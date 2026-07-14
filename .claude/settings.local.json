@@ -2,7 +2,17 @@
   "permissions": {
     "allow": [
       "PowerShell(& \"C:\\\\Users\\\\ABJDJO~1.26\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Projet-Prisme\\\\b6def550-a63b-47cd-beaa-197a40601893\\\\scratchpad\\\\generer_banc.ps1\")",
-      "PowerShell(Get-ChildItem Env: | Where-Object { $_.Name -match 'ANTHROPIC|OPENAI|CLAUDE|LLM|API_KEY' } | Select-Object Name)"
+      "PowerShell(Get-ChildItem Env: | Where-Object { $_.Name -match 'ANTHROPIC|OPENAI|CLAUDE|LLM|API_KEY' } | Select-Object Name)",
+      "Bash(pip --version)",
+      "Read(//usr/bin/**)",
+      "Bash(python3 -m venv --help)",
+      "Bash(python3 -m ensurepip --help)",
+      "Bash(curl -sI --max-time 3 https://astral.sh)",
+      "Bash(apt list *)",
+      "Read(//usr/lib/python3.14/**)",
+      "Bash(python3 -c \"import ensurepip\")",
+      "Bash(wget -qO- https://astral.sh/uv/install.sh)",
+      "Bash(sh)"
     ]
   }
 }

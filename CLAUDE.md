@@ -14,6 +14,51 @@ The authoritative spec is [`PRISME_Note_de_Cadrage (2).md`](<./PRISME_Note_de_Ca
 architectural changes. Code comments reference its sections as `§N` (e.g. `§5.2`, `§6.7`); keep
 that convention and cite the section a piece of code implements.
 
+## Commands
+
+Dependency management is **uv** (not pip/Poetry directly — see `CONTRIBUTING.md` PH0-T2 for why).
+`.python-version` pins the interpreter to **3.11** — `ortools` does not yet publish wheels for
+newer CPython versions (verified: resolution against system Python 3.14 fails; 3.11 works), so
+`uv` transparently downloads and uses 3.11 regardless of the system Python. `uv.lock` is the
+single source of truth for exact (including transitive) dependency versions — commit it, and
+regenerate with `uv lock` after any `pyproject.toml` dependency change. Core dependencies
+(`ortools`, `pydantic`, `fastapi`, `pytest`) are pinned with `==` in `pyproject.toml` itself, per
+PH0-T2; other deps keep `>=` bounds.
+
+Run everything from the repo root. `pyproject.toml` sets `pythonpath = ["."]`, so tests and
+`python -m` scripts resolve the packages without an install once the environment is synced.
+
+```bash
+uv sync --all-extras   # the one command that rebuilds the whole environment (downloads Python 3.11 if needed)
+uv sync                # core deps only, no extras
+uv sync --extra llm    # + anthropic, openai (needed only to actually call the generator)
+uv sync --extra sandbox  # + docker SDK (needed only for sandboxed execution)
+
+uv run pytest                                              # full suite (Docker tests self-skip if unreachable)
+uv run pytest tests/unit                                   # Layer-1 tests only — no OR-Tools/Docker needed
+uv run pytest tests/integration/test_solveur_reference.py  # a single file
+uv run pytest tests/unit/test_cascade.py::<name> -k <expr> # a single test / filter
+
+# Dev scripts (all run as modules from the repo root, never `python path/to/file.py`):
+uv run python -m scripts.generer_banc_synthetique          # regenerate synthetic bench JSON after bench changes
+uv run python -m scripts.benchmarker_solveur_reference     # reference solver: makespan-vs-optimum + solve time
+uv run python -m scripts.mesurer_taux_succes_generation    # measure single-shot generation success (needs .[llm] + creds)
+uv run python -m scripts.enregistrer_solveur_reference     # seed solver_store with the reference solver (idempotent)
+uv run python -m scripts.demo_bout_en_bout                 # Étape 8 end-to-end demo (adapter→ingestion→execution→planning→audit)
+
+uv run uvicorn api.app:app --reload                        # run the API (docs at /docs)
+docker build -t prisme-sandbox sandbox/container/          # build the sandbox image (env setup, never done by app code)
+```
+
+Known issue found while verifying this section: `uv run pytest tests/unit` errors on
+`tests/unit/test_stability.py` — pytest's default `test*` collection glob matches the imported
+`tester_stabilite` function (no `test_` prefix guard) and tries to collect it as a test, failing
+on a missing `solveur` fixture. Pre-existing, unrelated to environment setup; not yet fixed.
+
+There is **no configured linter/formatter/type-checker** — don't invent a `ruff`/`black`/`mypy`
+command. LLM provider/model are selected via `PRISME_LLM_PROVIDER` (`anthropic`|`openai`) and
+`PRISME_LLM_MODEL` env vars.
+
 **Project stage:** early scaffolding, Étapes 1–5, 7, and 8 of 9 (§8) implemented (out of the
 roadmap's own order — see Build order below; Étape 6, the bounded repair loop, is deliberately
 skipped so far), plus one hand-written step the roadmap doesn't list. Every module directory
