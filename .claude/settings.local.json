@@ -16,7 +16,8 @@
       "Bash(docker --version)",
       "Bash(docker compose *)",
       "Bash(systemctl is-active *)",
-      "Bash(docker info *)"
+      "Bash(docker info *)",
+      "Bash(getent group *)"
     ]
   }
 }
