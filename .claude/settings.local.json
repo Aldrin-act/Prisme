@@ -12,7 +12,11 @@
       "Read(//usr/lib/python3.14/**)",
       "Bash(python3 -c \"import ensurepip\")",
       "Bash(wget -qO- https://astral.sh/uv/install.sh)",
-      "Bash(sh)"
+      "Bash(sh)",
+      "Bash(docker --version)",
+      "Bash(docker compose *)",
+      "Bash(systemctl is-active *)",
+      "Bash(docker info *)"
     ]
   }
 }

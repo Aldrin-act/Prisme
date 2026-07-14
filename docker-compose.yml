@@ -1,0 +1,50 @@
+# Socle Docker Compose (PH0-T3). `db` est le seul service réellement fonctionnel pour l'instant ;
+# `api`, `worker` et `frontend` sont des réservations de nom pour les phases à venir (voir
+# api/README.md, dashboard/README.md) — placés derrière le profil `full` pour ne pas gêner
+# `docker compose up` par défaut, qui ne doit lever que PostgreSQL.
+#
+# Usage :
+#   docker compose up -d            # PostgreSQL seul (usage courant en développement)
+#   docker compose --profile full up -d   # + les services placeholder
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-prisme}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-prisme}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - prisme_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-prisme} -d ${POSTGRES_DB:-prisme}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    image: python:3.11-slim
+    command: ["sh", "-c", "echo 'api : reservé, pas encore implémenté (voir api/README.md)'; sleep infinity"]
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["full"]
+
+  worker:
+    image: python:3.11-slim
+    command: ["sh", "-c", "echo 'worker : reservé, pas encore implémenté (voir diagnostics/, dashboard/)'; sleep infinity"]
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["full"]
+
+  frontend:
+    image: node:20-alpine
+    command: ["sh", "-c", "echo 'frontend : reservé, pas encore implémenté (Phase 10, dashboard/README.md)'; sleep infinity"]
+    profiles: ["full"]
+
+volumes:
+  prisme_db_data:
