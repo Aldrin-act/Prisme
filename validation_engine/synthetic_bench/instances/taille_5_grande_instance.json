@@ -1,0 +1,1731 @@
+{
+    "nom":  "taille_5_grande_instance",
+    "optimum":  338,
+    "instance":  {
+                     "taches":  [
+                                    {
+                                        "id":  "J0T0",
+                                        "nom":  null,
+                                        "duree":  10
+                                    },
+                                    {
+                                        "id":  "J0T1",
+                                        "nom":  null,
+                                        "duree":  27
+                                    },
+                                    {
+                                        "id":  "J0T2",
+                                        "nom":  null,
+                                        "duree":  44
+                                    },
+                                    {
+                                        "id":  "J0T3",
+                                        "nom":  null,
+                                        "duree":  11
+                                    },
+                                    {
+                                        "id":  "J0T4",
+                                        "nom":  null,
+                                        "duree":  28
+                                    },
+                                    {
+                                        "id":  "J0T5",
+                                        "nom":  null,
+                                        "duree":  45
+                                    },
+                                    {
+                                        "id":  "J0T6",
+                                        "nom":  null,
+                                        "duree":  12
+                                    },
+                                    {
+                                        "id":  "J0T7",
+                                        "nom":  null,
+                                        "duree":  29
+                                    },
+                                    {
+                                        "id":  "J1T0",
+                                        "nom":  null,
+                                        "duree":  41
+                                    },
+                                    {
+                                        "id":  "J1T1",
+                                        "nom":  null,
+                                        "duree":  58
+                                    },
+                                    {
+                                        "id":  "J1T2",
+                                        "nom":  null,
+                                        "duree":  25
+                                    },
+                                    {
+                                        "id":  "J1T3",
+                                        "nom":  null,
+                                        "duree":  42
+                                    },
+                                    {
+                                        "id":  "J1T4",
+                                        "nom":  null,
+                                        "duree":  59
+                                    },
+                                    {
+                                        "id":  "J1T5",
+                                        "nom":  null,
+                                        "duree":  26
+                                    },
+                                    {
+                                        "id":  "J1T6",
+                                        "nom":  null,
+                                        "duree":  43
+                                    },
+                                    {
+                                        "id":  "J1T7",
+                                        "nom":  null,
+                                        "duree":  10
+                                    },
+                                    {
+                                        "id":  "J2T0",
+                                        "nom":  null,
+                                        "duree":  22
+                                    },
+                                    {
+                                        "id":  "J2T1",
+                                        "nom":  null,
+                                        "duree":  39
+                                    },
+                                    {
+                                        "id":  "J2T2",
+                                        "nom":  null,
+                                        "duree":  56
+                                    },
+                                    {
+                                        "id":  "J2T3",
+                                        "nom":  null,
+                                        "duree":  23
+                                    },
+                                    {
+                                        "id":  "J2T4",
+                                        "nom":  null,
+                                        "duree":  40
+                                    },
+                                    {
+                                        "id":  "J2T5",
+                                        "nom":  null,
+                                        "duree":  57
+                                    },
+                                    {
+                                        "id":  "J2T6",
+                                        "nom":  null,
+                                        "duree":  24
+                                    },
+                                    {
+                                        "id":  "J2T7",
+                                        "nom":  null,
+                                        "duree":  41
+                                    },
+                                    {
+                                        "id":  "J3T0",
+                                        "nom":  null,
+                                        "duree":  53
+                                    },
+                                    {
+                                        "id":  "J3T1",
+                                        "nom":  null,
+                                        "duree":  20
+                                    },
+                                    {
+                                        "id":  "J3T2",
+                                        "nom":  null,
+                                        "duree":  37
+                                    },
+                                    {
+                                        "id":  "J3T3",
+                                        "nom":  null,
+                                        "duree":  54
+                                    },
+                                    {
+                                        "id":  "J3T4",
+                                        "nom":  null,
+                                        "duree":  21
+                                    },
+                                    {
+                                        "id":  "J3T5",
+                                        "nom":  null,
+                                        "duree":  38
+                                    },
+                                    {
+                                        "id":  "J3T6",
+                                        "nom":  null,
+                                        "duree":  55
+                                    },
+                                    {
+                                        "id":  "J3T7",
+                                        "nom":  null,
+                                        "duree":  22
+                                    },
+                                    {
+                                        "id":  "J4T0",
+                                        "nom":  null,
+                                        "duree":  34
+                                    },
+                                    {
+                                        "id":  "J4T1",
+                                        "nom":  null,
+                                        "duree":  51
+                                    },
+                                    {
+                                        "id":  "J4T2",
+                                        "nom":  null,
+                                        "duree":  18
+                                    },
+                                    {
+                                        "id":  "J4T3",
+                                        "nom":  null,
+                                        "duree":  35
+                                    },
+                                    {
+                                        "id":  "J4T4",
+                                        "nom":  null,
+                                        "duree":  52
+                                    },
+                                    {
+                                        "id":  "J4T5",
+                                        "nom":  null,
+                                        "duree":  19
+                                    },
+                                    {
+                                        "id":  "J4T6",
+                                        "nom":  null,
+                                        "duree":  36
+                                    },
+                                    {
+                                        "id":  "J4T7",
+                                        "nom":  null,
+                                        "duree":  53
+                                    },
+                                    {
+                                        "id":  "J5T0",
+                                        "nom":  null,
+                                        "duree":  15
+                                    },
+                                    {
+                                        "id":  "J5T1",
+                                        "nom":  null,
+                                        "duree":  32
+                                    },
+                                    {
+                                        "id":  "J5T2",
+                                        "nom":  null,
+                                        "duree":  49
+                                    },
+                                    {
+                                        "id":  "J5T3",
+                                        "nom":  null,
+                                        "duree":  16
+                                    },
+                                    {
+                                        "id":  "J5T4",
+                                        "nom":  null,
+                                        "duree":  33
+                                    },
+                                    {
+                                        "id":  "J5T5",
+                                        "nom":  null,
+                                        "duree":  50
+                                    },
+                                    {
+                                        "id":  "J5T6",
+                                        "nom":  null,
+                                        "duree":  17
+                                    },
+                                    {
+                                        "id":  "J5T7",
+                                        "nom":  null,
+                                        "duree":  34
+                                    },
+                                    {
+                                        "id":  "J6T0",
+                                        "nom":  null,
+                                        "duree":  46
+                                    },
+                                    {
+                                        "id":  "J6T1",
+                                        "nom":  null,
+                                        "duree":  13
+                                    },
+                                    {
+                                        "id":  "J6T2",
+                                        "nom":  null,
+                                        "duree":  30
+                                    },
+                                    {
+                                        "id":  "J6T3",
+                                        "nom":  null,
+                                        "duree":  47
+                                    },
+                                    {
+                                        "id":  "J6T4",
+                                        "nom":  null,
+                                        "duree":  14
+                                    },
+                                    {
+                                        "id":  "J6T5",
+                                        "nom":  null,
+                                        "duree":  31
+                                    },
+                                    {
+                                        "id":  "J6T6",
+                                        "nom":  null,
+                                        "duree":  48
+                                    },
+                                    {
+                                        "id":  "J6T7",
+                                        "nom":  null,
+                                        "duree":  15
+                                    },
+                                    {
+                                        "id":  "J7T0",
+                                        "nom":  null,
+                                        "duree":  27
+                                    },
+                                    {
+                                        "id":  "J7T1",
+                                        "nom":  null,
+                                        "duree":  44
+                                    },
+                                    {
+                                        "id":  "J7T2",
+                                        "nom":  null,
+                                        "duree":  11
+                                    },
+                                    {
+                                        "id":  "J7T3",
+                                        "nom":  null,
+                                        "duree":  28
+                                    },
+                                    {
+                                        "id":  "J7T4",
+                                        "nom":  null,
+                                        "duree":  45
+                                    },
+                                    {
+                                        "id":  "J7T5",
+                                        "nom":  null,
+                                        "duree":  12
+                                    },
+                                    {
+                                        "id":  "J7T6",
+                                        "nom":  null,
+                                        "duree":  29
+                                    },
+                                    {
+                                        "id":  "J7T7",
+                                        "nom":  null,
+                                        "duree":  46
+                                    },
+                                    {
+                                        "id":  "J8T0",
+                                        "nom":  null,
+                                        "duree":  58
+                                    },
+                                    {
+                                        "id":  "J8T1",
+                                        "nom":  null,
+                                        "duree":  25
+                                    },
+                                    {
+                                        "id":  "J8T2",
+                                        "nom":  null,
+                                        "duree":  42
+                                    },
+                                    {
+                                        "id":  "J8T3",
+                                        "nom":  null,
+                                        "duree":  59
+                                    },
+                                    {
+                                        "id":  "J8T4",
+                                        "nom":  null,
+                                        "duree":  26
+                                    },
+                                    {
+                                        "id":  "J8T5",
+                                        "nom":  null,
+                                        "duree":  43
+                                    },
+                                    {
+                                        "id":  "J8T6",
+                                        "nom":  null,
+                                        "duree":  10
+                                    },
+                                    {
+                                        "id":  "J8T7",
+                                        "nom":  null,
+                                        "duree":  27
+                                    },
+                                    {
+                                        "id":  "J9T0",
+                                        "nom":  null,
+                                        "duree":  39
+                                    },
+                                    {
+                                        "id":  "J9T1",
+                                        "nom":  null,
+                                        "duree":  56
+                                    },
+                                    {
+                                        "id":  "J9T2",
+                                        "nom":  null,
+                                        "duree":  23
+                                    },
+                                    {
+                                        "id":  "J9T3",
+                                        "nom":  null,
+                                        "duree":  40
+                                    },
+                                    {
+                                        "id":  "J9T4",
+                                        "nom":  null,
+                                        "duree":  57
+                                    },
+                                    {
+                                        "id":  "J9T5",
+                                        "nom":  null,
+                                        "duree":  24
+                                    },
+                                    {
+                                        "id":  "J9T6",
+                                        "nom":  null,
+                                        "duree":  41
+                                    },
+                                    {
+                                        "id":  "J9T7",
+                                        "nom":  null,
+                                        "duree":  58
+                                    }
+                                ],
+                     "ressources":  [
+                                        {
+                                            "id":  "J0M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J0M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J0M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J0M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J1M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J1M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J1M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J1M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J2M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J2M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J2M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J2M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J3M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J3M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J3M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J3M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J4M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J4M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J4M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J4M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J5M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J5M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J5M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J5M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J6M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J6M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J6M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J6M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J7M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J7M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J7M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J7M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J8M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J8M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J8M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J8M3",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J9M0",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J9M1",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J9M2",
+                                            "nom":  null
+                                        },
+                                        {
+                                            "id":  "J9M3",
+                                            "nom":  null
+                                        }
+                                    ],
+                     "contraintes":  [
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T0",
+                                             "ressource":  "J0M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T1",
+                                             "ressource":  "J0M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J0T0",
+                                             "apres":  "J0T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T2",
+                                             "ressource":  "J0M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J0T1",
+                                             "apres":  "J0T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T3",
+                                             "ressource":  "J0M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J0T2",
+                                             "apres":  "J0T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T4",
+                                             "ressource":  "J0M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J0T3",
+                                             "apres":  "J0T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T5",
+                                             "ressource":  "J0M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J0T4",
+                                             "apres":  "J0T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T6",
+                                             "ressource":  "J0M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J0T5",
+                                             "apres":  "J0T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T7",
+                                             "ressource":  "J0M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J0T6",
+                                             "apres":  "J0T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T0",
+                                             "ressource":  "J1M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T1",
+                                             "ressource":  "J1M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J1T0",
+                                             "apres":  "J1T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T2",
+                                             "ressource":  "J1M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J1T1",
+                                             "apres":  "J1T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T3",
+                                             "ressource":  "J1M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J1T2",
+                                             "apres":  "J1T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T4",
+                                             "ressource":  "J1M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J1T3",
+                                             "apres":  "J1T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T5",
+                                             "ressource":  "J1M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J1T4",
+                                             "apres":  "J1T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T6",
+                                             "ressource":  "J1M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J1T5",
+                                             "apres":  "J1T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J1T7",
+                                             "ressource":  "J1M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J1T6",
+                                             "apres":  "J1T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T0",
+                                             "ressource":  "J2M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T1",
+                                             "ressource":  "J2M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J2T0",
+                                             "apres":  "J2T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T2",
+                                             "ressource":  "J2M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J2T1",
+                                             "apres":  "J2T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T3",
+                                             "ressource":  "J2M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J2T2",
+                                             "apres":  "J2T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T4",
+                                             "ressource":  "J2M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J2T3",
+                                             "apres":  "J2T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T5",
+                                             "ressource":  "J2M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J2T4",
+                                             "apres":  "J2T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T6",
+                                             "ressource":  "J2M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J2T5",
+                                             "apres":  "J2T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J2T7",
+                                             "ressource":  "J2M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J2T6",
+                                             "apres":  "J2T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T0",
+                                             "ressource":  "J3M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T1",
+                                             "ressource":  "J3M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J3T0",
+                                             "apres":  "J3T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T2",
+                                             "ressource":  "J3M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J3T1",
+                                             "apres":  "J3T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T3",
+                                             "ressource":  "J3M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J3T2",
+                                             "apres":  "J3T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T4",
+                                             "ressource":  "J3M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J3T3",
+                                             "apres":  "J3T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T5",
+                                             "ressource":  "J3M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J3T4",
+                                             "apres":  "J3T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T6",
+                                             "ressource":  "J3M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J3T5",
+                                             "apres":  "J3T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J3T7",
+                                             "ressource":  "J3M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J3T6",
+                                             "apres":  "J3T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T0",
+                                             "ressource":  "J4M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T1",
+                                             "ressource":  "J4M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J4T0",
+                                             "apres":  "J4T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T2",
+                                             "ressource":  "J4M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J4T1",
+                                             "apres":  "J4T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T3",
+                                             "ressource":  "J4M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J4T2",
+                                             "apres":  "J4T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T4",
+                                             "ressource":  "J4M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J4T3",
+                                             "apres":  "J4T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T5",
+                                             "ressource":  "J4M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J4T4",
+                                             "apres":  "J4T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T6",
+                                             "ressource":  "J4M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J4T5",
+                                             "apres":  "J4T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J4T7",
+                                             "ressource":  "J4M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J4T6",
+                                             "apres":  "J4T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T0",
+                                             "ressource":  "J5M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T1",
+                                             "ressource":  "J5M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J5T0",
+                                             "apres":  "J5T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T2",
+                                             "ressource":  "J5M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J5T1",
+                                             "apres":  "J5T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T3",
+                                             "ressource":  "J5M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J5T2",
+                                             "apres":  "J5T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T4",
+                                             "ressource":  "J5M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J5T3",
+                                             "apres":  "J5T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T5",
+                                             "ressource":  "J5M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J5T4",
+                                             "apres":  "J5T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T6",
+                                             "ressource":  "J5M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J5T5",
+                                             "apres":  "J5T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J5T7",
+                                             "ressource":  "J5M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J5T6",
+                                             "apres":  "J5T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T0",
+                                             "ressource":  "J6M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T1",
+                                             "ressource":  "J6M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J6T0",
+                                             "apres":  "J6T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T2",
+                                             "ressource":  "J6M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J6T1",
+                                             "apres":  "J6T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T3",
+                                             "ressource":  "J6M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J6T2",
+                                             "apres":  "J6T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T4",
+                                             "ressource":  "J6M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J6T3",
+                                             "apres":  "J6T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T5",
+                                             "ressource":  "J6M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J6T4",
+                                             "apres":  "J6T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T6",
+                                             "ressource":  "J6M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J6T5",
+                                             "apres":  "J6T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J6T7",
+                                             "ressource":  "J6M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J6T6",
+                                             "apres":  "J6T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T0",
+                                             "ressource":  "J7M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T1",
+                                             "ressource":  "J7M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J7T0",
+                                             "apres":  "J7T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T2",
+                                             "ressource":  "J7M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J7T1",
+                                             "apres":  "J7T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T3",
+                                             "ressource":  "J7M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J7T2",
+                                             "apres":  "J7T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T4",
+                                             "ressource":  "J7M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J7T3",
+                                             "apres":  "J7T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T5",
+                                             "ressource":  "J7M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J7T4",
+                                             "apres":  "J7T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T6",
+                                             "ressource":  "J7M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J7T5",
+                                             "apres":  "J7T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J7T7",
+                                             "ressource":  "J7M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J7T6",
+                                             "apres":  "J7T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T0",
+                                             "ressource":  "J8M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T1",
+                                             "ressource":  "J8M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J8T0",
+                                             "apres":  "J8T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T2",
+                                             "ressource":  "J8M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J8T1",
+                                             "apres":  "J8T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T3",
+                                             "ressource":  "J8M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J8T2",
+                                             "apres":  "J8T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T4",
+                                             "ressource":  "J8M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J8T3",
+                                             "apres":  "J8T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T5",
+                                             "ressource":  "J8M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J8T4",
+                                             "apres":  "J8T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T6",
+                                             "ressource":  "J8M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J8T5",
+                                             "apres":  "J8T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J8T7",
+                                             "ressource":  "J8M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J8T6",
+                                             "apres":  "J8T7"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T0",
+                                             "ressource":  "J9M0"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T1",
+                                             "ressource":  "J9M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J9T0",
+                                             "apres":  "J9T1"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T2",
+                                             "ressource":  "J9M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J9T1",
+                                             "apres":  "J9T2"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T3",
+                                             "ressource":  "J9M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J9T2",
+                                             "apres":  "J9T3"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T4",
+                                             "ressource":  "J9M0"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J9T3",
+                                             "apres":  "J9T4"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T5",
+                                             "ressource":  "J9M1"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J9T4",
+                                             "apres":  "J9T5"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T6",
+                                             "ressource":  "J9M2"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J9T5",
+                                             "apres":  "J9T6"
+                                         },
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J9T7",
+                                             "ressource":  "J9M3"
+                                         },
+                                         {
+                                             "type":  "precedence",
+                                             "avant":  "J9T6",
+                                             "apres":  "J9T7"
+                                         }
+                                     ],
+                     "objectifs":  [
+                                       {
+                                           "type":  "minimiser_makespan"
+                                       }
+                                   ]
+                 },
+    "planning_optimal":  {
+                             "operations":  [
+                                                {
+                                                    "tache":  "J0T0",
+                                                    "ressource":  "J0M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J0T1",
+                                                    "ressource":  "J0M1",
+                                                    "debut":  10
+                                                },
+                                                {
+                                                    "tache":  "J0T2",
+                                                    "ressource":  "J0M2",
+                                                    "debut":  37
+                                                },
+                                                {
+                                                    "tache":  "J0T3",
+                                                    "ressource":  "J0M3",
+                                                    "debut":  81
+                                                },
+                                                {
+                                                    "tache":  "J0T4",
+                                                    "ressource":  "J0M0",
+                                                    "debut":  92
+                                                },
+                                                {
+                                                    "tache":  "J0T5",
+                                                    "ressource":  "J0M1",
+                                                    "debut":  120
+                                                },
+                                                {
+                                                    "tache":  "J0T6",
+                                                    "ressource":  "J0M2",
+                                                    "debut":  165
+                                                },
+                                                {
+                                                    "tache":  "J0T7",
+                                                    "ressource":  "J0M3",
+                                                    "debut":  177
+                                                },
+                                                {
+                                                    "tache":  "J1T0",
+                                                    "ressource":  "J1M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J1T1",
+                                                    "ressource":  "J1M1",
+                                                    "debut":  41
+                                                },
+                                                {
+                                                    "tache":  "J1T2",
+                                                    "ressource":  "J1M2",
+                                                    "debut":  99
+                                                },
+                                                {
+                                                    "tache":  "J1T3",
+                                                    "ressource":  "J1M3",
+                                                    "debut":  124
+                                                },
+                                                {
+                                                    "tache":  "J1T4",
+                                                    "ressource":  "J1M0",
+                                                    "debut":  166
+                                                },
+                                                {
+                                                    "tache":  "J1T5",
+                                                    "ressource":  "J1M1",
+                                                    "debut":  225
+                                                },
+                                                {
+                                                    "tache":  "J1T6",
+                                                    "ressource":  "J1M2",
+                                                    "debut":  251
+                                                },
+                                                {
+                                                    "tache":  "J1T7",
+                                                    "ressource":  "J1M3",
+                                                    "debut":  294
+                                                },
+                                                {
+                                                    "tache":  "J2T0",
+                                                    "ressource":  "J2M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J2T1",
+                                                    "ressource":  "J2M1",
+                                                    "debut":  22
+                                                },
+                                                {
+                                                    "tache":  "J2T2",
+                                                    "ressource":  "J2M2",
+                                                    "debut":  61
+                                                },
+                                                {
+                                                    "tache":  "J2T3",
+                                                    "ressource":  "J2M3",
+                                                    "debut":  117
+                                                },
+                                                {
+                                                    "tache":  "J2T4",
+                                                    "ressource":  "J2M0",
+                                                    "debut":  140
+                                                },
+                                                {
+                                                    "tache":  "J2T5",
+                                                    "ressource":  "J2M1",
+                                                    "debut":  180
+                                                },
+                                                {
+                                                    "tache":  "J2T6",
+                                                    "ressource":  "J2M2",
+                                                    "debut":  237
+                                                },
+                                                {
+                                                    "tache":  "J2T7",
+                                                    "ressource":  "J2M3",
+                                                    "debut":  261
+                                                },
+                                                {
+                                                    "tache":  "J3T0",
+                                                    "ressource":  "J3M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J3T1",
+                                                    "ressource":  "J3M1",
+                                                    "debut":  53
+                                                },
+                                                {
+                                                    "tache":  "J3T2",
+                                                    "ressource":  "J3M2",
+                                                    "debut":  73
+                                                },
+                                                {
+                                                    "tache":  "J3T3",
+                                                    "ressource":  "J3M3",
+                                                    "debut":  110
+                                                },
+                                                {
+                                                    "tache":  "J3T4",
+                                                    "ressource":  "J3M0",
+                                                    "debut":  164
+                                                },
+                                                {
+                                                    "tache":  "J3T5",
+                                                    "ressource":  "J3M1",
+                                                    "debut":  185
+                                                },
+                                                {
+                                                    "tache":  "J3T6",
+                                                    "ressource":  "J3M2",
+                                                    "debut":  223
+                                                },
+                                                {
+                                                    "tache":  "J3T7",
+                                                    "ressource":  "J3M3",
+                                                    "debut":  278
+                                                },
+                                                {
+                                                    "tache":  "J4T0",
+                                                    "ressource":  "J4M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J4T1",
+                                                    "ressource":  "J4M1",
+                                                    "debut":  34
+                                                },
+                                                {
+                                                    "tache":  "J4T2",
+                                                    "ressource":  "J4M2",
+                                                    "debut":  85
+                                                },
+                                                {
+                                                    "tache":  "J4T3",
+                                                    "ressource":  "J4M3",
+                                                    "debut":  103
+                                                },
+                                                {
+                                                    "tache":  "J4T4",
+                                                    "ressource":  "J4M0",
+                                                    "debut":  138
+                                                },
+                                                {
+                                                    "tache":  "J4T5",
+                                                    "ressource":  "J4M1",
+                                                    "debut":  190
+                                                },
+                                                {
+                                                    "tache":  "J4T6",
+                                                    "ressource":  "J4M2",
+                                                    "debut":  209
+                                                },
+                                                {
+                                                    "tache":  "J4T7",
+                                                    "ressource":  "J4M3",
+                                                    "debut":  245
+                                                },
+                                                {
+                                                    "tache":  "J5T0",
+                                                    "ressource":  "J5M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J5T1",
+                                                    "ressource":  "J5M1",
+                                                    "debut":  15
+                                                },
+                                                {
+                                                    "tache":  "J5T2",
+                                                    "ressource":  "J5M2",
+                                                    "debut":  47
+                                                },
+                                                {
+                                                    "tache":  "J5T3",
+                                                    "ressource":  "J5M3",
+                                                    "debut":  96
+                                                },
+                                                {
+                                                    "tache":  "J5T4",
+                                                    "ressource":  "J5M0",
+                                                    "debut":  112
+                                                },
+                                                {
+                                                    "tache":  "J5T5",
+                                                    "ressource":  "J5M1",
+                                                    "debut":  145
+                                                },
+                                                {
+                                                    "tache":  "J5T6",
+                                                    "ressource":  "J5M2",
+                                                    "debut":  195
+                                                },
+                                                {
+                                                    "tache":  "J5T7",
+                                                    "ressource":  "J5M3",
+                                                    "debut":  212
+                                                },
+                                                {
+                                                    "tache":  "J6T0",
+                                                    "ressource":  "J6M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J6T1",
+                                                    "ressource":  "J6M1",
+                                                    "debut":  46
+                                                },
+                                                {
+                                                    "tache":  "J6T2",
+                                                    "ressource":  "J6M2",
+                                                    "debut":  59
+                                                },
+                                                {
+                                                    "tache":  "J6T3",
+                                                    "ressource":  "J6M3",
+                                                    "debut":  89
+                                                },
+                                                {
+                                                    "tache":  "J6T4",
+                                                    "ressource":  "J6M0",
+                                                    "debut":  136
+                                                },
+                                                {
+                                                    "tache":  "J6T5",
+                                                    "ressource":  "J6M1",
+                                                    "debut":  150
+                                                },
+                                                {
+                                                    "tache":  "J6T6",
+                                                    "ressource":  "J6M2",
+                                                    "debut":  181
+                                                },
+                                                {
+                                                    "tache":  "J6T7",
+                                                    "ressource":  "J6M3",
+                                                    "debut":  229
+                                                },
+                                                {
+                                                    "tache":  "J7T0",
+                                                    "ressource":  "J7M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J7T1",
+                                                    "ressource":  "J7M1",
+                                                    "debut":  27
+                                                },
+                                                {
+                                                    "tache":  "J7T2",
+                                                    "ressource":  "J7M2",
+                                                    "debut":  71
+                                                },
+                                                {
+                                                    "tache":  "J7T3",
+                                                    "ressource":  "J7M3",
+                                                    "debut":  82
+                                                },
+                                                {
+                                                    "tache":  "J7T4",
+                                                    "ressource":  "J7M0",
+                                                    "debut":  110
+                                                },
+                                                {
+                                                    "tache":  "J7T5",
+                                                    "ressource":  "J7M1",
+                                                    "debut":  155
+                                                },
+                                                {
+                                                    "tache":  "J7T6",
+                                                    "ressource":  "J7M2",
+                                                    "debut":  167
+                                                },
+                                                {
+                                                    "tache":  "J7T7",
+                                                    "ressource":  "J7M3",
+                                                    "debut":  196
+                                                },
+                                                {
+                                                    "tache":  "J8T0",
+                                                    "ressource":  "J8M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J8T1",
+                                                    "ressource":  "J8M1",
+                                                    "debut":  58
+                                                },
+                                                {
+                                                    "tache":  "J8T2",
+                                                    "ressource":  "J8M2",
+                                                    "debut":  83
+                                                },
+                                                {
+                                                    "tache":  "J8T3",
+                                                    "ressource":  "J8M3",
+                                                    "debut":  125
+                                                },
+                                                {
+                                                    "tache":  "J8T4",
+                                                    "ressource":  "J8M0",
+                                                    "debut":  184
+                                                },
+                                                {
+                                                    "tache":  "J8T5",
+                                                    "ressource":  "J8M1",
+                                                    "debut":  210
+                                                },
+                                                {
+                                                    "tache":  "J8T6",
+                                                    "ressource":  "J8M2",
+                                                    "debut":  253
+                                                },
+                                                {
+                                                    "tache":  "J8T7",
+                                                    "ressource":  "J8M3",
+                                                    "debut":  263
+                                                },
+                                                {
+                                                    "tache":  "J9T0",
+                                                    "ressource":  "J9M0",
+                                                    "debut":  0
+                                                },
+                                                {
+                                                    "tache":  "J9T1",
+                                                    "ressource":  "J9M1",
+                                                    "debut":  39
+                                                },
+                                                {
+                                                    "tache":  "J9T2",
+                                                    "ressource":  "J9M2",
+                                                    "debut":  95
+                                                },
+                                                {
+                                                    "tache":  "J9T3",
+                                                    "ressource":  "J9M3",
+                                                    "debut":  118
+                                                },
+                                                {
+                                                    "tache":  "J9T4",
+                                                    "ressource":  "J9M0",
+                                                    "debut":  158
+                                                },
+                                                {
+                                                    "tache":  "J9T5",
+                                                    "ressource":  "J9M1",
+                                                    "debut":  215
+                                                },
+                                                {
+                                                    "tache":  "J9T6",
+                                                    "ressource":  "J9M2",
+                                                    "debut":  239
+                                                },
+                                                {
+                                                    "tache":  "J9T7",
+                                                    "ressource":  "J9M3",
+                                                    "debut":  280
+                                                }
+                                            ]
+                         }
+}

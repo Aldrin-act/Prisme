@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \"C:\\\\Users\\\\ABJDJO~1.26\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Projet-Prisme\\\\b6def550-a63b-47cd-beaa-197a40601893\\\\scratchpad\\\\generer_banc.ps1\")",
+      "PowerShell(Get-ChildItem Env: | Where-Object { $_.Name -match 'ANTHROPIC|OPENAI|CLAUDE|LLM|API_KEY' } | Select-Object Name)"
+    ]
+  }
+}

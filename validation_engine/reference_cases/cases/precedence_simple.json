@@ -1,0 +1,28 @@
+{
+  "nom": "precedence_simple",
+  "description": "Deux tâches liées par précédence, chacune compatible avec une seule ressource : cas de base sans aucune ambiguïté, pour vérifier que la chaîne temporelle attendue (A puis B, B ne commençant pas avant la fin de A) est bien reproduite telle quelle.",
+  "instance": {
+    "taches": [
+      {"id": "A", "nom": null, "duree": 20},
+      {"id": "B", "nom": null, "duree": 15}
+    ],
+    "ressources": [
+      {"id": "M1", "nom": null},
+      {"id": "M2", "nom": null}
+    ],
+    "contraintes": [
+      {"type": "precedence", "avant": "A", "apres": "B"},
+      {"type": "compatibilite_machine_tache", "tache": "A", "ressource": "M1"},
+      {"type": "compatibilite_machine_tache", "tache": "B", "ressource": "M2"}
+    ],
+    "objectifs": [
+      {"type": "minimiser_makespan"}
+    ]
+  },
+  "planning_attendu": {
+    "operations": [
+      {"tache": "A", "ressource": "M1", "debut": 0},
+      {"tache": "B", "ressource": "M2", "debut": 20}
+    ]
+  }
+}

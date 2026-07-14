@@ -1,0 +1,40 @@
+{
+    "nom":  "taille_1_tache_unique",
+    "optimum":  10,
+    "instance":  {
+                     "taches":  [
+                                    {
+                                        "id":  "J0T0",
+                                        "nom":  null,
+                                        "duree":  10
+                                    }
+                                ],
+                     "ressources":  [
+                                        {
+                                            "id":  "J0M0",
+                                            "nom":  null
+                                        }
+                                    ],
+                     "contraintes":  [
+                                         {
+                                             "type":  "compatibilite_machine_tache",
+                                             "tache":  "J0T0",
+                                             "ressource":  "J0M0"
+                                         }
+                                     ],
+                     "objectifs":  [
+                                       {
+                                           "type":  "minimiser_makespan"
+                                       }
+                                   ]
+                 },
+    "planning_optimal":  {
+                             "operations":  [
+                                                {
+                                                    "tache":  "J0T0",
+                                                    "ressource":  "J0M0",
+                                                    "debut":  0
+                                                }
+                                            ]
+                         }
+}
