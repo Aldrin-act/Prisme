@@ -46,11 +46,5 @@ def tester_stabilite(solveur: Solveur, instance: InstanceTRCO, n_essais: int = 5
         makespans.append(calculer_makespan(instance, planning))
 
     valeurs_legales = [makespan for makespan in makespans if makespan is not None]
-    stable = (
-        not diagnostics
-        and len(valeurs_legales) == n_essais
-        and len(set(valeurs_legales)) == 1
-    )
-    return ResultatStabilite(
-        stable=stable, makespans=tuple(makespans), diagnostics=tuple(diagnostics)
-    )
+    stable = not diagnostics and len(valeurs_legales) == n_essais and len(set(valeurs_legales)) == 1
+    return ResultatStabilite(stable=stable, makespans=tuple(makespans), diagnostics=tuple(diagnostics))

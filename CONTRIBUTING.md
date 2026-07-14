@@ -5,7 +5,8 @@
 - **`main` est protégée** : pas de push direct. Toute modification passe par une Pull Request
   avec au moins une revue et une CI verte avant fusion.
   Sur GitHub : *Settings → Branches → Add branch protection rule* sur `main`, avec
-  *Require a pull request before merging* et *Require status checks to pass before merging*.
+  *Require a pull request before merging* et *Require status checks to pass before merging* — coche
+  le check `test` (job défini dans `.github/workflows/ci.yml`, PH0-T4) comme requis.
 - Toute modification se fait sur une **branche de fonctionnalité**, créée depuis `main` à jour :
 
   ```bash
@@ -35,7 +36,8 @@
 ## Avant d'ouvrir une Pull Request
 
 - `uv run pytest` passe localement (voir [README.md](README.md#commandes) pour les sous-ensembles
-  utiles sans OR-Tools/Docker).
+  utiles sans OR-Tools/Docker), et `uv run ruff check .` / `uv run ruff format --check .` sont
+  propres — la CI (`.github/workflows/ci.yml`) applique les trois.
 - Si une dépendance a changé dans `pyproject.toml`, `uv.lock` a été régénéré (`uv lock`) et
   committé.
 - Toute nouvelle brique respecte la philosophie de validation par couches (§6 de la

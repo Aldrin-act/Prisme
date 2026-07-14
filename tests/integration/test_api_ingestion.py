@@ -7,8 +7,8 @@ Docker (aucune exécution n'a lieu ici) — contrairement à
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 import pytest
 from fastapi.testclient import TestClient
@@ -23,9 +23,7 @@ from solver_store.registry import Registre
 def client_isole(tmp_path: Path) -> Iterator[tuple[TestClient, EtatAPI]]:
     """Un client de test avec état et store isolés — jamais le store réel du dépôt."""
     etat_test = EtatAPI()
-    registre_test = Registre(
-        chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts"
-    )
+    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
     try:
@@ -37,9 +35,9 @@ def client_isole(tmp_path: Path) -> Iterator[tuple[TestClient, EtatAPI]]:
 def test_ingestion_accepte_un_payload_valide(client_isole: tuple[TestClient, EtatAPI]) -> None:
     client, etat_test = client_isole
     payload = {
-        "taches": [{"id": "T1", "duree": 10}],
+        "taches": [{"id": "T1"}],
         "ressources": [{"id": "M1"}],
-        "contraintes": [],
+        "contraintes": [{"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10}],
         "objectifs": [{"type": "minimiser_makespan"}],
     }
 
@@ -48,15 +46,15 @@ def test_ingestion_accepte_un_payload_valide(client_isole: tuple[TestClient, Eta
     assert reponse.status_code == 200
     corps = reponse.json()
     assert corps["instance_id"] in etat_test.instances
-    assert corps["structure_contraintes"] == "aucune"
+    assert corps["structure_contraintes"] == "compatibilite_machine_tache"
 
 
 def test_ingestion_rejette_un_payload_invalide(client_isole: tuple[TestClient, EtatAPI]) -> None:
     client, _ = client_isole
     payload = {
-        "taches": [{"id": "T1", "duree": -10}],
+        "taches": [{"id": "T1"}],
         "ressources": [{"id": "M1"}],
-        "contraintes": [],
+        "contraintes": [{"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": -10}],
         "objectifs": [{"type": "minimiser_makespan"}],
     }
 
@@ -68,11 +66,12 @@ def test_ingestion_rejette_un_payload_invalide(client_isole: tuple[TestClient, E
 def test_ingestion_calcule_la_structure_de_contraintes(client_isole: tuple[TestClient, EtatAPI]) -> None:
     client, _ = client_isole
     payload = {
-        "taches": [{"id": "T1", "duree": 10}, {"id": "T2", "duree": 5}],
+        "taches": [{"id": "T1"}, {"id": "T2"}],
         "ressources": [{"id": "M1"}],
         "contraintes": [
             {"type": "precedence", "avant": "T1", "apres": "T2"},
-            {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1"},
+            {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_machine_tache", "tache": "T2", "ressource": "M1", "duree": 5},
         ],
         "objectifs": [{"type": "minimiser_makespan"}],
     }

@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-from dsl.schema import InstanceTRCO, MinimiserMakespan, Ressource, Tache
+from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, MinimiserMakespan, Ressource, Tache
 from sandbox.runner import ErreurExecutionSandbox, executer_dans_sandbox
 
 CODE_TENTATIVE_RESEAU = """
@@ -38,9 +38,9 @@ def resoudre(instance):
 
 def _instance_triviale() -> InstanceTRCO:
     return InstanceTRCO(
-        taches=[Tache(id="T1", duree=10)],
+        taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1")],
-        contraintes=[],
+        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
         objectifs=[MinimiserMakespan()],
     )
 

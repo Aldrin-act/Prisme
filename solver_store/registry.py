@@ -19,7 +19,7 @@ import sqlite3
 import uuid
 from contextlib import closing
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from validation_engine.cascade import VerdictCascade
@@ -95,9 +95,7 @@ class Registre:
         (Étape 5) — le store ne persiste jamais un solveur non validé
         (principe fondateur, §5.2)."""
         if not verdict_cascade.reussi:
-            raise ValueError(
-                "refus d'enregistrer un solveur dont la cascade de validation n'est pas au vert"
-            )
+            raise ValueError("refus d'enregistrer un solveur dont la cascade de validation n'est pas au vert")
 
         id_solveur = str(uuid.uuid4())
         dossier = self._dossier_artefacts / id_solveur
@@ -116,7 +114,7 @@ class Registre:
                     structure_contraintes,
                     str(chemin_code),
                     _empreinte(code_source),
-                    datetime.now(timezone.utc).isoformat(),
+                    datetime.now(UTC).isoformat(),
                 ),
             )
             connexion.commit()

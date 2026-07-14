@@ -25,7 +25,11 @@ def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
     instance = traduire(payload)
 
     assert isinstance(instance, InstanceTRCO)
-    assert {tache.id: tache.duree for tache in instance.taches} == {"OP10": 30, "OP20": 45}
+    assert {tache.id for tache in instance.taches} == {"OP10", "OP20"}
+    assert {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)} == {
+        "OP10": 30,
+        "OP20": 45,
+    }
     assert {ressource.id for ressource in instance.ressources} == {"POSTE_A", "POSTE_B"}
 
 

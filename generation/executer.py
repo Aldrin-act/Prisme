@@ -11,8 +11,8 @@ environnement de développement contrôlé — voir §5.3, Security posture.
 
 from __future__ import annotations
 
-from validation_engine.cascade import Solveur
 from generation.validation_statique import valider_code_genere
+from validation_engine.cascade import Solveur
 
 
 class ErreurExecutionGeneree(Exception):
@@ -22,9 +22,7 @@ class ErreurExecutionGeneree(Exception):
 def executer_code_genere(code: str) -> Solveur:
     resultat = valider_code_genere(code)
     if not resultat.valide:
-        raise ErreurExecutionGeneree(
-            f"validation statique refusée : {'; '.join(resultat.violations)}"
-        )
+        raise ErreurExecutionGeneree(f"validation statique refusée : {'; '.join(resultat.violations)}")
 
     espace_noms: dict[str, object] = {}
     exec(compile(code, "<solveur_genere>", "exec"), espace_noms)

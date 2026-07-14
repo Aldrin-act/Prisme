@@ -15,3 +15,11 @@ venv/
 .mypy_cache/
 .coverage
 htmlcov/
+
+# Secrets locaux (voir .env.example pour le modèle documenté)
+.env
+
+# Store de solveurs local (solver_store/registry.py) — état généré, jamais versionné
+solver_store/*.sqlite3
+solver_store/artifacts/*
+!solver_store/artifacts/.gitkeep

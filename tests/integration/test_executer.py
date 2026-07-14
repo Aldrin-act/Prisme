@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pytest
 
-from dsl.schema import InstanceTRCO, MinimiserMakespan, Ressource, Tache
+from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, MinimiserMakespan, Ressource, Tache
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from validation_engine.feasibility_checker import verifier_faisabilite
 
@@ -30,13 +30,15 @@ from dsl.schema import CompatibiliteMachineTache, OperationPlanifiee, Planning, 
 
 def resoudre(instance):
     modele = cp_model.CpModel()
-    horizon = sum(tache.duree for tache in instance.taches)
-    toutes_ressources = {ressource.id for ressource in instance.ressources}
 
     compat = defaultdict(set)
+    duree = {}
     for contrainte in instance.contraintes:
         if isinstance(contrainte, CompatibiliteMachineTache):
             compat[contrainte.tache].add(contrainte.ressource)
+            duree[(contrainte.tache, contrainte.ressource)] = contrainte.duree
+
+    horizon = sum(max(duree[(tache.id, r)] for r in compat[tache.id]) for tache in instance.taches)
 
     debut = {}
     fin = {}
@@ -44,17 +46,17 @@ def resoudre(instance):
     intervalles = defaultdict(list)
 
     for tache in instance.taches:
-        candidats = compat.get(tache.id) or toutes_ressources
-        d = modele.NewIntVar(0, horizon, f"debut_{tache.id}")
-        f = modele.NewIntVar(0, horizon, f"fin_{tache.id}")
-        modele.Add(f == d + tache.duree)
-        debut[tache.id] = d
-        fin[tache.id] = f
+        candidats = compat[tache.id]
+        d_var = modele.NewIntVar(0, horizon, f"debut_{tache.id}")
+        f_var = modele.NewIntVar(0, horizon, f"fin_{tache.id}")
+        debut[tache.id] = d_var
+        fin[tache.id] = f_var
 
         presences_tache = []
         for ressource_id in candidats:
+            d = duree[(tache.id, ressource_id)]
             p = modele.NewBoolVar(f"presence_{tache.id}_{ressource_id}")
-            intervalle = modele.NewOptionalIntervalVar(d, tache.duree, f, p, f"iv_{tache.id}_{ressource_id}")
+            intervalle = modele.NewOptionalIntervalVar(d_var, d, f_var, p, f"iv_{tache.id}_{ressource_id}")
             intervalles[ressource_id].append(intervalle)
             presence[(tache.id, ressource_id)] = p
             presences_tache.append(p)
@@ -78,7 +80,7 @@ def resoudre(instance):
 
     operations = []
     for tache in instance.taches:
-        candidats = compat.get(tache.id) or toutes_ressources
+        candidats = compat[tache.id]
         ressource_choisie = next(r for r in candidats if solveur.Value(presence[(tache.id, r)]))
         operations.append(
             OperationPlanifiee(tache=tache.id, ressource=ressource_choisie, debut=solveur.Value(debut[tache.id]))
@@ -89,9 +91,9 @@ def resoudre(instance):
 
 def test_code_valide_est_execute_et_resout_correctement() -> None:
     instance = InstanceTRCO(
-        taches=[Tache(id="T1", duree=10)],
+        taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1")],
-        contraintes=[],
+        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
         objectifs=[MinimiserMakespan()],
     )
 

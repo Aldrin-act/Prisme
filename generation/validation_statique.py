@@ -28,6 +28,7 @@ def _prefixe_autorise(chemin: str) -> bool:
     `from ortools.sat.python import cp_model` (module = `ortools.sat.python`)."""
     return any(chemin == prefixe or chemin.startswith(f"{prefixe}.") for prefixe in PREFIXES_AUTORISES)
 
+
 APPELS_INTERDITS = frozenset(
     {
         "eval",

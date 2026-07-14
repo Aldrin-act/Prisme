@@ -8,7 +8,7 @@ existantes.
 
 from __future__ import annotations
 
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -25,18 +25,20 @@ class Precedence(BaseModel):
     apres: Identifiant
 
     @model_validator(mode="after")
-    def _pas_d_autoreference(self) -> "Precedence":
+    def _pas_d_autoreference(self) -> Precedence:
         if self.avant == self.apres:
             raise ValueError("une tâche ne peut pas se précéder elle-même")
         return self
 
 
 class CompatibiliteMachineTache(BaseModel):
-    """La tâche `tache` ne peut s'exécuter que sur la ressource `ressource`.
+    """La tâche `tache` peut s'exécuter sur la ressource `ressource`, avec la durée `duree`
+    propre à ce couple (tâche, ressource) — deux ressources compatibles pour la même tâche
+    peuvent avoir des durées différentes (FJSP flexible).
 
     Une tâche compatible avec plusieurs ressources est décrite par plusieurs
-    contraintes de ce type (une par ressource compatible), pour garder chaque
-    contrainte atomique et homogène (§4.2).
+    contraintes de ce type (une par ressource compatible, chacune portant sa
+    propre durée), pour garder chaque contrainte atomique et homogène (§4.2).
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -44,9 +46,10 @@ class CompatibiliteMachineTache(BaseModel):
     type: Literal["compatibilite_machine_tache"] = "compatibilite_machine_tache"
     tache: Identifiant
     ressource: Identifiant
+    duree: int = Field(gt=0, description="Durée de l'opération sur cette ressource, en minutes")
 
 
 Contrainte = Annotated[
-    Union[Precedence, CompatibiliteMachineTache],
+    Precedence | CompatibiliteMachineTache,
     Field(discriminator="type"),
 ]

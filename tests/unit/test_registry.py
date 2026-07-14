@@ -13,9 +13,7 @@ from solver_store.registry import ErreurIntegriteSolveur, Registre
 from validation_engine.cascade import DiagnosticInstance, VerdictCascade
 
 VERDICT_VERT = VerdictCascade(diagnostics=())
-VERDICT_ROUGE = VerdictCascade(
-    diagnostics=(DiagnosticInstance("un_cas", "faisabilite", ("planning illégal",)),)
-)
+VERDICT_ROUGE = VerdictCascade(diagnostics=(DiagnosticInstance("un_cas", "faisabilite", ("planning illégal",)),))
 
 
 def _registre(tmp_path: Path) -> Registre:

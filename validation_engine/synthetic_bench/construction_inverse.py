@@ -87,9 +87,7 @@ def construire_instance(nom: str, jobs: list[FormeJob]) -> InstanceSynthetique:
     optimum = 0
 
     for indice_job, forme in enumerate(jobs):
-        ressources_job = [
-            f"J{indice_job}M{indice_ressource}" for indice_ressource in range(forme.n_ressources)
-        ]
+        ressources_job = [f"J{indice_job}M{indice_ressource}" for indice_ressource in range(forme.n_ressources)]
         ressources.extend(Ressource(id=ressource_id) for ressource_id in ressources_job)
 
         instant = 0
@@ -99,15 +97,11 @@ def construire_instance(nom: str, jobs: list[FormeJob]) -> InstanceSynthetique:
             duree = _duree(indice_job, indice_tache)
             ressource_id = ressources_job[indice_tache % forme.n_ressources]
 
-            taches.append(Tache(id=tache_id, duree=duree))
-            contraintes.append(
-                CompatibiliteMachineTache(tache=tache_id, ressource=ressource_id)
-            )
+            taches.append(Tache(id=tache_id))
+            contraintes.append(CompatibiliteMachineTache(tache=tache_id, ressource=ressource_id, duree=duree))
             if tache_precedente is not None:
                 contraintes.append(Precedence(avant=tache_precedente, apres=tache_id))
-            operations.append(
-                OperationPlanifiee(tache=tache_id, ressource=ressource_id, debut=instant)
-            )
+            operations.append(OperationPlanifiee(tache=tache_id, ressource=ressource_id, debut=instant))
 
             instant += duree
             tache_precedente = tache_id
@@ -122,6 +116,4 @@ def construire_instance(nom: str, jobs: list[FormeJob]) -> InstanceSynthetique:
     )
     planning_optimal = Planning(operations=operations)
 
-    return InstanceSynthetique(
-        nom=nom, instance=instance, planning_optimal=planning_optimal, optimum=optimum
-    )
+    return InstanceSynthetique(nom=nom, instance=instance, planning_optimal=planning_optimal, optimum=optimum)

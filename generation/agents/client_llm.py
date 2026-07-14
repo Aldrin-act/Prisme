@@ -72,8 +72,6 @@ def construire_appel_llm() -> AppelLLM:
     fournisseur = os.environ.get("PRISME_LLM_PROVIDER", "anthropic")
     constructeur = _CONSTRUCTEURS.get(fournisseur)
     if constructeur is None:
-        raise ValueError(
-            f"fournisseur LLM inconnu : {fournisseur!r} (attendu : {sorted(_CONSTRUCTEURS)})"
-        )
+        raise ValueError(f"fournisseur LLM inconnu : {fournisseur!r} (attendu : {sorted(_CONSTRUCTEURS)})")
     modele = os.environ.get("PRISME_LLM_MODEL", _MODELES_PAR_DEFAUT[fournisseur])
     return constructeur(modele)

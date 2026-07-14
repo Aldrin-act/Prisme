@@ -82,6 +82,10 @@ uv run pytest tests/unit                                   # tests de couche 1 u
 uv run pytest tests/integration/test_solveur_reference.py  # un seul fichier
 uv run pytest tests/unit/test_cascade.py::<nom_test>       # un seul test
 
+# Lint / format (ruff)
+uv run ruff check .            # lint
+uv run ruff format --check .   # vérifie le formatage sans modifier (enlever --check pour appliquer)
+
 # Scripts de développement (toujours en module, depuis la racine du dépôt)
 uv run python -m scripts.generer_banc_synthetique          # régénère le banc synthétique après modification de construction_inverse.py
 uv run python -m scripts.benchmarker_solveur_reference     # solveur de référence : makespan vs optimum + temps de résolution
@@ -96,7 +100,15 @@ uv run uvicorn api.app:app --reload                 # documentation OpenAPI disp
 docker build -t prisme-sandbox sandbox/container/
 ```
 
-Aucun linter/formatter/type-checker n'est configuré dans ce dépôt.
+Lint et format : `ruff` (voir `[tool.ruff]` dans `pyproject.toml`). Aucun type-checker configuré.
+
+## Intégration continue
+
+`.github/workflows/ci.yml` (PH0-T4) tourne sur chaque push vers `main` et chaque Pull Request :
+installation via `uv sync --all-extras`, puis `ruff check`, `ruff format --check`, et `pytest`
+(suite complète — les runners GitHub `ubuntu-latest` embarquent Docker, donc les tests sandbox et
+bout-en-bout s'exécutent réellement, pas seulement en `skip`). Un run rouge doit bloquer la fusion
+(voir CONTRIBUTING.md pour activer ce garde-fou dans la protection de branche).
 
 ### Variables d'environnement
 

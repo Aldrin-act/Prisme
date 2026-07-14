@@ -110,9 +110,7 @@ def executer_dans_sandbox(
                     pass
 
     if code_sortie != 0:
-        raise ErreurExecutionSandbox(
-            f"le conteneur a quitté avec le code {code_sortie} : {sortie_brute.strip()}"
-        )
+        raise ErreurExecutionSandbox(f"le conteneur a quitté avec le code {code_sortie} : {sortie_brute.strip()}")
 
     sortie = sortie_brute.strip()
     if sortie == "null":

@@ -8,14 +8,14 @@ faisabilité (Étape 2) confirme légal — les trois étapes bouclées ensemble
 
 from __future__ import annotations
 
-from solveur_reference import resoudre
+from solveur_reference import resoudre_detaille
 from validation_engine.feasibility_checker import verifier_faisabilite
 from validation_engine.synthetic_bench import generer_catalogue
 
 
 def test_solveur_reference_retrouve_l_optimum_connu() -> None:
     for cas in generer_catalogue():
-        resultat = resoudre(cas.instance, limite_temps_s=10.0)
+        resultat = resoudre_detaille(cas.instance, limite_temps_s=10.0)
 
         assert resultat.statut == "optimal", (cas.nom, resultat.statut)
         assert resultat.makespan == cas.optimum, (cas.nom, resultat.makespan, cas.optimum)

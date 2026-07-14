@@ -1,7 +1,7 @@
 """Benchmark du solveur de référence sur le catalogue du banc synthétique.
 
 Pour chaque instance de `validation_engine/synthetic_bench/`, résout avec
-`solveur_reference.resoudre` et compare le makespan obtenu à l'optimum connu
+`solveur_reference.resoudre_detaille` et compare le makespan obtenu à l'optimum connu
 par construction (§6.4), en rapportant aussi le temps de résolution — la
 calibration de performance visée par l'étape « solveur de référence ».
 
@@ -10,8 +10,8 @@ Usage : python scripts/benchmarker_solveur_reference.py
 
 from __future__ import annotations
 
+from solveur_reference import resoudre_detaille
 from validation_engine.synthetic_bench import generer_catalogue
-from solveur_reference import resoudre
 
 
 def main() -> None:
@@ -20,7 +20,7 @@ def main() -> None:
     print(ligne_format.format(*entetes))
 
     for cas in generer_catalogue():
-        resultat = resoudre(cas.instance)
+        resultat = resoudre_detaille(cas.instance)
         ecart = "-" if resultat.makespan is None else resultat.makespan - cas.optimum
         print(
             ligne_format.format(

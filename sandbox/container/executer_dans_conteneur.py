@@ -24,6 +24,10 @@ def _charger_solveur_fige(chemin: str):
     if spec is None or spec.loader is None:
         raise RuntimeError(f"impossible de charger le solveur figé depuis {chemin!r}")
     module = importlib.util.module_from_spec(spec)
+    # `dataclasses` (`_is_type`) résout `sys.modules[cls.__module__]` pour évaluer les
+    # annotations différées ; sans cet enregistrement, un solveur figé définissant une
+    # dataclass plante avec `AttributeError: 'NoneType' object has no attribute '__dict__'`.
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module.resoudre
 

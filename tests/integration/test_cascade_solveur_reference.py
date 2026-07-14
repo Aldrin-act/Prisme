@@ -9,15 +9,11 @@ référence (Étape 4) au vert sur les trois briques à la fois.
 
 from __future__ import annotations
 
-from dsl.schema import InstanceTRCO, Planning
 from solveur_reference import resoudre
 from validation_engine.cascade import evaluer_cascade
 
 
 def test_solveur_reference_passe_la_cascade_au_vert() -> None:
-    def solveur(instance: InstanceTRCO) -> Planning | None:
-        return resoudre(instance).planning
-
-    verdict = evaluer_cascade(solveur)
+    verdict = evaluer_cascade(resoudre)
 
     assert verdict.reussi, verdict.echecs

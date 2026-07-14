@@ -10,6 +10,11 @@ from dsl.schema import InstanceTRCO, OperationPlanifiee, Planning
 from validation_engine.stability_test import tester_stabilite
 from validation_engine.synthetic_bench import generer_catalogue
 
+# pytest collecte par défaut toute fonction préfixée par "test" (sans exiger
+# l'underscore) ; sans ce garde-fou, `tester_stabilite` importée ci-dessus est
+# elle-même prise pour un test et échoue faute de fixture `solveur`.
+tester_stabilite.__test__ = False
+
 _CAS = next(cas for cas in generer_catalogue() if cas.nom == "taille_2_chaine_simple")
 
 

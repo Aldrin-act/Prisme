@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
-from dsl.schema import InstanceTRCO, Planning
+from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, Planning
 
 
 def calculer_makespan(instance: InstanceTRCO, planning: Planning) -> int:
-    duree = {tache.id: tache.duree for tache in instance.taches}
+    duree = {
+        (c.tache, c.ressource): c.duree for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)
+    }
     fins = [
-        operation.debut + duree[operation.tache]
+        operation.debut + duree[(operation.tache, operation.ressource)]
         for operation in planning.operations
-        if operation.tache in duree
+        if (operation.tache, operation.ressource) in duree
     ]
     return max(fins, default=0)

@@ -5,6 +5,6 @@ du noyau, calibre la performance attendue, et sert de cas de référence pour
 la fidélité sémantique (§6.2 brique 3).
 """
 
-from .solveur import ResultatResolution, resoudre
+from .solveur import ResultatResolution, resoudre, resoudre_detaille
 
-__all__ = ["ResultatResolution", "resoudre"]
+__all__ = ["ResultatResolution", "resoudre", "resoudre_detaille"]

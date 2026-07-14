@@ -38,15 +38,15 @@ def _op(tache: str, ressource: str, debut: int) -> OperationPlanifiee:
 
 def test_planning_legal_est_accepte() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=30), Tache(id="T2", duree=45), Tache(id="T3", duree=15)],
+        taches=[Tache(id="T1"), Tache(id="T2"), Tache(id="T3")],
         ressources=[Ressource(id="M1"), Ressource(id="M2")],
         contraintes=[
             Precedence(avant="T1", apres="T2"),
             Precedence(avant="T2", apres="T3"),
-            CompatibiliteMachineTache(tache="T1", ressource="M1"),
-            CompatibiliteMachineTache(tache="T2", ressource="M1"),
-            CompatibiliteMachineTache(tache="T2", ressource="M2"),
-            CompatibiliteMachineTache(tache="T3", ressource="M2"),
+            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=30),
+            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=45),
+            CompatibiliteMachineTache(tache="T2", ressource="M2", duree=45),
+            CompatibiliteMachineTache(tache="T3", ressource="M2", duree=15),
         ],
     )
     planning = _planning(
@@ -63,8 +63,12 @@ def test_planning_legal_est_accepte() -> None:
 
 def test_operations_bout_a_bout_sur_la_meme_ressource_sont_legales() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=10), Tache(id="T2", duree=10)],
+        taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="M1")],
+        contraintes=[
+            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=10),
+        ],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T2", "M1", 10))
 
@@ -78,9 +82,13 @@ def test_precedence_violee_est_detectee() -> None:
     # toute violation de chevauchement (même ressource + mêmes instants
     # déclencherait aussi un chevauchement_ressource).
     instance = _instance(
-        taches=[Tache(id="T1", duree=30), Tache(id="T2", duree=10)],
+        taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="M1"), Ressource(id="M2")],
-        contraintes=[Precedence(avant="T1", apres="T2")],
+        contraintes=[
+            Precedence(avant="T1", apres="T2"),
+            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=30),
+            CompatibiliteMachineTache(tache="T2", ressource="M2", duree=10),
+        ],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T2", "M2", 20))
 
@@ -94,8 +102,12 @@ def test_precedence_violee_est_detectee() -> None:
 
 def test_chevauchement_ressource_est_detecte() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=10), Tache(id="T2", duree=10)],
+        taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="M1")],
+        contraintes=[
+            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=10),
+        ],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T2", "M1", 5))
 
@@ -110,9 +122,9 @@ def test_chevauchement_ressource_est_detecte() -> None:
 
 def test_incompatibilite_machine_tache_est_detectee() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=10)],
+        taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1"), Ressource(id="M2")],
-        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1")],
+        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M2", 0))
 
@@ -124,23 +136,14 @@ def test_incompatibilite_machine_tache_est_detectee() -> None:
     assert resultat.violations[0].ressource == "M2"
 
 
-def test_tache_sans_contrainte_de_compatibilite_est_libre() -> None:
-    """Absence de contrainte = absence de restriction (voir docstring du module)."""
-    instance = _instance(
-        taches=[Tache(id="T1", duree=10)],
-        ressources=[Ressource(id="M1"), Ressource(id="M2")],
-    )
-    planning = _planning(_op("T1", "M2", 0))
-
-    resultat = verifier_faisabilite(instance, planning)
-
-    assert resultat.legal
-
-
 def test_tache_non_planifiee_est_detectee() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=10), Tache(id="T2", duree=10)],
+        taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="M1")],
+        contraintes=[
+            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=10),
+        ],
     )
     planning = _planning(_op("T1", "M1", 0))
 
@@ -153,8 +156,9 @@ def test_tache_non_planifiee_est_detectee() -> None:
 
 def test_tache_planifiee_plusieurs_fois_est_detectee() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=10)],
+        taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1"), Ressource(id="M2")],
+        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T1", "M2", 0))
 
@@ -167,8 +171,9 @@ def test_tache_planifiee_plusieurs_fois_est_detectee() -> None:
 
 def test_tache_inconnue_dans_planning_est_detectee() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=10)],
+        taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1")],
+        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T99", "M1", 10))
 
@@ -181,9 +186,9 @@ def test_tache_inconnue_dans_planning_est_detectee() -> None:
 
 def test_ressource_inconnue_dans_planning_est_detectee() -> None:
     instance = _instance(
-        taches=[Tache(id="T1", duree=10)],
+        taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1")],
+        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M99", 0))
 

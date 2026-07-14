@@ -17,7 +17,12 @@
       "Bash(docker compose *)",
       "Bash(systemctl is-active *)",
       "Bash(docker info *)",
-      "Bash(getent group *)"
+      "Bash(getent group *)",
+      "Bash(cp .env.example .env)",
+      "Bash(cd /home/vboxuser/Projet_Prisme *)"
+    ],
+    "additionalDirectories": [
+      "/home/vboxuser/Projet_Prisme"
     ]
   }
 }

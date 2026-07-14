@@ -20,7 +20,7 @@ def _optimum_attendu(instance: InstanceTRCO) -> int:
     précédence impose, à elle seule, qu'une chaîne de tâches liées ne peut
     pas durer moins que la somme de leurs durées (§6.4).
     """
-    durees = {tache.id: tache.duree for tache in instance.taches}
+    durees = {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)}
     suivant: dict[str, str] = {}
     a_un_predecesseur: set[str] = set()
     for contrainte in instance.contraintes:
@@ -28,9 +28,7 @@ def _optimum_attendu(instance: InstanceTRCO) -> int:
             suivant[contrainte.avant] = contrainte.apres
             a_un_predecesseur.add(contrainte.apres)
 
-    departs_de_chaine = [
-        tache_id for tache_id in durees if tache_id not in a_un_predecesseur
-    ]
+    departs_de_chaine = [tache_id for tache_id in durees if tache_id not in a_un_predecesseur]
 
     optimum = 0
     for depart in departs_de_chaine:
@@ -46,7 +44,10 @@ def _optimum_attendu(instance: InstanceTRCO) -> int:
 
 
 def _ensemble_taches(instance: InstanceTRCO) -> set[tuple[str, int]]:
-    return {(tache.id, tache.duree) for tache in instance.taches}
+    """La durée vit sur `CompatibiliteMachineTache`, pas sur `Tache` — mais le banc
+    synthétique garantit une seule ressource compatible par tâche, donc la paire
+    (tâche, durée) reste bien définie ici."""
+    return {(c.tache, c.duree) for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)}
 
 
 def _ensemble_ressources(instance: InstanceTRCO) -> set[str]:
@@ -59,9 +60,7 @@ def _ensemble_contraintes(instance: InstanceTRCO) -> set[tuple[str, str, str]]:
         if isinstance(contrainte, Precedence):
             resultat.add(("precedence", contrainte.avant, contrainte.apres))
         elif isinstance(contrainte, CompatibiliteMachineTache):
-            resultat.add(
-                ("compatibilite_machine_tache", contrainte.tache, contrainte.ressource)
-            )
+            resultat.add(("compatibilite_machine_tache", contrainte.tache, contrainte.ressource))
     return resultat
 
 
@@ -95,12 +94,6 @@ def test_catalogue_verse_sur_disque_est_a_jour() -> None:
 
         assert cas_disque.optimum == cas.optimum
         assert _ensemble_taches(cas_disque.instance) == _ensemble_taches(cas.instance)
-        assert _ensemble_ressources(cas_disque.instance) == _ensemble_ressources(
-            cas.instance
-        )
-        assert _ensemble_contraintes(cas_disque.instance) == _ensemble_contraintes(
-            cas.instance
-        )
-        assert _ensemble_operations(cas_disque.planning_optimal) == _ensemble_operations(
-            cas.planning_optimal
-        )
+        assert _ensemble_ressources(cas_disque.instance) == _ensemble_ressources(cas.instance)
+        assert _ensemble_contraintes(cas_disque.instance) == _ensemble_contraintes(cas.instance)
+        assert _ensemble_operations(cas_disque.planning_optimal) == _ensemble_operations(cas.planning_optimal)

@@ -15,10 +15,12 @@ lève donc rien : toute anomalie, y compris structurelle (tâche non
 planifiée, planifiée deux fois, référence inconnue), devient une entrée de
 `ResultatFaisabilite.violations`.
 
-Règle de compatibilité machine-tâche (choix de modélisation) : une
-contrainte `CompatibiliteMachineTache` est une *restriction*. Une tâche sans
-aucune contrainte de ce type déclarée n'est donc pas restreinte : elle peut
-être affectée à n'importe quelle ressource déclarée dans l'instance.
+Règle de compatibilité machine-tâche (à garder synchronisée avec
+`solveur_reference/solveur.py`) : `CompatibiliteMachineTache` est
+obligatoire — une tâche sans aucune n'est pas rejetée ici (ce garde-fou-là
+vit dans `InstanceTRCO`, §6.7), mais la contrainte porte aussi la durée
+propre à ce couple (tâche, ressource), utilisée ci-dessous pour les calculs
+de fin d'opération.
 """
 
 from __future__ import annotations
@@ -128,6 +130,13 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
             continue
         operations_valides[tache_id] = operation
 
+    ressources_autorisees: dict[str, set[str]] = defaultdict(set)
+    duree_par_couple: dict[tuple[str, str], int] = {}
+    for contrainte in instance.contraintes:
+        if isinstance(contrainte, CompatibiliteMachineTache):
+            ressources_autorisees[contrainte.tache].add(contrainte.ressource)
+            duree_par_couple[(contrainte.tache, contrainte.ressource)] = contrainte.duree
+
     for contrainte in instance.contraintes:
         if not isinstance(contrainte, Precedence):
             continue
@@ -135,22 +144,22 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
         operation_apres = operations_valides.get(contrainte.apres)
         if operation_avant is None or operation_apres is None:
             continue
-        fin_avant = operation_avant.debut + taches_par_id[contrainte.avant].duree
+        duree_avant = duree_par_couple.get((contrainte.avant, operation_avant.ressource))
+        if duree_avant is None:
+            # Ressource incompatible : déjà signalé séparément ci-dessous
+            # (incompatibilite_machine_tache), aucune durée connue pour ce
+            # couple précis, donc pas de vérification de fin possible ici.
+            continue
+        fin_avant = operation_avant.debut + duree_avant
         if fin_avant > operation_apres.debut:
             violations.append(
                 Violation(
                     "precedence_violee",
-                    f"précédence violée : {contrainte.avant!r} doit finir avant le "
-                    f"début de {contrainte.apres!r}",
+                    f"précédence violée : {contrainte.avant!r} doit finir avant le début de {contrainte.apres!r}",
                     tache=contrainte.avant,
                     tache_secondaire=contrainte.apres,
                 )
             )
-
-    ressources_autorisees: dict[str, set[str]] = defaultdict(set)
-    for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
-            ressources_autorisees[contrainte.tache].add(contrainte.ressource)
 
     for tache_id, operation in operations_valides.items():
         restrictions = ressources_autorisees.get(tache_id)
@@ -158,8 +167,7 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
             violations.append(
                 Violation(
                     "incompatibilite_machine_tache",
-                    f"tâche {tache_id!r} affectée à une ressource incompatible : "
-                    f"{operation.ressource!r}",
+                    f"tâche {tache_id!r} affectée à une ressource incompatible : {operation.ressource!r}",
                     tache=tache_id,
                     ressource=operation.ressource,
                 )
@@ -167,7 +175,12 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
 
     operations_par_ressource: dict[str, list[tuple[str, int, int]]] = defaultdict(list)
     for tache_id, operation in operations_valides.items():
-        fin = operation.debut + taches_par_id[tache_id].duree
+        duree_operation = duree_par_couple.get((tache_id, operation.ressource))
+        if duree_operation is None:
+            # Ressource incompatible : déjà signalé séparément ci-dessus, pas
+            # de durée connue pour ce couple, donc pas de chevauchement calculable.
+            continue
+        fin = operation.debut + duree_operation
         operations_par_ressource[operation.ressource].append((tache_id, operation.debut, fin))
 
     for ressource_id, intervalles in operations_par_ressource.items():

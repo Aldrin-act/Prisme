@@ -33,11 +33,9 @@ def test_exemple_invalide_est_rejete(chemin: Path) -> None:
 
 def _instance_minimale(**overrides: object) -> dict:
     base = {
-        "taches": [{"id": "T1", "duree": 10}],
+        "taches": [{"id": "T1"}],
         "ressources": [{"id": "M1"}],
-        "contraintes": [
-            {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1"}
-        ],
+        "contraintes": [{"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10}],
         "objectifs": [{"type": "minimiser_makespan"}],
     }
     base.update(overrides)
@@ -45,13 +43,15 @@ def _instance_minimale(**overrides: object) -> dict:
 
 
 def test_duree_nulle_rejetee() -> None:
-    payload = _instance_minimale(taches=[{"id": "T1", "duree": 0}])
+    payload = _instance_minimale(
+        contraintes=[{"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 0}]
+    )
     with pytest.raises(ValidationError):
         charger_instance(payload)
 
 
 def test_identifiant_hors_alphabet_rejete() -> None:
-    payload = _instance_minimale(taches=[{"id": "T 1", "duree": 10}])
+    payload = _instance_minimale(taches=[{"id": "T 1"}])
     with pytest.raises(ValidationError):
         charger_instance(payload)
 
@@ -60,10 +60,16 @@ def test_precedence_autoreference_rejetee() -> None:
     payload = _instance_minimale(
         contraintes=[
             {"type": "precedence", "avant": "T1", "apres": "T1"},
-            {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1"},
+            {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10},
         ]
     )
     with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_tache_sans_compatibilite_est_rejetee() -> None:
+    payload = _instance_minimale(contraintes=[])
+    with pytest.raises(ValidationError, match="sans aucune contrainte de compatibilité"):
         charger_instance(payload)
 
 

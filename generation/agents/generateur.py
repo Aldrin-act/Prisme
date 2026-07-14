@@ -1,4 +1,4 @@
-ZJP"""Agent générateur (§5.6) — un seul appel LLM, une seule génération, sans
+"""Agent générateur (§5.6) — un seul appel LLM, une seule génération, sans
 boucle : c'est l'Étape 4, le premier contact avec l'IA, avant toute boucle
 generate-test-repair (Étape 6). Le contrat de sortie attendu — une fonction
 `resoudre(instance) -> Planning | None` — est identique à celui de

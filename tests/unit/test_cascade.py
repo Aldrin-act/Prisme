@@ -33,12 +33,12 @@ def _solveur_ignore_precedence(instance: InstanceTRCO) -> Planning:
     for contrainte in instance.contraintes:
         if isinstance(contrainte, CompatibiliteMachineTache):
             compat[contrainte.tache].add(contrainte.ressource)
-    toutes_ressources = {ressource.id for ressource in instance.ressources}
 
     operations = [
         OperationPlanifiee(
             tache=tache.id,
-            ressource=sorted(compat.get(tache.id) or toutes_ressources)[0],
+            # Non vide : garanti par la validation InstanceTRCO (§6.7).
+            ressource=sorted(compat[tache.id])[0],
             debut=0,
         )
         for tache in instance.taches
@@ -52,12 +52,12 @@ def _planifier_glouton(instance: InstanceTRCO, choisir_ressource) -> Planning:
     prédécesseurs et de la disponibilité de la ressource choisie. Le choix
     entre plusieurs ressources compatibles est délégué à `choisir_ressource`.
     """
-    duree = {tache.id: tache.duree for tache in instance.taches}
     compat: dict[str, set[str]] = defaultdict(set)
+    duree_par_couple: dict[tuple[str, str], int] = {}
     for contrainte in instance.contraintes:
         if isinstance(contrainte, CompatibiliteMachineTache):
             compat[contrainte.tache].add(contrainte.ressource)
-    toutes_ressources = {ressource.id for ressource in instance.ressources}
+            duree_par_couple[(contrainte.tache, contrainte.ressource)] = contrainte.duree
 
     predecesseurs: dict[str, list[str]] = defaultdict(list)
     successeurs: dict[str, list[str]] = defaultdict(list)
@@ -81,11 +81,12 @@ def _planifier_glouton(instance: InstanceTRCO, choisir_ressource) -> Planning:
     disponible_ressource: dict[str, int] = defaultdict(int)
     operations = []
     for tache_id in ordre:
-        candidats = sorted(compat.get(tache_id) or toutes_ressources)
+        # Non vide : garanti par la validation InstanceTRCO (§6.7).
+        candidats = sorted(compat[tache_id])
         ressource = choisir_ressource(candidats)
         pret = max((fin_tache[predecesseur] for predecesseur in predecesseurs.get(tache_id, [])), default=0)
         debut = max(pret, disponible_ressource[ressource])
-        fin = debut + duree[tache_id]
+        fin = debut + duree_par_couple[(tache_id, ressource)]
         fin_tache[tache_id] = fin
         disponible_ressource[ressource] = fin
         operations.append(OperationPlanifiee(tache=tache_id, ressource=ressource, debut=debut))

@@ -97,10 +97,7 @@ def evaluer_un_cas_de_banc(
 def evaluer_optimalite_banc(solveur: Solveur, tolerance_relative: float = 0.0) -> VerdictCascade:
     """Brique 2 sur tout le catalogue du banc synthétique (§6.4)."""
     return VerdictCascade(
-        tuple(
-            evaluer_un_cas_de_banc(solveur, cas, tolerance_relative)
-            for cas in generer_catalogue()
-        )
+        tuple(evaluer_un_cas_de_banc(solveur, cas, tolerance_relative) for cas in generer_catalogue())
     )
 
 
@@ -119,15 +116,12 @@ def evaluer_un_cas_reference(solveur: Solveur, cas: CasReference) -> DiagnosticI
 
     assert planning is not None
     affectation_obtenue = {operation.tache: operation.ressource for operation in planning.operations}
-    affectation_attendue = {
-        operation.tache: operation.ressource for operation in cas.planning_attendu.operations
-    }
+    affectation_attendue = {operation.tache: operation.ressource for operation in cas.planning_attendu.operations}
     makespan_obtenu = calculer_makespan(cas.instance, planning)
     makespan_attendu = calculer_makespan(cas.instance, cas.planning_attendu)
 
     ecarts = [
-        f"tâche {tache!r} : ressource attendue {ressource_attendue!r}, obtenue "
-        f"{affectation_obtenue.get(tache)!r}"
+        f"tâche {tache!r} : ressource attendue {ressource_attendue!r}, obtenue {affectation_obtenue.get(tache)!r}"
         for tache, ressource_attendue in affectation_attendue.items()
         if affectation_obtenue.get(tache) != ressource_attendue
     ]
@@ -141,9 +135,7 @@ def evaluer_un_cas_reference(solveur: Solveur, cas: CasReference) -> DiagnosticI
 
 def evaluer_fidelite_reference(solveur: Solveur) -> VerdictCascade:
     """Brique 3 sur tout le catalogue de cas de référence (§6.2 brique 3)."""
-    return VerdictCascade(
-        tuple(evaluer_un_cas_reference(solveur, cas) for cas in charger_cas_reference())
-    )
+    return VerdictCascade(tuple(evaluer_un_cas_reference(solveur, cas) for cas in charger_cas_reference()))
 
 
 def evaluer_cascade(solveur: Solveur, tolerance_relative: float = 0.0) -> VerdictCascade:

@@ -41,6 +41,5 @@ def _depuis_dict(donnees: dict[str, Any]) -> CasReference:
 def charger_cas_reference(dossier: Path = DOSSIER_CAS) -> list[CasReference]:
     """Charge tous les cas de référence versionnés sous `dossier`, triés par nom."""
     return [
-        _depuis_dict(json.loads(chemin.read_text(encoding="utf-8")))
-        for chemin in sorted(dossier.glob("*.json"))
+        _depuis_dict(json.loads(chemin.read_text(encoding="utf-8"))) for chemin in sorted(dossier.glob("*.json"))
     ]

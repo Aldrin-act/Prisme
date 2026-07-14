@@ -22,21 +22,18 @@ from .schema_erp import PayloadERP
 
 def traduire(payload: PayloadERP) -> InstanceTRCO:
     """Traduit un payload de l'ERP de référence en instance T-R-C-O canonique."""
-    taches = [
-        Tache(id=operation.code_operation, duree=operation.duree_minutes)
-        for operation in payload.operations
-    ]
+    taches = [Tache(id=operation.code_operation) for operation in payload.operations]
     ressources = [Ressource(id=poste.code_poste) for poste in payload.postes]
 
     contraintes: list[Contrainte] = []
     for operation in payload.operations:
         contraintes.append(
-            CompatibiliteMachineTache(tache=operation.code_operation, ressource=operation.poste_id)
+            CompatibiliteMachineTache(
+                tache=operation.code_operation, ressource=operation.poste_id, duree=operation.duree_minutes
+            )
         )
         if operation.operation_precedente is not None:
-            contraintes.append(
-                Precedence(avant=operation.operation_precedente, apres=operation.code_operation)
-            )
+            contraintes.append(Precedence(avant=operation.operation_precedente, apres=operation.code_operation))
 
     return InstanceTRCO(
         taches=taches,

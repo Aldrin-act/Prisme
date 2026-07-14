@@ -18,9 +18,8 @@ from pathlib import Path
 
 import solveur_reference.solveur as _module_solveur_reference
 from solver_store.registry import Registre
-from validation_engine.cascade import evaluer_cascade
 from solveur_reference import resoudre
-
+from validation_engine.cascade import evaluer_cascade
 
 STRUCTURE_MINIMALE = "compatibilite_machine_tache,precedence"
 
@@ -34,13 +33,11 @@ def enregistrer(registre: Registre, client_id: str = "demo") -> str:
     d'enregistrer — le store ne doit jamais recevoir un verdict qu'on n'a
     pas réellement vérifié.
     """
-    existants = registre.rechercher_solveurs(
-        client_id=client_id, structure_contraintes=STRUCTURE_MINIMALE
-    )
+    existants = registre.rechercher_solveurs(client_id=client_id, structure_contraintes=STRUCTURE_MINIMALE)
     if existants:
         return existants[0].id
 
-    verdict = evaluer_cascade(lambda instance: resoudre(instance).planning)
+    verdict = evaluer_cascade(resoudre)
     if not verdict.reussi:
         raise RuntimeError(f"le solveur de référence n'a pas passé la cascade : {verdict.echecs}")
 

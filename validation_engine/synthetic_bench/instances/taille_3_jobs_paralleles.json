@@ -1,210 +1,210 @@
 {
-    "nom":  "taille_3_jobs_paralleles",
-    "optimum":  124,
-    "instance":  {
-                     "taches":  [
-                                    {
-                                        "id":  "J0T0",
-                                        "nom":  null,
-                                        "duree":  10
-                                    },
-                                    {
-                                        "id":  "J0T1",
-                                        "nom":  null,
-                                        "duree":  27
-                                    },
-                                    {
-                                        "id":  "J0T2",
-                                        "nom":  null,
-                                        "duree":  44
-                                    },
-                                    {
-                                        "id":  "J1T0",
-                                        "nom":  null,
-                                        "duree":  41
-                                    },
-                                    {
-                                        "id":  "J1T1",
-                                        "nom":  null,
-                                        "duree":  58
-                                    },
-                                    {
-                                        "id":  "J1T2",
-                                        "nom":  null,
-                                        "duree":  25
-                                    },
-                                    {
-                                        "id":  "J2T0",
-                                        "nom":  null,
-                                        "duree":  22
-                                    },
-                                    {
-                                        "id":  "J2T1",
-                                        "nom":  null,
-                                        "duree":  39
-                                    },
-                                    {
-                                        "id":  "J2T2",
-                                        "nom":  null,
-                                        "duree":  56
-                                    }
-                                ],
-                     "ressources":  [
-                                        {
-                                            "id":  "J0M0",
-                                            "nom":  null
-                                        },
-                                        {
-                                            "id":  "J0M1",
-                                            "nom":  null
-                                        },
-                                        {
-                                            "id":  "J1M0",
-                                            "nom":  null
-                                        },
-                                        {
-                                            "id":  "J1M1",
-                                            "nom":  null
-                                        },
-                                        {
-                                            "id":  "J2M0",
-                                            "nom":  null
-                                        },
-                                        {
-                                            "id":  "J2M1",
-                                            "nom":  null
-                                        }
-                                    ],
-                     "contraintes":  [
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J0T0",
-                                             "ressource":  "J0M0"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J0T1",
-                                             "ressource":  "J0M1"
-                                         },
-                                         {
-                                             "type":  "precedence",
-                                             "avant":  "J0T0",
-                                             "apres":  "J0T1"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J0T2",
-                                             "ressource":  "J0M0"
-                                         },
-                                         {
-                                             "type":  "precedence",
-                                             "avant":  "J0T1",
-                                             "apres":  "J0T2"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J1T0",
-                                             "ressource":  "J1M0"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J1T1",
-                                             "ressource":  "J1M1"
-                                         },
-                                         {
-                                             "type":  "precedence",
-                                             "avant":  "J1T0",
-                                             "apres":  "J1T1"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J1T2",
-                                             "ressource":  "J1M0"
-                                         },
-                                         {
-                                             "type":  "precedence",
-                                             "avant":  "J1T1",
-                                             "apres":  "J1T2"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J2T0",
-                                             "ressource":  "J2M0"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J2T1",
-                                             "ressource":  "J2M1"
-                                         },
-                                         {
-                                             "type":  "precedence",
-                                             "avant":  "J2T0",
-                                             "apres":  "J2T1"
-                                         },
-                                         {
-                                             "type":  "compatibilite_machine_tache",
-                                             "tache":  "J2T2",
-                                             "ressource":  "J2M0"
-                                         },
-                                         {
-                                             "type":  "precedence",
-                                             "avant":  "J2T1",
-                                             "apres":  "J2T2"
-                                         }
-                                     ],
-                     "objectifs":  [
-                                       {
-                                           "type":  "minimiser_makespan"
-                                       }
-                                   ]
-                 },
-    "planning_optimal":  {
-                             "operations":  [
-                                                {
-                                                    "tache":  "J0T0",
-                                                    "ressource":  "J0M0",
-                                                    "debut":  0
-                                                },
-                                                {
-                                                    "tache":  "J0T1",
-                                                    "ressource":  "J0M1",
-                                                    "debut":  10
-                                                },
-                                                {
-                                                    "tache":  "J0T2",
-                                                    "ressource":  "J0M0",
-                                                    "debut":  37
-                                                },
-                                                {
-                                                    "tache":  "J1T0",
-                                                    "ressource":  "J1M0",
-                                                    "debut":  0
-                                                },
-                                                {
-                                                    "tache":  "J1T1",
-                                                    "ressource":  "J1M1",
-                                                    "debut":  41
-                                                },
-                                                {
-                                                    "tache":  "J1T2",
-                                                    "ressource":  "J1M0",
-                                                    "debut":  99
-                                                },
-                                                {
-                                                    "tache":  "J2T0",
-                                                    "ressource":  "J2M0",
-                                                    "debut":  0
-                                                },
-                                                {
-                                                    "tache":  "J2T1",
-                                                    "ressource":  "J2M1",
-                                                    "debut":  22
-                                                },
-                                                {
-                                                    "tache":  "J2T2",
-                                                    "ressource":  "J2M0",
-                                                    "debut":  61
-                                                }
-                                            ]
-                         }
+  "instance": {
+    "contraintes": [
+      {
+        "duree": 10,
+        "ressource": "J0M0",
+        "tache": "J0T0",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "duree": 27,
+        "ressource": "J0M1",
+        "tache": "J0T1",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "apres": "J0T1",
+        "avant": "J0T0",
+        "type": "precedence"
+      },
+      {
+        "duree": 44,
+        "ressource": "J0M0",
+        "tache": "J0T2",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "apres": "J0T2",
+        "avant": "J0T1",
+        "type": "precedence"
+      },
+      {
+        "duree": 41,
+        "ressource": "J1M0",
+        "tache": "J1T0",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "duree": 58,
+        "ressource": "J1M1",
+        "tache": "J1T1",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "apres": "J1T1",
+        "avant": "J1T0",
+        "type": "precedence"
+      },
+      {
+        "duree": 25,
+        "ressource": "J1M0",
+        "tache": "J1T2",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "apres": "J1T2",
+        "avant": "J1T1",
+        "type": "precedence"
+      },
+      {
+        "duree": 22,
+        "ressource": "J2M0",
+        "tache": "J2T0",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "duree": 39,
+        "ressource": "J2M1",
+        "tache": "J2T1",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "apres": "J2T1",
+        "avant": "J2T0",
+        "type": "precedence"
+      },
+      {
+        "duree": 56,
+        "ressource": "J2M0",
+        "tache": "J2T2",
+        "type": "compatibilite_machine_tache"
+      },
+      {
+        "apres": "J2T2",
+        "avant": "J2T1",
+        "type": "precedence"
+      }
+    ],
+    "objectifs": [
+      {
+        "type": "minimiser_makespan"
+      }
+    ],
+    "ressources": [
+      {
+        "id": "J0M0",
+        "nom": null
+      },
+      {
+        "id": "J0M1",
+        "nom": null
+      },
+      {
+        "id": "J1M0",
+        "nom": null
+      },
+      {
+        "id": "J1M1",
+        "nom": null
+      },
+      {
+        "id": "J2M0",
+        "nom": null
+      },
+      {
+        "id": "J2M1",
+        "nom": null
+      }
+    ],
+    "taches": [
+      {
+        "id": "J0T0",
+        "nom": null
+      },
+      {
+        "id": "J0T1",
+        "nom": null
+      },
+      {
+        "id": "J0T2",
+        "nom": null
+      },
+      {
+        "id": "J1T0",
+        "nom": null
+      },
+      {
+        "id": "J1T1",
+        "nom": null
+      },
+      {
+        "id": "J1T2",
+        "nom": null
+      },
+      {
+        "id": "J2T0",
+        "nom": null
+      },
+      {
+        "id": "J2T1",
+        "nom": null
+      },
+      {
+        "id": "J2T2",
+        "nom": null
+      }
+    ]
+  },
+  "nom": "taille_3_jobs_paralleles",
+  "optimum": 124,
+  "planning_optimal": {
+    "operations": [
+      {
+        "debut": 0,
+        "ressource": "J0M0",
+        "tache": "J0T0"
+      },
+      {
+        "debut": 10,
+        "ressource": "J0M1",
+        "tache": "J0T1"
+      },
+      {
+        "debut": 37,
+        "ressource": "J0M0",
+        "tache": "J0T2"
+      },
+      {
+        "debut": 0,
+        "ressource": "J1M0",
+        "tache": "J1T0"
+      },
+      {
+        "debut": 41,
+        "ressource": "J1M1",
+        "tache": "J1T1"
+      },
+      {
+        "debut": 99,
+        "ressource": "J1M0",
+        "tache": "J1T2"
+      },
+      {
+        "debut": 0,
+        "ressource": "J2M0",
+        "tache": "J2T0"
+      },
+      {
+        "debut": 22,
+        "ressource": "J2M1",
+        "tache": "J2T1"
+      },
+      {
+        "debut": 61,
+        "ressource": "J2M0",
+        "tache": "J2T2"
+      }
+    ]
+  }
 }
