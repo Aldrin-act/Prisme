@@ -104,6 +104,40 @@ class EtatAPI:
     def lister_alertes(self) -> list[Alerte]:
         return list(self.alertes.values())
 
+    def lister_executions(self) -> list[dict[str, object]]:
+        """Vue de supervision (lecture seule) sur toutes les exécutions
+        connues, pas seulement celles nées d'une alerte."""
+        resultats = []
+        for execution_id, (id_solveur, instance_id, resultat) in self.executions.items():
+            client_id, _ = self.instances[instance_id]
+            decision = self.decisions.get(execution_id)
+            resultats.append(
+                {
+                    "execution_id": execution_id,
+                    "id_solveur": id_solveur,
+                    "instance_id": instance_id,
+                    "client_id": client_id,
+                    "reussi": resultat.reussi,
+                    "erreur": resultat.erreur,
+                    "decision": decision.decision if decision else None,
+                }
+            )
+        return resultats
+
+    def lister_instances(self) -> list[dict[str, object]]:
+        """Vue de supervision (lecture seule) sur toutes les instances
+        ingérées, avec un indicateur `executee` pour repérer celles en attente."""
+        instances_executees = {instance_id for (_, instance_id, _) in self.executions.values()}
+        return [
+            {
+                "instance_id": instance_id,
+                "client_id": client_id,
+                "structure_contraintes": structure_contraintes(instance),
+                "executee": instance_id in instances_executees,
+            }
+            for instance_id, (client_id, instance) in self.instances.items()
+        ]
+
     def marquer_alerte_traitee(self, alerte_id: str, execution_id: str) -> None:
         alerte = self.recuperer_alerte(alerte_id)
         self.alertes[alerte_id] = Alerte(

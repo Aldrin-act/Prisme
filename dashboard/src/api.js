@@ -19,6 +19,20 @@ async function requete(chemin, options) {
   return reponse.json();
 }
 
+export function ingererInstance(clientId, instance) {
+  return requete(`/ingestion/${clientId}`, {
+    method: "POST",
+    body: JSON.stringify(instance),
+  });
+}
+
+export function leverAlerte(instanceId, clientId, typeAlea, description) {
+  return requete("/alertes", {
+    method: "POST",
+    body: JSON.stringify({ instance_id: instanceId, client_id: clientId, type_alea: typeAlea, description }),
+  });
+}
+
 export function listerAlertes() {
   return requete("/alertes");
 }

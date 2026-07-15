@@ -9,31 +9,75 @@ body {
   color: #1a1a1a;
 }
 
-.app {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 1.5rem;
+.layout {
+  display: flex;
+  min-height: 100vh;
+  align-items: flex-start;
 }
 
-header {
-  margin-bottom: 1.5rem;
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  min-height: 100vh;
+  background: #1a2233;
+  color: #e6e9f0;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-header h1 {
+.sidebar-entete {
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-entete h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.03em;
 }
 
-.sous-titre {
-  margin: 0.25rem 0 0;
-  color: #555;
+.sidebar .sous-titre {
+  margin: 0.2rem 0 0;
+  color: #9aa4bb;
   font-style: italic;
+  font-size: 0.8rem;
 }
 
-main {
+.sidebar-section {
+  margin: 1rem 0 0.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9aa4bb;
+}
+
+.nav-item {
+  background: transparent;
+  border: 1px solid #3a4560;
+  color: #e6e9f0;
+  text-align: left;
+  width: 100%;
+}
+
+.nav-item.actif,
+.nav-item:hover {
+  background: #2f6feb;
+  border-color: #2f6feb;
+}
+
+.sidebar .vide,
+.sidebar .erreur {
+  font-size: 0.85rem;
+}
+
+.contenu {
+  flex: 1;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  max-width: 900px;
 }
 
 .panel {
@@ -69,14 +113,20 @@ main {
 }
 
 .liste-alertes li {
-  border: 1px solid #e0e0e0;
+  border: 1px solid #3a4560;
   border-radius: 6px;
-  padding: 0.75rem;
+  padding: 0.6rem;
+  background: #232c42;
+  font-size: 0.85rem;
 }
 
 .liste-alertes li.selectionnee {
   border-color: #2f6feb;
-  background: #f0f5ff;
+  background: #2a3a63;
+}
+
+.liste-alertes p {
+  margin: 0.2rem 0;
 }
 
 .alerte-entete {
@@ -125,6 +175,51 @@ main {
   font-size: 0.75rem;
   color: #888;
   margin: 0.25rem 0 0.5rem;
+}
+
+.sidebar .horodatage {
+  color: #9aa4bb;
+}
+
+/* Ingestion */
+.ingestion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ingestion-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ingestion-form input,
+.ingestion-form select,
+.ingestion-form textarea {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.ingestion-form textarea {
+  resize: vertical;
+}
+
+.ingestion-resultat {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eee;
+}
+
+.ingestion-resultat code {
+  background: #eef0f3;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
 }
 
 button {

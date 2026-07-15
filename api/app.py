@@ -10,7 +10,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import alertes, audit, diagnostics, execution, ingestion, planning, validation
+from api.routes import alertes, audit, diagnostics, execution, ingestion, planning, supervision, validation
 
 app = FastAPI(
     title="PRISME",
@@ -37,3 +37,4 @@ app.include_router(audit.router)
 app.include_router(alertes.router)
 app.include_router(validation.router)
 app.include_router(diagnostics.router)
+app.include_router(supervision.router)

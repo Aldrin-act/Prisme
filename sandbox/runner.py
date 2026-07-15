@@ -37,6 +37,20 @@ class ErreurExecutionSandbox(Exception):
     dépassé, sortie non nulle, isolation ayant bloqué une tentative...)."""
 
 
+def sandbox_disponible() -> bool:
+    """Le démon Docker est-il joignable ? Même logique que `_docker_disponible`
+    de `tests/integration/conftest.py`, exposée ici pour la route de santé de
+    l'API (`/supervision/sante`) — import paresseux : `docker` est un extra
+    optionnel (`.[sandbox]`)."""
+    try:
+        import docker
+
+        docker.from_env().ping()
+        return True
+    except Exception:
+        return False
+
+
 @dataclass(frozen=True)
 class LimitesSandbox:
     limite_temps_s: float = 30.0

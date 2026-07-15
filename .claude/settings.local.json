@@ -27,7 +27,15 @@
       "Skill(run)",
       "Skill(run:*)",
       "Bash(sqlite3 solver_store/registre.sqlite3 \"SELECT id, client_id FROM solveurs;\")",
-      "Bash(kill 17358 17359)"
+      "Bash(kill 17358 17359)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8000/openapi.json)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"api:%{http_code}\\\\n\" http://localhost:8000/openapi.json)",
+      "Bash(curl -s -o /dev/null -w \"dashboard:%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(npx oxlint *)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(npm run *)",
+      "Bash(uv run *)"
     ],
     "additionalDirectories": [
       "/home/vboxuser/Projet_Prisme"
