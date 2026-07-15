@@ -12,6 +12,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from validation_engine.feasibility_checker import verifier_faisabilite
+
 from .construction_inverse import FormeJob, InstanceSynthetique, construire_instance
 
 DOSSIER_INSTANCES = Path(__file__).resolve().parent / "instances"
@@ -35,5 +37,14 @@ CATALOGUE: list[tuple[str, list[FormeJob]]] = [
 
 
 def generer_catalogue() -> list[InstanceSynthetique]:
-    """Construit chaque cas du catalogue (déterministe, sans aléatoire)."""
-    return [construire_instance(nom, jobs) for nom, jobs in CATALOGUE]
+    """Construit chaque cas du catalogue (déterministe, sans aléatoire), et
+    vérifie la faisabilité (Étape 2) de son planning optimal avant de le
+    renvoyer — un `construction_inverse.py` cassé ne doit jamais produire
+    silencieusement un cas invalide dans le catalogue versionné (PH3-T2).
+    """
+    cas = [construire_instance(nom, jobs) for nom, jobs in CATALOGUE]
+    for c in cas:
+        verdict = verifier_faisabilite(c.instance, c.planning_optimal)
+        if not verdict.legal:
+            raise ValueError(f"le cas synthétique {c.nom!r} produit un planning illégal : {verdict.violations}")
+    return cas

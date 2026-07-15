@@ -77,3 +77,41 @@ def test_champ_inconnu_rejete() -> None:
     payload = _instance_minimale(champ_fantome="valeur")
     with pytest.raises(ValidationError):
         charger_instance(payload)
+
+
+def test_sans_aucune_tache_rejete() -> None:
+    payload = _instance_minimale(taches=[])
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_sans_aucune_ressource_rejete() -> None:
+    payload = _instance_minimale(ressources=[])
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_sans_aucun_objectif_rejete() -> None:
+    payload = _instance_minimale(objectifs=[])
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_identifiants_de_taches_dupliques_rejetes() -> None:
+    payload = _instance_minimale(taches=[{"id": "T1"}, {"id": "T1"}])
+    with pytest.raises(ValidationError, match="dupliqués"):
+        charger_instance(payload)
+
+
+def test_identifiants_de_ressources_dupliques_rejetes() -> None:
+    payload = _instance_minimale(ressources=[{"id": "M1"}, {"id": "M1"}])
+    with pytest.raises(ValidationError, match="dupliqués"):
+        charger_instance(payload)
+
+
+def test_compatibilite_vers_tache_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[{"type": "compatibilite_machine_tache", "tache": "T99", "ressource": "M1", "duree": 10}]
+    )
+    with pytest.raises(ValidationError, match="tâche inconnue"):
+        charger_instance(payload)

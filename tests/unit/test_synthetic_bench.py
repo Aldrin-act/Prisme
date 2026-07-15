@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, Planning, Precedence
 from validation_engine.feasibility_checker import verifier_faisabilite
-from validation_engine.synthetic_bench import generer_catalogue
+from validation_engine.synthetic_bench import generer_catalogue, generer_catalogue_faisabilite_seule
 from validation_engine.synthetic_bench.catalogue import DOSSIER_INSTANCES
 from validation_engine.synthetic_bench.stockage import charger
 
@@ -97,3 +97,30 @@ def test_catalogue_verse_sur_disque_est_a_jour() -> None:
         assert _ensemble_ressources(cas_disque.instance) == _ensemble_ressources(cas.instance)
         assert _ensemble_contraintes(cas_disque.instance) == _ensemble_contraintes(cas.instance)
         assert _ensemble_operations(cas_disque.planning_optimal) == _ensemble_operations(cas.planning_optimal)
+
+
+def test_niveau_faisabilite_seule_produit_des_instances_valides() -> None:
+    """PH3-T3 : le second niveau n'a pas d'optimum connu — seule sa validité
+    structurelle (schéma T-R-C-O) est vérifiable à ce stade ; sa faisabilité
+    une fois résolue est exercée par
+    `tests/integration/test_synthetic_bench_faisabilite_seule.py` (a besoin
+    d'un vrai solveur OR-Tools, donc hors de `unit/`)."""
+    cas_generes = generer_catalogue_faisabilite_seule()
+    assert cas_generes
+    for cas in cas_generes:
+        assert isinstance(cas.instance, InstanceTRCO)
+
+
+def test_niveau_faisabilite_seule_exerce_une_vraie_contention_partagee() -> None:
+    """Contrairement au niveau 1 (une ressource dédiée par job), chaque tâche
+    ici est compatible avec toutes les ressources partagées de l'instance —
+    une vraie contention entre jobs, jamais produite par `construction_inverse.py`."""
+    for cas in generer_catalogue_faisabilite_seule():
+        ressources = {r.id for r in cas.instance.ressources}
+        for tache in cas.instance.taches:
+            compatibles = {
+                c.ressource
+                for c in cas.instance.contraintes
+                if isinstance(c, CompatibiliteMachineTache) and c.tache == tache.id
+            }
+            assert compatibles == ressources, (cas.nom, tache.id)
