@@ -1,0 +1,249 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f4f5f7;
+  color: #1a1a1a;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+header {
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.sous-titre {
+  margin: 0.25rem 0 0;
+  color: #555;
+  font-style: italic;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.panel {
+  background: white;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.vide,
+.note {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.erreur {
+  color: #b00020;
+  font-weight: 600;
+}
+
+.liste-alertes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.liste-alertes li {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.liste-alertes li.selectionnee {
+  border-color: #2f6feb;
+  background: #f0f5ff;
+}
+
+.alerte-entete {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.badge-panne {
+  background: #c62828;
+}
+
+.badge-commande_urgente {
+  background: #ef6c00;
+}
+
+.badge-retard {
+  background: #6a1b9a;
+}
+
+.statut {
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.statut-nouvelle {
+  background: #fff3cd;
+  color: #7a5c00;
+}
+
+.statut-traitee {
+  background: #d4edda;
+  color: #1e6b2e;
+}
+
+.horodatage {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0.25rem 0 0.5rem;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #2f6feb;
+  background: #2f6feb;
+  color: white;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input[type="text"] {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.validation-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.decision {
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.decision-acceptee {
+  background: #d4edda;
+}
+
+.decision-refusee {
+  background: #f8d7da;
+}
+
+/* Gantt */
+.gantt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1rem 0;
+}
+
+.gantt-ligne {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gantt-ressource {
+  width: 4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.gantt-piste {
+  position: relative;
+  flex: 1;
+  height: 1.75rem;
+  background: #eef0f3;
+  border-radius: 4px;
+}
+
+.gantt-barre {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: #2f6feb;
+  color: white;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 2px;
+}
+
+/* Diagnostic */
+.diagnostic {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: #f4f5f7;
+}
+
+.diagnostic-code {
+  background: #f8d7da;
+}
+
+.diagnostic-donnees {
+  background: #fff3cd;
+}
+
+.diagnostic-specification_dsl {
+  background: #ffe0b2;
+}
+
+.diagnostic-aucune {
+  background: #d4edda;
+}
+
+.proposition {
+  font-style: italic;
+}
+
+.humain-decide {
+  font-size: 0.8rem;
+  color: #555;
+}

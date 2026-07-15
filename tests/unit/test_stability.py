@@ -43,10 +43,31 @@ def _fabriquer_solveur_instable():
     return solveur
 
 
+def _fabriquer_solveur_partiellement_illegal():
+    """Un solveur illégal un essai sur cinq (précédence violée) — légal et
+    stable le reste du temps : sert à vérifier que `taux_generations_valides`
+    est bien une mesure quantifiable, distincte du verdict tout-ou-rien `stable`."""
+    compteur = {"n": 0}
+
+    def solveur(instance: InstanceTRCO) -> Planning:
+        compteur["n"] += 1
+        if compteur["n"] == 1:
+            return Planning(
+                operations=[
+                    OperationPlanifiee(tache=operation.tache, ressource=operation.ressource, debut=0)
+                    for operation in _CAS.planning_optimal.operations
+                ]
+            )
+        return _CAS.planning_optimal
+
+    return solveur
+
+
 def test_solveur_deterministe_est_stable() -> None:
     resultat = tester_stabilite(_solveur_deterministe, _CAS.instance, n_essais=5)
 
     assert resultat.stable
+    assert resultat.taux_generations_valides == 1.0
     assert len(set(resultat.makespans)) == 1
     assert resultat.diagnostics == ()
 
@@ -55,4 +76,13 @@ def test_solveur_a_makespan_variable_est_instable() -> None:
     resultat = tester_stabilite(_fabriquer_solveur_instable(), _CAS.instance, n_essais=5)
 
     assert not resultat.stable
+    assert resultat.taux_generations_valides == 1.0
     assert len(set(resultat.makespans)) > 1
+
+
+def test_taux_generations_valides_reflete_les_essais_illegaux() -> None:
+    resultat = tester_stabilite(_fabriquer_solveur_partiellement_illegal(), _CAS.instance, n_essais=5)
+
+    assert not resultat.stable
+    assert resultat.taux_generations_valides == 0.8
+    assert len(resultat.diagnostics) == 1

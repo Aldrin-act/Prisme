@@ -19,7 +19,15 @@
       "Bash(docker info *)",
       "Bash(getent group *)",
       "Bash(cp .env.example .env)",
-      "Bash(cd /home/vboxuser/Projet_Prisme *)"
+      "Bash(cd /home/vboxuser/Projet_Prisme *)",
+      "Bash(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh)",
+      "Bash(bash)",
+      "Bash(curl -s -X POST http://localhost:8000/alertes -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(curl -s http://localhost:8000/alertes)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(sqlite3 solver_store/registre.sqlite3 \"SELECT id, client_id FROM solveurs;\")",
+      "Bash(kill 17358 17359)"
     ],
     "additionalDirectories": [
       "/home/vboxuser/Projet_Prisme"

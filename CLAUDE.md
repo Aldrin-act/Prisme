@@ -34,8 +34,9 @@ uv run python -m scripts.benchmarker_solveur_reference     # makespan-vs-optimum
 uv run python -m scripts.mesurer_taux_succes_generation    # single-shot generation success rate (needs .[llm] + creds)
 uv run python -m scripts.enregistrer_solveur_reference     # seed solver_store (idempotent)
 uv run python -m scripts.demo_bout_en_bout                 # Étape 8 end-to-end demo
-uv run uvicorn api.app:app --reload                        # API (docs at /docs)
+uv run uvicorn api.app:app --reload                        # API (docs at /docs), needed by the dashboard
 docker build -t prisme-sandbox sandbox/container/          # sandbox image (env setup, never automatic)
+cd dashboard && npm install && npm run dev                 # dashboard dev server, :5173 (Node via nvm, no sudo)
 ```
 
 No type-checker configured. `PRISME_LLM_PROVIDER` (`anthropic`|`openai`) / `PRISME_LLM_MODEL`
@@ -44,10 +45,9 @@ and docstrings run longer). CI (`.github/workflows/ci.yml`) runs lint → format
 push/PR; `ubuntu-latest` runners have Docker preinstalled, so sandbox/bout-en-bout tests actually
 execute there — require this check in `main`'s branch protection.
 
-**Project stage:** Étapes 1–5, 7, 8 of 9 (§8) implemented, out of roadmap order (see Build order),
-Étape 6 (bounded repair loop) deliberately skipped so far. Modules besides `dsl/`,
-`validation_engine/`, `solveur_reference/`, `generation/`, `solver_store/`, `sandbox/`,
-`adapters/`, `api/` hold only a `README.md`. Since PH0-T4 the full test suite (Docker included)
+**Project stage:** Étapes 1–5, 7, 8 of 9 (§8) implemented plus Phase 10 (dashboard, §2.3) from the
+dev plan, out of roadmap order (see Build order). Étape 6 (bounded repair loop) deliberately
+skipped so far. Since PH0-T4 the full test suite (Docker included)
 actually runs and passes — see "Verified" notes below for two real bugs found and fixed then.
 
 - **Étape 1 — DSL** (`dsl/schema/`): Pydantic v2 — `Tache`, `Ressource`, `Contrainte` (discriminated
@@ -155,10 +155,10 @@ later without redesign, don't implement now. Guard against scope creep.
 | `solveur_reference/` | Hand-written CP-SAT solver, permanent, outside the generate-once cycle |
 | `solver_store/` | Persistent registry (`registry.py`) + frozen `artifacts/` |
 | `sandbox/` | Ephemeral disposable-container execution (`runner.py`, `container/`) |
-| `api/` | Routes: `ingestion`, `execution`, `planning` (operational), `audit`; `input_validation/` |
+| `api/` | Routes: `ingestion`, `execution`, `planning`, `audit`, `alertes`, `executions/{id}/decision`, `diagnostics` |
 | `adapters/` | ERP anti-corruption layer; `erp_reference/` for the PoC |
-| `diagnostics/` | Cause attribution before improvement — not yet implemented |
-| `dashboard/` | Human alerting, reschedule trigger, plan validation — not yet implemented |
+| `diagnostics/` | Cause attribution (`attribution.py`) + sandbox wrapper (`solveur_sandbox.py`) — done |
+| `dashboard/` | React/Vite (§2.3, Phase 10) — alerts, human validation, live diagnostic — done |
 | `tests/` | `unit/`, `integration/`, `property_based/`, `generation_stability/` |
 | `docs/` | Architecture + DSL spec (next priority) + roadmap — not yet written |
 | `scripts/` | Dev env, synthetic-bench generation, CI tasks |

@@ -4,6 +4,12 @@ même qualité — ici, même makespan). En Étape 6, cette mécanique tournera 
 N *générations* différentes du même code plutôt que N appels d'un solveur
 déjà figé ; l'un et l'autre partagent le même critère : légalité à chaque
 essai, et un seul makespan observé sur l'ensemble des essais.
+
+En plus du verdict tout-ou-rien (`stable`), `ResultatStabilite.taux_generations_valides`
+expose la métrique quantifiable demandée par PH5-T4 (« taux de générations
+valides sur N essais ») — utile pour le mémoire même quand `stable` est faux :
+un solveur peut être légal 4 essais sur 5 (taux = 0.8) sans être stable pour
+autant (si le makespan légal varie).
 """
 
 from __future__ import annotations
@@ -21,6 +27,17 @@ class ResultatStabilite:
     stable: bool
     makespans: tuple[int | None, ...]
     diagnostics: tuple[str, ...]
+
+    @property
+    def taux_generations_valides(self) -> float:
+        """La part des essais ayant produit un planning légal (Étape 2), sur
+        l'ensemble des essais — la métrique quantifiable exposée pour PH5-T4,
+        indépendante de `stable` (un solveur peut être majoritairement légal
+        sans être stable, si le makespan légal varie d'un essai à l'autre)."""
+        if not self.makespans:
+            return 0.0
+        essais_valides = sum(1 for makespan in self.makespans if makespan is not None)
+        return essais_valides / len(self.makespans)
 
 
 def tester_stabilite(solveur: Solveur, instance: InstanceTRCO, n_essais: int = 5) -> ResultatStabilite:
