@@ -150,12 +150,12 @@ later without redesign, don't implement now. Guard against scope creep.
 | Module | Role |
 |---|---|
 | `dsl/` | T-R-C-O canonical model: typed `schema/`, payload `validation/`, `examples/` |
-| `generation/` | Multi-agent generate-test-repair loop → CP-SAT code (`agents/`, `loop.py`, `prompts/`, `failures/`) |
+| `generation/` | Single-shot LLM generator → CP-SAT code (`agents/`, `tentative_unique.py`); repair loop (`loop.py`, `failures/`) not built — Étape 6 skipped |
 | `validation_engine/` | Validation cascade + `stability_test.py` |
 | `solveur_reference/` | Hand-written CP-SAT solver, permanent, outside the generate-once cycle |
 | `solver_store/` | Persistent registry (`registry.py`) + frozen `artifacts/` |
 | `sandbox/` | Ephemeral disposable-container execution (`runner.py`, `container/`) |
-| `api/` | Routes: `ingestion`, `execution`, `planning`, `audit`, `alertes`, `executions/{id}/decision`, `diagnostics` |
+| `api/` | Routes: `ingestion`, `execution`, `planning`, `audit`, `alertes`, `executions/{id}/decision` (`validation.py`), `diagnostics`, `supervision` (dashboard read-only view) |
 | `adapters/` | ERP anti-corruption layer; `erp_reference/` for the PoC |
 | `diagnostics/` | Cause attribution (`attribution.py`) + sandbox wrapper (`solveur_sandbox.py`) — done |
 | `dashboard/` | React/Vite (§2.3, Phase 10) — alerts, human validation, live diagnostic — done |

@@ -35,7 +35,8 @@
       "Bash(npx oxlint *)",
       "Bash(echo \"EXIT: $?\")",
       "Bash(npm run *)",
-      "Bash(uv run *)"
+      "Bash(uv run *)",
+      "Bash(uv run python -c ' *)"
     ],
     "additionalDirectories": [
       "/home/vboxuser/Projet_Prisme"
