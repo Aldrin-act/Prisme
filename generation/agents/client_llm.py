@@ -3,13 +3,14 @@
 Le fournisseur et le modèle sont choisis par variables d'environnement,
 jamais codés en dur, pour ne lier ce projet à aucun fournisseur particulier :
 
-- `PRISME_LLM_PROVIDER` : "anthropic" (défaut) ou "openai".
+- `PRISME_LLM_PROVIDER` : "anthropic" (défaut), "openai" ou "mistral".
 - `PRISME_LLM_MODEL` : nom du modèle (défaut selon le fournisseur, ci-dessous).
 - la clé d'API suit la convention standard de chaque SDK (`ANTHROPIC_API_KEY`,
-  `OPENAI_API_KEY`) — jamais lue, manipulée ou journalisée directement ici.
+  `OPENAI_API_KEY`, `MISTRAL_API_KEY`) — jamais lue, manipulée ou journalisée
+  directement ici.
 
 Le SDK du fournisseur choisi est importé à la demande (`extra` optionnel
-`llm` du projet) : pas besoin d'installer les deux pour n'en utiliser qu'un.
+`llm` du projet) : pas besoin d'installer les trois pour n'en utiliser qu'un.
 """
 
 from __future__ import annotations
@@ -23,6 +24,7 @@ AppelLLM = Callable[[str, str], str]
 _MODELES_PAR_DEFAUT = {
     "anthropic": "claude-sonnet-5",
     "openai": "gpt-5",
+    "mistral": "mistral-large-latest",
 }
 
 
@@ -61,9 +63,30 @@ def _construire_appel_openai(modele: str) -> AppelLLM:
     return appel
 
 
+def _construire_appel_mistral(modele: str) -> AppelLLM:
+    # `from mistralai import Mistral` échoue sur ce paquet (namespace package sans
+    # réexport à la racine) — la classe vit dans le sous-module `mistralai.client`.
+    from mistralai.client import Mistral
+
+    client = Mistral(api_key=os.environ.get("MISTRAL_API_KEY"))
+
+    def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
+        reponse = client.chat.complete(
+            model=modele,
+            messages=[
+                {"role": "system", "content": prompt_systeme},
+                {"role": "user", "content": prompt_utilisateur},
+            ],
+        )
+        return reponse.choices[0].message.content or ""
+
+    return appel
+
+
 _CONSTRUCTEURS: dict[str, Callable[[str], AppelLLM]] = {
     "anthropic": _construire_appel_anthropic,
     "openai": _construire_appel_openai,
+    "mistral": _construire_appel_mistral,
 }
 
 

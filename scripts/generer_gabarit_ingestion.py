@@ -284,7 +284,29 @@ def construire(chemin_sortie: Path) -> None:
         ],
         ligne=5,
     )
-    _bordures_vides(ws, 4, ligne_debut=6)
+    # Constat réel (pas un exemple à effacer) : voir adapters/greensig/rapport_dsl.md — 228/1007
+    # tâches (23 %) n'ont jamais été affectées à une équipe, donc rejetées par le garde-fou §6.7
+    # plutôt que planifiées. Ce n'est PAS une affectation à faire en amont — juste établir quelles
+    # équipes seraient compatibles (via les compétences), pour que le solveur choisisse ensuite.
+    ligne_constat = [
+        "Déterminer, à partir des compétences des opérateurs, quelles équipes sont compatibles "
+        "avec les tâches jamais affectées (228/1007 sur le dernier export, 23 %) — pas les "
+        "affecter nous-mêmes, juste leur donner des candidates pour que le solveur choisisse.",
+        "Contrainte supplémentaire",
+        "api_users_competence/api_users_competenceoperateur existe côté GreenSIG mais n'est relié "
+        'aux types de tâche par aucune clé fiable (noms proches mais pas identiques, ex. "Tonte" '
+        'vs "Utilisation de tondeuse") — demande un mappage type_tache↔compétence validé à la '
+        "main avant d'être exploitable.",
+        "Constat interne — adapters/greensig/rapport_dsl.md, 2026-07-16",
+    ]
+    for i, valeur in enumerate(ligne_constat, start=1):
+        c = ws.cell(row=6, column=i, value=valeur)
+        c.font = Font(name="Calibri", size=11)
+        c.alignment = Alignment(wrap_text=True, vertical="top")
+        c.border = BORDURE_CELLULE
+    ws.row_dimensions[6].height = 60
+
+    _bordures_vides(ws, 4, ligne_debut=7)
     dv_type = DataValidation(
         type="list",
         formula1='"Contrainte supplémentaire,Objectif supplémentaire,Autre"',

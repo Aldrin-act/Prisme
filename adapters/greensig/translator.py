@@ -30,12 +30,27 @@ _DUREE_PAR_DEFAUT_MINUTES = 30  # tâche sans charge_estimee_heures renseignée
 _DUREE_MINIMALE_MINUTES = 1  # `CompatibiliteMachineTache.duree` exige > 0 ; jamais 0 par arrondi
 
 
-def _id_tache(id_brut: int) -> str:
+def id_tache(id_brut: int) -> str:
     return f"T{id_brut}"
 
 
-def _id_ressource(id_brut: int) -> str:
+def id_ressource(id_brut: int) -> str:
     return f"E{id_brut}"
+
+
+def duree_minutes_pour(charge_estimee_heures: float | None) -> int:
+    """La règle de conversion durée exacte utilisée par `traduire` — publique
+    pour que d'autres outils (ex. `scripts/rapport_greensig_dsl.py`) puissent
+    reproduire le même calcul sans dupliquer la logique.
+
+    Sur données réelles (voir `tests/integration/test_greensig_extraction.py`),
+    une charge non nulle mais minuscule (ex. 0.0006h, quelques secondes)
+    arrondirait à 0 minute — `max(..., _DUREE_MINIMALE_MINUTES)` l'empêche
+    sans pour autant gonfler ces tâches au défaut de 30 min (qui ne vaut que
+    pour une charge réellement absente)."""
+    if not charge_estimee_heures:
+        return _DUREE_PAR_DEFAUT_MINUTES
+    return max(round(charge_estimee_heures * _MINUTES_PAR_HEURE), _DUREE_MINIMALE_MINUTES)
 
 
 def traduire(payload: PayloadGreenSIG) -> InstanceTRCO:
@@ -48,28 +63,19 @@ def traduire(payload: PayloadGreenSIG) -> InstanceTRCO:
     taches_actives = [t for t in payload.taches if t.deleted_at is None]
     equipes_actives = [e for e in payload.equipes if e.actif]
 
-    taches = [Tache(id=_id_tache(t.id)) for t in taches_actives]
-    ressources = [Ressource(id=_id_ressource(e.id)) for e in equipes_actives]
+    taches = [Tache(id=id_tache(t.id)) for t in taches_actives]
+    ressources = [Ressource(id=id_ressource(e.id)) for e in equipes_actives]
     ids_ressources_actives = {r.id for r in ressources}
 
     contraintes: list[Contrainte] = []
     for tache in taches_actives:
-        # Sur données réelles (voir tests/integration/test_greensig_extraction.py), une
-        # charge_estimee_heures non nulle mais minuscule (ex. 0.0006h, quelques secondes)
-        # arrondit à 0 minute — `max(..., _DUREE_MINIMALE_MINUTES)` l'empêche sans pour
-        # autant gonfler ces tâches au défaut de 30 min (qui ne vaut que pour une charge
-        # réellement absente).
-        duree_minutes = (
-            max(round(tache.charge_estimee_heures * _MINUTES_PAR_HEURE), _DUREE_MINIMALE_MINUTES)
-            if tache.charge_estimee_heures
-            else _DUREE_PAR_DEFAUT_MINUTES
-        )
+        duree_minutes = duree_minutes_pour(tache.charge_estimee_heures)
         for id_equipe in tache.equipes_ids:
-            id_ressource = _id_ressource(id_equipe)
-            if id_ressource not in ids_ressources_actives:
+            id_ress = id_ressource(id_equipe)
+            if id_ress not in ids_ressources_actives:
                 continue  # équipe désaffectée ou hors payload : compatibilité ignorée
             contraintes.append(
-                CompatibiliteMachineTache(tache=_id_tache(tache.id), ressource=id_ressource, duree=duree_minutes)
+                CompatibiliteMachineTache(tache=id_tache(tache.id), ressource=id_ress, duree=duree_minutes)
             )
 
     return InstanceTRCO(

@@ -1,0 +1,1008 @@
+tache_id,type_tache,charge_estimee_heures,duree_minutes_calculee,nb_equipes_actives_affectees,statut
+T259,Désherbage,27.0575,1623,1,traduit
+T634,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T163,Binage,0.1322222222222222,8,0,rejeté : aucune équipe active
+T208,Confection des cuvettes,2.4166666666666665,145,0,rejeté : aucune équipe active
+T235,Binage,5.173333333333333,310,1,traduit
+T428,Binage,6.225,374,1,traduit
+T137,Tonte,0.009166666666666667,1,1,traduit
+T138,Tonte,0.03666666666666667,2,1,traduit
+T206,Confection des cuvettes,2.4166666666666665,145,0,rejeté : aucune équipe active
+T207,Confection des cuvettes,2.4166666666666665,145,0,rejeté : aucune équipe active
+T616,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T255,Désherbage,27.0575,1623,1,traduit
+T239,Binage,5.173333333333333,310,1,traduit
+T265,Confection des cuvettes,0.95,57,0,rejeté : aucune équipe active
+T242,Binage,5.173333333333333,310,1,traduit
+T222,Désherbage,12.25,735,0,rejeté : aucune équipe active
+T216,Binage,2.6766666666666663,161,0,rejeté : aucune équipe active
+T214,Binage,2.6766666666666663,161,1,traduit
+T250,Désherbage,28.706666666666667,1722,1,traduit
+T237,Binage,5.173333333333333,310,1,traduit
+T251,Désherbage,28.706666666666667,1722,1,traduit
+T183,Tonte,0.009166666666666667,1,1,traduit
+T184,Tonte,0.009166666666666667,1,1,traduit
+T209,Nettoyage,11.64,698,0,rejeté : aucune équipe active
+T220,Désherbage,12.25,735,0,rejeté : aucune équipe active
+T228,Confection des cuvettes,1.125,68,1,traduit
+T229,Confection des cuvettes,1.125,68,1,traduit
+T3034,Désherbage,844.57,50674,1,traduit
+T1432,Réparation des fuites,0.0,30,1,traduit
+T256,Désherbage,27.0575,1623,1,traduit
+T205,Confection des cuvettes,2.0,120,0,rejeté : aucune équipe active
+T167,Arrosage,0.134375,8,1,traduit
+T171,Taille d'entretien,0.09049382716049383,5,1,traduit
+T246,Binage,9.196666666666667,552,1,traduit
+T236,Binage,5.173333333333333,310,1,traduit
+T285,Binage,0.0046502057613168725,1,1,traduit
+T281,Arrosage,0.6633333333333333,40,1,traduit
+T429,Binage,6.225,374,1,traduit
+T176,Binage,0.016527777777777777,1,0,rejeté : aucune équipe active
+T181,Désherbage,0.4877777777777777,29,1,traduit
+T202,Confection des cuvettes,0.0611111111111111,4,1,traduit
+T203,Confection des cuvettes,2.0,120,0,rejeté : aucune équipe active
+T219,Désherbage,18.32,1099,0,rejeté : aucune équipe active
+T232,Binage,3.606666666666667,216,1,traduit
+T231,Confection des cuvettes,4.75,285,1,traduit
+T252,Désherbage,16.34,980,1,traduit
+T264,Confection des cuvettes,0.95,57,0,rejeté : aucune équipe active
+T192,Taille d'entretien,1.3058333333333334,78,1,traduit
+T223,Nettoyage,8.01,481,0,rejeté : aucune équipe active
+T1247,Confection des cuvettes,12.5,750,1,traduit
+T276,Arrosage,0.358,21,1,traduit
+T166,Arrosage,0.134375,8,1,traduit
+T212,Binage,3.606666666666667,216,0,rejeté : aucune équipe active
+T204,Confection des cuvettes,2.0,120,0,rejeté : aucune équipe active
+T211,Binage,3.606666666666667,216,0,rejeté : aucune équipe active
+T217,Désherbage,18.32,1099,0,rejeté : aucune équipe active
+T423,Nettoyage,,30,1,traduit
+T260,Désherbage,27.0575,1623,1,traduit
+T253,Désherbage,16.34,980,1,traduit
+T287,Arrachage des plantes mortes,0.06,4,0,rejeté : aucune équipe active
+T240,Binage,5.173333333333333,310,1,traduit
+T273,Arrosage,0.5966666666666667,36,1,traduit
+T263,Confection des cuvettes,0.95,57,0,rejeté : aucune équipe active
+T274,Arrosage,0.5966666666666667,36,1,traduit
+T277,Arrosage,0.358,21,1,traduit
+T278,Arrosage,0.358,21,1,traduit
+T280,Arrosage,0.358,21,1,traduit
+T234,Binage,3.606666666666667,216,1,traduit
+T431,Binage,6.225,374,1,traduit
+T311,Taille d'entretien,1.3325,80,1,traduit
+T432,Binage,6.225,374,1,traduit
+T433,Binage,6.225,374,1,traduit
+T434,Binage,6.225,374,1,traduit
+T436,Binage,6.225,374,1,traduit
+T430,Binage,6.225,374,1,traduit
+T307,Désherbage,0.20828125,12,0,rejeté : aucune équipe active
+T310,Taille d'entretien,1.3325,80,1,traduit
+T2446,Tonte,,30,1,traduit
+T318,Nettoyage,0.0,30,1,traduit
+T305,Nettoyage,8.01,481,0,rejeté : aucune équipe active
+T270,Arrosage,0.8133333333333334,49,1,traduit
+T412,Nettoyage,,30,1,traduit
+T607,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T609,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T610,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T605,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T612,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T367,Nettoyage,,30,1,traduit
+T650,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T614,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T611,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T304,Nettoyage,8.01,481,0,rejeté : aucune équipe active
+T604,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T613,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T382,Nettoyage,,30,1,traduit
+T438,Désherbage,24.9,1494,1,traduit
+T649,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T703,Taille d'entretien,0.05,3,1,traduit
+T685,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T606,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T308,Désherbage,0.20828125,12,0,rejeté : aucune équipe active
+T441,Désherbage,24.9,1494,1,traduit
+T706,Taille d'entretien,0.05,3,1,traduit
+T415,Nettoyage,,30,1,traduit
+T385,Nettoyage,,30,1,traduit
+T386,Nettoyage,,30,1,traduit
+T443,Désherbage,24.9,1494,1,traduit
+T387,Nettoyage,,30,1,traduit
+T388,Nettoyage,,30,1,traduit
+T444,Désherbage,24.9,1494,1,traduit
+T389,Nettoyage,,30,1,traduit
+T446,Désherbage,24.9,1494,1,traduit
+T316,Nettoyage,0.00064453125,1,1,traduit
+T440,Désherbage,24.9,1494,1,traduit
+T384,Nettoyage,,30,1,traduit
+T414,Nettoyage,,30,1,traduit
+T704,Taille d'entretien,0.05,3,1,traduit
+T439,Désherbage,24.9,1494,1,traduit
+T413,Nettoyage,,30,1,traduit
+T383,Nettoyage,,30,1,traduit
+T2447,Tonte,,30,1,traduit
+T247,Binage,9.196666666666667,552,1,traduit
+T670,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T626,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T662,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T659,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T641,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T689,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T627,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T628,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T623,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T630,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T621,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T629,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T620,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T370,Nettoyage,,30,1,traduit
+T416,Nettoyage,,30,1,traduit
+T707,Taille d'entretien,0.05,3,1,traduit
+T686,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T658,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T667,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T622,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T640,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T660,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T687,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T615,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T624,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T625,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T661,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T688,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T371,Nettoyage,,30,1,traduit
+T417,Nettoyage,,30,1,traduit
+T372,Nettoyage,,30,1,traduit
+T373,Nettoyage,,30,1,traduit
+T418,Nettoyage,,30,1,traduit
+T709,Taille d'entretien,0.05,3,1,traduit
+T419,Nettoyage,,30,1,traduit
+T374,Nettoyage,,30,1,traduit
+T710,Taille d'entretien,0.05,3,1,traduit
+T711,Taille d'entretien,0.05,3,1,traduit
+T390,Nettoyage,,30,1,traduit
+T375,Nettoyage,,30,1,traduit
+T421,Nettoyage,,30,1,traduit
+T376,Nettoyage,,30,1,traduit
+T391,Nettoyage,,30,1,traduit
+T425,Nettoyage,,30,1,traduit
+T424,Nettoyage,,30,1,traduit
+T393,Nettoyage,,30,1,traduit
+T422,Nettoyage,,30,1,traduit
+T377,Nettoyage,,30,1,traduit
+T392,Nettoyage,,30,1,traduit
+T369,Nettoyage,,30,1,traduit
+T368,Nettoyage,,30,1,traduit
+T467,Confection des cuvettes,1.0,60,0,rejeté : aucune équipe active
+T671,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T635,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T458,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T653,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T680,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T644,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T690,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T654,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T636,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T681,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T631,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T645,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T664,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T632,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T712,Taille d'entretien,0.05,3,1,traduit
+T676,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T677,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T642,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T678,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T651,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T643,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T679,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T652,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T691,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T646,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T673,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T639,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T637,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T682,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T655,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T715,Taille d'entretien,0.05,3,1,traduit
+T461,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T716,Taille d'entretien,0.05,3,1,traduit
+T462,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T463,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T464,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T718,Taille d'entretien,0.05,3,1,traduit
+T465,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T719,Taille d'entretien,0.05,3,1,traduit
+T720,Taille d'entretien,0.05,3,1,traduit
+T466,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T394,Nettoyage,,30,1,traduit
+T379,Nettoyage,,30,1,traduit
+T378,Nettoyage,,30,1,traduit
+T460,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T459,Confection des cuvettes,2.5,150,0,rejeté : aucune équipe active
+T713,Taille d'entretien,0.05,3,1,traduit
+T1434,Nettoyage,192.46,11548,0,rejeté : aucune équipe active
+T743,Nettoyage,27.14,1628,0,rejeté : aucune équipe active
+T740,Confection des cuvettes,9.38,563,1,traduit
+T742,Taille d'entretien,8.67,520,1,traduit
+T736,Binage,29.31,1759,1,traduit
+T744,Nettoyage,27.14,1628,1,traduit
+T1526,Nettoyage,53.79,3227,0,rejeté : aucune équipe active
+T271,Arrosage,0.8133333333333334,49,1,traduit
+T751,Nettoyage,9.31,559,1,traduit
+T468,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T941,Confection des cuvettes,12.25,735,1,traduit
+T737,Désherbage,117.23,7034,1,traduit
+T675,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T684,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T693,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T648,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T666,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T656,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T665,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T692,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T647,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T683,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T2445,Tonte,2.12,127,1,traduit
+T2787,Entretien des pots intérieurs,,30,1,traduit
+T759,Confection des cuvettes,12.5,750,1,traduit
+T2788,Entretien des pots intérieurs,,30,1,traduit
+T2789,Entretien des pots intérieurs,,30,1,traduit
+T3035,Confection des cuvettes,34.88,2093,1,traduit
+T2786,Entretien des pots intérieurs,7.35,441,1,traduit
+T758,Confection des cuvettes,12.5,750,1,traduit
+T608,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T1454,Nettoyage,192.46,11548,0,rejeté : aucune équipe active
+T948,Nettoyage,24.76,1486,1,traduit
+T1303,Nettoyage,99.76,5986,1,traduit
+T952,Nettoyage,24.76,1486,1,traduit
+T954,Nettoyage,24.76,1486,1,traduit
+T442,Désherbage,24.9,1494,1,traduit
+T779,Nettoyage,1.26,76,1,traduit
+T787,Nettoyage,1.26,76,1,traduit
+T2449,Tonte,2.12,127,1,traduit
+T791,Nettoyage,1.26,76,1,traduit
+T2450,Tonte,2.12,127,1,traduit
+T2451,Tonte,2.12,127,1,traduit
+T2791,Entretien des pots intérieurs,7.35,441,1,traduit
+T788,Nettoyage,1.26,76,1,traduit
+T780,Nettoyage,1.26,76,1,traduit
+T789,Nettoyage,1.26,76,1,traduit
+T2792,Entretien des pots intérieurs,7.35,441,1,traduit
+T2793,Entretien des pots intérieurs,7.35,441,1,traduit
+T790,Nettoyage,1.26,76,1,traduit
+T2934,Arrosage,8.67,520,1,traduit
+T784,Nettoyage,1.26,76,1,traduit
+T781,Nettoyage,1.26,76,1,traduit
+T786,Nettoyage,1.26,76,1,traduit
+T783,Nettoyage,1.26,76,1,traduit
+T617,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T785,Nettoyage,1.26,76,1,traduit
+T286,Binage,0.0046502057613168725,1,1,traduit
+T782,Nettoyage,1.26,76,1,traduit
+T805,Nettoyage,1.26,76,1,traduit
+T833,Arrosage,0.02,1,1,traduit
+T797,Nettoyage,1.26,76,1,traduit
+T808,Nettoyage,1.26,76,1,traduit
+T795,Nettoyage,1.26,76,1,traduit
+T798,Nettoyage,1.26,76,1,traduit
+T663,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T796,Nettoyage,1.26,76,1,traduit
+T794,Nettoyage,1.26,76,1,traduit
+T804,Nettoyage,1.26,76,1,traduit
+T807,Nettoyage,1.26,76,1,traduit
+T832,Arrosage,0.02,1,1,traduit
+T845,Nettoyage,15.08,905,1,traduit
+T803,Nettoyage,1.26,76,1,traduit
+T793,Nettoyage,1.26,76,1,traduit
+T835,Arrosage,0.02,1,1,traduit
+T834,Arrosage,0.02,1,1,traduit
+T836,Arrosage,0.02,1,1,traduit
+T831,Arrosage,0.02,1,1,traduit
+T837,Arrosage,0.02,1,1,traduit
+T799,Nettoyage,1.26,76,1,traduit
+T800,Nettoyage,1.26,76,1,traduit
+T801,Nettoyage,1.26,76,1,traduit
+T806,Nettoyage,1.26,76,1,traduit
+T849,Nettoyage,15.08,905,1,traduit
+T792,Nettoyage,1.26,76,1,traduit
+T714,Taille d'entretien,0.05,3,1,traduit
+T842,Nettoyage,15.08,905,1,traduit
+T708,Taille d'entretien,0.05,3,1,traduit
+T851,Nettoyage,15.08,905,1,traduit
+T282,Arrosage,0.6633333333333333,40,1,traduit
+T3036,Confection des cuvettes,34.88,2093,1,traduit
+T1168,Binage,1.28,77,1,traduit
+T809,Nettoyage,1.26,76,1,traduit
+T1169,Binage,1.28,77,1,traduit
+T717,Taille d'entretien,0.05,3,1,traduit
+T1167,Binage,1.28,77,1,traduit
+T705,Taille d'entretien,0.05,3,1,traduit
+T1166,Binage,1.28,77,1,traduit
+T1044,Désherbage,9.43,566,1,traduit
+T2452,Traçage des bordures,0.0,30,1,traduit
+T672,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T2794,Entretien des pots intérieurs,4.72,283,1,traduit
+T2935,Arrosage,8.67,520,1,traduit
+T2936,Arrosage,8.67,520,1,traduit
+T1248,Désherbage,54.14,3248,1,traduit
+T1174,Binage,1.28,77,1,traduit
+T1177,Binage,1.28,77,1,traduit
+T1172,Binage,1.28,77,1,traduit
+T1173,Binage,1.28,77,1,traduit
+T1176,Binage,1.28,77,1,traduit
+T1175,Binage,1.28,77,1,traduit
+T1171,Binage,1.28,77,1,traduit
+T1170,Binage,1.28,77,1,traduit
+T1280,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1276,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1277,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1278,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1279,Tonte,0.17,10,0,rejeté : aucune équipe active
+T3037,Bouturage,910.53,54632,1,traduit
+T2937,Taille d'entretien,99.43,5966,1,traduit
+T1184,Binage,1.28,77,1,traduit
+T618,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T1179,Binage,1.28,77,1,traduit
+T1178,Binage,1.28,77,1,traduit
+T1183,Binage,1.28,77,1,traduit
+T1185,Binage,1.28,77,1,traduit
+T1181,Binage,1.28,77,1,traduit
+T1182,Binage,1.28,77,1,traduit
+T1180,Binage,1.28,77,1,traduit
+T201,Confection des cuvettes,0.0611111111111111,4,1,traduit
+T3038,Taille de réduction,0.0,30,1,traduit
+T657,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T2796,Arrosage des pots intérieurs,,30,1,traduit
+T2797,Arrosage des pots intérieurs,,30,1,traduit
+T2798,Arrosage des pots intérieurs,,30,1,traduit
+T2795,Arrosage des pots intérieurs,6.09,365,1,traduit
+T1190,Binage,1.28,77,1,traduit
+T2938,Taille d'entretien,139.36,8362,1,traduit
+T1191,Binage,1.28,77,1,traduit
+T1188,Binage,1.28,77,1,traduit
+T1193,Binage,1.28,77,1,traduit
+T1186,Binage,1.28,77,1,traduit
+T1187,Binage,1.28,77,1,traduit
+T1192,Binage,1.28,77,1,traduit
+T1194,Binage,1.28,77,1,traduit
+T1189,Binage,1.28,77,1,traduit
+T2800,Arrosage des pots intérieurs,6.09,365,1,traduit
+T2801,Arrosage des pots intérieurs,6.09,365,1,traduit
+T2802,Arrosage des pots intérieurs,6.09,365,1,traduit
+T3039,Taille de formation,82.5,4950,1,traduit
+T2285,Arrosage du gazon,26.62,1597,1,traduit
+T2939,Taille d'entretien,327.77,19666,1,traduit
+T638,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T2425,Tuteurage,48.0,2880,1,traduit
+T1196,Binage,1.28,77,1,traduit
+T1148,Binage,1.28,77,1,traduit
+T445,Désherbage,24.9,1494,1,traduit
+T1195,Binage,1.28,77,1,traduit
+T1045,Confection des cuvettes,2.75,165,1,traduit
+T2803,Confection des cuvettes,0.0,30,1,traduit
+T3040,Taille de formation,0.0,30,0,rejeté : aucune équipe active
+T939,Binage,23.85,1431,1,traduit
+T279,Arrosage,0.358,21,1,traduit
+T2520,Arrosage du gazon,,30,1,traduit
+T435,Binage,6.225,374,1,traduit
+T1439,Nettoyage,192.46,11548,0,rejeté : aucune équipe active
+T2941,Entretien des pots intérieurs,,30,1,traduit
+T2942,Entretien des pots intérieurs,,30,1,traduit
+T2943,Entretien des pots intérieurs,,30,1,traduit
+T2940,Entretien des pots intérieurs,2.67,160,1,traduit
+T2521,Arrosage du gazon,,30,1,traduit
+T1197,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1458,Taille d'entretien des arbustes,1590.04,95402,0,rejeté : aucune équipe active
+T1272,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1273,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1274,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1275,Tonte,0.17,10,0,rejeté : aucune équipe active
+T674,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T420,Nettoyage,,30,1,traduit
+T1043,Binage,2.36,142,1,traduit
+T284,Arrachage des plantes mortes,0.06,4,1,traduit
+T200,Confection des cuvettes,0.0611111111111111,4,1,traduit
+T1053,Nettoyage,4.14,248,1,traduit
+T1049,Nettoyage,4.14,248,1,traduit
+T940,Désherbage,95.4,5724,1,traduit
+T1050,Nettoyage,4.14,248,1,traduit
+T215,Binage,2.6766666666666663,161,0,rejeté : aucune équipe active
+T1459,Nettoyage,192.46,11548,0,rejeté : aucune équipe active
+T1249,Tonte,0.17,10,0,rejeté : aucune équipe active
+T221,Désherbage,12.25,735,0,rejeté : aucune équipe active
+T1051,Nettoyage,4.14,248,1,traduit
+T619,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T3041,Élagage,26.0,1560,1,traduit
+T2945,Entretien des pots intérieurs,2.67,160,1,traduit
+T1216,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2946,Entretien des pots intérieurs,2.67,160,1,traduit
+T2947,Entretien des pots intérieurs,2.67,160,1,traduit
+T1220,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2536,Arrosage du gazon,,30,1,traduit
+T2537,Arrosage du gazon,,30,1,traduit
+T1219,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1217,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1218,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1233,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1231,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1222,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T315,Nettoyage,0.00064453125,1,1,traduit
+T1224,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1228,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1223,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T395,Nettoyage,,30,1,traduit
+T2288,Arrosage du gazon,11.41,685,1,traduit
+T1226,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1232,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2456,Arrosage du gazon,,30,1,traduit
+T2457,Arrosage du gazon,,30,1,traduit
+T2458,Arrosage du gazon,,30,1,traduit
+T1225,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2460,Arrosage du gazon,,30,1,traduit
+T2461,Arrosage du gazon,,30,1,traduit
+T2462,Arrosage du gazon,,30,1,traduit
+T2463,Arrosage du gazon,,30,1,traduit
+T2464,Arrosage du gazon,,30,1,traduit
+T1221,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2466,Arrosage du gazon,,30,1,traduit
+T1227,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2550,Arrosage du gazon,,30,1,traduit
+T2551,Arrosage du gazon,,30,1,traduit
+T1229,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1230,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1234,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1236,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2467,Arrosage du gazon,,30,1,traduit
+T1238,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1235,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T1240,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2468,Arrosage du gazon,,30,1,traduit
+T2469,Arrosage du gazon,,30,1,traduit
+T2470,Arrosage du gazon,,30,1,traduit
+T2805,Binage,13.6,816,1,traduit
+T1246,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2472,Arrosage du gazon,,30,1,traduit
+T2473,Arrosage du gazon,,30,1,traduit
+T2474,Arrosage du gazon,,30,1,traduit
+T1243,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2475,Arrosage du gazon,,30,1,traduit
+T1237,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T3042,Taille d'entretien,1752.75,105165,1,traduit
+T1244,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2289,Arrosage du gazon,1.72,103,1,traduit
+T1245,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2479,Arrosage du gazon,,30,1,traduit
+T1239,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2480,Arrosage du gazon,,30,1,traduit
+T1251,Tonte,0.17,10,0,rejeté : aucune équipe active
+T2481,Arrosage du gazon,,30,1,traduit
+T2482,Arrosage du gazon,,30,1,traduit
+T1241,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2483,Arrosage du gazon,,30,1,traduit
+T1242,Désherbage,5.11,307,0,rejeté : aucune équipe active
+T2484,Arrosage du gazon,,30,1,traduit
+T1250,Tonte,0.17,10,0,rejeté : aucune équipe active
+T2485,Arrosage du gazon,,30,1,traduit
+T2486,Arrosage du gazon,,30,1,traduit
+T1444,Nettoyage,192.46,11548,0,rejeté : aucune équipe active
+T1297,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1298,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1289,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1294,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1295,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1296,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1290,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1291,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1292,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1293,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1285,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1286,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1287,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1288,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1281,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1282,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1283,Tonte,0.17,10,0,rejeté : aucune équipe active
+T1284,Tonte,0.17,10,0,rejeté : aucune équipe active
+T668,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T633,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T233,Binage,3.606666666666667,216,1,traduit
+T669,Nettoyage,0.32039999999999996,19,0,rejeté : aucune équipe active
+T1445,Binage,213.86,12832,0,rejeté : aucune équipe active
+T2487,Arrosage du gazon,,30,1,traduit
+T2488,Arrosage du gazon,,30,1,traduit
+T2489,Arrosage du gazon,,30,1,traduit
+T2490,Arrosage du gazon,,30,1,traduit
+T2491,Arrosage du gazon,,30,1,traduit
+T2492,Arrosage du gazon,,30,1,traduit
+T2493,Arrosage du gazon,,30,1,traduit
+T2494,Arrosage du gazon,,30,1,traduit
+T2495,Arrosage du gazon,,30,1,traduit
+T2496,Arrosage du gazon,,30,1,traduit
+T2497,Arrosage du gazon,,30,1,traduit
+T2498,Arrosage du gazon,,30,1,traduit
+T2499,Arrosage du gazon,,30,1,traduit
+T2500,Arrosage du gazon,,30,1,traduit
+T2501,Arrosage du gazon,,30,1,traduit
+T1924,Tuteurage,106.0,6360,1,traduit
+T2502,Arrosage du gazon,,30,1,traduit
+T2503,Arrosage du gazon,,30,1,traduit
+T2504,Arrosage du gazon,,30,1,traduit
+T2505,Arrosage du gazon,,30,1,traduit
+T2506,Arrosage du gazon,,30,1,traduit
+T1446,Désherbage,853.87,51232,0,rejeté : aucune équipe active
+T2507,Arrosage du gazon,,30,1,traduit
+T2508,Arrosage du gazon,,30,1,traduit
+T1465,Désherbage chimique,19.88,1193,0,rejeté : aucune équipe active
+T1410,Élagage,1.5,90,0,rejeté : aucune équipe active
+T1411,Élagage,4.5,270,1,traduit
+T1415,Taille de formation,19.67,1180,1,traduit
+T802,Nettoyage,1.26,76,1,traduit
+T1421,Confection des cuvettes,25.0,1500,0,rejeté : aucune équipe active
+T1420,Désherbage,75.02,4501,0,rejeté : aucune équipe active
+T1422,Nettoyage,29.74,1784,0,rejeté : aucune équipe active
+T2509,Arrosage du gazon,,30,1,traduit
+T1447,Confection des cuvettes,55.38,3323,0,rejeté : aucune équipe active
+T249,Désherbage,28.706666666666667,1722,1,traduit
+T1417,Élagage,0.5,30,1,traduit
+T268,Terreautage,3.34,200,0,rejeté : aucune équipe active
+T1419,Fertilisation chimique,5.7,342,0,rejeté : aucune équipe active
+T1409,Fertilisation chimique,0.52,31,0,rejeté : aucune équipe active
+T752,Nettoyage,9.31,559,1,traduit
+T1147,Binage,1.28,77,1,traduit
+T761,Nettoyage,1.26,76,1,traduit
+T164,Désherbage,107.2,6432,1,traduit
+T165,Taille d'entretien,6.33,380,1,traduit
+T734,Taille d'entretien,0.67,40,1,traduit
+T194,Tonte,1.61,97,0,rejeté : aucune équipe active
+T199,Confection des cuvettes,2.75,165,1,traduit
+T723,Nettoyage,14.79,887,0,rejeté : aucune équipe active
+T724,Nettoyage,14.79,887,0,rejeté : aucune équipe active
+T227,Confection des cuvettes,1.125,68,1,traduit
+T1418,Nettoyage,37.48,2249,0,rejeté : aucune équipe active
+T1423,Binage,39.49,2369,0,rejeté : aucune équipe active
+T945,Nettoyage,24.76,1486,1,traduit
+T748,Nettoyage,9.31,559,1,traduit
+T725,Nettoyage,14.79,887,0,rejeté : aucune équipe active
+T810,Arrosage,0.02,1,1,traduit
+T1301,Nettoyage,99.76,5986,1,traduit
+T946,Nettoyage,24.76,1486,1,traduit
+T749,Nettoyage,9.31,559,1,traduit
+T843,Nettoyage,15.08,905,1,traduit
+T735,Replantation,5.33,320,1,traduit
+T844,Nettoyage,15.08,905,1,traduit
+T750,Nettoyage,9.31,559,1,traduit
+T846,Nettoyage,15.08,905,1,traduit
+T296,Désherbage,13.33,800,0,rejeté : aucune équipe active
+T1407,Traitement,1.0,60,0,rejeté : aucune équipe active
+T1424,Confection des cuvettes,14.38,863,0,rejeté : aucune équipe active
+T728,Nettoyage,18.31,1099,1,traduit
+T949,Nettoyage,24.76,1486,1,traduit
+T950,Nettoyage,24.76,1486,1,traduit
+T2510,Arrosage du gazon,,30,1,traduit
+T1426,Arrachage des arbres morts,0.0,30,1,traduit
+T756,Binage,20.72,1243,1,traduit
+T757,Désherbage,82.88,4973,1,traduit
+T1425,Replantation,0.0,30,1,traduit
+T1412,Taille d'entretien,0.67,40,1,traduit
+T741,Taille d'entretien,8.67,520,0,rejeté : aucune équipe active
+T1467,Nettoyage,192.46,11548,0,rejeté : aucune équipe active
+T1416,Sursemis,0.02,1,1,traduit
+T2511,Arrosage du gazon,,30,1,traduit
+T2512,Arrosage du gazon,,30,1,traduit
+T2513,Arrosage du gazon,,30,1,traduit
+T2514,Arrosage du gazon,,30,1,traduit
+T2515,Arrosage du gazon,,30,1,traduit
+T2516,Arrosage du gazon,,30,1,traduit
+T2517,Arrosage du gazon,,30,1,traduit
+T2518,Arrosage du gazon,,30,1,traduit
+T2519,Arrosage du gazon,,30,1,traduit
+T2522,Arrosage du gazon,,30,1,traduit
+T2523,Arrosage du gazon,,30,1,traduit
+T2524,Arrosage du gazon,,30,1,traduit
+T2525,Arrosage du gazon,,30,1,traduit
+T2526,Arrosage du gazon,,30,1,traduit
+T2527,Arrosage du gazon,,30,1,traduit
+T2528,Arrosage du gazon,,30,1,traduit
+T2529,Arrosage du gazon,,30,1,traduit
+T2530,Arrosage du gazon,,30,1,traduit
+T2531,Arrosage du gazon,,30,1,traduit
+T2532,Arrosage du gazon,,30,1,traduit
+T2533,Arrosage du gazon,,30,1,traduit
+T2534,Arrosage du gazon,,30,1,traduit
+T2535,Arrosage du gazon,,30,1,traduit
+T2538,Arrosage du gazon,,30,1,traduit
+T2539,Arrosage du gazon,,30,1,traduit
+T2540,Arrosage du gazon,,30,1,traduit
+T2541,Arrosage du gazon,,30,1,traduit
+T2542,Arrosage du gazon,,30,1,traduit
+T2543,Arrosage du gazon,,30,1,traduit
+T2544,Arrosage du gazon,,30,1,traduit
+T2545,Arrosage du gazon,,30,1,traduit
+T2546,Arrosage du gazon,,30,1,traduit
+T2547,Arrosage du gazon,,30,1,traduit
+T2548,Arrosage du gazon,,30,1,traduit
+T2549,Arrosage du gazon,,30,1,traduit
+T3044,Arrosage,,30,1,traduit
+T3045,Arrosage,,30,1,traduit
+T2552,Arrosage du gazon,,30,1,traduit
+T2553,Arrosage du gazon,,30,1,traduit
+T3046,Arrosage,,30,1,traduit
+T3043,Arrosage,90.54,5432,1,traduit
+T2949,Arrosage des pots intérieurs,,30,1,traduit
+T2950,Arrosage des pots intérieurs,,30,1,traduit
+T2951,Arrosage des pots intérieurs,,30,1,traduit
+T2948,Arrosage des pots intérieurs,2.67,160,1,traduit
+T2026,Pincement,96.0,5760,1,traduit
+T3048,Arrosage,90.54,5432,1,traduit
+T3049,Arrosage,90.54,5432,1,traduit
+T3050,Arrosage,90.54,5432,1,traduit
+T2953,Arrosage des pots intérieurs,2.67,160,1,traduit
+T2954,Arrosage des pots intérieurs,2.67,160,1,traduit
+T2955,Arrosage des pots intérieurs,2.67,160,1,traduit
+T2554,Arrosage du gazon,26.55,1593,1,traduit
+T2555,Arrosage du gazon,26.55,1593,1,traduit
+T2556,Arrosage du gazon,26.55,1593,1,traduit
+T2558,Arrosage du gazon,26.55,1593,1,traduit
+T2559,Arrosage du gazon,26.55,1593,1,traduit
+T2560,Arrosage du gazon,26.55,1593,1,traduit
+T2561,Arrosage du gazon,26.55,1593,1,traduit
+T2562,Arrosage du gazon,26.55,1593,1,traduit
+T2563,Arrosage du gazon,26.55,1593,1,traduit
+T2564,Arrosage du gazon,26.55,1593,1,traduit
+T2565,Arrosage du gazon,26.55,1593,1,traduit
+T2566,Arrosage du gazon,26.55,1593,1,traduit
+T2567,Arrosage du gazon,26.55,1593,1,traduit
+T2568,Arrosage du gazon,26.55,1593,1,traduit
+T2569,Arrosage du gazon,26.55,1593,1,traduit
+T2570,Arrosage du gazon,26.55,1593,1,traduit
+T2571,Arrosage du gazon,26.55,1593,1,traduit
+T2572,Arrosage du gazon,26.55,1593,1,traduit
+T2573,Arrosage du gazon,26.55,1593,1,traduit
+T2574,Arrosage du gazon,26.55,1593,1,traduit
+T2575,Arrosage du gazon,26.55,1593,1,traduit
+T2576,Arrosage du gazon,26.55,1593,1,traduit
+T2577,Arrosage du gazon,26.55,1593,1,traduit
+T2578,Arrosage du gazon,26.55,1593,1,traduit
+T2579,Arrosage du gazon,26.55,1593,1,traduit
+T2809,Désherbage,54.3,3258,1,traduit
+T3052,Tonte,,30,1,traduit
+T3053,Tonte,,30,1,traduit
+T3054,Tonte,,30,1,traduit
+T3051,Tonte,1.17,70,1,traduit
+T2957,Nettoyage,,30,1,traduit
+T2958,Nettoyage,,30,1,traduit
+T2959,Nettoyage,,30,1,traduit
+T2960,Nettoyage,,30,1,traduit
+T2961,Nettoyage,,30,1,traduit
+T2962,Nettoyage,,30,1,traduit
+T2963,Nettoyage,,30,1,traduit
+T2964,Nettoyage,,30,1,traduit
+T2965,Nettoyage,,30,1,traduit
+T2966,Nettoyage,,30,1,traduit
+T2967,Nettoyage,,30,1,traduit
+T2968,Nettoyage,,30,1,traduit
+T2969,Nettoyage,,30,1,traduit
+T2970,Nettoyage,,30,1,traduit
+T2971,Nettoyage,,30,1,traduit
+T2972,Nettoyage,,30,1,traduit
+T3055,Tonte,1.17,70,1,traduit
+T2975,Nettoyage,,30,1,traduit
+T2976,Nettoyage,,30,1,traduit
+T2956,Nettoyage,15.18,911,1,traduit
+T2581,Arrosage,,30,1,traduit
+T2582,Arrosage,,30,1,traduit
+T2583,Arrosage,,30,1,traduit
+T2584,Arrosage,,30,1,traduit
+T2585,Arrosage,,30,1,traduit
+T2586,Arrosage,,30,1,traduit
+T2587,Arrosage,,30,1,traduit
+T3056,Tonte,1.17,70,1,traduit
+T3057,Tonte,1.17,70,1,traduit
+T2811,Désherbage,54.3,3258,1,traduit
+T2589,Arrosage,0.62,37,1,traduit
+T2244,Désherbage,1607.22,96433,1,traduit
+T2590,Arrosage,0.62,37,1,traduit
+T2591,Arrosage,0.62,37,1,traduit
+T2977,Nettoyage,15.18,911,1,traduit
+T2978,Nettoyage,15.18,911,1,traduit
+T2979,Nettoyage,15.18,911,1,traduit
+T3059,Traçage des bordures,,30,1,traduit
+T3060,Traçage des bordures,,30,1,traduit
+T3061,Traçage des bordures,,30,1,traduit
+T3058,Traçage des bordures,0.0,30,1,traduit
+T2812,Binage,13.6,816,1,traduit
+T2980,Désherbage,11.68,701,1,traduit
+T3062,Traçage des bordures,0.0,30,1,traduit
+T3063,Traçage des bordures,0.0,30,1,traduit
+T191,Taille d'entretien,1.3058333333333334,78,1,traduit
+T3064,Traçage des bordures,0.0,30,1,traduit
+T2594,Entretien des pots intérieurs,,30,1,traduit
+T2595,Entretien des pots intérieurs,,30,1,traduit
+T2596,Entretien des pots intérieurs,,30,1,traduit
+T2597,Entretien des pots intérieurs,,30,1,traduit
+T2599,Entretien des pots intérieurs,,30,1,traduit
+T2593,Entretien des pots intérieurs,4.72,283,1,traduit
+T2245,Confection des cuvettes,80.0,4800,1,traduit
+T218,Désherbage,18.32,1099,0,rejeté : aucune équipe active
+T2601,Entretien des pots intérieurs,4.72,283,1,traduit
+T2602,Entretien des pots intérieurs,4.72,283,1,traduit
+T2603,Entretien des pots intérieurs,4.72,283,1,traduit
+T2813,Confection des cuvettes,0.0,30,1,traduit
+T2814,Taille de décoration,812.1,48726,1,traduit
+T2605,Arrosage des pots intérieurs,,30,1,traduit
+T2606,Arrosage des pots intérieurs,,30,1,traduit
+T2607,Arrosage des pots intérieurs,,30,1,traduit
+T2608,Arrosage des pots intérieurs,,30,1,traduit
+T2609,Arrosage des pots intérieurs,,30,1,traduit
+T2610,Arrosage des pots intérieurs,,30,1,traduit
+T2604,Arrosage des pots intérieurs,4.72,283,1,traduit
+T2613,Arrosage des pots intérieurs,4.72,283,1,traduit
+T2614,Arrosage des pots intérieurs,4.72,283,1,traduit
+T2983,Désherbage,11.68,701,1,traduit
+T2615,Binage,1.34,80,1,traduit
+T2984,Confection des cuvettes,0.0,30,1,traduit
+T2985,Confection des cuvettes,0.0,30,1,traduit
+T2617,Binage,1.34,80,1,traduit
+T2986,Tonte,0.91,55,1,traduit
+T2618,Désherbage,3.53,212,1,traduit
+T2990,Tonte,0.91,55,1,traduit
+T2991,Tonte,0.91,55,1,traduit
+T1878,Nettoyage,46.5,2790,0,rejeté : aucune équipe active
+T1874,Nettoyage,,30,0,rejeté : aucune équipe active
+T2619,Désherbage,3.53,212,1,traduit
+T1875,Nettoyage,,30,0,rejeté : aucune équipe active
+T1877,Nettoyage,,30,0,rejeté : aucune équipe active
+T1879,Nettoyage,,30,0,rejeté : aucune équipe active
+T1867,Traitement,66.68,4001,1,traduit
+T2620,Confection des cuvettes,0.0,30,1,traduit
+T2995,Traçage des bordures,,30,1,traduit
+T2994,Traçage des bordures,0.0,30,1,traduit
+T2621,Confection des cuvettes,0.0,30,1,traduit
+T2820,Arrosage,2.7,162,1,traduit
+T2996,Traçage des bordures,0.0,30,1,traduit
+T1887,Confection des cuvettes,55.38,3323,0,rejeté : aucune équipe active
+T2997,Traçage des bordures,0.0,30,1,traduit
+T2623,Nettoyage,,30,1,traduit
+T2624,Nettoyage,,30,1,traduit
+T2625,Nettoyage,,30,1,traduit
+T2626,Nettoyage,,30,1,traduit
+T2627,Nettoyage,,30,1,traduit
+T2628,Nettoyage,,30,1,traduit
+T2629,Nettoyage,,30,1,traduit
+T2630,Nettoyage,,30,1,traduit
+T2631,Nettoyage,,30,1,traduit
+T2632,Nettoyage,,30,1,traduit
+T2633,Nettoyage,,30,1,traduit
+T2635,Nettoyage,,30,1,traduit
+T2636,Nettoyage,,30,1,traduit
+T2637,Nettoyage,,30,1,traduit
+T2638,Nettoyage,,30,1,traduit
+T2639,Nettoyage,,30,1,traduit
+T2640,Nettoyage,,30,1,traduit
+T2641,Nettoyage,,30,1,traduit
+T2645,Nettoyage,,30,1,traduit
+T2622,Nettoyage,50.03,3002,1,traduit
+T2647,Nettoyage,50.03,3002,1,traduit
+T2826,Nettoyage,,30,1,traduit
+T2827,Nettoyage,,30,1,traduit
+T2828,Nettoyage,,30,1,traduit
+T2832,Nettoyage,,30,1,traduit
+T2833,Nettoyage,,30,1,traduit
+T2834,Nettoyage,,30,1,traduit
+T2836,Nettoyage,,30,1,traduit
+T2838,Nettoyage,,30,1,traduit
+T2840,Nettoyage,,30,1,traduit
+T2841,Nettoyage,,30,1,traduit
+T2650,Tonte,,30,1,traduit
+T2843,Nettoyage,,30,1,traduit
+T2652,Tonte,,30,1,traduit
+T2649,Tonte,0.14,8,1,traduit
+T2845,Nettoyage,,30,1,traduit
+T2846,Nettoyage,,30,1,traduit
+T2850,Nettoyage,,30,1,traduit
+T2654,Tonte,0.14,8,1,traduit
+T2852,Nettoyage,24.07,1444,1,traduit
+T2853,Nettoyage,24.07,1444,1,traduit
+T2857,Nettoyage,24.07,1444,1,traduit
+T2656,Traçage des bordures,0.0,30,1,traduit
+T2859,Nettoyage,24.07,1444,1,traduit
+T2863,Nettoyage,24.07,1444,1,traduit
+T2867,Nettoyage,24.07,1444,1,traduit
+T2870,Nettoyage,24.07,1444,1,traduit
+T2998,Tonte,0.91,55,1,traduit
+T2657,Traçage des bordures,0.0,30,1,traduit
+T2879,Binage,15.53,932,1,traduit
+T2999,Traçage des bordures,0.0,30,1,traduit
+T3001,Arrosage du gazon,,30,1,traduit
+T2880,Binage,15.53,932,1,traduit
+T2659,Arrosage du gazon,,30,1,traduit
+T2660,Arrosage du gazon,,30,1,traduit
+T2661,Arrosage du gazon,,30,1,traduit
+T2662,Arrosage du gazon,,30,1,traduit
+T2663,Arrosage du gazon,,30,1,traduit
+T2665,Arrosage du gazon,,30,1,traduit
+T2666,Arrosage du gazon,,30,1,traduit
+T2667,Arrosage du gazon,,30,1,traduit
+T2658,Arrosage du gazon,1.71,103,1,traduit
+T3002,Arrosage du gazon,,30,1,traduit
+T3003,Arrosage du gazon,,30,1,traduit
+T3004,Arrosage du gazon,,30,1,traduit
+T3005,Arrosage du gazon,,30,1,traduit
+T3006,Arrosage du gazon,,30,1,traduit
+T3007,Arrosage du gazon,,30,1,traduit
+T3008,Arrosage du gazon,,30,1,traduit
+T3009,Arrosage du gazon,,30,1,traduit
+T3010,Arrosage du gazon,,30,1,traduit
+T2881,Désherbage,59.92,3595,1,traduit
+T2671,Arrosage du gazon,1.71,103,1,traduit
+T3011,Arrosage du gazon,,30,1,traduit
+T3012,Arrosage du gazon,,30,1,traduit
+T3013,Arrosage du gazon,,30,1,traduit
+T3016,Arrosage du gazon,,30,1,traduit
+T3000,Arrosage du gazon,11.38,683,1,traduit
+T2673,Taille d'entretien,0.46,28,1,traduit
+T2882,Désherbage,49.02,2941,1,traduit
+T3017,Arrosage du gazon,11.38,683,1,traduit
+T3018,Arrosage du gazon,11.38,683,1,traduit
+T3019,Arrosage du gazon,11.38,683,1,traduit
+T2883,Confection des cuvettes,0.0,30,1,traduit
+T2675,Arrosage,,30,1,traduit
+T2676,Arrosage,,30,1,traduit
+T2677,Arrosage,,30,1,traduit
+T2674,Arrosage,8.62,517,1,traduit
+T3021,Arrosage,,30,1,traduit
+T3022,Arrosage,,30,1,traduit
+T3023,Arrosage,,30,1,traduit
+T3020,Arrosage,3.71,223,1,traduit
+T2679,Arrosage,8.62,517,1,traduit
+T2680,Arrosage,8.62,517,1,traduit
+T2681,Arrosage,8.62,517,1,traduit
+T2884,Confection des cuvettes,0.0,30,1,traduit
+T3025,Arrosage,3.71,223,1,traduit
+T3026,Arrosage,3.71,223,1,traduit
+T3027,Arrosage,3.71,223,1,traduit
+T3028,Ecorçage,0.0,30,1,traduit
+T2886,Tonte,1.44,86,1,traduit
+T2889,Tonte,1.44,86,1,traduit
+T2683,Arrosage,,30,1,traduit
+T2684,Arrosage,,30,1,traduit
+T2685,Arrosage,,30,1,traduit
+T2686,Arrosage,,30,1,traduit
+T2687,Arrosage,,30,1,traduit
+T2688,Arrosage,,30,1,traduit
+T2691,Arrosage,,30,1,traduit
+T2692,Arrosage,,30,1,traduit
+T2693,Arrosage,,30,1,traduit
+T2694,Arrosage,,30,1,traduit
+T2695,Arrosage,,30,1,traduit
+T2696,Arrosage,,30,1,traduit
+T2697,Arrosage,,30,1,traduit
+T2698,Arrosage,,30,1,traduit
+T2699,Arrosage,,30,1,traduit
+T2700,Arrosage,,30,1,traduit
+T2701,Arrosage,,30,1,traduit
+T2702,Arrosage,,30,1,traduit
+T2703,Arrosage,,30,1,traduit
+T2704,Arrosage,,30,1,traduit
+T2705,Arrosage,,30,1,traduit
+T2706,Arrosage,,30,1,traduit
+T2707,Arrosage,,30,1,traduit
+T2708,Arrosage,,30,1,traduit
+T2709,Arrosage,,30,1,traduit
+T2710,Arrosage,,30,1,traduit
+T2711,Arrosage,,30,1,traduit
+T2712,Arrosage,,30,1,traduit
+T2713,Arrosage,,30,1,traduit
+T2714,Arrosage,,30,1,traduit
+T2715,Arrosage,,30,1,traduit
+T2716,Arrosage,,30,1,traduit
+T2717,Arrosage,,30,1,traduit
+T2718,Arrosage,,30,1,traduit
+T3029,Taille d'entretien,16.61,997,1,traduit
+T2719,Arrosage,,30,1,traduit
+T2720,Arrosage,,30,1,traduit
+T2721,Arrosage,,30,1,traduit
+T2722,Arrosage,,30,1,traduit
+T2723,Arrosage,,30,1,traduit
+T2724,Arrosage,,30,1,traduit
+T2725,Arrosage,,30,1,traduit
+T2726,Arrosage,,30,1,traduit
+T2727,Arrosage,,30,1,traduit
+T2728,Arrosage,,30,1,traduit
+T2729,Arrosage,,30,1,traduit
+T2730,Arrosage,,30,1,traduit
+T2731,Arrosage,,30,1,traduit
+T2732,Arrosage,,30,1,traduit
+T2733,Arrosage,,30,1,traduit
+T2734,Arrosage,,30,1,traduit
+T2735,Arrosage,,30,1,traduit
+T2736,Arrosage,,30,1,traduit
+T2737,Arrosage,,30,1,traduit
+T2738,Arrosage,,30,1,traduit
+T2739,Arrosage,,30,1,traduit
+T2740,Arrosage,,30,1,traduit
+T2741,Arrosage,,30,1,traduit
+T2742,Arrosage,,30,1,traduit
+T2743,Arrosage,,30,1,traduit
+T2744,Arrosage,,30,1,traduit
+T2745,Arrosage,,30,1,traduit
+T2746,Arrosage,,30,1,traduit
+T2747,Arrosage,,30,1,traduit
+T2748,Arrosage,,30,1,traduit
+T2749,Arrosage,,30,1,traduit
+T2750,Arrosage,,30,1,traduit
+T2751,Arrosage,,30,1,traduit
+T2682,Arrosage,0.5,30,1,traduit
+T2890,Tonte,1.44,86,1,traduit
+T2891,Tonte,1.44,86,1,traduit
+T3030,Taille d'entretien,16.61,997,1,traduit
+T2894,Traçage des bordures,,30,1,traduit
+T2896,Traçage des bordures,,30,1,traduit
+T2893,Traçage des bordures,0.0,30,1,traduit
+T3031,Binage,213.86,12832,1,traduit
+T2752,Arrosage,0.5,30,1,traduit
+T2753,Arrosage,0.5,30,1,traduit
+T2754,Arrosage,0.5,30,1,traduit
+T2755,Arrosage,0.5,30,1,traduit
+T2756,Arrosage,0.5,30,1,traduit
+T2757,Arrosage,0.5,30,1,traduit
+T2758,Arrosage,0.5,30,1,traduit
+T2759,Arrosage,0.5,30,1,traduit
+T2760,Arrosage,0.5,30,1,traduit
+T2761,Arrosage,0.5,30,1,traduit
+T2762,Arrosage,0.5,30,1,traduit
+T2763,Arrosage,0.5,30,1,traduit
+T2764,Arrosage,0.5,30,1,traduit
+T2765,Arrosage,0.5,30,1,traduit
+T2766,Arrosage,0.5,30,1,traduit
+T2767,Arrosage,0.5,30,1,traduit
+T2768,Arrosage,0.5,30,1,traduit
+T2769,Arrosage,0.5,30,1,traduit
+T2770,Arrosage,0.5,30,1,traduit
+T2771,Arrosage,0.5,30,1,traduit
+T2772,Arrosage,0.5,30,1,traduit
+T2773,Arrosage,0.5,30,1,traduit
+T2774,Arrosage,0.5,30,1,traduit
+T2775,Arrosage,0.5,30,1,traduit
+T2776,Arrosage,0.5,30,1,traduit
+T2777,Arrosage,0.5,30,1,traduit
+T2778,Arrosage,0.5,30,1,traduit
+T2779,Arrosage,0.5,30,1,traduit
+T2780,Arrosage,0.5,30,1,traduit
+T2781,Arrosage,0.5,30,1,traduit
+T2782,Arrosage,0.5,30,1,traduit
+T2783,Arrosage,0.5,30,1,traduit
+T2784,Arrosage,0.5,30,1,traduit
+T2785,Arrosage,0.5,30,1,traduit
+T2898,Traçage des bordures,0.0,30,1,traduit
+T3032,Binage,213.86,12832,1,traduit
+T2900,Taille d'entretien,56.65,3399,1,traduit
+T3033,Désherbage,844.57,50674,1,traduit
+T2901,Taille d'entretien,56.65,3399,1,traduit
+T2903,Arrosage du gazon,,30,1,traduit
+T2904,Arrosage du gazon,,30,1,traduit
+T2905,Arrosage du gazon,,30,1,traduit
+T2906,Arrosage du gazon,,30,1,traduit
+T2907,Arrosage du gazon,,30,1,traduit
+T2908,Arrosage du gazon,,30,1,traduit
+T2909,Arrosage du gazon,,30,1,traduit
+T2910,Arrosage du gazon,,30,1,traduit
+T2911,Arrosage du gazon,,30,1,traduit
+T2912,Arrosage du gazon,,30,1,traduit
+T2913,Arrosage du gazon,,30,1,traduit
+T2914,Arrosage du gazon,,30,1,traduit
+T2915,Arrosage du gazon,,30,1,traduit
+T2916,Arrosage du gazon,,30,1,traduit
+T2917,Arrosage du gazon,,30,1,traduit
+T2918,Arrosage du gazon,,30,1,traduit
+T2921,Arrosage du gazon,,30,1,traduit
+T2922,Arrosage du gazon,,30,1,traduit
+T2902,Arrosage du gazon,18.05,1083,1,traduit
+T811,Arrosage,0.02,1,1,traduit
+T2923,Arrosage du gazon,18.05,1083,1,traduit
+T2924,Arrosage du gazon,18.05,1083,1,traduit
+T2925,Arrosage du gazon,18.05,1083,1,traduit
+T2930,Arrosage,,30,1,traduit
+T2931,Arrosage,,30,1,traduit
+T2932,Arrosage,,30,1,traduit
+T2929,Arrosage,8.67,520,1,traduit
