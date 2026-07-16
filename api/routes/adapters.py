@@ -1,10 +1,17 @@
-"""Pont entre un adaptateur ERP réel et le canal d'ingestion standard —
-pour que le dashboard puisse charger une instance depuis de vraies données
-sans que quelqu'un tape du JSON à la main. Ne fait rien de plus que
+"""Pont entre un adaptateur ERP et le canal d'ingestion standard — pour que
+le dashboard puisse charger une instance depuis de vraies données sans que
+quelqu'un tape du JSON à la main. Ne fait rien de plus que
 `/ingestion/{client_id}` une fois la traduction faite : mêmes garde-fous
-(§6.7), même stockage. Aujourd'hui : GreenSIG (`adapters/greensig/`) seul.
+(§6.7), même stockage. Deux chemins :
 
-Ne masque jamais un rejet de `traduire()` (ex. tâches sans compatibilité
+- GreenSIG (`adapters/greensig/`) — adaptateur écrit à la main, déterministe,
+  gratuit. Le chemin par défaut, à privilégier dès qu'un `translator.py`
+  existe pour l'ERP concerné.
+- Comprehension (`adapters/agent_comprehension/`) — agent LLM, pour un ERP
+  sans adaptateur dédié. Propose une traduction, jamais une vérité : le même
+  garde-fou déterministe tranche, comme pour GreenSIG.
+
+Ne masque jamais un rejet de traduction (ex. tâches sans compatibilité
 machine-tâche, §6.7) derrière un succès partiel — l'échec explicite est
 volontaire (voir `adapters/greensig/mapping/regles.md`, limite 3) : mieux
 vaut que l'utilisateur du dashboard voie l'erreur telle quelle qu'une
@@ -15,11 +22,14 @@ from __future__ import annotations
 
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
+from adapters.agent_comprehension import comprendre_donnees_erp
 from adapters.greensig import extraire_payload, traduire
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
-from api.input_validation import erreurs_serialisables
+from api.input_validation import erreurs_serialisables, valider_payload_trco
+from generation.agents.base import ErreurReponseAgentInvalide
+from generation.agents.client_llm import AppelLLM, construire_appel_llm
 
 CLIENT_ID_GREENSIG = "greensig"
 
@@ -40,3 +50,29 @@ def ingerer_depuis_greensig(etat: EtatAPI = Depends(obtenir_etat)) -> dict[str, 
 
     instance_id = etat.enregistrer_instance(CLIENT_ID_GREENSIG, instance)
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
+
+
+class RequeteComprehension(BaseModel):
+    client_id: str
+    donnees_brutes: str
+
+
+@router.post("/comprehension/ingerer")
+def ingerer_via_comprehension(
+    requete: RequeteComprehension,
+    etat: EtatAPI = Depends(obtenir_etat),
+    appel_llm: AppelLLM = Depends(construire_appel_llm),
+) -> dict[str, object]:
+    try:
+        resultat = comprendre_donnees_erp(appel_llm, requete.donnees_brutes)
+    except ErreurReponseAgentInvalide as erreur:
+        raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
+
+    instance = valider_payload_trco(resultat.instance_brute)  # lève déjà un 422 si invalide
+
+    instance_id = etat.enregistrer_instance(requete.client_id, instance)
+    return {
+        "instance_id": instance_id,
+        "structure_contraintes": structure_contraintes(instance),
+        "avertissements": list(resultat.avertissements),
+    }

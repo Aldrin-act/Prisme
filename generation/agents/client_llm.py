@@ -92,9 +92,14 @@ _CONSTRUCTEURS: dict[str, Callable[[str], AppelLLM]] = {
 
 def construire_appel_llm() -> AppelLLM:
     """Construit l'appel LLM à utiliser, d'après `PRISME_LLM_PROVIDER` / `PRISME_LLM_MODEL`."""
-    fournisseur = os.environ.get("PRISME_LLM_PROVIDER", "anthropic")
+    fournisseur = os.environ.get("PRISME_LLM_PROVIDER") or "anthropic"
     constructeur = _CONSTRUCTEURS.get(fournisseur)
     if constructeur is None:
         raise ValueError(f"fournisseur LLM inconnu : {fournisseur!r} (attendu : {sorted(_CONSTRUCTEURS)})")
-    modele = os.environ.get("PRISME_LLM_MODEL", _MODELES_PAR_DEFAUT[fournisseur])
+    # `.get(..., defaut)` ne renvoie le défaut que si la variable est absente —
+    # or `.env` la déclare toujours, vide par défaut (`PRISME_LLM_MODEL=`), ce
+    # qui donnerait `modele = ""` sans le `or` : Mistral (entre autres) rejette
+    # alors l'appel avec "Missing model parameter" plutôt que d'utiliser son
+    # propre défaut, l'erreur n'a rien d'évident depuis l'appelant.
+    modele = os.environ.get("PRISME_LLM_MODEL") or _MODELES_PAR_DEFAUT[fournisseur]
     return constructeur(modele)
