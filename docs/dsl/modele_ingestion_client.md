@@ -5,6 +5,12 @@ Format **déterministe** : un JSON à structure fixe, validé automatiquement pa
 gabarit directement — c'est l'alternative à un mapping assisté par LLM quand le client peut
 produire lui-même le format canonique.
 
+Pour quelqu'un qui préfère ne pas écrire de JSON à la main, la même structure existe en tableur :
+[`gabarit_ingestion_trco.xlsx`](gabarit_ingestion_trco.xlsx) (régénérable via
+`scripts/generer_gabarit_ingestion.py`). Il ajoute un onglet "Besoins additionnels" pour noter en
+langage libre tout ce qui sort du périmètre minimal ci-dessous (calendriers, équilibrage de
+charge, priorités...) — examiné à la main, jamais converti automatiquement.
+
 ## Les 4 sections à fournir
 
 ### `taches` (au moins une)

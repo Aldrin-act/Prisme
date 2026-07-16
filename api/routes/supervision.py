@@ -1,8 +1,8 @@
 """Canal de supervision (lecture seule) : donne au dashboard une vue globale
 de l'état du système — instances en attente, historique des exécutions,
-solveurs enregistrés, santé API/sandbox — sans passer par le fil
-alerte -> déclenchement. Jamais de code source ici : `code_source` ne sort
-que par `/audit/{execution_id}` sur demande explicite (§5.1, §5.5)."""
+solveurs enregistrés, santé API/sandbox. Jamais de code source ici :
+`code_source` ne sort que par `/audit/{execution_id}` sur demande
+explicite (§5.1, §5.5)."""
 
 from __future__ import annotations
 

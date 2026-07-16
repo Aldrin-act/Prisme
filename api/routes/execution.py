@@ -16,8 +16,9 @@ def executer_pour_instance(
     etat: EtatAPI, registre: Registre, instance_id: str, client_id: str
 ) -> tuple[str, ResultatExecution]:
     """Chaîne lookup instance → recherche solveur validé → sandbox →
-    enregistrement — factorisé pour être partagé entre `/execution/{instance_id}`
-    et le déclenchement humain d'une alerte (`/alertes/{alerte_id}/declencher`)."""
+    enregistrement. Un aléa (panne, retard...) se traite en réingérant
+    l'instance avec ses contraintes mises à jour, puis en rappelant cette
+    même fonction — aucun mécanisme d'alerte dédié dans le noyau."""
     try:
         _, instance = etat.recuperer_instance(instance_id)
     except KeyError:

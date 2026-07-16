@@ -2,7 +2,7 @@
 jamais exposer le code source d'un solveur (`code_source` reste réservé à
 `/audit/{execution_id}`, sur demande explicite — §5.1, §5.5). Les cas qui
 n'ont pas besoin d'une exécution réelle en sandbox n'exigent pas Docker ;
-seul le scénario ingestion -> alerte -> déclenchement en a besoin.
+seul le scénario ingestion -> exécution en a besoin.
 """
 
 from __future__ import annotations
@@ -60,7 +60,7 @@ def test_solveurs_enregistres_sans_code_source(tmp_path: Path) -> None:
         app.dependency_overrides.clear()
 
 
-def test_cycle_ingestion_alerte_visible_en_supervision(tmp_path: Path, image_sandbox: str) -> None:
+def test_cycle_ingestion_execution_visible_en_supervision(tmp_path: Path, image_sandbox: str) -> None:
     etat_test = EtatAPI()
     registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
@@ -82,24 +82,15 @@ def test_cycle_ingestion_alerte_visible_en_supervision(tmp_path: Path, image_san
 
         client = TestClient(app)
 
-        instance_id = client.post(
-            "/ingestion/client_test", json=instance.model_dump(mode="json")
-        ).json()["instance_id"]
+        instance_id = client.post("/ingestion/client_test", json=instance.model_dump(mode="json")).json()[
+            "instance_id"
+        ]
 
         instances = client.get("/supervision/instances").json()
         instance_supervisee = next(i for i in instances if i["instance_id"] == instance_id)
         assert instance_supervisee["executee"] is False
 
-        alerte_id = client.post(
-            "/alertes",
-            json={
-                "instance_id": instance_id,
-                "client_id": "client_test",
-                "type_alea": "panne",
-                "description": "machine M1 en panne",
-            },
-        ).json()["alerte_id"]
-        execution_id = client.post(f"/alertes/{alerte_id}/declencher").json()["execution_id"]
+        execution_id = client.post(f"/execution/{instance_id}?client_id=client_test").json()["execution_id"]
 
         instances = client.get("/supervision/instances").json()
         instance_supervisee = next(i for i in instances if i["instance_id"] == instance_id)

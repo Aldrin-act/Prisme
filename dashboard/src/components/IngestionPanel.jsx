@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ingererInstance, leverAlerte } from "../api";
+import { declencherExecution, ingererInstance } from "../api";
 
 // Exemples de démo, copiés depuis dsl/examples/valid/ pour peuplement rapide
 // du formulaire — dsl/examples/ reste la source de vérité pour les tests,
@@ -20,34 +20,28 @@ const EXEMPLES = {
   },
 };
 
-const TYPES_ALEA = ["panne", "commande_urgente", "retard"];
-
-// Ingestion (§5.1, §5.5, §6.7) + création d'alerte — pour que tout le cycle
-// human-in-the-loop (§2.3) soit utilisable depuis le navigateur, sans curl.
-// `AlertList` interroge /alertes toutes les 3s de son côté : pas besoin de
-// forcer un rafraîchissement immédiat ici, la nouvelle alerte apparaît seule.
-export default function IngestionPanel() {
+// Ingestion (§5.1, §5.5, §6.7) + déclenchement d'exécution — pour que tout
+// le cycle human-in-the-loop (§2.3) soit utilisable depuis le navigateur,
+// sans curl. Un aléa atelier (panne, retard...) n'a pas de mécanisme dédié
+// ici : il se traduit dans les contraintes de l'instance (ex. retirer la
+// ressource en panne des compatibilités machine-tâche) avant de ré-ingérer
+// et de relancer l'exécution — le processus exact dépend du client.
+export default function IngestionPanel({ onExecutionDeclenchee }) {
   const [clientId, setClientId] = useState("demo");
   const [payloadTexte, setPayloadTexte] = useState(JSON.stringify(EXEMPLES["Atelier 3 tâches"], null, 2));
   const [instance, setInstance] = useState(null);
   const [erreur, setErreur] = useState(null);
   const [enCours, setEnCours] = useState(false);
 
-  const [typeAlea, setTypeAlea] = useState(TYPES_ALEA[0]);
-  const [description, setDescription] = useState("");
-  const [alerteCreee, setAlerteCreee] = useState(false);
-
   function chargerExemple(nom) {
     setPayloadTexte(JSON.stringify(EXEMPLES[nom], null, 2));
     setInstance(null);
-    setAlerteCreee(false);
     setErreur(null);
   }
 
   async function handleIngerer() {
     setErreur(null);
     setInstance(null);
-    setAlerteCreee(false);
     let payload;
     try {
       payload = JSON.parse(payloadTexte);
@@ -66,12 +60,12 @@ export default function IngestionPanel() {
     }
   }
 
-  async function handleLeverAlerte() {
+  async function handleExecuter() {
     setErreur(null);
     setEnCours(true);
     try {
-      await leverAlerte(instance.instance_id, clientId, typeAlea, description);
-      setAlerteCreee(true);
+      const { execution_id: executionId } = await declencherExecution(instance.instance_id, clientId);
+      onExecutionDeclenchee(executionId);
     } catch (e) {
       setErreur(e);
     } finally {
@@ -106,7 +100,6 @@ export default function IngestionPanel() {
           onChange={(e) => {
             setPayloadTexte(e.target.value);
             setInstance(null);
-            setAlerteCreee(false);
           }}
         />
         <button onClick={handleIngerer} disabled={enCours}>
@@ -122,29 +115,9 @@ export default function IngestionPanel() {
             Instance <code>{instance.instance_id}</code> — structure :{" "}
             <code>{instance.structure_contraintes}</code>
           </p>
-
-          {alerteCreee ? (
-            <p className="note">Alerte créée — visible dans la liste ci-dessous.</p>
-          ) : (
-            <div className="validation-actions">
-              <select value={typeAlea} onChange={(e) => setTypeAlea(e.target.value)}>
-                {TYPES_ALEA.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                placeholder="Description de l'aléa"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              <button onClick={handleLeverAlerte} disabled={enCours || !description}>
-                Lever une alerte pour cette instance
-              </button>
-            </div>
-          )}
+          <button onClick={handleExecuter} disabled={enCours}>
+            {enCours ? "Exécution…" : "Déclencher l'exécution"}
+          </button>
         </div>
       )}
     </section>

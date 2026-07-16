@@ -155,10 +155,10 @@ later without redesign, don't implement now. Guard against scope creep.
 | `solveur_reference/` | Hand-written CP-SAT solver, permanent, outside the generate-once cycle |
 | `solver_store/` | Persistent registry (`registry.py`) + frozen `artifacts/` |
 | `sandbox/` | Ephemeral disposable-container execution (`runner.py`, `container/`) |
-| `api/` | Routes: `ingestion`, `execution`, `planning`, `audit`, `alertes`, `executions/{id}/decision` (`validation.py`), `diagnostics`, `supervision` (dashboard read-only view) |
+| `api/` | Routes: `ingestion`, `execution`, `planning`, `audit`, `executions/{id}/decision` (`validation.py`), `diagnostics`, `supervision` (dashboard read-only view). No dedicated alert type — a workshop disruption (breakdown, urgent order, delay...) is expressed by re-ingesting the instance with updated constraints, then re-calling `/execution/{instance_id}`; the exact process is client-specific, deliberately not hardcoded |
 | `adapters/` | ERP anti-corruption layer; `erp_reference/` for the PoC |
 | `diagnostics/` | Cause attribution (`attribution.py`) + sandbox wrapper (`solveur_sandbox.py`) — done |
-| `dashboard/` | React/Vite (§2.3, Phase 10) — alerts, human validation, live diagnostic — done |
+| `dashboard/` | React/Vite (§2.3, Phase 10) — ingestion, human validation, live diagnostic — done |
 | `tests/` | `unit/`, `integration/`, `property_based/`, `generation_stability/` |
 | `docs/` | Architecture + DSL spec (next priority) + roadmap — not yet written |
 | `scripts/` | Dev env, synthetic-bench generation, CI tasks |

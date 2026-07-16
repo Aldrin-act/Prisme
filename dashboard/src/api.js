@@ -26,19 +26,8 @@ export function ingererInstance(clientId, instance) {
   });
 }
 
-export function leverAlerte(instanceId, clientId, typeAlea, description) {
-  return requete("/alertes", {
-    method: "POST",
-    body: JSON.stringify({ instance_id: instanceId, client_id: clientId, type_alea: typeAlea, description }),
-  });
-}
-
-export function listerAlertes() {
-  return requete("/alertes");
-}
-
-export function declencherRecalcul(alerteId) {
-  return requete(`/alertes/${alerteId}/declencher`, { method: "POST" });
+export function declencherExecution(instanceId, clientId) {
+  return requete(`/execution/${instanceId}?client_id=${encodeURIComponent(clientId)}`, { method: "POST" });
 }
 
 export function obtenirPlanning(executionId) {

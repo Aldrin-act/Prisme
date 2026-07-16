@@ -38,7 +38,7 @@ export default function ValidationPanel({ executionId }) {
     return (
       <section className="panel">
         <h2>Planning proposé</h2>
-        <p className="vide">Déclenche un recalcul depuis une alerte pour voir un planning ici.</p>
+        <p className="vide">Déclenche une exécution depuis l'onglet Ingestion pour voir un planning ici.</p>
       </section>
     );
   }

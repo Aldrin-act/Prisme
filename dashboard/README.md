@@ -1,8 +1,11 @@
 # dashboard — Tableau de bord & humain dans la boucle (§2.3, §9 Étape 9)
 
-Interface qui matérialise le fil directeur du projet : le système alerte, l'humain décide.
+Interface qui matérialise le fil directeur du projet : le système propose, l'humain décide.
 
-- Alerte sur aléa atelier (panne, commande urgente, retard) et déclenchement humain du recalcul.
+- Ingestion d'une instance et déclenchement humain de l'exécution. Un aléa atelier (panne,
+  commande urgente, retard...) n'a pas de mécanisme dédié : il se traduit dans les contraintes
+  de l'instance (ex. retirer la ressource en panne), qui est ré-ingérée puis réexécutée — le
+  processus exact dépend du client, volontairement pas figé dans le noyau.
 - Validation humaine du planning proposé avant application.
 - Restitution de la boucle d'amélioration diagnostique (`diagnostics/`) sous décision humaine.
 

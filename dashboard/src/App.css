@@ -44,12 +44,10 @@ body {
   font-size: 0.8rem;
 }
 
-.sidebar-section {
-  margin: 1rem 0 0.25rem;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #9aa4bb;
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .nav-item {
@@ -58,6 +56,9 @@ body {
   color: #e6e9f0;
   text-align: left;
   width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .nav-item.actif,
@@ -66,9 +67,8 @@ body {
   border-color: #2f6feb;
 }
 
-.sidebar .vide,
-.sidebar .erreur {
-  font-size: 0.85rem;
+.nav-item-icone {
+  font-weight: 700;
 }
 
 .contenu {
@@ -90,6 +90,9 @@ body {
 .panel h2 {
   margin-top: 0;
   font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .vide,
@@ -101,84 +104,6 @@ body {
 .erreur {
   color: #b00020;
   font-weight: 600;
-}
-
-.liste-alertes {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.liste-alertes li {
-  border: 1px solid #3a4560;
-  border-radius: 6px;
-  padding: 0.6rem;
-  background: #232c42;
-  font-size: 0.85rem;
-}
-
-.liste-alertes li.selectionnee {
-  border-color: #2f6feb;
-  background: #2a3a63;
-}
-
-.liste-alertes p {
-  margin: 0.2rem 0;
-}
-
-.alerte-entete {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.35rem;
-}
-
-.badge {
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: white;
-}
-
-.badge-panne {
-  background: #c62828;
-}
-
-.badge-commande_urgente {
-  background: #ef6c00;
-}
-
-.badge-retard {
-  background: #6a1b9a;
-}
-
-.statut {
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-}
-
-.statut-nouvelle {
-  background: #fff3cd;
-  color: #7a5c00;
-}
-
-.statut-traitee {
-  background: #d4edda;
-  color: #1e6b2e;
-}
-
-.horodatage {
-  font-size: 0.75rem;
-  color: #888;
-  margin: 0.25rem 0 0.5rem;
-}
-
-.sidebar .horodatage {
-  color: #9aa4bb;
 }
 
 /* Ingestion */

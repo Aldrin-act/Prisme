@@ -1,11 +1,18 @@
 # Socle Docker Compose (PH0-T3). `db` est le seul service réellement fonctionnel pour l'instant ;
 # `api`, `worker` et `frontend` sont des réservations de nom pour les phases à venir (voir
 # api/README.md, dashboard/README.md) — placés derrière le profil `full` pour ne pas gêner
-# `docker compose up` par défaut, qui ne doit lever que PostgreSQL.
+# `docker compose up` par défaut, qui ne doit lever que PostgreSQL. `dev` est l'environnement de
+# développement conteneurisé (uv + Python 3.11) pour les machines sans `uv`/Python natifs — voir
+# CONTRIBUTING.md.
 #
 # Usage :
-#   docker compose up -d            # PostgreSQL seul (usage courant en développement)
-#   docker compose --profile full up -d   # + les services placeholder
+#   docker compose up -d                    # PostgreSQL seul (usage courant en développement)
+#   docker compose --profile full up -d     # + api/worker (placeholder) + frontend (dashboard réel)
+#   docker compose --profile full up -d frontend  # dashboard seul, sur http://localhost:5173
+#   docker compose --profile dev up -d dev  # + le conteneur dev (uv sync au démarrage)
+#   docker compose exec dev uv run pytest -v
+#   docker compose exec dev uv run ruff check .
+#   docker compose exec dev uv run uvicorn api.app:app --host 0.0.0.0 --reload
 
 services:
   db:
@@ -41,10 +48,31 @@ services:
         condition: service_healthy
     profiles: ["full"]
 
+  # Dashboard Vite/React (Phase 10) : repo monté en bind, `node_modules` en volume nommé pour ne
+  # pas déposer de binaires Linux dans l'arbre du repo hôte (même motif que `dev`).
   frontend:
     image: node:20-alpine
-    command: ["sh", "-c", "echo 'frontend : reservé, pas encore implémenté (Phase 10, dashboard/README.md)'; sleep infinity"]
+    working_dir: /workspace
+    volumes:
+      - ./dashboard:/workspace
+      - prisme_frontend_node_modules:/workspace/node_modules
+    command: ["sh", "-c", "npm install && npm run dev -- --host 0.0.0.0"]
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
     profiles: ["full"]
+
+  # Conteneur de dev : repo monté en bind, `.venv` en volume nommé pour ne pas déposer de
+  # binaires Linux dans l'arbre du repo hôte (utile sous Windows sans WSL/uv natif).
+  dev:
+    image: ghcr.io/astral-sh/uv:debian-slim
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - prisme_dev_venv:/workspace/.venv
+    command: ["sh", "-c", "uv sync --all-extras && sleep infinity"]
+    profiles: ["dev"]
 
 volumes:
   prisme_db_data:
+  prisme_dev_venv:
+  prisme_frontend_node_modules:
