@@ -15,9 +15,11 @@ from dsl.schema import InstanceTRCO
 from dsl.validation import charger_instance
 
 
-def _erreurs_serialisables(erreur: ValidationError) -> list[dict[str, Any]]:
+def erreurs_serialisables(erreur: ValidationError) -> list[dict[str, Any]]:
     """Ne garde que les champs garantis sérialisables en JSON — `ctx` peut
-    contenir des objets Python bruts (ex. l'exception d'un validateur)."""
+    contenir des objets Python bruts (ex. l'exception d'un validateur).
+    Publique : réutilisée par toute route qui traduit un `ValidationError`
+    pydantic en `HTTPException` (`routes/ingestion.py`, `routes/adapters.py`)."""
     return [
         {"loc": entree["loc"], "msg": entree["msg"], "type": entree["type"]}
         for entree in erreur.errors(include_url=False)
@@ -28,4 +30,4 @@ def valider_payload_trco(payload: dict[str, Any]) -> InstanceTRCO:
     try:
         return charger_instance(payload)
     except ValidationError as erreur:
-        raise HTTPException(status_code=422, detail=_erreurs_serialisables(erreur)) from erreur
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur

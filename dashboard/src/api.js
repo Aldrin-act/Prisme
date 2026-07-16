@@ -30,6 +30,10 @@ export function declencherExecution(instanceId, clientId) {
   return requete(`/execution/${instanceId}?client_id=${encodeURIComponent(clientId)}`, { method: "POST" });
 }
 
+export function ingererDepuisGreensig() {
+  return requete("/adapters/greensig/ingerer", { method: "POST" });
+}
+
 export function obtenirPlanning(executionId) {
   return requete(`/planning/${executionId}`);
 }

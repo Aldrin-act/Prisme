@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { declencherExecution, ingererInstance } from "../api";
+import { declencherExecution, ingererDepuisGreensig, ingererInstance } from "../api";
 
 // Exemples de démo, copiés depuis dsl/examples/valid/ pour peuplement rapide
 // du formulaire — dsl/examples/ reste la source de vérité pour les tests,
@@ -60,6 +60,21 @@ export default function IngestionPanel({ onExecutionDeclenchee }) {
     }
   }
 
+  async function handleChargerGreensig() {
+    setErreur(null);
+    setInstance(null);
+    setEnCours(true);
+    try {
+      const resultat = await ingererDepuisGreensig();
+      setClientId("greensig");
+      setInstance(resultat);
+    } catch (e) {
+      setErreur(e);
+    } finally {
+      setEnCours(false);
+    }
+  }
+
   async function handleExecuter() {
     setErreur(null);
     setEnCours(true);
@@ -76,6 +91,18 @@ export default function IngestionPanel({ onExecutionDeclenchee }) {
   return (
     <section className="panel">
       <h2>Ingestion (§6.7)</h2>
+
+      <div className="ingestion-greensig">
+        <button onClick={handleChargerGreensig} disabled={enCours}>
+          {enCours ? "Chargement…" : "Charger depuis GreenSIG"}
+        </button>
+        <p className="note">
+          Tente la traduction complète des tâches réelles encore à planifier — échoue si des
+          tâches n'ont aucune équipe active affectée (garde-fou §6.7, jamais masqué derrière un
+          succès partiel).
+        </p>
+      </div>
+
       <div className="ingestion-form">
         <label>
           Client
