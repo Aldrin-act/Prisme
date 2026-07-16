@@ -10,6 +10,7 @@
 #   docker compose --profile full up -d     # + api/worker (placeholder) + frontend (dashboard réel)
 #   docker compose --profile full up -d frontend  # dashboard seul, sur http://localhost:5173
 #   docker compose --profile dev up -d dev  # + le conteneur dev (uv sync au démarrage)
+#   docker compose --profile greensig up -d db_greensig  # base PostGIS, restaure backup_20260503.sql
 #   docker compose exec dev uv run pytest -v
 #   docker compose exec dev uv run ruff check .
 #   docker compose exec dev uv run uvicorn api.app:app --host 0.0.0.0 --reload
@@ -61,18 +62,57 @@ services:
       - "${FRONTEND_PORT:-5173}:5173"
     profiles: ["full"]
 
+  # Base de référence GreenSIG (adapters/greensig/) : image PostGIS, pas la même que `db` (ce
+  # dump réel nécessite postgis/postgis_tiger_geocoder/postgis_topology, absents de
+  # postgres:16-alpine) ; volontairement séparée de `db` pour ne jamais mélanger ce schéma client
+  # réel avec la base applicative de PRISME.
+  #
+  # Restauration MANUELLE (pas via /docker-entrypoint-initdb.d/) : l'image postgis/postgis crée
+  # déjà elle-même les schémas tiger/tiger_data/topology au démarrage, ce que `backup_20260503.sql`
+  # (un pg_dump qui les recrée aussi) ferait échouer sous le mécanisme d'auto-init de l'image
+  # (ON_ERROR_STOP=1, s'arrête à la première collision) — d'où la restauration `psql` explicite
+  # ci-dessous, qui elle tolère ces quelques erreurs « existe déjà » et continue.
+  #
+  #   docker compose --profile greensig up -d db_greensig
+  #   # bash / Git Bash :
+  #   docker compose exec -T db_greensig psql -U greensig -d greensig -f - < backup_20260503.sql
+  #   # PowerShell (n'a pas l'opérateur `<` — on délègue la redirection à cmd.exe) :
+  #   cmd /c "docker compose exec -T db_greensig psql -U greensig -d greensig -f - < backup_20260503.sql"
+  db_greensig:
+    image: postgis/postgis:16-3.4-alpine
+    environment:
+      POSTGRES_USER: greensig
+      POSTGRES_PASSWORD: ${GREENSIG_DB_PASSWORD:-changeme}
+      POSTGRES_DB: greensig
+    ports:
+      - "${GREENSIG_DB_PORT:-5433}:5432"
+    volumes:
+      - prisme_greensig_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U greensig -d greensig"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    profiles: ["greensig"]
+
   # Conteneur de dev : repo monté en bind, `.venv` en volume nommé pour ne pas déposer de
-  # binaires Linux dans l'arbre du repo hôte (utile sous Windows sans WSL/uv natif).
+  # binaires Linux dans l'arbre du repo hôte (utile sous Windows sans WSL/uv natif). `env_file`
+  # injecte DATABASE_URL (hôte `db`, résolu via le réseau compose) pour solver_store/registry.py.
   dev:
     image: ghcr.io/astral-sh/uv:debian-slim
     working_dir: /workspace
+    env_file: .env
     volumes:
       - .:/workspace
       - prisme_dev_venv:/workspace/.venv
     command: ["sh", "-c", "uv sync --all-extras && sleep infinity"]
+    depends_on:
+      db:
+        condition: service_healthy
     profiles: ["dev"]
 
 volumes:
   prisme_db_data:
   prisme_dev_venv:
   prisme_frontend_node_modules:
+  prisme_greensig_db_data:

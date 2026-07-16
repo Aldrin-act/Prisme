@@ -16,11 +16,8 @@ from validation_engine.cascade import VerdictCascade
 from validation_engine.synthetic_bench import generer_catalogue
 
 
-def test_solveur_valide_stocke_puis_execute_en_sandbox(tmp_path: Path, image_sandbox: str) -> None:
-    registre = Registre(
-        chemin_base=tmp_path / "registre.sqlite3",
-        dossier_artefacts=tmp_path / "artifacts",
-    )
+def test_solveur_valide_stocke_puis_execute_en_sandbox(image_sandbox: str, registre_test: Registre) -> None:
+    registre = registre_test
     code_source = Path(_module_solveur_reference.__file__).read_text(encoding="utf-8")
 
     # Un verdict vert « à blanc » : ce test vérifie le câblage store → sandbox

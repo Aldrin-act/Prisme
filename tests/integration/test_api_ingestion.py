@@ -2,13 +2,14 @@
 instance (garde-fou amont, §6.7). Placé dans `integration/` parce qu'il
 exerce une vraie application FastAPI via `TestClient`, mais ne nécessite pas
 Docker (aucune exécution n'a lieu ici) — contrairement à
-`test_api_bout_en_bout.py`.
+`test_api_bout_en_bout.py`. Nécessite en revanche PostgreSQL joignable,
+car `client_isole` instancie tout de même un `Registre` pour la
+dépendance FastAPI (skip sinon, voir `registre_test`).
 """
 
 from __future__ import annotations
 
 from collections.abc import Iterator
-from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -20,10 +21,9 @@ from solver_store.registry import Registre
 
 
 @pytest.fixture
-def client_isole(tmp_path: Path) -> Iterator[tuple[TestClient, EtatAPI]]:
+def client_isole(registre_test: Registre) -> Iterator[tuple[TestClient, EtatAPI]]:
     """Un client de test avec état et store isolés — jamais le store réel du dépôt."""
     etat_test = EtatAPI()
-    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
     try:

@@ -9,8 +9,6 @@ l'API)."""
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from fastapi.testclient import TestClient
 
 from api.app import app
@@ -22,10 +20,9 @@ from solver_store.registry import Registre
 
 
 def test_diagnostic_via_l_api_ne_trouve_aucune_cause_pour_un_solveur_sain(
-    tmp_path: Path, image_sandbox: str
+    image_sandbox: str, registre_test: Registre
 ) -> None:
     etat_test = EtatAPI()
-    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 

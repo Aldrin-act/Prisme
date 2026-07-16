@@ -5,8 +5,6 @@ planning n'est appliqué sans validation humaine explicite, et la décision
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from fastapi.testclient import TestClient
 
 from api.app import app
@@ -35,9 +33,8 @@ def _executer_une_instance(client: TestClient) -> str:
     return reponse.json()["execution_id"]
 
 
-def test_aucune_decision_avant_validation_explicite(tmp_path: Path, image_sandbox: str) -> None:
+def test_aucune_decision_avant_validation_explicite(image_sandbox: str, registre_test: Registre) -> None:
     etat_test = EtatAPI()
-    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 
@@ -68,9 +65,8 @@ def test_aucune_decision_avant_validation_explicite(tmp_path: Path, image_sandbo
         app.dependency_overrides.clear()
 
 
-def test_decision_refusee_est_tracee(tmp_path: Path, image_sandbox: str) -> None:
+def test_decision_refusee_est_tracee(image_sandbox: str, registre_test: Registre) -> None:
     etat_test = EtatAPI()
-    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 

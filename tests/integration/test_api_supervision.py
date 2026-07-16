@@ -7,8 +7,6 @@ seul le scénario ingestion -> exécution en a besoin.
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from fastapi.testclient import TestClient
 
 from api.app import app
@@ -40,8 +38,7 @@ def test_sante_repond_toujours_200() -> None:
     assert isinstance(corps["sandbox_docker"], bool)
 
 
-def test_solveurs_enregistres_sans_code_source(tmp_path: Path) -> None:
-    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
+def test_solveurs_enregistres_sans_code_source(registre_test: Registre) -> None:
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 
     try:
@@ -60,9 +57,8 @@ def test_solveurs_enregistres_sans_code_source(tmp_path: Path) -> None:
         app.dependency_overrides.clear()
 
 
-def test_cycle_ingestion_execution_visible_en_supervision(tmp_path: Path, image_sandbox: str) -> None:
+def test_cycle_ingestion_execution_visible_en_supervision(image_sandbox: str, registre_test: Registre) -> None:
     etat_test = EtatAPI()
-    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 

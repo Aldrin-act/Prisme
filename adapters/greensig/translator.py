@@ -27,6 +27,7 @@ from .schema_greensig import PayloadGreenSIG
 
 _MINUTES_PAR_HEURE = 60
 _DUREE_PAR_DEFAUT_MINUTES = 30  # tâche sans charge_estimee_heures renseignée
+_DUREE_MINIMALE_MINUTES = 1  # `CompatibiliteMachineTache.duree` exige > 0 ; jamais 0 par arrondi
 
 
 def _id_tache(id_brut: int) -> str:
@@ -53,8 +54,13 @@ def traduire(payload: PayloadGreenSIG) -> InstanceTRCO:
 
     contraintes: list[Contrainte] = []
     for tache in taches_actives:
+        # Sur données réelles (voir tests/integration/test_greensig_extraction.py), une
+        # charge_estimee_heures non nulle mais minuscule (ex. 0.0006h, quelques secondes)
+        # arrondit à 0 minute — `max(..., _DUREE_MINIMALE_MINUTES)` l'empêche sans pour
+        # autant gonfler ces tâches au défaut de 30 min (qui ne vaut que pour une charge
+        # réellement absente).
         duree_minutes = (
-            round(tache.charge_estimee_heures * _MINUTES_PAR_HEURE)
+            max(round(tache.charge_estimee_heures * _MINUTES_PAR_HEURE), _DUREE_MINIMALE_MINUTES)
             if tache.charge_estimee_heures
             else _DUREE_PAR_DEFAUT_MINUTES
         )

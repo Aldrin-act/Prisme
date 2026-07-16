@@ -6,8 +6,6 @@ canal d'audit.
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from fastapi.testclient import TestClient
 
 from adapters.erp_reference import OperationERP, PayloadERP, PosteERP, traduire
@@ -18,9 +16,8 @@ from scripts.enregistrer_solveur_reference import STRUCTURE_MINIMALE, enregistre
 from solver_store.registry import Registre
 
 
-def test_bout_en_bout_erp_vers_planning_et_audit(tmp_path: Path, image_sandbox: str) -> None:
+def test_bout_en_bout_erp_vers_planning_et_audit(image_sandbox: str, registre_test: Registre) -> None:
     etat_test = EtatAPI()
-    registre_test = Registre(chemin_base=tmp_path / "registre.sqlite3", dossier_artefacts=tmp_path / "artifacts")
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 

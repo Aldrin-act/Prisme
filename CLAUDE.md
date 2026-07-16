@@ -63,13 +63,12 @@ actually runs and passes — see "Verified" notes below for two real bugs found 
   dedicated resources (never shared), so the optimum is provable by arithmetic, no solver needed.
   `catalogue.py` (1→80 tasks), `stockage.py` (JSON); regenerate via `generer_banc_synthetique.py`.
 - **Reference solver** (`solveur_reference/`, not in the roadmap, predates Étape 4 on purpose):
-  hand-written CP-SAT FJSP model. Two entry points: `resoudre(instance) -> Planning | None` (the
-  cascade/store/sandbox contract, what generated code must match) and
-  `resoudre_detaille(instance) -> ResultatResolution` (adds statut/makespan/temps, for
-  `scripts/benchmarker_solveur_reference.py`). **Verified (PH0-T4):** split added after the first
-  real Docker run found the store freezing the raw `ResultatResolution` module while the cascade
-  validated a `.planning`-unwrapped version — validated ≠ frozen. Keep both in sync, and in sync
-  with `feasibility_checker.py`'s mandatory-`CompatibiliteMachineTache`/per-pair-`duree` rule.
+  hand-written CP-SAT FJSP model. Two entry points: `resoudre(instance) -> Planning | None`
+  (cascade/store/sandbox contract) and `resoudre_detaille(instance) -> ResultatResolution` (adds
+  statut/makespan/temps). **Verified (PH0-T4):** split added after the first real Docker run found
+  the store freezing the raw `ResultatResolution` module while the cascade validated a
+  `.planning`-unwrapped version — validated ≠ frozen. Keep both in sync with
+  `feasibility_checker.py`'s mandatory-`CompatibiliteMachineTache`/per-pair-`duree` rule too.
 - **Étape 4 — single-shot generator** (`generation/`), built *after* Étape 5 in practice: one LLM
   call, no repair loop. `client_llm.py` picks provider via `PRISME_LLM_PROVIDER`/`_MODEL` (extra
   `.[llm]`, lazy import). `validation_statique.py` is an AST **allowlist** (only `ortools`, `dsl`,
@@ -85,9 +84,12 @@ actually runs and passes — see "Verified" notes below for two real bugs found 
   if every run is legal and hits the same makespan (`tester_stabilite.__test__ = False` needed
   after import in tests — pytest's default `python_functions` bare-matches `"test"`, not `"test_*"`).
 - **Étape 7 — store + ephemeral sandbox** (`solver_store/`, `sandbox/`), Étape 6 skipped on
-  purpose. `Registre` is SQLite-backed (Postgres deferred to `PRISME_Plan_Developpement.md`
-  PH8-T1). **Refuses to register** any non-green `VerdictCascade`; re-verifies a SHA-256 hash on
-  retrieval. `sandbox/runner.py` runs a frozen artifact in a fresh `--rm` container: no network,
+  purpose. `Registre` is PostgreSQL-backed (`DATABASE_URL`, migrated from the original SQLite
+  PoC per PH8-T1) — one schema per instance (`public` in prod, a throwaway per-test schema
+  otherwise); artifacts stay on disk, never duplicated in the DB. Registry tests, like the
+  Docker-gated sandbox ones, live in `tests/integration/` and skip if their dependency is
+  unreachable. **Refuses to register** any non-green `VerdictCascade`; re-verifies a SHA-256 hash
+  on retrieval. `sandbox/runner.py` runs a frozen artifact in a fresh `--rm` container: no network,
   read-only rootfs, non-root (uid 10001), CPU/memory/PID limits, `no-new-privileges`, force-kill on
   timeout. The in-container harness (`executer_dans_conteneur.py`) has zero dependency on
   `validation_engine/` — both §6.7 guardrails run on the **host**. It registers the loaded module
@@ -105,11 +107,11 @@ actually runs and passes — see "Verified" notes below for two real bugs found 
   poorer simulated legacy format (single forced machine) into `InstanceTRCO`. **Verified
   (PH0-T4):** `demo_bout_en_bout` and `test_api_bout_en_bout.py` now run clean end to end.
 
-Docker-dependent tests (`test_sandbox_execution.py`, `test_sandbox_securite.py`,
-`test_api_bout_en_bout.py`) **skip**, not fail, if Docker is unreachable (`conftest.py` session
-fixture); the security test feeds malicious code straight to `executer_dans_sandbox`, bypassing
-the AST gate, to prove container isolation holds independently (§5.3). Codebase is **French**
-(identifiers, docstrings, domain terms) — match it (`Tache`, `Ressource`, `faisabilité`...).
+Docker- and Postgres-dependent tests **skip**, not fail, if their dependency is unreachable
+(`conftest.py` fixtures); the security test feeds malicious code straight to
+`executer_dans_sandbox`, bypassing the AST gate, to prove container isolation holds independently
+(§5.3). Codebase is **French** (identifiers, docstrings, domain terms) — match it (`Tache`,
+`Ressource`, `faisabilité`...).
 
 ## The founding principle (do not violate)
 
@@ -194,7 +196,5 @@ T-R-C-O DSL spec** is the declared next priority (§9); `docs/roadmap.md` doesn'
 **Actual order deviates:** cascade (Étape 5) was built and made green *before* the generator
 (Étape 4) — it only needs a `Callable[[InstanceTRCO], Planning | None]`, and the reference solver
 stood in as a candidate; success rate against a live LLM is still unmeasured. **Étape 6 skipped at
-explicit direction** — no `generation/loop.py`/`failures/` yet; `Registre.enregistrer_solveur`
-expects a `VerdictCascade` handed directly (manual call today, the loop's caller later). **Étape 8
-built ahead of Étape 6** — `/execution` only needs *some* validated solver, supplied by
-`enregistrer_solveur_reference.py` re-running the cascade on the reference solver.
+explicit direction** — no `generation/loop.py`/`failures/` yet. **Étape 8 built ahead of Étape 6**
+— `/execution` only needs *some* validated solver, supplied by `enregistrer_solveur_reference.py`.

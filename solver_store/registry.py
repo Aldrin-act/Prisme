@@ -1,10 +1,12 @@
 """Store de code persistant (§5.2, §7) : indexation et récupération des
 solveurs validés, par client / structure de contraintes.
 
-Backend SQLite (stdlib, zéro configuration) plutôt que PostgreSQL pour ce
-stade de PoC — même interface (`Registre`), migrable plus tard vers
-PostgreSQL sans redesign du reste du système, ce module étant le seul point
-de contact.
+Backend PostgreSQL (service `db` de `docker-compose.yml`), connexion via
+`DATABASE_URL` (voir `.env.example`) — même interface (`Registre`) qu'avant
+la migration depuis SQLite, ce module restant le seul point de contact avec
+le stockage. Chaque instance peut cibler un schéma Postgres distinct
+(`schema`, `public` par défaut) : les tests s'isolent ainsi les uns des
+autres sans fichier séparé, à la manière d'un fichier `.sqlite3` par test.
 
 Le code source n'est jamais dupliqué en base : seul son chemin sur disque
 (`artifacts/<id>/solveur.py`) et son empreinte SHA-256 le sont, pour détecter
@@ -15,29 +17,39 @@ veut que le code persiste tel quel, jamais réécrit une fois validé.
 from __future__ import annotations
 
 import hashlib
-import sqlite3
+import os
 import uuid
 from contextlib import closing
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
+import psycopg
+from psycopg import sql
+
 from validation_engine.cascade import VerdictCascade
 
 DOSSIER_STORE = Path(__file__).resolve().parent
 DOSSIER_ARTEFACTS = DOSSIER_STORE / "artifacts"
-CHEMIN_BASE_PAR_DEFAUT = DOSSIER_STORE / "registre.sqlite3"
 
-_SCHEMA = """
-CREATE TABLE IF NOT EXISTS solveurs (
-    id TEXT PRIMARY KEY,
-    client_id TEXT,
-    structure_contraintes TEXT NOT NULL,
-    chemin_code TEXT NOT NULL,
-    empreinte_sha256 TEXT NOT NULL,
-    date_validation TEXT NOT NULL
-);
-"""
+SCHEMA_PAR_DEFAUT = "public"
+_NOM_TABLE = "solveurs"
+
+
+def dsn_par_defaut() -> str:
+    """`DATABASE_URL` si défini (voir `.env.example`, injecté dans le
+    conteneur `dev`/`api` via `env_file`) ; sinon reconstruit depuis les
+    variables `POSTGRES_*` individuelles, hôte `localhost` par défaut pour
+    un usage hors conteneur."""
+    url = os.environ.get("DATABASE_URL")
+    if url:
+        return url
+    utilisateur = os.environ.get("POSTGRES_USER", "prisme")
+    mot_de_passe = os.environ.get("POSTGRES_PASSWORD", "changeme")
+    hote = os.environ.get("POSTGRES_HOST", "localhost")
+    port = os.environ.get("POSTGRES_PORT", "5432")
+    base = os.environ.get("POSTGRES_DB", "prisme")
+    return f"postgresql://{utilisateur}:{mot_de_passe}@{hote}:{port}/{base}"
 
 
 class ErreurIntegriteSolveur(Exception):
@@ -60,29 +72,49 @@ def _empreinte(code: str) -> str:
     return hashlib.sha256(code.encode("utf-8")).hexdigest()
 
 
-class Registre:
-    """Un registre SQLite de solveurs validés.
+def _table(schema: str) -> sql.Composed:
+    return sql.Identifier(schema, _NOM_TABLE)
 
-    Chaque instance pointe vers un fichier `.sqlite3` (`chemin_base`) et un
-    dossier d'artefacts (`dossier_artefacts`) ; les deux valent par défaut
-    ceux de `solver_store/`, mais des chemins dédiés (ex. `tmp_path` en
+
+class Registre:
+    """Un registre Postgres de solveurs validés.
+
+    Chaque instance cible une base (`dsn`) et un schéma (`schema`) au sein de
+    cette base, plus un dossier d'artefacts (`dossier_artefacts`) ; ceux-ci
+    valent par défaut la base `DATABASE_URL`/schéma `public`/dossier de
+    `solver_store/`, mais des valeurs dédiées (schéma unique + `tmp_path` en
     test) évitent de polluer le store réel.
     """
 
     def __init__(
         self,
-        chemin_base: Path = CHEMIN_BASE_PAR_DEFAUT,
+        dsn: str | None = None,
+        schema: str = SCHEMA_PAR_DEFAUT,
         dossier_artefacts: Path = DOSSIER_ARTEFACTS,
     ) -> None:
-        self._chemin_base = chemin_base
+        self._dsn = dsn or dsn_par_defaut()
+        self._schema = schema
         self._dossier_artefacts = dossier_artefacts
         self._dossier_artefacts.mkdir(parents=True, exist_ok=True)
         with closing(self._connexion()) as connexion:
-            connexion.execute(_SCHEMA)
+            if self._schema != SCHEMA_PAR_DEFAUT:
+                connexion.execute(sql.SQL("CREATE SCHEMA IF NOT EXISTS {}").format(sql.Identifier(self._schema)))
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "client_id TEXT, "
+                    "structure_contraintes TEXT NOT NULL, "
+                    "chemin_code TEXT NOT NULL, "
+                    "empreinte_sha256 TEXT NOT NULL, "
+                    "date_validation TEXT NOT NULL"
+                    ")"
+                ).format(table=_table(self._schema))
+            )
             connexion.commit()
 
-    def _connexion(self) -> sqlite3.Connection:
-        return sqlite3.connect(self._chemin_base)
+    def _connexion(self) -> psycopg.Connection:
+        return psycopg.connect(self._dsn)
 
     def enregistrer_solveur(
         self,
@@ -105,9 +137,11 @@ class Registre:
 
         with closing(self._connexion()) as connexion:
             connexion.execute(
-                "INSERT INTO solveurs "
-                "(id, client_id, structure_contraintes, chemin_code, empreinte_sha256, date_validation) "
-                "VALUES (?, ?, ?, ?, ?, ?)",
+                sql.SQL(
+                    "INSERT INTO {table} "
+                    "(id, client_id, structure_contraintes, chemin_code, empreinte_sha256, date_validation) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)"
+                ).format(table=_table(self._schema)),
                 (
                     id_solveur,
                     client_id,
@@ -124,8 +158,10 @@ class Registre:
     def recuperer_solveur(self, id_solveur: str) -> ArtefactSolveur:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
-                "SELECT id, client_id, structure_contraintes, chemin_code, empreinte_sha256, "
-                "date_validation FROM solveurs WHERE id = ?",
+                sql.SQL(
+                    "SELECT id, client_id, structure_contraintes, chemin_code, empreinte_sha256, date_validation "
+                    "FROM {table} WHERE id = %s"
+                ).format(table=_table(self._schema)),
                 (id_solveur,),
             ).fetchone()
 
@@ -152,13 +188,13 @@ class Registre:
     def rechercher_solveurs(
         self, client_id: str | None = None, structure_contraintes: str | None = None
     ) -> list[ArtefactSolveur]:
-        requete = "SELECT id FROM solveurs WHERE 1 = 1"
+        requete = sql.SQL("SELECT id FROM {table} WHERE 1 = 1").format(table=_table(self._schema))
         parametres: list[str] = []
         if client_id is not None:
-            requete += " AND client_id = ?"
+            requete += sql.SQL(" AND client_id = %s")
             parametres.append(client_id)
         if structure_contraintes is not None:
-            requete += " AND structure_contraintes = ?"
+            requete += sql.SQL(" AND structure_contraintes = %s")
             parametres.append(structure_contraintes)
 
         with closing(self._connexion()) as connexion:

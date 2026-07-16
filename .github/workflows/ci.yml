@@ -8,6 +8,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      # solver_store/registry.py (§7.2, migré depuis SQLite) a besoin d'un
+      # vrai serveur Postgres pour les tests d'intégration ; injoignable →
+      # ces tests skip plutôt qu'échouent (voir tests/integration/conftest.py),
+      # mais on veut qu'ils tournent réellement en CI, pas seulement en local.
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: prisme
+          POSTGRES_PASSWORD: changeme
+          POSTGRES_DB: prisme
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U prisme -d prisme"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://prisme:changeme@localhost:5432/prisme
     steps:
       - uses: actions/checkout@v4
 

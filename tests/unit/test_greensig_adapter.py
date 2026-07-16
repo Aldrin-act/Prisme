@@ -55,6 +55,24 @@ def test_duree_par_defaut_si_charge_estimee_absente() -> None:
     assert compatibilites[0].duree == 30
 
 
+def test_duree_plancher_a_une_minute_si_charge_arrondit_a_zero() -> None:
+    """Observé sur données réelles (`backup_20260503.sql`) : une
+    charge_estimee_heures non nulle mais minuscule (quelques secondes)
+    arrondit à 0 minute — `CompatibiliteMachineTache.duree` exige `> 0`,
+    donc jamais 0, mais pas non plus le défaut de 30 min (qui ne vaut que
+    pour une charge réellement absente)."""
+    payload = PayloadGreenSIG(
+        taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=0.00064453125, equipes_ids=[100])],
+        equipes=[EquipeGreenSIG(id=100, nom_equipe="Equipe Nord", actif=True)],
+        types_tache=[TypeTacheGreenSIG(id=10, nom_tache="Tonte")],
+    )
+
+    instance = traduire(payload)
+
+    compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)]
+    assert compatibilites[0].duree == 1
+
+
 def test_meme_duree_appliquee_a_chaque_equipe_compatible() -> None:
     payload = PayloadGreenSIG(
         taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=1.0, equipes_ids=[100, 200])],

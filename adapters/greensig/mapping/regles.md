@@ -6,7 +6,8 @@
 | `api_users_equipe.id` (`actif = true`)                                    | `Ressource.id` (préfixé `E` — ex. `id=100` → `"E100"`)                      |
 | `api_planification_tache_equipes` (association tâche↔équipe)              | `CompatibiliteMachineTache` — une par couple (tâche, équipe affectée)       |
 | `api_planification_tache.charge_estimee_heures × 60`                      | `CompatibiliteMachineTache.duree` (identique pour chaque équipe compatible) |
-| *(absent si `charge_estimee_heures` est `NULL`)*                          | `CompatibiliteMachineTache.duree = 30` (valeur par défaut, `_DUREE_PAR_DEFAUT_MINUTES`) |
+| *(absent si `charge_estimee_heures` est `NULL` ou `0`)*                   | `CompatibiliteMachineTache.duree = 30` (valeur par défaut, `_DUREE_PAR_DEFAUT_MINUTES`) |
+| *(`charge_estimee_heures` non nulle mais arrondissant à 0 minute)*        | `CompatibiliteMachineTache.duree = 1` (plancher, `_DUREE_MINIMALE_MINUTES` — observé sur données réelles : ex. `0.00064h`, quelques secondes) |
 | *(aucune colonne)*                                                        | `Precedence` → jamais produite (voir limite 1 ci-dessous)                   |
 | *(aucun champ GreenSIG)*                                                  | `Objectif` → toujours `MinimiserMakespan()` (GreenSIG n'a pas la notion)    |
 
