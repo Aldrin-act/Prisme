@@ -9,12 +9,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from generation.agents.base import charger_mission, extraire_bloc_code
+from generation.agents.base import charger_mission, extraire_json
 from generation.agents.client_llm import AppelLLM
 
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "debugger.md"
 
-_PROMPT_SYSTEME = "Tu es un développeur Python expert en débogage de modèles d'optimisation combinatoire (CP-SAT)."
+_PROMPT_SYSTEME = (
+    "Tu es un développeur Python expert en débogage de modèles d'optimisation combinatoire (CP-SAT). "
+    "Tu réponds toujours en JSON strict, jamais en texte libre."
+)
 
 
 @dataclass(frozen=True)
@@ -27,4 +30,5 @@ def corriger_code(appel_llm: AppelLLM, code_source: str, probleme: str) -> Resul
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     prompt = gabarit.format(mission=charger_mission(), code=code_source, probleme=probleme)
     reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    return ResultatCorrection(reponse_brute=reponse, code_source=extraire_bloc_code(reponse))
+    donnees = extraire_json(reponse)
+    return ResultatCorrection(reponse_brute=reponse, code_source=donnees["code"])

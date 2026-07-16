@@ -13,12 +13,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from generation.agents.base import charger_mission, extraire_bloc_code
+from generation.agents.base import charger_mission, extraire_json
 from generation.agents.client_llm import AppelLLM
 
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "testeur.md"
 
-_PROMPT_SYSTEME = "Tu es un ingénieur qualité spécialisé en tests de solveurs d'optimisation combinatoire."
+_PROMPT_SYSTEME = (
+    "Tu es un ingénieur qualité spécialisé en tests de solveurs d'optimisation combinatoire. "
+    "Tu réponds toujours en JSON strict, jamais en texte libre."
+)
 
 
 @dataclass(frozen=True)
@@ -31,4 +34,5 @@ def generer_tests(appel_llm: AppelLLM, code_source: str) -> ResultatTests:
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     prompt = gabarit.format(mission=charger_mission(), code=code_source)
     reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    return ResultatTests(reponse_brute=reponse, code_tests=extraire_bloc_code(reponse))
+    donnees = extraire_json(reponse)
+    return ResultatTests(reponse_brute=reponse, code_tests=donnees["code_tests"])

@@ -10,23 +10,18 @@ Tu n'écris aucun code à cette étape. Le contrat impose **un seul module,
 une seule fonction publique `resoudre()`** — il n'y a donc rien à découper
 en plusieurs fichiers. Ton travail consiste à planifier la **structure
 interne** de ce module unique, pour que l'agent Développeur n'ait plus qu'à
-la traduire en code CP-SAT. Réponds en texte structuré (pas de bloc de
-code), avec exactement ces sections :
+la traduire en code CP-SAT.
 
-## Variables du modèle CP-SAT
-Quelles variables créer (ex. un intervalle optionnel par couple
-tâche-ressource compatible, une variable début/fin par tâche, une variable
-makespan), et sur quels domaines.
+## Format de réponse exigé
 
-## Contraintes du modèle
-Quelles méthodes CP-SAT poser pour chaque contrainte métier identifiée par
-l'Analyste (ex. `AddExactlyOne` pour le choix de ressource, `AddNoOverlap`
-par ressource, une inégalité pour chaque précédence).
+Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de
+texte, pas de bloc markdown autour) :
 
-## Objectif
-Comment encoder et minimiser le makespan.
-
-## Fonctions internes éventuelles
-Si une décomposition en petites fonctions privées (préfixées `_`) à
-l'intérieur du module aide à la lisibilité, propose-les ; sinon dis
-explicitement qu'une seule fonction `resoudre()` suffit.
+```json
+{{
+  "variables": "quelles variables créer (intervalles optionnels, début/fin par tâche, makespan...) et sur quels domaines",
+  "contraintes_modele": "quelles méthodes CP-SAT poser pour chaque contrainte métier identifiée par l'Analyste",
+  "objectif": "comment encoder et minimiser le makespan",
+  "fonctions_internes": "une décomposition en petites fonctions privées si utile, sinon null"
+}}
+```

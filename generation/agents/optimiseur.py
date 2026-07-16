@@ -9,14 +9,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from generation.agents.base import charger_mission, extraire_bloc_code
+from generation.agents.base import charger_mission, extraire_json
 from generation.agents.client_llm import AppelLLM
 
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "optimiseur.md"
 
-_PROMPT_SYSTEME = "Tu es un ingénieur performance spécialisé en modèles CP-SAT et en code Python sobre."
-
-_MARQUEUR_PROPOSEE = "OPTIMISATION: PROPOSEE"
+_PROMPT_SYSTEME = (
+    "Tu es un ingénieur performance spécialisé en modèles CP-SAT et en code Python sobre. "
+    "Tu réponds toujours en JSON strict, jamais en texte libre."
+)
 
 
 @dataclass(frozen=True)
@@ -31,13 +32,11 @@ def optimiser_code(appel_llm: AppelLLM, code_source: str) -> ResultatOptimisatio
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     prompt = gabarit.format(mission=charger_mission(), code=code_source)
     reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-
-    premiere_ligne, _, reste = reponse.strip().partition("\n")
-    proposee = _MARQUEUR_PROPOSEE in premiere_ligne
-    if not proposee:
-        return ResultatOptimisation(reponse_brute=reponse, proposee=False, code_source=None, notes=reste.strip())
-
-    code_optimise = extraire_bloc_code(reste)
+    donnees = extraire_json(reponse)
+    proposee = bool(donnees.get("optimisation_proposee", False))
     return ResultatOptimisation(
-        reponse_brute=reponse, proposee=True, code_source=code_optimise, notes=reste.strip()
+        reponse_brute=reponse,
+        proposee=proposee,
+        code_source=donnees.get("code") if proposee else None,
+        notes=donnees.get("notes", ""),
     )

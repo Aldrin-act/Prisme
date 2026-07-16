@@ -1,5 +1,5 @@
 """Agent Orchestrateur (pipeline multi-agents, §5.6) — produit un plan
-d'exécution nommant l'instruction de chaque agent pour cette mission.
+d'exécution JSON nommant l'instruction de chaque agent pour cette mission.
 
 Rôle volontairement limité à la **trace/documentation** du déroulement, pas
 à un vrai routage dynamique : la mission de PRISME est fixe (toujours
@@ -14,21 +14,32 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from generation.agents.base import charger_mission
+from generation.agents.base import charger_mission, extraire_json
 from generation.agents.client_llm import AppelLLM
 
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "orchestrateur.md"
 
-_PROMPT_SYSTEME = "Tu es un chef de projet technique qui planifie le travail d'une équipe d'agents spécialisés."
+_PROMPT_SYSTEME = (
+    "Tu es un chef de projet technique qui planifie le travail d'une équipe d'agents spécialisés. "
+    "Tu réponds toujours en JSON strict, jamais en texte libre."
+)
+
+
+@dataclass(frozen=True)
+class EtapePlan:
+    agent: str
+    instruction: str
 
 
 @dataclass(frozen=True)
 class ResultatOrchestration:
     reponse_brute: str
-    plan: str
+    plan: tuple[EtapePlan, ...]
 
 
 def planifier(appel_llm: AppelLLM) -> ResultatOrchestration:
     prompt = CHEMIN_PROMPT.read_text(encoding="utf-8").format(mission=charger_mission())
     reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    return ResultatOrchestration(reponse_brute=reponse, plan=reponse.strip())
+    donnees = extraire_json(reponse)
+    plan = tuple(EtapePlan(agent=etape["agent"], instruction=etape["instruction"]) for etape in donnees["plan"])
+    return ResultatOrchestration(reponse_brute=reponse, plan=plan)

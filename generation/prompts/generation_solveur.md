@@ -33,7 +33,5 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
   liste ci-dessus (notamment `os`, `sys`, `subprocess`, `socket`, `shutil`,
   `importlib`).
 
-## Format de réponse
-
-Réponds avec un unique bloc de code Python (` ```python ... ``` `), sans
-texte avant ni après. Aucune explication, aucun commentaire de conversation.
+Ceci est le contrat commun ; le format de réponse exact (bloc de code,
+JSON...) est précisé séparément selon qui te le demande.

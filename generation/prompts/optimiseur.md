@@ -21,16 +21,17 @@ mieux vaut ne rien changer qu'introduire un risque de régression.
 
 ## Format de réponse exigé
 
-Première ligne, exactement l'une des deux :
-```
-OPTIMISATION: PROPOSEE
-```
-ou
-```
-OPTIMISATION: AUCUNE
+Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de
+texte, pas de bloc markdown autour) :
+
+```json
+{{
+  "optimisation_proposee": false,
+  "code": null,
+  "notes": "pourquoi rien n'a été changé, ou brève explication des changements si optimisation_proposee est true"
+}}
 ```
 
-Si `PROPOSEE` : un unique bloc de code Python (` ```python ... ``` `) avec
-la version complète optimisée, suivi d'une brève explication des
-changements. Si `AUCUNE` : juste une brève explication de pourquoi rien
-n'a été changé, pas de bloc de code.
+Si `optimisation_proposee` est `true`, `code` doit contenir le module
+complet optimisé (même format que `code_source` reçu ci-dessus) ; si
+`false`, laisse `code` à `null`.

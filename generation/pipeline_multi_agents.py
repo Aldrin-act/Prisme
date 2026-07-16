@@ -31,6 +31,7 @@ from generation.agents import (
 from generation.agents.client_llm import AppelLLM
 from generation.agents.generateur import generer_code_depuis_plan
 from generation.agents.optimiseur import ResultatOptimisation
+from generation.agents.orchestrateur import EtapePlan
 from generation.agents.reviewer import ResultatRevue
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
@@ -82,7 +83,7 @@ class ResultatPipelineMultiAgents:
     exécuté par ce pipeline (voir `generation.agents.testeur`) ; seul
     `verdict_cascade` fait autorité sur l'acceptation du solveur."""
 
-    plan_orchestrateur: str
+    plan_orchestrateur: tuple[EtapePlan, ...]
     specification: str
     plan_technique: str
     code_genere: str
@@ -113,8 +114,8 @@ def tenter_generation_multi_agents(appel_llm: AppelLLM) -> ResultatPipelineMulti
     `tentative_unique.tenter_generation_unique`)."""
     plan = orchestrateur.planifier(appel_llm)
     analyse = analyste.analyser_mission(appel_llm)
-    conception = architecte.concevoir_modele(appel_llm, analyse.specification)
-    brut = generer_code_depuis_plan(appel_llm, conception.plan_technique)
+    conception = architecte.concevoir_modele(appel_llm, analyse)
+    brut = generer_code_depuis_plan(appel_llm, conception.en_texte())
     tests = testeur.generer_tests(appel_llm, brut.code_source)
     revue = reviewer.relire_code(appel_llm, brut.code_source)
 
@@ -130,8 +131,8 @@ def tenter_generation_multi_agents(appel_llm: AppelLLM) -> ResultatPipelineMulti
     if not resultat.reussi:
         return ResultatPipelineMultiAgents(
             plan_orchestrateur=plan.plan,
-            specification=analyse.specification,
-            plan_technique=conception.plan_technique,
+            specification=analyse.en_texte(),
+            plan_technique=conception.en_texte(),
             code_genere=brut.code_source,
             tests_generes=tests.code_tests,
             revue=revue,
@@ -163,8 +164,8 @@ def tenter_generation_multi_agents(appel_llm: AppelLLM) -> ResultatPipelineMulti
 
     return ResultatPipelineMultiAgents(
         plan_orchestrateur=plan.plan,
-        specification=analyse.specification,
-        plan_technique=conception.plan_technique,
+        specification=analyse.en_texte(),
+        plan_technique=conception.en_texte(),
         code_genere=brut.code_source,
         tests_generes=tests.code_tests,
         revue=revue,
@@ -175,5 +176,5 @@ def tenter_generation_multi_agents(appel_llm: AppelLLM) -> ResultatPipelineMulti
         verdict_cascade=resultat_final.verdict_cascade,
         optimisation=optimisation,
         code_optimise_adopte=code_optimise_adopte,
-        documentation=doc.documentation,
+        documentation=doc.en_texte(),
     )

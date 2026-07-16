@@ -21,7 +21,13 @@ Couvre notamment :
 - une instance avec plusieurs ressources compatibles pour une même tâche,
   chacune avec une durée différente.
 
-Réponds avec un unique bloc de code Python (` ```python ... ``` `)
-contenant les fonctions de test, sans texte avant ni après. Respecte les
-mêmes règles d'imports que la mission (`dsl.schema`, `pytest`,
-`ortools.sat.python.cp_model` si besoin de construire des instances).
+## Format de réponse exigé
+
+Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de
+texte, pas de bloc markdown autour) :
+
+```json
+{{
+  "code_tests": "le code des tests pytest, sur une seule chaîne avec des \n pour les retours à la ligne"
+}}
+```

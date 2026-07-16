@@ -24,15 +24,16 @@ tranchera de toute façon — mais il sert à repérer tôt un problème éviden
 
 ## Format de réponse exigé
 
-Première ligne, exactement l'une des deux :
-```
-VERDICT: APPROUVE
-```
-ou
-```
-VERDICT: A_CORRIGER
+Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de
+texte, pas de bloc markdown autour) :
+
+```json
+{{
+  "verdict": "APPROUVE",
+  "commentaires": "ce qui a été vérifié, ce qui pose problème le cas échéant"
+}}
 ```
 
-Puis, à partir de la deuxième ligne, tes commentaires (ce qui a été vérifié,
-ce qui pose problème le cas échéant). Pas de bloc de code ici — tu ne
-réécris rien, c'est le rôle de l'agent Debugger si `A_CORRIGER`.
+`verdict` vaut exactement `"APPROUVE"` ou `"A_CORRIGER"` — rien d'autre. Pas
+de champ de code ici : tu ne réécris rien, c'est le rôle de l'agent
+Debugger si `"A_CORRIGER"`.
