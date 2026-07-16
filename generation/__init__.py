@@ -1,6 +1,7 @@
 """generation — Traduction du DSL T-R-C-O en code de solveur CP-SAT (§5.6).
 
-Étape 4 (implémentée) : un seul agent, une seule génération, sans boucle —
-voir `tentative_unique.py`. La boucle bornée generate-test-repair (Étape 6,
-`loop.py`) n'existe pas encore.
+Deux chemins, tous deux à tentative unique bornée : l'Étape 4 historique à
+un seul agent (`tentative_unique.py`) et un pipeline à 9 agents
+(`pipeline_multi_agents.py`, voir `README.md`). La boucle bornée
+generate-test-repair générale (Étape 6, `loop.py`) n'existe toujours pas.
 """

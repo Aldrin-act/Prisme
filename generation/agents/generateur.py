@@ -1,26 +1,33 @@
-"""Agent générateur (§5.6) — un seul appel LLM, une seule génération, sans
-boucle : c'est l'Étape 4, le premier contact avec l'IA, avant toute boucle
-generate-test-repair (Étape 6). Le contrat de sortie attendu — une fonction
-`resoudre(instance) -> Planning | None` — est identique à celui de
+"""Agent Développeur (§5.6) — écrit le code à partir de la mission (et, dans
+le pipeline multi-agents, du plan technique de l'agent Architecte). Historiquement
+le seul agent du pipeline (Étape 4, tir unique, avant toute boucle
+generate-test-repair d'Étape 6) — `generer_code_solveur` reste ce mode simple ;
+`generer_code_depuis_plan` est la variante utilisée par
+`generation.pipeline_multi_agents`. Le contrat de sortie attendu — une
+fonction `resoudre(instance) -> Planning | None` — est identique à celui de
 `solveur_reference.resoudre`, pour que le code produit se branche
-directement dans `validation_engine.cascade.evaluer_cascade` sans
-adaptation.
+directement dans `validation_engine.cascade.evaluer_cascade` sans adaptation.
 """
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass
-from pathlib import Path
 
+from generation.agents.base import charger_mission, extraire_bloc_code
 from generation.agents.client_llm import AppelLLM
-
-CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "generation_solveur.md"
 
 _PROMPT_SYSTEME = "Tu es un générateur de code Python expert en optimisation combinatoire."
 
-_MOTIF_BLOC_PYTHON = re.compile(r"```python\s*\n(.*?)```", re.DOTALL)
-_MOTIF_BLOC_GENERIQUE = re.compile(r"```\s*\n(.*?)```", re.DOTALL)
+_GABARIT_DEPUIS_PLAN = """{mission}
+
+## Plan technique de l'agent Architecte
+
+Voici le plan que tu dois suivre pour écrire le module — respecte ses choix \
+de variables et de contraintes, sauf s'il viole une des règles de sécurité \
+ci-dessus (auquel cas les règles de sécurité priment) :
+
+{plan_technique}
+"""
 
 
 @dataclass(frozen=True)
@@ -31,22 +38,21 @@ class ResultatGenerationBrute:
     code_source: str
 
 
-def _extraire_bloc_code(reponse: str) -> str:
-    """Extrait le contenu d'un bloc ```python ... ``` ; à défaut, un bloc
-    générique ; à défaut, la réponse telle quelle (le prompt exige le
-    premier format, mais les LLM n'y sont pas toujours fidèles)."""
-    for motif in (_MOTIF_BLOC_PYTHON, _MOTIF_BLOC_GENERIQUE):
-        correspondance = motif.search(reponse)
-        if correspondance is not None:
-            return correspondance.group(1)
-    return reponse
-
-
 def generer_code_solveur(appel_llm: AppelLLM) -> ResultatGenerationBrute:
-    """Un seul essai de génération : construit le prompt, appelle le LLM,
-    extrait le code. Ne valide ni n'exécute rien — voir
+    """Un seul essai de génération, sans plan technique préalable (Étape 4,
+    tir unique) : construit le prompt à partir de la seule mission, appelle
+    le LLM, extrait le code. Ne valide ni n'exécute rien — voir
     `generation.validation_statique` et `generation.executer`.
     """
-    prompt = CHEMIN_PROMPT.read_text(encoding="utf-8")
+    prompt = charger_mission()
     reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    return ResultatGenerationBrute(reponse_brute=reponse, code_source=_extraire_bloc_code(reponse))
+    return ResultatGenerationBrute(reponse_brute=reponse, code_source=extraire_bloc_code(reponse))
+
+
+def generer_code_depuis_plan(appel_llm: AppelLLM, plan_technique: str) -> ResultatGenerationBrute:
+    """Variante utilisée par le pipeline multi-agents : écrit le code en
+    suivant le plan produit par l'agent Architecte plutôt que la seule
+    mission brute."""
+    prompt = _GABARIT_DEPUIS_PLAN.format(mission=charger_mission(), plan_technique=plan_technique)
+    reponse = appel_llm(_PROMPT_SYSTEME, prompt)
+    return ResultatGenerationBrute(reponse_brute=reponse, code_source=extraire_bloc_code(reponse))
