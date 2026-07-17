@@ -23,7 +23,12 @@ ci-dessus. Règles impératives :
   et une ressource qualifiée mais jamais affectée peut l'être. À défaut de
   toute notion de compétence explicite dans les données, l'historique
   d'affectation reste un signal acceptable, mais dis-le dans
-  `avertissements` (c'est une approximation, pas une certitude).
+  `avertissements` (c'est une approximation, pas une certitude). Si les
+  données nomment explicitement une compétence requise par une tâche,
+  exprime-la avec la contrainte `competence_requise` (et renseigne
+  `ressources[].competences`) plutôt que de la garder implicite — le
+  garde-fou automatique vérifie alors lui-même la cohérence entre
+  compatibilité déclarée et compétence, sans que tu aies à le faire toi-même.
 - **N'invente rien.** Si une tâche n'a manifestement aucune ressource
   compatible dans les données fournies (ni par compétence, ni par
   historique), ne fabrique pas une compatibilité — même par défaut, même
@@ -56,14 +61,20 @@ texte, pas de bloc markdown autour) :
 ```json
 {{
   "instance": {{
-    "taches": [{{"id": "...", "nom": "..."}}],
-    "ressources": [{{"id": "...", "nom": "..."}}],
+    "taches": [{{"id": "...", "nom": "...", "priorite": 3}}],
+    "ressources": [{{"id": "...", "nom": "...", "competences": ["..."]}}],
     "contraintes": [
       {{"type": "precedence", "avant": "...", "apres": "..."}},
-      {{"type": "compatibilite_ressource_tache", "tache": "...", "ressource": "...", "duree": 30}}
+      {{"type": "compatibilite_ressource_tache", "tache": "...", "ressource": "...", "duree": 30}},
+      {{"type": "echeance", "tache": "...", "echeance": 480}},
+      {{"type": "competence_requise", "tache": "...", "competence": "..."}}
     ],
     "objectifs": [{{"type": "minimiser_makespan"}}]
   }},
   "avertissements": ["ce qui a été ignoré, incertain, ou à vérifier — tableau vide si rien à signaler"]
 }}
 ```
+
+`priorite`, `competences`, `echeance` et `competence_requise` sont **optionnels** —
+n'en mets que si les données brutes les portent explicitement, jamais par supposition
+(même règle "n'invente rien" que pour la compatibilité).

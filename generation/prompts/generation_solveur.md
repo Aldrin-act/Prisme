@@ -15,13 +15,22 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
 ```
 
 - `InstanceTRCO`, `Planning`, `OperationPlanifiee`, `Tache`, `Ressource`,
-  `Contrainte`, `Precedence`, `CompatibiliteRessourceTache` s'importent depuis
-  `dsl.schema`.
+  `Contrainte`, `Precedence`, `CompatibiliteRessourceTache`, `Echeance`,
+  `CompetenceRequise` s'importent depuis `dsl.schema`.
 - `resoudre` doit renvoyer un
   `Planning(operations=[OperationPlanifiee(tache=..., ressource=..., debut=...), ...])`
   légal et de makespan minimal, ou `None` si l'instance est infaisable.
 - Utilise `ortools.sat.python.cp_model` (CP-SAT) pour résoudre réellement le
   problème — pas d'heuristique gloutonne approximative.
+- `Echeance`/`CompetenceRequise` sont des extensions optionnelles du noyau
+  minimal (absentes de la plupart des instances) : si l'instance contient des
+  `Echeance`, encode-les en contrainte dure sur la fin de la tâche concernée
+  (`modele.Add(fin <= echeance)`) — sinon ignore-les, elles n'existent pas.
+  `CompetenceRequise` ne demande aucun traitement côté solveur :
+  `InstanceTRCO` garantit déjà, avant que `resoudre` ne soit appelé, que
+  toute `CompatibiliteRessourceTache` respecte les compétences requises —
+  `CompatibiliteRessourceTache` reste la seule source de compatibilité et de
+  durée à utiliser.
 
 ## Contraintes de sécurité (impératives — le code est exécuté automatiquement)
 

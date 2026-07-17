@@ -100,3 +100,22 @@ def greensig_dsn() -> str:
     if not _greensig_disponible():
         pytest.skip("Base GreenSIG (db_greensig) indisponible dans cet environnement")
     return _greensig_dsn_par_defaut()
+
+
+def _greensig_lecture_seule_dsn_par_defaut() -> str:
+    from adapters.agent_comprehension.exploration_bdd import dsn_lecture_seule_greensig_par_defaut
+
+    return dsn_lecture_seule_greensig_par_defaut()
+
+
+@pytest.fixture(scope="session")
+def greensig_dsn_lecture_seule() -> str:
+    """Le DSN du rôle lecture seule dédié (`scripts/creer_role_lecture_seule_greensig.py`) —
+    saute si le rôle n'existe pas encore (pas seulement si `db_greensig` est injoignable),
+    même convention que `greensig_dsn`."""
+    dsn = _greensig_lecture_seule_dsn_par_defaut()
+    try:
+        with closing(psycopg.connect(dsn, connect_timeout=2)):
+            return dsn
+    except Exception as erreur:
+        pytest.skip(f"Rôle lecture seule GreenSIG indisponible : {erreur}")

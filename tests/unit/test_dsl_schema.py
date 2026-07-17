@@ -115,3 +115,85 @@ def test_compatibilite_vers_tache_inconnue_rejetee() -> None:
     )
     with pytest.raises(ValidationError, match="tâche inconnue"):
         charger_instance(payload)
+
+
+def test_priorite_valide_acceptee() -> None:
+    payload = _instance_minimale(taches=[{"id": "T1", "priorite": 3}])
+    instance = charger_instance(payload)
+    assert instance.taches[0].priorite == 3
+
+
+def test_priorite_absente_par_defaut_none() -> None:
+    instance = charger_instance(_instance_minimale())
+    assert instance.taches[0].priorite is None
+
+
+@pytest.mark.parametrize("priorite", [0, 6])
+def test_priorite_hors_bornes_rejetee(priorite: int) -> None:
+    payload = _instance_minimale(taches=[{"id": "T1", "priorite": priorite}])
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_competences_absentes_par_defaut_liste_vide() -> None:
+    instance = charger_instance(_instance_minimale())
+    assert instance.ressources[0].competences == []
+
+
+def test_echeance_valide_acceptee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "echeance", "tache": "T1", "echeance": 100},
+        ]
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 2
+
+
+def test_echeance_vers_tache_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "echeance", "tache": "T99", "echeance": 100},
+        ]
+    )
+    with pytest.raises(ValidationError, match="échéance référence une tâche inconnue"):
+        charger_instance(payload)
+
+
+def test_competence_requise_valide_acceptee() -> None:
+    payload = _instance_minimale(
+        ressources=[{"id": "M1", "competences": ["soudure"]}],
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "competence_requise", "tache": "T1", "competence": "soudure"},
+        ],
+    )
+    instance = charger_instance(payload)
+    assert instance.ressources[0].competences == ["soudure"]
+
+
+def test_competence_requise_vers_tache_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "competence_requise", "tache": "T99", "competence": "soudure"},
+        ]
+    )
+    with pytest.raises(ValidationError, match="compétence requise référence une tâche inconnue"):
+        charger_instance(payload)
+
+
+def test_compatibilite_sans_competence_requise_rejetee() -> None:
+    """Une ressource sans la compétence exigée ne peut pas être déclarée compatible —
+    même si elle est par ailleurs listée dans `ressources` (§ garde-fou structurel)."""
+    payload = _instance_minimale(
+        ressources=[{"id": "M1", "competences": []}],
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "competence_requise", "tache": "T1", "competence": "soudure"},
+        ],
+    )
+    with pytest.raises(ValidationError, match="sans les compétences requises"):
+        charger_instance(payload)

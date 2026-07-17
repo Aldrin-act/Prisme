@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    Echeance,
     InstanceTRCO,
     MinimiserMakespan,
     OperationPlanifiee,
@@ -197,3 +198,37 @@ def test_ressource_inconnue_dans_planning_est_detectee() -> None:
     assert not resultat.legal
     assert [v.type for v in resultat.violations] == ["ressource_inconnue_dans_planning"]
     assert resultat.violations[0].ressource == "M99"
+
+
+def test_echeance_respectee_est_legale() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="M1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            Echeance(tache="T1", echeance=10),
+        ],
+    )
+    planning = _planning(_op("T1", "M1", 0))  # finit à 10 : échéance respectée pile
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_echeance_depassee_est_detectee() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="M1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            Echeance(tache="T1", echeance=5),
+        ],
+    )
+    planning = _planning(_op("T1", "M1", 0))  # finit à 10, échéance à 5
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["echeance_depassee"]
+    assert resultat.violations[0].tache == "T1"

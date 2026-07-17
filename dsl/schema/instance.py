@@ -2,18 +2,22 @@
 
 Agrège les quatre axes et applique le garde-fou amont (§6.7) : identifiants
 uniques par axe, toute contrainte ne référence que des tâches ou ressources
-réellement déclarées dans l'instance, et toute tâche est couverte par au
-moins une contrainte `CompatibiliteRessourceTache` (la durée, désormais propre
-à chaque couple tâche-ressource, n'existe que là — une tâche sans aucune
-compatibilité déclarée n'aurait donc aucune durée connue). Un payload qui
-échoue cette validation est rejeté avant d'atteindre le solveur.
+réellement déclarées dans l'instance, toute tâche est couverte par au moins
+une contrainte `CompatibiliteRessourceTache` (la durée, désormais propre à
+chaque couple tâche-ressource, n'existe que là — une tâche sans aucune
+compatibilité déclarée n'aurait donc aucune durée connue), et toute
+compatibilité déclarée pour une tâche ayant des `CompetenceRequise` porte sur
+une ressource réellement qualifiée. Un payload qui échoue cette validation
+est rejeté avant d'atteindre le solveur.
 """
 
 from __future__ import annotations
 
+from collections import defaultdict
+
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .contraintes import CompatibiliteRessourceTache, Contrainte, Precedence
+from .contraintes import CompatibiliteRessourceTache, CompetenceRequise, Contrainte, Echeance, Precedence
 from .objectifs import MinimiserMakespan
 from .ressources import Ressource
 from .taches import Tache
@@ -56,6 +60,12 @@ class InstanceTRCO(BaseModel):
                     raise ValueError(f"compatibilité référence une tâche inconnue : {contrainte.tache!r}")
                 if contrainte.ressource not in ids_ressources:
                     raise ValueError(f"compatibilité référence une ressource inconnue : {contrainte.ressource!r}")
+            elif isinstance(contrainte, Echeance):
+                if contrainte.tache not in ids_taches:
+                    raise ValueError(f"échéance référence une tâche inconnue : {contrainte.tache!r}")
+            elif isinstance(contrainte, CompetenceRequise):
+                if contrainte.tache not in ids_taches:
+                    raise ValueError(f"compétence requise référence une tâche inconnue : {contrainte.tache!r}")
 
         return self
 
@@ -68,4 +78,34 @@ class InstanceTRCO(BaseModel):
                 f"tâche(s) sans aucune contrainte de compatibilité ressource-tâche déclarée : "
                 f"{ids_sans_compatibilite!r}"
             )
+        return self
+
+    @model_validator(mode="after")
+    def _competences_requises_respectees(self) -> InstanceTRCO:
+        """Si une tâche a des `CompetenceRequise`, toute `CompatibiliteRessourceTache`
+        déclarée pour elle doit référencer une ressource dont `competences` couvre
+        ces exigences — sans effet si aucune `CompetenceRequise` n'est déclarée."""
+        competences_requises_par_tache: dict[str, set[str]] = defaultdict(set)
+        for contrainte in self.contraintes:
+            if isinstance(contrainte, CompetenceRequise):
+                competences_requises_par_tache[contrainte.tache].add(contrainte.competence)
+
+        if not competences_requises_par_tache:
+            return self
+
+        competences_par_ressource = {r.id: set(r.competences) for r in self.ressources}
+
+        for contrainte in self.contraintes:
+            if not isinstance(contrainte, CompatibiliteRessourceTache):
+                continue
+            requises = competences_requises_par_tache.get(contrainte.tache)
+            if not requises:
+                continue
+            manquantes = requises - competences_par_ressource.get(contrainte.ressource, set())
+            if manquantes:
+                raise ValueError(
+                    f"compatibilité déclarée entre {contrainte.tache!r} et {contrainte.ressource!r} "
+                    f"sans les compétences requises : {sorted(manquantes)!r}"
+                )
+
         return self

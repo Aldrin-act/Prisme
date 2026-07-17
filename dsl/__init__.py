@@ -2,7 +2,9 @@
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    CompetenceRequise,
     Contrainte,
+    Echeance,
     InstanceTRCO,
     MinimiserMakespan,
     OperationPlanifiee,
@@ -14,7 +16,9 @@ from dsl.schema import (
 
 __all__ = [
     "CompatibiliteRessourceTache",
+    "CompetenceRequise",
     "Contrainte",
+    "Echeance",
     "InstanceTRCO",
     "MinimiserMakespan",
     "OperationPlanifiee",

@@ -32,6 +32,7 @@ from typing import Literal
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    Echeance,
     InstanceTRCO,
     OperationPlanifiee,
     Planning,
@@ -46,6 +47,7 @@ TypeViolation = Literal[
     "precedence_violee",
     "incompatibilite_ressource_tache",
     "chevauchement_ressource",
+    "echeance_depassee",
 ]
 
 
@@ -159,6 +161,27 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
                     f"précédence violée : {contrainte.avant!r} doit finir avant le début de {contrainte.apres!r}",
                     tache=contrainte.avant,
                     tache_secondaire=contrainte.apres,
+                )
+            )
+
+    for contrainte in instance.contraintes:
+        if not isinstance(contrainte, Echeance):
+            continue
+        operation = operations_valides.get(contrainte.tache)
+        if operation is None:
+            continue
+        duree = duree_par_couple.get((contrainte.tache, operation.ressource))
+        if duree is None:
+            # Ressource incompatible : déjà signalé séparément (incompatibilite_ressource_tache),
+            # aucune durée connue pour ce couple, donc pas de vérification d'échéance possible ici.
+            continue
+        fin = operation.debut + duree
+        if fin > contrainte.echeance:
+            violations.append(
+                Violation(
+                    "echeance_depassee",
+                    f"échéance dépassée : {contrainte.tache!r} finit à {fin} au lieu de {contrainte.echeance}",
+                    tache=contrainte.tache,
                 )
             )
 

@@ -8,8 +8,10 @@ produire lui-même le format canonique.
 Pour quelqu'un qui préfère ne pas écrire de JSON à la main, la même structure existe en tableur :
 [`gabarit_ingestion_trco.xlsx`](gabarit_ingestion_trco.xlsx) (régénérable via
 `scripts/generer_gabarit_ingestion.py`). Il ajoute un onglet "Besoins additionnels" pour noter en
-langage libre tout ce qui sort du périmètre minimal ci-dessous (calendriers, équilibrage de
-charge, priorités...) — examiné à la main, jamais converti automatiquement.
+langage libre tout ce qui sort du périmètre ci-dessous (calendriers, capacité par ressource,
+équilibrage de charge...) — examiné à la main, jamais converti automatiquement. `priorite` et les
+compétences (`competences`/`competence_requise`) sont en revanche déjà pris en charge
+structurellement, voir ci-dessous.
 
 ## Les 4 sections à fournir
 
@@ -19,6 +21,7 @@ charge, priorités...) — examiné à la main, jamais converti automatiquement.
 |---|---|---|---|
 | `id` | texte | oui | 1 à 64 caractères, lettres/chiffres/`_`/`-` uniquement, unique parmi les tâches |
 | `nom` | texte | non | libre, pour lisibilité humaine seulement |
+| `priorite` | entier | non | 1 (critique) à 5 (faible) — purement informatif, aucune contrainte ni objectif n'en dépend aujourd'hui |
 
 ### `ressources` (au moins une)
 
@@ -26,10 +29,11 @@ charge, priorités...) — examiné à la main, jamais converti automatiquement.
 |---|---|---|---|
 | `id` | texte | oui | même règle que pour `taches.id`, unique parmi les ressources |
 | `nom` | texte | non | libre |
+| `competences` | liste de textes | non | compétences détenues ; liste vide si non renseigné |
 
 ### `contraintes` (peut être vide, mais voir règle 3 ci-dessous)
 
-Deux types possibles, chacun avec son propre champ `type` :
+Quatre types possibles, chacun avec son propre champ `type` :
 
 **Précédence** — la tâche `avant` doit finir avant que `apres` ne commence :
 ```json
@@ -41,6 +45,21 @@ en `duree` minutes (propre à ce couple tâche-ressource : deux ressources compa
 tâche peuvent avoir des durées différentes) :
 ```json
 {"type": "compatibilite_ressource_tache", "tache": "<id-tache>", "ressource": "<id-ressource>", "duree": <entier > 0>}
+```
+
+**Échéance** (optionnel) — la tâche `tache` doit finir au plus tard à l'instant `echeance`, en
+minutes — même référentiel que `duree` ci-dessus, pas une date calendaire (convertir une vraie date
+en minutes reste à faire en amont, avant l'ingestion) :
+```json
+{"type": "echeance", "tache": "<id-tache>", "echeance": <entier >= 0>}
+```
+
+**Compétence requise** (optionnel) — la tâche `tache` exige la compétence `competence` ; toute
+compatibilité ressource-tâche déclarée pour cette tâche doit alors référencer une ressource
+possédant cette compétence (sinon rejeté, voir règle 5) — une tâche exigeant plusieurs compétences
+utilise plusieurs contraintes de ce type :
+```json
+{"type": "competence_requise", "tache": "<id-tache>", "competence": "<nom-competence>"}
 ```
 
 ### `objectifs` (au moins un)
@@ -58,6 +77,8 @@ Un seul type supporté aujourd'hui :
    inconnue et elle ne peut pas être planifiée.
 4. Aucun champ en dehors de ceux listés ci-dessus n'est toléré (schéma strict — un champ en trop
    fait rejeter tout le fichier, pas seulement ce champ).
+5. Si une tâche a une contrainte `competence_requise`, toute `compatibilite_ressource_tache` la
+   concernant doit référencer une ressource dont `competences` couvre cette exigence — sinon rejeté.
 
 ## Gabarit à remplir
 
