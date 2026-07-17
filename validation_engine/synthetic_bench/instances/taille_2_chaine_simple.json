@@ -5,13 +5,13 @@
         "duree": 10,
         "ressource": "J0M0",
         "tache": "J0T0",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "duree": 27,
         "ressource": "J0M1",
         "tache": "J0T1",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J0T1",
@@ -22,7 +22,7 @@
         "duree": 44,
         "ressource": "J0M0",
         "tache": "J0T2",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J0T2",

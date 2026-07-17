@@ -5,13 +5,13 @@
         "duree": 10,
         "ressource": "J0M0",
         "tache": "J0T0",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "duree": 27,
         "ressource": "J0M1",
         "tache": "J0T1",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J0T1",
@@ -22,7 +22,7 @@
         "duree": 44,
         "ressource": "J0M2",
         "tache": "J0T2",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J0T2",
@@ -33,7 +33,7 @@
         "duree": 11,
         "ressource": "J0M0",
         "tache": "J0T3",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J0T3",
@@ -44,7 +44,7 @@
         "duree": 28,
         "ressource": "J0M1",
         "tache": "J0T4",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J0T4",
@@ -55,13 +55,13 @@
         "duree": 41,
         "ressource": "J1M0",
         "tache": "J1T0",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "duree": 58,
         "ressource": "J1M1",
         "tache": "J1T1",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J1T1",
@@ -72,7 +72,7 @@
         "duree": 25,
         "ressource": "J1M2",
         "tache": "J1T2",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J1T2",
@@ -83,7 +83,7 @@
         "duree": 42,
         "ressource": "J1M0",
         "tache": "J1T3",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J1T3",
@@ -94,7 +94,7 @@
         "duree": 59,
         "ressource": "J1M1",
         "tache": "J1T4",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J1T4",
@@ -105,13 +105,13 @@
         "duree": 22,
         "ressource": "J2M0",
         "tache": "J2T0",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "duree": 39,
         "ressource": "J2M1",
         "tache": "J2T1",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J2T1",
@@ -122,7 +122,7 @@
         "duree": 56,
         "ressource": "J2M2",
         "tache": "J2T2",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J2T2",
@@ -133,7 +133,7 @@
         "duree": 23,
         "ressource": "J2M0",
         "tache": "J2T3",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J2T3",
@@ -144,7 +144,7 @@
         "duree": 40,
         "ressource": "J2M1",
         "tache": "J2T4",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J2T4",
@@ -155,13 +155,13 @@
         "duree": 53,
         "ressource": "J3M0",
         "tache": "J3T0",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "duree": 20,
         "ressource": "J3M1",
         "tache": "J3T1",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J3T1",
@@ -172,7 +172,7 @@
         "duree": 37,
         "ressource": "J3M2",
         "tache": "J3T2",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J3T2",
@@ -183,7 +183,7 @@
         "duree": 54,
         "ressource": "J3M0",
         "tache": "J3T3",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J3T3",
@@ -194,7 +194,7 @@
         "duree": 21,
         "ressource": "J3M1",
         "tache": "J3T4",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J3T4",
@@ -205,13 +205,13 @@
         "duree": 34,
         "ressource": "J4M0",
         "tache": "J4T0",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "duree": 51,
         "ressource": "J4M1",
         "tache": "J4T1",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J4T1",
@@ -222,7 +222,7 @@
         "duree": 18,
         "ressource": "J4M2",
         "tache": "J4T2",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J4T2",
@@ -233,7 +233,7 @@
         "duree": 35,
         "ressource": "J4M0",
         "tache": "J4T3",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J4T3",
@@ -244,7 +244,7 @@
         "duree": 52,
         "ressource": "J4M1",
         "tache": "J4T4",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       },
       {
         "apres": "J4T4",

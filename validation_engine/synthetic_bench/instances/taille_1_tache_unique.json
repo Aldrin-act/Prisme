@@ -5,7 +5,7 @@
         "duree": 10,
         "ressource": "J0M0",
         "tache": "J0T0",
-        "type": "compatibilite_machine_tache"
+        "type": "compatibilite_ressource_tache"
       }
     ],
     "objectifs": [

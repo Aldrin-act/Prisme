@@ -12,7 +12,7 @@ from fastapi.testclient import TestClient
 from api.app import app
 from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, obtenir_etat
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
 from scripts.enregistrer_solveur_reference import enregistrer
 from solver_store.registry import Registre
 
@@ -51,7 +51,7 @@ def test_solveurs_enregistres_sans_code_source(registre_test: Registre) -> None:
         solveur = next(s for s in solveurs if s["id"] == id_solveur)
 
         assert solveur["client_id"] == "client_test"
-        assert solveur["structure_contraintes"] == "compatibilite_machine_tache,precedence"
+        assert solveur["structure_contraintes"] == "compatibilite_ressource_tache,precedence"
         assert "code_source" not in solveur
     finally:
         app.dependency_overrides.clear()
@@ -70,8 +70,8 @@ def test_cycle_ingestion_execution_visible_en_supervision(image_sandbox: str, re
             ressources=[Ressource(id="M1")],
             contraintes=[
                 Precedence(avant="T1", apres="T2"),
-                CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
-                CompatibiliteMachineTache(tache="T2", ressource="M1", duree=5),
+                CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+                CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=5),
             ],
             objectifs=[MinimiserMakespan()],
         )

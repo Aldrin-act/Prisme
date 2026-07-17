@@ -12,7 +12,7 @@ quelqu'un tape du JSON à la main. Ne fait rien de plus que
   garde-fou déterministe tranche, comme pour GreenSIG.
 
 Ne masque jamais un rejet de traduction (ex. tâches sans compatibilité
-machine-tâche, §6.7) derrière un succès partiel — l'échec explicite est
+ressource-tâche, §6.7) derrière un succès partiel — l'échec explicite est
 volontaire (voir `adapters/greensig/mapping/regles.md`, limite 3) : mieux
 vaut que l'utilisateur du dashboard voie l'erreur telle quelle qu'une
 instance silencieusement tronquée.

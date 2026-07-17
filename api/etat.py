@@ -7,7 +7,7 @@ par une file de tâches / base de données ; hors périmètre du noyau minimal.
 Un aléa atelier (panne, commande urgente, retard...) ne passe pas par un
 type dédié ici : il se traduit directement dans les contraintes T-R-C-O de
 l'instance réingérée (ex. la ressource en panne disparaît des
-`CompatibiliteMachineTache`), puis un nouvel appel à `/execution/{instance_id}`
+`CompatibiliteRessourceTache`), puis un nouvel appel à `/execution/{instance_id}`
 recalcule le planning — le processus exact varie d'un client à l'autre et
 n'est donc pas figé dans le noyau.
 """

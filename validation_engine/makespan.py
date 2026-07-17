@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, Planning
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Planning
 
 
 def calculer_makespan(instance: InstanceTRCO, planning: Planning) -> int:
     duree = {
-        (c.tache, c.ressource): c.duree for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)
+        (c.tache, c.ressource): c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)
     }
     fins = [
         operation.debut + duree[(operation.tache, operation.ressource)]

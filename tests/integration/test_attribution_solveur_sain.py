@@ -1,16 +1,17 @@
 """Couche 1 (§6.1), `integration/` : les causes "données" et "aucune" de la
 boucle diagnostique (PH10-T3) ont besoin d'un solveur réellement sain sur le
-banc synthétique et les cas de référence pour être isolées proprement — le
-solveur de référence réel (OR-Tools), donc `integration/` et pas `unit/`
-(voir `tests/unit/test_attribution.py` pour les causes "code" et
-"specification_dsl", avec des solveurs bogués en pur Python).
+banc synthétique et les cas de référence pour être isolées proprement — un
+vrai solveur OR-Tools (`scripts/_solveur_minimal.py`, fixture de dev/démo/test),
+donc `integration/` et pas `unit/` (voir `tests/unit/test_attribution.py`
+pour les causes "code" et "specification_dsl", avec des solveurs bogués en
+pur Python).
 """
 
 from __future__ import annotations
 
 from diagnostics import diagnostiquer
 from dsl.schema import OperationPlanifiee, Planning
-from solveur_reference import resoudre
+from scripts._solveur_minimal import resoudre
 from validation_engine.synthetic_bench import generer_catalogue
 
 

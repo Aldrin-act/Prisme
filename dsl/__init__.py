@@ -1,7 +1,7 @@
 """dsl — Modèle pivot T-R-C-O (§4)."""
 
 from dsl.schema import (
-    CompatibiliteMachineTache,
+    CompatibiliteRessourceTache,
     Contrainte,
     InstanceTRCO,
     MinimiserMakespan,
@@ -13,7 +13,7 @@ from dsl.schema import (
 )
 
 __all__ = [
-    "CompatibiliteMachineTache",
+    "CompatibiliteRessourceTache",
     "Contrainte",
     "InstanceTRCO",
     "MinimiserMakespan",

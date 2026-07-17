@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pytest
 
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, MinimiserMakespan, Ressource, Tache
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Ressource, Tache
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from validation_engine.feasibility_checker import verifier_faisabilite
 
@@ -25,7 +25,7 @@ from collections import defaultdict
 
 from ortools.sat.python import cp_model
 
-from dsl.schema import CompatibiliteMachineTache, OperationPlanifiee, Planning, Precedence
+from dsl.schema import CompatibiliteRessourceTache, OperationPlanifiee, Planning, Precedence
 
 
 def resoudre(instance):
@@ -34,7 +34,7 @@ def resoudre(instance):
     compat = defaultdict(set)
     duree = {}
     for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
+        if isinstance(contrainte, CompatibiliteRessourceTache):
             compat[contrainte.tache].add(contrainte.ressource)
             duree[(contrainte.tache, contrainte.ressource)] = contrainte.duree
 
@@ -93,7 +93,7 @@ def test_code_valide_est_execute_et_resout_correctement() -> None:
     instance = InstanceTRCO(
         taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
         objectifs=[MinimiserMakespan()],
     )
 

@@ -26,7 +26,7 @@
   | `refactor/` | Réécriture sans changement de comportement |
 
 - **Commits** : messages courts à l'impératif, en français, qui disent *pourquoi* plutôt que
-  *quoi* quand ce n'est pas évident (ex. `Ajoute la vérification de compatibilité machine-tâche`
+  *quoi* quand ce n'est pas évident (ex. `Ajoute la vérification de compatibilité ressource-tâche`
   plutôt que `Modifie feasibility_checker.py`).
 - **Fusion** : une fois la revue et la CI passées, fusionner via *Squash and merge* pour garder
   un historique linéaire sur `main` — une entrée par Pull Request.

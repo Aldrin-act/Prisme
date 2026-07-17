@@ -8,7 +8,7 @@ interne du générateur.
 
 from __future__ import annotations
 
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, Planning, Precedence
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Planning, Precedence
 from validation_engine.feasibility_checker import verifier_faisabilite
 from validation_engine.synthetic_bench import generer_catalogue, generer_catalogue_faisabilite_seule
 from validation_engine.synthetic_bench.catalogue import DOSSIER_INSTANCES
@@ -20,7 +20,7 @@ def _optimum_attendu(instance: InstanceTRCO) -> int:
     précédence impose, à elle seule, qu'une chaîne de tâches liées ne peut
     pas durer moins que la somme de leurs durées (§6.4).
     """
-    durees = {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)}
+    durees = {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)}
     suivant: dict[str, str] = {}
     a_un_predecesseur: set[str] = set()
     for contrainte in instance.contraintes:
@@ -44,10 +44,10 @@ def _optimum_attendu(instance: InstanceTRCO) -> int:
 
 
 def _ensemble_taches(instance: InstanceTRCO) -> set[tuple[str, int]]:
-    """La durée vit sur `CompatibiliteMachineTache`, pas sur `Tache` — mais le banc
+    """La durée vit sur `CompatibiliteRessourceTache`, pas sur `Tache` — mais le banc
     synthétique garantit une seule ressource compatible par tâche, donc la paire
     (tâche, durée) reste bien définie ici."""
-    return {(c.tache, c.duree) for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)}
+    return {(c.tache, c.duree) for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)}
 
 
 def _ensemble_ressources(instance: InstanceTRCO) -> set[str]:
@@ -59,8 +59,8 @@ def _ensemble_contraintes(instance: InstanceTRCO) -> set[tuple[str, str, str]]:
     for contrainte in instance.contraintes:
         if isinstance(contrainte, Precedence):
             resultat.add(("precedence", contrainte.avant, contrainte.apres))
-        elif isinstance(contrainte, CompatibiliteMachineTache):
-            resultat.add(("compatibilite_machine_tache", contrainte.tache, contrainte.ressource))
+        elif isinstance(contrainte, CompatibiliteRessourceTache):
+            resultat.add(("compatibilite_ressource_tache", contrainte.tache, contrainte.ressource))
     return resultat
 
 
@@ -121,6 +121,6 @@ def test_niveau_faisabilite_seule_exerce_une_vraie_contention_partagee() -> None
             compatibles = {
                 c.ressource
                 for c in cas.instance.contraintes
-                if isinstance(c, CompatibiliteMachineTache) and c.tache == tache.id
+                if isinstance(c, CompatibiliteRessourceTache) and c.tache == tache.id
             }
             assert compatibles == ressources, (cas.nom, tache.id)

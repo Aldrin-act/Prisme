@@ -36,11 +36,11 @@ Deux types possibles, chacun avec son propre champ `type` :
 {"type": "precedence", "avant": "<id-tache>", "apres": "<id-tache>"}
 ```
 
-**Compatibilité machine-tâche** — la tâche `tache` peut s'exécuter sur la ressource `ressource`,
+**Compatibilité ressource-tâche** — la tâche `tache` peut s'exécuter sur la ressource `ressource`,
 en `duree` minutes (propre à ce couple tâche-ressource : deux ressources compatibles pour la même
 tâche peuvent avoir des durées différentes) :
 ```json
-{"type": "compatibilite_machine_tache", "tache": "<id-tache>", "ressource": "<id-ressource>", "duree": <entier > 0>}
+{"type": "compatibilite_ressource_tache", "tache": "<id-tache>", "ressource": "<id-ressource>", "duree": <entier > 0>}
 ```
 
 ### `objectifs` (au moins un)
@@ -54,7 +54,7 @@ Un seul type supporté aujourd'hui :
 
 1. Un identifiant ne peut pas être répété au sein d'un même axe (deux tâches `id: "T1"` : rejeté).
 2. Toute contrainte doit référencer des tâches/ressources réellement déclarées dans le fichier.
-3. **Chaque tâche doit avoir au moins une compatibilité machine-tâche** — sans ça, sa durée est
+3. **Chaque tâche doit avoir au moins une compatibilité ressource-tâche** — sans ça, sa durée est
    inconnue et elle ne peut pas être planifiée.
 4. Aucun champ en dehors de ceux listés ci-dessus n'est toléré (schéma strict — un champ en trop
    fait rejeter tout le fichier, pas seulement ce champ).
@@ -71,7 +71,7 @@ Un seul type supporté aujourd'hui :
   ],
   "contraintes": [
     {"type": "precedence", "avant": "<id-tache>", "apres": "<id-tache>"},
-    {"type": "compatibilite_machine_tache", "tache": "<id-tache>", "ressource": "<id-ressource>", "duree": 30}
+    {"type": "compatibilite_ressource_tache", "tache": "<id-tache>", "ressource": "<id-ressource>", "duree": 30}
   ],
   "objectifs": [
     {"type": "minimiser_makespan"}

@@ -18,6 +18,12 @@ Note sur `confirmee` : sur le dump `backup_20260503.sql`, cette colonne vaut
 `false` pour les 2165 tâches sans exception — un filtre dessus viderait tout
 le payload. Pas utilisée ici pour cette raison, pas parce qu'elle serait
 dénuée de sens en général.
+
+Même logique de filtrage en amont pour les opérateurs : seuls les
+`statut = 'ACTIF'` sont extraits, et leurs compétences excluent
+`niveau = 'NON'` (qui signifie explicitement "n'a pas cette compétence", pas
+une absence de donnée) — un opérateur inactif ou sans la compétence ne doit
+jamais compter comme une ressource compatible côté `translator.traduire`.
 """
 
 from __future__ import annotations
@@ -28,9 +34,18 @@ from contextlib import closing
 
 import psycopg
 
-from .schema_greensig import EquipeGreenSIG, PayloadGreenSIG, TacheGreenSIG, TypeTacheGreenSIG
+from .schema_greensig import (
+    CompetenceGreenSIG,
+    EquipeGreenSIG,
+    OperateurGreenSIG,
+    PayloadGreenSIG,
+    TacheGreenSIG,
+    TypeTacheGreenSIG,
+)
 
 STATUTS_A_PLANIFIER = ("PLANIFIEE", "EN_COURS")
+STATUT_OPERATEUR_ACTIF = "ACTIF"
+NIVEAU_COMPETENCE_ABSENTE = "NON"  # niveau explicite signifiant "n'a pas cette compétence"
 
 
 def dsn_par_defaut() -> str:
@@ -88,4 +103,32 @@ def extraire_payload(dsn: str | None = None) -> PayloadGreenSIG:
             ).fetchall()
         ]
 
-    return PayloadGreenSIG(taches=taches, equipes=equipes, types_tache=types_tache)
+        competences_par_operateur: dict[int, list[int]] = defaultdict(list)
+        for operateur_id, competence_id in connexion.execute(
+            "SELECT operateur_id, competence_id FROM api_users_competenceoperateur WHERE niveau != %s",
+            (NIVEAU_COMPETENCE_ABSENTE,),
+        ).fetchall():
+            competences_par_operateur[operateur_id].append(competence_id)
+
+        operateurs = [
+            OperateurGreenSIG(id=id_, equipe_id=equipe_id, competences_ids=competences_par_operateur.get(id_, []))
+            for id_, equipe_id in connexion.execute(
+                "SELECT id, equipe_id FROM api_users_operateur WHERE statut = %s",
+                (STATUT_OPERATEUR_ACTIF,),
+            ).fetchall()
+        ]
+
+        competences = [
+            CompetenceGreenSIG(id=id_, nom_competence=nom_competence)
+            for id_, nom_competence in connexion.execute(
+                "SELECT id, nom_competence FROM api_users_competence"
+            ).fetchall()
+        ]
+
+    return PayloadGreenSIG(
+        taches=taches,
+        equipes=equipes,
+        types_tache=types_tache,
+        operateurs=operateurs,
+        competences=competences,
+    )

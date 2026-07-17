@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import solveur_reference.solveur as _module_solveur_reference
+import scripts._solveur_minimal as _module_solveur_minimal
 from sandbox.runner import executer_solveur_valide
 from solver_store.registry import Registre
 from validation_engine.cascade import VerdictCascade
@@ -18,13 +18,13 @@ from validation_engine.synthetic_bench import generer_catalogue
 
 def test_solveur_valide_stocke_puis_execute_en_sandbox(image_sandbox: str, registre_test: Registre) -> None:
     registre = registre_test
-    code_source = Path(_module_solveur_reference.__file__).read_text(encoding="utf-8")
+    code_source = Path(_module_solveur_minimal.__file__).read_text(encoding="utf-8")
 
     # Un verdict vert « à blanc » : ce test vérifie le câblage store → sandbox
     # → garde-fou, pas la cascade elle-même (déjà couverte ailleurs).
     id_solveur = registre.enregistrer_solveur(
         code_source=code_source,
-        structure_contraintes="precedence,compatibilite_machine_tache",
+        structure_contraintes="precedence,compatibilite_ressource_tache",
         verdict_cascade=VerdictCascade(diagnostics=()),
     )
 

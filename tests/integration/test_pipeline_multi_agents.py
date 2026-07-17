@@ -16,9 +16,9 @@ import json
 
 from generation.pipeline_multi_agents import tenter_generation_multi_agents
 
-# Respecte l'allowlist AST (validation_statique.py) — contrairement à
-# solveur_reference/solveur.py, qui importe `time` et n'y est jamais soumis
-# (code permanent écrit à la main, hors du cycle « générer une fois »).
+# Respecte l'allowlist AST (validation_statique.py) — contrairement à du code
+# permanent écrit à la main hors du cycle « générer une fois », qui n'y est
+# jamais soumis.
 CODE_BON = """
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ from collections import defaultdict
 
 from ortools.sat.python import cp_model
 
-from dsl.schema import CompatibiliteMachineTache, OperationPlanifiee, Planning, Precedence
+from dsl.schema import CompatibiliteRessourceTache, OperationPlanifiee, Planning, Precedence
 
 
 def resoudre(instance):
@@ -35,7 +35,7 @@ def resoudre(instance):
     compat = defaultdict(set)
     duree = {}
     for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
+        if isinstance(contrainte, CompatibiliteRessourceTache):
             compat[contrainte.tache].add(contrainte.ressource)
             duree[(contrainte.tache, contrainte.ressource)] = contrainte.duree
 

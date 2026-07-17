@@ -12,8 +12,8 @@
     ],
     "contraintes": [
       {"type": "precedence", "avant": "A", "apres": "B"},
-      {"type": "compatibilite_machine_tache", "tache": "A", "ressource": "M1", "duree": 20},
-      {"type": "compatibilite_machine_tache", "tache": "B", "ressource": "M2", "duree": 15}
+      {"type": "compatibilite_ressource_tache", "tache": "A", "ressource": "M1", "duree": 20},
+      {"type": "compatibilite_ressource_tache", "tache": "B", "ressource": "M2", "duree": 15}
     ],
     "objectifs": [
       {"type": "minimiser_makespan"}

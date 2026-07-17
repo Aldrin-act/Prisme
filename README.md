@@ -19,7 +19,7 @@ Scheduling Problem* (FJSP), via OR-Tools CP-SAT.
 Scaffolding précoce. Étapes 1–5, 7 et 8 de la roadmap (§8) sont implémentées, dans un ordre qui
 dévie volontairement de l'ordre listé (l'Étape 6, la boucle de réparation bornée, est sautée pour
 l'instant — voir §8 de la note de cadrage pour le détail des dépendances). En dehors de `dsl/`,
-`validation_engine/`, `solveur_reference/`, `generation/`, `solver_store/`, `sandbox/`,
+`validation_engine/`, `generation/`, `solver_store/`, `sandbox/`,
 `adapters/` et `api/`, chaque répertoire de module ne contient pour l'instant qu'un
 `README.md` décrivant son contenu prévu (`diagnostics/`, `dashboard/`, `docs/`).
 
@@ -79,7 +79,6 @@ synchronisé.
 # Tests
 uv run pytest                                              # suite complète (tests Docker auto-ignorés si Docker indisponible)
 uv run pytest tests/unit                                   # tests de couche 1 uniquement — ni OR-Tools ni Docker requis
-uv run pytest tests/integration/test_solveur_reference.py  # un seul fichier
 uv run pytest tests/unit/test_cascade.py::<nom_test>       # un seul test
 
 # Lint / format (ruff)
@@ -88,9 +87,8 @@ uv run ruff format --check .   # vérifie le formatage sans modifier (enlever --
 
 # Scripts de développement (toujours en module, depuis la racine du dépôt)
 uv run python -m scripts.generer_banc_synthetique          # régénère le banc synthétique après modification de construction_inverse.py
-uv run python -m scripts.benchmarker_solveur_reference     # solveur de référence : makespan vs optimum + temps de résolution
 uv run python -m scripts.mesurer_taux_succes_generation    # taux de succès du générateur tir unique (nécessite .[llm] + clé API)
-uv run python -m scripts.enregistrer_solveur_reference     # enregistre le solveur de référence dans le store (idempotent)
+uv run python -m scripts.enregistrer_solveur_reference     # enregistre un solveur minimal de démo/test dans le store (idempotent)
 uv run python -m scripts.demo_bout_en_bout                 # démo bout en bout Étape 8 (adaptateur → ingestion → exécution → planning → audit)
 
 # API
@@ -122,7 +120,6 @@ bout-en-bout s'exécutent réellement, pas seulement en `skip`). Un run rouge do
 ```
 dsl/                  Modèle pivot T-R-C-O — Tâches, Ressources, Contraintes, Objectifs (Étape 1)
 validation_engine/    Cascade de validation : faisabilité → banc synthétique → cas de référence (Étapes 2, 3, 5)
-solveur_reference/    Solveur CP-SAT écrit à la main, cible de fidélité pour `generation/` (hors roadmap, avant Étape 4)
 generation/           Générateur tir unique piloté par LLM → code CP-SAT (Étape 4 ; boucle de réparation Étape 6 non faite)
 solver_store/         Store des solveurs validés, code figé (Étape 7)
 sandbox/              Exécution éphémère en conteneur jetable (Étape 7)

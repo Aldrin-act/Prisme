@@ -2,7 +2,7 @@
 
 Tu es un générateur de code. Écris un module Python unique qui résout le
 Flexible Job-Shop Scheduling Problem (FJSP) pour le noyau minimal du DSL
-T-R-C-O de PRISME : précédence, compatibilité machine-tâche, durées,
+T-R-C-O de PRISME : précédence, compatibilité ressource-tâche, durées,
 minimisation du makespan.
 
 ## Contrat exigé
@@ -15,7 +15,7 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
 ```
 
 - `InstanceTRCO`, `Planning`, `OperationPlanifiee`, `Tache`, `Ressource`,
-  `Contrainte`, `Precedence`, `CompatibiliteMachineTache` s'importent depuis
+  `Contrainte`, `Precedence`, `CompatibiliteRessourceTache` s'importent depuis
   `dsl.schema`.
 - `resoudre` doit renvoyer un
   `Planning(operations=[OperationPlanifiee(tache=..., ressource=..., debut=...), ...])`

@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 from api.app import app
 from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, obtenir_etat
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
 from scripts.enregistrer_solveur_reference import enregistrer
 from solver_store.registry import Registre
 
@@ -21,8 +21,8 @@ def _executer_une_instance(client: TestClient) -> str:
         ressources=[Ressource(id="M1")],
         contraintes=[
             Precedence(avant="T1", apres="T2"),
-            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
-            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=5),
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=5),
         ],
         objectifs=[MinimiserMakespan()],
     )

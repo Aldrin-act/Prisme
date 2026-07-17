@@ -15,9 +15,10 @@ lève donc rien : toute anomalie, y compris structurelle (tâche non
 planifiée, planifiée deux fois, référence inconnue), devient une entrée de
 `ResultatFaisabilite.violations`.
 
-Règle de compatibilité machine-tâche (à garder synchronisée avec
-`solveur_reference/solveur.py`) : `CompatibiliteMachineTache` est
-obligatoire — une tâche sans aucune n'est pas rejetée ici (ce garde-fou-là
+Règle de compatibilité ressource-tâche (à garder synchronisée avec tout
+solveur CP-SAT du dépôt, ex. `scripts/_solveur_minimal.py`) :
+`CompatibiliteRessourceTache` est obligatoire — une tâche sans aucune n'est
+pas rejetée ici (ce garde-fou-là
 vit dans `InstanceTRCO`, §6.7), mais la contrainte porte aussi la durée
 propre à ce couple (tâche, ressource), utilisée ci-dessous pour les calculs
 de fin d'opération.
@@ -30,7 +31,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from dsl.schema import (
-    CompatibiliteMachineTache,
+    CompatibiliteRessourceTache,
     InstanceTRCO,
     OperationPlanifiee,
     Planning,
@@ -43,7 +44,7 @@ TypeViolation = Literal[
     "tache_non_planifiee",
     "tache_planifiee_plusieurs_fois",
     "precedence_violee",
-    "incompatibilite_machine_tache",
+    "incompatibilite_ressource_tache",
     "chevauchement_ressource",
 ]
 
@@ -133,7 +134,7 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
     ressources_autorisees: dict[str, set[str]] = defaultdict(set)
     duree_par_couple: dict[tuple[str, str], int] = {}
     for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
+        if isinstance(contrainte, CompatibiliteRessourceTache):
             ressources_autorisees[contrainte.tache].add(contrainte.ressource)
             duree_par_couple[(contrainte.tache, contrainte.ressource)] = contrainte.duree
 
@@ -147,7 +148,7 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
         duree_avant = duree_par_couple.get((contrainte.avant, operation_avant.ressource))
         if duree_avant is None:
             # Ressource incompatible : déjà signalé séparément ci-dessous
-            # (incompatibilite_machine_tache), aucune durée connue pour ce
+            # (incompatibilite_ressource_tache), aucune durée connue pour ce
             # couple précis, donc pas de vérification de fin possible ici.
             continue
         fin_avant = operation_avant.debut + duree_avant
@@ -166,7 +167,7 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
         if restrictions and operation.ressource not in restrictions:
             violations.append(
                 Violation(
-                    "incompatibilite_machine_tache",
+                    "incompatibilite_ressource_tache",
                     f"tâche {tache_id!r} affectée à une ressource incompatible : {operation.ressource!r}",
                     tache=tache_id,
                     ressource=operation.ressource,

@@ -52,7 +52,7 @@ def test_ingestion_via_comprehension_accepte_une_traduction_valide() -> None:
                 "taches": [{"id": "T1"}],
                 "ressources": [{"id": "M1"}],
                 "contraintes": [
-                    {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10}
+                    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10}
                 ],
                 "objectifs": [{"type": "minimiser_makespan"}],
             },
@@ -71,7 +71,7 @@ def test_ingestion_via_comprehension_accepte_une_traduction_valide() -> None:
 
         assert reponse.status_code == 200, reponse.json()
         corps = reponse.json()
-        assert corps["structure_contraintes"] == "compatibilite_machine_tache"
+        assert corps["structure_contraintes"] == "compatibilite_ressource_tache"
         assert corps["avertissements"] == ["durée estimée, absente des données source"]
         assert corps["instance_id"] in etat_test.instances
     finally:

@@ -47,7 +47,6 @@ build-backend = "hatchling.build"
 packages = [
     "dsl",
     "validation_engine",
-    "solveur_reference",
     "generation",
     "solver_store",
     "sandbox",

@@ -1,4 +1,4 @@
-"""C — Contraintes : précédence et compatibilité machine-tâche, le noyau minimal (§3.1, §4).
+"""C — Contraintes : précédence et compatibilité ressource-tâche, le noyau minimal (§3.1, §4).
 
 Une contrainte est un objet discriminé par son champ `type`, pour rester
 homogène et extensible : préemptibilité, périmètre de replanification, etc.
@@ -31,7 +31,7 @@ class Precedence(BaseModel):
         return self
 
 
-class CompatibiliteMachineTache(BaseModel):
+class CompatibiliteRessourceTache(BaseModel):
     """La tâche `tache` peut s'exécuter sur la ressource `ressource`, avec la durée `duree`
     propre à ce couple (tâche, ressource) — deux ressources compatibles pour la même tâche
     peuvent avoir des durées différentes (FJSP flexible).
@@ -43,13 +43,13 @@ class CompatibiliteMachineTache(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    type: Literal["compatibilite_machine_tache"] = "compatibilite_machine_tache"
+    type: Literal["compatibilite_ressource_tache"] = "compatibilite_ressource_tache"
     tache: Identifiant
     ressource: Identifiant
     duree: int = Field(gt=0, description="Durée de l'opération sur cette ressource, en minutes")
 
 
 Contrainte = Annotated[
-    Precedence | CompatibiliteMachineTache,
+    Precedence | CompatibiliteRessourceTache,
     Field(discriminator="type"),
 ]

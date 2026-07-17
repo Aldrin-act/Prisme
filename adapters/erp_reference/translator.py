@@ -8,7 +8,7 @@ Voir `mapping/regles.md` pour la table de correspondance champ par champ.
 from __future__ import annotations
 
 from dsl.schema import (
-    CompatibiliteMachineTache,
+    CompatibiliteRessourceTache,
     Contrainte,
     InstanceTRCO,
     MinimiserMakespan,
@@ -28,7 +28,7 @@ def traduire(payload: PayloadERP) -> InstanceTRCO:
     contraintes: list[Contrainte] = []
     for operation in payload.operations:
         contraintes.append(
-            CompatibiliteMachineTache(
+            CompatibiliteRessourceTache(
                 tache=operation.code_operation, ressource=operation.poste_id, duree=operation.duree_minutes
             )
         )

@@ -80,7 +80,7 @@ La preuve du concept ne dépend **pas** du nombre de familles de contraintes cou
 Le **socle FJSP** :
 
 - **Précédence** entre opérations (l'opération A doit finir avant que B commence).
-- **Compatibilité machine-tâche** (chaque opération n'est exécutable que sur un sous-ensemble de ressources).
+- **Compatibilité ressource-tâche** (chaque opération n'est exécutable que sur un sous-ensemble de ressources).
 - **Durées** des opérations.
 
 Ces trois familles forment le socle sur lequel tout le reste se greffe naturellement.
@@ -122,7 +122,7 @@ Le bon DSL couvre l'essentiel des besoins réels avec une complexité minimale :
 - Trop pauvre, il ne capte pas les vraies contraintes des ateliers → outil-jouet.
 - Trop riche, l'IA se perd, la validation explose, le projet ne se termine jamais.
 
-Pour le noyau minimal, le DSL doit exprimer proprement précédence, compatibilité machine-tâche et durées, avec des champs typés permettant une génération CP-SAT vérifiable.
+Pour le noyau minimal, le DSL doit exprimer proprement précédence, compatibilité ressource-tâche et durées, avec des champs typés permettant une génération CP-SAT vérifiable.
 
 ---
 
@@ -306,7 +306,7 @@ Le vérificateur de faisabilité sert ainsi **deux fois** : hors ligne dans la v
 *Séquence logique de mise en œuvre. Les dépendances sont explicites : chaque étape s'appuie sur les précédentes.*
 
 ### Étape 1 — Fondations du DSL et du modèle canonique
-Concevoir le DSL T-R-C-O pour le **noyau minimal** (précédence, compatibilité machine-tâche, durées) : champs typés, schéma de validation. C'est la pièce dont tout le reste dépend — elle vient en premier.
+Concevoir le DSL T-R-C-O pour le **noyau minimal** (précédence, compatibilité ressource-tâche, durées) : champs typés, schéma de validation. C'est la pièce dont tout le reste dépend — elle vient en premier.
 > *Prérequis d'à peu près tout ce qui suit.*
 
 ### Étape 2 — Vérificateur de faisabilité

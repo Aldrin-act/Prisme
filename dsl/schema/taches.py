@@ -16,7 +16,7 @@ class Tache(BaseModel):
 
     La durée n'est pas ici non plus : dans le FJSP flexible, elle dépend de
     la ressource choisie, pas seulement de la tâche — elle vit sur
-    `CompatibiliteMachineTache.duree` (une durée par couple tâche-ressource).
+    `CompatibiliteRessourceTache.duree` (une durée par couple tâche-ressource).
     """
 
     model_config = ConfigDict(extra="forbid")

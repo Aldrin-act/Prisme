@@ -37,7 +37,7 @@ def test_ingestion_accepte_un_payload_valide(client_isole: tuple[TestClient, Eta
     payload = {
         "taches": [{"id": "T1"}],
         "ressources": [{"id": "M1"}],
-        "contraintes": [{"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10}],
         "objectifs": [{"type": "minimiser_makespan"}],
     }
 
@@ -46,7 +46,7 @@ def test_ingestion_accepte_un_payload_valide(client_isole: tuple[TestClient, Eta
     assert reponse.status_code == 200
     corps = reponse.json()
     assert corps["instance_id"] in etat_test.instances
-    assert corps["structure_contraintes"] == "compatibilite_machine_tache"
+    assert corps["structure_contraintes"] == "compatibilite_ressource_tache"
 
 
 def test_ingestion_rejette_un_payload_invalide(client_isole: tuple[TestClient, EtatAPI]) -> None:
@@ -54,7 +54,7 @@ def test_ingestion_rejette_un_payload_invalide(client_isole: tuple[TestClient, E
     payload = {
         "taches": [{"id": "T1"}],
         "ressources": [{"id": "M1"}],
-        "contraintes": [{"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": -10}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": -10}],
         "objectifs": [{"type": "minimiser_makespan"}],
     }
 
@@ -70,8 +70,8 @@ def test_ingestion_calcule_la_structure_de_contraintes(client_isole: tuple[TestC
         "ressources": [{"id": "M1"}],
         "contraintes": [
             {"type": "precedence", "avant": "T1", "apres": "T2"},
-            {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10},
-            {"type": "compatibilite_machine_tache", "tache": "T2", "ressource": "M1", "duree": 5},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "M1", "duree": 5},
         ],
         "objectifs": [{"type": "minimiser_makespan"}],
     }
@@ -79,4 +79,4 @@ def test_ingestion_calcule_la_structure_de_contraintes(client_isole: tuple[TestC
     reponse = client.post("/ingestion/client_a", json=payload)
 
     assert reponse.status_code == 200
-    assert reponse.json()["structure_contraintes"] == "compatibilite_machine_tache,precedence"
+    assert reponse.json()["structure_contraintes"] == "compatibilite_ressource_tache,precedence"

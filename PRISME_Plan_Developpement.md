@@ -55,7 +55,7 @@ Le principe directeur reste inchangé : **chaque brique déterministe et testabl
 **Semaines :** 2-3
 **Objectif :** Modéliser le contrat métier-machine (les quatre axes Tâches, Ressources, Contraintes, Objectifs) pour le noyau minimal, en champs typés et validables.
 
-Le noyau minimal couvre trois familles seulement : **précédence**, **compatibilité machine-tâche** et **durées**. Le DSL joue simultanément trois rôles : format d'échange, entrée de génération et cadre de validation.
+Le noyau minimal couvre trois familles seulement : **précédence**, **compatibilité ressource-tâche** et **durées**. Le DSL joue simultanément trois rôles : format d'échange, entrée de génération et cadre de validation.
 
 ### PH1-T1 · Modéliser l'axe T (Tâches)
 - Définir le modèle Pydantic d'une tâche : identifiant, durée, opération.
@@ -66,7 +66,7 @@ Le noyau minimal couvre trois familles seulement : **précédence**, **compatibi
 
 ### PH1-T2 · Modéliser l'axe R (Ressources)
 - Définir le modèle d'une ressource (machine/poste) avec identifiant.
-- Modéliser la compatibilité machine-tâche (sous-ensemble de ressources par opération).
+- Modéliser la compatibilité ressource-tâche (sous-ensemble de ressources par opération).
 - Valider qu'une tâche ne référence que des ressources déclarées.
 
 *Definition of Done — Une instance référençant une ressource inexistante est rejetée à la validation.*

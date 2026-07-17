@@ -9,7 +9,7 @@ Technique retenue ici, volontairement simple à prouver correcte : des
 chacun affecté à un lot de ressources qui lui est **dédié** (jamais partagé
 entre jobs). Deux conséquences :
 
-- la compatibilité machine-tâche est **forcée** (une seule ressource
+- la compatibilité ressource-tâche est **forcée** (une seule ressource
   compatible par tâche déclarée) — aucun choix de routage, seulement
   l'ordonnancement dans le temps ;
 - comme les jobs ne se disputent jamais de ressource, ils s'exécutent en
@@ -34,7 +34,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from dsl.schema import (
-    CompatibiliteMachineTache,
+    CompatibiliteRessourceTache,
     Contrainte,
     InstanceTRCO,
     MinimiserMakespan,
@@ -98,7 +98,7 @@ def construire_instance(nom: str, jobs: list[FormeJob]) -> InstanceSynthetique:
             ressource_id = ressources_job[indice_tache % forme.n_ressources]
 
             taches.append(Tache(id=tache_id))
-            contraintes.append(CompatibiliteMachineTache(tache=tache_id, ressource=ressource_id, duree=duree))
+            contraintes.append(CompatibiliteRessourceTache(tache=tache_id, ressource=ressource_id, duree=duree))
             if tache_precedente is not None:
                 contraintes.append(Precedence(avant=tache_precedente, apres=tache_id))
             operations.append(OperationPlanifiee(tache=tache_id, ressource=ressource_id, debut=instant))

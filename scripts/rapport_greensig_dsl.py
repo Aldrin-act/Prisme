@@ -23,7 +23,12 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from adapters.greensig import PayloadGreenSIG, extraire_payload, traduire
-from adapters.greensig.translator import duree_minutes_pour, id_tache
+from adapters.greensig.translator import (
+    duree_minutes_pour,
+    equipes_compatibles_pour,
+    equipes_competentes_pour,
+    id_tache,
+)
 from dsl.schema import InstanceTRCO
 
 DOSSIER_SORTIE = Path(__file__).resolve().parent.parent / "adapters" / "greensig"
@@ -33,21 +38,33 @@ CHEMIN_MD = DOSSIER_SORTIE / "rapport_dsl.md"
 
 def _lignes_par_tache(payload: PayloadGreenSIG) -> list[dict[str, object]]:
     types_par_id = {t.id: t.nom_tache for t in payload.types_tache}
+    ids_ressources_actives = {f"E{e.id}" for e in payload.equipes if e.actif}
     equipes_actives_ids = {e.id for e in payload.equipes if e.actif}
 
     lignes: list[dict[str, object]] = []
     for tache in payload.taches:
         if tache.deleted_at is not None:
             continue  # hors périmètre canonique, comme traduire()
-        nb_actives = sum(1 for eid in tache.equipes_ids if eid in equipes_actives_ids)
+
+        equipes_par_competence = equipes_competentes_pour(
+            tache.id_type_tache_id, payload.operateurs, ids_ressources_actives
+        )
+        if equipes_par_competence is not None:
+            source_compatibilite = "compétence" if equipes_par_competence else "aucune (type mappé, non qualifié)"
+            nb_compatibles = len(equipes_par_competence)
+        else:
+            nb_compatibles = sum(1 for eid in tache.equipes_ids if eid in equipes_actives_ids)
+            source_compatibilite = "affectation (fallback, type non mappé)" if nb_compatibles else "aucune"
+
         lignes.append(
             {
                 "tache_id": id_tache(tache.id),
                 "type_tache": types_par_id.get(tache.id_type_tache_id, "?"),
                 "charge_estimee_heures": tache.charge_estimee_heures,
                 "duree_minutes_calculee": duree_minutes_pour(tache.charge_estimee_heures),
-                "nb_equipes_actives_affectees": nb_actives,
-                "statut": "traduit" if nb_actives > 0 else "rejeté : aucune équipe active",
+                "nb_ressources_compatibles": nb_compatibles,
+                "source_compatibilite": source_compatibilite,
+                "statut": "traduit" if nb_compatibles > 0 else "rejeté : aucune ressource compatible",
             }
         )
     return lignes
@@ -63,14 +80,18 @@ def _ecrire_csv(lignes: list[dict[str, object]], chemin: Path) -> None:
 def _instance_illustrative(payload: PayloadGreenSIG) -> InstanceTRCO:
     """Traduit le sous-ensemble déjà traduisible, uniquement pour illustrer la forme de
     l'InstanceTRCO obtenue — jamais ce que le système ingère réellement (voir docstring)."""
-    equipes_actives_ids = {e.id for e in payload.equipes if e.actif}
+    ids_ressources_actives = {f"E{e.id}" for e in payload.equipes if e.actif}
     taches_traduisibles = [
         t
         for t in payload.taches
-        if t.deleted_at is None and any(eid in equipes_actives_ids for eid in t.equipes_ids)
+        if t.deleted_at is None and equipes_compatibles_pour(t, payload.operateurs, ids_ressources_actives)
     ]
     payload_filtre = PayloadGreenSIG(
-        taches=taches_traduisibles, equipes=payload.equipes, types_tache=payload.types_tache
+        taches=taches_traduisibles,
+        equipes=payload.equipes,
+        types_tache=payload.types_tache,
+        operateurs=payload.operateurs,
+        competences=payload.competences,
     )
     return traduire(payload_filtre)
 
@@ -82,10 +103,14 @@ def main() -> None:
     total = len(lignes)
     traduites = [ligne for ligne in lignes if ligne["statut"] == "traduit"]
     rejetees = [ligne for ligne in lignes if ligne["statut"] != "traduit"]
+    via_competence = [ligne for ligne in traduites if ligne["source_compatibilite"] == "compétence"]
+    via_affectation = [ligne for ligne in traduites if ligne["source_compatibilite"] != "compétence"]
 
     print(f"Tâches actives extraites (statut à planifier, non supprimées) : {total}")
-    print(f"  traduisibles (≥1 équipe active) : {len(traduites)}")
-    print(f"  rejetées (aucune équipe active) : {len(rejetees)}")
+    print(f"  traduisibles (≥1 ressource compatible) : {len(traduites)}")
+    print(f"    dont par compétence (type de tâche mappé) : {len(via_competence)}")
+    print(f"    dont par affectation historique (fallback, type non mappé) : {len(via_affectation)}")
+    print(f"  rejetées (aucune ressource compatible) : {len(rejetees)}")
 
     if rejetees:
         print("\nRejets par type de tâche (top 10) :")
@@ -107,7 +132,7 @@ def main() -> None:
     if instance_illustrative:
         print("\nInstanceTRCO illustrative (sous-ensemble traduisible seulement, jamais ingérée telle quelle) :")
         print(f"  {len(instance_illustrative.taches)} tâches, {len(instance_illustrative.ressources)} ressources,")
-        print(f"  {len(instance_illustrative.contraintes)} contraintes de compatibilité machine-tâche")
+        print(f"  {len(instance_illustrative.contraintes)} contraintes de compatibilité ressource-tâche")
 
     DOSSIER_SORTIE.mkdir(parents=True, exist_ok=True)
     _ecrire_csv(lignes, CHEMIN_CSV)
@@ -120,8 +145,13 @@ def main() -> None:
         f.write("## Résumé\n\n")
         f.write("| | |\n|---|---:|\n")
         f.write(f"| Tâches actives extraites | {total} |\n")
-        f.write(f"| Traduisibles (≥1 équipe active) | {len(traduites)} |\n")
-        f.write(f"| Rejetées (aucune équipe active) | {len(rejetees)} |\n")
+        f.write(f"| Traduisibles (≥1 ressource compatible) | {len(traduites)} |\n")
+        f.write(f"| &nbsp;&nbsp;dont par compétence (type de tâche mappé) | {len(via_competence)} |\n")
+        f.write(
+            "| &nbsp;&nbsp;dont par affectation historique (fallback, type non mappé) | "
+            f"{len(via_affectation)} |\n"
+        )
+        f.write(f"| Rejetées (aucune ressource compatible) | {len(rejetees)} |\n")
         f.write(f"| Taux de rejet | {len(rejetees) / total:.0%} |\n\n" if total else "\n")
 
         f.write("## Traduction du lot brut complet (comportement réel du système)\n\n")
@@ -148,12 +178,14 @@ def main() -> None:
             f.write("## Instance T-R-C-O illustrative (sous-ensemble traduisible)\n\n")
             f.write(
                 "**Jamais ce que le système ingère réellement** — construite ici uniquement pour montrer la "
-                "forme de l'InstanceTRCO obtenue une fois les tâches sans équipe active écartées.\n\n"
+                "forme de l'InstanceTRCO obtenue une fois les tâches sans ressource compatible écartées.\n\n"
             )
             f.write("| | |\n|---|---:|\n")
             f.write(f"| Tâches | {len(instance_illustrative.taches)} |\n")
             f.write(f"| Ressources (équipes) | {len(instance_illustrative.ressources)} |\n")
-            f.write(f"| Contraintes de compatibilité machine-tâche | {len(instance_illustrative.contraintes)} |\n")
+            f.write(
+                f"| Contraintes de compatibilité ressource-tâche | {len(instance_illustrative.contraintes)} |\n"
+            )
             f.write("| Contraintes de précédence | 0 (GreenSIG n'en produit jamais, voir regles.md) |\n")
             f.write("| Objectif | minimiser_makespan |\n")
 

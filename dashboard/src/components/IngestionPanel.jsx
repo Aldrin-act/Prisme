@@ -11,10 +11,10 @@ const EXEMPLES = {
     contraintes: [
       { type: "precedence", avant: "T1", apres: "T2" },
       { type: "precedence", avant: "T2", apres: "T3" },
-      { type: "compatibilite_machine_tache", tache: "T1", ressource: "M1", duree: 30 },
-      { type: "compatibilite_machine_tache", tache: "T2", ressource: "M1", duree: 45 },
-      { type: "compatibilite_machine_tache", tache: "T2", ressource: "M2", duree: 45 },
-      { type: "compatibilite_machine_tache", tache: "T3", ressource: "M2", duree: 15 },
+      { type: "compatibilite_ressource_tache", tache: "T1", ressource: "M1", duree: 30 },
+      { type: "compatibilite_ressource_tache", tache: "T2", ressource: "M1", duree: 45 },
+      { type: "compatibilite_ressource_tache", tache: "T2", ressource: "M2", duree: 45 },
+      { type: "compatibilite_ressource_tache", tache: "T3", ressource: "M2", duree: 15 },
     ],
     objectifs: [{ type: "minimiser_makespan" }],
   },
@@ -24,7 +24,7 @@ const EXEMPLES = {
 // le cycle human-in-the-loop (§2.3) soit utilisable depuis le navigateur,
 // sans curl. Un aléa atelier (panne, retard...) n'a pas de mécanisme dédié
 // ici : il se traduit dans les contraintes de l'instance (ex. retirer la
-// ressource en panne des compatibilités machine-tâche) avant de ré-ingérer
+// ressource en panne des compatibilités ressource-tâche) avant de ré-ingérer
 // et de relancer l'exécution — le processus exact dépend du client.
 export default function IngestionPanel({ onExecutionDeclenchee }) {
   const [clientId, setClientId] = useState("demo");

@@ -7,7 +7,7 @@ voisin et un cas illégal qui le déclenche, en isolation des autres.
 from __future__ import annotations
 
 from dsl.schema import (
-    CompatibiliteMachineTache,
+    CompatibiliteRessourceTache,
     InstanceTRCO,
     MinimiserMakespan,
     OperationPlanifiee,
@@ -43,10 +43,10 @@ def test_planning_legal_est_accepte() -> None:
         contraintes=[
             Precedence(avant="T1", apres="T2"),
             Precedence(avant="T2", apres="T3"),
-            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=30),
-            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=45),
-            CompatibiliteMachineTache(tache="T2", ressource="M2", duree=45),
-            CompatibiliteMachineTache(tache="T3", ressource="M2", duree=15),
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=30),
+            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=45),
+            CompatibiliteRessourceTache(tache="T2", ressource="M2", duree=45),
+            CompatibiliteRessourceTache(tache="T3", ressource="M2", duree=15),
         ],
     )
     planning = _planning(
@@ -66,8 +66,8 @@ def test_operations_bout_a_bout_sur_la_meme_ressource_sont_legales() -> None:
         taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="M1")],
         contraintes=[
-            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
-            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=10),
         ],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T2", "M1", 10))
@@ -86,8 +86,8 @@ def test_precedence_violee_est_detectee() -> None:
         ressources=[Ressource(id="M1"), Ressource(id="M2")],
         contraintes=[
             Precedence(avant="T1", apres="T2"),
-            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=30),
-            CompatibiliteMachineTache(tache="T2", ressource="M2", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=30),
+            CompatibiliteRessourceTache(tache="T2", ressource="M2", duree=10),
         ],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T2", "M2", 20))
@@ -105,8 +105,8 @@ def test_chevauchement_ressource_est_detecte() -> None:
         taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="M1")],
         contraintes=[
-            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
-            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=10),
         ],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T2", "M1", 5))
@@ -120,18 +120,18 @@ def test_chevauchement_ressource_est_detecte() -> None:
     assert {violation.tache, violation.tache_secondaire} == {"T1", "T2"}
 
 
-def test_incompatibilite_machine_tache_est_detectee() -> None:
+def test_incompatibilite_ressource_tache_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1"), Ressource(id="M2")],
-        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M2", 0))
 
     resultat = verifier_faisabilite(instance, planning)
 
     assert not resultat.legal
-    assert [v.type for v in resultat.violations] == ["incompatibilite_machine_tache"]
+    assert [v.type for v in resultat.violations] == ["incompatibilite_ressource_tache"]
     assert resultat.violations[0].tache == "T1"
     assert resultat.violations[0].ressource == "M2"
 
@@ -141,8 +141,8 @@ def test_tache_non_planifiee_est_detectee() -> None:
         taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="M1")],
         contraintes=[
-            CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10),
-            CompatibiliteMachineTache(tache="T2", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=10),
         ],
     )
     planning = _planning(_op("T1", "M1", 0))
@@ -158,7 +158,7 @@ def test_tache_planifiee_plusieurs_fois_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1"), Ressource(id="M2")],
-        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T1", "M2", 0))
 
@@ -173,7 +173,7 @@ def test_tache_inconnue_dans_planning_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M1", 0), _op("T99", "M1", 10))
 
@@ -188,7 +188,7 @@ def test_ressource_inconnue_dans_planning_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
         ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteMachineTache(tache="T1", ressource="M1", duree=10)],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
     )
     planning = _planning(_op("T1", "M99", 0))
 

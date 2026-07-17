@@ -20,7 +20,7 @@ from __future__ import annotations
 from collections import defaultdict, deque
 
 from diagnostics import diagnostiquer
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, OperationPlanifiee, Planning, Precedence
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, OperationPlanifiee, Planning, Precedence
 from validation_engine.synthetic_bench import generer_catalogue
 
 
@@ -30,7 +30,7 @@ def _solveur_ignore_precedence(instance: InstanceTRCO) -> Planning:
     donc déjà sur le banc synthétique (vérité terrain) : cause "code"."""
     compat: dict[str, set[str]] = defaultdict(set)
     for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
+        if isinstance(contrainte, CompatibiliteRessourceTache):
             compat[contrainte.tache].add(contrainte.ressource)
     return Planning(
         operations=[
@@ -49,7 +49,7 @@ def _solveur_mauvais_choix_ressource(instance: InstanceTRCO) -> Planning:
     compat: dict[str, set[str]] = defaultdict(set)
     duree_par_couple: dict[tuple[str, str], int] = {}
     for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
+        if isinstance(contrainte, CompatibiliteRessourceTache):
             compat[contrainte.tache].add(contrainte.ressource)
             duree_par_couple[(contrainte.tache, contrainte.ressource)] = contrainte.duree
 

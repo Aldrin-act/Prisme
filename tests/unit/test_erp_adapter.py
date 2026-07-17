@@ -5,7 +5,7 @@ Docker)."""
 from __future__ import annotations
 
 from adapters.erp_reference import OperationERP, PayloadERP, PosteERP, traduire
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, Precedence
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Precedence
 
 
 def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
@@ -26,7 +26,7 @@ def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
 
     assert isinstance(instance, InstanceTRCO)
     assert {tache.id for tache in instance.taches} == {"OP10", "OP20"}
-    assert {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)} == {
+    assert {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)} == {
         "OP10": 30,
         "OP20": 45,
     }
@@ -41,7 +41,7 @@ def test_traduction_produit_une_compatibilite_unique_par_tache() -> None:
 
     instance = traduire(payload)
 
-    compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteMachineTache)]
+    compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
     assert len(compatibilites) == 1
     assert compatibilites[0].tache == "OP10"
     assert compatibilites[0].ressource == "POSTE_A"

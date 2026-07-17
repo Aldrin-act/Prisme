@@ -16,7 +16,7 @@ from __future__ import annotations
 from collections import defaultdict, deque
 
 from dsl.schema import (
-    CompatibiliteMachineTache,
+    CompatibiliteRessourceTache,
     InstanceTRCO,
     OperationPlanifiee,
     Planning,
@@ -31,7 +31,7 @@ def _solveur_ignore_precedence(instance: InstanceTRCO) -> Planning:
     """
     compat: dict[str, set[str]] = defaultdict(set)
     for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
+        if isinstance(contrainte, CompatibiliteRessourceTache):
             compat[contrainte.tache].add(contrainte.ressource)
 
     operations = [
@@ -55,7 +55,7 @@ def _planifier_glouton(instance: InstanceTRCO, choisir_ressource) -> Planning:
     compat: dict[str, set[str]] = defaultdict(set)
     duree_par_couple: dict[tuple[str, str], int] = {}
     for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteMachineTache):
+        if isinstance(contrainte, CompatibiliteRessourceTache):
             compat[contrainte.tache].add(contrainte.ressource)
             duree_par_couple[(contrainte.tache, contrainte.ressource)] = contrainte.duree
 

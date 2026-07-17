@@ -69,7 +69,7 @@ def test_rechercher_par_client_et_structure(registre_test: Registre) -> None:
     )
     id_b = registre_test.enregistrer_solveur(
         code_source="def resoudre(instance):\n    return None\n",
-        structure_contraintes="precedence,compatibilite_machine_tache",
+        structure_contraintes="precedence,compatibilite_ressource_tache",
         verdict_cascade=VERDICT_VERT,
         client_id="client_b",
     )
@@ -78,6 +78,6 @@ def test_rechercher_par_client_et_structure(registre_test: Registre) -> None:
     assert [artefact.id for artefact in resultats_client_a] == [id_a]
 
     resultats_structure = registre_test.rechercher_solveurs(
-        structure_contraintes="precedence,compatibilite_machine_tache"
+        structure_contraintes="precedence,compatibilite_ressource_tache"
     )
     assert [artefact.id for artefact in resultats_structure] == [id_b]

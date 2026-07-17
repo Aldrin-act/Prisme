@@ -250,7 +250,7 @@ def construire(chemin_sortie: Path) -> None:
         column=1,
         value=(
             "Ce que le système sait faire aujourd'hui : ordonner des tâches selon des contraintes "
-            "de précédence et de compatibilité machine-tâche, en minimisant la durée totale. Tout le "
+            "de précédence et de compatibilité ressource-tâche, en minimisant la durée totale. Tout le "
             "reste (calendriers, équilibrage de charge, priorités, délais...) se note ici, en langage "
             "courant. Ce n'est PAS traité automatiquement — c'est examiné à la main avant toute évolution."
         ),

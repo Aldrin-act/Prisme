@@ -30,7 +30,6 @@ uv run pytest tests/unit/test_cascade.py::<name> -k <expr> # single test / filte
 uv run ruff check . && uv run ruff format --check .        # lint + format check (drop --check to apply)
 # Dev scripts (always as modules from repo root, never `python path/to/file.py`):
 uv run python -m scripts.generer_banc_synthetique          # regenerate synthetic bench JSON
-uv run python -m scripts.benchmarker_solveur_reference     # makespan-vs-optimum + solve time
 uv run python -m scripts.mesurer_taux_succes_generation    # single-shot generation success rate (needs .[llm] + creds)
 uv run python -m scripts.enregistrer_solveur_reference     # seed solver_store (idempotent)
 uv run python -m scripts.demo_bout_en_bout                 # Étape 8 end-to-end demo
@@ -56,19 +55,21 @@ actually runs and passes — see "Verified" notes below for two real bugs found 
   `validation/charger_instance` backs `api/input_validation/`.
 - **Étape 2 — feasibility checker** (`validation_engine/feasibility_checker.py`):
   `verifier_faisabilite(instance, planning) -> ResultatFaisabilite`, pure, never raises — every
-  anomaly becomes a `Violation`. `CompatibiliteMachineTache` is mandatory (≥1 per task, enforced by
+  anomaly becomes a `Violation`. `CompatibiliteRessourceTache` is mandatory (≥1 per task, enforced by
   `InstanceTRCO`) and carries `duree` per (task, resource), not a fixed `Tache` field (true flexible FJSP).
 - **Étape 3 — synthetic bench** (`validation_engine/synthetic_bench/`): `construction_inverse.py`
   builds instances *around* a chosen-optimal `Planning` — each "job" a precedence chain on
   dedicated resources (never shared), so the optimum is provable by arithmetic, no solver needed.
   `catalogue.py` (1→80 tasks), `stockage.py` (JSON); regenerate via `generer_banc_synthetique.py`.
-- **Reference solver** (`solveur_reference/`, not in the roadmap, predates Étape 4 on purpose):
-  hand-written CP-SAT FJSP model. Two entry points: `resoudre(instance) -> Planning | None`
-  (cascade/store/sandbox contract) and `resoudre_detaille(instance) -> ResultatResolution` (adds
-  statut/makespan/temps). **Verified (PH0-T4):** split added after the first real Docker run found
-  the store freezing the raw `ResultatResolution` module while the cascade validated a
-  `.planning`-unwrapped version — validated ≠ frozen. Keep both in sync with
-  `feasibility_checker.py`'s mandatory-`CompatibiliteMachineTache`/per-pair-`duree` rule too.
+  `scripts/_solveur_minimal.py` is a small hand-written CP-SAT solver used only as a dev/demo/test
+  fixture (`enregistrer_solveur_reference.py`, a handful of tests needing a known-good real
+  solver) — never a system component, never imported by production code; the leading `_` marks it
+  as internal, not a standalone CLI script like its `scripts/` siblings. The former standalone
+  `solveur_reference/` module (permanent, outside the generate-once cycle, once the cascade's
+  pre-generator candidate) was removed once its only remaining role was exactly this — tests that
+  needed it now import `scripts._solveur_minimal` directly instead of a dedicated top-level
+  package, keeping the dependency direction test → dev-tooling, never the reverse — a scripts/
+  module importing from tests/ would have been the wrong way round.
 - **Étape 4 — single-shot generator** (`generation/`), built *after* Étape 5 in practice: one LLM
   call, no repair loop. `client_llm.py` picks provider via `PRISME_LLM_PROVIDER`/`_MODEL` (extra
   `.[llm]`, lazy import). `validation_statique.py` is an AST **allowlist** (only `ortools`, `dsl`,
@@ -99,7 +100,7 @@ actually runs and passes — see "Verified" notes below for two real bugs found 
 - **Étape 8 — API + ERP adapter** (`api/`, `adapters/erp_reference/`): `routes/ingestion.py` (→
   `input_validation/`, §6.7 guardrail), `routes/execution.py` (solver lookup by `client_id` +
   **exact** constraint-type-signature match — deliberate literal reading, not a bug:
-  `"precedence,compatibilite_machine_tache"` won't match an instance using only one),
+  `"precedence,compatibilite_ressource_tache"` won't match an instance using only one),
   `routes/planning.py` (operational JSON), `routes/audit.py` (source code, explicit request only,
   never mixed into the operational response). `api/etat.py` is in-memory demo wiring only.
   `api/dependencies.py`'s `obtenir_registre()` points at the real store — tests must override via
@@ -154,7 +155,6 @@ later without redesign, don't implement now. Guard against scope creep.
 | `dsl/` | T-R-C-O canonical model: typed `schema/`, payload `validation/`, `examples/` |
 | `generation/` | Single-shot LLM generator → CP-SAT code (`agents/`, `tentative_unique.py`); repair loop (`loop.py`, `failures/`) not built — Étape 6 skipped |
 | `validation_engine/` | Validation cascade + `stability_test.py` |
-| `solveur_reference/` | Hand-written CP-SAT solver, permanent, outside the generate-once cycle |
 | `solver_store/` | Persistent registry (`registry.py`) + frozen `artifacts/` |
 | `sandbox/` | Ephemeral disposable-container execution (`runner.py`, `container/`) |
 | `api/` | Routes: `ingestion`, `execution`, `planning`, `audit`, `executions/{id}/decision` (`validation.py`), `diagnostics`, `supervision` (dashboard read-only view). No dedicated alert type — a workshop disruption (breakdown, urgent order, delay...) is expressed by re-ingesting the instance with updated constraints, then re-calling `/execution/{instance_id}`; the exact process is client-specific, deliberately not hardcoded |
@@ -163,7 +163,7 @@ later without redesign, don't implement now. Guard against scope creep.
 | `dashboard/` | React/Vite (§2.3, Phase 10) — ingestion, human validation, live diagnostic — done |
 | `tests/` | `unit/`, `integration/`, `property_based/`, `generation_stability/` |
 | `docs/` | Architecture + DSL spec (next priority) + roadmap — not yet written |
-| `scripts/` | Dev env, synthetic-bench generation, CI tasks |
+| `scripts/` | Dev env, synthetic-bench generation, CI tasks, `_solveur_minimal.py` (dev/demo/test fixture) |
 
 ## Validation & testing philosophy (§6)
 
@@ -194,7 +194,7 @@ generate-test-repair loop → store + sandbox → API + ERP adapter → dashboar
 T-R-C-O DSL spec** is the declared next priority (§9); `docs/roadmap.md` doesn't exist yet.
 
 **Actual order deviates:** cascade (Étape 5) was built and made green *before* the generator
-(Étape 4) — it only needs a `Callable[[InstanceTRCO], Planning | None]`, and the reference solver
+(Étape 4) — it only needs a `Callable[[InstanceTRCO], Planning | None]`, and a hand-written solver
 stood in as a candidate; success rate against a live LLM is still unmeasured. **Étape 6 skipped at
 explicit direction** — no `generation/loop.py`/`failures/` yet. **Étape 8 built ahead of Étape 6**
 — `/execution` only needs *some* validated solver, supplied by `enregistrer_solveur_reference.py`.

@@ -12,9 +12,9 @@
       {"id": "M3", "nom": null}
     ],
     "contraintes": [
-      {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M1", "duree": 10},
-      {"type": "compatibilite_machine_tache", "tache": "T1", "ressource": "M2", "duree": 30},
-      {"type": "compatibilite_machine_tache", "tache": "T2", "ressource": "M3", "duree": 20}
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M2", "duree": 30},
+      {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "M3", "duree": 20}
     ],
     "objectifs": [
       {"type": "minimiser_makespan"}

@@ -24,7 +24,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from dsl.schema import (
-    CompatibiliteMachineTache,
+    CompatibiliteRessourceTache,
     Contrainte,
     InstanceTRCO,
     MinimiserMakespan,
@@ -88,7 +88,7 @@ def construire_instance_contention_partagee(
             # contrairement au niveau 1, où le choix de machine est absent.
             for indice_ressource, ressource in enumerate(ressources):
                 contraintes.append(
-                    CompatibiliteMachineTache(
+                    CompatibiliteRessourceTache(
                         tache=tache_id,
                         ressource=ressource.id,
                         duree=_duree(indice_job, indice_tache, indice_ressource),

@@ -20,7 +20,7 @@ from typing import Literal
 
 from ortools.sat.python import cp_model
 
-from dsl.schema import CompatibiliteMachineTache, InstanceTRCO, OperationPlanifiee, Planning, Precedence
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, OperationPlanifiee, Planning, Precedence
 
 
 def resoudre(instance: InstanceTRCO) -> Planning | None:

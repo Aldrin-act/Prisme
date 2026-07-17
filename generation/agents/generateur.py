@@ -9,9 +9,9 @@ formats de sortie coexistent :
   comme les 8 autres agents du pipeline.
 
 Le contrat de sortie attendu dans les deux cas — une fonction
-`resoudre(instance) -> Planning | None` — est identique à celui de
-`solveur_reference.resoudre`, pour que le code produit se branche
-directement dans `validation_engine.cascade.evaluer_cascade` sans adaptation.
+`resoudre(instance) -> Planning | None` (`Callable[[InstanceTRCO], Planning | None]`,
+§5.6, §6.2) — permet au code produit de se brancher directement dans
+`validation_engine.cascade.evaluer_cascade` sans adaptation.
 """
 
 from __future__ import annotations
