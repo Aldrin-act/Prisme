@@ -1,0 +1,907 @@
+{
+  "total": 60,
+  "succes": 60,
+  "taux_global": 100.0,
+  "resultats": [
+    {
+      "id": "csv_simple_1000",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "csv_simple_1001",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 2,
+        "nb_contraintes": 2
+      }
+    },
+    {
+      "id": "csv_simple_1002",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "csv_simple_1003",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "csv_simple_1004",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "csv_simple_1005",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "csv_simple_1006",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 4
+      }
+    },
+    {
+      "id": "csv_simple_1007",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 2,
+        "nb_contraintes": 2
+      }
+    },
+    {
+      "id": "csv_simple_1008",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "csv_simple_1009",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 3
+      }
+    },
+    {
+      "id": "csv_simple_1010",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 3
+      }
+    },
+    {
+      "id": "csv_simple_1011",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 4
+      }
+    },
+    {
+      "id": "csv_simple_1012",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 4
+      }
+    },
+    {
+      "id": "csv_simple_1013",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "csv_simple_1014",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 2,
+        "nb_contraintes": 2
+      }
+    },
+    {
+      "id": "json_erp_precedences_2000",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 6,
+        "nb_ressources": 6,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_erp_precedences_2001",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "json_erp_precedences_2002",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "json_erp_precedences_2003",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "json_erp_precedences_2004",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "json_erp_precedences_2005",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 6,
+        "nb_ressources": 6,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_erp_precedences_2006",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 6,
+        "nb_ressources": 6,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_erp_precedences_2007",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "json_erp_precedences_2008",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "json_erp_precedences_2009",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 9
+      }
+    },
+    {
+      "id": "json_erp_precedences_2010",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "json_erp_precedences_2011",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "json_erp_precedences_2012",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "json_erp_precedences_2013",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 6,
+        "nb_ressources": 6,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_erp_precedences_2014",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 5,
+        "nb_ressources": 5,
+        "nb_contraintes": 9
+      }
+    },
+    {
+      "id": "texte_libre_3000",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "texte_libre_3001",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "texte_libre_3002",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 2,
+        "nb_contraintes": 3
+      }
+    },
+    {
+      "id": "texte_libre_3003",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "texte_libre_3004",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "texte_libre_3005",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "texte_libre_3006",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "texte_libre_3007",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "texte_libre_3008",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "texte_libre_3009",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "texte_libre_3010",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "texte_libre_3011",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 2,
+        "nb_contraintes": 3
+      }
+    },
+    {
+      "id": "texte_libre_3012",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 5
+      }
+    },
+    {
+      "id": "texte_libre_3013",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "texte_libre_3014",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 2,
+        "nb_contraintes": 3
+      }
+    },
+    {
+      "id": "json_multi_ressources_4000",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 6,
+        "nb_contraintes": 8
+      }
+    },
+    {
+      "id": "json_multi_ressources_4001",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 4,
+        "nb_contraintes": 8
+      }
+    },
+    {
+      "id": "json_multi_ressources_4002",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 6,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_multi_ressources_4003",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 10
+      }
+    },
+    {
+      "id": "json_multi_ressources_4004",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 5,
+        "nb_contraintes": 9
+      }
+    },
+    {
+      "id": "json_multi_ressources_4005",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 10
+      }
+    },
+    {
+      "id": "json_multi_ressources_4006",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 12
+      }
+    },
+    {
+      "id": "json_multi_ressources_4007",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 5,
+        "nb_contraintes": 4
+      }
+    },
+    {
+      "id": "json_multi_ressources_4008",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 3,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_multi_ressources_4009",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 3,
+        "nb_ressources": 3,
+        "nb_contraintes": 7
+      }
+    },
+    {
+      "id": "json_multi_ressources_4010",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 4,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_multi_ressources_4011",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 6,
+        "nb_contraintes": 4
+      }
+    },
+    {
+      "id": "json_multi_ressources_4012",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 2,
+        "nb_ressources": 5,
+        "nb_contraintes": 4
+      }
+    },
+    {
+      "id": "json_multi_ressources_4013",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 3,
+        "nb_contraintes": 11
+      }
+    },
+    {
+      "id": "json_multi_ressources_4014",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "succes": true,
+      "erreur": null,
+      "instance_valide": true,
+      "details": {
+        "identique": true,
+        "differences": [],
+        "nb_taches": 4,
+        "nb_ressources": 6,
+        "nb_contraintes": 9
+      }
+    }
+  ]
+}

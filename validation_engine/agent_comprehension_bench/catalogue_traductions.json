@@ -1,0 +1,5566 @@
+{
+  "metadata": {
+    "total_exemples": 60,
+    "formats": [
+      "json_simple",
+      "texte_libre",
+      "json_erp",
+      "csv"
+    ],
+    "difficultes": [
+      "complexe",
+      "simple",
+      "moyen"
+    ]
+  },
+  "exemples": [
+    {
+      "id": "csv_simple_1000",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,2.8\nTask_2,Resource_B,0.8\nTask_3,Resource_C,1.7\nTask_4,Resource_D,2.1\nTask_5,Resource_E,2.4",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          },
+          {
+            "id": "Task_5",
+            "nom": "Task 5"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          },
+          {
+            "id": "Resource_E",
+            "nom": "Resource_E Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 168
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 48
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 102
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 126
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_5",
+            "ressource": "Resource_E",
+            "duree": 144
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1001",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,3.2\nTask_2,Resource_B,1.2",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 192
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 72
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1002",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,3.6\nTask_2,Resource_B,1.0\nTask_3,Resource_C,1.5\nTask_4,Resource_D,0.9\nTask_5,Resource_E,2.5",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          },
+          {
+            "id": "Task_5",
+            "nom": "Task 5"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          },
+          {
+            "id": "Resource_E",
+            "nom": "Resource_E Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 216
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 60
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 54
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_5",
+            "ressource": "Resource_E",
+            "duree": 150
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1003",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,2.5\nTask_2,Resource_B,1.3\nTask_3,Resource_C,2.1\nTask_4,Resource_D,2.4\nTask_5,Resource_E,1.9",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          },
+          {
+            "id": "Task_5",
+            "nom": "Task 5"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          },
+          {
+            "id": "Resource_E",
+            "nom": "Resource_E Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 78
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 126
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 144
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_5",
+            "ressource": "Resource_E",
+            "duree": 114
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1004",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,0.9\nTask_2,Resource_B,3.0\nTask_3,Resource_C,2.4\nTask_4,Resource_D,2.8\nTask_5,Resource_E,2.7",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          },
+          {
+            "id": "Task_5",
+            "nom": "Task 5"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          },
+          {
+            "id": "Resource_E",
+            "nom": "Resource_E Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 54
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 144
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 168
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_5",
+            "ressource": "Resource_E",
+            "duree": 162
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1005",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,3.3\nTask_2,Resource_B,1.9\nTask_3,Resource_C,1.9\nTask_4,Resource_D,3.8\nTask_5,Resource_E,2.7",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          },
+          {
+            "id": "Task_5",
+            "nom": "Task 5"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          },
+          {
+            "id": "Resource_E",
+            "nom": "Resource_E Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 198
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 228
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_5",
+            "ressource": "Resource_E",
+            "duree": 162
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1006",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,0.7\nTask_2,Resource_B,2.1\nTask_3,Resource_C,1.2\nTask_4,Resource_D,2.5",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 42
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 126
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 72
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 150
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1007",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,3.3\nTask_2,Resource_B,2.6",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 198
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 156
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1008",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,1.7\nTask_2,Resource_B,3.0\nTask_3,Resource_C,3.7\nTask_4,Resource_D,0.7\nTask_5,Resource_E,2.8",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          },
+          {
+            "id": "Task_5",
+            "nom": "Task 5"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          },
+          {
+            "id": "Resource_E",
+            "nom": "Resource_E Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 102
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 222
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 42
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_5",
+            "ressource": "Resource_E",
+            "duree": 168
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1009",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,0.5\nTask_2,Resource_B,4.0\nTask_3,Resource_C,3.1",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 30
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 240
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 186
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1010",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,2.4\nTask_2,Resource_B,1.9\nTask_3,Resource_C,1.9",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 144
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 114
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1011",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,1.4\nTask_2,Resource_B,1.9\nTask_3,Resource_C,2.8\nTask_4,Resource_D,1.9",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 84
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 168
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 114
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1012",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,1.1\nTask_2,Resource_B,1.9\nTask_3,Resource_C,2.6\nTask_4,Resource_D,1.7",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 66
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 156
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 102
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1013",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,3.2\nTask_2,Resource_B,2.9\nTask_3,Resource_C,3.0\nTask_4,Resource_D,3.4\nTask_5,Resource_E,2.9",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "Task_3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "Task_4",
+            "nom": "Task 4"
+          },
+          {
+            "id": "Task_5",
+            "nom": "Task 5"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          },
+          {
+            "id": "Resource_C",
+            "nom": "Resource_C Station"
+          },
+          {
+            "id": "Resource_D",
+            "nom": "Resource_D Station"
+          },
+          {
+            "id": "Resource_E",
+            "nom": "Resource_E Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 192
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 174
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_3",
+            "ressource": "Resource_C",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_4",
+            "ressource": "Resource_D",
+            "duree": 204
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_5",
+            "ressource": "Resource_E",
+            "duree": 174
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "csv_simple_1014",
+      "format_source": "csv",
+      "difficulte": "simple",
+      "caracteristiques": [
+        "une_ressource_par_tache",
+        "pas_de_precedence"
+      ],
+      "donnees_brutes": "Task,Resource,Duration_Hours\nTask_1,Resource_A,1.3\nTask_2,Resource_B,0.6",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "Task_1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "Task_2",
+            "nom": "Task 2"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "Resource_A",
+            "nom": "Resource_A Station"
+          },
+          {
+            "id": "Resource_B",
+            "nom": "Resource_B Station"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_1",
+            "ressource": "Resource_A",
+            "duree": 78
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "Task_2",
+            "ressource": "Resource_B",
+            "duree": 36
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2000",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 21,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 113,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 105,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 88,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1003\n    },\n    {\n      \"wo_id\": 1004,\n      \"operation\": \"Operation_E\",\n      \"estimated_time_min\": 32,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1004\n    },\n    {\n      \"wo_id\": 1005,\n      \"operation\": \"Operation_F\",\n      \"estimated_time_min\": 39,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1005\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    },\n    {\n      \"station_id\": \"WS_E\",\n      \"station_name\": \"Workstation E\"\n    },\n    {\n      \"station_id\": \"WS_F\",\n      \"station_name\": \"Workstation F\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1004",
+            "nom": "Operation_E",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1005",
+            "nom": "Operation_F",
+            "priorite": 3
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          },
+          {
+            "id": "WS_E",
+            "nom": "Workstation E"
+          },
+          {
+            "id": "WS_F",
+            "nom": "Workstation F"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1003",
+            "apres": "WO_1004"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1004",
+            "apres": "WO_1005"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 21
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 113
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 105
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 88
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1004",
+            "ressource": "WS_E",
+            "duree": 32
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1005",
+            "ressource": "WS_F",
+            "duree": 39
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2001",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 61,\n      \"priority\": 1\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 26,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 91,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1002\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 3
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 61
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 26
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 91
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2002",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 79,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 114,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 87,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1002\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 1
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 79
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 87
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2003",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 106,\n      \"priority\": 3\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 103,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 51,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1002\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 2
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 106
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 103
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 51
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2004",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 116,\n      \"priority\": 3\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 41,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 28,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1002\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 3
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 116
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 41
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 28
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2005",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 16,\n      \"priority\": 1\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 77,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 74,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 70,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1003\n    },\n    {\n      \"wo_id\": 1004,\n      \"operation\": \"Operation_E\",\n      \"estimated_time_min\": 45,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1004\n    },\n    {\n      \"wo_id\": 1005,\n      \"operation\": \"Operation_F\",\n      \"estimated_time_min\": 120,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1005\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    },\n    {\n      \"station_id\": \"WS_E\",\n      \"station_name\": \"Workstation E\"\n    },\n    {\n      \"station_id\": \"WS_F\",\n      \"station_name\": \"Workstation F\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1004",
+            "nom": "Operation_E",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1005",
+            "nom": "Operation_F",
+            "priorite": 2
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          },
+          {
+            "id": "WS_E",
+            "nom": "Workstation E"
+          },
+          {
+            "id": "WS_F",
+            "nom": "Workstation F"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1003",
+            "apres": "WO_1004"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1004",
+            "apres": "WO_1005"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 16
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 77
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 74
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 70
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1004",
+            "ressource": "WS_E",
+            "duree": 45
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1005",
+            "ressource": "WS_F",
+            "duree": 120
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2006",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 24,\n      \"priority\": 3\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 21,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 98,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 98,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1003\n    },\n    {\n      \"wo_id\": 1004,\n      \"operation\": \"Operation_E\",\n      \"estimated_time_min\": 97,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1004\n    },\n    {\n      \"wo_id\": 1005,\n      \"operation\": \"Operation_F\",\n      \"estimated_time_min\": 42,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1005\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    },\n    {\n      \"station_id\": \"WS_E\",\n      \"station_name\": \"Workstation E\"\n    },\n    {\n      \"station_id\": \"WS_F\",\n      \"station_name\": \"Workstation F\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1004",
+            "nom": "Operation_E",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1005",
+            "nom": "Operation_F",
+            "priorite": 2
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          },
+          {
+            "id": "WS_E",
+            "nom": "Workstation E"
+          },
+          {
+            "id": "WS_F",
+            "nom": "Workstation F"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1003",
+            "apres": "WO_1004"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1004",
+            "apres": "WO_1005"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 24
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 21
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 98
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 98
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1004",
+            "ressource": "WS_E",
+            "duree": 97
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1005",
+            "ressource": "WS_F",
+            "duree": 42
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2007",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 114,\n      \"priority\": 3\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 111,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 68,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 104,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1003\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 2
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 111
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 68
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 104
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2008",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 84,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 29,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 112,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 65,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1003\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 2
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 84
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 29
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 112
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 65
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2009",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 95,\n      \"priority\": 3\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 94,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 67,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 106,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1003\n    },\n    {\n      \"wo_id\": 1004,\n      \"operation\": \"Operation_E\",\n      \"estimated_time_min\": 58,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1004\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    },\n    {\n      \"station_id\": \"WS_E\",\n      \"station_name\": \"Workstation E\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 1
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1004",
+            "nom": "Operation_E",
+            "priorite": 1
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          },
+          {
+            "id": "WS_E",
+            "nom": "Workstation E"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1003",
+            "apres": "WO_1004"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 95
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 94
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 67
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 106
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1004",
+            "ressource": "WS_E",
+            "duree": 58
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2010",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 77,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 44,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 84,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 72,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1003\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 2
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 77
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 44
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 84
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 72
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2011",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 118,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 36,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 22,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 61,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1003\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 1
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 118
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 36
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 22
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 61
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2012",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 75,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 39,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 89,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1002\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 1
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 75
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 39
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 89
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2013",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 21,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 118,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 111,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 88,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1003\n    },\n    {\n      \"wo_id\": 1004,\n      \"operation\": \"Operation_E\",\n      \"estimated_time_min\": 72,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1004\n    },\n    {\n      \"wo_id\": 1005,\n      \"operation\": \"Operation_F\",\n      \"estimated_time_min\": 113,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1005\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    },\n    {\n      \"station_id\": \"WS_E\",\n      \"station_name\": \"Workstation E\"\n    },\n    {\n      \"station_id\": \"WS_F\",\n      \"station_name\": \"Workstation F\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1004",
+            "nom": "Operation_E",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1005",
+            "nom": "Operation_F",
+            "priorite": 3
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          },
+          {
+            "id": "WS_E",
+            "nom": "Workstation E"
+          },
+          {
+            "id": "WS_F",
+            "nom": "Workstation F"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1003",
+            "apres": "WO_1004"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1004",
+            "apres": "WO_1005"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 21
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 118
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 111
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 88
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1004",
+            "ressource": "WS_E",
+            "duree": 72
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1005",
+            "ressource": "WS_F",
+            "duree": 113
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_erp_precedences_2014",
+      "format_source": "json_erp",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "precedences_chaine",
+        "priorities",
+        "une_ressource_par_tache"
+      ],
+      "donnees_brutes": "{\n  \"work_orders\": [\n    {\n      \"wo_id\": 1000,\n      \"operation\": \"Operation_A\",\n      \"estimated_time_min\": 89,\n      \"priority\": 2\n    },\n    {\n      \"wo_id\": 1001,\n      \"operation\": \"Operation_B\",\n      \"estimated_time_min\": 39,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1001\n    },\n    {\n      \"wo_id\": 1002,\n      \"operation\": \"Operation_C\",\n      \"estimated_time_min\": 41,\n      \"priority\": 2,\n      \"must_finish_before_wo\": 1002\n    },\n    {\n      \"wo_id\": 1003,\n      \"operation\": \"Operation_D\",\n      \"estimated_time_min\": 70,\n      \"priority\": 3,\n      \"must_finish_before_wo\": 1003\n    },\n    {\n      \"wo_id\": 1004,\n      \"operation\": \"Operation_E\",\n      \"estimated_time_min\": 78,\n      \"priority\": 1,\n      \"must_finish_before_wo\": 1004\n    }\n  ],\n  \"workstations\": [\n    {\n      \"station_id\": \"WS_A\",\n      \"station_name\": \"Workstation A\"\n    },\n    {\n      \"station_id\": \"WS_B\",\n      \"station_name\": \"Workstation B\"\n    },\n    {\n      \"station_id\": \"WS_C\",\n      \"station_name\": \"Workstation C\"\n    },\n    {\n      \"station_id\": \"WS_D\",\n      \"station_name\": \"Workstation D\"\n    },\n    {\n      \"station_id\": \"WS_E\",\n      \"station_name\": \"Workstation E\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "WO_1000",
+            "nom": "Operation_A",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1001",
+            "nom": "Operation_B",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1002",
+            "nom": "Operation_C",
+            "priorite": 2
+          },
+          {
+            "id": "WO_1003",
+            "nom": "Operation_D",
+            "priorite": 3
+          },
+          {
+            "id": "WO_1004",
+            "nom": "Operation_E",
+            "priorite": 1
+          }
+        ],
+        "ressources": [
+          {
+            "id": "WS_A",
+            "nom": "Workstation A"
+          },
+          {
+            "id": "WS_B",
+            "nom": "Workstation B"
+          },
+          {
+            "id": "WS_C",
+            "nom": "Workstation C"
+          },
+          {
+            "id": "WS_D",
+            "nom": "Workstation D"
+          },
+          {
+            "id": "WS_E",
+            "nom": "Workstation E"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "precedence",
+            "avant": "WO_1000",
+            "apres": "WO_1001"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1001",
+            "apres": "WO_1002"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1002",
+            "apres": "WO_1003"
+          },
+          {
+            "type": "precedence",
+            "avant": "WO_1003",
+            "apres": "WO_1004"
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1000",
+            "ressource": "WS_A",
+            "duree": 89
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1001",
+            "ressource": "WS_B",
+            "duree": 39
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1002",
+            "ressource": "WS_C",
+            "duree": 41
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1003",
+            "ressource": "WS_D",
+            "duree": 70
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "WO_1004",
+            "ressource": "WS_E",
+            "duree": 78
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3000",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 4 opérations à effectuer :\n- Soudure (90 minutes) sur poste de soudure\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n- Peinture (180 minutes) sur cabine de peinture\n\nIMPORTANT : Assemblage ne peut commencer qu'après Soudure.\nDécoupe doit être faite après Assemblage.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_ASSEMBLAGE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_PEINTURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3001",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 3 opérations à effectuer :\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n- Soudure (90 minutes) sur poste de soudure\n\nIMPORTANT : Découpe ne peut commencer qu'après Assemblage.\nSoudure doit être faite après Découpe.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_SOUDURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3002",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 2 opérations à effectuer :\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n\nIMPORTANT : Découpe ne peut commencer qu'après Assemblage.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3003",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 4 opérations à effectuer :\n- Assemblage (150 minutes) sur table d'assemblage\n- Peinture (180 minutes) sur cabine de peinture\n- Découpe (120 minutes) sur laser\n- Soudure (90 minutes) sur poste de soudure\n\nIMPORTANT : Peinture ne peut commencer qu'après Assemblage.\nDécoupe doit être faite après Peinture.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_PEINTURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_PEINTURE",
+            "apres": "T_DÉCOUPE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_SOUDURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3004",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 3 opérations à effectuer :\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n- Peinture (180 minutes) sur cabine de peinture\n\nIMPORTANT : Découpe ne peut commencer qu'après Assemblage.\nPeinture doit être faite après Découpe.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_PEINTURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3005",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 4 opérations à effectuer :\n- Découpe (120 minutes) sur laser\n- Soudure (90 minutes) sur poste de soudure\n- Peinture (180 minutes) sur cabine de peinture\n- Assemblage (150 minutes) sur table d'assemblage\n\nIMPORTANT : Soudure ne peut commencer qu'après Découpe.\nPeinture doit être faite après Soudure.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          },
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          },
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_SOUDURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_PEINTURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_PEINTURE",
+            "apres": "T_ASSEMBLAGE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3006",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 4 opérations à effectuer :\n- Découpe (120 minutes) sur laser\n- Peinture (180 minutes) sur cabine de peinture\n- Soudure (90 minutes) sur poste de soudure\n- Assemblage (150 minutes) sur table d'assemblage\n\nIMPORTANT : Peinture ne peut commencer qu'après Découpe.\nSoudure doit être faite après Peinture.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          },
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          },
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_PEINTURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_PEINTURE",
+            "apres": "T_SOUDURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_ASSEMBLAGE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3007",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 4 opérations à effectuer :\n- Peinture (180 minutes) sur cabine de peinture\n- Soudure (90 minutes) sur poste de soudure\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n\nIMPORTANT : Soudure ne peut commencer qu'après Peinture.\nAssemblage doit être faite après Soudure.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          },
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          },
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "precedence",
+            "avant": "T_PEINTURE",
+            "apres": "T_SOUDURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_ASSEMBLAGE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3008",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 3 opérations à effectuer :\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n- Peinture (180 minutes) sur cabine de peinture\n\nIMPORTANT : Découpe ne peut commencer qu'après Assemblage.\nPeinture doit être faite après Découpe.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_PEINTURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3009",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 3 opérations à effectuer :\n- Peinture (180 minutes) sur cabine de peinture\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n\nIMPORTANT : Assemblage ne peut commencer qu'après Peinture.\nDécoupe doit être faite après Assemblage.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          },
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          },
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "precedence",
+            "avant": "T_PEINTURE",
+            "apres": "T_ASSEMBLAGE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3010",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 4 opérations à effectuer :\n- Peinture (180 minutes) sur cabine de peinture\n- Assemblage (150 minutes) sur table d'assemblage\n- Soudure (90 minutes) sur poste de soudure\n- Découpe (120 minutes) sur laser\n\nIMPORTANT : Assemblage ne peut commencer qu'après Peinture.\nSoudure doit être faite après Assemblage.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          },
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          },
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "precedence",
+            "avant": "T_PEINTURE",
+            "apres": "T_ASSEMBLAGE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_SOUDURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_DÉCOUPE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3011",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 2 opérations à effectuer :\n- Soudure (90 minutes) sur poste de soudure\n- Peinture (180 minutes) sur cabine de peinture\n\nIMPORTANT : Peinture ne peut commencer qu'après Soudure.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_PEINTURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3012",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 3 opérations à effectuer :\n- Soudure (90 minutes) sur poste de soudure\n- Assemblage (150 minutes) sur table d'assemblage\n- Découpe (120 minutes) sur laser\n\nIMPORTANT : Assemblage ne peut commencer qu'après Soudure.\nDécoupe doit être faite après Assemblage.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_ASSEMBLAGE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_DÉCOUPE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3013",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 4 opérations à effectuer :\n- Assemblage (150 minutes) sur table d'assemblage\n- Peinture (180 minutes) sur cabine de peinture\n- Découpe (120 minutes) sur laser\n- Soudure (90 minutes) sur poste de soudure\n\nIMPORTANT : Peinture ne peut commencer qu'après Assemblage.\nDécoupe doit être faite après Peinture.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_ASSEMBLAGE",
+            "nom": "Assemblage"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          },
+          {
+            "id": "T_DÉCOUPE",
+            "nom": "Découpe"
+          },
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_ASS",
+            "nom": "Table d'assemblage"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          },
+          {
+            "id": "R_DÉC",
+            "nom": "Laser"
+          },
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_ASSEMBLAGE",
+            "ressource": "R_ASS",
+            "duree": 150
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_DÉCOUPE",
+            "ressource": "R_DÉC",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "precedence",
+            "avant": "T_ASSEMBLAGE",
+            "apres": "T_PEINTURE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_PEINTURE",
+            "apres": "T_DÉCOUPE"
+          },
+          {
+            "type": "precedence",
+            "avant": "T_DÉCOUPE",
+            "apres": "T_SOUDURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "texte_libre_3014",
+      "format_source": "texte_libre",
+      "difficulte": "moyen",
+      "caracteristiques": [
+        "langage_naturel",
+        "precedences_implicites"
+      ],
+      "donnees_brutes": "Voici les 2 opérations à effectuer :\n- Soudure (90 minutes) sur poste de soudure\n- Peinture (180 minutes) sur cabine de peinture\n\nIMPORTANT : Peinture ne peut commencer qu'après Soudure.",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T_SOUDURE",
+            "nom": "Soudure"
+          },
+          {
+            "id": "T_PEINTURE",
+            "nom": "Peinture"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R_SOU",
+            "nom": "Poste de soudure"
+          },
+          {
+            "id": "R_PEI",
+            "nom": "Cabine de peinture"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_SOUDURE",
+            "ressource": "R_SOU",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T_PEINTURE",
+            "ressource": "R_PEI",
+            "duree": 180
+          },
+          {
+            "type": "precedence",
+            "avant": "T_SOUDURE",
+            "apres": "T_PEINTURE"
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4000",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R6\",\n          \"duration_min\": 70\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 79\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 115\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 73\n        },\n        {\n          \"resource_id\": \"R6\",\n          \"duration_min\": 34\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 108\n        },\n        {\n          \"resource_id\": \"R6\",\n          \"duration_min\": 115\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 95\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    },\n    {\n      \"id\": \"R5\",\n      \"nom\": \"Resource 5\"\n    },\n    {\n      \"id\": \"R6\",\n      \"nom\": \"Resource 6\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          },
+          {
+            "id": "R5",
+            "nom": "Resource 5"
+          },
+          {
+            "id": "R6",
+            "nom": "Resource 6"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R6",
+            "duree": 70
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 79
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R4",
+            "duree": 115
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 73
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R6",
+            "duree": 34
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 108
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R6",
+            "duree": 115
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R4",
+            "duree": 95
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4001",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 119\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 90\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 114\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 87\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 81\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 92\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 41\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 40\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 119
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R4",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R3",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 87
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R4",
+            "duree": 81
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R2",
+            "duree": 92
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 41
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R3",
+            "duree": 40
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4002",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 105\n        },\n        {\n          \"resource_id\": \"R6\",\n          \"duration_min\": 35\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 38\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R5\",\n          \"duration_min\": 98\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 67\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 49\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R6\",\n          \"duration_min\": 113\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 80\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 100\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 41\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 86\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    },\n    {\n      \"id\": \"R5\",\n      \"nom\": \"Resource 5\"\n    },\n    {\n      \"id\": \"R6\",\n      \"nom\": \"Resource 6\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          },
+          {
+            "id": "R5",
+            "nom": "Resource 5"
+          },
+          {
+            "id": "R6",
+            "nom": "Resource 6"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 105
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R6",
+            "duree": 35
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 38
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R5",
+            "duree": 98
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R4",
+            "duree": 67
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R1",
+            "duree": 49
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R6",
+            "duree": 113
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 80
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R4",
+            "duree": 100
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R3",
+            "duree": 41
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R1",
+            "duree": 86
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4003",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 42\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 112\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 75\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 39\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 67\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 46\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 66\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 37\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 100\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 44\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 42
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 112
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R4",
+            "duree": 75
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R1",
+            "duree": 39
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 67
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R4",
+            "duree": 46
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 66
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R1",
+            "duree": 37
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R3",
+            "duree": 100
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R2",
+            "duree": 44
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4004",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R5\",\n          \"duration_min\": 33\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 87\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 30\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R5\",\n          \"duration_min\": 81\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 119\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 57\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 112\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 118\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 100\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    },\n    {\n      \"id\": \"R5\",\n      \"nom\": \"Resource 5\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          },
+          {
+            "id": "R5",
+            "nom": "Resource 5"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R5",
+            "duree": 33
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 87
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 30
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R5",
+            "duree": 81
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 119
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R1",
+            "duree": 57
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R2",
+            "duree": 112
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 118
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R4",
+            "duree": 100
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4005",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 31\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 103\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 75\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 48\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 95\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 31\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 62\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 45\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 30\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 104\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 31
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R4",
+            "duree": 103
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 75
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 48
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 95
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R3",
+            "duree": 31
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R2",
+            "duree": 62
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R3",
+            "duree": 45
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R4",
+            "duree": 30
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R2",
+            "duree": 104
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4006",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 115\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 107\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 33\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 115\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 87\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 117\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 53\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 56\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 118\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 116\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 48\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 36\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 115
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R3",
+            "duree": 107
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 33
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 115
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R4",
+            "duree": 87
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 117
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R3",
+            "duree": 53
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R4",
+            "duree": 56
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 118
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R1",
+            "duree": 116
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R3",
+            "duree": 48
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R2",
+            "duree": 36
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4007",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 37\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 83\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 89\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 106\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    },\n    {\n      \"id\": \"R5\",\n      \"nom\": \"Resource 5\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          },
+          {
+            "id": "R5",
+            "nom": "Resource 5"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 37
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R4",
+            "duree": 83
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 89
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R4",
+            "duree": 106
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4008",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 115\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 88\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 84\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 103\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 52\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 80\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 59\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 117\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 78\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 89\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 34\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 115
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 88
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R3",
+            "duree": 84
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 103
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R1",
+            "duree": 52
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 80
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R3",
+            "duree": 59
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R2",
+            "duree": 117
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 78
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R1",
+            "duree": 89
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R2",
+            "duree": 34
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4009",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 104\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 85\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 47\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 74\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 47\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 82\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 90\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 104
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 85
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R1",
+            "duree": 47
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 74
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 47
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R2",
+            "duree": 82
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 90
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4010",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 85\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 79\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 51\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 106\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 117\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 77\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 112\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 50\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 118\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 55\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 117\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R3",
+            "duree": 85
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R4",
+            "duree": 79
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 51
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 106
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 117
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R4",
+            "duree": 77
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R3",
+            "duree": 112
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R4",
+            "duree": 50
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 118
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R4",
+            "duree": 55
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R1",
+            "duree": 117
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4011",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 110\n        },\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 55\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 105\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 118\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    },\n    {\n      \"id\": \"R5\",\n      \"nom\": \"Resource 5\"\n    },\n    {\n      \"id\": \"R6\",\n      \"nom\": \"Resource 6\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          },
+          {
+            "id": "R5",
+            "nom": "Resource 5"
+          },
+          {
+            "id": "R6",
+            "nom": "Resource 6"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 110
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R4",
+            "duree": 55
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 105
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 118
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4012",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 116\n        },\n        {\n          \"resource_id\": \"R5\",\n          \"duration_min\": 39\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R5\",\n          \"duration_min\": 53\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 101\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    },\n    {\n      \"id\": \"R5\",\n      \"nom\": \"Resource 5\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          },
+          {
+            "id": "R5",
+            "nom": "Resource 5"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 116
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R5",
+            "duree": 39
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R5",
+            "duree": 53
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 101
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4013",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 88\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 116\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 111\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 76\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 94\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 120\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 90\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 84\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 58\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 80\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 80\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 88
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R3",
+            "duree": 116
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R1",
+            "duree": 111
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 76
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R1",
+            "duree": 94
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 120
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R1",
+            "duree": 90
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R2",
+            "duree": 84
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R2",
+            "duree": 58
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R1",
+            "duree": 80
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R3",
+            "duree": 80
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "json_multi_ressources_4014",
+      "format_source": "json_simple",
+      "difficulte": "complexe",
+      "caracteristiques": [
+        "multi_ressources",
+        "fjsp_flexible"
+      ],
+      "donnees_brutes": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"T1\",\n      \"task_name\": \"Task 1\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R6\",\n          \"duration_min\": 78\n        },\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 37\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T2\",\n      \"task_name\": \"Task 2\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R2\",\n          \"duration_min\": 94\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 33\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T3\",\n      \"task_name\": \"Task 3\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 118\n        },\n        {\n          \"resource_id\": \"R5\",\n          \"duration_min\": 114\n        }\n      ]\n    },\n    {\n      \"task_id\": \"T4\",\n      \"task_name\": \"Task 4\",\n      \"compatible_resources\": [\n        {\n          \"resource_id\": \"R4\",\n          \"duration_min\": 40\n        },\n        {\n          \"resource_id\": \"R3\",\n          \"duration_min\": 46\n        },\n        {\n          \"resource_id\": \"R1\",\n          \"duration_min\": 48\n        }\n      ]\n    }\n  ],\n  \"resources\": [\n    {\n      \"id\": \"R1\",\n      \"nom\": \"Resource 1\"\n    },\n    {\n      \"id\": \"R2\",\n      \"nom\": \"Resource 2\"\n    },\n    {\n      \"id\": \"R3\",\n      \"nom\": \"Resource 3\"\n    },\n    {\n      \"id\": \"R4\",\n      \"nom\": \"Resource 4\"\n    },\n    {\n      \"id\": \"R5\",\n      \"nom\": \"Resource 5\"\n    },\n    {\n      \"id\": \"R6\",\n      \"nom\": \"Resource 6\"\n    }\n  ]\n}",
+      "instance_trco_attendue": {
+        "taches": [
+          {
+            "id": "T1",
+            "nom": "Task 1"
+          },
+          {
+            "id": "T2",
+            "nom": "Task 2"
+          },
+          {
+            "id": "T3",
+            "nom": "Task 3"
+          },
+          {
+            "id": "T4",
+            "nom": "Task 4"
+          }
+        ],
+        "ressources": [
+          {
+            "id": "R1",
+            "nom": "Resource 1"
+          },
+          {
+            "id": "R2",
+            "nom": "Resource 2"
+          },
+          {
+            "id": "R3",
+            "nom": "Resource 3"
+          },
+          {
+            "id": "R4",
+            "nom": "Resource 4"
+          },
+          {
+            "id": "R5",
+            "nom": "Resource 5"
+          },
+          {
+            "id": "R6",
+            "nom": "Resource 6"
+          }
+        ],
+        "contraintes": [
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R6",
+            "duree": 78
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T1",
+            "ressource": "R2",
+            "duree": 37
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R2",
+            "duree": 94
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T2",
+            "ressource": "R3",
+            "duree": 33
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R3",
+            "duree": 118
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T3",
+            "ressource": "R5",
+            "duree": 114
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R4",
+            "duree": 40
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R3",
+            "duree": 46
+          },
+          {
+            "type": "compatibilite_ressource_tache",
+            "tache": "T4",
+            "ressource": "R1",
+            "duree": 48
+          }
+        ],
+        "objectifs": [
+          {
+            "type": "minimiser_makespan"
+          }
+        ]
+      }
+    }
+  ]
+}

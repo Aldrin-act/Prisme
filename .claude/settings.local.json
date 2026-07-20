@@ -44,7 +44,11 @@
       "PowerShell(python -m pytest tests/unit/test_dsl_schema.py -v --tb=short 2>&1)",
       "PowerShell(python -m scripts.migrer_nomenclature --dry-run --silencieux 2>&1)",
       "PowerShell(python -m ruff check . 2>&1)",
-      "PowerShell(Get-Command ruff -ErrorAction SilentlyContinue)"
+      "PowerShell(Get-Command ruff -ErrorAction SilentlyContinue)",
+      "PowerShell(python -m scripts.demo_agent_comprehension 2>&1)",
+      "PowerShell(python C:\\\\Users\\\\ASUS\\\\Desktop\\\\PFE\\\\Prisme\\\\Prisme\\\\scripts\\\\demo_agent_simple.py)",
+      "PowerShell(python C:\\\\Users\\\\ASUS\\\\Desktop\\\\PFE\\\\Prisme\\\\Prisme\\\\scripts\\\\generer_jeu_donnees_comprehension.py)",
+      "PowerShell(python C:\\\\Users\\\\ASUS\\\\Desktop\\\\PFE\\\\Prisme\\\\Prisme\\\\scripts\\\\tester_agent_comprehension.py)"
     ],
     "additionalDirectories": [
       "/home/vboxuser/Projet_Prisme"
