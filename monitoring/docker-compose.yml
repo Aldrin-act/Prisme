@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Prometheus - Collecte des métriques
   prometheus:
