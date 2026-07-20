@@ -1,19 +1,17 @@
 from __future__ import annotations
 from ortools.sat.python import cp_model
 from dsl.schema import (
-    InstanceTRCO, Planning, OperationPlanifiee, Tache, Ressource,
-    Contrainte, Precedence, CompatibiliteRessourceTache, Echeance,
-    CompetenceRequise
+    InstanceTRCO, Planning, OperationPlanifiee, Tache, Ressource, Contrainte,
+    Precedence, CompatibiliteRessourceTache, Echeance, CompetenceRequise
 )
 from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple, Set
+from typing import Dict, List, Optional, Tuple, Any
 
 
 def resoudre(instance: InstanceTRCO) -> Optional[Planning]:
     """Résout le FJSP pour une instance TRCO en minimisant le makespan."""
-    model = cp_model.CpModel()
     
     # Calcul de l'horizon maximal conservatif
     horizon_max = sum(
@@ -22,148 +20,173 @@ def resoudre(instance: InstanceTRCO) -> Optional[Planning]:
         for tache in instance.taches
     )
     
+    # Création du modèle CP-SAT
+    modele = cp_model.CpModel()
+    
     # Création des variables
-    variables = _creer_variables(model, instance, horizon_max)
+    variables = _creer_variables(modele, instance, horizon_max)
     
     # Ajout des contraintes
-    _ajouter_contraintes(model, instance, variables)
+    _ajouter_contraintes(modele, variables, instance)
     
     # Définition de l'objectif
-    model.Minimize(variables['makespan'])
+    modele.Minimize(variables['makespan'])
     
     # Résolution
-    solver = cp_model.CpSolver()
-    status = solver.Solve(model)
+    solveur = cp_model.CpSolver()
+    statut = solveur.Solve(modele)
     
     # Extraction de la solution
-    if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-        return _extraire_solution(solver, instance, variables)
+    if statut in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return _extraire_solution(solveur, variables, instance)
     else:
         return None
 
 
 def _creer_variables(
-    model: cp_model.CpModel,
+    modele: cp_model.CpModel,
     instance: InstanceTRCO,
     horizon_max: int
-) -> Dict[str, Dict | cp_model.IntVar]:
+) -> Dict[str, Any]:
     """Crée toutes les variables du modèle CP-SAT."""
+    
     # Dictionnaires pour stocker les variables
-    interval_vars = {}
-    start_vars = {}
-    end_vars = {}
-    resource_vars = {}
+    intervals_per_operation = {}
+    presence_literals = {}
+    start_end_per_task = {}
     
-    # Indexation des tâches et ressources pour un accès rapide
-    tache_to_idx = {tache: idx for idx, tache in enumerate(instance.taches)}
-    ressource_to_idx = {ressource: idx for idx, ressource in enumerate(instance.ressources)}
-    
-    # Création des variables de début et de fin pour chaque tâche
+    # Création des variables de début et fin pour chaque tâche
     for tache in instance.taches:
-        start_vars[tache] = model.NewIntVar(0, horizon_max, f'start_{tache.id}')
-        end_vars[tache] = model.NewIntVar(0, horizon_max, f'end_{tache.id}')
+        start_task = modele.NewIntVar(0, horizon_max, f'start_{tache.id}')
+        end_task = modele.NewIntVar(0, horizon_max, f'end_{tache.id}')
+        start_end_per_task[tache] = (start_task, end_task)
     
-    # Création des variables d'intervalle et de ressource pour chaque compatibilité
+    # Création des intervalles optionnels et littéraux de présence
     for crt in instance.compatibilites_ressource_tache:
         tache = crt.tache
         ressource = crt.ressource
         duree = crt.duree
         
-        # Variable d'intervalle
-        interval_var = model.NewIntervalVar(
-            start_vars[tache], 
-            duree, 
-            end_vars[tache], 
-            f'interval_{tache.id}_{ressource.id}'
+        # Variable intervalle optionnelle
+        interval = modele.NewOptionalIntervalVar(
+            start=modele.NewIntVar(0, horizon_max, f'start_{tache.id}_{ressource.id}'),
+            size=duree,
+            end=modele.NewIntVar(0, horizon_max, f'end_{tache.id}_{ressource.id}'),
+            is_present=modele.NewBoolVar(f'presence_{tache.id}_{ressource.id}'),
+            name=f'interval_{tache.id}_{ressource.id}'
         )
-        interval_vars[(tache, ressource)] = interval_var
         
-        # Variable de ressource (booléenne)
-        resource_var = model.NewBoolVar(f'resource_{tache.id}_{ressource.id}')
-        resource_vars[(tache, ressource)] = resource_var
-        
-        # Lier l'intervalle à la variable de ressource
-        model.Add(interval_var == resource_var)
+        intervals_per_operation[(tache, ressource)] = interval
+        presence_literals[(tache, ressource)] = interval.IsPresent()
     
     # Variable makespan
-    makespan = model.NewIntVar(0, horizon_max, 'makespan')
+    makespan = modele.NewIntVar(0, horizon_max, 'makespan')
     
     return {
-        'interval_vars': interval_vars,
-        'start_vars': start_vars,
-        'end_vars': end_vars,
-        'resource_vars': resource_vars,
+        'intervals_per_operation': intervals_per_operation,
+        'presence_literals': presence_literals,
+        'start_end_per_task': start_end_per_task,
         'makespan': makespan
     }
 
 
 def _ajouter_contraintes(
-    model: cp_model.CpModel,
-    instance: InstanceTRCO,
-    variables: Dict[str, Dict | cp_model.IntVar]
+    modele: cp_model.CpModel,
+    variables: Dict[str, Any],
+    instance: InstanceTRCO
 ) -> None:
     """Ajoute toutes les contraintes au modèle CP-SAT."""
-    start_vars = variables['start_vars']
-    end_vars = variables['end_vars']
-    resource_vars = variables['resource_vars']
-    interval_vars = variables['interval_vars']
+    
+    intervals_per_operation = variables['intervals_per_operation']
+    presence_literals = variables['presence_literals']
+    start_end_per_task = variables['start_end_per_task']
     makespan = variables['makespan']
     
-    # Contraintes d'assignation : chaque tâche est assignée à exactement une ressource compatible
+    # Contrainte : une seule ressource par tâche
     for tache in instance.taches:
-        compatible_resources = [
-            resource_vars[(tache, crt.ressource)] 
-            for crt in instance.compatibilites_ressource_tache 
+        literals = [
+            presence_literals[(tache, crt.ressource)]
+            for crt in instance.compatibilites_ressource_tache
             if crt.tache == tache
         ]
-        model.AddExactlyOne(compatible_resources)
+        modele.AddExactlyOne(literals)
     
-    # Contraintes de précédence
+    # Contrainte : liaison entre début/fin de tâche et intervalles optionnels
+    for crt in instance.compatibilites_ressource_tache:
+        tache = crt.tache
+        ressource = crt.ressource
+        interval = intervals_per_operation[(tache, ressource)]
+        presence_literal = presence_literals[(tache, ressource)]
+        start_task, end_task = start_end_per_task[tache]
+        
+        # Si l'intervalle est présent, son début/fin doit correspondre à celui de la tâche
+        modele.Add(start_task == interval.Start()).OnlyEnforceIf(presence_literal)
+        modele.Add(end_task == interval.End()).OnlyEnforceIf(presence_literal)
+    
+    # Contrainte : disjonction des ressources
+    ressources_intervals = defaultdict(list)
+    for (tache, ressource), interval in intervals_per_operation.items():
+        ressources_intervals[ressource].append(interval)
+    
+    for ressource, intervals in ressources_intervals.items():
+        modele.AddNoOverlap(intervals)
+    
+    # Contrainte : précédence entre tâches
     for contrainte in instance.contraintes:
         if isinstance(contrainte, Precedence):
-            model.Add(end_vars[contrainte.tache_predecesseur] <= start_vars[contrainte.tache_successeur])
+            tache_precedente = contrainte.tache_precedente
+            tache_suivante = contrainte.tache_suivante
+            start_suivante, _ = start_end_per_task[tache_suivante]
+            _, end_precedente = start_end_per_task[tache_precedente]
+            modele.Add(end_precedente <= start_suivante)
     
-    # Contraintes de disjonction de ressource
-    ressource_to_intervals = defaultdict(list)
-    for (tache, ressource), interval_var in interval_vars.items():
-        ressource_to_intervals[ressource].append(interval_var)
-    
-    for ressource, intervals in ressource_to_intervals.items():
-        model.AddNoOverlap(intervals)
-    
-    # Contraintes d'échéance (si présentes)
+    # Contrainte : échéances (si présentes)
     for contrainte in instance.contraintes:
         if isinstance(contrainte, Echeance):
-            model.Add(end_vars[contrainte.tache] <= contrainte.echeance)
+            tache = contrainte.tache
+            _, end_task = start_end_per_task[tache]
+            modele.Add(end_task <= contrainte.echeance)
     
     # Définition du makespan
-    model.AddMaxEquality(makespan, list(end_vars.values()))
+    end_tasks = [end_task for _, end_task in start_end_per_task.values()]
+    modele.AddMaxEquality(makespan, end_tasks)
 
 
 def _extraire_solution(
-    solver: cp_model.CpSolver,
-    instance: InstanceTRCO,
-    variables: Dict[str, Dict | cp_model.IntVar]
-) -> Planning:
+    solveur: cp_model.CpSolver,
+    variables: Dict[str, Any],
+    instance: InstanceTRCO
+) -> Optional[Planning]:
     """Extrait la solution du solveur et construit l'objet Planning."""
-    start_vars = variables['start_vars']
-    resource_vars = variables['resource_vars']
+    
+    presence_literals = variables['presence_literals']
+    start_end_per_task = variables['start_end_per_task']
     
     operations_planifiees = []
     
     for tache in instance.taches:
-        # Trouver la ressource assignée
+        start_task, end_task = start_end_per_task[tache]
+        start = solveur.Value(start_task)
+        
+        # Trouver la ressource sélectionnée pour cette tâche
+        ressource_selectionnee = None
         for crt in instance.compatibilites_ressource_tache:
             if crt.tache == tache:
-                if solver.Value(resource_vars[(tache, crt.ressource)]) == 1:
-                    debut = solver.Value(start_vars[tache])
-                    operations_planifiees.append(
-                        OperationPlanifiee(
-                            tache=tache,
-                            ressource=crt.ressource,
-                            debut=debut
-                        )
-                    )
+                presence_literal = presence_literals[(tache, crt.ressource)]
+                if solveur.Value(presence_literal):
+                    ressource_selectionnee = crt.ressource
+                    duree = crt.duree
                     break
+        
+        if ressource_selectionnee is None:
+            return None  # Aucune ressource sélectionnée (ne devrait pas arriver)
+        
+        operations_planifiees.append(
+            OperationPlanifiee(
+                tache=tache,
+                ressource=ressource_selectionnee,
+                debut=start
+            )
+        )
     
     return Planning(operations=operations_planifiees)

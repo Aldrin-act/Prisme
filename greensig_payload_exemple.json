@@ -1,0 +1,147 @@
+{
+  "types_tache": [
+    {
+      "id": 1,
+      "nom_tache": "Tonte"
+    },
+    {
+      "id": 2,
+      "nom_tache": "Binage"
+    },
+    {
+      "id": 3,
+      "nom_tache": "Taille d'arbres"
+    },
+    {
+      "id": 4,
+      "nom_tache": "Arrosage"
+    }
+  ],
+  "equipes": [
+    {
+      "id": 100,
+      "nom_equipe": "Équipe Nord",
+      "actif": true
+    },
+    {
+      "id": 200,
+      "nom_equipe": "Équipe Sud",
+      "actif": true
+    },
+    {
+      "id": 300,
+      "nom_equipe": "Équipe Est",
+      "actif": true
+    }
+  ],
+  "competences": [
+    {
+      "id": 21,
+      "nom_competence": "Binage"
+    },
+    {
+      "id": 5,
+      "nom_competence": "Binage des sols"
+    },
+    {
+      "id": 10,
+      "nom_competence": "Tonte"
+    },
+    {
+      "id": 11,
+      "nom_competence": "Taille"
+    },
+    {
+      "id": 12,
+      "nom_competence": "Arrosage"
+    }
+  ],
+  "operateurs": [
+    {
+      "id": 1,
+      "equipe_id": 100,
+      "competences_ids": [
+        10,
+        21
+      ]
+    },
+    {
+      "id": 2,
+      "equipe_id": 100,
+      "competences_ids": [
+        11
+      ]
+    },
+    {
+      "id": 3,
+      "equipe_id": 200,
+      "competences_ids": [
+        21,
+        12
+      ]
+    },
+    {
+      "id": 4,
+      "equipe_id": 200,
+      "competences_ids": [
+        10
+      ]
+    },
+    {
+      "id": 5,
+      "equipe_id": 300,
+      "competences_ids": [
+        11,
+        12
+      ]
+    },
+    {
+      "id": 6,
+      "equipe_id": 300,
+      "competences_ids": [
+        5
+      ]
+    }
+  ],
+  "taches": [
+    {
+      "id": 501,
+      "id_type_tache_id": 1,
+      "charge_estimee_heures": 2.5,
+      "equipes_ids": [
+        100,
+        200
+      ],
+      "deleted_at": null
+    },
+    {
+      "id": 502,
+      "id_type_tache_id": 2,
+      "charge_estimee_heures": 1.5,
+      "equipes_ids": [
+        300
+      ],
+      "deleted_at": null
+    },
+    {
+      "id": 503,
+      "id_type_tache_id": 3,
+      "charge_estimee_heures": 3.0,
+      "equipes_ids": [
+        100,
+        300
+      ],
+      "deleted_at": null
+    },
+    {
+      "id": 504,
+      "id_type_tache_id": 4,
+      "charge_estimee_heures": null,
+      "equipes_ids": [
+        200,
+        300
+      ],
+      "deleted_at": null
+    }
+  ]
+}

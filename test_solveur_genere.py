@@ -1,17 +1,50 @@
 from __future__ import annotations
-from dsl.schema import (
-    InstanceTRCO, Planning, OperationPlanifiee, Tache, Ressource,
-    Contrainte, Precedence, CompatibiliteRessourceTache, Echeance
-)
+from dataclasses import dataclass
+from typing import List, Optional
 import pytest
-from typing import List
+from dsl.schema import (
+    InstanceTRCO, Planning, OperationPlanifiee, Tache, Ressource, Contrainte,
+    Precedence, CompatibiliteRessourceTache, Echeance
+)
+from solver import resoudre
+
+
+@dataclass
+class MockTache:
+    id: str
+
+
+@dataclass
+class MockRessource:
+    id: str
+
+
+@dataclass
+class MockCompatibiliteRessourceTache:
+    tache: Tache
+    ressource: Ressource
+    duree: int
+
+
+@dataclass
+class MockPrecedence:
+    tache_precedente: Tache
+    tache_suivante: Tache
+
+
+@dataclass
+class MockEcheance:
+    tache: Tache
+    echeance: int
 
 
 def test_instance_une_tache_une_ressource():
     """Test une instance avec une seule tâche et une seule ressource compatible."""
-    tache = Tache(id="T1")
-    ressource = Ressource(id="R1")
-    compatibilites = [CompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=5)]
+    tache = MockTache(id="T1")
+    ressource = MockRessource(id="R1")
+    compatibilites = [
+        MockCompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=5)
+    ]
     instance = InstanceTRCO(
         taches=[tache],
         ressources=[ressource],
@@ -27,11 +60,10 @@ def test_instance_une_tache_une_ressource():
     assert planning.operations[0].debut == 0
 
 
-def test_instance_infaisable():
+def test_instance_infaisable_aucune_ressource_compatible():
     """Test une instance infaisable (aucune ressource compatible pour une tâche)."""
-    tache = Tache(id="T1")
-    ressource = Ressource(id="R1")
-    # Aucune compatibilité pour T1
+    tache = MockTache(id="T1")
+    ressource = MockRessource(id="R1")
     instance = InstanceTRCO(
         taches=[tache],
         ressources=[ressource],
@@ -43,14 +75,14 @@ def test_instance_infaisable():
     assert planning is None
 
 
-def test_instance_ressources_multiples_durees_differentes():
-    """Test une instance avec plusieurs ressources compatibles pour une même tâche, durées différentes."""
-    tache = Tache(id="T1")
-    ressource1 = Ressource(id="R1")
-    ressource2 = Ressource(id="R2")
+def test_instance_plusieurs_ressources_compatibles_durees_differentes():
+    """Test une instance avec plusieurs ressources compatibles pour une même tâche."""
+    tache = MockTache(id="T1")
+    ressource1 = MockRessource(id="R1")
+    ressource2 = MockRessource(id="R2")
     compatibilites = [
-        CompatibiliteRessourceTache(tache=tache, ressource=ressource1, duree=3),
-        CompatibiliteRessourceTache(tache=tache, ressource=ressource2, duree=5)
+        MockCompatibiliteRessourceTache(tache=tache, ressource=ressource1, duree=3),
+        MockCompatibiliteRessourceTache(tache=tache, ressource=ressource2, duree=5)
     ]
     instance = InstanceTRCO(
         taches=[tache],
@@ -67,23 +99,21 @@ def test_instance_ressources_multiples_durees_differentes():
     assert planning.operations[0].debut == 0
     # Vérifie que la ressource avec la durée la plus courte est choisie
     if planning.operations[0].ressource == ressource1:
-        assert planning.operations[0].ressource == ressource1
-    else:
-        # Si ce n'est pas le cas, c'est que le solveur a trouvé une autre solution optimale
-        # (par exemple, si d'autres contraintes sont ajoutées plus tard)
-        pass
+        assert planning.operations[0].debut + 3 <= 5
 
 
 def test_instance_avec_precedence():
     """Test une instance avec des contraintes de précédence."""
-    tache1 = Tache(id="T1")
-    tache2 = Tache(id="T2")
-    ressource = Ressource(id="R1")
+    tache1 = MockTache(id="T1")
+    tache2 = MockTache(id="T2")
+    ressource = MockRessource(id="R1")
     compatibilites = [
-        CompatibiliteRessourceTache(tache=tache1, ressource=ressource, duree=2),
-        CompatibiliteRessourceTache(tache=tache2, ressource=ressource, duree=3)
+        MockCompatibiliteRessourceTache(tache=tache1, ressource=ressource, duree=2),
+        MockCompatibiliteRessourceTache(tache=tache2, ressource=ressource, duree=3)
     ]
-    contraintes = [Precedence(tache_predecesseur=tache1, tache_successeur=tache2)]
+    contraintes = [
+        MockPrecedence(tache_precedente=tache1, tache_suivante=tache2)
+    ]
     instance = InstanceTRCO(
         taches=[tache1, tache2],
         ressources=[ressource],
@@ -95,19 +125,22 @@ def test_instance_avec_precedence():
     assert planning is not None
     assert len(planning.operations) == 2
     
-    # Trouver les opérations pour T1 et T2
-    op_t1 = next(op for op in planning.operations if op.tache == tache1)
-    op_t2 = next(op for op in planning.operations if op.tache == tache2)
+    op1 = next(op for op in planning.operations if op.tache == tache1)
+    op2 = next(op for op in planning.operations if op.tache == tache2)
     
-    assert op_t1.debut + 2 <= op_t2.debut
+    assert op1.debut + 2 <= op2.debut
 
 
 def test_instance_avec_echeance():
     """Test une instance avec une échéance sur une tâche."""
-    tache = Tache(id="T1")
-    ressource = Ressource(id="R1")
-    compatibilites = [CompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=5)]
-    contraintes = [Echeance(tache=tache, echeance=4)]  # Échéance impossible à respecter
+    tache = MockTache(id="T1")
+    ressource = MockRessource(id="R1")
+    compatibilites = [
+        MockCompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=5)
+    ]
+    contraintes = [
+        MockEcheance(tache=tache, echeance=4)
+    ]
     instance = InstanceTRCO(
         taches=[tache],
         ressources=[ressource],
@@ -116,15 +149,19 @@ def test_instance_avec_echeance():
     )
     
     planning = resoudre(instance)
-    assert planning is None
+    assert planning is None  # L'échéance est trop stricte (durée 5 > échéance 4)
 
 
 def test_instance_avec_echeance_realiste():
     """Test une instance avec une échéance réaliste."""
-    tache = Tache(id="T1")
-    ressource = Ressource(id="R1")
-    compatibilites = [CompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=3)]
-    contraintes = [Echeance(tache=tache, echeance=5)]
+    tache = MockTache(id="T1")
+    ressource = MockRessource(id="R1")
+    compatibilites = [
+        MockCompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=3)
+    ]
+    contraintes = [
+        MockEcheance(tache=tache, echeance=5)
+    ]
     instance = InstanceTRCO(
         taches=[tache],
         ressources=[ressource],
@@ -136,3 +173,34 @@ def test_instance_avec_echeance_realiste():
     assert planning is not None
     assert len(planning.operations) == 1
     assert planning.operations[0].debut + 3 <= 5
+
+
+def test_instance_multiple_taches_ressources():
+    """Test une instance avec plusieurs tâches et ressources."""
+    tache1 = MockTache(id="T1")
+    tache2 = MockTache(id="T2")
+    ressource1 = MockRessource(id="R1")
+    ressource2 = MockRessource(id="R2")
+    compatibilites = [
+        MockCompatibiliteRessourceTache(tache=tache1, ressource=ressource1, duree=2),
+        MockCompatibiliteRessourceTache(tache=tache1, ressource=ressource2, duree=3),
+        MockCompatibiliteRessourceTache(tache=tache2, ressource=ressource1, duree=4),
+        MockCompatibiliteRessourceTache(tache=tache2, ressource=ressource2, duree=1)
+    ]
+    instance = InstanceTRCO(
+        taches=[tache1, tache2],
+        ressources=[ressource1, ressource2],
+        compatibilites_ressource_tache=compatibilites,
+        contraintes=[]
+    )
+    
+    planning = resoudre(instance)
+    assert planning is not None
+    assert len(planning.operations) == 2
+    
+    # Vérifie que les tâches ne se chevauchent pas sur la même ressource
+    for ressource in [ressource1, ressource2]:
+        ops = [op for op in planning.operations if op.ressource == ressource]
+        if len(ops) > 1:
+            assert ops[0].debut + ops[0].tache.duree <= ops[1].debut or \
+                   ops[1].debut + ops[1].tache.duree <= ops[0].debut
