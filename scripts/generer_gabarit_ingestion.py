@@ -89,7 +89,7 @@ def construire(chemin_sortie: Path) -> None:
         ("", None),
         ("5 onglets à remplir, dans cet ordre :", Font(bold=True)),
         ("  1. Tâches — la liste des travaux à planifier.", None),
-        ("  2. Ressources — la liste des machines/équipes qui peuvent réaliser ces travaux.", None),
+        ("  2. Ressources — la liste des ressource/équipes qui peuvent réaliser ces travaux.", None),
         ("  3. Précédences (optionnel) — quelles tâches doivent être finies avant que d'autres démarrent.", None),
         ("  4. Compatibilités — quelle tâche peut être faite par quelle ressource, et en combien de temps.", None),
         (
@@ -155,11 +155,11 @@ def construire(chemin_sortie: Path) -> None:
     _entete(
         ws,
         [
-            ("id *", 22, "Identifiant unique de la ressource (machine, équipe...). Même règle que les tâches."),
+            ("id *", 22, "Identifiant unique de la ressource (ressource, équipe...). Même règle que les tâches."),
             ("nom", 34, "Libre, pour la lisibilité humaine seulement (facultatif)."),
         ],
     )
-    _ligne_exemple(ws, ["M1", "Découpeuse"], note="← exemple, à remplacer")
+    _ligne_exemple(ws, ["R1", "Découpeuse"], note="← exemple, à remplacer")
     _bordures_vides(ws, 2)
 
     # ---------------------------------------------------------------- Précédences
@@ -200,7 +200,7 @@ def construire(chemin_sortie: Path) -> None:
             ),
         ],
     )
-    _ligne_exemple(ws, ["T1", "M1", 30], note="← exemple : T1 prend 30 min sur M1")
+    _ligne_exemple(ws, ["T1", "R1", 30], note="← exemple : T1 prend 30 min sur M1")
     _bordures_vides(ws, 3)
     dv_c_tache = DataValidation(
         type="list", formula1=f"='Tâches'!$A$2:$A${N_LIGNES_VALIDATION}", allow_blank=True, showErrorMessage=True

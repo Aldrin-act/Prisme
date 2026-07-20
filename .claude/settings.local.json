@@ -36,7 +36,15 @@
       "Bash(echo \"EXIT: $?\")",
       "Bash(npm run *)",
       "Bash(uv run *)",
-      "Bash(uv run python -c ' *)"
+      "Bash(uv run python -c ' *)",
+      "PowerShell(uv run python -m scripts.migrer_nomenclature --dry-run)",
+      "PowerShell(python -m scripts.migrer_nomenclature --dry-run)",
+      "PowerShell(python -m scripts.migrer_nomenclature --dry-run 2>&1)",
+      "PowerShell(python -m scripts.migrer_nomenclature --backup)",
+      "PowerShell(python -m pytest tests/unit/test_dsl_schema.py -v --tb=short 2>&1)",
+      "PowerShell(python -m scripts.migrer_nomenclature --dry-run --silencieux 2>&1)",
+      "PowerShell(python -m ruff check . 2>&1)",
+      "PowerShell(Get-Command ruff -ErrorAction SilentlyContinue)"
     ],
     "additionalDirectories": [
       "/home/vboxuser/Projet_Prisme"

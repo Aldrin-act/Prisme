@@ -24,8 +24,8 @@ entre jobs). Deux conséquences :
 Simplification assumée : un job peut réutiliser une même ressource dédiée
 plusieurs fois dans sa chaîne (si `n_ressources < n_taches`), ce qui exerce
 réellement le vérificateur de faisabilité (Étape 2) sur le chevauchement de
-ressource ; mais il n'y a jamais de choix de machine à faire, seulement un
-ordre à respecter — la question du **choix** entre plusieurs machines
+ressource ; mais il n'y a jamais de choix de ressource à faire, seulement un
+ordre à respecter — la question du **choix** entre plusieurs ressource
 compatibles reste hors du périmètre de ce banc.
 """
 

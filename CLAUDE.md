@@ -38,11 +38,14 @@ docker build -t prisme-sandbox sandbox/container/          # sandbox image (env 
 cd dashboard && npm install && npm run dev                 # dashboard dev server, :5173 (Node via nvm, no sudo)
 ```
 
-No type-checker configured. `PRISME_LLM_PROVIDER` (`anthropic`|`openai`) / `PRISME_LLM_MODEL`
-select the generation LLM. `[tool.ruff]` sets `line-length = 115` (wider than 88/100 — French code
-and docstrings run longer). CI (`.github/workflows/ci.yml`) runs lint → format check → `pytest` on
-push/PR; `ubuntu-latest` runners have Docker preinstalled, so sandbox/bout-en-bout tests actually
-execute there — require this check in `main`'s branch protection.
+No type-checker configured. Environment variables:
+- `PRISME_LLM_PROVIDER` (`anthropic`|`openai`|`mistralai`) / `PRISME_LLM_MODEL` — generation LLM
+- `DATABASE_URL` — Postgres connection (defaults to in-memory store if unset; tests use per-test schemas)
+
+`[tool.ruff]` sets `line-length = 115` (wider than 88/100 — French code and docstrings run longer).
+CI (`.github/workflows/ci.yml`) runs lint → format check → `pytest` on push/PR; `ubuntu-latest`
+runners have Docker preinstalled, so sandbox/bout-en-bout tests actually execute there —
+**require the `test` check in `main`'s branch protection** (Settings → Branches → protect `main`).
 
 **Project stage:** Étapes 1–5, 7, 8 of 9 (§8) implemented plus Phase 10 (dashboard, §2.3) from the
 dev plan, out of roadmap order (see Build order). Étape 6 (bounded repair loop) deliberately
@@ -105,14 +108,19 @@ actually runs and passes — see "Verified" notes below for two real bugs found 
   never mixed into the operational response). `api/etat.py` is in-memory demo wiring only.
   `api/dependencies.py`'s `obtenir_registre()` points at the real store — tests must override via
   `app.dependency_overrides` (`conftest.py`). `adapters/erp_reference/` translates a deliberately
-  poorer simulated legacy format (single forced machine) into `InstanceTRCO`. **Verified
+  poorer simulated legacy format (single forced ressource) into `InstanceTRCO`. **Verified
   (PH0-T4):** `demo_bout_en_bout` and `test_api_bout_en_bout.py` now run clean end to end.
 
 Docker- and Postgres-dependent tests **skip**, not fail, if their dependency is unreachable
 (`conftest.py` fixtures); the security test feeds malicious code straight to
 `executer_dans_sandbox`, bypassing the AST gate, to prove container isolation holds independently
-(§5.3). Codebase is **French** (identifiers, docstrings, domain terms) — match it (`Tache`,
-`Ressource`, `faisabilité`...).
+(§5.3).
+
+Codebase is **French** (identifiers, docstrings, domain terms) — match it (`Tache`,
+`Ressource`, `faisabilité`...). Commit messages: short imperative French, focusing on *why* over
+*what* (e.g., "Ajoute la vérification de compatibilité ressource-tâche"). Branch naming:
+`<type>/<sujet-court>` where type ∈ {`feature/`, `fix/`, `docs/`, `chore/`, `refactor/`}.
+All changes via PR from feature branch; squash-merge to keep linear `main` history.
 
 ## The founding principle (do not violate)
 
@@ -136,7 +144,7 @@ iteration) / **audit** (solver source, explicit request) output channels.
 The **T-R-C-O DSL** (`dsl/`) is exchange format, generation input, and validation frame at once.
 Vocabulary is deliberately **finite and typed** to bound the AI's generation surface (§5.3 security
 control — `dsl/schema/common.py`'s `Identifiant`). Four axes: **T**âches, **R**essources,
-**C**ontraintes (precedence, machine-task compatibility — *constraints*, not fields on
+**C**ontraintes (precedence, ressource-task compatibility — *constraints*, not fields on
 `Tache`/`Ressource`), **O**bjectifs (makespan, load balancing, deadlines).
 
 **`dsl/schema/` conventions:** every model sets `extra="forbid"`; `Contrainte` is a
@@ -144,7 +152,7 @@ control — `dsl/schema/common.py`'s `Identifiant`). Four axes: **T**âches, **R
 `InstanceTRCO` enforces per-axis unique IDs and that every constraint references a declared
 `Tache`/`Ressource` — that cross-axis check *is* the §6.7 upstream guardrail.
 
-**Minimal viable core (in scope):** precedence, machine-task compatibility, durations only. Setup
+**Minimal viable core (in scope):** precedence, ressource-task compatibility, durations only. Setup
 times, calendars, priorities/due dates, capacity are **out of initial scope** by design — accept
 later without redesign, don't implement now. Guard against scope creep.
 

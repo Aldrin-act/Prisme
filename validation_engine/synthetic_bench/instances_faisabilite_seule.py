@@ -6,7 +6,7 @@ La construction inverse (niveau 1, `construction_inverse.py`) dédie une
 ressource par job pour garantir l'optimum par simple arithmétique — ce qui
 exclut, par construction, toute vraie contention de ressource entre jobs. Ce
 module fait l'inverse : plusieurs jobs partagent réellement un pool de
-machines communes, chaque tâche étant compatible avec toutes ces machines à
+ressource communes, chaque tâche étant compatible avec toutes ces ressource à
 des durées différentes (FJSP flexible véritable). La complexité qui en
 résulte est authentique — calculer l'optimum est NP-difficile et n'est
 délibérément pas tenté ici.
@@ -63,7 +63,7 @@ def construire_instance_contention_partagee(
     nom: str, jobs: list[FormeJobPartage], ressources_partagees: int
 ) -> InstanceFaisabiliteSeule:
     """Construit une instance où tous les jobs se disputent réellement un même
-    pool de `ressources_partagees` machines — aucune résolution n'a lieu ici,
+    pool de `ressources_partagees` ressource — aucune résolution n'a lieu ici,
     donc aucun optimum n'est connu ; seule sa faisabilité (Étape 2) est
     garantie vérifiable, une fois un planning candidat produit ailleurs.
     """
@@ -85,7 +85,7 @@ def construire_instance_contention_partagee(
 
             # Compatible avec TOUTES les ressources partagées (vrai choix de
             # routage), chacune à sa propre durée (FJSP flexible véritable) —
-            # contrairement au niveau 1, où le choix de machine est absent.
+            # contrairement au niveau 1, où le choix de ressource est absent.
             for indice_ressource, ressource in enumerate(ressources):
                 contraintes.append(
                     CompatibiliteRessourceTache(

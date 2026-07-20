@@ -1,0 +1,643 @@
+# Rapport de migration de nomenclature
+
+Date: 2026-07-20 08:38:56
+Mode: DRY-RUN (simulation)
+
+## Résumé
+
+- Fichiers modifiés : **34**
+- Corrections appliquées : **449**
+- Erreurs : **0**
+
+## Corrections par type
+
+- `id_machine_simple` : 306 occurrence(s)
+- `commentaire_machine` : 94 occurrence(s)
+- `id_machine_name` : 26 occurrence(s)
+- `id_machine_prefix` : 14 occurrence(s)
+- `variable_machine_id` : 3 occurrence(s)
+- `param_par_machine` : 2 occurrence(s)
+- `champ_machine_id` : 2 occurrence(s)
+- `champ_machines` : 1 occurrence(s)
+- `champ_par_machine` : 1 occurrence(s)
+
+## Détail par fichier
+
+### adapters\agent_comprehension\prompts\exploration_bdd.md
+
+1 correction(s) :
+
+- L21: `machines` → `ressource`
+
+### CLAUDE.md
+
+3 correction(s) :
+
+- L111: `machine` → `ressource`
+- L147: `machine` → `ressource`
+- L155: `machine` → `ressource`
+
+### docs\nomenclature_dsl.md
+
+11 correction(s) :
+
+- L40: `machine` → `ressource`
+- L47: `Machine` → `Ressource`
+- L73: `"M1"` → `"R1"`
+- L74: `"MACHINE_A"` → `"RESSOURCE_A"`
+- L184: `"machine_ids"` → `"ressource_ids"`
+- L196: `Machine` → `Ressource`
+- L204: `"MACHINE_1"` → `"RESSOURCE_1"`
+- L244: `machines` → `ressource`
+- L260: `"M1"` → `"R1"`
+- L263: `"M1"` → `"R1"`
+- L304: `Machine` → `Ressource`
+
+### docs\objectifs_configurables.md
+
+2 correction(s) :
+
+- L64: `"M1"` → `"R1"`
+- L64: `"M2"` → `"R2"`
+
+### dsl\examples\invalid\duree_negative.json
+
+2 correction(s) :
+
+- L6: `"M1"` → `"R1"`
+- L9: `"M1"` → `"R1"`
+
+### dsl\examples\invalid\ressource_inexistante.json
+
+2 correction(s) :
+
+- L6: `"M1"` → `"R1"`
+- L9: `"M99"` → `"R99"`
+
+### dsl\examples\invalid\tache_inexistante_precedence.json
+
+3 correction(s) :
+
+- L7: `"M1"` → `"R1"`
+- L11: `"M1"` → `"R1"`
+- L12: `"M1"` → `"R1"`
+
+### dsl\examples\valid\atelier_trois_taches.json
+
+6 correction(s) :
+
+- L8: `"M1"` → `"R1"`
+- L9: `"M2"` → `"R2"`
+- L14: `"M1"` → `"R1"`
+- L15: `"M1"` → `"R1"`
+- L16: `"M2"` → `"R2"`
+- L17: `"M2"` → `"R2"`
+
+### dsl\examples\valid\tache_unique.json
+
+2 correction(s) :
+
+- L6: `"M1"` → `"R1"`
+- L9: `"M1"` → `"R1"`
+
+### dsl\README.md
+
+1 correction(s) :
+
+- L3: `machine` → `ressource`
+
+### dsl\schema\ressources.py
+
+2 correction(s) :
+
+- L1: `machines` → `ressource`
+- L11: `machine` → `ressource`
+
+### PRISME_Note_de_Cadrage (2).md
+
+10 correction(s) :
+
+- L29: `machine` → `ressource`
+- L31: `machines` → `ressource`
+- L31: `machine` → `ressource`
+- L39: `machine` → `ressource`
+- L70: `machine` → `ressource`
+- L106: `machines` → `ressource`
+- L232: `machine` → `ressource`
+- L251: `machine` → `ressource`
+- L282: `machine` → `ressource`
+- L351: `machine` → `ressource`
+
+### PRISME_Plan_Developpement.md
+
+5 correction(s) :
+
+- L56: `machine` → `ressource`
+- L68: `machine` → `ressource`
+- L98: `machine` → `ressource`
+- L127: `machines` → `ressource`
+- L154: `machine` → `ressource`
+
+### rapport_migration.md
+
+221 correction(s) :
+
+- L30: `machines` → `ressource`
+- L36: `machine` → `ressource`
+- L37: `machine` → `ressource`
+- L38: `machine` → `ressource`
+- L44: `machine` → `ressource`
+- L45: `Machine` → `Ressource`
+- L46: `"M1"` → `"R1"`
+- L47: `"MACHINE_A"` → `"RESSOURCE_A"`
+- L48: `"machine_ids"` → `"ressource_ids"`
+- L49: `Machine` → `Ressource`
+- L50: `"MACHINE_1"` → `"RESSOURCE_1"`
+- L51: `machines` → `ressource`
+- L52: `"M1"` → `"R1"`
+- L53: `"M1"` → `"R1"`
+- L54: `Machine` → `Ressource`
+- L60: `"M1"` → `"R1"`
+- L61: `"M2"` → `"R2"`
+- L67: `"M1"` → `"R1"`
+- L68: `"M1"` → `"R1"`
+- L74: `"M1"` → `"R1"`
+- L75: `"M99"` → `"R99"`
+- L81: `"M1"` → `"R1"`
+- L82: `"M1"` → `"R1"`
+- L83: `"M1"` → `"R1"`
+- L89: `"M1"` → `"R1"`
+- L90: `"M2"` → `"R2"`
+- L91: `"M1"` → `"R1"`
+- L92: `"M1"` → `"R1"`
+- L93: `"M2"` → `"R2"`
+- L94: `"M2"` → `"R2"`
+- L100: `"M1"` → `"R1"`
+- L101: `"M1"` → `"R1"`
+- L107: `machine` → `ressource`
+- L113: `machines` → `ressource`
+- L114: `machine` → `ressource`
+- L120: `machine` → `ressource`
+- L121: `machines` → `ressource`
+- L122: `machine` → `ressource`
+- L123: `machine` → `ressource`
+- L124: `machine` → `ressource`
+- L125: `machines` → `ressource`
+- L126: `machine` → `ressource`
+- L127: `machine` → `ressource`
+- L128: `machine` → `ressource`
+- L129: `machine` → `ressource`
+- L135: `machine` → `ressource`
+- L136: `machine` → `ressource`
+- L137: `machine` → `ressource`
+- L138: `machines` → `ressource`
+- L139: `machine` → `ressource`
+- L145: `machines` → `ressource`
+- L146: `machine` → `ressource`
+- L147: `"M1"` → `"R1"`
+- L148: `"M1"` → `"R1"`
+- L154: `Machine` → `Ressource`
+- L155: `"M1"` → `"R1"`
+- L156: `"M2"` → `"R2"`
+- L157: `"MACHINE_XXX"` → `"RESSOURCE_XXX"`
+- L158: `"machine_xxx"` → `"ressource_xxx"`
+- L159: `"machine_id"` → `"ressource_id"`
+- L161: `"machine_id"` → `"ressource_id"`
+- L163: `"machine_ids"` → `"ressource_ids"`
+- L164: `"machine_ids"` → `"ressource_ids"`
+- L166: `"machine_id"` → `"ressource_id"`
+- L169: `machine` → `ressource`
+- L170: `Machine` → `Ressource`
+- L176: `Machine` → `Ressource`
+- L177: `"M1"` → `"R1"`
+- L178: `"M2"` → `"R2"`
+- L179: `"M1"` → `"R1"`
+- L180: `"M2"` → `"R2"`
+- L181: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+- L182: `"machine_a"` → `"ressource_a"`
+- L183: `"machine_id"` → `"ressource_id"`
+- L184: `"machine_ids"` → `"ressource_ids"`
+- L185: `machines` → `ressource`
+- L186: `Machine` → `Ressource`
+- L187: `machines` → `ressource`
+- L188: `machine` → `ressource`
+- L189: `"M1"` → `"R1"`
+- L190: `"M2"` → `"R2"`
+- L191: `Machine` → `Ressource`
+- L192: `Machine` → `Ressource`
+- L193: `machines` → `ressource`
+- L200: `"M1"` → `"R1"`
+- L201: `"M2"` → `"R2"`
+- L202: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+- L203: `"M1"` → `"R1"`
+- L204: `"machine_id"` → `"ressource_id"`
+- L205: `"machine_id"` → `"ressource_id"`
+- L206: `"M2"` → `"R2"`
+- L207: `"machine_id"` → `"ressource_id"`
+- L208: `"machine_id"` → `"ressource_id"`
+- L210: `"M1"` → `"R1"`
+- L211: `"M2"` → `"R2"`
+- L212: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+- L213: `"M1"` → `"R1"`
+- L214: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+- L220: `"M1"` → `"R1"`
+- L221: `"M1"` → `"R1"`
+- L222: `"M1"` → `"R1"`
+- L228: `"M1"` → `"R1"`
+- L229: `"M1"` → `"R1"`
+- L230: `"M1"` → `"R1"`
+- L236: `"M1"` → `"R1"`
+- L237: `"M1"` → `"R1"`
+- L238: `"M1"` → `"R1"`
+- L239: `"M1"` → `"R1"`
+- L240: `"M1"` → `"R1"`
+- L241: `"M1"` → `"R1"`
+- L242: `"M1"` → `"R1"`
+- L248: `"M1"` → `"R1"`
+- L249: `"M1"` → `"R1"`
+- L250: `"M1"` → `"R1"`
+- L256: `"M1"` → `"R1"`
+- L257: `"M1"` → `"R1"`
+- L258: `"M1"` → `"R1"`
+- L264: `"M1"` → `"R1"`
+- L265: `"M1"` → `"R1"`
+- L271: `"M1"` → `"R1"`
+- L272: `"M1"` → `"R1"`
+- L278: `"M1"` → `"R1"`
+- L279: `"M1"` → `"R1"`
+- L280: `"M1"` → `"R1"`
+- L281: `"M1"` → `"R1"`
+- L287: `"M1"` → `"R1"`
+- L288: `"M1"` → `"R1"`
+- L289: `"M1"` → `"R1"`
+- L290: `"M1"` → `"R1"`
+- L291: `"M1"` → `"R1"`
+- L292: `"M1"` → `"R1"`
+- L293: `"M1"` → `"R1"`
+- L294: `"M1"` → `"R1"`
+- L295: `"M1"` → `"R1"`
+- L296: `"M1"` → `"R1"`
+- L297: `"M1"` → `"R1"`
+- L298: `"M1"` → `"R1"`
+- L299: `"M1"` → `"R1"`
+- L300: `"M1"` → `"R1"`
+- L306: `"M1"` → `"R1"`
+- L307: `"M2"` → `"R2"`
+- L308: `"M1"` → `"R1"`
+- L309: `"M1"` → `"R1"`
+- L310: `"M2"` → `"R2"`
+- L311: `"M2"` → `"R2"`
+- L312: `"M1"` → `"R1"`
+- L313: `"M2"` → `"R2"`
+- L314: `"M2"` → `"R2"`
+- L315: `"M1"` → `"R1"`
+- L316: `"M1"` → `"R1"`
+- L317: `"M1"` → `"R1"`
+- L318: `"M1"` → `"R1"`
+- L319: `"M1"` → `"R1"`
+- L320: `"M1"` → `"R1"`
+- L321: `"M2"` → `"R2"`
+- L322: `"M1"` → `"R1"`
+- L323: `"M2"` → `"R2"`
+- L324: `"M1"` → `"R1"`
+- L325: `"M2"` → `"R2"`
+- L326: `"M1"` → `"R1"`
+- L327: `"M1"` → `"R1"`
+- L328: `"M1"` → `"R1"`
+- L329: `"M1"` → `"R1"`
+- L330: `"M1"` → `"R1"`
+- L331: `"M1"` → `"R1"`
+- L332: `"M1"` → `"R1"`
+- L333: `"M2"` → `"R2"`
+- L334: `"M1"` → `"R1"`
+- L335: `"M2"` → `"R2"`
+- L336: `"M2"` → `"R2"`
+- L337: `"M1"` → `"R1"`
+- L338: `"M1"` → `"R1"`
+- L339: `"M1"` → `"R1"`
+- L340: `"M1"` → `"R1"`
+- L341: `"M1"` → `"R1"`
+- L342: `"M2"` → `"R2"`
+- L343: `"M1"` → `"R1"`
+- L344: `"M1"` → `"R1"`
+- L345: `"M2"` → `"R2"`
+- L346: `"M1"` → `"R1"`
+- L347: `"M1"` → `"R1"`
+- L348: `"M1"` → `"R1"`
+- L349: `"M1"` → `"R1"`
+- L350: `"M1"` → `"R1"`
+- L351: `"M1"` → `"R1"`
+- L352: `"M99"` → `"R99"`
+- L353: `"M99"` → `"R99"`
+- L354: `"M1"` → `"R1"`
+- L355: `"M1"` → `"R1"`
+- L356: `"M1"` → `"R1"`
+- L357: `"M1"` → `"R1"`
+- L358: `"M1"` → `"R1"`
+- L359: `"M1"` → `"R1"`
+- L365: `machine` → `ressource`
+- L371: `"M1"` → `"R1"`
+- L372: `"M2"` → `"R2"`
+- L373: `"M1"` → `"R1"`
+- L374: `"M2"` → `"R2"`
+- L375: `"M1"` → `"R1"`
+- L376: `"M2"` → `"R2"`
+- L377: `"M1"` → `"R1"`
+- L383: `"M1"` → `"R1"`
+- L384: `"M2"` → `"R2"`
+- L385: `"M3"` → `"R3"`
+- L386: `"M1"` → `"R1"`
+- L387: `"M2"` → `"R2"`
+- L388: `"M3"` → `"R3"`
+- L389: `"M1"` → `"R1"`
+- L390: `"M3"` → `"R3"`
+- L396: `"M1"` → `"R1"`
+- L397: `"M2"` → `"R2"`
+- L398: `"M1"` → `"R1"`
+- L399: `"M2"` → `"R2"`
+- L400: `"M1"` → `"R1"`
+- L401: `"M2"` → `"R2"`
+- L407: `machine` → `ressource`
+- L408: `machines` → `ressource`
+- L414: `machines` → `ressource`
+- L415: `machines` → `ressource`
+- L416: `machines` → `ressource`
+- L417: `machine` → `ressource`
+
+### scripts\generer_gabarit_ingestion.py
+
+4 correction(s) :
+
+- L92: `machines` → `ressource`
+- L158: `machine` → `ressource`
+- L162: `"M1"` → `"R1"`
+- L203: `"M1"` → `"R1"`
+
+### scripts\migrer_nomenclature.py
+
+17 correction(s) :
+
+- L1: `Machine` → `Ressource`
+- L75: `"M1"` → `"R1"`
+- L75: `"M2"` → `"R2"`
+- L82: `"MACHINE_XXX"` → `"RESSOURCE_XXX"`
+- L89: `"machine_xxx"` → `"ressource_xxx"`
+- L104: `"machine_id"` → `"ressource_id"`
+- L104: `machine_id` → `ressource_id`
+- L106: `"machine_id"` → `"ressource_id"`
+- L106: `machine_id` → `ressource_id`
+- L111: `"machine_ids"` → `"ressource_ids"`
+- L113: `"machine_ids"` → `"ressource_ids"`
+- L117: `champ_par_machine` → `champ_par_ressource`
+- L144: `"machine_id"` → `"ressource_id"`
+- L144: `machine_id` → `ressource_id`
+- L155: `param_par_machine` → `param_par_ressource`
+- L168: `machine` → `ressource`
+- L499: `Machine` → `Ressource`
+
+### scripts\README_MIGRATION.md
+
+18 correction(s) :
+
+- L7: `Machine` → `Ressource`
+- L24: `"M1"` → `"R1"`
+- L25: `"M2"` → `"R2"`
+- L80: `"M1"` → `"R1"`
+- L80: `"M2"` → `"R2"`
+- L81: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+- L82: `"machine_a"` → `"ressource_a"`
+- L89: `"machine_id"` → `"ressource_id"`
+- L90: `"machine_ids"` → `"ressource_ids"`
+- L97: `machines` → `ressource`
+- L99: `Machine` → `Ressource`
+- L106: `machines` → `ressource`
+- L107: `machine` → `ressource`
+- L139: `"M1"` → `"R1"`
+- L140: `"M2"` → `"R2"`
+- L174: `Machine` → `Ressource`
+- L345: `Machine` → `Ressource`
+- L348: `machines` → `ressource`
+
+### scripts\test_migration_exemple.json
+
+16 correction(s) :
+
+- L7: `"machines":` → `"ressources":`
+- L8: `"M1"` → `"R1"`
+- L9: `"M2"` → `"R2"`
+- L10: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+- L16: `"M1"` → `"R1"`
+- L16: `"machine_id"` → `"ressource_id"`
+- L16: `"machine_id":` → `"ressource_id":`
+- L22: `"M2"` → `"R2"`
+- L22: `"machine_id"` → `"ressource_id"`
+- L22: `"machine_id":` → `"ressource_id":`
+- L29: `"cout_par_machine":` → `"cout_par_ressource":`
+- L30: `"M1"` → `"R1"`
+- L31: `"M2"` → `"R2"`
+- L32: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+- L34: `"M1"` → `"R1"`
+- L34: `"MACHINE_LASER"` → `"RESSOURCE_LASER"`
+
+### tests\integration\test_api_adapters.py
+
+3 correction(s) :
+
+- L53: `"M1"` → `"R1"`
+- L55: `"M1"` → `"R1"`
+- L90: `"M1"` → `"R1"`
+
+### tests\integration\test_api_diagnostics.py
+
+3 correction(s) :
+
+- L35: `"M1"` → `"R1"`
+- L38: `"M1"` → `"R1"`
+- L39: `"M1"` → `"R1"`
+
+### tests\integration\test_api_ingestion.py
+
+7 correction(s) :
+
+- L39: `"M1"` → `"R1"`
+- L40: `"M1"` → `"R1"`
+- L56: `"M1"` → `"R1"`
+- L57: `"M1"` → `"R1"`
+- L70: `"M1"` → `"R1"`
+- L73: `"M1"` → `"R1"`
+- L74: `"M1"` → `"R1"`
+
+### tests\integration\test_api_supervision.py
+
+3 correction(s) :
+
+- L70: `"M1"` → `"R1"`
+- L73: `"M1"` → `"R1"`
+- L74: `"M1"` → `"R1"`
+
+### tests\integration\test_api_validation.py
+
+3 correction(s) :
+
+- L21: `"M1"` → `"R1"`
+- L24: `"M1"` → `"R1"`
+- L25: `"M1"` → `"R1"`
+
+### tests\integration\test_executer.py
+
+2 correction(s) :
+
+- L95: `"M1"` → `"R1"`
+- L96: `"M1"` → `"R1"`
+
+### tests\integration\test_sandbox_securite.py
+
+2 correction(s) :
+
+- L42: `"M1"` → `"R1"`
+- L43: `"M1"` → `"R1"`
+
+### tests\unit\test_agent_comprehension.py
+
+4 correction(s) :
+
+- L30: `"M1"` → `"R1"`
+- L32: `"M1"` → `"R1"`
+- L51: `"M1"` → `"R1"`
+- L53: `"M1"` → `"R1"`
+
+### tests\unit\test_dsl_schema.py
+
+14 correction(s) :
+
+- L37: `"M1"` → `"R1"`
+- L38: `"M1"` → `"R1"`
+- L47: `"M1"` → `"R1"`
+- L63: `"M1"` → `"R1"`
+- L107: `"M1"` → `"R1"`
+- L107: `"M1"` → `"R1"`
+- L114: `"M1"` → `"R1"`
+- L146: `"M1"` → `"R1"`
+- L157: `"M1"` → `"R1"`
+- L167: `"M1"` → `"R1"`
+- L169: `"M1"` → `"R1"`
+- L180: `"M1"` → `"R1"`
+- L192: `"M1"` → `"R1"`
+- L194: `"M1"` → `"R1"`
+
+### tests\unit\test_feasibility_checker.py
+
+54 correction(s) :
+
+- L43: `"M1"` → `"R1"`
+- L43: `"M2"` → `"R2"`
+- L47: `"M1"` → `"R1"`
+- L48: `"M1"` → `"R1"`
+- L49: `"M2"` → `"R2"`
+- L50: `"M2"` → `"R2"`
+- L54: `"M1"` → `"R1"`
+- L55: `"M2"` → `"R2"`
+- L56: `"M2"` → `"R2"`
+- L68: `"M1"` → `"R1"`
+- L70: `"M1"` → `"R1"`
+- L71: `"M1"` → `"R1"`
+- L74: `"M1"` → `"R1"`
+- L74: `"M1"` → `"R1"`
+- L87: `"M1"` → `"R1"`
+- L87: `"M2"` → `"R2"`
+- L90: `"M1"` → `"R1"`
+- L91: `"M2"` → `"R2"`
+- L94: `"M1"` → `"R1"`
+- L94: `"M2"` → `"R2"`
+- L107: `"M1"` → `"R1"`
+- L109: `"M1"` → `"R1"`
+- L110: `"M1"` → `"R1"`
+- L113: `"M1"` → `"R1"`
+- L113: `"M1"` → `"R1"`
+- L120: `"M1"` → `"R1"`
+- L127: `"M1"` → `"R1"`
+- L127: `"M2"` → `"R2"`
+- L128: `"M1"` → `"R1"`
+- L130: `"M2"` → `"R2"`
+- L137: `"M2"` → `"R2"`
+- L143: `"M1"` → `"R1"`
+- L145: `"M1"` → `"R1"`
+- L146: `"M1"` → `"R1"`
+- L149: `"M1"` → `"R1"`
+- L161: `"M1"` → `"R1"`
+- L161: `"M2"` → `"R2"`
+- L162: `"M1"` → `"R1"`
+- L164: `"M1"` → `"R1"`
+- L164: `"M2"` → `"R2"`
+- L176: `"M1"` → `"R1"`
+- L177: `"M1"` → `"R1"`
+- L179: `"M1"` → `"R1"`
+- L179: `"M1"` → `"R1"`
+- L191: `"M1"` → `"R1"`
+- L192: `"M1"` → `"R1"`
+- L194: `"M99"` → `"R99"`
+- L200: `"M99"` → `"R99"`
+- L206: `"M1"` → `"R1"`
+- L208: `"M1"` → `"R1"`
+- L212: `"M1"` → `"R1"`
+- L222: `"M1"` → `"R1"`
+- L224: `"M1"` → `"R1"`
+- L228: `"M1"` → `"R1"`
+
+### validation_engine\README.md
+
+1 correction(s) :
+
+- L5: `machine` → `ressource`
+
+### validation_engine\reference_cases\cases\choix_ressource_attendu.json
+
+7 correction(s) :
+
+- L10: `"M1"` → `"R1"`
+- L11: `"M2"` → `"R2"`
+- L14: `"M1"` → `"R1"`
+- L15: `"M2"` → `"R2"`
+- L16: `"M1"` → `"R1"`
+- L24: `"M2"` → `"R2"`
+- L25: `"M1"` → `"R1"`
+
+### validation_engine\reference_cases\cases\duree_differente_par_ressource.json
+
+8 correction(s) :
+
+- L10: `"M1"` → `"R1"`
+- L11: `"M2"` → `"R2"`
+- L12: `"M3"` → `"R3"`
+- L15: `"M1"` → `"R1"`
+- L16: `"M2"` → `"R2"`
+- L17: `"M3"` → `"R3"`
+- L25: `"M1"` → `"R1"`
+- L26: `"M3"` → `"R3"`
+
+### validation_engine\reference_cases\cases\precedence_simple.json
+
+6 correction(s) :
+
+- L10: `"M1"` → `"R1"`
+- L11: `"M2"` → `"R2"`
+- L15: `"M1"` → `"R1"`
+- L16: `"M2"` → `"R2"`
+- L24: `"M1"` → `"R1"`
+- L25: `"M2"` → `"R2"`
+
+### validation_engine\synthetic_bench\construction_inverse.py
+
+2 correction(s) :
+
+- L27: `machine` → `ressource`
+- L28: `machines` → `ressource`
+
+### validation_engine\synthetic_bench\instances_faisabilite_seule.py
+
+4 correction(s) :
+
+- L9: `machines` → `ressource`
+- L9: `machines` → `ressource`
+- L66: `machines` → `ressource`
+- L88: `machine` → `ressource`

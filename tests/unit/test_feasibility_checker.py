@@ -40,20 +40,20 @@ def _op(tache: str, ressource: str, debut: int) -> OperationPlanifiee:
 def test_planning_legal_est_accepte() -> None:
     instance = _instance(
         taches=[Tache(id="T1"), Tache(id="T2"), Tache(id="T3")],
-        ressources=[Ressource(id="M1"), Ressource(id="M2")],
+        ressources=[Ressource(id="R1"), Ressource(id="R2")],
         contraintes=[
             Precedence(avant="T1", apres="T2"),
             Precedence(avant="T2", apres="T3"),
-            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=30),
-            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=45),
-            CompatibiliteRessourceTache(tache="T2", ressource="M2", duree=45),
-            CompatibiliteRessourceTache(tache="T3", ressource="M2", duree=15),
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=30),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=45),
+            CompatibiliteRessourceTache(tache="T2", ressource="R2", duree=45),
+            CompatibiliteRessourceTache(tache="T3", ressource="R2", duree=15),
         ],
     )
     planning = _planning(
-        _op("T1", "M1", 0),
-        _op("T2", "M2", 30),
-        _op("T3", "M2", 75),
+        _op("T1", "R1", 0),
+        _op("T2", "R2", 30),
+        _op("T3", "R2", 75),
     )
 
     resultat = verifier_faisabilite(instance, planning)
@@ -65,13 +65,13 @@ def test_planning_legal_est_accepte() -> None:
 def test_operations_bout_a_bout_sur_la_meme_ressource_sont_legales() -> None:
     instance = _instance(
         taches=[Tache(id="T1"), Tache(id="T2")],
-        ressources=[Ressource(id="M1")],
+        ressources=[Ressource(id="R1")],
         contraintes=[
-            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
-            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=10),
         ],
     )
-    planning = _planning(_op("T1", "M1", 0), _op("T2", "M1", 10))
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 10))
 
     resultat = verifier_faisabilite(instance, planning)
 
@@ -84,14 +84,14 @@ def test_precedence_violee_est_detectee() -> None:
     # déclencherait aussi un chevauchement_ressource).
     instance = _instance(
         taches=[Tache(id="T1"), Tache(id="T2")],
-        ressources=[Ressource(id="M1"), Ressource(id="M2")],
+        ressources=[Ressource(id="R1"), Ressource(id="R2")],
         contraintes=[
             Precedence(avant="T1", apres="T2"),
-            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=30),
-            CompatibiliteRessourceTache(tache="T2", ressource="M2", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=30),
+            CompatibiliteRessourceTache(tache="T2", ressource="R2", duree=10),
         ],
     )
-    planning = _planning(_op("T1", "M1", 0), _op("T2", "M2", 20))
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R2", 20))
 
     resultat = verifier_faisabilite(instance, planning)
 
@@ -104,49 +104,49 @@ def test_precedence_violee_est_detectee() -> None:
 def test_chevauchement_ressource_est_detecte() -> None:
     instance = _instance(
         taches=[Tache(id="T1"), Tache(id="T2")],
-        ressources=[Ressource(id="M1")],
+        ressources=[Ressource(id="R1")],
         contraintes=[
-            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
-            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=10),
         ],
     )
-    planning = _planning(_op("T1", "M1", 0), _op("T2", "M1", 5))
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 5))
 
     resultat = verifier_faisabilite(instance, planning)
 
     assert not resultat.legal
     assert [v.type for v in resultat.violations] == ["chevauchement_ressource"]
     violation = resultat.violations[0]
-    assert violation.ressource == "M1"
+    assert violation.ressource == "R1"
     assert {violation.tache, violation.tache_secondaire} == {"T1", "T2"}
 
 
 def test_incompatibilite_ressource_tache_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1"), Ressource(id="M2")],
-        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
+        ressources=[Ressource(id="R1"), Ressource(id="R2")],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
     )
-    planning = _planning(_op("T1", "M2", 0))
+    planning = _planning(_op("T1", "R2", 0))
 
     resultat = verifier_faisabilite(instance, planning)
 
     assert not resultat.legal
     assert [v.type for v in resultat.violations] == ["incompatibilite_ressource_tache"]
     assert resultat.violations[0].tache == "T1"
-    assert resultat.violations[0].ressource == "M2"
+    assert resultat.violations[0].ressource == "R2"
 
 
 def test_tache_non_planifiee_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1"), Tache(id="T2")],
-        ressources=[Ressource(id="M1")],
+        ressources=[Ressource(id="R1")],
         contraintes=[
-            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
-            CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=10),
         ],
     )
-    planning = _planning(_op("T1", "M1", 0))
+    planning = _planning(_op("T1", "R1", 0))
 
     resultat = verifier_faisabilite(instance, planning)
 
@@ -158,10 +158,10 @@ def test_tache_non_planifiee_est_detectee() -> None:
 def test_tache_planifiee_plusieurs_fois_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1"), Ressource(id="M2")],
-        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
+        ressources=[Ressource(id="R1"), Ressource(id="R2")],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
     )
-    planning = _planning(_op("T1", "M1", 0), _op("T1", "M2", 0))
+    planning = _planning(_op("T1", "R1", 0), _op("T1", "R2", 0))
 
     resultat = verifier_faisabilite(instance, planning)
 
@@ -173,10 +173,10 @@ def test_tache_planifiee_plusieurs_fois_est_detectee() -> None:
 def test_tache_inconnue_dans_planning_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
+        ressources=[Ressource(id="R1")],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
     )
-    planning = _planning(_op("T1", "M1", 0), _op("T99", "M1", 10))
+    planning = _planning(_op("T1", "R1", 0), _op("T99", "R1", 10))
 
     resultat = verifier_faisabilite(instance, planning)
 
@@ -188,28 +188,28 @@ def test_tache_inconnue_dans_planning_est_detectee() -> None:
 def test_ressource_inconnue_dans_planning_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
+        ressources=[Ressource(id="R1")],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
     )
-    planning = _planning(_op("T1", "M99", 0))
+    planning = _planning(_op("T1", "R99", 0))
 
     resultat = verifier_faisabilite(instance, planning)
 
     assert not resultat.legal
     assert [v.type for v in resultat.violations] == ["ressource_inconnue_dans_planning"]
-    assert resultat.violations[0].ressource == "M99"
+    assert resultat.violations[0].ressource == "R99"
 
 
 def test_echeance_respectee_est_legale() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1")],
+        ressources=[Ressource(id="R1")],
         contraintes=[
-            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
             Echeance(tache="T1", echeance=10),
         ],
     )
-    planning = _planning(_op("T1", "M1", 0))  # finit à 10 : échéance respectée pile
+    planning = _planning(_op("T1", "R1", 0))  # finit à 10 : échéance respectée pile
 
     resultat = verifier_faisabilite(instance, planning)
 
@@ -219,13 +219,13 @@ def test_echeance_respectee_est_legale() -> None:
 def test_echeance_depassee_est_detectee() -> None:
     instance = _instance(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1")],
+        ressources=[Ressource(id="R1")],
         contraintes=[
-            CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
             Echeance(tache="T1", echeance=5),
         ],
     )
-    planning = _planning(_op("T1", "M1", 0))  # finit à 10, échéance à 5
+    planning = _planning(_op("T1", "R1", 0))  # finit à 10, échéance à 5
 
     resultat = verifier_faisabilite(instance, planning)
 

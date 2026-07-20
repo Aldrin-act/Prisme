@@ -32,11 +32,11 @@ def test_diagnostic_via_l_api_ne_trouve_aucune_cause_pour_un_solveur_sain(
 
         instance = InstanceTRCO(
             taches=[Tache(id="T1"), Tache(id="T2")],
-            ressources=[Ressource(id="M1")],
+            ressources=[Ressource(id="R1")],
             contraintes=[
                 Precedence(avant="T1", apres="T2"),
-                CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
-                CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=5),
+                CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+                CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=5),
             ],
             objectifs=[MinimiserMakespan()],
         )

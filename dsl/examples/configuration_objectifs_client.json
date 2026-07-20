@@ -1,0 +1,179 @@
+{
+  "_comment": "Configuration des objectifs pour différents clients - exemples",
+
+  "client_baraa_production": {
+    "description": "Planning de production BARAA - optimisation économique",
+    "objectifs": [
+      {
+        "type": "minimiser_cout_total",
+        "poids": 0.7,
+        "cout_horaire_par_ressource": {
+          "R1": 50.0,
+          "R2": 75.0,
+          "R3": 60.0
+        },
+        "cout_setup_par_changement": {
+          "R1": 100.0,
+          "R2": 150.0,
+          "R3": 120.0
+        },
+        "penalite_retard_par_jour": 200.0,
+        "cout_inactivite_par_heure": 10.0
+      },
+      {
+        "type": "equilibrer_charge",
+        "poids": 0.3,
+        "methode": "variance",
+        "ressources_cibles": ["R1", "R2", "R3"]
+      }
+    ]
+  },
+
+  "client_maintenance_urgence": {
+    "description": "Planning de maintenance - délais critiques",
+    "objectifs": [
+      {
+        "type": "minimiser_retards",
+        "poids": 0.8,
+        "fonction_penalite": "exponentielle",
+        "priorite_par_tache": {
+          "URGENCE_001": 10.0,
+          "URGENCE_002": 8.0,
+          "MAINTENANCE_PREVENTIVE": 1.0
+        },
+        "seuil_grace": 30
+      },
+      {
+        "type": "minimiser_makespan",
+        "poids": 0.2,
+        "makespan_cible": 480
+      }
+    ]
+  },
+
+  "client_eco_responsable": {
+    "description": "Planning avec contraintes environnementales",
+    "objectifs": [
+      {
+        "type": "minimiser_empreinte_co2",
+        "poids": 0.5,
+        "emission_co2_par_ressource_par_heure": {
+          "RESSOURCE_DIESEL": 12.5,
+          "RESSOURCE_ELECTRIQUE": 2.3,
+          "RESSOURCE_HYBRIDE": 5.0
+        },
+        "emission_co2_par_changement": {
+          "RESSOURCE_DIESEL": 5.0,
+          "RESSOURCE_ELECTRIQUE": 0.5,
+          "RESSOURCE_HYBRIDE": 2.0
+        },
+        "seuil_alerte_co2": 500.0
+      },
+      {
+        "type": "minimiser_makespan",
+        "poids": 0.3
+      },
+      {
+        "type": "equilibrer_charge",
+        "poids": 0.2,
+        "methode": "ecart_max"
+      }
+    ]
+  },
+
+  "client_optimisation_complete": {
+    "description": "Tous les objectifs - pondération équilibrée",
+    "objectifs": [
+      {
+        "type": "minimiser_makespan",
+        "poids": 0.3,
+        "makespan_cible": 600,
+        "penalite_depassement": 2.0
+      },
+      {
+        "type": "equilibrer_charge",
+        "poids": 0.25,
+        "methode": "gini"
+      },
+      {
+        "type": "minimiser_retards",
+        "poids": 0.2,
+        "fonction_penalite": "quadratique",
+        "seuil_grace": 15
+      },
+      {
+        "type": "maximiser_utilisation",
+        "poids": 0.15,
+        "ressources_prioritaires": ["R1", "R3"]
+      },
+      {
+        "type": "minimiser_changements",
+        "poids": 0.1,
+        "cout_changement_par_ressource": {
+          "R1": 1.5,
+          "R2": 2.0,
+          "R3": 1.0
+        }
+      }
+    ]
+  },
+
+  "client_simple_makespan": {
+    "description": "Objectif simple - minimiser la durée totale",
+    "objectifs": [
+      {
+        "type": "minimiser_makespan",
+        "poids": 1.0
+      }
+    ]
+  },
+
+  "client_preferences_operateurs": {
+    "description": "Planning avec préférences d'affectation",
+    "objectifs": [
+      {
+        "type": "minimiser_makespan",
+        "poids": 0.6
+      },
+      {
+        "type": "respect_preferences",
+        "poids": 0.4,
+        "preferences_tache_ressource": {
+          "T1": {
+            "EQUIPE_A": 1.5,
+            "EQUIPE_B": 1.0,
+            "EQUIPE_C": 0.5
+          },
+          "T2": {
+            "EQUIPE_A": 1.0,
+            "EQUIPE_B": 1.8,
+            "EQUIPE_C": 1.0
+          }
+        },
+        "preferences_horaires": {
+          "T1": {
+            "préféré": [0, 240],
+            "éviter": [480, 600]
+          }
+        }
+      }
+    ]
+  },
+
+  "_schemas_disponibles": {
+    "note": "Pour référence - types d'objectifs disponibles",
+    "objectifs_base": [
+      "minimiser_makespan",
+      "equilibrer_charge",
+      "minimiser_retards",
+      "maximiser_utilisation",
+      "minimiser_changements"
+    ],
+    "objectifs_personnalises": [
+      "minimiser_cout_total",
+      "minimiser_empreinte_co2",
+      "objectif_multi_criteres",
+      "respect_preferences"
+    ]
+  }
+}

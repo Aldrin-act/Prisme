@@ -1,0 +1,28 @@
+{
+  "nom": "choix_ressource_attendu",
+  "description": "T1 (courte) est compatible avec M1 et M2 (même durée sur les deux — le choix ne se joue pas sur la durée) ; T2 (longue) n'est compatible qu'avec M1. Aucune précédence entre les deux. L'affectation optimale est forcée par la contention de disponibilité, pas par un choix arbitraire : mettre T1 sur M1 obligerait T2 à attendre la fin de T1 sur la même ressource (makespan 40), alors que libérer M1 pour T2 seul et envoyer T1 sur M2 donne un makespan de 30. Un solveur correct trouve donc M2 pour T1 quelle que soit sa stratégie interne de bris d'égalité — ce cas sert à démontrer que la brique fidélité détecte un mauvais choix de ressource même quand ce choix reste, par ailleurs, faisable. Voir duree_differente_par_ressource.json pour le cas symétrique où c'est la durée, pas la contention, qui force le choix.",
+  "instance": {
+    "taches": [
+      {"id": "T1", "nom": null},
+      {"id": "T2", "nom": null}
+    ],
+    "ressources": [
+      {"id": "M1", "nom": null},
+      {"id": "M2", "nom": null}
+    ],
+    "contraintes": [
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M2", "duree": 10},
+      {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "M1", "duree": 30}
+    ],
+    "objectifs": [
+      {"type": "minimiser_makespan"}
+    ]
+  },
+  "planning_attendu": {
+    "operations": [
+      {"tache": "T1", "ressource": "M2", "debut": 0},
+      {"tache": "T2", "ressource": "M1", "debut": 0}
+    ]
+  }
+}

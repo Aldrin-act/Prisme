@@ -18,7 +18,7 @@ travail : à partir du schéma ci-dessus, propose une ou plusieurs requêtes SQL
 qui extraient les données pertinentes pour construire une instance
 d'ordonnancement T-R-C-O — typiquement : les tâches/travaux encore à
 planifier, les ressources qui peuvent les exécuter (équipes, opérateurs,
-machines...), et s'ils existent, des compétences/qualifications ou un
+ressource...), et s'ils existent, des compétences/qualifications ou un
 historique d'affectation.
 
 Règles impératives :

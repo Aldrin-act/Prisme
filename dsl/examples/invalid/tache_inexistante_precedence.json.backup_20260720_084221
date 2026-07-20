@@ -1,0 +1,17 @@
+{
+  "taches": [
+    {"id": "T1"},
+    {"id": "T2"}
+  ],
+  "ressources": [
+    {"id": "M1"}
+  ],
+  "contraintes": [
+    {"type": "precedence", "avant": "T1", "apres": "T99"},
+    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 20},
+    {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "M1", "duree": 10}
+  ],
+  "objectifs": [
+    {"type": "minimiser_makespan"}
+  ]
+}

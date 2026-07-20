@@ -67,11 +67,11 @@ def test_cycle_ingestion_execution_visible_en_supervision(image_sandbox: str, re
 
         instance = InstanceTRCO(
             taches=[Tache(id="T1"), Tache(id="T2")],
-            ressources=[Ressource(id="M1")],
+            ressources=[Ressource(id="R1")],
             contraintes=[
                 Precedence(avant="T1", apres="T2"),
-                CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10),
-                CompatibiliteRessourceTache(tache="T2", ressource="M1", duree=5),
+                CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+                CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=5),
             ],
             objectifs=[MinimiserMakespan()],
         )

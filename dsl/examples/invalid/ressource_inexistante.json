@@ -3,10 +3,10 @@
     {"id": "T1"}
   ],
   "ressources": [
-    {"id": "M1"}
+    {"id": "R1"}
   ],
   "contraintes": [
-    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M99", "duree": 20}
+    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R99", "duree": 20}
   ],
   "objectifs": [
     {"type": "minimiser_makespan"}

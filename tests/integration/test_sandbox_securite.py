@@ -39,8 +39,8 @@ def resoudre(instance):
 def _instance_triviale() -> InstanceTRCO:
     return InstanceTRCO(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
+        ressources=[Ressource(id="R1")],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
         objectifs=[MinimiserMakespan()],
     )
 

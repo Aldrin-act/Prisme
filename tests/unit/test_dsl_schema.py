@@ -34,8 +34,8 @@ def test_exemple_invalide_est_rejete(chemin: Path) -> None:
 def _instance_minimale(**overrides: object) -> dict:
     base = {
         "taches": [{"id": "T1"}],
-        "ressources": [{"id": "M1"}],
-        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10}],
+        "ressources": [{"id": "R1"}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}],
         "objectifs": [{"type": "minimiser_makespan"}],
     }
     base.update(overrides)
@@ -44,7 +44,7 @@ def _instance_minimale(**overrides: object) -> dict:
 
 def test_duree_nulle_rejetee() -> None:
     payload = _instance_minimale(
-        contraintes=[{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 0}]
+        contraintes=[{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 0}]
     )
     with pytest.raises(ValidationError):
         charger_instance(payload)
@@ -60,7 +60,7 @@ def test_precedence_autoreference_rejetee() -> None:
     payload = _instance_minimale(
         contraintes=[
             {"type": "precedence", "avant": "T1", "apres": "T1"},
-            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
         ]
     )
     with pytest.raises(ValidationError):
@@ -104,14 +104,14 @@ def test_identifiants_de_taches_dupliques_rejetes() -> None:
 
 
 def test_identifiants_de_ressources_dupliques_rejetes() -> None:
-    payload = _instance_minimale(ressources=[{"id": "M1"}, {"id": "M1"}])
+    payload = _instance_minimale(ressources=[{"id": "R1"}, {"id": "R1"}])
     with pytest.raises(ValidationError, match="dupliqués"):
         charger_instance(payload)
 
 
 def test_compatibilite_vers_tache_inconnue_rejetee() -> None:
     payload = _instance_minimale(
-        contraintes=[{"type": "compatibilite_ressource_tache", "tache": "T99", "ressource": "M1", "duree": 10}]
+        contraintes=[{"type": "compatibilite_ressource_tache", "tache": "T99", "ressource": "R1", "duree": 10}]
     )
     with pytest.raises(ValidationError, match="tâche inconnue"):
         charger_instance(payload)
@@ -143,7 +143,7 @@ def test_competences_absentes_par_defaut_liste_vide() -> None:
 def test_echeance_valide_acceptee() -> None:
     payload = _instance_minimale(
         contraintes=[
-            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
             {"type": "echeance", "tache": "T1", "echeance": 100},
         ]
     )
@@ -154,7 +154,7 @@ def test_echeance_valide_acceptee() -> None:
 def test_echeance_vers_tache_inconnue_rejetee() -> None:
     payload = _instance_minimale(
         contraintes=[
-            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
             {"type": "echeance", "tache": "T99", "echeance": 100},
         ]
     )
@@ -164,9 +164,9 @@ def test_echeance_vers_tache_inconnue_rejetee() -> None:
 
 def test_competence_requise_valide_acceptee() -> None:
     payload = _instance_minimale(
-        ressources=[{"id": "M1", "competences": ["soudure"]}],
+        ressources=[{"id": "R1", "competences": ["soudure"]}],
         contraintes=[
-            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
             {"type": "competence_requise", "tache": "T1", "competence": "soudure"},
         ],
     )
@@ -177,7 +177,7 @@ def test_competence_requise_valide_acceptee() -> None:
 def test_competence_requise_vers_tache_inconnue_rejetee() -> None:
     payload = _instance_minimale(
         contraintes=[
-            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
             {"type": "competence_requise", "tache": "T99", "competence": "soudure"},
         ]
     )
@@ -189,9 +189,9 @@ def test_compatibilite_sans_competence_requise_rejetee() -> None:
     """Une ressource sans la compétence exigée ne peut pas être déclarée compatible —
     même si elle est par ailleurs listée dans `ressources` (§ garde-fou structurel)."""
     payload = _instance_minimale(
-        ressources=[{"id": "M1", "competences": []}],
+        ressources=[{"id": "R1", "competences": []}],
         contraintes=[
-            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
             {"type": "competence_requise", "tache": "T1", "competence": "soudure"},
         ],
     )

@@ -1,0 +1,37 @@
+{
+  "_comment": "Fichier de test pour le script de migration - contient volontairement l'ancienne nomenclature",
+  "taches": [
+    {"id": "T1", "nom": "Découpe"},
+    {"id": "T2", "nom": "Assemblage"}
+  ],
+  "machines": [
+    {"id": "M1", "nom": "Machine de découpe"},
+    {"id": "M2", "nom": "Machine d'assemblage"},
+    {"id": "MACHINE_LASER", "nom": "Laser industriel"}
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "machine_id": "M1",
+      "duree": 60
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "machine_id": "M2",
+      "duree": 90
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_cout_total",
+      "cout_par_machine": {
+        "M1": 50.0,
+        "M2": 75.0,
+        "MACHINE_LASER": 120.0
+      },
+      "machines_prioritaires": ["M1", "MACHINE_LASER"]
+    }
+  ]
+}

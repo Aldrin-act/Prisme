@@ -7,13 +7,13 @@
       {"id": "T2", "nom": null}
     ],
     "ressources": [
-      {"id": "M1", "nom": null},
-      {"id": "M2", "nom": null}
+      {"id": "R1", "nom": null},
+      {"id": "R2", "nom": null}
     ],
     "contraintes": [
-      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
-      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M2", "duree": 10},
-      {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "M1", "duree": 30}
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R2", "duree": 10},
+      {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 30}
     ],
     "objectifs": [
       {"type": "minimiser_makespan"}
@@ -21,8 +21,8 @@
   },
   "planning_attendu": {
     "operations": [
-      {"tache": "T1", "ressource": "M2", "debut": 0},
-      {"tache": "T2", "ressource": "M1", "debut": 0}
+      {"tache": "T1", "ressource": "R2", "debut": 0},
+      {"tache": "T2", "ressource": "R1", "debut": 0}
     ]
   }
 }

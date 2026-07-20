@@ -26,9 +26,9 @@ L'ordonnancement et l'équilibrage de charge en industrie sont des problèmes cl
 
 ### 2.2 Nature exacte du problème d'optimisation
 
-PRISME traite l'**ordonnancement et l'équilibrage de charge comme un problème indissociable**. Décider *quelle ressource* exécute une tâche (équilibrage) et *quand* elle l'exécute (ordonnancement) sont deux faces d'une même décision : on ne peut pas dater sans savoir sur quelle machine.
+PRISME traite l'**ordonnancement et l'équilibrage de charge comme un problème indissociable**. Décider *quelle ressource* exécute une tâche (équilibrage) et *quand* elle l'exécute (ordonnancement) sont deux faces d'une même décision : on ne peut pas dater sans savoir sur quelle ressource.
 
-Formellement, cela correspond au **Flexible Job-Shop Scheduling Problem (FJSP)** : chaque opération peut être exécutée par un sous-ensemble de machines compatibles, et le solveur doit à la fois **affecter** (choix de la machine) et **séquencer** (ordre et dates). CP-SAT est adapté précisément parce qu'il gère nativement ce couplage affectation + séquencement. Le FJSP est NP-difficile, ce qui a des conséquences directes sur la stratégie de validation (voir §7).
+Formellement, cela correspond au **Flexible Job-Shop Scheduling Problem (FJSP)** : chaque opération peut être exécutée par un sous-ensemble de ressource compatibles, et le solveur doit à la fois **affecter** (choix de la ressource) et **séquencer** (ordre et dates). CP-SAT est adapté précisément parce qu'il gère nativement ce couplage affectation + séquencement. Le FJSP est NP-difficile, ce qui a des conséquences directes sur la stratégie de validation (voir §7).
 
 ### 2.3 Mode de fonctionnement : réordonnancement réactif avec humain dans la boucle
 
@@ -36,7 +36,7 @@ PRISME n'est **pas** un système de replanification autonome temps-réel. C'est 
 
 Le cycle de fonctionnement est le suivant :
 
-1. Un aléa survient dans l'atelier (panne machine, commande urgente, retard).
+1. Un aléa survient dans l'atelier (panne ressource, commande urgente, retard).
 2. Le système **lève une alerte sur le tableau de bord**.
 3. Un opérateur humain voit l'alerte et **décide de déclencher** le recalcul.
 4. Le solveur (déjà généré et validé) s'exécute sur l'état courant de l'atelier.
@@ -67,7 +67,7 @@ Une tension centrale traverse le projet :
 - Plus on **pré-écrit** des stratégies figées, plus le système est robuste, mais moins l'IA « génère » réellement — on retombe vers un outil paramétrable classique, exactement ce qu'on veut éviter.
 - Plus on laisse l'IA **générer librement**, plus l'originalité est forte, mais plus la validation devient impossible à maîtriser.
 
-**Position retenue : génération libre encadrée par un DSL.** L'entreprise s'exprime dans un vocabulaire métier structuré (le modèle T-R-C-O) ; l'IA traduit ce vocabulaire en code de solveur ; et parce que le vocabulaire est **fini et typé**, la sortie de l'IA reste validable. Le DSL est le **contrat entre le métier et la machine** : il donne à la fois l'utilité (l'entreprise parle sa langue), l'originalité (l'IA génère réellement le code) et la fiabilité (la surface de génération est bornée et vérifiable).
+**Position retenue : génération libre encadrée par un DSL.** L'entreprise s'exprime dans un vocabulaire métier structuré (le modèle T-R-C-O) ; l'IA traduit ce vocabulaire en code de solveur ; et parce que le vocabulaire est **fini et typé**, la sortie de l'IA reste validable. Le DSL est le **contrat entre le métier et la ressource** : il donne à la fois l'utilité (l'entreprise parle sa langue), l'originalité (l'IA génère réellement le code) et la fiabilité (la surface de génération est bornée et vérifiable).
 
 ---
 
@@ -103,7 +103,7 @@ Le DSL et l'architecture sont conçus pour accueillir ces familles **sans refont
 Le DSL est la pièce d'ingénierie centrale dont dépend tout le reste. Il est organisé selon quatre axes métier :
 
 - **T — Tâches** : les opérations à ordonnancer, leurs durées, leurs relations de précédence.
-- **R — Ressources** : les machines / postes, leurs compatibilités avec les tâches.
+- **R — Ressources** : les ressource / postes, leurs compatibilités avec les tâches.
 - **C — Contraintes** : les règles que le planning doit respecter (précédence, compatibilité, et plus tard préemptibilité, périmètre de replanification, etc.).
 - **O — Objectifs** : ce que le planning doit optimiser (minimiser le makespan, équilibrer la charge, respecter les délais…).
 
@@ -229,7 +229,7 @@ Ces trois conditions garantissent que la boucle sert l'architecture (génératio
 Lorsqu'un planning est jugé mauvais (par des **KPI qui se dégradent** et/ou par un **signal humain** — les deux sources combinées), le système ne régénère pas le code au hasard. Il **attribue d'abord la cause** parmi trois coupables possibles, par élimination et dans un ordre précis :
 
 1. **Test du code** sur les instances synthétiques à vérité terrain connue. S'il échoue là où la bonne réponse est connue → **le code est fautif** → régénération justifiée.
-2. **Test des données** : le planning produit est-il faisable ? S'il est infaisable ou incohérent alors que le code est sain → **les données d'entrée sont corrompues** (durée négative, machine inexistante…) → régénérer ne réparerait rien.
+2. **Test des données** : le planning produit est-il faisable ? S'il est infaisable ou incohérent alors que le code est sain → **les données d'entrée sont corrompues** (durée négative, ressource inexistante…) → régénérer ne réparerait rien.
 3. **Test de la spécification** : si le code est sain et les données propres mais que le résultat ne correspond pas à l'attendu → **la description DSL est fausse** (l'entreprise a mal décrit ses règles).
 
 Confondre ces trois cas est fatal : une boucle qui « améliore » du code sain en réponse à des données pourries dégrade le système à chaque itération. Le système **diagnostique et propose une correction, mais l'humain décide d'agir**, en cohérence avec le fil directeur du projet.
@@ -248,7 +248,7 @@ On ne teste pas un système qui génère du code non déterministe comme on test
 
 ### 6.2 Les trois briques de test de la couche 2 (par sévérité croissante)
 
-1. **Vérificateur de faisabilité** — *le planning est-il légal ?* Aucune précédence violée, aucune machine occupée deux fois, aucune tâche sur une ressource incompatible. Vérificateur écrit une seule fois, à la main, déterministe, applicable à n'importe quel planning. C'est le test le plus rentable : il attrape la grande majorité des erreurs de génération.
+1. **Vérificateur de faisabilité** — *le planning est-il légal ?* Aucune précédence violée, aucune ressource occupée deux fois, aucune tâche sur une ressource incompatible. Vérificateur écrit une seule fois, à la main, déterministe, applicable à n'importe quel planning. C'est le test le plus rentable : il attrape la grande majorité des erreurs de génération.
 2. **Optimalité sur banc synthétique** — *le planning est-il bon ?* Sur des instances dont l'optimum est connu, on compare le résultat du solveur généré à l'optimum. Prouve que l'IA produit non seulement du code légal mais du code qui résout **bien** le problème.
 3. **Fidélité sémantique** — *le planning résout-il le bon problème ?* Sur des cas de référence où le DSL et le planning attendu sont écrits à la main, on vérifie que la génération retombe dessus. C'est là que se cachent les erreurs les plus vicieuses (traduire « A avant B » en « B avant A » produit un planning faisable et optimal… pour le mauvais problème).
 
@@ -279,7 +279,7 @@ Spécifique au non-déterminisme : générer le solveur pour le **même DSL** pl
 
 ### 6.7 Garde-fous déterministes en production
 
-Le code est déterministe **pour des données valides**. En production arrivent les données réelles du client, qui peuvent être corrompues (durée négative, machine inexistante, contraintes contradictoires). On conserve donc **deux garde-fous légers et déterministes** sur chaque exécution :
+Le code est déterministe **pour des données valides**. En production arrivent les données réelles du client, qui peuvent être corrompues (durée négative, ressource inexistante, contraintes contradictoires). On conserve donc **deux garde-fous légers et déterministes** sur chaque exécution :
 
 - **En amont** — validation des données d'entrée : le payload T-R-C-O est-il cohérent avant de lancer le solveur ?
 - **En aval** — vérificateur de faisabilité : il repasse en une fraction de seconde sur le planning produit, non pour juger le code, mais pour attraper le cas où des données pathologiques auraient produit un résultat illégal.
@@ -348,7 +348,7 @@ Interface d'alerte et de déclenchement humain du réordonnancement ; validation
 **Décidé :**
 - Positionnement : réordonnanceur réactif human-in-the-loop.
 - Problème : FJSP, noyau à trois familles de contraintes.
-- Contrat métier-machine : DSL T-R-C-O.
+- Contrat métier-ressource : DSL T-R-C-O.
 - Architecture d'exécution : code persistant, sandbox éphémère, adaptateur ERP, deux canaux de sortie.
 - Validation : boucle generate-test-repair bornée, hors ligne, diagnostique, avec échec honnête.
 - Test : trois briques ordonnées + deux garde-fous déterministes en production + test de stabilité.

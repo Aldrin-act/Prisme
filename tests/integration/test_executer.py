@@ -92,8 +92,8 @@ def resoudre(instance):
 def test_code_valide_est_execute_et_resout_correctement() -> None:
     instance = InstanceTRCO(
         taches=[Tache(id="T1")],
-        ressources=[Ressource(id="M1")],
-        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="M1", duree=10)],
+        ressources=[Ressource(id="R1")],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
         objectifs=[MinimiserMakespan()],
     )
 

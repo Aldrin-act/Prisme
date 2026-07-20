@@ -1,0 +1,29 @@
+{
+  "nom": "duree_differente_par_ressource",
+  "description": "T1 est compatible avec M1 (durée 10) et M2 (durée 30) : même tâche, deux ressources compatibles, mais avec des durées réellement différentes selon la ressource choisie — le FJSP flexible véritable, pas une durée partagée. T2 n'est compatible qu'avec M3, une ressource dédiée, jamais disputée par personne. Aucune précédence. Contrairement à choix_ressource_attendu.json (durée partagée entre ressources, choix forcé par la contention de disponibilité), ici M2 n'est jamais sollicitée par une autre tâche : rien ne pourrait justifier de la préférer à M1 sinon en se trompant sur la durée propre à chaque ressource. Un solveur correct affecte donc T1 à M1 (makespan 20, le max de 10 et 20) ; un solveur qui utiliserait par erreur une durée unique par tâche resterait faisable mais produirait un mauvais makespan (30) sans qu'aucune violation de faisabilité ne le trahisse — ce cas démontre que la brique fidélité détecte une mauvaise durée par ressource, symétriquement au mauvais choix de ressource que détecte déjà choix_ressource_attendu.json.",
+  "instance": {
+    "taches": [
+      {"id": "T1", "nom": null},
+      {"id": "T2", "nom": null}
+    ],
+    "ressources": [
+      {"id": "M1", "nom": null},
+      {"id": "M2", "nom": null},
+      {"id": "M3", "nom": null}
+    ],
+    "contraintes": [
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10},
+      {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M2", "duree": 30},
+      {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "M3", "duree": 20}
+    ],
+    "objectifs": [
+      {"type": "minimiser_makespan"}
+    ]
+  },
+  "planning_attendu": {
+    "operations": [
+      {"tache": "T1", "ressource": "M1", "debut": 0},
+      {"tache": "T2", "ressource": "M3", "debut": 0}
+    ]
+  }
+}

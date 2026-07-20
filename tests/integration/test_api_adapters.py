@@ -50,9 +50,9 @@ def test_ingestion_via_comprehension_accepte_une_traduction_valide() -> None:
         {
             "instance": {
                 "taches": [{"id": "T1"}],
-                "ressources": [{"id": "M1"}],
+                "ressources": [{"id": "R1"}],
                 "contraintes": [
-                    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "M1", "duree": 10}
+                    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}
                 ],
                 "objectifs": [{"type": "minimiser_makespan"}],
             },
@@ -87,7 +87,7 @@ def test_ingestion_via_comprehension_relaie_le_rejet_du_garde_fou() -> None:
         {
             "instance": {
                 "taches": [{"id": "T1"}],
-                "ressources": [{"id": "M1"}],
+                "ressources": [{"id": "R1"}],
                 "contraintes": [],
                 "objectifs": [{"type": "minimiser_makespan"}],
             }

@@ -53,7 +53,7 @@ Le principe directeur reste inchangé : **chaque brique déterministe et testabl
 ## Phase 1 — Fondations du DSL T-R-C-O
 
 **Semaines :** 2-3
-**Objectif :** Modéliser le contrat métier-machine (les quatre axes Tâches, Ressources, Contraintes, Objectifs) pour le noyau minimal, en champs typés et validables.
+**Objectif :** Modéliser le contrat métier-ressource (les quatre axes Tâches, Ressources, Contraintes, Objectifs) pour le noyau minimal, en champs typés et validables.
 
 Le noyau minimal couvre trois familles seulement : **précédence**, **compatibilité ressource-tâche** et **durées**. Le DSL joue simultanément trois rôles : format d'échange, entrée de génération et cadre de validation.
 
@@ -65,7 +65,7 @@ Le noyau minimal couvre trois familles seulement : **précédence**, **compatibi
 *Definition of Done — Un ensemble de tâches avec précédences se charge et se sérialise en JSON.*
 
 ### PH1-T2 · Modéliser l'axe R (Ressources)
-- Définir le modèle d'une ressource (machine/poste) avec identifiant.
+- Définir le modèle d'une ressource (ressource/poste) avec identifiant.
 - Modéliser la compatibilité ressource-tâche (sous-ensemble de ressources par opération).
 - Valider qu'une tâche ne référence que des ressources déclarées.
 
@@ -95,7 +95,7 @@ Le noyau minimal couvre trois familles seulement : **précédence**, **compatibi
 ### PH2-T1 · Cœur du vérificateur
 - Prendre en entrée une instance T-R-C-O et un planning proposé.
 - Vérifier qu'aucune relation de précédence n'est violée.
-- Vérifier qu'aucune machine n'exécute deux opérations en chevauchement.
+- Vérifier qu'aucune ressource n'exécute deux opérations en chevauchement.
 - Vérifier qu'aucune tâche n'est affectée à une ressource incompatible.
 
 *Definition of Done — Le vérificateur rend un verdict légal/illégal sur tout planning du noyau.*
@@ -124,7 +124,7 @@ Le noyau minimal couvre trois familles seulement : **précédence**, **compatibi
 ### PH3-T1 · Générateur par construction inverse
 - Partir d'un planning optimal choisi et construire l'instance T-R-C-O autour.
 - Garantir que l'optimum est connu par construction, sans calcul coûteux.
-- Paramétrer la taille des instances (nombre de tâches, de machines).
+- Paramétrer la taille des instances (nombre de tâches, de ressource).
 
 *Definition of Done — Le générateur produit une instance dont l'optimum est connu et documenté.*
 
@@ -151,7 +151,7 @@ Le noyau minimal couvre trois familles seulement : **précédence**, **compatibi
 
 ### PH4-T1 · Modèle CP-SAT du noyau
 - Traduire précédence, compatibilité et durées en modèle OR-Tools CP-SAT.
-- Implémenter l'affectation machine et le séquencement (couplage FJSP).
+- Implémenter l'affectation ressource et le séquencement (couplage FJSP).
 - Poser l'objectif de minimisation du makespan.
 
 *Definition of Done — Le solveur manuel résout une instance du noyau et rend un planning.*
