@@ -24,6 +24,7 @@ _PROMPT_SYSTEME = (
 class ResultatCorrection:
     reponse_brute: str
     code_source: str
+    cause: str
 
 
 def corriger_code(appel_llm: AppelLLM, code_source: str, probleme: str) -> ResultatCorrection:
@@ -31,4 +32,8 @@ def corriger_code(appel_llm: AppelLLM, code_source: str, probleme: str) -> Resul
     prompt = gabarit.format(mission=charger_mission(), code=code_source, probleme=probleme)
     reponse = appel_llm(_PROMPT_SYSTEME, prompt)
     donnees = extraire_json(reponse)
-    return ResultatCorrection(reponse_brute=reponse, code_source=donnees["code"])
+    # `cause` est une aide au diagnostic/audit (pourquoi le Debugger a changé
+    # le code) — jamais bloquante si le LLM l'omet malgré la consigne.
+    return ResultatCorrection(
+        reponse_brute=reponse, code_source=donnees["code"], cause=donnees.get("cause", "non précisée")
+    )

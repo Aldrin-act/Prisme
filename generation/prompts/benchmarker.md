@@ -165,6 +165,13 @@ Analyser les caractéristiques d'une instance FJSP et recommander le **meilleur 
 
 ## Exemple de réponse
 
+**Cet exemple illustre uniquement le format JSON attendu, pas une règle à
+reproduire.** Les valeurs (algorithme, paramètres, temps estimé) sont
+propres à *cette* instance de 2165 tâches — une grande instance ne signifie
+pas systématiquement "génétique" : appuie ta recommandation sur les
+caractéristiques réelles fournies ci-dessus et les critères de décision,
+jamais sur la ressemblance avec cet exemple.
+
 Pour une instance de 2165 tâches, 30 ressources, flexibilité moyenne 3.5, avec précédences :
 
 ```json

@@ -14,6 +14,15 @@ référence, seul endroit où un humain a validé une réponse précise (§6.2
 brique 3). Un même défaut peut donc, selon où il se manifeste, être classé
 « optimalite » ou « fidelite » — ce n'est pas une ambiguïté, c'est le
 découpage des responsabilités entre les deux bancs.
+
+`tolerance_relative` et `comparer_affectation` existent pour les algorithmes
+non-CP-SAT recommandés par l'agent Benchmarker (§5.6) : CP-SAT reste jugé
+strictement (valeurs par défaut, exactitude requise) ; un algorithme approché
+est jugé sur la qualité de son makespan à une tolérance explicite près, sans
+exiger l'affectation tâche→ressource exacte d'un cas écrit à la main pour un
+autre algorithme. `evaluer_cascade` reste agnostique de *quel* algorithme a
+produit le solveur — c'est à l'appelant (`generation/pipeline_multi_agents.py`,
+qui connaît la recommandation du Benchmarker) de choisir ces deux valeurs.
 """
 
 from __future__ import annotations
@@ -101,13 +110,26 @@ def evaluer_optimalite_banc(solveur: Solveur, tolerance_relative: float = 0.0) -
     )
 
 
-def evaluer_un_cas_reference(solveur: Solveur, cas: CasReference) -> DiagnosticInstance:
+def evaluer_un_cas_reference(
+    solveur: Solveur,
+    cas: CasReference,
+    tolerance_relative: float = 0.0,
+    comparer_affectation: bool = True,
+) -> DiagnosticInstance:
     """Brique 3 sur un cas de référence : le solveur retombe-t-il sur le
     planning attendu, écrit à la main pour la fidélité sémantique (§6.2
     brique 3) ? Comparaison volontairement partielle — même affectation
     tâche→ressource et même makespan que le planning attendu, pas l'égalité
     horaire stricte, puisque plusieurs plannings différemment chronométrés
     peuvent être également valides.
+
+    `comparer_affectation` et `tolerance_relative` existent pour les
+    algorithmes non-CP-SAT recommandés par l'agent Benchmarker
+    (`generation/agents/benchmarker.py`) : un algorithme approché (génétique,
+    ACO, recuit simulé, tabou, heuristiques de dispatching) n'a aucune raison
+    de reproduire l'affectation exacte écrite à la main pour ce cas — seule
+    la qualité du makespan compte alors, à `tolerance_relative` près. CP-SAT
+    reste jugé sur les deux critères stricts (valeurs par défaut).
     """
     planning = solveur(cas.instance)
     echec_faisabilite = _diagnostiquer_faisabilite(cas.nom, cas.instance, planning)
@@ -115,31 +137,53 @@ def evaluer_un_cas_reference(solveur: Solveur, cas: CasReference) -> DiagnosticI
         return echec_faisabilite
 
     assert planning is not None
-    affectation_obtenue = {operation.tache: operation.ressource for operation in planning.operations}
-    affectation_attendue = {operation.tache: operation.ressource for operation in cas.planning_attendu.operations}
     makespan_obtenu = calculer_makespan(cas.instance, planning)
     makespan_attendu = calculer_makespan(cas.instance, cas.planning_attendu)
 
-    ecarts = [
-        f"tâche {tache!r} : ressource attendue {ressource_attendue!r}, obtenue {affectation_obtenue.get(tache)!r}"
-        for tache, ressource_attendue in affectation_attendue.items()
-        if affectation_obtenue.get(tache) != ressource_attendue
-    ]
-    if makespan_obtenu != makespan_attendu:
-        ecarts.append(f"makespan attendu {makespan_attendu}, obtenu {makespan_obtenu}")
+    ecarts: list[str] = []
+    if comparer_affectation:
+        affectation_obtenue = {operation.tache: operation.ressource for operation in planning.operations}
+        affectation_attendue = {operation.tache: operation.ressource for operation in cas.planning_attendu.operations}
+        ecarts.extend(
+            f"tâche {tache!r} : ressource attendue {ressource_attendue!r}, obtenue {affectation_obtenue.get(tache)!r}"
+            for tache, ressource_attendue in affectation_attendue.items()
+            if affectation_obtenue.get(tache) != ressource_attendue
+        )
+
+    plafond_tolere = makespan_attendu * (1 + tolerance_relative)
+    if makespan_obtenu > plafond_tolere:
+        ecarts.append(
+            f"makespan attendu {makespan_attendu} (tolérance {tolerance_relative:.0%}), obtenu {makespan_obtenu}"
+        )
 
     if ecarts:
         return DiagnosticInstance(cas.nom, "fidelite", tuple(ecarts))
     return DiagnosticInstance(cas.nom, None, ())
 
 
-def evaluer_fidelite_reference(solveur: Solveur) -> VerdictCascade:
+def evaluer_fidelite_reference(
+    solveur: Solveur, tolerance_relative: float = 0.0, comparer_affectation: bool = True
+) -> VerdictCascade:
     """Brique 3 sur tout le catalogue de cas de référence (§6.2 brique 3)."""
-    return VerdictCascade(tuple(evaluer_un_cas_reference(solveur, cas) for cas in charger_cas_reference()))
+    return VerdictCascade(
+        tuple(
+            evaluer_un_cas_reference(solveur, cas, tolerance_relative, comparer_affectation)
+            for cas in charger_cas_reference()
+        )
+    )
 
 
-def evaluer_cascade(solveur: Solveur, tolerance_relative: float = 0.0) -> VerdictCascade:
-    """Les trois briques bout à bout (§6.3) : faisabilité → optimalité → fidélité."""
+def evaluer_cascade(
+    solveur: Solveur, tolerance_relative: float = 0.0, comparer_affectation: bool = True
+) -> VerdictCascade:
+    """Les trois briques bout à bout (§6.3) : faisabilité → optimalité → fidélité.
+
+    Par défaut (`tolerance_relative=0.0`, `comparer_affectation=True`) le
+    comportement est celui, strict, attendu d'un solveur CP-SAT — inchangé
+    pour tous les appelants existants. Un algorithme approché recommandé par
+    l'agent Benchmarker doit être évalué avec une tolérance non nulle et
+    `comparer_affectation=False` (voir `generation/pipeline_multi_agents.py`,
+    seul endroit qui connaît quel algorithme a produit le solveur candidat)."""
     verdict_banc = evaluer_optimalite_banc(solveur, tolerance_relative)
-    verdict_reference = evaluer_fidelite_reference(solveur)
+    verdict_reference = evaluer_fidelite_reference(solveur, tolerance_relative, comparer_affectation)
     return VerdictCascade(verdict_banc.diagnostics + verdict_reference.diagnostics)

@@ -19,7 +19,20 @@ from __future__ import annotations
 import ast
 from dataclasses import dataclass
 
-PREFIXES_AUTORISES = ("__future__", "collections", "dataclasses", "typing", "ortools", "dsl")
+PREFIXES_AUTORISES = (
+    "__future__",
+    "collections",
+    "dataclasses",
+    "typing",
+    "ortools",
+    "dsl",
+    # `random`/`math` : uniquement utiles à un algorithme non-CP-SAT recommandé
+    # par l'agent Benchmarker (génétique, ACO, recuit simulé...) — voir
+    # generation/prompts/generation_solveur.md. Aucun des deux ne permet
+    # d'accès réseau/fichier/système, donc pas de risque de sécurité ajouté.
+    "random",
+    "math",
+)
 
 
 def _prefixe_autorise(chemin: str) -> bool:

@@ -26,7 +26,18 @@ _VERDICT_APPROUVE = "APPROUVE"
 class ResultatRevue:
     reponse_brute: str
     approuve: bool
-    commentaires: str
+    problemes: tuple[str, ...]
+
+    @property
+    def commentaires(self) -> str:
+        """Rendu texte des problèmes relevés, pour les appelants historiques
+        (scripts/, generation/loop.py, generation/pipeline_avec_boucle.py)
+        qui consomment une chaîne plutôt que la liste structurée `problemes`
+        — la migration du prompt Reviewer vers un format liste (voir
+        prompts/reviewer.md) n'a pas besoin de tous les mettre à jour."""
+        if not self.problemes:
+            return "aucun problème relevé"
+        return "\n".join(f"- {probleme}" for probleme in self.problemes)
 
 
 def relire_code(appel_llm: AppelLLM, code_source: str) -> ResultatRevue:
@@ -39,4 +50,5 @@ def relire_code(appel_llm: AppelLLM, code_source: str) -> ResultatRevue:
     # corriger" plutôt que d'approuver à tort — la cascade reste de toute
     # façon l'arbitre final.
     approuve = donnees.get("verdict") == _VERDICT_APPROUVE
-    return ResultatRevue(reponse_brute=reponse, approuve=approuve, commentaires=donnees.get("commentaires", ""))
+    problemes = tuple(donnees.get("problemes") or [])
+    return ResultatRevue(reponse_brute=reponse, approuve=approuve, problemes=problemes)

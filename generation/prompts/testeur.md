@@ -31,3 +31,11 @@ texte, pas de bloc markdown autour) :
   "code_tests": "le code des tests pytest, sur une seule chaîne avec des \n pour les retours à la ligne"
 }}
 ```
+
+Exemple de réponse valide (structure attendue, pas les seuls tests à écrire) :
+
+```json
+{{
+  "code_tests": "from dsl.schema import InstanceTRCO, Tache, Ressource\n\n\ndef test_instance_infaisable_renvoie_none():\n    instance = InstanceTRCO(taches=[...], ressources=[], contraintes=[], objectifs=[...])\n    assert resoudre(instance) is None\n"
+}}
+```

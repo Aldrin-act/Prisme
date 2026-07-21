@@ -3,11 +3,12 @@
 Le fournisseur et le modèle sont choisis par variables d'environnement,
 jamais codés en dur, pour ne lier ce projet à aucun fournisseur particulier :
 
-- `PRISME_LLM_PROVIDER` : "anthropic" (défaut), "openai", "mistral", "qwen" ou "together".
+- `PRISME_LLM_PROVIDER` : "mistral" (défaut), "qwen", "together", "nvidia", "minimax" ou "deepseek".
 - `PRISME_LLM_MODEL` : nom du modèle (défaut selon le fournisseur, ci-dessous).
-- la clé d'API suit la convention standard de chaque SDK (`ANTHROPIC_API_KEY`,
-  `OPENAI_API_KEY`, `MISTRAL_API_KEY`, `TOGETHER_API_KEY`) — jamais lue, manipulée
-  ou journalisée directement ici.
+- la clé d'API suit la convention standard de chaque SDK (`MISTRAL_API_KEY`,
+  `TOGETHER_API_KEY`, `NVIDIA_API_KEY`, `MINIMAX_API_KEY`, `DEEPSEEK_API_KEY`)
+  — jamais lue, manipulée ou journalisée directement ici, uniquement passée
+  telle quelle au SDK du fournisseur.
 
 Le SDK du fournisseur choisi est importé à la demande (`extra` optionnel
 `llm` du projet) : pas besoin d'installer les trois pour n'en utiliser qu'un.
@@ -22,47 +23,13 @@ from collections.abc import Callable
 AppelLLM = Callable[[str, str], str]
 
 _MODELES_PAR_DEFAUT = {
-    "anthropic": "claude-sonnet-5",
-    "openai": "gpt-5",
     "mistral": "mistral-large-latest",
     "qwen": "Qwen/Qwen2.5-72B-Instruct",
     "together": "Qwen/Qwen2.5-72B-Instruct",
+    "nvidia": "qwen/qwen3-next-80b-a3b-instruct",
+    "minimax": "minimaxai/minimax-m2.7",
+    "deepseek": "deepseek-ai/deepseek-v4-pro",
 }
-
-
-def _construire_appel_anthropic(modele: str) -> AppelLLM:
-    import anthropic
-
-    client = anthropic.Anthropic()
-
-    def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
-        reponse = client.messages.create(
-            model=modele,
-            max_tokens=8192,
-            system=prompt_systeme,
-            messages=[{"role": "user", "content": prompt_utilisateur}],
-        )
-        return "".join(bloc.text for bloc in reponse.content if bloc.type == "text")
-
-    return appel
-
-
-def _construire_appel_openai(modele: str) -> AppelLLM:
-    import openai
-
-    client = openai.OpenAI()
-
-    def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
-        reponse = client.chat.completions.create(
-            model=modele,
-            messages=[
-                {"role": "system", "content": prompt_systeme},
-                {"role": "user", "content": prompt_utilisateur},
-            ],
-        )
-        return reponse.choices[0].message.content or ""
-
-    return appel
 
 
 def _construire_appel_mistral(modele: str) -> AppelLLM:
@@ -88,11 +55,11 @@ def _construire_appel_mistral(modele: str) -> AppelLLM:
 def _construire_appel_together(modele: str) -> AppelLLM:
     """Together AI utilise une API compatible OpenAI."""
     import openai
-    
+
     client = openai.OpenAI(
-  base_url="https://integrate.api.nvidia.com/v1",
-  api_key="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"
-)
+        base_url="https://api.together.xyz/v1",
+        api_key=os.environ.get("TOGETHER_API_KEY")
+    )
 
     def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
         reponse = client.chat.completions.create(
@@ -101,6 +68,85 @@ def _construire_appel_together(modele: str) -> AppelLLM:
                 {"role": "system", "content": prompt_systeme},
                 {"role": "user", "content": prompt_utilisateur},
             ],
+            temperature=0.7,
+            top_p=0.9,
+            max_tokens=8192,
+        )
+        return reponse.choices[0].message.content or ""
+
+    return appel
+
+
+def _construire_appel_nvidia(modele: str) -> AppelLLM:
+    """NVIDIA API utilise une API compatible OpenAI."""
+    import openai
+
+    client = openai.OpenAI(
+        base_url="https://integrate.api.nvidia.com/v1",
+        api_key=os.environ.get("NVIDIA_API_KEY"),
+    )
+
+    def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
+        reponse = client.chat.completions.create(
+            model=modele,
+            messages=[
+                {"role": "system", "content": prompt_systeme},
+                {"role": "user", "content": prompt_utilisateur},
+            ],
+            temperature=0.6,
+            top_p=0.7,
+            max_tokens=4096,
+        )
+        return reponse.choices[0].message.content or ""
+
+    return appel
+
+
+def _construire_appel_minimax(modele: str) -> AppelLLM:
+    """MiniMax API via NVIDIA, utilise une API compatible OpenAI."""
+    import openai
+
+    client = openai.OpenAI(
+        base_url="https://integrate.api.nvidia.com/v1",
+        api_key=os.environ.get("MINIMAX_API_KEY"),
+    )
+
+    def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
+        reponse = client.chat.completions.create(
+            model=modele,
+            messages=[
+                {"role": "system", "content": prompt_systeme},
+                {"role": "user", "content": prompt_utilisateur},
+            ],
+            temperature=1,
+            top_p=0.95,
+            max_tokens=8192,
+        )
+        return reponse.choices[0].message.content or ""
+
+    return appel
+
+
+def _construire_appel_deepseek(modele: str) -> AppelLLM:
+    """DeepSeek V4 Pro via NVIDIA, utilise une API compatible OpenAI avec support du mode thinking."""
+    import openai
+
+    client = openai.OpenAI(
+        base_url="https://integrate.api.nvidia.com/v1",
+        api_key=os.environ.get("DEEPSEEK_API_KEY"),
+    )
+
+    def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
+        reponse = client.chat.completions.create(
+            model=modele,
+            messages=[
+                {"role": "system", "content": prompt_systeme},
+                {"role": "user", "content": prompt_utilisateur},
+            ],
+            temperature=1,
+            top_p=0.95,
+            max_tokens=16384,
+            extra_body={"chat_template_kwargs": {"thinking": False}},
         )
         return reponse.choices[0].message.content or ""
 
@@ -113,17 +159,18 @@ def _construire_appel_qwen(modele: str) -> AppelLLM:
 
 
 _CONSTRUCTEURS: dict[str, Callable[[str], AppelLLM]] = {
-    "anthropic": _construire_appel_anthropic,
-    "openai": _construire_appel_openai,
     "mistral": _construire_appel_mistral,
     "together": _construire_appel_together,
     "qwen": _construire_appel_qwen,
+    "nvidia": _construire_appel_nvidia,
+    "minimax": _construire_appel_minimax,
+    "deepseek": _construire_appel_deepseek,
 }
 
 
 def construire_appel_llm() -> AppelLLM:
     """Construit l'appel LLM à utiliser, d'après `PRISME_LLM_PROVIDER` / `PRISME_LLM_MODEL`."""
-    fournisseur = os.environ.get("PRISME_LLM_PROVIDER") or "anthropic"
+    fournisseur = os.environ.get("PRISME_LLM_PROVIDER") or "mistral"
     constructeur = _CONSTRUCTEURS.get(fournisseur)
     if constructeur is None:
         raise ValueError(f"fournisseur LLM inconnu : {fournisseur!r} (attendu : {sorted(_CONSTRUCTEURS)})")
@@ -133,4 +180,39 @@ def construire_appel_llm() -> AppelLLM:
     # alors l'appel avec "Missing model parameter" plutôt que d'utiliser son
     # propre défaut, l'erreur n'a rien d'évident depuis l'appelant.
     modele = os.environ.get("PRISME_LLM_MODEL") or _MODELES_PAR_DEFAUT[fournisseur]
+    return constructeur(modele)
+
+
+def construire_appel_llm_pour_agent(nom_agent: str) -> AppelLLM:
+    """Construit l'appel LLM optimal pour un agent spécifique.
+
+    Utilise la configuration centralisée (`config_fournisseurs.py`) pour
+    sélectionner le fournisseur le mieux adapté à chaque agent. Permet une
+    surcharge par variable d'environnement `PRISME_LLM_PROVIDER_<AGENT>`.
+
+    Args:
+        nom_agent: Nom de l'agent (ex: "generateur", "debugger", "orchestrateur")
+
+    Returns:
+        Callable LLM configuré pour le fournisseur optimal de cet agent
+
+    Exemples:
+        >>> appel = construire_appel_llm_pour_agent("generateur")  # → deepseek
+        >>> appel = construire_appel_llm_pour_agent("orchestrateur")  # → nvidia
+    """
+    # Import ici pour éviter une dépendance circulaire (config_fournisseurs
+    # pourrait importer de client_llm dans le futur)
+    from generation.agents.config_fournisseurs import obtenir_fournisseur_pour_agent
+
+    fournisseur = obtenir_fournisseur_pour_agent(nom_agent)
+    constructeur = _CONSTRUCTEURS.get(fournisseur)
+    if constructeur is None:
+        raise ValueError(
+            f"fournisseur LLM inconnu pour l'agent {nom_agent!r} : {fournisseur!r} "
+            f"(attendu : {sorted(_CONSTRUCTEURS)})"
+        )
+
+    # Le modèle peut toujours être surchargé par PRISME_LLM_MODEL_<AGENT>
+    var_modele = f"PRISME_LLM_MODEL_{nom_agent.upper()}"
+    modele = os.environ.get(var_modele) or _MODELES_PAR_DEFAUT[fournisseur]
     return constructeur(modele)

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import ast; ast.parse\\(open\\('generation/pipeline_multi_agents.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(uv run *)",
+      "Bash(python -m pytest tests/unit/test_cascade.py tests/unit/test_validation_statique.py -q)",
+      "Bash(python -m pytest tests/unit -q)",
+      "Bash(python -m pytest tests/unit -q --ignore=tests/unit/test_agent_comprehension.py --ignore=tests/unit/test_attribution.py --ignore=tests/unit/test_exploration_bdd.py --ignore=tests/unit/test_greensig_adapter.py)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('generation/agents/debugger.py', encoding='utf-8'\\).read\\(\\)\\); ast.parse\\(open\\('generation/pipeline_multi_agents.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import openai, dotenv, pydantic, ortools; print\\('deps OK'\\)\")",
+      "Bash(python -m scripts.test_pipeline_avec_benchmarker)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('scripts/diagnostiquer_algorithme_2165.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(python -m scripts.diagnostiquer_algorithme_2165)"
+    ]
+  }
+}

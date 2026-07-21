@@ -143,7 +143,7 @@ def main():
     print(f"Validation statique : {'OK' if resultat.validation_statique.valide else 'ECHEC'}")
 
     if not resultat.validation_statique.valide:
-        print(f"  Erreurs : {resultat.validation_statique.message_erreur}")
+        print(f"  Erreurs : {', '.join(resultat.validation_statique.violations)}")
 
     print(f"Execution : {'OK' if resultat.erreur_execution is None else 'ECHEC'}")
 
@@ -233,7 +233,7 @@ def main():
                 "parametres_algorithme": resultat.parametres_algorithme,
                 "validation_statique": {
                     "valide": resultat.validation_statique.valide,
-                    "message": resultat.validation_statique.message_erreur or "OK",
+                    "message": ", ".join(resultat.validation_statique.violations) or "OK",
                 },
                 "erreur_execution": resultat.erreur_execution,
                 "cascade_reussie": resultat.verdict_cascade.reussi

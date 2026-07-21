@@ -25,3 +25,17 @@ texte, pas de bloc markdown autour) :
   ]
 }}
 ```
+
+Exemple de réponse valide :
+
+```json
+{{
+  "entrees": "InstanceTRCO.taches (durée par tâche via CompatibiliteRessourceTache), .ressources, .contraintes (Precedence, CompatibiliteRessourceTache), .objectifs (MinimiserMakespan)",
+  "sorties": "un Planning avec une OperationPlanifiee par tâche (tâche, ressource compatible, début) si une solution légale existe, sinon None",
+  "contraintes_a_couvrir": [
+    "chaque tâche n'est affectée qu'à une ressource compatible listée dans CompatibiliteRessourceTache",
+    "deux tâches liées par une Precedence respectent l'ordre : fin de la première <= début de la seconde",
+    "une ressource ne traite qu'une tâche à la fois"
+  ]
+}}
+```

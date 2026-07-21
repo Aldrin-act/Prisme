@@ -4,10 +4,11 @@ d'exécution JSON nommant l'instruction de chaque agent pour cette mission.
 Rôle volontairement limité à la **trace/documentation** du déroulement, pas
 à un vrai routage dynamique : la mission de PRISME est fixe (toujours
 "écrire resoudre() pour le noyau minimal T-R-C-O"), il n'y a donc qu'un seul
-ordre d'exécution valide. `generation.pipeline_multi_agents` appelle les 8
-autres agents dans un ordre câblé en Python, jamais décidé au vol par la
-réponse de cet agent — un plan mal formé ou incomplet ne doit jamais faire
-échouer le pipeline. Voir aussi generation/README.md."""
+ordre d'exécution valide. `generation.pipeline_multi_agents` appelle les 9
+autres agents (dont le Benchmarker, exécuté avant l'Architecte) dans un
+ordre câblé en Python, jamais décidé au vol par la réponse de cet agent — un
+plan mal formé ou incomplet ne doit jamais faire échouer le pipeline. Voir
+aussi generation/README.md."""
 
 from __future__ import annotations
 

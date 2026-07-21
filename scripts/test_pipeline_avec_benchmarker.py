@@ -139,7 +139,7 @@ def main():
     print(f"Validation statique : {'OK' if resultat.validation_statique.valide else 'ECHEC'}")
 
     if not resultat.validation_statique.valide:
-        print(f"  Erreurs : {resultat.validation_statique.message_erreur}")
+        print(f"  Erreurs : {', '.join(resultat.validation_statique.violations)}")
 
     print(f"Execution : {'OK' if resultat.erreur_execution is None else 'ECHEC'}")
 
@@ -148,10 +148,13 @@ def main():
 
     if resultat.verdict_cascade:
         print(f"Cascade : {'REUSSI' if resultat.verdict_cascade.reussi else 'ECHEC'}")
-        if resultat.verdict_cascade.reussi:
-            print(
-                f"  Instances validees : {len([d for d in resultat.verdict_cascade.diagnostics if d.valide])}"
-            )
+        nb_instances = len(resultat.verdict_cascade.diagnostics)
+        nb_reussies = len([d for d in resultat.verdict_cascade.diagnostics if d.reussi])
+        print(f"  Instances : {nb_reussies}/{nb_instances} reussies")
+        if not resultat.verdict_cascade.reussi:
+            print("  Echecs :")
+            for diagnostic in resultat.verdict_cascade.echecs:
+                print(f"    - {diagnostic.nom} [{diagnostic.brique_en_echec}] : {'; '.join(diagnostic.details)}")
     else:
         print("Cascade : NON EVALUEE")
 
@@ -203,12 +206,16 @@ def main():
                 "parametres_algorithme": resultat.parametres_algorithme,
                 "validation_statique": {
                     "valide": resultat.validation_statique.valide,
-                    "message": resultat.validation_statique.message_erreur or "OK",
+                    "message": ", ".join(resultat.validation_statique.violations) or "OK",
                 },
                 "erreur_execution": resultat.erreur_execution,
                 "cascade_reussie": resultat.verdict_cascade.reussi
                 if resultat.verdict_cascade
                 else False,
+                "cascade_echecs": [
+                    {"nom": d.nom, "brique": d.brique_en_echec, "details": list(d.details)}
+                    for d in (resultat.verdict_cascade.echecs if resultat.verdict_cascade else ())
+                ],
                 "code_optimise_adopte": resultat.code_optimise_adopte,
             },
             f,
@@ -218,12 +225,11 @@ def main():
 
     print(f"Resultat sauvegarde : {chemin_resultat}")
 
-    # Sauvegarder le code genere si succes
-    if resultat.reussi:
-        chemin_code = projet_root / "solveur_genere_avec_benchmarker.py"
-        with open(chemin_code, "w", encoding="utf-8") as f:
-            f.write(resultat.code_final)
-        print(f"Code du solveur sauvegarde : {chemin_code}")
+    # Sauvegarder le code final (meme en cas d'echec cascade, pour pouvoir l'inspecter)
+    chemin_code = projet_root / "solveur_genere_avec_benchmarker.py"
+    with open(chemin_code, "w", encoding="utf-8") as f:
+        f.write(resultat.code_final)
+    print(f"Code du solveur sauvegarde : {chemin_code}{'' if resultat.reussi else ' (echec cascade)'}")
 
     print()
 

@@ -20,7 +20,16 @@ texte, pas de bloc markdown autour) :
 
 ```json
 {{
-  "resume": "ce que le module résout et comment (l'essentiel de l'approche CP-SAT), en français",
+  "resume": "ce que le module résout et comment (l'essentiel de l'approche utilisée), en français",
   "limites_connues": "toute limite ou hypothèse simplificatrice, ou explicitement \"aucune\" s'il n'y en a pas"
+}}
+```
+
+Exemple de réponse valide :
+
+```json
+{{
+  "resume": "Résout le FJSP par un modèle CP-SAT : une variable d'intervalle optionnelle par (tâche, ressource compatible), une contrainte de non-chevauchement par ressource, minimisation du makespan.",
+  "limites_connues": "aucune"
 }}
 ```
