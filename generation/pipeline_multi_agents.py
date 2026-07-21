@@ -1,7 +1,12 @@
-"""Pipeline de génération multi-agents (§5.6) — enchaîne les 9 agents de
-`generation/agents/` : Orchestrateur → Analyste → Architecte → Développeur
-→ Testeur → Reviewer → [Debugger si besoin] → validation complète →
-Optimiseur → Documentation.
+"""Pipeline de génération multi-agents (§5.6) — enchaîne les 10 agents de
+`generation/agents/` : Orchestrateur → Analyste → Architecte → **Benchmarker**
+→ Développeur → Testeur → Reviewer → [Debugger si besoin] → validation
+complète → Optimiseur → Documentation.
+
+**Nouveau** : L'agent Benchmarker (ajouté après Architecte) analyse une instance
+exemple et recommande le meilleur algorithme (CP-SAT, GA, ACO, Tabu, etc.) selon
+les caractéristiques (taille, contraintes, flexibilité). Le Développeur génère
+ensuite le code adapté à l'algorithme recommandé.
 
 Reste une **tentative unique bornée**, pas une boucle générale (Étape 6,
 toujours non construite) : le Debugger n'intervient qu'une fois, s'il le
@@ -10,7 +15,7 @@ Python, jamais décidé dynamiquement par la réponse de l'Orchestrateur — voi
 sa docstring dans `generation/agents/orchestrateur.py`.
 
 À la différence de `generation.tentative_unique` (Étape 4, un seul agent),
-c'est ici que vivent les 8 agents supplémentaires demandés pour le pipeline
+c'est ici que vivent les 9 agents supplémentaires demandés pour le pipeline
 complet ; les deux chemins restent disponibles indépendamment.
 """
 
@@ -21,6 +26,7 @@ from dataclasses import dataclass
 from generation.agents import (
     analyste,
     architecte,
+    benchmarker,
     debugger,
     documentation,
     optimiseur,
@@ -76,6 +82,26 @@ def _valider_completement(code: str) -> _ResultatValidationComplete:
     return _ResultatValidationComplete(validation, None, verdict)
 
 
+def _creer_instance_exemple_defaut() -> dict:
+    """Crée une petite instance par défaut (10 tâches, 5 ressources) pour le
+    Benchmarker lorsqu'aucune instance exemple n'est fournie. Cette instance
+    sera typiquement reconnue comme 'petite' et orientera vers CP-SAT."""
+    return {
+        "taches": [{"id": f"T{i}"} for i in range(1, 11)],
+        "ressources": [{"id": f"R{i}"} for i in range(1, 6)],
+        "contraintes": [
+            {
+                "type": "compatibilite_ressource_tache",
+                "tache": f"T{i}",
+                "ressource": f"R{((i - 1) % 5) + 1}",
+                "duree": 30,
+            }
+            for i in range(1, 11)
+        ],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+
+
 @dataclass(frozen=True)
 class ResultatPipelineMultiAgents:
     """Le devenir complet d'une tentative multi-agents — la sortie de
@@ -86,6 +112,9 @@ class ResultatPipelineMultiAgents:
     plan_orchestrateur: tuple[EtapePlan, ...]
     specification: str
     plan_technique: str
+    algorithme_recommande: str  # Nouveau : algorithme choisi par Benchmarker
+    justification_algorithme: str  # Nouveau : raison du choix
+    parametres_algorithme: dict  # Nouveau : paramètres suggérés
     code_genere: str
     tests_generes: str
     revue: ResultatRevue
@@ -108,14 +137,36 @@ class ResultatPipelineMultiAgents:
         )
 
 
-def tenter_generation_multi_agents(appel_llm: AppelLLM) -> ResultatPipelineMultiAgents:
-    """Une tentative complète à travers les 9 agents — bornée : le Debugger
+def tenter_generation_multi_agents(
+    appel_llm: AppelLLM, instance_exemple: dict | None = None
+) -> ResultatPipelineMultiAgents:
+    """Une tentative complète à travers les 10 agents — bornée : le Debugger
     n'intervient qu'une fois, jamais en boucle jusqu'à succès (§6.6, comme
-    `tentative_unique.tenter_generation_unique`)."""
+    `tentative_unique.tenter_generation_unique`).
+
+    Args:
+        appel_llm: Client LLM
+        instance_exemple: Instance T-R-C-O exemple (dict) pour le Benchmarker.
+            Si None, utilise une petite instance par défaut (10 tâches).
+    """
     plan = orchestrateur.planifier(appel_llm)
     analyse = analyste.analyser_mission(appel_llm)
     conception = architecte.concevoir_modele(appel_llm, analyse)
-    brut = generer_code_depuis_plan(appel_llm, conception.en_texte())
+
+    # Nouveau : Benchmarker choisit l'algorithme optimal
+    if instance_exemple is None:
+        # Instance par défaut : petite (10 tâches) → CP-SAT
+        instance_exemple = _creer_instance_exemple_defaut()
+
+    resultat_benchmark = benchmarker.benchmarker_algorithmes(appel_llm, instance_exemple)
+    algo = resultat_benchmark.recommandation.algorithme
+    justification = resultat_benchmark.recommandation.raison
+    parametres = resultat_benchmark.recommandation.parametres_suggeres
+
+    # Générer code avec l'algorithme recommandé
+    brut = generer_code_depuis_plan(
+        appel_llm, conception.en_texte(), algorithme=algo, parametres=parametres
+    )
     tests = testeur.generer_tests(appel_llm, brut.code_source)
     revue = reviewer.relire_code(appel_llm, brut.code_source)
 
@@ -133,6 +184,9 @@ def tenter_generation_multi_agents(appel_llm: AppelLLM) -> ResultatPipelineMulti
             plan_orchestrateur=plan.plan,
             specification=analyse.en_texte(),
             plan_technique=conception.en_texte(),
+            algorithme_recommande=algo,
+            justification_algorithme=justification,
+            parametres_algorithme=parametres,
             code_genere=brut.code_source,
             tests_generes=tests.code_tests,
             revue=revue,
@@ -166,6 +220,9 @@ def tenter_generation_multi_agents(appel_llm: AppelLLM) -> ResultatPipelineMulti
         plan_orchestrateur=plan.plan,
         specification=analyse.en_texte(),
         plan_technique=conception.en_texte(),
+        algorithme_recommande=algo,
+        justification_algorithme=justification,
+        parametres_algorithme=parametres,
         code_genere=brut.code_source,
         tests_generes=tests.code_tests,
         revue=revue,

@@ -53,12 +53,43 @@ def generer_code_solveur(appel_llm: AppelLLM) -> ResultatGenerationBrute:
     return ResultatGenerationBrute(reponse_brute=reponse, code_source=extraire_bloc_code(reponse))
 
 
-def generer_code_depuis_plan(appel_llm: AppelLLM, plan_technique: str) -> ResultatGenerationBrute:
+def generer_code_depuis_plan(
+    appel_llm: AppelLLM,
+    plan_technique: str,
+    algorithme: str | None = None,
+    parametres: dict | None = None,
+) -> ResultatGenerationBrute:
     """Variante utilisée par le pipeline multi-agents : écrit le code en
     suivant le plan produit par l'agent Architecte plutôt que la seule
-    mission brute, et répond en JSON comme le reste du pipeline."""
+    mission brute, et répond en JSON comme le reste du pipeline.
+
+    Args:
+        appel_llm: Client LLM
+        plan_technique: Plan de l'agent Architecte
+        algorithme: Algorithme recommandé par le Benchmarker (ex: "cp_sat", "genetic")
+        parametres: Paramètres suggérés pour l'algorithme
+    """
     gabarit = CHEMIN_PROMPT_DEPUIS_PLAN.read_text(encoding="utf-8")
-    prompt = gabarit.format(mission=charger_mission(), plan_technique=plan_technique)
+
+    # Construire la section algorithme si fournie
+    section_algorithme = ""
+    if algorithme:
+        section_algorithme = f"\n## Algorithme recommandé par le Benchmarker\n\n"
+        section_algorithme += f"L'agent Benchmarker a analysé les caractéristiques de "
+        section_algorithme += f"l'instance et recommande d'utiliser : **{algorithme.upper()}**\n\n"
+
+        if parametres:
+            section_algorithme += "Paramètres suggérés :\n"
+            for param, valeur in parametres.items():
+                section_algorithme += f"- {param}: {valeur}\n"
+            section_algorithme += "\n"
+
+        section_algorithme += "Implémente le solveur avec cet algorithme.\n"
+
+    prompt = gabarit.format(
+        mission=charger_mission(),
+        plan_technique=plan_technique + section_algorithme,
+    )
     reponse = appel_llm(_PROMPT_SYSTEME_JSON, prompt)
     donnees = extraire_json(reponse)
     return ResultatGenerationBrute(reponse_brute=reponse, code_source=donnees["code"])
