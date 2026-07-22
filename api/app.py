@@ -10,7 +10,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import adapters, audit, diagnostics, execution, ingestion, planning, supervision, validation
+from api.routes import adapters, audit, auth, diagnostics, execution, ingestion, planning, supervision, validation
 
 app = FastAPI(
     title="PRISME",
@@ -30,6 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(ingestion.router)
 app.include_router(adapters.router)
 app.include_router(execution.router)
