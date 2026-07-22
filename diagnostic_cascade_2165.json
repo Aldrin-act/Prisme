@@ -1,0 +1,21 @@
+{
+  "algorithme": "genetic",
+  "parametres": {
+    "population_size": 400,
+    "generations": 600,
+    "crossover_rate": 0.85,
+    "mutation_rate": 0.08,
+    "tournament_size": 5,
+    "elitism": 0.1,
+    "crossover_type": "OX",
+    "selection_method": "tournament",
+    "adaptive_mutation": true
+  },
+  "tolerance_relative": 0.1,
+  "comparer_affectation": false,
+  "validation_statique": true,
+  "cascade_reussie": true,
+  "nb_instances": 8,
+  "nb_echecs": 0,
+  "echecs": []
+}

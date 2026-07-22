@@ -11,7 +11,10 @@
       "Bash(python -c \"import openai, dotenv, pydantic, ortools; print\\('deps OK'\\)\")",
       "Bash(python -m scripts.test_pipeline_avec_benchmarker)",
       "Bash(python -c \"import ast; ast.parse\\(open\\('scripts/diagnostiquer_algorithme_2165.py', encoding='utf-8'\\).read\\(\\)\\)\")",
-      "Bash(python -m scripts.diagnostiquer_algorithme_2165)"
+      "Bash(python -m scripts.diagnostiquer_algorithme_2165)",
+      "Bash(DATABASE_URL=postgresql://prisme:changeme@localhost:5433/prisme python -c ' *)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('solver_store/registry.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(DATABASE_URL=\"postgresql://prisme:changeme@localhost:5433/prisme\" python -m pytest tests/integration/test_registry.py -v)"
     ]
   }
 }

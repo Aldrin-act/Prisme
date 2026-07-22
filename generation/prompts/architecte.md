@@ -60,6 +60,16 @@ que l'agent Développeur n'ait plus qu'à la traduire en code.
   d'arrêt déterministe et indépendant de la machine (nombre fixe
   d'itérations ou de générations), jamais une limite de temps écoulé.
 
+  **Précise explicitement quelles tables de correspondance sont précalculées
+  une seule fois avant la recherche** (durée par couple tâche-ressource,
+  compatibilités par tâche, précédences par tâche...). Le décodeur/la
+  fitness est appelé des dizaines ou centaines de milliers de fois
+  (population × générations) : une recherche dans `instance.contraintes`
+  à l'intérieur de cette fonction plutôt qu'un accès `O(1)` à une table
+  précalculée est invisible sur le petit banc de validation mais fait
+  dépasser le délai du bac à sable dès une instance réelle de quelques
+  centaines de tâches.
+
 ## Format de réponse exigé
 
 Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de

@@ -90,6 +90,40 @@ accède, ne les devine jamais par analogie avec un autre projet :
   uniques — ne jamais les utiliser comme identifiant, seulement pour de
   l'affichage.
 
+## Précalcule tout, jamais de recherche répétée dans `instance.contraintes`
+
+Que l'algorithme soit CP-SAT ou une métaheuristique, **parcourir
+`instance.contraintes` (ou toute liste de taille proportionnelle à
+l'instance) à l'intérieur d'une fonction appelée par tâche, par opération,
+ou par évaluation est interdit** — ça transforme un algorithme censé être
+rapide en un algorithme quadratique (ou pire), invisible sur le petit banc
+de validation (1 à 80 tâches, quelques secondes) mais qui explose sur une
+instance réelle de quelques centaines ou milliers de tâches (minutes à
+heures) et dépasse le délai du bac à sable (30 s par défaut).
+
+Construis chaque table de correspondance **une seule fois**, avant toute
+boucle de recherche/génération, jamais à l'intérieur :
+
+```python
+# Une seule fois, avant la recherche — jamais recalculé ensuite
+duree_par_tache_ressource = {
+    (c.tache, c.ressource): c.duree
+    for c in instance.contraintes
+    if isinstance(c, CompatibiliteRessourceTache)
+}
+compatibilites_par_tache: dict[str, list[tuple[str, int]]] = {}
+for c in instance.contraintes:
+    if isinstance(c, CompatibiliteRessourceTache):
+        compatibilites_par_tache.setdefault(c.tache, []).append((c.ressource, c.duree))
+```
+
+Pour un algorithme non-CP-SAT dont le décodeur/la fitness est appelé des
+dizaines ou centaines de milliers de fois (population × générations,
+itérations...) : toute recherche de durée, de compatibilité ou de
+précédence dans cette fonction doit être un accès de dictionnaire `O(1)`
+sur une table construite en dehors de la boucle — jamais un `for c in
+instance.contraintes: ...` réévalué à chaque appel.
+
 ## Contraintes de sécurité (impératives — le code est exécuté automatiquement)
 
 - Imports autorisés, et seulement ceux-là : `ortools.sat.python.cp_model`,

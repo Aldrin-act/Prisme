@@ -22,6 +22,13 @@ AST, exécution, cascade de faisabilité/optimalité/fidélité). Vérifie :
   passer des individus qui violent quand même la règle — signale-le comme
   problème même si le code "a l'air de marcher", ça fait échouer la brique
   faisabilité de la cascade, pas juste la qualité du résultat ;
+- **si l'algorithme n'est pas CP-SAT : la fonction de décodage/fitness
+  parcourt-elle `instance.contraintes` (ou une liste de taille
+  proportionnelle à l'instance) à chaque appel, au lieu d'utiliser une
+  table précalculée une seule fois avant la recherche ?** Invisible sur le
+  petit banc de validation (1 à 80 tâches), mais explose en temps de calcul
+  sur une instance réelle et dépasse le délai du bac à sable — signale-le
+  même si la cascade passe, elle ne teste jamais à l'échelle réelle ;
 - absence de bug évident (ex. mauvaise borne, contrainte manquante,
   exception non gérée sur un cas simple).
 

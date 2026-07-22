@@ -60,6 +60,37 @@ def test_alteration_du_fichier_fige_est_detectee(registre_test: Registre) -> Non
         registre_test.recuperer_solveur(id_solveur)
 
 
+def test_desactiver_solveur_le_retire_de_la_recherche(registre_test: Registre) -> None:
+    id_solveur = registre_test.enregistrer_solveur(
+        code_source="def resoudre(instance):\n    return None\n",
+        structure_contraintes="precedence",
+        verdict_cascade=VERDICT_VERT,
+        client_id="client_c",
+    )
+
+    resultats = registre_test.rechercher_solveurs(client_id="client_c")
+    assert [a.id for a in resultats] == [id_solveur]
+    assert resultats[0].actif is True
+
+    registre_test.desactiver_solveur(id_solveur)
+
+    assert registre_test.rechercher_solveurs(client_id="client_c") == []
+
+    resultats_avec_inactifs = registre_test.rechercher_solveurs(client_id="client_c", inclure_inactifs=True)
+    assert [a.id for a in resultats_avec_inactifs] == [id_solveur]
+    assert resultats_avec_inactifs[0].actif is False
+
+    # La ligne/l'artefact restent consultables directement, juste hors circulation
+    artefact = registre_test.recuperer_solveur(id_solveur)
+    assert artefact.actif is False
+    assert artefact.chemin_code.exists()
+
+
+def test_desactiver_solveur_inconnu_leve_keyerror(registre_test: Registre) -> None:
+    with pytest.raises(KeyError):
+        registre_test.desactiver_solveur("id-inexistant")
+
+
 def test_rechercher_par_client_et_structure(registre_test: Registre) -> None:
     id_a = registre_test.enregistrer_solveur(
         code_source="def resoudre(instance):\n    return None\n",

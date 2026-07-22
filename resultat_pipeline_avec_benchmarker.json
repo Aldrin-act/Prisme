@@ -1,0 +1,24 @@
+{
+  "succes": true,
+  "algorithme_recommande": "genetic",
+  "justification_algorithme": "Avec 2165 tâches, CP-SAT est clairement contre-indiqué : le temps de résolution sera exponentiel et un timeout est quasi certain. L'algorithme génétique est le choix optimal pour cette taille d'instance. La flexibilité modérée (3.49) offre un espace de recherche suffisamment riche pour que le GA puisse explorer efficacement. L'absence de contraintes de précédence simplifie l'encodage chromosomique et améliore la convergence. Le GA offre le meilleur compromis qualité/temps pour les instances très grandes, avec une qualité attendue de 92-95% de l'optimal en 5-15 minutes sur cette taille de problème.",
+  "parametres_algorithme": {
+    "population_size": 400,
+    "generations": 600,
+    "crossover_rate": 0.85,
+    "mutation_rate": 0.03,
+    "tournament_size": 5,
+    "elitism": 0.08,
+    "mutation_type": "swap_and_insert",
+    "crossover_type": "two_point_crossover",
+    "adaptive_mutation": true
+  },
+  "validation_statique": {
+    "valide": true,
+    "message": "OK"
+  },
+  "erreur_execution": null,
+  "cascade_reussie": true,
+  "cascade_echecs": [],
+  "code_optimise_adopte": false
+}

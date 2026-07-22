@@ -1,8 +1,10 @@
-"""État en mémoire de l'API (démo PoC, §8). File d'instances ingérées,
-résultats d'exécution et décisions humaines — un simple tampon entre les
-routes, pas une persistance réelle : la seule persistance durable du
-système est `solver_store/` (§5.2). Un déploiement réel remplacerait ceci
-par une file de tâches / base de données ; hors périmètre du noyau minimal.
+"""État de l'API (§8). File d'instances ingérées, résultats d'exécution et
+décisions humaines. `EtatAPI` (ci-dessous) reste l'implémentation en
+mémoire — utilisée par les tests (`app.dependency_overrides`, isolation
+gratuite par test) — mais `obtenir_etat()` sert par défaut `EtatPostgres`
+(`api/etat_postgres.py`, §7 extension) : la persistance réelle du système
+n'est donc plus limitée à `solver_store/` (§5.2), elle couvre aussi
+instances/exécutions/décisions.
 
 Un aléa atelier (panne, commande urgente, retard...) ne passe pas par un
 type dédié ici : il se traduit directement dans les contraintes T-R-C-O de
@@ -17,10 +19,13 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from dsl.schema import InstanceTRCO
 from sandbox.runner import ResultatExecution
+
+if TYPE_CHECKING:
+    from api.etat_postgres import EtatPostgres
 
 Decision = Literal["acceptee", "refusee"]
 
@@ -115,8 +120,20 @@ class EtatAPI:
         return self.decisions.get(execution_id)
 
 
-_ETAT_GLOBAL = EtatAPI()
+_ETAT_GLOBAL: EtatAPI | EtatPostgres | None = None
 
 
-def obtenir_etat() -> EtatAPI:
+def obtenir_etat() -> EtatAPI | EtatPostgres:
+    """Instanciation paresseuse, même principe que
+    `api.dependencies.obtenir_registre` : `EtatPostgres()` ouvre une
+    connexion Postgres et crée ses tables au premier appel réel — la
+    retarder évite qu'un simple `import api.app` échoue si la base n'est
+    pas encore joignable. Les tests substituent cette dépendance via
+    `app.dependency_overrides` avec leur propre `EtatAPI()` en mémoire —
+    ce code n'est donc jamais atteint pendant les tests."""
+    global _ETAT_GLOBAL
+    if _ETAT_GLOBAL is None:
+        from api.etat_postgres import EtatPostgres as _EtatPostgres
+
+        _ETAT_GLOBAL = _EtatPostgres()
     return _ETAT_GLOBAL

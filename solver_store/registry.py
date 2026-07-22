@@ -12,6 +12,15 @@ Le code source n'est jamais dupliqué en base : seul son chemin sur disque
 (`artifacts/<id>/solveur.py`) et son empreinte SHA-256 le sont, pour détecter
 toute altération du fichier « figé » après coup — le principe fondateur
 veut que le code persiste tel quel, jamais réécrit une fois validé.
+
+Un solveur peut être désactivé (`desactiver_solveur`) sans être supprimé :
+la ligne et l'artefact restent en base pour l'audit/historique, mais
+`rechercher_solveurs` (donc `/execution`) ne le propose plus par défaut —
+c'est le mécanisme prévu pour un solveur découvert défaillant après coup
+(ex. bug de performance à l'échelle réelle, invisible à la validation sur
+le banc synthétique) sans violer le principe « jamais réécrit une fois
+validé » : on ne le corrige pas en place, on en enregistre un nouveau et on
+retire l'ancien de la circulation.
 """
 
 from __future__ import annotations
@@ -66,6 +75,7 @@ class ArtefactSolveur:
     empreinte_sha256: str
     date_validation: str
     code_source: str
+    actif: bool
 
 
 def _empreinte(code: str) -> str:
@@ -110,6 +120,13 @@ class Registre:
                     "date_validation TEXT NOT NULL"
                     ")"
                 ).format(table=_table(self._schema))
+            )
+            # Migration idempotente : les tables créées avant l'ajout du
+            # mécanisme de désactivation n'ont pas cette colonne.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS actif BOOLEAN NOT NULL DEFAULT TRUE").format(
+                    table=_table(self._schema)
+                )
             )
             connexion.commit()
 
@@ -159,7 +176,8 @@ class Registre:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT id, client_id, structure_contraintes, chemin_code, empreinte_sha256, date_validation "
+                    "SELECT id, client_id, structure_contraintes, chemin_code, empreinte_sha256, "
+                    "date_validation, actif "
                     "FROM {table} WHERE id = %s"
                 ).format(table=_table(self._schema)),
                 (id_solveur,),
@@ -168,7 +186,7 @@ class Registre:
         if ligne is None:
             raise KeyError(f"aucun solveur enregistré avec l'id {id_solveur!r}")
 
-        id_, client_id, structure, chemin_code, empreinte, date_validation = ligne
+        id_, client_id, structure, chemin_code, empreinte, date_validation, actif = ligne
         code_source = Path(chemin_code).read_text(encoding="utf-8")
         if _empreinte(code_source) != empreinte:
             raise ErreurIntegriteSolveur(
@@ -183,13 +201,23 @@ class Registre:
             empreinte_sha256=empreinte,
             date_validation=date_validation,
             code_source=code_source,
+            actif=actif,
         )
 
     def rechercher_solveurs(
-        self, client_id: str | None = None, structure_contraintes: str | None = None
+        self,
+        client_id: str | None = None,
+        structure_contraintes: str | None = None,
+        inclure_inactifs: bool = False,
     ) -> list[ArtefactSolveur]:
+        """Par défaut, ne renvoie que les solveurs actifs — `/execution` ne
+        doit jamais retomber sur un solveur désactivé (ex. bug de
+        performance découvert après coup). `inclure_inactifs=True` sert à
+        l'audit/l'historique, jamais au chemin d'exécution normal."""
         requete = sql.SQL("SELECT id FROM {table} WHERE 1 = 1").format(table=_table(self._schema))
         parametres: list[str] = []
+        if not inclure_inactifs:
+            requete += sql.SQL(" AND actif = true")
         if client_id is not None:
             requete += sql.SQL(" AND client_id = %s")
             parametres.append(client_id)
@@ -201,3 +229,17 @@ class Registre:
             ids = [ligne[0] for ligne in connexion.execute(requete, parametres).fetchall()]
 
         return [self.recuperer_solveur(id_solveur) for id_solveur in ids]
+
+    def desactiver_solveur(self, id_solveur: str) -> None:
+        """Retire un solveur de la circulation sans le supprimer ni le
+        réécrire — `rechercher_solveurs` (donc `/execution`) ne le proposera
+        plus, mais la ligne, l'artefact et son historique restent
+        consultables (`recuperer_solveur`, `inclure_inactifs=True`)."""
+        with closing(self._connexion()) as connexion:
+            resultat = connexion.execute(
+                sql.SQL("UPDATE {table} SET actif = false WHERE id = %s").format(table=_table(self._schema)),
+                (id_solveur,),
+            )
+            if resultat.rowcount == 0:
+                raise KeyError(f"aucun solveur enregistré avec l'id {id_solveur!r}")
+            connexion.commit()

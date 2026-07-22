@@ -27,11 +27,20 @@ par la réponse de l'Orchestrateur — voir sa docstring dans
 À la différence de `generation.tentative_unique` (Étape 4, un seul agent),
 c'est ici que vivent les 9 agents supplémentaires demandés pour le pipeline
 complet ; les deux chemins restent disponibles indépendamment.
+
+**Enregistrement dans le store (Étape 7)** : si `client_id` est fourni et
+que le pipeline aboutit (`resultat.reussi`), le code final est enregistré
+via `solver_store.registry.Registre.enregistrer_solveur` — c'est le seul
+chemin qui alimente automatiquement le store pour le pipeline multi-agents
+(auparavant, seul `scripts/enregistrer_solveur_reference.py`, pour le
+solveur de référence écrit à la main, le faisait). Sans `client_id`, le
+comportement est inchangé : le code final est renvoyé mais jamais persisté.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from generation.agents import (
     analyste,
@@ -52,6 +61,11 @@ from generation.agents.reviewer import ResultatRevue
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
 from validation_engine.cascade import VerdictCascade, evaluer_cascade
+
+if TYPE_CHECKING:
+    # Import différé (voir _enregistrer_si_demande) : le module appelant n'a
+    # pas besoin de psycopg/solver_store tant qu'il n'enregistre rien.
+    from solver_store.registry import Registre
 
 
 @dataclass(frozen=True)
@@ -110,6 +124,37 @@ def _valider_completement(code: str, algorithme: str) -> _ResultatValidationComp
     return _ResultatValidationComplete(validation, None, verdict)
 
 
+def _enregistrer_si_demande(
+    client_id: str | None,
+    registre: Registre | None,
+    instance_exemple: dict,
+    code_final: str,
+    verdict_cascade: VerdictCascade | None,
+) -> str | None:
+    """Enregistre `code_final` dans le store si `client_id` est fourni,
+    sinon ne fait rien (renvoie None) — voir docstring du module et de
+    `tenter_generation_multi_agents`. Import différé de `solver_store`/`api.etat`
+    pour ne pas imposer `psycopg` aux appelants qui n'enregistrent rien."""
+    if client_id is None:
+        return None
+
+    from dsl.schema import InstanceTRCO
+
+    from api.etat import structure_contraintes
+    from solver_store.registry import Registre as _Registre
+
+    assert verdict_cascade is not None  # garanti par l'appelant (résultat réussi)
+    instance_validee = InstanceTRCO.model_validate(instance_exemple)
+    structure = structure_contraintes(instance_validee)
+    registre_effectif = registre if registre is not None else _Registre()
+    return registre_effectif.enregistrer_solveur(
+        code_source=code_final,
+        structure_contraintes=structure,
+        verdict_cascade=verdict_cascade,
+        client_id=client_id,
+    )
+
+
 def _creer_instance_exemple_defaut() -> dict:
     """Crée une petite instance par défaut (10 tâches, 5 ressources) pour le
     Benchmarker lorsqu'aucune instance exemple n'est fournie. Cette instance
@@ -154,6 +199,7 @@ class ResultatPipelineMultiAgents:
     optimisation: ResultatOptimisation | None
     code_optimise_adopte: bool
     documentation: str | None
+    id_solveur: str | None  # Nouveau : id dans solver_store si enregistré (client_id fourni), sinon None
 
     @property
     def reussi(self) -> bool:
@@ -166,7 +212,10 @@ class ResultatPipelineMultiAgents:
 
 
 def tenter_generation_multi_agents(
-    appel_llm: AppelLLM | None = None, instance_exemple: dict | None = None
+    appel_llm: AppelLLM | None = None,
+    instance_exemple: dict | None = None,
+    client_id: str | None = None,
+    registre: Registre | None = None,
 ) -> ResultatPipelineMultiAgents:
     """Une tentative complète à travers les 10 agents — bornée : le Debugger
     n'intervient qu'une fois, jamais en boucle jusqu'à succès (§6.6, comme
@@ -176,7 +225,18 @@ def tenter_generation_multi_agents(
         appel_llm: Client LLM (obsolète, ignoré — chaque agent utilise son fournisseur optimal).
             Conservé pour rétrocompatibilité uniquement.
         instance_exemple: Instance T-R-C-O exemple (dict) pour le Benchmarker.
-            Si None, utilise une petite instance par défaut (10 tâches).
+            Si None, utilise une petite instance par défaut (10 tâches). Doit être un
+            payload T-R-C-O valide (`InstanceTRCO.model_validate`) dès lors que
+            `client_id` est fourni — c'est aussi cette instance qui détermine la
+            signature de contraintes (`structure_contraintes`) sous laquelle le
+            solveur est enregistré.
+        client_id: Si fourni et que le pipeline aboutit, enregistre le code final
+            dans le store (`solver_store.registry.Registre.enregistrer_solveur`)
+            pour ce client. Si None (défaut), comportement inchangé : rien n'est
+            persisté, seul `code_final` est renvoyé.
+        registre: `Registre` à utiliser pour l'enregistrement (permet d'injecter un
+            registre de test, schéma dédié). Ignoré si `client_id` est None ; sinon
+            un `Registre()` par défaut (store réel) est construit si non fourni.
 
     Note:
         Depuis la configuration optimale par agent (config_fournisseurs.py), chaque
@@ -307,6 +367,7 @@ def tenter_generation_multi_agents(
             optimisation=None,
             code_optimise_adopte=False,
             documentation=None,
+            id_solveur=None,
         )
 
     # Cascade réussie : l'Optimiseur peut proposer une amélioration, mais
@@ -324,6 +385,10 @@ def tenter_generation_multi_agents(
             resultat_final = resultat_opt
 
     doc = documentation.documenter_code(construire_appel_llm_pour_agent("documentation"), code_final)
+
+    id_solveur = _enregistrer_si_demande(
+        client_id, registre, instance_exemple, code_final, resultat_final.verdict_cascade
+    )
 
     return ResultatPipelineMultiAgents(
         plan_orchestrateur=plan.plan,
@@ -343,4 +408,5 @@ def tenter_generation_multi_agents(
         optimisation=optimisation,
         code_optimise_adopte=code_optimise_adopte,
         documentation=doc.en_texte(),
+        id_solveur=id_solveur,
     )

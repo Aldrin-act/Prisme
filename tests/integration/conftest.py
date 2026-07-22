@@ -16,6 +16,7 @@ import psycopg
 import pytest
 from psycopg import sql
 
+from api.etat_postgres import EtatPostgres
 from solver_store.registry import Registre, dsn_par_defaut
 
 RACINE_DEPOT = Path(__file__).resolve().parents[2]
@@ -72,6 +73,24 @@ def registre_test(tmp_path: Path) -> Iterator[Registre]:
     registre = Registre(schema=schema, dossier_artefacts=tmp_path / "artifacts")
     try:
         yield registre
+    finally:
+        with closing(psycopg.connect(dsn_par_defaut())) as connexion:
+            connexion.execute(sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(sql.Identifier(schema)))
+            connexion.commit()
+
+
+@pytest.fixture
+def etat_postgres_test() -> Iterator[EtatPostgres]:
+    """`EtatPostgres` (api/etat_postgres.py) isolé dans un schéma unique —
+    même convention que `registre_test` : schéma jetable, supprimé après le
+    test, skip plutôt qu'échec si Postgres est injoignable."""
+    if not _postgres_disponible():
+        pytest.skip("PostgreSQL indisponible dans cet environnement")
+
+    schema = f"test_{uuid.uuid4().hex}"
+    etat = EtatPostgres(schema=schema)
+    try:
+        yield etat
     finally:
         with closing(psycopg.connect(dsn_par_defaut())) as connexion:
             connexion.execute(sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(sql.Identifier(schema)))
