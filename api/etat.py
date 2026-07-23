@@ -59,6 +59,18 @@ class DecisionHumaine:
 
 
 @dataclass(frozen=True)
+class Client:
+    """Un client (tenant métier) — l'unité de cloisonnement des données dans
+    tout le système (§7) : matching des solveurs (`solver_store/registry.py`),
+    visibilité des instances/projets (`api/autorisation.py`). Créé
+    explicitement (ce module) plutôt qu'implicitement au premier usage, pour
+    porter un vrai nom et pouvoir être choisi à l'inscription d'un compte."""
+
+    id: str
+    nom: str | None
+
+
+@dataclass(frozen=True)
 class Projet:
     """Regroupe des données brutes persistées (ex. export ERP collé/déposé
     par un humain) et l'historique des instances T-R-C-O générées à partir
@@ -80,8 +92,26 @@ class EtatAPI:
     decisions: dict[str, DecisionHumaine] = field(default_factory=dict)
     projets: dict[str, Projet] = field(default_factory=dict)
     projet_par_instance: dict[str, str] = field(default_factory=dict)
+    clients: dict[str, Client] = field(default_factory=dict)
+
+    def enregistrer_client(self, client_id: str, nom: str | None = None) -> None:
+        """Idempotent au sens applicatif : ré-enregistrer un `client_id`
+        existant ne l'écrase pas (même logique que le `ON CONFLICT DO
+        NOTHING` de `EtatPostgres`) — un nom déjà posé n'est jamais perdu."""
+        if client_id in self.clients:
+            return
+        self.clients[client_id] = Client(id=client_id, nom=nom)
+
+    def recuperer_client(self, client_id: str) -> Client:
+        if client_id not in self.clients:
+            raise KeyError(client_id)
+        return self.clients[client_id]
+
+    def lister_clients(self) -> list[dict[str, object]]:
+        return [{"client_id": c.id, "nom": c.nom} for c in self.clients.values()]
 
     def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, projet_id: str | None = None) -> str:
+        self.enregistrer_client(client_id)
         instance_id = str(uuid.uuid4())
         self.instances[instance_id] = (client_id, instance)
         if projet_id is not None:
@@ -89,6 +119,7 @@ class EtatAPI:
         return instance_id
 
     def enregistrer_projet(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
+        self.enregistrer_client(client_id)
         projet_id = str(uuid.uuid4())
         self.projets[projet_id] = Projet(
             id=projet_id,
@@ -132,6 +163,16 @@ class EtatAPI:
             for instance_id, pid in self.projet_par_instance.items()
             if pid == projet_id
         ]
+
+    def supprimer_projet(self, projet_id: str) -> None:
+        """Supprime le projet (données brutes) sans toucher aux instances déjà
+        générées à partir de lui — elles restent, seul le lien disparaît
+        (même logique inverse que `supprimer_instance`)."""
+        if projet_id not in self.projets:
+            raise KeyError(projet_id)
+        del self.projets[projet_id]
+        for instance_id in [iid for iid, pid in self.projet_par_instance.items() if pid == projet_id]:
+            del self.projet_par_instance[instance_id]
 
     def recuperer_instance(self, instance_id: str) -> tuple[str, InstanceTRCO]:
         if instance_id not in self.instances:

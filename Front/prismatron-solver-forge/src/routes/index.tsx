@@ -10,7 +10,6 @@ import {
   Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/integrations/prisme/auth";
 import { MarketingNav, MarketingFooter } from "@/components/marketing-shell";
 
 export const Route = createFileRoute("/")({
@@ -34,25 +33,23 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
-  const { estAuthentifie: authed } = useAuth();
-
   return (
     <div className="min-h-screen">
       <MarketingNav />
-      <Hero authed={authed} />
+      <Hero />
       <TrustedBy />
       <Platform />
       <Features />
       <Architecture />
       <Pricing />
       <FAQ />
-      <CTA authed={authed} />
+      <CTA />
       <MarketingFooter />
     </div>
   );
 }
 
-function Hero({ authed }: { authed: boolean }) {
+function Hero() {
   return (
     <section
       className="relative overflow-hidden pt-40 pb-24"
@@ -79,8 +76,8 @@ function Hero({ authed }: { authed: boolean }) {
             size="lg"
             className="bg-gradient-to-r from-primary to-accent glow hover:opacity-90"
           >
-            <Link to={authed ? "/app" : "/contact"}>
-              {authed ? "Ouvrir la plateforme" : "Demander une démo"}
+            <Link to="/contact">
+              Demander une démo
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -371,7 +368,7 @@ function FAQ() {
   );
 }
 
-function CTA({ authed }: { authed: boolean }) {
+function CTA() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-20">
       <div
@@ -386,8 +383,8 @@ function CTA({ authed }: { authed: boolean }) {
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent glow">
-            <Link to={authed ? "/app" : "/contact"}>
-              {authed ? "Ouvrir PRISME" : "Demander une démo"} <ArrowRight className="ml-2 h-4 w-4" />
+            <Link to="/contact">
+              Demander une démo <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">

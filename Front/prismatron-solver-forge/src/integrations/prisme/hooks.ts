@@ -20,11 +20,41 @@ export const prismeKeys = {
   codeSource: (executionId: string) => [...prismeKeys.all, 'codeSource', executionId] as const,
   projets: () => [...prismeKeys.all, 'projets'] as const,
   projet: (projetId: string) => [...prismeKeys.all, 'projets', projetId] as const,
+  clients: () => [...prismeKeys.all, 'clients'] as const,
+  instance: (instanceId: string) => [...prismeKeys.all, 'instance', instanceId] as const,
 } as const;
 
 // ============================================================================
 // QUERIES (Lecture)
 // ============================================================================
+
+/**
+ * Liste les clients (tenants) — public, pas besoin d'être connecté.
+ */
+export function useClients(
+  options?: Omit<UseQueryOptions<Types.Client[]>, 'queryKey' | 'queryFn'>
+) {
+  return useQuery({
+    queryKey: prismeKeys.clients(),
+    queryFn: () => prismeClient.listerClients(),
+    ...options,
+  });
+}
+
+/**
+ * Contenu T-R-C-O complet d'une instance déjà ingérée.
+ */
+export function useInstance(
+  instanceId: string | null,
+  options?: Omit<UseQueryOptions<Types.InstanceDetail>, 'queryKey' | 'queryFn'>
+) {
+  return useQuery({
+    queryKey: prismeKeys.instance(instanceId || ''),
+    queryFn: () => prismeClient.obtenirInstance(instanceId!),
+    enabled: !!instanceId,
+    ...options,
+  });
+}
 
 /**
  * Liste les instances ingérées
@@ -233,6 +263,16 @@ export function useConvertirDonneesBrutes() {
 }
 
 /**
+ * Mutation pour créer un client (admin uniquement côté backend).
+ */
+export function useCreerClient() {
+  return useMutation({
+    mutationFn: ({ clientId, nom }: { clientId: string; nom?: string }) =>
+      prismeClient.creerClient(clientId, nom),
+  });
+}
+
+/**
  * Mutation pour créer un projet (persiste des données brutes sans les convertir).
  */
 export function useCreerProjet() {
@@ -256,5 +296,15 @@ export function useCreerProjet() {
 export function useGenererInstanceDepuisProjet() {
   return useMutation({
     mutationFn: (projetId: string) => prismeClient.genererInstanceDepuisProjet(projetId),
+  });
+}
+
+/**
+ * Mutation pour supprimer un projet (données brutes) — n'affecte jamais les
+ * instances déjà générées à partir de lui.
+ */
+export function useSupprimerProjet() {
+  return useMutation({
+    mutationFn: (projetId: string) => prismeClient.supprimerProjet(projetId),
   });
 }

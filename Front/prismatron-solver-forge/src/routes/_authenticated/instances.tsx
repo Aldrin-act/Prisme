@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
-import { AlertCircle, FolderKanban, Plus, Trash2 } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQueryClient, useQueries } from "@tanstack/react-query";
+import { AlertCircle, Eye, FolderKanban, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -22,9 +22,27 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
 import { IngestionDialog } from "@/components/ingestion/ingestion-dialog";
-import { prismeKeys, useInstances, useSupprimerInstance, PrismeAPIError } from "@/integrations/prisme";
+import {
+  prismeKeys,
+  prismeClient,
+  useInstances,
+  useInstance,
+  useProjets,
+  useSupprimerInstance,
+  PrismeAPIError,
+  type ProjetDetail,
+  type Contrainte,
+  type Objectif,
+} from "@/integrations/prisme";
 
 export const Route = createFileRoute("/_authenticated/instances")({
   head: () => ({ meta: [{ title: "Instances — PRISME" }] }),
@@ -34,9 +52,38 @@ export const Route = createFileRoute("/_authenticated/instances")({
 function InstancesPage() {
   const [dialogOuvert, setDialogOuvert] = useState(false);
   const [aSupprimer, setASupprimer] = useState<string | null>(null);
+  const [aVoir, setAVoir] = useState<string | null>(null);
   const { data: instances, isLoading } = useInstances();
+  const { data: projets } = useProjets();
   const queryClient = useQueryClient();
   const supprimer = useSupprimerInstance();
+
+  // /supervision/instances ne relie pas les instances à leur projet — seul
+  // GET /projets/{id} donne ce lien (`instances: [{instance_id, ...}]`).
+  // On charge donc le détail de chaque projet pour reconstruire, côté
+  // client, l'association instance → (nom du projet, rang de génération).
+  const detailsProjets = useQueries({
+    queries: (projets ?? []).map((projet) => ({
+      queryKey: prismeKeys.projet(projet.projet_id),
+      queryFn: () => prismeClient.obtenirProjet(projet.projet_id),
+    })),
+  });
+
+  const infoParInstance = new Map<string, { nomProjet: string; label: string; projetId: string }>();
+  detailsProjets.forEach((requete) => {
+    const detail = requete.data as ProjetDetail | undefined;
+    if (!detail) return;
+    const nom = detail.nom ?? "Sans nom";
+    // Le backend renvoie les instances du plus récent au plus ancien —
+    // on inverse pour numéroter dans l'ordre de génération (1, 2, 3...).
+    [...detail.instances].reverse().forEach((instance, index) => {
+      infoParInstance.set(instance.instance_id, {
+        nomProjet: nom,
+        label: `${nom}-${index + 1}`,
+        projetId: detail.projet_id,
+      });
+    });
+  });
 
   const boutonNouvelleInstance = (
     <Button className="bg-gradient-to-r from-primary to-accent" onClick={() => setDialogOuvert(true)}>
@@ -86,6 +133,7 @@ function InstancesPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Instance</TableHead>
+                <TableHead>Projet</TableHead>
                 <TableHead>Client</TableHead>
                 <TableHead>Structure des contraintes</TableHead>
                 <TableHead>Statut</TableHead>
@@ -93,32 +141,60 @@ function InstancesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {instances.map((instance) => (
-                <TableRow key={instance.instance_id}>
-                  <TableCell className="font-mono text-xs">{instance.instance_id}</TableCell>
-                  <TableCell>{instance.client_id}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="font-mono text-xs">
-                      {instance.structure_contraintes}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={instance.executee ? "secondary" : "outline"}>
-                      {instance.executee ? "Exécutée" : "En attente"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      aria-label="Supprimer l'instance"
-                      onClick={() => ouvrirConfirmation(instance.instance_id)}
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {instances.map((instance) => {
+                const info = infoParInstance.get(instance.instance_id);
+                return (
+                  <TableRow key={instance.instance_id}>
+                    <TableCell className="font-mono text-xs" title={instance.instance_id}>
+                      {info ? info.label : instance.instance_id}
+                    </TableCell>
+                    <TableCell>
+                      {info ? (
+                        <Link
+                          to="/donnees"
+                          search={{ projet: info.projetId }}
+                          className="text-primary underline-offset-2 hover:underline"
+                        >
+                          {info.nomProjet}
+                        </Link>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
+                    <TableCell>{instance.client_id}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="font-mono text-xs">
+                        {instance.structure_contraintes}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={instance.executee ? "secondary" : "outline"}>
+                        {instance.executee ? "Exécutée" : "En attente"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex justify-end gap-1">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Voir l'instance"
+                          onClick={() => setAVoir(instance.instance_id)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Supprimer l'instance"
+                          onClick={() => ouvrirConfirmation(instance.instance_id)}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
@@ -158,6 +234,116 @@ function InstancesPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <DialogDetailInstance instanceId={aVoir} onOpenChange={(open) => !open && setAVoir(null)} />
     </>
+  );
+}
+
+function decrireContrainte(c: Contrainte): string {
+  switch (c.type) {
+    case "precedence":
+      return `${c.avant} → ${c.apres}`;
+    case "compatibilite_ressource_tache":
+      return `${c.tache} sur ${c.ressource} (${c.duree} min)`;
+    case "echeance":
+      return `${c.tache} avant ${c.echeance}`;
+    case "competence_requise":
+      return `${c.tache} requiert « ${c.competence} »`;
+  }
+}
+
+const LABELS_TYPE_OBJECTIF: Record<Objectif["type"], string> = {
+  minimiser_makespan: "Minimiser le makespan",
+  equilibrer_charge: "Équilibrer la charge",
+  minimiser_retards: "Minimiser les retards",
+  maximiser_utilisation: "Maximiser l'utilisation",
+  minimiser_changements: "Minimiser les changements",
+};
+
+function decrireObjectif(o: Objectif): string {
+  const poids = o.poids !== undefined ? ` (poids ${o.poids})` : "";
+  return `${LABELS_TYPE_OBJECTIF[o.type]}${poids}`;
+}
+
+function DialogDetailInstance({
+  instanceId,
+  onOpenChange,
+}: {
+  instanceId: string | null;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const { data: instance, isLoading } = useInstance(instanceId);
+
+  return (
+    <Dialog open={!!instanceId} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Détail de l'instance</DialogTitle>
+          <DialogDescription className="font-mono text-xs">{instanceId}</DialogDescription>
+        </DialogHeader>
+
+        {isLoading || !instance ? (
+          <p className="text-sm text-muted-foreground">Chargement...</p>
+        ) : (
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="secondary">{instance.client_id}</Badge>
+              <Badge variant="outline" className="font-mono text-xs">
+                {instance.structure_contraintes}
+              </Badge>
+            </div>
+
+            <div>
+              <h4 className="mb-2 text-sm font-semibold">Tâches ({instance.taches.length})</h4>
+              <div className="flex flex-wrap gap-1.5">
+                {instance.taches.map((t) => (
+                  <Badge key={t.id} variant="outline" className="font-mono text-xs">
+                    {t.id}
+                    {t.nom ? ` — ${t.nom}` : ""}
+                    {t.priorite ? ` · p${t.priorite}` : ""}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="mb-2 text-sm font-semibold">Ressources ({instance.ressources.length})</h4>
+              <div className="flex flex-wrap gap-1.5">
+                {instance.ressources.map((r) => (
+                  <Badge key={r.id} variant="outline" className="font-mono text-xs">
+                    {r.id}
+                    {r.nom ? ` — ${r.nom}` : ""}
+                    {r.competences.length > 0 ? ` · ${r.competences.join(", ")}` : ""}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="mb-2 text-sm font-semibold">Contraintes ({instance.contraintes.length})</h4>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                {instance.contraintes.map((c, i) => (
+                  <li key={i} className="font-mono text-xs">
+                    {decrireContrainte(c)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="mb-2 text-sm font-semibold">Objectifs ({instance.objectifs.length})</h4>
+              <div className="flex flex-wrap gap-1.5">
+                {instance.objectifs.map((o, i) => (
+                  <Badge key={i} variant="secondary" className="text-xs">
+                    {decrireObjectif(o)}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

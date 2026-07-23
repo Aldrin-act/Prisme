@@ -17,6 +17,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr
 
 from api.auth_db import UtilisateursDB, RoleUtilisateur
+from api.etat import EtatAPI, obtenir_etat
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -178,8 +179,11 @@ async def obtenir_utilisateur_courant(
     return utilisateur_db.to_dict()
 
 
-async def require_role(*roles: str):
-    """Dépendance pour vérifier le rôle de l'utilisateur."""
+def require_role(*roles: str):
+    """Dépendance paramétrée pour vérifier le rôle de l'utilisateur — usage :
+    `Depends(require_role("admin"))`. Factory volontairement synchrone : elle
+    ne fait que construire et renvoyer `role_checker`, seul ce dernier est
+    exécuté par FastAPI comme dépendance (async)."""
     async def role_checker(utilisateur: dict = Depends(obtenir_utilisateur_courant)):
         if utilisateur["role"] not in roles:
             raise HTTPException(
@@ -237,8 +241,13 @@ def login(credentials: CredentialsLogin) -> ReponseAuth:
 
 
 @router.post("/register")
-def register(credentials: CredentialsRegister) -> ReponseAuth:
-    """Inscription d'un nouvel utilisateur (stockage PostgreSQL + bcrypt)."""
+def register(credentials: CredentialsRegister, etat: EtatAPI = Depends(obtenir_etat)) -> ReponseAuth:
+    """Inscription d'un nouvel utilisateur (stockage PostgreSQL + bcrypt).
+
+    `client_id` requis pour tout rôle autre qu'admin (sinon le compte ne
+    pourrait rien créer, voir `api/autorisation.py`), et doit référencer un
+    client déjà enregistré (`api/routes/clients.py`) — jamais une valeur
+    inventée à la volée."""
     # Vérifier si email existe déjà
     if utilisateurs_db.email_existe(credentials.email):
         raise HTTPException(
@@ -248,6 +257,14 @@ def register(credentials: CredentialsRegister) -> ReponseAuth:
                 "message": "Un compte avec cet email existe déjà",
             },
         )
+
+    if credentials.role != "admin":
+        if not credentials.client_id:
+            raise HTTPException(status_code=400, detail="client_id requis pour ce rôle")
+        try:
+            etat.recuperer_client(credentials.client_id)
+        except KeyError:
+            raise HTTPException(status_code=400, detail="client_id inconnu") from None
 
     # Créer utilisateur dans PostgreSQL (hachage bcrypt automatique)
     utilisateur_db = utilisateurs_db.creer_utilisateur(

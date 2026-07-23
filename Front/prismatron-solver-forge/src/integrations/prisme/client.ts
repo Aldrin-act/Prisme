@@ -95,6 +95,15 @@ async function apiFetch<T>(
 // ============================================================================
 
 export const prismeClient = {
+  // CLIENTS — GET public (utilisé par le formulaire d'inscription), POST admin uniquement.
+  listerClients: () => apiFetch<Types.Client[]>(PRISME_CONFIG.routes.clients),
+
+  creerClient: (clientId: string, nom?: string) =>
+    apiFetch<Types.Client>(PRISME_CONFIG.routes.clients, {
+      method: 'POST',
+      body: JSON.stringify({ client_id: clientId, nom: nom ?? null }),
+    }),
+
   // INGESTION
   ingererInstance: (clientId: string, instance: Types.InstanceTRCO) =>
     apiFetch<Types.ReponseIngestion>(
@@ -106,6 +115,11 @@ export const prismeClient = {
   // les solveurs enregistrés, indépendants).
   supprimerInstance: (instanceId: string) =>
     apiFetch<void>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}`, { method: 'DELETE' }),
+
+  // Contenu T-R-C-O complet d'une instance déjà ingérée (tâches, ressources,
+  // contraintes, objectifs) — pour l'afficher, jamais pour la modifier.
+  obtenirInstance: (instanceId: string) =>
+    apiFetch<Types.InstanceDetail>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}`),
 
   // EXÉCUTION
   declencherExecution: (instanceId: string, clientId: string) =>
@@ -206,6 +220,11 @@ export const prismeClient = {
 
   obtenirProjet: (projetId: string) =>
     apiFetch<Types.ProjetDetail>(`${PRISME_CONFIG.routes.projets}/${projetId}`),
+
+  // Supprime les données brutes du projet — n'affecte jamais les instances
+  // déjà générées à partir de lui.
+  supprimerProjet: (projetId: string) =>
+    apiFetch<void>(`${PRISME_CONFIG.routes.projets}/${projetId}`, { method: 'DELETE' }),
 
   // Pas de timeout (null) : demande explicite — une conversion sur un gros
   // volume de données brutes peut prendre plusieurs minutes, on laisse

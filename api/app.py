@@ -14,6 +14,7 @@ from api.routes import (
     adapters,
     audit,
     auth,
+    clients,
     diagnostics,
     execution,
     ingestion,
@@ -44,6 +45,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(clients.router)
 app.include_router(ingestion.router)
 app.include_router(adapters.router)
 app.include_router(projets.router)

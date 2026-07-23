@@ -28,7 +28,7 @@ def seed_utilisateurs_test() -> None:
             "nom": "Dupont",
             "prenom": "Jean",
             "role": "maintenant",
-            "client_id": None,
+            "client_id": "demo",
         },
         {
             "email": "admin@example.com",
@@ -36,7 +36,7 @@ def seed_utilisateurs_test() -> None:
             "nom": "Admin",
             "prenom": "Super",
             "role": "admin",
-            "client_id": None,
+            "client_id": "demo",
         },
         {
             "email": "operateur@example.com",

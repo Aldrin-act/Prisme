@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { ArrowRight, Menu, X, Linkedin, Github, Mail } from "lucide-react";
+import { Menu, X, Linkedin, Github, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/integrations/prisme/auth";
 import { PrismeLogo } from "@/components/prisme-logo";
 
 const LINKS = [
@@ -16,7 +15,6 @@ const LINKS = [
 ] as const;
 
 export function MarketingNav() {
-  const { estAuthentifie: authed } = useAuth();
   const [open, setOpen] = useState(false);
   return (
     <header className="fixed top-0 z-50 w-full">
@@ -39,22 +37,12 @@ export function MarketingNav() {
             ))}
           </nav>
           <div className="hidden items-center gap-2 lg:flex">
-            {authed ? (
-              <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent">
-                <Link to="/app">
-                  Ouvrir l'app <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            ) : (
-              <>
-                <Button asChild variant="ghost" size="sm">
-                  <Link to="/auth">Se connecter</Link>
-                </Button>
-                <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent">
-                  <Link to="/contact">Demander une démo</Link>
-                </Button>
-              </>
-            )}
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/auth">Se connecter</Link>
+            </Button>
+            <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent">
+              <Link to="/contact">Demander une démo</Link>
+            </Button>
           </div>
           <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

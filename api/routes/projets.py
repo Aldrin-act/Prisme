@@ -88,6 +88,23 @@ def obtenir_projet(
     }
 
 
+@router.delete("/{projet_id}", status_code=204)
+def supprimer_projet(
+    projet_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> None:
+    """Supprime les données brutes du projet — n'affecte jamais les instances
+    déjà générées à partir de lui (elles restent, seul le lien disparaît)."""
+    try:
+        projet = etat.recuperer_projet(projet_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="projet inconnu") from None
+
+    verifier_acces_client(utilisateur, projet.client_id)
+    etat.supprimer_projet(projet_id)
+
+
 @router.post("/{projet_id}/generer-instance")
 def generer_instance(
     projet_id: str,

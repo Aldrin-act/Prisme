@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/integrations/prisme/auth";
 import { PrismeAPIError } from "@/integrations/prisme/client";
+import { useClients } from "@/integrations/prisme";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
@@ -168,9 +170,11 @@ function SignUpForm() {
   const [password, setPassword] = useState("");
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
+  const [clientId, setClientId] = useState("");
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { data: clients, isLoading: clientsEnChargement } = useClients();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -179,9 +183,10 @@ function SignUpForm() {
     if (!emailOk.success) return toast.error(emailOk.error.issues[0].message);
     if (!pwOk.success) return toast.error(pwOk.error.issues[0].message);
     if (!prenom.trim() || !nom.trim()) return toast.error("Merci de renseigner votre prénom et votre nom");
+    if (!clientId) return toast.error("Merci de sélectionner votre client");
     setLoading(true);
     try {
-      await register({ email, password, prenom, nom });
+      await register({ email, password, prenom, nom, client_id: clientId });
       toast.success("Compte créé");
       navigate({ to: "/app" });
     } catch (error) {
@@ -208,6 +213,22 @@ function SignUpForm() {
           placeholder="vous@entreprise.com"
           required
         />
+      </Field>
+      <Field label="Client">
+        <Select value={clientId} onValueChange={setClientId}>
+          <SelectTrigger>
+            <SelectValue
+              placeholder={clientsEnChargement ? "Chargement..." : "Sélectionnez votre client"}
+            />
+          </SelectTrigger>
+          <SelectContent>
+            {clients?.map((c) => (
+              <SelectItem key={c.client_id} value={c.client_id}>
+                {c.nom || c.client_id}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </Field>
       <PasswordField
         label="Mot de passe"

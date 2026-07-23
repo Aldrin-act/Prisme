@@ -37,7 +37,7 @@ from datetime import UTC, datetime
 import psycopg
 from psycopg import sql
 
-from api.etat import Decision, DecisionHumaine, Projet, structure_contraintes
+from api.etat import Client, Decision, DecisionHumaine, Projet, structure_contraintes
 from dsl.schema import InstanceTRCO, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from solver_store.registry import SCHEMA_PAR_DEFAUT, dsn_par_defaut
@@ -141,6 +141,39 @@ class EtatPostgres:
     def _table(self, nom: str) -> sql.Composed:
         return _table(self._schema, nom)
 
+    # --- Clients -----------------------------------------------------------
+
+    def enregistrer_client(self, client_id: str, nom: str | None = None) -> None:
+        """`ON CONFLICT DO NOTHING` : un nom déjà posé pour ce client_id
+        n'est jamais écrasé par un enregistrement implicite ultérieur
+        (ex. `enregistrer_instance` sur un client déjà nommé)."""
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, %s) ON CONFLICT (id) DO NOTHING").format(
+                    self._table("clients")
+                ),
+                (client_id, nom),
+            )
+            connexion.commit()
+
+    def recuperer_client(self, client_id: str) -> Client:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT id, nom FROM {} WHERE id = %s").format(self._table("clients")),
+                (client_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(client_id)
+        id_, nom = ligne
+        return Client(id=id_, nom=nom)
+
+    def lister_clients(self) -> list[dict[str, object]]:
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(
+                sql.SQL("SELECT id, nom FROM {} ORDER BY id").format(self._table("clients"))
+            ).fetchall()
+        return [{"client_id": id_, "nom": nom} for id_, nom in lignes]
+
     # --- Projets ---------------------------------------------------------
 
     def enregistrer_projet(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
@@ -203,6 +236,30 @@ class EtatPostgres:
                 (projet_id,),
             ).fetchall()
         return [{"instance_id": id_, "structure_contraintes": structure} for id_, structure in lignes]
+
+    def supprimer_projet(self, projet_id: str) -> None:
+        """Supprime le projet (données brutes) sans toucher aux instances déjà
+        générées à partir de lui — elles restent, seul le lien (`projet_id`)
+        disparaît (même logique inverse que `supprimer_instance`)."""
+        with closing(self._connexion()) as connexion:
+            existe = connexion.execute(
+                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("projets")),
+                (projet_id,),
+            ).fetchone()
+            if existe is None:
+                raise KeyError(projet_id)
+
+            connexion.execute(
+                sql.SQL("UPDATE {} SET projet_id = NULL WHERE projet_id = %s").format(
+                    self._table("instances_trco")
+                ),
+                (projet_id,),
+            )
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE id = %s").format(self._table("projets")),
+                (projet_id,),
+            )
+            connexion.commit()
 
     # --- Instances -----------------------------------------------------
 

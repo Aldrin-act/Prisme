@@ -4,6 +4,15 @@
  */
 
 // ============================================================================
+// CLIENTS (tenants)
+// ============================================================================
+
+export interface Client {
+  client_id: string;
+  nom: string | null;
+}
+
+// ============================================================================
 // MODÈLES DE BASE (DSL T-R-C-O)
 // ============================================================================
 
@@ -135,6 +144,12 @@ export interface PlanningAvecDurees extends Planning {
 
 export interface ReponseIngestion {
   instance_id: string;
+  structure_contraintes: string;
+}
+
+export interface InstanceDetail extends InstanceTRCO {
+  instance_id: string;
+  client_id: string;
   structure_contraintes: string;
 }
 

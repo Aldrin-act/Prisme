@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowRightLeft, CheckCircle2, AlertCircle, AlertTriangle, FolderOpen, Plus } from "lucide-react";
+import { z } from "zod";
+import { ArrowRightLeft, CheckCircle2, AlertCircle, AlertTriangle, FolderOpen, Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
 import {
   prismeKeys,
@@ -17,18 +28,27 @@ import {
   useGenererInstanceDepuisProjet,
   useProjet,
   useProjets,
+  useSupprimerProjet,
   PrismeAPIError,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
 
+const searchSchema = z.object({
+  projet: z.string().optional(),
+});
+
 export const Route = createFileRoute("/_authenticated/donnees")({
   head: () => ({ meta: [{ title: "Données — PRISME" }] }),
+  validateSearch: searchSchema,
   component: DonneesPage,
 });
 
 function DonneesPage() {
+  const { projet } = Route.useSearch();
   const [tab, setTab] = useState<"actif" | "historique">("actif");
-  const [projetActifId, setProjetActifId] = useState<string | null>(null);
+  // Pré-rempli depuis l'URL (?projet=<id>) — permet un lien direct depuis la
+  // page Instances vers le détail du projet qui a généré une instance donnée.
+  const [projetActifId, setProjetActifId] = useState<string | null>(projet ?? null);
 
   function ouvrirProjet(projetId: string) {
     setProjetActifId(projetId);
@@ -151,7 +171,7 @@ function FormulaireNouveauProjet({ onCree }: { onCree: (projetId: string) => voi
       <div className="flex justify-end">
         <Button
           onClick={enregistrer}
-          disabled={creer.isPending || !clientId.trim() || !donneesBrutes.trim()}
+          disabled={creer.isPending || (estAdmin && !clientId.trim()) || !donneesBrutes.trim()}
           className="bg-gradient-to-r from-primary to-accent"
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -276,6 +296,26 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
 
 function ListeProjets({ onOuvrir }: { onOuvrir: (projetId: string) => void }) {
   const { data: projets, isLoading } = useProjets();
+  const queryClient = useQueryClient();
+  const supprimer = useSupprimerProjet();
+  const [aSupprimer, setASupprimer] = useState<string | null>(null);
+
+  const erreurSuppression = supprimer.error as PrismeAPIError | null;
+
+  function ouvrirConfirmation(projetId: string) {
+    supprimer.reset();
+    setASupprimer(projetId);
+  }
+
+  function confirmerSuppression() {
+    if (!aSupprimer) return;
+    supprimer.mutate(aSupprimer, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: prismeKeys.projets() });
+        setASupprimer(null);
+      },
+    });
+  }
 
   if (!isLoading && projets && projets.length === 0) {
     return (
@@ -288,40 +328,85 @@ function ListeProjets({ onOuvrir }: { onOuvrir: (projetId: string) => void }) {
   }
 
   return (
-    <div className="glass overflow-hidden rounded-2xl">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Projet</TableHead>
-            <TableHead>Client</TableHead>
-            <TableHead>Créé le</TableHead>
-            <TableHead>Instances générées</TableHead>
-            <TableHead />
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {projets?.map((p) => (
-            <TableRow key={p.projet_id}>
-              <TableCell>
-                <div className="font-medium">{p.nom || "Sans nom"}</div>
-                <div className="font-mono text-xs text-muted-foreground">{p.projet_id}</div>
-              </TableCell>
-              <TableCell>{p.client_id}</TableCell>
-              <TableCell className="text-sm text-muted-foreground">
-                {new Date(p.date_creation).toLocaleString()}
-              </TableCell>
-              <TableCell>
-                <Badge variant={p.nb_instances > 0 ? "secondary" : "outline"}>{p.nb_instances}</Badge>
-              </TableCell>
-              <TableCell>
-                <Button size="sm" variant="outline" onClick={() => onOuvrir(p.projet_id)}>
-                  <FolderOpen className="mr-2 h-3.5 w-3.5" /> Ouvrir
-                </Button>
-              </TableCell>
+    <>
+      <div className="glass overflow-hidden rounded-2xl">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Projet</TableHead>
+              <TableHead>Client</TableHead>
+              <TableHead>Créé le</TableHead>
+              <TableHead>Instances générées</TableHead>
+              <TableHead />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {projets?.map((p) => (
+              <TableRow key={p.projet_id}>
+                <TableCell>
+                  <div className="font-medium">{p.nom || "Sans nom"}</div>
+                  <div className="font-mono text-xs text-muted-foreground">{p.projet_id}</div>
+                </TableCell>
+                <TableCell>{p.client_id}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {new Date(p.date_creation).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  <Badge variant={p.nb_instances > 0 ? "secondary" : "outline"}>{p.nb_instances}</Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex justify-end gap-2">
+                    <Button size="sm" variant="outline" onClick={() => onOuvrir(p.projet_id)}>
+                      <FolderOpen className="mr-2 h-3.5 w-3.5" /> Ouvrir
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      aria-label="Supprimer le projet"
+                      onClick={() => ouvrirConfirmation(p.projet_id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <AlertDialog open={!!aSupprimer} onOpenChange={(open) => !open && setASupprimer(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Supprimer ce projet ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action supprime définitivement les données brutes du projet. Les instances déjà générées
+              à partir de lui restent intactes — seul le lien vers ce projet disparaît. Cette action est
+              irréversible.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          {erreurSuppression && (
+            <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="flex items-center gap-2 font-medium">
+                <AlertCircle className="h-4 w-4" /> Échec de la suppression
+              </div>
+              <p className="mt-1">{erreurSuppression.message}</p>
+            </div>
+          )}
+
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={supprimer.isPending}>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmerSuppression}
+              disabled={supprimer.isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {supprimer.isPending ? "Suppression..." : "Supprimer"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

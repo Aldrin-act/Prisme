@@ -17,6 +17,7 @@ import {
   Settings,
   LogOut,
   Search,
+  Building2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,6 +48,7 @@ const NAV = [
   { to: "/audit", icon: ClipboardList, label: "Audit" },
   { to: "/analytics", icon: BarChart3, label: "Analytique" },
   { to: "/alerts", icon: Bell, label: "Alertes" },
+  { to: "/clients", icon: Building2, label: "Clients", rolesAutorises: ["admin"] },
   { to: "/api-keys", icon: KeyRound, label: "Clés API" },
   { to: "/settings", icon: Settings, label: "Paramètres" },
 ] as const;
@@ -66,6 +68,9 @@ function AppShell() {
     navigate({ to: "/auth", replace: true });
   }
 
+  const navVisible = NAV.filter(
+    (n) => !("rolesAutorises" in n) || (n.rolesAutorises as readonly string[]).includes(utilisateur.role)
+  );
   const current = NAV.find((n) => n.to === pathname);
 
   return (
@@ -76,7 +81,7 @@ function AppShell() {
           <span className="font-bold tracking-tight">PRISME</span>
         </Link>
         <nav className="mt-6 flex-1 space-y-1 overflow-y-auto">
-          {NAV.map((n) => {
+          {navVisible.map((n) => {
             const active = pathname === n.to;
             return (
               <Link
