@@ -24,6 +24,7 @@ import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
+import { Route as AuthenticatedDonneesRouteImport } from './routes/_authenticated/donnees'
 import { Route as AuthenticatedDslRouteImport } from './routes/_authenticated/dsl'
 import { Route as AuthenticatedExecutionRouteImport } from './routes/_authenticated/execution'
 import { Route as AuthenticatedInstancesRouteImport } from './routes/_authenticated/instances'
@@ -107,6 +108,11 @@ const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDonneesRoute = AuthenticatedDonneesRouteImport.update({
+  id: '/donnees',
+  path: '/donnees',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDslRoute = AuthenticatedDslRouteImport.update({
   id: '/dsl',
   path: '/dsl',
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
   '/audit': typeof AuthenticatedAuditRoute
+  '/donnees': typeof AuthenticatedDonneesRoute
   '/dsl': typeof AuthenticatedDslRoute
   '/execution': typeof AuthenticatedExecutionRoute
   '/instances': typeof AuthenticatedInstancesRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
   '/audit': typeof AuthenticatedAuditRoute
+  '/donnees': typeof AuthenticatedDonneesRoute
   '/dsl': typeof AuthenticatedDslRoute
   '/execution': typeof AuthenticatedExecutionRoute
   '/instances': typeof AuthenticatedInstancesRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
+  '/_authenticated/donnees': typeof AuthenticatedDonneesRoute
   '/_authenticated/dsl': typeof AuthenticatedDslRoute
   '/_authenticated/execution': typeof AuthenticatedExecutionRoute
   '/_authenticated/instances': typeof AuthenticatedInstancesRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/api-keys'
     | '/app'
     | '/audit'
+    | '/donnees'
     | '/dsl'
     | '/execution'
     | '/instances'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/api-keys'
     | '/app'
     | '/audit'
+    | '/donnees'
     | '/dsl'
     | '/execution'
     | '/instances'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/_authenticated/api-keys'
     | '/_authenticated/app'
     | '/_authenticated/audit'
+    | '/_authenticated/donnees'
     | '/_authenticated/dsl'
     | '/_authenticated/execution'
     | '/_authenticated/instances'
@@ -419,6 +431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAuditRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/donnees': {
+      id: '/_authenticated/donnees'
+      path: '/donnees'
+      fullPath: '/donnees'
+      preLoaderRoute: typeof AuthenticatedDonneesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dsl': {
       id: '/_authenticated/dsl'
       path: '/dsl'
@@ -484,6 +503,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedApiKeysRoute: typeof AuthenticatedApiKeysRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
+  AuthenticatedDonneesRoute: typeof AuthenticatedDonneesRoute
   AuthenticatedDslRoute: typeof AuthenticatedDslRoute
   AuthenticatedExecutionRoute: typeof AuthenticatedExecutionRoute
   AuthenticatedInstancesRoute: typeof AuthenticatedInstancesRoute
@@ -500,6 +520,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedApiKeysRoute: AuthenticatedApiKeysRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedAuditRoute: AuthenticatedAuditRoute,
+  AuthenticatedDonneesRoute: AuthenticatedDonneesRoute,
   AuthenticatedDslRoute: AuthenticatedDslRoute,
   AuthenticatedExecutionRoute: AuthenticatedExecutionRoute,
   AuthenticatedInstancesRoute: AuthenticatedInstancesRoute,

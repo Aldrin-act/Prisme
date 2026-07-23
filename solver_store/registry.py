@@ -71,6 +71,7 @@ class ArtefactSolveur:
     id: str
     client_id: str | None
     structure_contraintes: str
+    signature_objectifs: str
     chemin_code: Path
     empreinte_sha256: str
     date_validation: str
@@ -128,6 +129,15 @@ class Registre:
                     table=_table(self._schema)
                 )
             )
+            # Migration idempotente : les solveurs enregistrés avant l'ajout
+            # des objectifs paramétrables valaient tous implicitement
+            # "minimiser_makespan" (seul objectif alors supporté).
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS signature_objectifs TEXT "
+                    "NOT NULL DEFAULT 'minimiser_makespan'"
+                ).format(table=_table(self._schema))
+            )
             connexion.commit()
 
     def _connexion(self) -> psycopg.Connection:
@@ -139,10 +149,13 @@ class Registre:
         structure_contraintes: str,
         verdict_cascade: VerdictCascade,
         client_id: str | None = None,
+        signature_objectifs: str = "minimiser_makespan",
     ) -> str:
         """N'enregistre que du code déjà passé au vert par la cascade
         (Étape 5) — le store ne persiste jamais un solveur non validé
-        (principe fondateur, §5.2)."""
+        (principe fondateur, §5.2). `signature_objectifs` vaut par défaut
+        "minimiser_makespan" pour ne pas casser les appelants existants,
+        tous générés avant l'ajout des objectifs paramétrables."""
         if not verdict_cascade.reussi:
             raise ValueError("refus d'enregistrer un solveur dont la cascade de validation n'est pas au vert")
 
@@ -156,13 +169,15 @@ class Registre:
             connexion.execute(
                 sql.SQL(
                     "INSERT INTO {table} "
-                    "(id, client_id, structure_contraintes, chemin_code, empreinte_sha256, date_validation) "
-                    "VALUES (%s, %s, %s, %s, %s, %s)"
+                    "(id, client_id, structure_contraintes, signature_objectifs, chemin_code, "
+                    "empreinte_sha256, date_validation) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s)"
                 ).format(table=_table(self._schema)),
                 (
                     id_solveur,
                     client_id,
                     structure_contraintes,
+                    signature_objectifs,
                     str(chemin_code),
                     _empreinte(code_source),
                     datetime.now(UTC).isoformat(),
@@ -176,8 +191,8 @@ class Registre:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT id, client_id, structure_contraintes, chemin_code, empreinte_sha256, "
-                    "date_validation, actif "
+                    "SELECT id, client_id, structure_contraintes, signature_objectifs, chemin_code, "
+                    "empreinte_sha256, date_validation, actif "
                     "FROM {table} WHERE id = %s"
                 ).format(table=_table(self._schema)),
                 (id_solveur,),
@@ -186,7 +201,7 @@ class Registre:
         if ligne is None:
             raise KeyError(f"aucun solveur enregistré avec l'id {id_solveur!r}")
 
-        id_, client_id, structure, chemin_code, empreinte, date_validation, actif = ligne
+        id_, client_id, structure, objectifs_signature, chemin_code, empreinte, date_validation, actif = ligne
         code_source = Path(chemin_code).read_text(encoding="utf-8")
         if _empreinte(code_source) != empreinte:
             raise ErreurIntegriteSolveur(
@@ -197,6 +212,7 @@ class Registre:
             id=id_,
             client_id=client_id,
             structure_contraintes=structure,
+            signature_objectifs=objectifs_signature,
             chemin_code=Path(chemin_code),
             empreinte_sha256=empreinte,
             date_validation=date_validation,
@@ -208,6 +224,7 @@ class Registre:
         self,
         client_id: str | None = None,
         structure_contraintes: str | None = None,
+        signature_objectifs: str | None = None,
         inclure_inactifs: bool = False,
     ) -> list[ArtefactSolveur]:
         """Par défaut, ne renvoie que les solveurs actifs — `/execution` ne
@@ -224,6 +241,9 @@ class Registre:
         if structure_contraintes is not None:
             requete += sql.SQL(" AND structure_contraintes = %s")
             parametres.append(structure_contraintes)
+        if signature_objectifs is not None:
+            requete += sql.SQL(" AND signature_objectifs = %s")
+            parametres.append(signature_objectifs)
 
         with closing(self._connexion()) as connexion:
             ids = [ligne[0] for ligne in connexion.execute(requete, parametres).fetchall()]

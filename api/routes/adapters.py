@@ -28,8 +28,10 @@ from adapters.agent_comprehension import comprendre_donnees_erp
 from adapters.greensig import extraire_payload, traduire
 from adapters.tableur import ErreurFichierInvalide
 from adapters.tableur import traduire as traduire_tableur
+from api.autorisation import verifier_acces_client
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
+from api.routes.auth import obtenir_utilisateur_courant
 from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.client_llm import AppelLLM, construire_appel_llm
 
@@ -39,7 +41,10 @@ router = APIRouter(prefix="/adapters", tags=["adapters"])
 
 
 @router.post("/greensig/ingerer")
-def ingerer_depuis_greensig(etat: EtatAPI = Depends(obtenir_etat)) -> dict[str, str]:
+def ingerer_depuis_greensig(
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, str]:
     try:
         payload = extraire_payload()
     except psycopg.OperationalError as erreur:
@@ -56,10 +61,14 @@ def ingerer_depuis_greensig(etat: EtatAPI = Depends(obtenir_etat)) -> dict[str, 
 
 @router.post("/tableur/{client_id}")
 async def ingerer_depuis_tableur(
-    client_id: str, fichier: UploadFile = File(...), etat: EtatAPI = Depends(obtenir_etat)
+    client_id: str,
+    fichier: UploadFile = File(...),
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     """Ingestion depuis le gabarit xlsx (§5.4, `docs/dsl/gabarit_ingestion_trco.xlsx`) —
     la voie « je remplis un tableur » plutôt que « j'écris du JSON »."""
+    verifier_acces_client(utilisateur, client_id)
     if not (fichier.filename or "").lower().endswith(".xlsx"):
         raise HTTPException(status_code=422, detail="le fichier doit être un classeur Excel (.xlsx)")
 
@@ -85,7 +94,9 @@ def ingerer_via_comprehension(
     requete: RequeteComprehension,
     etat: EtatAPI = Depends(obtenir_etat),
     appel_llm: AppelLLM = Depends(construire_appel_llm),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
+    verifier_acces_client(utilisateur, requete.client_id)
     try:
         resultat = comprendre_donnees_erp(appel_llm, requete.donnees_brutes)
     except ErreurReponseAgentInvalide as erreur:

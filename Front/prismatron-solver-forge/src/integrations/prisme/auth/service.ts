@@ -5,6 +5,7 @@
 import { PRISME_CONFIG } from '../config';
 import { PrismeAPIError } from '../client';
 import { PERMISSIONS_PAR_ROLE } from './types';
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY, AUTH_EXPIRES_KEY } from './storage';
 import type {
   Utilisateur,
   SessionAuth,
@@ -14,10 +15,6 @@ import type {
   ErreurAuth,
   PermissionsRole,
 } from './types';
-
-const AUTH_TOKEN_KEY = 'prisme_auth_token';
-const AUTH_USER_KEY = 'prisme_auth_user';
-const AUTH_EXPIRES_KEY = 'prisme_auth_expires';
 
 // ============================================================================
 // STORAGE (localStorage)

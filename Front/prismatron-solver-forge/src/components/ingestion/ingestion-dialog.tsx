@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Upload, FileJson, FileSpreadsheet, CheckCircle2, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Upload, FileJson, FileSpreadsheet, Braces, CheckCircle2, AlertCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,10 +30,13 @@ import {
   PrismeAPIError,
   type Contrainte,
   type InstanceTRCO,
+  type Objectif,
   type Ressource,
   type Tache,
   type TypeContrainte,
+  type TypeObjectif,
 } from "@/integrations/prisme";
+import { useAuth } from "@/integrations/prisme/auth";
 
 // Adaptateurs ERP réellement branchés côté backend (POST /adapters/{id}/ingerer).
 // Ajouter un adaptateur = ajouter une entrée ici, aucun autre changement de composant.
@@ -64,6 +67,26 @@ interface ContrainteLigne {
   competence: string;
 }
 
+interface ObjectifLigne {
+  clef: string;
+  type: TypeObjectif;
+  poids: string;
+  makespanCible: string;
+  methode: "ecart_max" | "variance" | "gini";
+  ressourcesCibles: string;
+  fonctionPenalite: "lineaire" | "quadratique" | "exponentielle";
+  seuilGrace: string;
+  ressourcesPrioritaires: string;
+}
+
+const LABELS_OBJECTIF: Record<TypeObjectif, string> = {
+  minimiser_makespan: "Minimiser le makespan",
+  equilibrer_charge: "Équilibrer la charge",
+  minimiser_retards: "Minimiser les retards",
+  maximiser_utilisation: "Maximiser l'utilisation",
+  minimiser_changements: "Minimiser les changements",
+};
+
 function nouvelleTache(): TacheLigne {
   return { clef: idLocal(), id: "", nom: "" };
 }
@@ -83,8 +106,69 @@ function nouvelleContrainte(): ContrainteLigne {
     competence: "",
   };
 }
+function nouvelObjectif(): ObjectifLigne {
+  return {
+    clef: idLocal(),
+    type: "minimiser_makespan",
+    poids: "1",
+    makespanCible: "",
+    methode: "ecart_max",
+    ressourcesCibles: "",
+    fonctionPenalite: "lineaire",
+    seuilGrace: "",
+    ressourcesPrioritaires: "",
+  };
+}
 
-function construireInstance(taches: TacheLigne[], ressources: RessourceLigne[], contraintes: ContrainteLigne[]): InstanceTRCO {
+function construireObjectifs(objectifs: ObjectifLigne[]): Objectif[] {
+  return objectifs.map((o): Objectif => {
+    const poids = o.poids.trim() ? Number(o.poids) : undefined;
+    switch (o.type) {
+      case "minimiser_makespan":
+        return {
+          type: "minimiser_makespan",
+          ...(poids !== undefined ? { poids } : {}),
+          ...(o.makespanCible.trim() ? { makespan_cible: Number(o.makespanCible) } : {}),
+        };
+      case "equilibrer_charge":
+        return {
+          type: "equilibrer_charge",
+          ...(poids !== undefined ? { poids } : {}),
+          methode: o.methode,
+          ...(o.ressourcesCibles.trim()
+            ? { ressources_cibles: o.ressourcesCibles.split(",").map((s) => s.trim()).filter(Boolean) }
+            : {}),
+        };
+      case "minimiser_retards":
+        return {
+          type: "minimiser_retards",
+          ...(poids !== undefined ? { poids } : {}),
+          fonction_penalite: o.fonctionPenalite,
+          ...(o.seuilGrace.trim() ? { seuil_grace: Number(o.seuilGrace) } : {}),
+        };
+      case "maximiser_utilisation":
+        return {
+          type: "maximiser_utilisation",
+          ...(poids !== undefined ? { poids } : {}),
+          ...(o.ressourcesPrioritaires.trim()
+            ? { ressources_prioritaires: o.ressourcesPrioritaires.split(",").map((s) => s.trim()).filter(Boolean) }
+            : {}),
+        };
+      case "minimiser_changements":
+        return {
+          type: "minimiser_changements",
+          ...(poids !== undefined ? { poids } : {}),
+        };
+    }
+  });
+}
+
+function construireInstance(
+  taches: TacheLigne[],
+  ressources: RessourceLigne[],
+  contraintes: ContrainteLigne[],
+  objectifs: ObjectifLigne[],
+): InstanceTRCO {
   return {
     taches: taches.map(({ id, nom, priorite }) => ({
       id,
@@ -116,7 +200,7 @@ function construireInstance(taches: TacheLigne[], ressources: RessourceLigne[], 
           return { type: "competence_requise", tache: c.tache, competence: c.competence };
       }
     }),
-    objectifs: [{ type: "minimiser_makespan" }],
+    objectifs: construireObjectifs(objectifs),
   };
 }
 
@@ -153,23 +237,33 @@ export function IngestionDialog({
   const ingerer = useIngererInstance();
   const importer = useImporterViaAdaptateur();
   const importerFichier = useImporterFichierTableur();
+  const { utilisateur } = useAuth();
+  const estAdmin = utilisateur?.role === "admin";
 
-  const [clientId, setClientId] = useState("client-001");
+  const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
   const [taches, setTaches] = useState<TacheLigne[]>([nouvelleTache()]);
   const [ressources, setRessources] = useState<RessourceLigne[]>([nouvelleRessource()]);
   const [contraintes, setContraintes] = useState<ContrainteLigne[]>([]);
+  const [objectifs, setObjectifs] = useState<ObjectifLigne[]>([nouvelObjectif()]);
   const [source, setSource] = useState<string>(SOURCES_IMPORT[0].id);
   const [fichier, setFichier] = useState<File | null>(null);
   const inputFichierRef = useRef<HTMLInputElement>(null);
+  const [fichierJson, setFichierJson] = useState<File | null>(null);
+  const inputJsonRef = useRef<HTMLInputElement>(null);
+  const [erreurParseJson, setErreurParseJson] = useState<string | null>(null);
   const [succes, setSucces] = useState<{ instance_id: string; structure_contraintes: string } | null>(null);
 
   function reinitialiser() {
-    setClientId("client-001");
+    setClientId(utilisateur?.client_id ?? "");
     setTaches([nouvelleTache()]);
     setRessources([nouvelleRessource()]);
     setContraintes([]);
+    setObjectifs([nouvelObjectif()]);
     setFichier(null);
     if (inputFichierRef.current) inputFichierRef.current.value = "";
+    setFichierJson(null);
+    if (inputJsonRef.current) inputJsonRef.current.value = "";
+    setErreurParseJson(null);
     setSucces(null);
     ingerer.reset();
     importer.reset();
@@ -187,7 +281,7 @@ export function IngestionDialog({
   }
 
   function soumettreTRCO() {
-    const instance = construireInstance(taches, ressources, contraintes);
+    const instance = construireInstance(taches, ressources, contraintes, objectifs);
     ingerer.mutate({ clientId, instance }, { onSuccess: onIngestionReussie });
   }
 
@@ -200,6 +294,19 @@ export function IngestionDialog({
     importerFichier.mutate({ clientId, fichier }, { onSuccess: onIngestionReussie });
   }
 
+  async function soumettreJson() {
+    if (!fichierJson) return;
+    setErreurParseJson(null);
+    let instance: InstanceTRCO;
+    try {
+      instance = JSON.parse(await fichierJson.text()) as InstanceTRCO;
+    } catch {
+      setErreurParseJson("Le fichier n'est pas un JSON valide.");
+      return;
+    }
+    ingerer.mutate({ clientId, instance }, { onSuccess: onIngestionReussie });
+  }
+
   const erreur = (ingerer.error ?? importer.error ?? importerFichier.error) as PrismeAPIError | null;
   const enCours = ingerer.isPending || importer.isPending || importerFichier.isPending;
 
@@ -209,7 +316,8 @@ export function IngestionDialog({
         <DialogHeader>
           <DialogTitle>Nouvelle instance</DialogTitle>
           <DialogDescription>
-            Ingérez une instance T-R-C-O directement, importez-la depuis un ERP connecté, ou depuis un fichier Excel rempli.
+            Ingérez une instance T-R-C-O directement, importez-la depuis un ERP connecté, ou depuis un fichier Excel
+            ou JSON rempli.
           </DialogDescription>
         </DialogHeader>
 
@@ -239,13 +347,11 @@ export function IngestionDialog({
               <TabsTrigger value="trco">Saisie T-R-C-O</TabsTrigger>
               <TabsTrigger value="import">Import ERP</TabsTrigger>
               <TabsTrigger value="fichier">Fichier Excel</TabsTrigger>
+              <TabsTrigger value="json">Fichier JSON</TabsTrigger>
             </TabsList>
 
             <TabsContent value="trco" className="space-y-5">
-              <div className="space-y-1.5">
-                <Label htmlFor="client_id">Client</Label>
-                <Input id="client_id" value={clientId} onChange={(e) => setClientId(e.target.value)} />
-              </div>
+              <ChampClient clientId={clientId} setClientId={setClientId} estAdmin={estAdmin} idChamp="client_id" />
 
               <SectionTaches taches={taches} setTaches={setTaches} />
               <SectionRessources ressources={ressources} setRessources={setRessources} />
@@ -256,10 +362,7 @@ export function IngestionDialog({
                 ressources={ressources}
               />
 
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>Objectif :</span>
-                <Badge variant="secondary">Minimiser le makespan</Badge>
-              </div>
+              <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
 
               {erreur && ingerer.error && <ErreursAPI erreur={erreur} />}
 
@@ -302,10 +405,12 @@ export function IngestionDialog({
             </TabsContent>
 
             <TabsContent value="fichier" className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="client_id_fichier">Client</Label>
-                <Input id="client_id_fichier" value={clientId} onChange={(e) => setClientId(e.target.value)} />
-              </div>
+              <ChampClient
+                clientId={clientId}
+                setClientId={setClientId}
+                estAdmin={estAdmin}
+                idChamp="client_id_fichier"
+              />
 
               <div className="space-y-1.5">
                 <Label htmlFor="fichier_xlsx">Fichier Excel (.xlsx)</Label>
@@ -330,6 +435,45 @@ export function IngestionDialog({
                 <Button onClick={soumettreFichier} disabled={enCours || !fichier}>
                   <FileSpreadsheet className="mr-2 h-4 w-4" />
                   {importerFichier.isPending ? "Import..." : "Importer le fichier"}
+                </Button>
+              </DialogFooter>
+            </TabsContent>
+
+            <TabsContent value="json" className="space-y-4">
+              <ChampClient clientId={clientId} setClientId={setClientId} estAdmin={estAdmin} idChamp="client_id_json" />
+
+              <div className="space-y-1.5">
+                <Label htmlFor="fichier_json">Fichier JSON (.json)</Label>
+                <Input
+                  id="fichier_json"
+                  ref={inputJsonRef}
+                  type="file"
+                  accept=".json,application/json"
+                  onChange={(e) => {
+                    setFichierJson(e.target.files?.[0] ?? null);
+                    setErreurParseJson(null);
+                  }}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Déposez un fichier JSON déjà au format T-R-C-O (mêmes champs que la saisie manuelle :
+                  taches, ressources, contraintes, objectifs) — il est ingéré tel quel, sans transformation.
+                </p>
+              </div>
+
+              {erreurParseJson && (
+                <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+                  <div className="flex items-center gap-2 font-medium">
+                    <AlertCircle className="h-4 w-4" /> {erreurParseJson}
+                  </div>
+                </div>
+              )}
+              {erreur && ingerer.error && <ErreursAPI erreur={erreur} />}
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => fermer(false)}>Annuler</Button>
+                <Button onClick={soumettreJson} disabled={enCours || !fichierJson}>
+                  <Braces className="mr-2 h-4 w-4" />
+                  {ingerer.isPending ? "Ingestion..." : "Importer le fichier"}
                 </Button>
               </DialogFooter>
             </TabsContent>
@@ -560,6 +704,161 @@ function SectionContraintes({
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+function SectionObjectifs({
+  objectifs,
+  setObjectifs,
+}: {
+  objectifs: ObjectifLigne[];
+  setObjectifs: React.Dispatch<React.SetStateAction<ObjectifLigne[]>>;
+}) {
+  function majLigne(i: number, patch: Partial<ObjectifLigne>) {
+    setObjectifs((arr) => arr.map((x, j) => (j === i ? { ...x, ...patch } : x)));
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <Label>Objectifs</Label>
+        <Button type="button" size="sm" variant="outline" onClick={() => setObjectifs((o) => [...o, nouvelObjectif()])}>
+          <Plus className="mr-1 h-3.5 w-3.5" /> Ajouter
+        </Button>
+      </div>
+      <div className="space-y-2">
+        {objectifs.map((o, i) => (
+          <div key={o.clef} className="flex flex-wrap items-center gap-2 rounded-lg border border-border/50 p-2">
+            <Select value={o.type} onValueChange={(v) => majLigne(i, { type: v as TypeObjectif })}>
+              <SelectTrigger className="w-56">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {(Object.keys(LABELS_OBJECTIF) as TypeObjectif[]).map((t) => (
+                  <SelectItem key={t} value={t}>{LABELS_OBJECTIF[t]}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Input
+              placeholder="poids"
+              type="number"
+              min={0}
+              step="0.1"
+              value={o.poids}
+              onChange={(e) => majLigne(i, { poids: e.target.value })}
+              className="w-24"
+            />
+
+            {o.type === "minimiser_makespan" && (
+              <Input
+                placeholder="makespan cible (min, optionnel)"
+                type="number"
+                min={0}
+                value={o.makespanCible}
+                onChange={(e) => majLigne(i, { makespanCible: e.target.value })}
+                className="w-56"
+              />
+            )}
+            {o.type === "equilibrer_charge" && (
+              <>
+                <Select value={o.methode} onValueChange={(v) => majLigne(i, { methode: v as ObjectifLigne["methode"] })}>
+                  <SelectTrigger className="w-36">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ecart_max">Écart max</SelectItem>
+                    <SelectItem value="variance">Variance</SelectItem>
+                    <SelectItem value="gini">Gini</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  placeholder="ressources ciblées (optionnel)"
+                  value={o.ressourcesCibles}
+                  onChange={(e) => majLigne(i, { ressourcesCibles: e.target.value })}
+                  className="w-56"
+                />
+              </>
+            )}
+            {o.type === "minimiser_retards" && (
+              <>
+                <Select
+                  value={o.fonctionPenalite}
+                  onValueChange={(v) => majLigne(i, { fonctionPenalite: v as ObjectifLigne["fonctionPenalite"] })}
+                >
+                  <SelectTrigger className="w-40">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="lineaire">Linéaire</SelectItem>
+                    <SelectItem value="quadratique">Quadratique</SelectItem>
+                    <SelectItem value="exponentielle">Exponentielle</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  placeholder="seuil de grâce (min)"
+                  type="number"
+                  min={0}
+                  value={o.seuilGrace}
+                  onChange={(e) => majLigne(i, { seuilGrace: e.target.value })}
+                  className="w-40"
+                />
+              </>
+            )}
+            {o.type === "maximiser_utilisation" && (
+              <Input
+                placeholder="ressources prioritaires (optionnel)"
+                value={o.ressourcesPrioritaires}
+                onChange={(e) => majLigne(i, { ressourcesPrioritaires: e.target.value })}
+                className="w-56"
+              />
+            )}
+
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              className="ml-auto"
+              onClick={() => setObjectifs((arr) => arr.filter((_, j) => j !== i))}
+              disabled={objectifs.length === 1}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        ))}
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Plusieurs objectifs sont combinés selon leur poids relatif (ex. 0.7 équilibrage + 0.3 makespan).
+        Les listes "ressources" acceptent des ids séparés par des virgules ; laissez vide pour "toutes".
+      </p>
+    </div>
+  );
+}
+
+function ChampClient({
+  clientId,
+  setClientId,
+  estAdmin,
+  idChamp,
+}: {
+  clientId: string;
+  setClientId: (v: string) => void;
+  estAdmin: boolean;
+  idChamp: string;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={idChamp}>Client</Label>
+      <Input
+        id={idChamp}
+        value={clientId}
+        onChange={(e) => setClientId(e.target.value)}
+        disabled={!estAdmin}
+      />
+      {!estAdmin && (
+        <p className="text-xs text-muted-foreground">Associé automatiquement à votre compte.</p>
+      )}
     </div>
   );
 }

@@ -58,9 +58,49 @@ export type Contrainte =
 
 export interface ObjectifMinimiserMakespan {
   type: 'minimiser_makespan';
+  poids?: number;
+  makespan_cible?: number | null;
+  penalite_depassement?: number;
 }
 
-export type Objectif = ObjectifMinimiserMakespan;
+export interface ObjectifEquilibrerCharge {
+  type: 'equilibrer_charge';
+  poids?: number;
+  methode?: 'ecart_max' | 'variance' | 'gini';
+  ressources_cibles?: string[] | null;
+}
+
+export interface ObjectifMinimiserRetards {
+  type: 'minimiser_retards';
+  poids?: number;
+  fonction_penalite?: 'lineaire' | 'quadratique' | 'exponentielle';
+  seuil_grace?: number;
+}
+
+export interface ObjectifMaximiserUtilisation {
+  type: 'maximiser_utilisation';
+  poids?: number;
+  ressources_prioritaires?: string[];
+}
+
+export interface ObjectifMinimiserChangements {
+  type: 'minimiser_changements';
+  poids?: number;
+}
+
+export type TypeObjectif =
+  | 'minimiser_makespan'
+  | 'equilibrer_charge'
+  | 'minimiser_retards'
+  | 'maximiser_utilisation'
+  | 'minimiser_changements';
+
+export type Objectif =
+  | ObjectifMinimiserMakespan
+  | ObjectifEquilibrerCharge
+  | ObjectifMinimiserRetards
+  | ObjectifMaximiserUtilisation
+  | ObjectifMinimiserChangements;
 
 export interface InstanceTRCO {
   taches: Tache[];
@@ -201,6 +241,44 @@ export interface ReponseValidation {
 // source de données côté backend et renvoie directement une instance ingérée,
 // à l'identique de POST /ingestion/{client_id}.
 export type ReponseImportAdaptateur = ReponseIngestion;
+
+// Agent de compréhension (LLM) : propose une traduction de données brutes
+// (ERP sans adaptateur dédié) vers T-R-C-O, jamais une vérité — le même
+// garde-fou déterministe que les autres canaux d'ingestion tranche derrière.
+export interface ReponseComprehension {
+  instance_id: string;
+  structure_contraintes: string;
+  avertissements: string[];
+}
+
+// Projets : données brutes persistées + historique des instances générées
+// à partir d'elles (une même donnée brute peut être reconvertie plusieurs
+// fois, sans jamais devoir être re-saisie).
+export interface Projet {
+  projet_id: string;
+  client_id: string;
+  nom: string | null;
+  date_creation: string;
+  nb_instances: number;
+}
+
+export interface InstanceDeProjet {
+  instance_id: string;
+  structure_contraintes: string;
+}
+
+export interface ProjetDetail {
+  projet_id: string;
+  client_id: string;
+  nom: string | null;
+  donnees_brutes: string;
+  date_creation: string;
+  instances: InstanceDeProjet[];
+}
+
+export interface ReponseCreationProjet {
+  projet_id: string;
+}
 
 // ============================================================================
 // ERREURS API

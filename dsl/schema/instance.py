@@ -18,7 +18,7 @@ from collections import defaultdict
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from .contraintes import CompatibiliteRessourceTache, CompetenceRequise, Contrainte, Echeance, Precedence
-from .objectifs import MinimiserMakespan
+from .objectifs import Objectif
 from .ressources import Ressource
 from .taches import Tache
 
@@ -31,7 +31,7 @@ class InstanceTRCO(BaseModel):
     taches: list[Tache] = Field(min_length=1)
     ressources: list[Ressource] = Field(min_length=1)
     contraintes: list[Contrainte] = Field(default_factory=list)
-    objectifs: list[MinimiserMakespan] = Field(min_length=1)
+    objectifs: list[Objectif] = Field(min_length=1)
 
     @model_validator(mode="after")
     def _identifiants_uniques_par_axe(self) -> InstanceTRCO:

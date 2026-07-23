@@ -3,6 +3,7 @@
  */
 
 import { PRISME_CONFIG } from './config';
+import { lireTokenStocke } from './auth/storage';
 import type * as Types from './types';
 
 // ============================================================================
@@ -32,20 +33,25 @@ export class PrismeAPIError extends Error {
 async function apiFetch<T>(
   path: string,
   options?: RequestInit,
-  timeoutMs = PRISME_CONFIG.timeout
+  // `null` = pas de timeout côté client (ex. agent de compréhension sur un
+  // gros volume de données brutes) — la requête attend la réponse du
+  // serveur aussi longtemps qu'il le faut, sans abandon automatique.
+  timeoutMs: number | null = PRISME_CONFIG.timeout
 ): Promise<T> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  const timeoutId = timeoutMs === null ? undefined : setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     // FormData (upload de fichier) : laisser le navigateur poser son propre
     // Content-Type (avec la boundary multipart) plutôt que forcer JSON.
     const estFormData = options?.body instanceof FormData;
+    const token = lireTokenStocke();
     const response = await fetch(`${PRISME_CONFIG.baseURL}${path}`, {
       ...options,
       signal: controller.signal,
       headers: {
         ...(estFormData ? { Accept: PRISME_CONFIG.headers.Accept } : PRISME_CONFIG.headers),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options?.headers,
       },
     });
@@ -64,6 +70,11 @@ async function apiFetch<T>(
         ? errorDetail.map((e) => `${e.loc.join('.')} : ${e.msg}`).join(' ; ')
         : errorDetail;
       throw new PrismeAPIError(`Erreur API: ${message}`, response.status, errorDetail);
+    }
+
+    // 204 No Content (ex. DELETE) : pas de corps à parser.
+    if (response.status === 204) {
+      return undefined as T;
     }
 
     return response.json();
@@ -90,6 +101,11 @@ export const prismeClient = {
       `${PRISME_CONFIG.routes.ingestion}/${clientId}`,
       { method: 'POST', body: JSON.stringify(instance) }
     ),
+
+  // Supprime une instance et son historique d'exécution (n'affecte jamais
+  // les solveurs enregistrés, indépendants).
+  supprimerInstance: (instanceId: string) =>
+    apiFetch<void>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}`, { method: 'DELETE' }),
 
   // EXÉCUTION
   declencherExecution: (instanceId: string, clientId: string) =>
@@ -165,4 +181,39 @@ export const prismeClient = {
       { method: 'POST', body: corps }
     );
   },
+
+  // Agent de compréhension : convertit des données brutes (texte libre, ERP
+  // sans adaptateur dédié) en instance T-R-C-O via un LLM, sous le même
+  // garde-fou de validation que les autres canaux d'ingestion.
+  convertirDonneesBrutes: (clientId: string, donneesBrutes: string) =>
+    apiFetch<Types.ReponseComprehension>(
+      `${PRISME_CONFIG.routes.adapters}/comprehension/ingerer`,
+      { method: 'POST', body: JSON.stringify({ client_id: clientId, donnees_brutes: donneesBrutes }) },
+      PRISME_CONFIG.timeoutComprehension
+    ),
+
+  // PROJETS — données brutes persistées, reconvertibles à volonté. Le
+  // client_id est dérivé du compte authentifié côté serveur ; `clientId`
+  // n'est envoyé (et n'a d'effet) que pour un compte admin ciblant un
+  // autre client (voir `api/routes/projets.py`).
+  creerProjet: (donneesBrutes: string, nom?: string, clientId?: string) =>
+    apiFetch<Types.ReponseCreationProjet>(PRISME_CONFIG.routes.projets, {
+      method: 'POST',
+      body: JSON.stringify({ donnees_brutes: donneesBrutes, nom: nom ?? null, client_id: clientId ?? null }),
+    }),
+
+  listerProjets: () => apiFetch<Types.Projet[]>(PRISME_CONFIG.routes.projets),
+
+  obtenirProjet: (projetId: string) =>
+    apiFetch<Types.ProjetDetail>(`${PRISME_CONFIG.routes.projets}/${projetId}`),
+
+  // Pas de timeout (null) : demande explicite — une conversion sur un gros
+  // volume de données brutes peut prendre plusieurs minutes, on laisse
+  // l'utilisateur attendre plutôt que d'abandonner arbitrairement.
+  genererInstanceDepuisProjet: (projetId: string) =>
+    apiFetch<Types.ReponseComprehension>(
+      `${PRISME_CONFIG.routes.projets}/${projetId}/generer-instance`,
+      { method: 'POST' },
+      null
+    ),
 } as const;

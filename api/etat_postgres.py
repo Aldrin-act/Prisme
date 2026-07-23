@@ -4,9 +4,12 @@ publique d'`EtatAPI` (`api/etat.py`), mais en base plutôt qu'en mémoire —
 c'est le remplacement que `EtatAPI` annonce lui-même dans son docstring
 (« un déploiement réel remplacerait ceci par ... une base de données »).
 
-Six tables, une par entité du modèle conceptuel :
-`clients`, `instances_trco`, `executions`, `plannings`, `operations_planifiees`,
-`decisions_humaines`. `instances_trco.payload` reste un blob JSONB (pas une
+Sept tables, une par entité du modèle conceptuel :
+`clients`, `projets`, `instances_trco`, `executions`, `plannings`, `operations_planifiees`,
+`decisions_humaines`. `projets` porte les données brutes persistées (agent de compréhension,
+§5.4 bis) et `instances_trco.projet_id` (nullable) relie une instance au projet qui l'a
+générée, quand c'est le cas — une instance ingérée par un autre canal (T-R-C-O, Excel, ERP)
+n'a pas de projet. `instances_trco.payload` reste un blob JSONB (pas une
 table par sous-type de `Contrainte`) : l'instance est déjà validée et typée
 par Pydantic à l'ingestion (§6.7), la redécomposer en lignes SQL dupliquerait
 une garantie déjà là, pour un bénéfice nul tant qu'aucune requête ne filtre
@@ -18,10 +21,10 @@ clé étrangère de `executions.solveur_id` vers la table `solveurs` (schémas
 potentiellement différents en test, et `solveurs.client_id` lui-même n'a pas
 de contrainte de clé étrangère — même niveau de rigueur des deux côtés).
 
-**Pas encore branché par défaut** : `api/dependencies.py`/`api/etat.py`
-continuent de servir `EtatAPI` (mémoire) via `obtenir_etat()`. Pour utiliser
-cette implémentation, substituer la dépendance FastAPI :
-`app.dependency_overrides[obtenir_etat] = lambda: EtatPostgres()`.
+`api/etat.py`'s `obtenir_etat()` sert cette implémentation par défaut (instanciation
+paresseuse au premier appel réel) ; seuls les tests la substituent, via
+`app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()`, pour rester en mémoire
+et isolés les uns des autres.
 """
 
 from __future__ import annotations
@@ -34,7 +37,7 @@ from datetime import UTC, datetime
 import psycopg
 from psycopg import sql
 
-from api.etat import Decision, DecisionHumaine, structure_contraintes
+from api.etat import Decision, DecisionHumaine, Projet, structure_contraintes
 from dsl.schema import InstanceTRCO, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from solver_store.registry import SCHEMA_PAR_DEFAUT, dsn_par_defaut
@@ -67,10 +70,28 @@ class EtatPostgres:
                     "CREATE TABLE IF NOT EXISTS {table} ("
                     "id TEXT PRIMARY KEY, "
                     "client_id TEXT NOT NULL REFERENCES {clients}(id), "
+                    "nom TEXT, "
+                    "donnees_brutes TEXT NOT NULL, "
+                    "date_creation TEXT NOT NULL)"
+                ).format(table=self._table("projets"), clients=self._table("clients"))
+            )
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "client_id TEXT NOT NULL REFERENCES {clients}(id), "
                     "payload JSONB NOT NULL, "
                     "structure_contraintes TEXT NOT NULL, "
                     "date_ingestion TEXT NOT NULL)"
                 ).format(table=self._table("instances_trco"), clients=self._table("clients"))
+            )
+            # Migration idempotente : lien optionnel vers le projet dont
+            # l'instance a été générée (agent de compréhension) — NULL pour
+            # toute instance ingérée par un autre canal (T-R-C-O, Excel, ERP).
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS projet_id TEXT REFERENCES {projets}(id)"
+                ).format(table=self._table("instances_trco"), projets=self._table("projets"))
             )
             connexion.execute(
                 sql.SQL(
@@ -120,9 +141,72 @@ class EtatPostgres:
     def _table(self, nom: str) -> sql.Composed:
         return _table(self._schema, nom)
 
+    # --- Projets ---------------------------------------------------------
+
+    def enregistrer_projet(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
+        projet_id = str(uuid.uuid4())
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(
+                    self._table("clients")
+                ),
+                (client_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation) VALUES (%s, %s, %s, %s, %s)"
+                ).format(self._table("projets")),
+                (projet_id, client_id, nom, donnees_brutes, datetime.now(UTC).isoformat()),
+            )
+            connexion.commit()
+        return projet_id
+
+    def recuperer_projet(self, projet_id: str) -> Projet:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT id, client_id, nom, donnees_brutes, date_creation FROM {} WHERE id = %s").format(
+                    self._table("projets")
+                ),
+                (projet_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(projet_id)
+        id_, client_id, nom, donnees_brutes, date_creation = ligne
+        return Projet(id=id_, client_id=client_id, nom=nom, donnees_brutes=donnees_brutes, date_creation=date_creation)
+
+    def lister_projets(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """`client_id=None` ne filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
+        requete = sql.SQL(
+            "SELECT p.id, p.client_id, p.nom, p.date_creation, "
+            "(SELECT COUNT(*) FROM {instances} i WHERE i.projet_id = p.id) AS nb_instances "
+            "FROM {projets} p WHERE 1 = 1"
+        ).format(projets=self._table("projets"), instances=self._table("instances_trco"))
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND p.client_id = %s")
+            parametres.append(client_id)
+        requete += sql.SQL(" ORDER BY p.date_creation DESC")
+
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(requete, parametres).fetchall()
+        return [
+            {"projet_id": id_, "client_id": client_id, "nom": nom, "date_creation": date_creation, "nb_instances": nb}
+            for id_, client_id, nom, date_creation, nb in lignes
+        ]
+
+    def lister_instances_pour_projet(self, projet_id: str) -> list[dict[str, object]]:
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(
+                sql.SQL(
+                    "SELECT id, structure_contraintes FROM {} WHERE projet_id = %s ORDER BY date_ingestion DESC"
+                ).format(self._table("instances_trco")),
+                (projet_id,),
+            ).fetchall()
+        return [{"instance_id": id_, "structure_contraintes": structure} for id_, structure in lignes]
+
     # --- Instances -----------------------------------------------------
 
-    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO) -> str:
+    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, projet_id: str | None = None) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
         with closing(self._connexion()) as connexion:
@@ -134,8 +218,8 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, payload, structure_contraintes, date_ingestion) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s)"
+                    "INSERT INTO {} (id, client_id, payload, structure_contraintes, date_ingestion, projet_id) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
@@ -143,6 +227,7 @@ class EtatPostgres:
                     instance.model_dump_json(),
                     structure,
                     datetime.now(UTC).isoformat(),
+                    projet_id,
                 ),
             )
             connexion.commit()
@@ -159,18 +244,72 @@ class EtatPostgres:
         client_id, payload = ligne
         return client_id, InstanceTRCO.model_validate(payload)
 
-    def lister_instances(self) -> list[dict[str, object]]:
+    def supprimer_instance(self, instance_id: str) -> None:
+        """Supprime l'instance et tout son historique d'exécution (plannings,
+        décisions humaines) — jamais les solveurs (indépendants, §7) ni le
+        projet dont elle a pu être générée, seul le lien disparaît. Suppression
+        en cascade applicative (pas de `ON DELETE CASCADE` en base) : les
+        clés étrangères existantes ne le déclarent pas, on respecte donc
+        l'ordre de dépendance à la main."""
+        with closing(self._connexion()) as connexion:
+            existe = connexion.execute(
+                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+            if existe is None:
+                raise KeyError(instance_id)
+
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {ops} WHERE planning_id IN ("
+                    "SELECT pl.id FROM {plannings} pl JOIN {execs} e ON e.id = pl.execution_id "
+                    "WHERE e.instance_id = %s)"
+                ).format(
+                    ops=self._table("operations_planifiees"),
+                    plannings=self._table("plannings"),
+                    execs=self._table("executions"),
+                ),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {decisions} WHERE execution_id IN (SELECT id FROM {execs} WHERE instance_id = %s)"
+                ).format(decisions=self._table("decisions_humaines"), execs=self._table("executions")),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {plannings} WHERE execution_id IN (SELECT id FROM {execs} WHERE instance_id = %s)"
+                ).format(plannings=self._table("plannings"), execs=self._table("executions")),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE instance_id = %s").format(self._table("executions")),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            )
+            connexion.commit()
+
+    def lister_instances(self, client_id: str | None = None) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) — équivalent SQL du repli
         Python de `EtatAPI.lister_instances` (jointure d'existence sur
-        `executions` pour l'indicateur `executee`)."""
+        `executions` pour l'indicateur `executee`). `client_id=None` ne
+        filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
+        requete = sql.SQL(
+            "SELECT i.id, i.client_id, i.structure_contraintes, "
+            "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee "
+            "FROM {instances} i WHERE 1 = 1"
+        ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND i.client_id = %s")
+            parametres.append(client_id)
+
         with closing(self._connexion()) as connexion:
-            lignes = connexion.execute(
-                sql.SQL(
-                    "SELECT i.id, i.client_id, i.structure_contraintes, "
-                    "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee "
-                    "FROM {instances} i"
-                ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
-            ).fetchall()
+            lignes = connexion.execute(requete, parametres).fetchall()
         return [
             {
                 "instance_id": instance_id,
@@ -288,20 +427,25 @@ class EtatPostgres:
         resultat = ResultatExecution(planning=planning, verdict_faisabilite=verdict_faisabilite, erreur=erreur)
         return solveur_id, instance_id, resultat
 
-    def lister_executions(self) -> list[dict[str, object]]:
+    def lister_executions(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """`client_id=None` ne filtre rien (réservé à l'admin)."""
+        requete = sql.SQL(
+            "SELECT e.id, e.solveur_id, e.instance_id, i.client_id, e.statut, e.erreur, d.decision "
+            "FROM {executions} e "
+            "JOIN {instances} i ON i.id = e.instance_id "
+            "LEFT JOIN {decisions} d ON d.execution_id = e.id WHERE 1 = 1"
+        ).format(
+            executions=self._table("executions"),
+            instances=self._table("instances_trco"),
+            decisions=self._table("decisions_humaines"),
+        )
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND i.client_id = %s")
+            parametres.append(client_id)
+
         with closing(self._connexion()) as connexion:
-            lignes = connexion.execute(
-                sql.SQL(
-                    "SELECT e.id, e.solveur_id, e.instance_id, i.client_id, e.statut, e.erreur, d.decision "
-                    "FROM {executions} e "
-                    "JOIN {instances} i ON i.id = e.instance_id "
-                    "LEFT JOIN {decisions} d ON d.execution_id = e.id"
-                ).format(
-                    executions=self._table("executions"),
-                    instances=self._table("instances_trco"),
-                    decisions=self._table("decisions_humaines"),
-                )
-            ).fetchall()
+            lignes = connexion.execute(requete, parametres).fetchall()
         return [
             {
                 "execution_id": execution_id,

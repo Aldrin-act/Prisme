@@ -1,21 +1,28 @@
-"""O — Objectifs : ce que le planning doit optimiser (§4). Noyau minimal : makespan seul.
+"""O — Objectifs : ce que le planning doit optimiser (§4).
 
-`MinimiserMakespan` porte un champ `type` discriminant même en l'absence
-d'autres variantes aujourd'hui, pour que l'ajout d'objectifs futurs
-(équilibrage de charge, respect des délais, §3.2) se fasse par extension
-plutôt que par refonte — même logique que `Contrainte`.
+Module de compatibilité : le contenu réel (types paramétrables + union
+discriminée extensible) vit dans `objectifs_parametrables.py`, ce module se
+contente de le ré-exporter pour que les imports historiques
+(`from dsl.schema.objectifs import MinimiserMakespan`) continuent de
+fonctionner sans changement.
 """
 
 from __future__ import annotations
 
-from typing import Literal
+from .objectifs_parametrables import (
+    EquilibrerCharge,
+    MaximiserUtilisation,
+    MinimiserChangements,
+    MinimiserMakespan,
+    MinimiserRetards,
+    Objectif,
+)
 
-from pydantic import BaseModel, ConfigDict
-
-
-class MinimiserMakespan(BaseModel):
-    """Minimiser la date de fin de la dernière opération du planning."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    type: Literal["minimiser_makespan"] = "minimiser_makespan"
+__all__ = [
+    "EquilibrerCharge",
+    "MaximiserUtilisation",
+    "MinimiserChangements",
+    "MinimiserMakespan",
+    "MinimiserRetards",
+    "Objectif",
+]

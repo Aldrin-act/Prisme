@@ -26,8 +26,24 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "VOTRE_CLE_SECRETE_ICI")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))
 
+# Échappatoire dev uniquement — JAMAIS en production : court-circuite
+# entièrement `obtenir_utilisateur_courant` (aucun token requis, aucune
+# vérification de client_id nulle part) pour tester l'API sans rejouer un
+# flux de login à chaque requête. Défaut : authentification active.
+AUTH_DESACTIVEE = os.getenv("PRISME_AUTH_DESACTIVEE", "").strip().lower() in ("1", "true", "yes")
+UTILISATEUR_FACTICE_SANS_AUTH = {
+    "id": "auth-desactivee",
+    "email": "dev@local",
+    "nom": "Dev",
+    "prenom": "Local",
+    "role": "admin",
+    "client_id": None,
+    "date_creation": "2024-01-01T00:00:00+00:00",
+    "dernier_acces": None,
+}
+
 router = APIRouter(prefix="/auth", tags=["authentification"])
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
 
 # Instance globale de la base de données utilisateurs
 # Utilise DATABASE_URL (même base que solver_store, etat_postgres, etc.)
@@ -131,9 +147,21 @@ def decoder_token_jwt(token: str) -> dict:
 # ============================================================================
 
 async def obtenir_utilisateur_courant(
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]
+    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(security)] = None,
 ) -> dict:
-    """Dépendance FastAPI pour extraire l'utilisateur du token JWT."""
+    """Dépendance FastAPI pour extraire l'utilisateur du token JWT.
+
+    `PRISME_AUTH_DESACTIVEE=1` (dev uniquement) court-circuite entièrement
+    cette vérification et renvoie un admin factice, sans exiger de token."""
+    if AUTH_DESACTIVEE:
+        return UTILISATEUR_FACTICE_SANS_AUTH
+
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"code": "UNAUTHORIZED", "message": "Authentification requise"},
+        )
+
     token = credentials.credentials
     payload = decoder_token_jwt(token)
 

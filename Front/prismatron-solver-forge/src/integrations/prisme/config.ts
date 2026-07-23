@@ -12,6 +12,10 @@ export const PRISME_CONFIG = {
   // Timeout pour diagnostics (opération lente)
   timeoutDiagnostics: 120000,
 
+  // Timeout pour la conversion via l'agent de compréhension (LLM sur des
+  // données brutes potentiellement volumineuses — plus lent qu'un diagnostic).
+  timeoutComprehension: 240000,
+
   // Headers par défaut
   headers: {
     'Content-Type': 'application/json',
@@ -28,5 +32,6 @@ export const PRISME_CONFIG = {
     supervision: '/supervision',
     validation: '/validation',
     adapters: '/adapters',
+    projets: '/projets',
   },
 } as const;

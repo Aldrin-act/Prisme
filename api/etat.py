@@ -38,6 +38,15 @@ def structure_contraintes(instance: InstanceTRCO) -> str:
     return ",".join(types) if types else "aucune"
 
 
+def signature_objectifs(instance: InstanceTRCO) -> str:
+    """Signature triée des types d'objectifs demandés — seconde moitié de la
+    clé de matching solveur (avec `structure_contraintes`) : un solveur
+    généré pour `minimiser_makespan` ne doit jamais être exécuté
+    silencieusement sur une instance visant `equilibrer_charge`."""
+    types = sorted({objectif.type for objectif in instance.objectifs})
+    return ",".join(types)
+
+
 @dataclass(frozen=True)
 class DecisionHumaine:
     """La décision humaine sur un planning proposé (§2.3, PH10-T2) — jamais
@@ -49,21 +58,97 @@ class DecisionHumaine:
     commentaire: str | None = None
 
 
+@dataclass(frozen=True)
+class Projet:
+    """Regroupe des données brutes persistées (ex. export ERP collé/déposé
+    par un humain) et l'historique des instances T-R-C-O générées à partir
+    d'elles via l'agent de compréhension — une même donnée brute peut être
+    reconvertie plusieurs fois (nouvel essai après un rejet, DSL affiné...)
+    sans jamais devoir être re-saisie."""
+
+    id: str
+    client_id: str
+    nom: str | None
+    donnees_brutes: str
+    date_creation: str
+
+
 @dataclass
 class EtatAPI:
     instances: dict[str, tuple[str, InstanceTRCO]] = field(default_factory=dict)
     executions: dict[str, tuple[str, str, ResultatExecution]] = field(default_factory=dict)
     decisions: dict[str, DecisionHumaine] = field(default_factory=dict)
+    projets: dict[str, Projet] = field(default_factory=dict)
+    projet_par_instance: dict[str, str] = field(default_factory=dict)
 
-    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO) -> str:
+    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, projet_id: str | None = None) -> str:
         instance_id = str(uuid.uuid4())
         self.instances[instance_id] = (client_id, instance)
+        if projet_id is not None:
+            self.projet_par_instance[instance_id] = projet_id
         return instance_id
+
+    def enregistrer_projet(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
+        projet_id = str(uuid.uuid4())
+        self.projets[projet_id] = Projet(
+            id=projet_id,
+            client_id=client_id,
+            nom=nom,
+            donnees_brutes=donnees_brutes,
+            date_creation=datetime.now(UTC).isoformat(),
+        )
+        return projet_id
+
+    def recuperer_projet(self, projet_id: str) -> Projet:
+        if projet_id not in self.projets:
+            raise KeyError(projet_id)
+        return self.projets[projet_id]
+
+    def lister_projets(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Vue de supervision (lecture seule) sur les projets connus, avec le
+        nombre d'instances déjà générées pour chacun. `client_id=None` ne
+        filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
+        compteurs: dict[str, int] = {}
+        for projet_id in self.projet_par_instance.values():
+            compteurs[projet_id] = compteurs.get(projet_id, 0) + 1
+        return [
+            {
+                "projet_id": p.id,
+                "client_id": p.client_id,
+                "nom": p.nom,
+                "date_creation": p.date_creation,
+                "nb_instances": compteurs.get(p.id, 0),
+            }
+            for p in self.projets.values()
+            if client_id is None or p.client_id == client_id
+        ]
+
+    def lister_instances_pour_projet(self, projet_id: str) -> list[dict[str, object]]:
+        return [
+            {
+                "instance_id": instance_id,
+                "structure_contraintes": structure_contraintes(self.instances[instance_id][1]),
+            }
+            for instance_id, pid in self.projet_par_instance.items()
+            if pid == projet_id
+        ]
 
     def recuperer_instance(self, instance_id: str) -> tuple[str, InstanceTRCO]:
         if instance_id not in self.instances:
             raise KeyError(instance_id)
         return self.instances[instance_id]
+
+    def supprimer_instance(self, instance_id: str) -> None:
+        """Supprime l'instance et tout son historique d'exécution (plannings,
+        décisions humaines) — jamais les solveurs (indépendants, §7) ni le
+        projet dont elle a pu être générée, seul le lien disparaît."""
+        if instance_id not in self.instances:
+            raise KeyError(instance_id)
+        del self.instances[instance_id]
+        self.projet_par_instance.pop(instance_id, None)
+        for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
+            del self.executions[execution_id]
+            self.decisions.pop(execution_id, None)
 
     def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
         execution_id = str(uuid.uuid4())
@@ -75,18 +160,21 @@ class EtatAPI:
             raise KeyError(execution_id)
         return self.executions[execution_id]
 
-    def lister_executions(self) -> list[dict[str, object]]:
-        """Vue de supervision (lecture seule) sur toutes les exécutions connues."""
+    def lister_executions(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Vue de supervision (lecture seule) sur les exécutions connues.
+        `client_id=None` ne filtre rien (réservé à l'admin)."""
         resultats = []
         for execution_id, (id_solveur, instance_id, resultat) in self.executions.items():
-            client_id, _ = self.instances[instance_id]
+            client_id_instance, _ = self.instances[instance_id]
+            if client_id is not None and client_id_instance != client_id:
+                continue
             decision = self.decisions.get(execution_id)
             resultats.append(
                 {
                     "execution_id": execution_id,
                     "id_solveur": id_solveur,
                     "instance_id": instance_id,
-                    "client_id": client_id,
+                    "client_id": client_id_instance,
                     "reussi": resultat.reussi,
                     "erreur": resultat.erreur,
                     "decision": decision.decision if decision else None,
@@ -94,18 +182,20 @@ class EtatAPI:
             )
         return resultats
 
-    def lister_instances(self) -> list[dict[str, object]]:
-        """Vue de supervision (lecture seule) sur toutes les instances
-        ingérées, avec un indicateur `executee` pour repérer celles en attente."""
+    def lister_instances(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Vue de supervision (lecture seule) sur les instances ingérées,
+        avec un indicateur `executee` pour repérer celles en attente.
+        `client_id=None` ne filtre rien (réservé à l'admin)."""
         instances_executees = {instance_id for (_, instance_id, _) in self.executions.values()}
         return [
             {
                 "instance_id": instance_id,
-                "client_id": client_id,
+                "client_id": client_id_instance,
                 "structure_contraintes": structure_contraintes(instance),
                 "executee": instance_id in instances_executees,
             }
-            for instance_id, (client_id, instance) in self.instances.items()
+            for instance_id, (client_id_instance, instance) in self.instances.items()
+            if client_id is None or client_id_instance == client_id
         ]
 
     def enregistrer_decision(self, execution_id: str, decision: Decision, commentaire: str | None = None) -> None:

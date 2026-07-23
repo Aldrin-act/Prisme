@@ -2,6 +2,7 @@ import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } 
 import { useQueryClient } from "@tanstack/react-query";
 import {
   LayoutDashboard,
+  Database,
   FolderKanban,
   Code2,
   Cpu,
@@ -35,6 +36,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 const NAV = [
   { to: "/app", icon: LayoutDashboard, label: "Tableau de bord" },
+  { to: "/donnees", icon: Database, label: "Données" },
   { to: "/instances", icon: FolderKanban, label: "Instances" },
   { to: "/dsl", icon: Code2, label: "Concepteur DSL" },
   { to: "/solver-generator", icon: Cpu, label: "Générateur de solveurs" },

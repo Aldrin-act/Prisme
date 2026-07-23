@@ -22,6 +22,32 @@ from solver_store.registry import Registre, dsn_par_defaut
 RACINE_DEPOT = Path(__file__).resolve().parents[2]
 
 
+@pytest.fixture(autouse=True)
+def _utilisateur_authentifie_par_defaut() -> Iterator[None]:
+    """Autouse : la plupart des routes API exigent désormais un JWT valide
+    (`Depends(obtenir_utilisateur_courant)`, voir `api/autorisation.py`) —
+    fournit un utilisateur de test « admin » par défaut (bypass des
+    vérifications de client_id) pour que les tests d'intégration existants,
+    qui utilisent des `client_id` arbitraires, n'aient pas à rejouer un vrai
+    flux de login. Un test qui veut vérifier l'autorisation elle-même écrase
+    cette entrée après coup avec un rôle/client_id spécifique."""
+    from api.app import app
+    from api.routes.auth import obtenir_utilisateur_courant
+
+    app.dependency_overrides[obtenir_utilisateur_courant] = lambda: {
+        "id": "test-utilisateur",
+        "email": "test@example.com",
+        "nom": "Test",
+        "prenom": "Utilisateur",
+        "role": "admin",
+        "client_id": None,
+        "date_creation": "2024-01-01T00:00:00+00:00",
+        "dernier_acces": None,
+    }
+    yield
+    app.dependency_overrides.pop(obtenir_utilisateur_courant, None)
+
+
 def _docker_disponible() -> bool:
     try:
         import docker

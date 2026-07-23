@@ -140,16 +140,18 @@ def _enregistrer_si_demande(
 
     from dsl.schema import InstanceTRCO
 
-    from api.etat import structure_contraintes
+    from api.etat import signature_objectifs, structure_contraintes
     from solver_store.registry import Registre as _Registre
 
     assert verdict_cascade is not None  # garanti par l'appelant (résultat réussi)
     instance_validee = InstanceTRCO.model_validate(instance_exemple)
     structure = structure_contraintes(instance_validee)
+    objectifs = signature_objectifs(instance_validee)
     registre_effectif = registre if registre is not None else _Registre()
     return registre_effectif.enregistrer_solveur(
         code_source=code_final,
         structure_contraintes=structure,
+        signature_objectifs=objectifs,
         verdict_cascade=verdict_cascade,
         client_id=client_id,
     )

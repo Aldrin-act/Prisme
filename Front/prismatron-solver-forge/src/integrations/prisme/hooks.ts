@@ -18,6 +18,8 @@ export const prismeKeys = {
   sante: () => [...prismeKeys.all, 'sante'] as const,
   planning: (executionId: string) => [...prismeKeys.all, 'planning', executionId] as const,
   codeSource: (executionId: string) => [...prismeKeys.all, 'codeSource', executionId] as const,
+  projets: () => [...prismeKeys.all, 'projets'] as const,
+  projet: (projetId: string) => [...prismeKeys.all, 'projets', projetId] as const,
 } as const;
 
 // ============================================================================
@@ -93,6 +95,34 @@ export function usePlanning(
 }
 
 /**
+ * Liste les projets (données brutes persistées) d'un client
+ */
+export function useProjets(
+  options?: Omit<UseQueryOptions<Types.Projet[]>, 'queryKey' | 'queryFn'>
+) {
+  return useQuery({
+    queryKey: prismeKeys.projets(),
+    queryFn: () => prismeClient.listerProjets(),
+    ...options,
+  });
+}
+
+/**
+ * Détail d'un projet : données brutes + instances déjà générées
+ */
+export function useProjet(
+  projetId: string | null,
+  options?: Omit<UseQueryOptions<Types.ProjetDetail>, 'queryKey' | 'queryFn'>
+) {
+  return useQuery({
+    queryKey: prismeKeys.projet(projetId || ''),
+    queryFn: () => prismeClient.obtenirProjet(projetId!),
+    enabled: !!projetId,
+    ...options,
+  });
+}
+
+/**
  * Récupère le code source d'un solveur (audit)
  */
 export function useCodeSource(
@@ -118,6 +148,15 @@ export function useIngererInstance() {
   return useMutation({
     mutationFn: ({ clientId, instance }: { clientId: string; instance: Types.InstanceTRCO }) =>
       prismeClient.ingererInstance(clientId, instance),
+  });
+}
+
+/**
+ * Mutation pour supprimer une instance et son historique d'exécution.
+ */
+export function useSupprimerInstance() {
+  return useMutation({
+    mutationFn: (instanceId: string) => prismeClient.supprimerInstance(instanceId),
   });
 }
 
@@ -179,5 +218,43 @@ export function useImporterFichierTableur() {
   return useMutation({
     mutationFn: ({ clientId, fichier }: { clientId: string; fichier: File }) =>
       prismeClient.importerFichierTableur(clientId, fichier),
+  });
+}
+
+/**
+ * Mutation pour convertir des données brutes (ERP sans adaptateur dédié)
+ * en instance T-R-C-O via l'agent de compréhension (LLM).
+ */
+export function useConvertirDonneesBrutes() {
+  return useMutation({
+    mutationFn: ({ clientId, donneesBrutes }: { clientId: string; donneesBrutes: string }) =>
+      prismeClient.convertirDonneesBrutes(clientId, donneesBrutes),
+  });
+}
+
+/**
+ * Mutation pour créer un projet (persiste des données brutes sans les convertir).
+ */
+export function useCreerProjet() {
+  return useMutation({
+    mutationFn: ({
+      donneesBrutes,
+      nom,
+      clientId,
+    }: {
+      donneesBrutes: string;
+      nom?: string;
+      clientId?: string;
+    }) => prismeClient.creerProjet(donneesBrutes, nom, clientId),
+  });
+}
+
+/**
+ * Mutation pour générer une instance de plus à partir d'un projet existant —
+ * rejouable à volonté, sans jamais re-saisir les données brutes.
+ */
+export function useGenererInstanceDepuisProjet() {
+  return useMutation({
+    mutationFn: (projetId: string) => prismeClient.genererInstanceDepuisProjet(projetId),
   });
 }

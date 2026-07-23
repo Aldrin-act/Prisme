@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from api.autorisation import verifier_acces_client
 from api.dependencies import obtenir_registre
-from api.etat import EtatAPI, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, obtenir_etat, signature_objectifs, structure_contraintes
+from api.routes.auth import obtenir_utilisateur_courant
 from sandbox.runner import ResultatExecution, executer_solveur_valide
 from solver_store.registry import Registre
 
@@ -13,23 +15,28 @@ router = APIRouter(prefix="/execution", tags=["execution"])
 
 
 def executer_pour_instance(
-    etat: EtatAPI, registre: Registre, instance_id: str, client_id: str
+    etat: EtatAPI, registre: Registre, instance_id: str, client_id: str, utilisateur: dict
 ) -> tuple[str, ResultatExecution]:
     """Chaîne lookup instance → recherche solveur validé → sandbox →
     enregistrement. Un aléa (panne, retard...) se traite en réingérant
     l'instance avec ses contraintes mises à jour, puis en rappelant cette
     même fonction — aucun mécanisme d'alerte dédié dans le noyau."""
     try:
-        _, instance = etat.recuperer_instance(instance_id)
+        client_id_instance, instance = etat.recuperer_instance(instance_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="instance inconnue") from None
 
+    verifier_acces_client(utilisateur, client_id_instance)
+
     structure = structure_contraintes(instance)
-    solveurs = registre.rechercher_solveurs(client_id=client_id, structure_contraintes=structure)
+    objectifs = signature_objectifs(instance)
+    solveurs = registre.rechercher_solveurs(
+        client_id=client_id, structure_contraintes=structure, signature_objectifs=objectifs
+    )
     if not solveurs:
         raise HTTPException(
             status_code=409,
-            detail=f"aucun solveur validé pour client={client_id!r}, structure={structure!r}",
+            detail=f"aucun solveur validé pour client={client_id!r}, structure={structure!r}, objectifs={objectifs!r}",
         )
     artefact = solveurs[0]
 
@@ -44,6 +51,7 @@ def declencher_execution(
     client_id: str,
     etat: EtatAPI = Depends(obtenir_etat),
     registre: Registre = Depends(obtenir_registre),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str | bool | None]:
-    execution_id, resultat = executer_pour_instance(etat, registre, instance_id, client_id)
+    execution_id, resultat = executer_pour_instance(etat, registre, instance_id, client_id, utilisateur)
     return {"execution_id": execution_id, "reussi": resultat.reussi, "erreur": resultat.erreur}
