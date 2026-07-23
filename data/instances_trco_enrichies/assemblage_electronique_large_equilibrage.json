@@ -1,0 +1,1915 @@
+{
+  "taches": [
+    {
+      "id": "PCB0001_PREP_0001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_REFUSION_B_0002",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_TEST_ICT_0003",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_AOI_A_0004",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_POSE_CMS_B_0005",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_PACKAGE_0006",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_TEST_FONC_0007",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_POSE_CMS_A_0008",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_REFUSION_A_0009",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0001_COATING_0010",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_AOI_A_0011",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_POSE_CMS_A_0012",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_POSE_CMS_B_0013",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_SOUDURE_THT_0014",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_COATING_0015",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_DEPANEL_0016",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_PACKAGE_0017",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_REFUSION_A_0018",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_PREP_0019",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_TEST_FONC_0020",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_REFUSION_B_0021",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0002_TEST_ICT_0022",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_AOI_A_0023",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_REFUSION_B_0024",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_POSE_CMS_A_0025",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_REFUSION_A_0026",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_TEST_ICT_0027",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_TEST_FONC_0028",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_COATING_0029",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_DEPANEL_0030",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_PACKAGE_0031",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_PREP_0032",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0003_SOUDURE_THT_0033",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_REFUSION_B_0034",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_TEST_FONC_0035",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_PACKAGE_0036",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_POSE_CMS_B_0037",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_TEST_ICT_0038",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_PREP_0039",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_AOI_A_0040",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_REFUSION_A_0041",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_SOUDURE_THT_0042",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0004_COATING_0043",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_REFUSION_A_0044",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_SOUDURE_THT_0045",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_PACKAGE_0046",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_PREP_0047",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_TEST_ICT_0048",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_COATING_0049",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_TEST_FONC_0050",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_AOI_A_0051",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_POSE_CMS_A_0052",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0005_POSE_CMS_B_0053",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_TEST_FONC_0054",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_REFUSION_B_0055",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_PACKAGE_0056",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_REFUSION_A_0057",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_POSE_CMS_B_0058",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_POSE_CMS_A_0059",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_TEST_ICT_0060",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0006_PREP_0061",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_POSE_CMS_A_0062",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_PREP_0063",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_POSE_CMS_B_0064",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_TEST_FONC_0065",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_SOUDURE_THT_0066",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_TEST_ICT_0067",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_COATING_0068",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_AOI_A_0069",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0007_PACKAGE_0070",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_REFUSION_B_0071",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_TEST_FONC_0072",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_POSE_CMS_A_0073",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_AOI_A_0074",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_TEST_ICT_0075",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_DEPANEL_0076",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_REFUSION_A_0077",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_PREP_0078",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_SOUDURE_THT_0079",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_POSE_CMS_B_0080",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0008_COATING_0081",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_PACKAGE_0082",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_REFUSION_A_0083",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_AOI_A_0084",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_SOUDURE_THT_0085",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_DEPANEL_0086",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_REFUSION_B_0087",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_POSE_CMS_B_0088",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_POSE_CMS_A_0089",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_TEST_ICT_0090",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_TEST_FONC_0091",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0009_COATING_0092",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_POSE_CMS_A_0093",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_SOUDURE_THT_0094",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_COATING_0095",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_TEST_ICT_0096",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_REFUSION_A_0097",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_REFUSION_B_0098",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_PREP_0099",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PCB0010_POSE_CMS_B_0100",
+      "nom": null,
+      "priorite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "PICK_PLACE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PICK_PLACE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PICK_PLACE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PICK_PLACE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PICK_PLACE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PICK_PLACE_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FOUR_REFUSION_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FOUR_REFUSION_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FOUR_REFUSION_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FOUR_REFUSION_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "AOI_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "AOI_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "AOI_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "AOI_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "AOI_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_8",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_9",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_10",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_11",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_12",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_13",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_14",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_15",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_ICT_8",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_COATING_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_COATING_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_COATING_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_8",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_9",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_10",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_PACKAGING_8",
+      "nom": null,
+      "competences": []
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_PREP_0001",
+      "ressource": "STATION_ASSEMBLAGE_5",
+      "duree": 44
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_REFUSION_B_0002",
+      "ressource": "FOUR_REFUSION_4",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_PREP_0001",
+      "apres": "PCB0001_REFUSION_B_0002"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_TEST_ICT_0003",
+      "ressource": "BANC_TEST_ICT_2",
+      "duree": 40
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_REFUSION_B_0002",
+      "apres": "PCB0001_TEST_ICT_0003"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_AOI_A_0004",
+      "ressource": "AOI_3",
+      "duree": 11
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_TEST_ICT_0003",
+      "apres": "PCB0001_AOI_A_0004"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_POSE_CMS_B_0005",
+      "ressource": "PICK_PLACE_3",
+      "duree": 84
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_AOI_A_0004",
+      "apres": "PCB0001_POSE_CMS_B_0005"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_PACKAGE_0006",
+      "ressource": "STATION_PACKAGING_6",
+      "duree": 13
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_POSE_CMS_B_0005",
+      "apres": "PCB0001_PACKAGE_0006"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_TEST_FONC_0007",
+      "ressource": "BANC_TEST_FONCTIONNEL_1",
+      "duree": 66
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_PACKAGE_0006",
+      "apres": "PCB0001_TEST_FONC_0007"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_POSE_CMS_A_0008",
+      "ressource": "PICK_PLACE_2",
+      "duree": 74
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_TEST_FONC_0007",
+      "apres": "PCB0001_POSE_CMS_A_0008"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_REFUSION_A_0009",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 31
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_POSE_CMS_A_0008",
+      "apres": "PCB0001_REFUSION_A_0009"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0001_COATING_0010",
+      "ressource": "ROBOT_COATING_3",
+      "duree": 22
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0001_REFUSION_A_0009",
+      "apres": "PCB0001_COATING_0010"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_AOI_A_0011",
+      "ressource": "AOI_2",
+      "duree": 15
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_POSE_CMS_A_0012",
+      "ressource": "PICK_PLACE_2",
+      "duree": 74
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_AOI_A_0011",
+      "apres": "PCB0002_POSE_CMS_A_0012"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_POSE_CMS_B_0013",
+      "ressource": "PICK_PLACE_4",
+      "duree": 71
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_POSE_CMS_A_0012",
+      "apres": "PCB0002_POSE_CMS_B_0013"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_SOUDURE_THT_0014",
+      "ressource": "POSTE_SOUDURE_MANUEL_1",
+      "duree": 46
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_POSE_CMS_B_0013",
+      "apres": "PCB0002_SOUDURE_THT_0014"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_COATING_0015",
+      "ressource": "ROBOT_COATING_1",
+      "duree": 24
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_SOUDURE_THT_0014",
+      "apres": "PCB0002_COATING_0015"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_DEPANEL_0016",
+      "ressource": "POSTE_DEPANNELISATION_1",
+      "duree": 12
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_COATING_0015",
+      "apres": "PCB0002_DEPANEL_0016"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_PACKAGE_0017",
+      "ressource": "STATION_PACKAGING_7",
+      "duree": 23
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_DEPANEL_0016",
+      "apres": "PCB0002_PACKAGE_0017"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_REFUSION_A_0018",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 22
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_PACKAGE_0017",
+      "apres": "PCB0002_REFUSION_A_0018"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_PREP_0019",
+      "ressource": "STATION_ASSEMBLAGE_6",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_REFUSION_A_0018",
+      "apres": "PCB0002_PREP_0019"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_TEST_FONC_0020",
+      "ressource": "BANC_TEST_FONCTIONNEL_4",
+      "duree": 45
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_PREP_0019",
+      "apres": "PCB0002_TEST_FONC_0020"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_REFUSION_B_0021",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 22
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_TEST_FONC_0020",
+      "apres": "PCB0002_REFUSION_B_0021"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0002_TEST_ICT_0022",
+      "ressource": "BANC_TEST_ICT_8",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0002_REFUSION_B_0021",
+      "apres": "PCB0002_TEST_ICT_0022"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_AOI_A_0023",
+      "ressource": "AOI_5",
+      "duree": 8
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_REFUSION_B_0024",
+      "ressource": "FOUR_REFUSION_1",
+      "duree": 21
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_AOI_A_0023",
+      "apres": "PCB0003_REFUSION_B_0024"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_POSE_CMS_A_0025",
+      "ressource": "PICK_PLACE_6",
+      "duree": 111
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_REFUSION_B_0024",
+      "apres": "PCB0003_POSE_CMS_A_0025"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_REFUSION_A_0026",
+      "ressource": "FOUR_REFUSION_1",
+      "duree": 35
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_POSE_CMS_A_0025",
+      "apres": "PCB0003_REFUSION_A_0026"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_TEST_ICT_0027",
+      "ressource": "BANC_TEST_ICT_6",
+      "duree": 59
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_REFUSION_A_0026",
+      "apres": "PCB0003_TEST_ICT_0027"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_TEST_FONC_0028",
+      "ressource": "BANC_TEST_FONCTIONNEL_5",
+      "duree": 52
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_TEST_ICT_0027",
+      "apres": "PCB0003_TEST_FONC_0028"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_COATING_0029",
+      "ressource": "ROBOT_COATING_2",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_TEST_FONC_0028",
+      "apres": "PCB0003_COATING_0029"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_DEPANEL_0030",
+      "ressource": "POSTE_DEPANNELISATION_4",
+      "duree": 14
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_COATING_0029",
+      "apres": "PCB0003_DEPANEL_0030"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_PACKAGE_0031",
+      "ressource": "STATION_PACKAGING_3",
+      "duree": 11
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_DEPANEL_0030",
+      "apres": "PCB0003_PACKAGE_0031"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_PREP_0032",
+      "ressource": "STATION_ASSEMBLAGE_8",
+      "duree": 39
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_PACKAGE_0031",
+      "apres": "PCB0003_PREP_0032"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0003_SOUDURE_THT_0033",
+      "ressource": "POSTE_SOUDURE_MANUEL_11",
+      "duree": 49
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0003_PREP_0032",
+      "apres": "PCB0003_SOUDURE_THT_0033"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_REFUSION_B_0034",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 27
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_TEST_FONC_0035",
+      "ressource": "BANC_TEST_FONCTIONNEL_2",
+      "duree": 58
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_REFUSION_B_0034",
+      "apres": "PCB0004_TEST_FONC_0035"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_PACKAGE_0036",
+      "ressource": "STATION_PACKAGING_2",
+      "duree": 19
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_TEST_FONC_0035",
+      "apres": "PCB0004_PACKAGE_0036"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_POSE_CMS_B_0037",
+      "ressource": "PICK_PLACE_2",
+      "duree": 99
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_PACKAGE_0036",
+      "apres": "PCB0004_POSE_CMS_B_0037"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_TEST_ICT_0038",
+      "ressource": "BANC_TEST_ICT_6",
+      "duree": 54
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_POSE_CMS_B_0037",
+      "apres": "PCB0004_TEST_ICT_0038"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_PREP_0039",
+      "ressource": "STATION_ASSEMBLAGE_1",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_TEST_ICT_0038",
+      "apres": "PCB0004_PREP_0039"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_AOI_A_0040",
+      "ressource": "AOI_2",
+      "duree": 12
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_PREP_0039",
+      "apres": "PCB0004_AOI_A_0040"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_REFUSION_A_0041",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 21
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_AOI_A_0040",
+      "apres": "PCB0004_REFUSION_A_0041"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_SOUDURE_THT_0042",
+      "ressource": "POSTE_SOUDURE_MANUEL_1",
+      "duree": 59
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_REFUSION_A_0041",
+      "apres": "PCB0004_SOUDURE_THT_0042"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0004_COATING_0043",
+      "ressource": "ROBOT_COATING_1",
+      "duree": 30
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0004_SOUDURE_THT_0042",
+      "apres": "PCB0004_COATING_0043"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_REFUSION_A_0044",
+      "ressource": "FOUR_REFUSION_2",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_SOUDURE_THT_0045",
+      "ressource": "POSTE_SOUDURE_MANUEL_2",
+      "duree": 81
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_REFUSION_A_0044",
+      "apres": "PCB0005_SOUDURE_THT_0045"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_PACKAGE_0046",
+      "ressource": "STATION_PACKAGING_3",
+      "duree": 14
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_SOUDURE_THT_0045",
+      "apres": "PCB0005_PACKAGE_0046"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_PREP_0047",
+      "ressource": "STATION_ASSEMBLAGE_7",
+      "duree": 39
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_PACKAGE_0046",
+      "apres": "PCB0005_PREP_0047"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_TEST_ICT_0048",
+      "ressource": "BANC_TEST_ICT_7",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_PREP_0047",
+      "apres": "PCB0005_TEST_ICT_0048"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_COATING_0049",
+      "ressource": "ROBOT_COATING_1",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_TEST_ICT_0048",
+      "apres": "PCB0005_COATING_0049"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_TEST_FONC_0050",
+      "ressource": "BANC_TEST_FONCTIONNEL_1",
+      "duree": 49
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_COATING_0049",
+      "apres": "PCB0005_TEST_FONC_0050"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_AOI_A_0051",
+      "ressource": "AOI_3",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_TEST_FONC_0050",
+      "apres": "PCB0005_AOI_A_0051"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_POSE_CMS_A_0052",
+      "ressource": "PICK_PLACE_6",
+      "duree": 121
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_AOI_A_0051",
+      "apres": "PCB0005_POSE_CMS_A_0052"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0005_POSE_CMS_B_0053",
+      "ressource": "PICK_PLACE_3",
+      "duree": 109
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0005_POSE_CMS_A_0052",
+      "apres": "PCB0005_POSE_CMS_B_0053"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_TEST_FONC_0054",
+      "ressource": "BANC_TEST_FONCTIONNEL_2",
+      "duree": 51
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_REFUSION_B_0055",
+      "ressource": "FOUR_REFUSION_4",
+      "duree": 24
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0006_TEST_FONC_0054",
+      "apres": "PCB0006_REFUSION_B_0055"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_PACKAGE_0056",
+      "ressource": "STATION_PACKAGING_6",
+      "duree": 18
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0006_REFUSION_B_0055",
+      "apres": "PCB0006_PACKAGE_0056"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_REFUSION_A_0057",
+      "ressource": "FOUR_REFUSION_4",
+      "duree": 27
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0006_PACKAGE_0056",
+      "apres": "PCB0006_REFUSION_A_0057"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_POSE_CMS_B_0058",
+      "ressource": "PICK_PLACE_3",
+      "duree": 92
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0006_REFUSION_A_0057",
+      "apres": "PCB0006_POSE_CMS_B_0058"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_POSE_CMS_A_0059",
+      "ressource": "PICK_PLACE_5",
+      "duree": 70
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0006_POSE_CMS_B_0058",
+      "apres": "PCB0006_POSE_CMS_A_0059"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_TEST_ICT_0060",
+      "ressource": "BANC_TEST_ICT_3",
+      "duree": 49
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0006_POSE_CMS_A_0059",
+      "apres": "PCB0006_TEST_ICT_0060"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0006_PREP_0061",
+      "ressource": "STATION_ASSEMBLAGE_2",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0006_TEST_ICT_0060",
+      "apres": "PCB0006_PREP_0061"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_POSE_CMS_A_0062",
+      "ressource": "PICK_PLACE_1",
+      "duree": 148
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_PREP_0063",
+      "ressource": "STATION_ASSEMBLAGE_5",
+      "duree": 26
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_POSE_CMS_A_0062",
+      "apres": "PCB0007_PREP_0063"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_POSE_CMS_B_0064",
+      "ressource": "PICK_PLACE_6",
+      "duree": 123
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_PREP_0063",
+      "apres": "PCB0007_POSE_CMS_B_0064"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_TEST_FONC_0065",
+      "ressource": "BANC_TEST_FONCTIONNEL_6",
+      "duree": 33
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_POSE_CMS_B_0064",
+      "apres": "PCB0007_TEST_FONC_0065"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_SOUDURE_THT_0066",
+      "ressource": "POSTE_SOUDURE_MANUEL_7",
+      "duree": 54
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_TEST_FONC_0065",
+      "apres": "PCB0007_SOUDURE_THT_0066"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_TEST_ICT_0067",
+      "ressource": "BANC_TEST_ICT_2",
+      "duree": 26
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_SOUDURE_THT_0066",
+      "apres": "PCB0007_TEST_ICT_0067"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_COATING_0068",
+      "ressource": "ROBOT_COATING_3",
+      "duree": 27
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_TEST_ICT_0067",
+      "apres": "PCB0007_COATING_0068"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_AOI_A_0069",
+      "ressource": "AOI_3",
+      "duree": 13
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_COATING_0068",
+      "apres": "PCB0007_AOI_A_0069"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0007_PACKAGE_0070",
+      "ressource": "STATION_PACKAGING_6",
+      "duree": 10
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0007_AOI_A_0069",
+      "apres": "PCB0007_PACKAGE_0070"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_REFUSION_B_0071",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 26
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_TEST_FONC_0072",
+      "ressource": "BANC_TEST_FONCTIONNEL_6",
+      "duree": 26
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_REFUSION_B_0071",
+      "apres": "PCB0008_TEST_FONC_0072"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_POSE_CMS_A_0073",
+      "ressource": "PICK_PLACE_2",
+      "duree": 133
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_TEST_FONC_0072",
+      "apres": "PCB0008_POSE_CMS_A_0073"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_AOI_A_0074",
+      "ressource": "AOI_5",
+      "duree": 9
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_POSE_CMS_A_0073",
+      "apres": "PCB0008_AOI_A_0074"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_TEST_ICT_0075",
+      "ressource": "BANC_TEST_ICT_5",
+      "duree": 38
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_AOI_A_0074",
+      "apres": "PCB0008_TEST_ICT_0075"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_DEPANEL_0076",
+      "ressource": "POSTE_DEPANNELISATION_2",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_TEST_ICT_0075",
+      "apres": "PCB0008_DEPANEL_0076"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_REFUSION_A_0077",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_DEPANEL_0076",
+      "apres": "PCB0008_REFUSION_A_0077"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_PREP_0078",
+      "ressource": "STATION_ASSEMBLAGE_2",
+      "duree": 40
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_REFUSION_A_0077",
+      "apres": "PCB0008_PREP_0078"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_SOUDURE_THT_0079",
+      "ressource": "POSTE_SOUDURE_MANUEL_2",
+      "duree": 31
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_PREP_0078",
+      "apres": "PCB0008_SOUDURE_THT_0079"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_POSE_CMS_B_0080",
+      "ressource": "PICK_PLACE_1",
+      "duree": 65
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_SOUDURE_THT_0079",
+      "apres": "PCB0008_POSE_CMS_B_0080"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0008_COATING_0081",
+      "ressource": "ROBOT_COATING_2",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0008_POSE_CMS_B_0080",
+      "apres": "PCB0008_COATING_0081"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_PACKAGE_0082",
+      "ressource": "STATION_PACKAGING_8",
+      "duree": 22
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_REFUSION_A_0083",
+      "ressource": "FOUR_REFUSION_2",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_PACKAGE_0082",
+      "apres": "PCB0009_REFUSION_A_0083"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_AOI_A_0084",
+      "ressource": "AOI_4",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_REFUSION_A_0083",
+      "apres": "PCB0009_AOI_A_0084"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_SOUDURE_THT_0085",
+      "ressource": "POSTE_SOUDURE_MANUEL_4",
+      "duree": 78
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_AOI_A_0084",
+      "apres": "PCB0009_SOUDURE_THT_0085"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_DEPANEL_0086",
+      "ressource": "POSTE_DEPANNELISATION_3",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_SOUDURE_THT_0085",
+      "apres": "PCB0009_DEPANEL_0086"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_REFUSION_B_0087",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 33
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_DEPANEL_0086",
+      "apres": "PCB0009_REFUSION_B_0087"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_POSE_CMS_B_0088",
+      "ressource": "PICK_PLACE_5",
+      "duree": 70
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_REFUSION_B_0087",
+      "apres": "PCB0009_POSE_CMS_B_0088"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_POSE_CMS_A_0089",
+      "ressource": "PICK_PLACE_3",
+      "duree": 122
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_POSE_CMS_B_0088",
+      "apres": "PCB0009_POSE_CMS_A_0089"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_TEST_ICT_0090",
+      "ressource": "BANC_TEST_ICT_2",
+      "duree": 54
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_POSE_CMS_A_0089",
+      "apres": "PCB0009_TEST_ICT_0090"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_TEST_FONC_0091",
+      "ressource": "BANC_TEST_FONCTIONNEL_4",
+      "duree": 66
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_TEST_ICT_0090",
+      "apres": "PCB0009_TEST_FONC_0091"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0009_COATING_0092",
+      "ressource": "ROBOT_COATING_1",
+      "duree": 28
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0009_TEST_FONC_0091",
+      "apres": "PCB0009_COATING_0092"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_POSE_CMS_A_0093",
+      "ressource": "PICK_PLACE_6",
+      "duree": 85
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_SOUDURE_THT_0094",
+      "ressource": "POSTE_SOUDURE_MANUEL_11",
+      "duree": 53
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0010_POSE_CMS_A_0093",
+      "apres": "PCB0010_SOUDURE_THT_0094"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_COATING_0095",
+      "ressource": "ROBOT_COATING_3",
+      "duree": 33
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0010_SOUDURE_THT_0094",
+      "apres": "PCB0010_COATING_0095"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_TEST_ICT_0096",
+      "ressource": "BANC_TEST_ICT_4",
+      "duree": 46
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0010_COATING_0095",
+      "apres": "PCB0010_TEST_ICT_0096"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_REFUSION_A_0097",
+      "ressource": "FOUR_REFUSION_1",
+      "duree": 28
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0010_TEST_ICT_0096",
+      "apres": "PCB0010_REFUSION_A_0097"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_REFUSION_B_0098",
+      "ressource": "FOUR_REFUSION_4",
+      "duree": 20
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0010_REFUSION_A_0097",
+      "apres": "PCB0010_REFUSION_B_0098"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_PREP_0099",
+      "ressource": "STATION_ASSEMBLAGE_10",
+      "duree": 24
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0010_REFUSION_B_0098",
+      "apres": "PCB0010_PREP_0099"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PCB0010_POSE_CMS_B_0100",
+      "ressource": "PICK_PLACE_6",
+      "duree": 139
+    },
+    {
+      "type": "precedence",
+      "avant": "PCB0010_PREP_0099",
+      "apres": "PCB0010_POSE_CMS_B_0100"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "equilibrer_charge",
+      "poids": 0.6,
+      "methode": "ecart_max"
+    },
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.4,
+      "makespan_cible": 70
+    }
+  ]
+}

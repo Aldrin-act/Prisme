@@ -1,0 +1,81 @@
+{
+  "operations": [
+    {
+      "code_operation": "PRE_PRESSE",
+      "duree_minutes": 60,
+      "poste_id": "STATION_PAO",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "CALAGE_PRESSE",
+      "duree_minutes": 45,
+      "poste_id": "PRESSE_OFFSET_1",
+      "operation_precedente": "PRE_PRESSE"
+    },
+    {
+      "code_operation": "IMPRESSION_RECTO",
+      "duree_minutes": 90,
+      "poste_id": "PRESSE_OFFSET_1",
+      "operation_precedente": "CALAGE_PRESSE"
+    },
+    {
+      "code_operation": "SECHAGE_RECTO",
+      "duree_minutes": 30,
+      "poste_id": "TUNNEL_SECHAGE",
+      "operation_precedente": "IMPRESSION_RECTO"
+    },
+    {
+      "code_operation": "IMPRESSION_VERSO",
+      "duree_minutes": 85,
+      "poste_id": "PRESSE_OFFSET_2",
+      "operation_precedente": "SECHAGE_RECTO"
+    },
+    {
+      "code_operation": "SECHAGE_VERSO",
+      "duree_minutes": 30,
+      "poste_id": "TUNNEL_SECHAGE",
+      "operation_precedente": "IMPRESSION_VERSO"
+    },
+    {
+      "code_operation": "VERNIS_SELECTIF",
+      "duree_minutes": 40,
+      "poste_id": "MACHINE_VERNIS",
+      "operation_precedente": "SECHAGE_VERSO"
+    },
+    {
+      "code_operation": "DECOUPE_PLIAGE",
+      "duree_minutes": 55,
+      "poste_id": "PLIEUSE_COLLEUSE",
+      "operation_precedente": "VERNIS_SELECTIF"
+    },
+    {
+      "code_operation": "FINITION",
+      "duree_minutes": 35,
+      "poste_id": "POSTE_FINITION",
+      "operation_precedente": "DECOUPE_PLIAGE"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "STATION_PAO"
+    },
+    {
+      "code_poste": "PRESSE_OFFSET_1"
+    },
+    {
+      "code_poste": "PRESSE_OFFSET_2"
+    },
+    {
+      "code_poste": "TUNNEL_SECHAGE"
+    },
+    {
+      "code_poste": "MACHINE_VERNIS"
+    },
+    {
+      "code_poste": "PLIEUSE_COLLEUSE"
+    },
+    {
+      "code_poste": "POSTE_FINITION"
+    }
+  ]
+}

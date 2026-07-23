@@ -1,0 +1,214 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Série A - pièce 1"
+    },
+    {
+      "id": "T2",
+      "nom": "Série A - pièce 2"
+    },
+    {
+      "id": "T3",
+      "nom": "Série A - pièce 3"
+    },
+    {
+      "id": "T4",
+      "nom": "Série B - pièce 1"
+    },
+    {
+      "id": "T5",
+      "nom": "Série B - pièce 2"
+    },
+    {
+      "id": "T6",
+      "nom": "Série C - pièce 1"
+    },
+    {
+      "id": "T7",
+      "nom": "Série C - pièce 2"
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Centre d'usinage 1"
+    },
+    {
+      "id": "R2",
+      "nom": "Centre d'usinage 2"
+    },
+    {
+      "id": "R3",
+      "nom": "Centre d'usinage 3"
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R1",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R2",
+      "duree": 28
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R3",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R1",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 28
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R3",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R1",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R2",
+      "duree": 28
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R3",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R1",
+      "duree": 35
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R2",
+      "duree": 32
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R3",
+      "duree": 38
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R1",
+      "duree": 35
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R2",
+      "duree": 32
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R3",
+      "duree": 38
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R1",
+      "duree": 40
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R2",
+      "duree": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R3",
+      "duree": 38
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T7",
+      "ressource": "R1",
+      "duree": 40
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T7",
+      "ressource": "R2",
+      "duree": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T7",
+      "ressource": "R3",
+      "duree": 38
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_changements",
+      "poids": 0.5,
+      "cout_changement_par_ressource": {
+        "R1": 2.0,
+        "R2": 3.5,
+        "R3": 1.5
+      }
+    },
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.3
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 0.2,
+      "methode": "variance"
+    }
+  ]
+}

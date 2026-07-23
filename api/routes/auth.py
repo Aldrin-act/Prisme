@@ -1,33 +1,42 @@
-"""Routes d'authentification pour les maintenants et opérateurs PRISME."""
+"""Routes d'authentification pour les maintenants et opérateurs PRISME.
+
+Stockage PostgreSQL avec hachage bcrypt des mots de passe (§5.2, §7).
+Même architecture que solver_store/registry.py : table auto-créée, schéma public.
+"""
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+import os
+from datetime import datetime, timedelta, UTC
 from typing import Annotated
 
 import jwt
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr
 
-# Configuration JWT (à déplacer dans un fichier config)
-JWT_SECRET_KEY = "VOTRE_CLE_SECRETE_ICI"  # À remplacer par variable d'environnement
-JWT_ALGORITHM = "HS256"
-JWT_EXPIRE_MINUTES = 1440  # 24 heures
+from api.auth_db import UtilisateursDB, RoleUtilisateur
+
+# Charger les variables d'environnement
+load_dotenv()
+
+# Configuration JWT depuis .env
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "VOTRE_CLE_SECRETE_ICI")
+JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))
 
 router = APIRouter(prefix="/auth", tags=["authentification"])
 security = HTTPBearer()
 
+# Instance globale de la base de données utilisateurs
+# Utilise DATABASE_URL (même base que solver_store, etat_postgres, etc.)
+utilisateurs_db = UtilisateursDB()
+
 
 # ============================================================================
-# MODÈLES
+# MODÈLES PYDANTIC (API)
 # ============================================================================
-
-class RoleUtilisateur(str):
-    OPERATEUR = "operateur"
-    MAINTENANT = "maintenant"
-    ADMIN = "admin"
-
 
 class Utilisateur(BaseModel):
     id: str
@@ -61,7 +70,7 @@ class CredentialsRegister(BaseModel):
     password: str
     nom: str
     prenom: str
-    role: str = "operateur"
+    role: RoleUtilisateur = "operateur"
     client_id: str | None = None
 
 
@@ -70,39 +79,14 @@ class ErreurAuth(BaseModel):
     message: str
 
 
-# ============================================================================
-# STOCKAGE TEMPORAIRE (À REMPLACER PAR BASE DE DONNÉES)
-# ============================================================================
+class ChangePasswordRequest(BaseModel):
+    ancien_mot_de_passe: str
+    nouveau_mot_de_passe: str
 
-# Base de données en mémoire pour la démo
-# En production, remplacer par PostgreSQL/SQLite
-UTILISATEURS_DB: dict[str, dict] = {
-    "maintenant@example.com": {
-        "id": "user-001",
-        "email": "maintenant@example.com",
-        "password_hash": "hashed_password_123",  # En vrai: bcrypt.hashpw(...)
-        "nom": "Dupont",
-        "prenom": "Jean",
-        "role": "maintenant",
-        "client_id": None,
-        "date_creation": "2026-01-01T00:00:00Z",
-        "dernier_acces": None,
-    },
-    "admin@example.com": {
-        "id": "user-002",
-        "email": "admin@example.com",
-        "password_hash": "hashed_password_456",
-        "nom": "Admin",
-        "prenom": "Super",
-        "role": "admin",
-        "client_id": None,
-        "date_creation": "2026-01-01T00:00:00Z",
-        "dernier_acces": None,
-    },
-}
 
-# Blacklist tokens invalidés
-TOKENS_INVALIDES: set[str] = set()
+class ResetPasswordRequest(BaseModel):
+    token: str
+    nouveau_mot_de_passe: str
 
 
 # ============================================================================
@@ -111,14 +95,14 @@ TOKENS_INVALIDES: set[str] = set()
 
 def creer_token_jwt(utilisateur_id: str, role: str, client_id: str | None) -> tuple[str, str]:
     """Crée un JWT token avec expiration."""
-    expires_at = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_MINUTES)
+    expires_at = datetime.now(UTC) + timedelta(minutes=JWT_EXPIRE_MINUTES)
 
     payload = {
         "user_id": utilisateur_id,
         "role": role,
         "client_id": client_id,
         "exp": expires_at,
-        "iat": datetime.utcnow(),
+        "iat": datetime.now(UTC),
     }
 
     token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
@@ -142,14 +126,8 @@ def decoder_token_jwt(token: str) -> dict:
         )
 
 
-def verifier_mot_de_passe(mot_de_passe: str, hash_stocke: str) -> bool:
-    """Vérifie le mot de passe (version simplifiée, utiliser bcrypt en prod)."""
-    # En production: bcrypt.checkpw(mot_de_passe.encode(), hash_stocke.encode())
-    return f"hashed_{mot_de_passe}" == hash_stocke
-
-
 # ============================================================================
-# DÉPENDANCES
+# DÉPENDANCES FASTAPI
 # ============================================================================
 
 async def obtenir_utilisateur_courant(
@@ -157,30 +135,19 @@ async def obtenir_utilisateur_courant(
 ) -> dict:
     """Dépendance FastAPI pour extraire l'utilisateur du token JWT."""
     token = credentials.credentials
-
-    # Vérifier si token blacklisté
-    if token in TOKENS_INVALIDES:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"code": "UNAUTHORIZED", "message": "Token révoqué"},
-        )
-
     payload = decoder_token_jwt(token)
 
-    # Récupérer utilisateur de la DB
+    # Récupérer utilisateur de la base de données PostgreSQL
     utilisateur_id = payload["user_id"]
-    utilisateur = next(
-        (u for u in UTILISATEURS_DB.values() if u["id"] == utilisateur_id),
-        None,
-    )
+    utilisateur_db = utilisateurs_db.recuperer_par_id(utilisateur_id)
 
-    if not utilisateur:
+    if not utilisateur_db:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={"code": "UNAUTHORIZED", "message": "Utilisateur introuvable"},
         )
 
-    return utilisateur
+    return utilisateur_db.to_dict()
 
 
 async def require_role(*roles: str):
@@ -197,17 +164,17 @@ async def require_role(*roles: str):
 
 
 # ============================================================================
-# ROUTES
+# ROUTES D'AUTHENTIFICATION
 # ============================================================================
 
 @router.post("/login")
 def login(credentials: CredentialsLogin) -> ReponseAuth:
-    """Connexion avec email/password."""
-    # Rechercher utilisateur
-    utilisateur = UTILISATEURS_DB.get(credentials.email)
+    """Connexion avec email/password (stockage PostgreSQL + bcrypt)."""
+    # Rechercher utilisateur dans PostgreSQL
+    utilisateur_db = utilisateurs_db.recuperer_par_email(credentials.email)
 
-    if not utilisateur or not verifier_mot_de_passe(
-        credentials.password, utilisateur["password_hash"]
+    if not utilisateur_db or not utilisateurs_db.verifier_mot_de_passe(
+        credentials.password, utilisateur_db.password_hash
     ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -217,17 +184,20 @@ def login(credentials: CredentialsLogin) -> ReponseAuth:
             },
         )
 
-    # Générer token
+    # Générer token JWT
     token, expires_at = creer_token_jwt(
-        utilisateur["id"], utilisateur["role"], utilisateur.get("client_id")
+        utilisateur_db.id, utilisateur_db.role, utilisateur_db.client_id
     )
 
-    # Mettre à jour dernier accès
-    utilisateur["dernier_acces"] = datetime.utcnow().isoformat()
+    # Mettre à jour dernier accès dans PostgreSQL
+    utilisateurs_db.mettre_a_jour_dernier_acces(utilisateur_db.id)
 
     # Créer session
+    utilisateur_dict = utilisateur_db.to_dict()
+    utilisateur_dict["dernier_acces"] = datetime.now(UTC).isoformat()
+
     session = SessionAuth(
-        utilisateur=Utilisateur(**{k: v for k, v in utilisateur.items() if k != "password_hash"}),
+        utilisateur=Utilisateur(**utilisateur_dict),
         token=token,
         expires_at=expires_at,
     )
@@ -240,9 +210,9 @@ def login(credentials: CredentialsLogin) -> ReponseAuth:
 
 @router.post("/register")
 def register(credentials: CredentialsRegister) -> ReponseAuth:
-    """Inscription d'un nouvel utilisateur."""
+    """Inscription d'un nouvel utilisateur (stockage PostgreSQL + bcrypt)."""
     # Vérifier si email existe déjà
-    if credentials.email in UTILISATEURS_DB:
+    if utilisateurs_db.email_existe(credentials.email):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail={
@@ -251,28 +221,24 @@ def register(credentials: CredentialsRegister) -> ReponseAuth:
             },
         )
 
-    # Créer utilisateur
-    user_id = f"user-{len(UTILISATEURS_DB) + 1:03d}"
-    utilisateur = {
-        "id": user_id,
-        "email": credentials.email,
-        "password_hash": f"hashed_{credentials.password}",  # En vrai: bcrypt
-        "nom": credentials.nom,
-        "prenom": credentials.prenom,
-        "role": credentials.role,
-        "client_id": credentials.client_id,
-        "date_creation": datetime.utcnow().isoformat(),
-        "dernier_acces": None,
-    }
+    # Créer utilisateur dans PostgreSQL (hachage bcrypt automatique)
+    utilisateur_db = utilisateurs_db.creer_utilisateur(
+        email=credentials.email,
+        mot_de_passe=credentials.password,
+        nom=credentials.nom,
+        prenom=credentials.prenom,
+        role=credentials.role,
+        client_id=credentials.client_id,
+    )
 
-    UTILISATEURS_DB[credentials.email] = utilisateur
-
-    # Générer token
-    token, expires_at = creer_token_jwt(user_id, credentials.role, credentials.client_id)
+    # Générer token JWT
+    token, expires_at = creer_token_jwt(
+        utilisateur_db.id, utilisateur_db.role, utilisateur_db.client_id
+    )
 
     # Créer session
     session = SessionAuth(
-        utilisateur=Utilisateur(**{k: v for k, v in utilisateur.items() if k != "password_hash"}),
+        utilisateur=Utilisateur(**utilisateur_db.to_dict()),
         token=token,
         expires_at=expires_at,
     )
@@ -285,15 +251,15 @@ def register(credentials: CredentialsRegister) -> ReponseAuth:
 
 @router.post("/logout")
 def logout(utilisateur: dict = Depends(obtenir_utilisateur_courant)) -> dict:
-    """Déconnexion (invalide le token)."""
-    # En production: ajouter le token à une blacklist Redis avec TTL
-    # Pour la démo, on utilise un set en mémoire
+    """Déconnexion (le client doit supprimer son token côté frontend)."""
+    # Note: Pour une vraie blacklist de tokens, utiliser Redis avec TTL
+    # Pour cette implémentation, on se fie au client pour supprimer le token
     return {"message": "Déconnexion réussie"}
 
 
 @router.get("/verify")
 def verify_token(utilisateur: dict = Depends(obtenir_utilisateur_courant)) -> dict:
-    """Vérifie la validité du token."""
+    """Vérifie la validité du token JWT."""
     return {"valid": True, "user_id": utilisateur["id"]}
 
 
@@ -307,7 +273,7 @@ def refresh_token(utilisateur: dict = Depends(obtenir_utilisateur_courant)) -> R
 
     # Créer nouvelle session
     session = SessionAuth(
-        utilisateur=Utilisateur(**{k: v for k, v in utilisateur.items() if k != "password_hash"}),
+        utilisateur=Utilisateur(**utilisateur),
         token=token,
         expires_at=expires_at,
     )
@@ -320,12 +286,23 @@ def refresh_token(utilisateur: dict = Depends(obtenir_utilisateur_courant)) -> R
 
 @router.post("/change-password")
 def change_password(
-    ancien_mot_de_passe: str,
-    nouveau_mot_de_passe: str,
+    request: ChangePasswordRequest,
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict:
     """Change le mot de passe de l'utilisateur."""
-    if not verifier_mot_de_passe(ancien_mot_de_passe, utilisateur["password_hash"]):
+    # Récupérer utilisateur complet depuis PostgreSQL
+    utilisateur_db = utilisateurs_db.recuperer_par_id(utilisateur["id"])
+
+    if not utilisateur_db:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"code": "NOT_FOUND", "message": "Utilisateur introuvable"},
+        )
+
+    # Vérifier ancien mot de passe
+    if not utilisateurs_db.verifier_mot_de_passe(
+        request.ancien_mot_de_passe, utilisateur_db.password_hash
+    ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
@@ -334,8 +311,8 @@ def change_password(
             },
         )
 
-    # Mettre à jour le mot de passe
-    utilisateur["password_hash"] = f"hashed_{nouveau_mot_de_passe}"
+    # Mettre à jour le mot de passe (hachage bcrypt automatique)
+    utilisateurs_db.changer_mot_de_passe(utilisateur["id"], request.nouveau_mot_de_passe)
 
     return {"message": "Mot de passe modifié"}
 
@@ -343,12 +320,14 @@ def change_password(
 @router.post("/forgot-password")
 def forgot_password(email: EmailStr) -> dict:
     """Demande de réinitialisation de mot de passe."""
-    # En production: envoyer email avec lien de réinitialisation
+    # En production: générer token unique, envoyer email avec lien de réinitialisation
+    # Pour cette implémentation, on retourne un message générique
     return {"message": "Email de réinitialisation envoyé (si le compte existe)"}
 
 
 @router.post("/reset-password")
-def reset_password(token: str, nouveau_mot_de_passe: str) -> dict:
+def reset_password(request: ResetPasswordRequest) -> dict:
     """Réinitialise le mot de passe avec un token."""
-    # En production: vérifier le token de réinitialisation
+    # En production: vérifier le token de réinitialisation (stocké en Redis/PostgreSQL avec expiration)
+    # Pour cette implémentation, endpoint placeholder
     return {"message": "Mot de passe réinitialisé"}

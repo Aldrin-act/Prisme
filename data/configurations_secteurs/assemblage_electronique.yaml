@@ -1,0 +1,108 @@
+# Configuration du secteur : Assemblage Électronique
+nom: assemblage_electronique
+description: Fabrication de cartes électroniques (PCB, pick&place, soudure, tests)
+
+types_postes:
+  PICK_PLACE:
+    duree_min: 60
+    duree_max: 150
+    capacite: 6
+
+  FOUR_REFUSION:
+    duree_min: 20
+    duree_max: 35
+    capacite: 4
+
+  AOI:
+    duree_min: 8
+    duree_max: 15
+    capacite: 5
+
+  POSTE_SOUDURE_MANUEL:
+    duree_min: 30
+    duree_max: 90
+    capacite: 15
+
+  BANC_TEST_ICT:
+    duree_min: 25
+    duree_max: 60
+    capacite: 8
+
+  BANC_TEST_FONCTIONNEL:
+    duree_min: 20
+    duree_max: 70
+    capacite: 6
+
+  ROBOT_COATING:
+    duree_min: 15
+    duree_max: 35
+    capacite: 3
+
+  STATION_ASSEMBLAGE:
+    duree_min: 20
+    duree_max: 50
+    capacite: 10
+
+  POSTE_DEPANNELISATION:
+    duree_min: 5
+    duree_max: 15
+    capacite: 4
+
+  STATION_PACKAGING:
+    duree_min: 10
+    duree_max: 25
+    capacite: 8
+
+phases_production:
+  - nom: PREP
+    types_poste:
+      - STATION_ASSEMBLAGE
+
+  - nom: POSE_CMS_A
+    types_poste:
+      - PICK_PLACE
+
+  - nom: REFUSION_A
+    types_poste:
+      - FOUR_REFUSION
+
+  - nom: AOI_A
+    types_poste:
+      - AOI
+
+  - nom: POSE_CMS_B
+    types_poste:
+      - PICK_PLACE
+
+  - nom: REFUSION_B
+    types_poste:
+      - FOUR_REFUSION
+
+  - nom: SOUDURE_THT
+    types_poste:
+      - POSTE_SOUDURE_MANUEL
+
+  - nom: TEST_ICT
+    types_poste:
+      - BANC_TEST_ICT
+
+  - nom: TEST_FONC
+    types_poste:
+      - BANC_TEST_FONCTIONNEL
+
+  - nom: COATING
+    types_poste:
+      - ROBOT_COATING
+
+  - nom: DEPANEL
+    types_poste:
+      - POSTE_DEPANNELISATION
+
+  - nom: PACKAGE
+    types_poste:
+      - STATION_PACKAGING
+
+generation:
+  operations_par_lot_min: 8
+  operations_par_lot_max: 12
+  prefix_lot: "PCB"

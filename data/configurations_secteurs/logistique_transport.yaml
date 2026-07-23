@@ -1,0 +1,93 @@
+# Configuration du secteur : Logistique et Transport
+nom: logistique_transport
+description: Planification des livraisons et opérations logistiques
+
+types_postes:
+  CAMION_20T:
+    duree_min: 60
+    duree_max: 480
+    capacite: 15
+
+  CAMION_10T:
+    duree_min: 45
+    duree_max: 300
+    capacite: 20
+
+  CAMIONNETTE:
+    duree_min: 30
+    duree_max: 180
+    capacite: 25
+
+  CHARIOT_ELEVATEUR:
+    duree_min: 10
+    duree_max: 45
+    capacite: 12
+
+  QUAI_CHARGEMENT:
+    duree_min: 20
+    duree_max: 90
+    capacite: 8
+
+  QUAI_DECHARGEMENT:
+    duree_min: 20
+    duree_max: 90
+    capacite: 8
+
+  ZONE_PREPARATION:
+    duree_min: 15
+    duree_max: 120
+    capacite: 10
+
+  POSTE_CONTROLE:
+    duree_min: 10
+    duree_max: 30
+    capacite: 6
+
+  ZONE_STOCKAGE:
+    duree_min: 5
+    duree_max: 60
+    capacite: 20
+
+phases_production:
+  - nom: RECEPTION
+    types_poste:
+      - QUAI_DECHARGEMENT
+
+  - nom: CONTROLE_ENTREE
+    types_poste:
+      - POSTE_CONTROLE
+
+  - nom: STOCKAGE
+    types_poste:
+      - CHARIOT_ELEVATEUR
+      - ZONE_STOCKAGE
+
+  - nom: PREPARATION_COMMANDE
+    types_poste:
+      - ZONE_PREPARATION
+
+  - nom: EMBALLAGE
+    types_poste:
+      - ZONE_PREPARATION
+
+  - nom: CHARGEMENT
+    types_poste:
+      - QUAI_CHARGEMENT
+      - CHARIOT_ELEVATEUR
+
+  - nom: TRANSPORT
+    types_poste:
+      - CAMION_20T
+      - CAMION_10T
+      - CAMIONNETTE
+
+  - nom: LIVRAISON
+    types_poste:
+      - CAMION_20T
+      - CAMION_10T
+      - CAMIONNETTE
+
+generation:
+  operations_par_lot_min: 6
+  operations_par_lot_max: 8
+  prefix_lot: "CMD"  # Commande

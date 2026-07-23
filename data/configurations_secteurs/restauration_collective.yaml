@@ -1,0 +1,103 @@
+# Configuration du secteur : Restauration Collective
+nom: restauration_collective
+description: Planification de la préparation de repas en cuisine collective
+
+types_postes:
+  POSTE_PREPARATION_LEGUMES:
+    duree_min: 30
+    duree_max: 120
+    capacite: 10
+
+  POSTE_PREPARATION_VIANDES:
+    duree_min: 40
+    duree_max: 150
+    capacite: 8
+
+  POSTE_CUISSON_FOUR:
+    duree_min: 45
+    duree_max: 240
+    capacite: 6
+
+  POSTE_CUISSON_PLAQUE:
+    duree_min: 20
+    duree_max: 90
+    capacite: 12
+
+  POSTE_CUISSON_MARMITE:
+    duree_min: 60
+    duree_max: 300
+    capacite: 8
+
+  POSTE_PATISSERIE:
+    duree_min: 60
+    duree_max: 240
+    capacite: 5
+
+  POSTE_DRESSAGE:
+    duree_min: 15
+    duree_max: 60
+    capacite: 15
+
+  CELLULE_REFROIDISSEMENT:
+    duree_min: 30
+    duree_max: 120
+    capacite: 6
+
+  POSTE_CONDITIONNEMENT:
+    duree_min: 10
+    duree_max: 45
+    capacite: 12
+
+  POSTE_CONTROLE_QUALITE:
+    duree_min: 10
+    duree_max: 30
+    capacite: 4
+
+  ZONE_LAVERIE:
+    duree_min: 20
+    duree_max: 90
+    capacite: 10
+
+phases_production:
+  - nom: PREP_INGREDIENTS
+    types_poste:
+      - POSTE_PREPARATION_LEGUMES
+      - POSTE_PREPARATION_VIANDES
+
+  - nom: CUISSON_PRINCIPALE
+    types_poste:
+      - POSTE_CUISSON_FOUR
+      - POSTE_CUISSON_MARMITE
+
+  - nom: CUISSON_MINUTE
+    types_poste:
+      - POSTE_CUISSON_PLAQUE
+
+  - nom: PATISSERIE
+    types_poste:
+      - POSTE_PATISSERIE
+
+  - nom: REFROIDISSEMENT
+    types_poste:
+      - CELLULE_REFROIDISSEMENT
+
+  - nom: DRESSAGE
+    types_poste:
+      - POSTE_DRESSAGE
+
+  - nom: CONDITIONNEMENT
+    types_poste:
+      - POSTE_CONDITIONNEMENT
+
+  - nom: CONTROLE
+    types_poste:
+      - POSTE_CONTROLE_QUALITE
+
+  - nom: NETTOYAGE
+    types_poste:
+      - ZONE_LAVERIE
+
+generation:
+  operations_par_lot_min: 6
+  operations_par_lot_max: 9
+  prefix_lot: "MENU"

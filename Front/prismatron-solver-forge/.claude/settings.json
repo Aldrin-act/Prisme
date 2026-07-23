@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chromium-cli --help)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(curl -s http://localhost:8082/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{content_type}\\\\n\" http://localhost:8082/IMG-20260722-WA0009.png)",
+      "Bash(curl -s http://localhost:8082/ -o /tmp/homepage.html)",
+      "Read(//tmp/**)",
+      "Bash(grep -a -o 'rel=\"icon\"[^/]*/[^>]*' /tmp/homepage.html)",
+      "Bash(grep -a -o '<img[^>]*IMG-20260722[^>]*>' /tmp/homepage.html | head -3)",
+      "Bash(powershell -NoProfile -Command \"Get-Process -Id 28472 | Select-Object Id,ProcessName,StartTime\")",
+      "Bash(powershell -NoProfile -Command \"Stop-Process -Id 28472 -Force\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8082/)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

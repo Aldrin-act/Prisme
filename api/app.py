@@ -21,11 +21,13 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# Dev uniquement : le dashboard (Vite, :5173) et l'API (uvicorn, :8000) tournent
-# en processus séparés, sans étape de build/déploiement commune pour ce PoC.
+# Dev uniquement : le dashboard (Vite, port variable selon disponibilité) et l'API (uvicorn,
+# :8000) tournent en processus séparés, sans étape de build/déploiement commune pour ce PoC.
+# Regex plutôt qu'une liste de ports fixes : Vite change de port si le précédent est occupé.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1):\d+",
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

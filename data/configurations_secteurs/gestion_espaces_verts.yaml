@@ -1,0 +1,91 @@
+# Configuration du secteur : Gestion d'Espaces Verts (type GreenSIG)
+nom: gestion_espaces_verts
+description: Planification des travaux d'entretien d'espaces verts (tonte, taille, plantation)
+
+types_postes:
+  EQUIPE_TONTE:
+    duree_min: 30
+    duree_max: 120
+    capacite: 8
+
+  EQUIPE_TAILLE:
+    duree_min: 45
+    duree_max: 180
+    capacite: 6
+
+  EQUIPE_PLANTATION:
+    duree_min: 60
+    duree_max: 240
+    capacite: 5
+
+  EQUIPE_ARROSAGE:
+    duree_min: 20
+    duree_max: 90
+    capacite: 10
+
+  EQUIPE_DESHERBAGE:
+    duree_min: 30
+    duree_max: 150
+    capacite: 7
+
+  EQUIPE_ELAGAGE:
+    duree_min: 90
+    duree_max: 300
+    capacite: 4
+
+  EQUIPE_NETTOYAGE:
+    duree_min: 25
+    duree_max: 100
+    capacite: 12
+
+  EQUIPE_TRAITEMENT_PHYTO:
+    duree_min: 40
+    duree_max: 120
+    capacite: 3
+
+  EQUIPE_AMENAGEMENT:
+    duree_min: 120
+    duree_max: 480
+    capacite: 4
+
+phases_production:
+  - nom: TONTE_GAZON
+    types_poste:
+      - EQUIPE_TONTE
+
+  - nom: TAILLE_HAIES
+    types_poste:
+      - EQUIPE_TAILLE
+
+  - nom: ELAGAGE_ARBRES
+    types_poste:
+      - EQUIPE_ELAGAGE
+
+  - nom: DESHERBAGE
+    types_poste:
+      - EQUIPE_DESHERBAGE
+
+  - nom: ARROSAGE
+    types_poste:
+      - EQUIPE_ARROSAGE
+
+  - nom: TRAITEMENT
+    types_poste:
+      - EQUIPE_TRAITEMENT_PHYTO
+
+  - nom: PLANTATION
+    types_poste:
+      - EQUIPE_PLANTATION
+
+  - nom: AMENAGEMENT
+    types_poste:
+      - EQUIPE_AMENAGEMENT
+
+  - nom: NETTOYAGE
+    types_poste:
+      - EQUIPE_NETTOYAGE
+
+generation:
+  operations_par_lot_min: 5
+  operations_par_lot_max: 9
+  prefix_lot: "ZONE"

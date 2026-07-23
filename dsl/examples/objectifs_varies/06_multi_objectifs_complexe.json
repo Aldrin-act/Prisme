@@ -1,0 +1,223 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Commande prioritaire A"
+    },
+    {
+      "id": "T2",
+      "nom": "Commande standard B"
+    },
+    {
+      "id": "T3",
+      "nom": "Commande urgente C"
+    },
+    {
+      "id": "T4",
+      "nom": "Opération préparatoire"
+    },
+    {
+      "id": "T5",
+      "nom": "Commande standard D"
+    },
+    {
+      "id": "T6",
+      "nom": "Finition A"
+    },
+    {
+      "id": "T7",
+      "nom": "Finition C"
+    },
+    {
+      "id": "T8",
+      "nom": "Contrôle qualité"
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Machine rapide premium",
+      "competences": [
+        "usinage",
+        "finition"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Machine standard polyvalente",
+      "competences": [
+        "usinage",
+        "preparation"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Machine contrôle",
+      "competences": [
+        "controle"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Machine finition",
+      "competences": [
+        "finition"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T1"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R1",
+      "duree": 40
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R2",
+      "duree": 50
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 60
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R1",
+      "duree": 35
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R2",
+      "duree": 45
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R2",
+      "duree": 20
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R1",
+      "duree": 55
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R2",
+      "duree": 65
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R1",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R4",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T7",
+      "ressource": "R1",
+      "duree": 20
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T7",
+      "ressource": "R4",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T8",
+      "ressource": "R3",
+      "duree": 15
+    },
+    {
+      "type": "echeance",
+      "tache": "T3",
+      "echeance": 150
+    },
+    {
+      "type": "echeance",
+      "tache": "T1",
+      "echeance": 200
+    },
+    {
+      "type": "echeance",
+      "tache": "T8",
+      "echeance": 280
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.25,
+      "makespan_cible": 300,
+      "penalite_depassement": 2.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 0.3,
+      "fonction_penalite": "quadratique",
+      "seuil_grace": 10
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 0.2,
+      "methode": "gini"
+    },
+    {
+      "type": "maximiser_utilisation",
+      "poids": 0.15,
+      "ressources_prioritaires": [
+        "R1"
+      ]
+    },
+    {
+      "type": "minimiser_changements",
+      "poids": 0.1
+    }
+  ]
+}

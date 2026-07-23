@@ -1,0 +1,98 @@
+# Configuration du secteur : Services de Nettoyage
+nom: services_nettoyage
+description: Planification des services de nettoyage et entretien de bâtiments
+
+types_postes:
+  EQUIPE_NETTOYAGE_BUREAUX:
+    duree_min: 30
+    duree_max: 120
+    capacite: 15
+
+  EQUIPE_NETTOYAGE_INDUSTRIEL:
+    duree_min: 60
+    duree_max: 240
+    capacite: 8
+
+  EQUIPE_VITRES:
+    duree_min: 45
+    duree_max: 180
+    capacite: 10
+
+  EQUIPE_DESINFECTION:
+    duree_min: 40
+    duree_max: 150
+    capacite: 6
+
+  EQUIPE_SOL_SPECIALISE:
+    duree_min: 60
+    duree_max: 240
+    capacite: 5
+
+  EQUIPE_DECAPAGE:
+    duree_min: 90
+    duree_max: 360
+    capacite: 4
+
+  EQUIPE_POLISSAGE:
+    duree_min: 60
+    duree_max: 180
+    capacite: 4
+
+  EQUIPE_SANITAIRES:
+    duree_min: 20
+    duree_max: 90
+    capacite: 12
+
+  EQUIPE_DECHETS:
+    duree_min: 15
+    duree_max: 60
+    capacite: 10
+
+  EQUIPE_CONTROLE_QUALITE:
+    duree_min: 10
+    duree_max: 45
+    capacite: 5
+
+phases_production:
+  - nom: ASPIRATION
+    types_poste:
+      - EQUIPE_NETTOYAGE_BUREAUX
+      - EQUIPE_NETTOYAGE_INDUSTRIEL
+
+  - nom: LAVAGE_SOLS
+    types_poste:
+      - EQUIPE_NETTOYAGE_BUREAUX
+      - EQUIPE_SOL_SPECIALISE
+
+  - nom: DESINFECTION
+    types_poste:
+      - EQUIPE_DESINFECTION
+
+  - nom: VITRES
+    types_poste:
+      - EQUIPE_VITRES
+
+  - nom: SANITAIRES
+    types_poste:
+      - EQUIPE_SANITAIRES
+
+  - nom: DECAPAGE
+    types_poste:
+      - EQUIPE_DECAPAGE
+
+  - nom: POLISSAGE
+    types_poste:
+      - EQUIPE_POLISSAGE
+
+  - nom: EVACUATION_DECHETS
+    types_poste:
+      - EQUIPE_DECHETS
+
+  - nom: CONTROLE
+    types_poste:
+      - EQUIPE_CONTROLE_QUALITE
+
+generation:
+  operations_par_lot_min: 5
+  operations_par_lot_max: 9
+  prefix_lot: "SITE"

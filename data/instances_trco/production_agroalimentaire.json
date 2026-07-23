@@ -1,0 +1,197 @@
+{
+  "taches": [
+    {
+      "id": "RECEPTION_MP",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LAVAGE_LEGUMES",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "EPLUCHAGE",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "DECOUPE",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "CUISSON",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "REFROIDISSEMENT",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "CONDITIONNEMENT",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "ETIQUETAGE",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PALETTISATION",
+      "nom": null,
+      "priorite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "QUAI_RECEPTION",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "TUNNEL_LAVAGE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "LIGNE_EPLUCHAGE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_DECOUPE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "AUTOCLAVE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "TUNNEL_REFROIDISSEMENT",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "LIGNE_CONDITIONNEMENT",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ETIQUETEUSE_AUTO",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_PALETTISEUR",
+      "nom": null,
+      "competences": []
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_MP",
+      "ressource": "QUAI_RECEPTION",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_LEGUMES",
+      "ressource": "TUNNEL_LAVAGE",
+      "duree": 45
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_MP",
+      "apres": "LAVAGE_LEGUMES"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE",
+      "ressource": "LIGNE_EPLUCHAGE",
+      "duree": 60
+    },
+    {
+      "type": "precedence",
+      "avant": "LAVAGE_LEGUMES",
+      "apres": "EPLUCHAGE"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE",
+      "ressource": "ROBOT_DECOUPE",
+      "duree": 40
+    },
+    {
+      "type": "precedence",
+      "avant": "EPLUCHAGE",
+      "apres": "DECOUPE"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON",
+      "ressource": "AUTOCLAVE_1",
+      "duree": 120
+    },
+    {
+      "type": "precedence",
+      "avant": "DECOUPE",
+      "apres": "CUISSON"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT",
+      "ressource": "TUNNEL_REFROIDISSEMENT",
+      "duree": 90
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON",
+      "apres": "REFROIDISSEMENT"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT",
+      "ressource": "LIGNE_CONDITIONNEMENT",
+      "duree": 50
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT",
+      "apres": "CONDITIONNEMENT"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE",
+      "ressource": "ETIQUETEUSE_AUTO",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "CONDITIONNEMENT",
+      "apres": "ETIQUETAGE"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION",
+      "ressource": "ROBOT_PALETTISEUR",
+      "duree": 35
+    },
+    {
+      "type": "precedence",
+      "avant": "ETIQUETAGE",
+      "apres": "PALETTISATION"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

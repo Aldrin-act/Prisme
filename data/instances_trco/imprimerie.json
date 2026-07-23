@@ -1,0 +1,187 @@
+{
+  "taches": [
+    {
+      "id": "PRE_PRESSE",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "CALAGE_PRESSE",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "IMPRESSION_RECTO",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "SECHAGE_RECTO",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "IMPRESSION_VERSO",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "SECHAGE_VERSO",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "VERNIS_SELECTIF",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "DECOUPE_PLIAGE",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "FINITION",
+      "nom": null,
+      "priorite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "STATION_PAO",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_OFFSET_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_OFFSET_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "TUNNEL_SECHAGE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "MACHINE_VERNIS",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PLIEUSE_COLLEUSE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_FINITION",
+      "nom": null,
+      "competences": []
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PRE_PRESSE",
+      "ressource": "STATION_PAO",
+      "duree": 60
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CALAGE_PRESSE",
+      "ressource": "PRESSE_OFFSET_1",
+      "duree": 45
+    },
+    {
+      "type": "precedence",
+      "avant": "PRE_PRESSE",
+      "apres": "CALAGE_PRESSE"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "IMPRESSION_RECTO",
+      "ressource": "PRESSE_OFFSET_1",
+      "duree": 90
+    },
+    {
+      "type": "precedence",
+      "avant": "CALAGE_PRESSE",
+      "apres": "IMPRESSION_RECTO"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SECHAGE_RECTO",
+      "ressource": "TUNNEL_SECHAGE",
+      "duree": 30
+    },
+    {
+      "type": "precedence",
+      "avant": "IMPRESSION_RECTO",
+      "apres": "SECHAGE_RECTO"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "IMPRESSION_VERSO",
+      "ressource": "PRESSE_OFFSET_2",
+      "duree": 85
+    },
+    {
+      "type": "precedence",
+      "avant": "SECHAGE_RECTO",
+      "apres": "IMPRESSION_VERSO"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SECHAGE_VERSO",
+      "ressource": "TUNNEL_SECHAGE",
+      "duree": 30
+    },
+    {
+      "type": "precedence",
+      "avant": "IMPRESSION_VERSO",
+      "apres": "SECHAGE_VERSO"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VERNIS_SELECTIF",
+      "ressource": "MACHINE_VERNIS",
+      "duree": 40
+    },
+    {
+      "type": "precedence",
+      "avant": "SECHAGE_VERSO",
+      "apres": "VERNIS_SELECTIF"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_PLIAGE",
+      "ressource": "PLIEUSE_COLLEUSE",
+      "duree": 55
+    },
+    {
+      "type": "precedence",
+      "avant": "VERNIS_SELECTIF",
+      "apres": "DECOUPE_PLIAGE"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION",
+      "ressource": "POSTE_FINITION",
+      "duree": 35
+    },
+    {
+      "type": "precedence",
+      "avant": "DECOUPE_PLIAGE",
+      "apres": "FINITION"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

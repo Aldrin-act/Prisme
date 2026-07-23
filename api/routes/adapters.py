@@ -21,11 +21,13 @@ instance silencieusement tronquée.
 from __future__ import annotations
 
 import psycopg
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import comprendre_donnees_erp
 from adapters.greensig import extraire_payload, traduire
+from adapters.tableur import ErreurFichierInvalide
+from adapters.tableur import traduire as traduire_tableur
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from generation.agents.base import ErreurReponseAgentInvalide
@@ -49,6 +51,27 @@ def ingerer_depuis_greensig(etat: EtatAPI = Depends(obtenir_etat)) -> dict[str, 
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     instance_id = etat.enregistrer_instance(CLIENT_ID_GREENSIG, instance)
+    return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
+
+
+@router.post("/tableur/{client_id}")
+async def ingerer_depuis_tableur(
+    client_id: str, fichier: UploadFile = File(...), etat: EtatAPI = Depends(obtenir_etat)
+) -> dict[str, str]:
+    """Ingestion depuis le gabarit xlsx (§5.4, `docs/dsl/gabarit_ingestion_trco.xlsx`) —
+    la voie « je remplis un tableur » plutôt que « j'écris du JSON »."""
+    if not (fichier.filename or "").lower().endswith(".xlsx"):
+        raise HTTPException(status_code=422, detail="le fichier doit être un classeur Excel (.xlsx)")
+
+    contenu = await fichier.read()
+    try:
+        instance = traduire_tableur(contenu)
+    except ErreurFichierInvalide as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    instance_id = etat.enregistrer_instance(client_id, instance)
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 

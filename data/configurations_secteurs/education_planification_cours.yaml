@@ -1,0 +1,88 @@
+# Configuration du secteur : Éducation - Planification de Cours
+nom: education_planification_cours
+description: Planification des cours, examens et activités pédagogiques
+
+types_postes:
+  SALLE_COURS_STANDARD:
+    duree_min: 60
+    duree_max: 180
+    capacite: 25
+
+  SALLE_TP_INFORMATIQUE:
+    duree_min: 90
+    duree_max: 240
+    capacite: 10
+
+  SALLE_TP_SCIENCES:
+    duree_min: 90
+    duree_max: 240
+    capacite: 8
+
+  AMPHITHEATRE:
+    duree_min: 60
+    duree_max: 180
+    capacite: 5
+
+  SALLE_EXAMEN:
+    duree_min: 120
+    duree_max: 240
+    capacite: 15
+
+  SALLE_TD:
+    duree_min: 60
+    duree_max: 120
+    capacite: 30
+
+  LABORATOIRE:
+    duree_min: 120
+    duree_max: 300
+    capacite: 6
+
+  SALLE_CONFERENCE:
+    duree_min: 90
+    duree_max: 240
+    capacite: 3
+
+  BIBLIOTHEQUE:
+    duree_min: 60
+    duree_max: 180
+    capacite: 8
+
+phases_production:
+  - nom: COURS_MAGISTRAL
+    types_poste:
+      - AMPHITHEATRE
+      - SALLE_COURS_STANDARD
+
+  - nom: TRAVAUX_DIRIGES
+    types_poste:
+      - SALLE_TD
+
+  - nom: TP_INFORMATIQUE
+    types_poste:
+      - SALLE_TP_INFORMATIQUE
+
+  - nom: TP_SCIENCES
+    types_poste:
+      - SALLE_TP_SCIENCES
+      - LABORATOIRE
+
+  - nom: EXAMEN
+    types_poste:
+      - SALLE_EXAMEN
+      - AMPHITHEATRE
+
+  - nom: CONFERENCE
+    types_poste:
+      - SALLE_CONFERENCE
+      - AMPHITHEATRE
+
+  - nom: PROJET_GROUPE
+    types_poste:
+      - BIBLIOTHEQUE
+      - SALLE_TD
+
+generation:
+  operations_par_lot_min: 4
+  operations_par_lot_max: 7
+  prefix_lot: "UE"  # Unité d'Enseignement

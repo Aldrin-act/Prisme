@@ -1,14 +1,14 @@
 """Génère le gabarit tableur (xlsx) d'ingestion T-R-C-O — la version tableur
 de `docs/dsl/modele_ingestion_client.md`, à remettre à une personne qui n'a
-pas à écrire de JSON à la main : elle remplit les onglets, on convertit
-ensuite vers le format attendu par `/ingestion/{client_id}`.
+pas à écrire de JSON à la main : elle remplit les onglets, puis le fichier
+est ingéré tel quel via `POST /adapters/tableur/{client_id}`
+(`adapters/tableur/`), qui lit exactement les onglets produits ici.
 
-À relancer si les règles du DSL (`dsl/schema/`) changent.
+À relancer si les règles du DSL (`dsl/schema/`) changent — et si les noms/
+colonnes d'onglets changent, mettre à jour `adapters/tableur/traducteur.py`
+en même temps, les deux doivent rester en accord.
 
-`openpyxl` n'est pas une dépendance du projet (usage ponctuel, pas du code
-qui tourne en production) — lancer avec :
-
-    uv run --with openpyxl python -m scripts.generer_gabarit_ingestion
+    uv run python -m scripts.generer_gabarit_ingestion
 """
 
 from __future__ import annotations

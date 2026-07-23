@@ -1,0 +1,139 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Commande urgente client A"
+    },
+    {
+      "id": "T2",
+      "nom": "Commande standard client B"
+    },
+    {
+      "id": "T3",
+      "nom": "Commande prioritaire client C"
+    },
+    {
+      "id": "T4",
+      "nom": "Maintenance préventive"
+    },
+    {
+      "id": "T5",
+      "nom": "Commande urgente client D"
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Ligne de production 1"
+    },
+    {
+      "id": "R2",
+      "nom": "Ligne de production 2"
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T4"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R1",
+      "duree": 60
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R2",
+      "duree": 65
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R1",
+      "duree": 90
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 85
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R1",
+      "duree": 45
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R2",
+      "duree": 50
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R1",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R2",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R1",
+      "duree": 55
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R2",
+      "duree": 52
+    },
+    {
+      "type": "echeance",
+      "tache": "T1",
+      "echeance": 120
+    },
+    {
+      "type": "echeance",
+      "tache": "T3",
+      "echeance": 180
+    },
+    {
+      "type": "echeance",
+      "tache": "T5",
+      "echeance": 150
+    },
+    {
+      "type": "echeance",
+      "tache": "T2",
+      "echeance": 300
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_retards",
+      "poids": 0.8,
+      "fonction_penalite": "quadratique",
+      "priorite_par_tache": {
+        "T1": 10.0,
+        "T5": 8.0,
+        "T3": 5.0,
+        "T2": 1.0
+      },
+      "seuil_grace": 10
+    },
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.2
+    }
+  ]
+}

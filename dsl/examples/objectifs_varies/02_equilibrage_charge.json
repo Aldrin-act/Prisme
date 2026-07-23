@@ -1,0 +1,163 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Tâche A"
+    },
+    {
+      "id": "T2",
+      "nom": "Tâche B"
+    },
+    {
+      "id": "T3",
+      "nom": "Tâche C"
+    },
+    {
+      "id": "T4",
+      "nom": "Tâche D"
+    },
+    {
+      "id": "T5",
+      "nom": "Tâche E"
+    },
+    {
+      "id": "T6",
+      "nom": "Tâche F"
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Machine A"
+    },
+    {
+      "id": "R2",
+      "nom": "Machine B"
+    },
+    {
+      "id": "R3",
+      "nom": "Machine C"
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R1",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R2",
+      "duree": 35
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R3",
+      "duree": 28
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R1",
+      "duree": 40
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 38
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R3",
+      "duree": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R1",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R2",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R3",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R1",
+      "duree": 35
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R2",
+      "duree": 33
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R3",
+      "duree": 37
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R1",
+      "duree": 20
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R2",
+      "duree": 22
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R3",
+      "duree": 20
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R1",
+      "duree": 45
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R2",
+      "duree": 40
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R3",
+      "duree": 43
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "equilibrer_charge",
+      "poids": 0.7,
+      "methode": "ecart_max"
+    },
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.3
+    }
+  ]
+}

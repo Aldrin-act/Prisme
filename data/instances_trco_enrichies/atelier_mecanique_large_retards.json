@@ -1,0 +1,2156 @@
+{
+  "taches": [
+    {
+      "id": "LOT001_PEINTURE_0001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT001_USINAGE_0002",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT001_FINITION_0003",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT001_PREPARATION_0004",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT001_ASSEMBLAGE_0005",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT001_SOUDURE_0006",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT001_CONTROLE_0007",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT001_FORMAGE_0008",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_PREPARATION_0009",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_ASSEMBLAGE_0010",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_USINAGE_0011",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_FINITION_0012",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_SOUDURE_0013",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_PEINTURE_0014",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_CONTROLE_0015",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT002_FORMAGE_0016",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_CONTROLE_0017",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_SOUDURE_0018",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_FORMAGE_0019",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_PREPARATION_0020",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_USINAGE_0021",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_PEINTURE_0022",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_ASSEMBLAGE_0023",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT003_FINITION_0024",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_FINITION_0025",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_SOUDURE_0026",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_CONTROLE_0027",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_PREPARATION_0028",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_ASSEMBLAGE_0029",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_PEINTURE_0030",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_USINAGE_0031",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT004_FORMAGE_0032",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_PEINTURE_0033",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_USINAGE_0034",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_SOUDURE_0035",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_PREPARATION_0036",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_FINITION_0037",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_ASSEMBLAGE_0038",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_FORMAGE_0039",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT005_CONTROLE_0040",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_PREPARATION_0041",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_ASSEMBLAGE_0042",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_CONTROLE_0043",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_USINAGE_0044",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_FINITION_0045",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_FORMAGE_0046",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_SOUDURE_0047",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT006_PEINTURE_0048",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_PREPARATION_0049",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_SOUDURE_0050",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_ASSEMBLAGE_0051",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_FORMAGE_0052",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_USINAGE_0053",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_PEINTURE_0054",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_FINITION_0055",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT007_CONTROLE_0056",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_USINAGE_0057",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_PREPARATION_0058",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_FINITION_0059",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_PEINTURE_0060",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_SOUDURE_0061",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_FORMAGE_0062",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_ASSEMBLAGE_0063",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT008_CONTROLE_0064",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_FINITION_0065",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_FORMAGE_0066",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_ASSEMBLAGE_0067",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_USINAGE_0068",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_CONTROLE_0069",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_PREPARATION_0070",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_PEINTURE_0071",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT009_SOUDURE_0072",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_USINAGE_0073",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_CONTROLE_0074",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_FORMAGE_0075",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_PEINTURE_0076",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_ASSEMBLAGE_0077",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_FINITION_0078",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_SOUDURE_0079",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "LOT010_PREPARATION_0080",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0081",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0082",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0083",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0084",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0085",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0086",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0087",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0088",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0089",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0090",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0091",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0092",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0093",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0094",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0095",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0096",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0097",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0098",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0099",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "COMP_0100",
+      "nom": null,
+      "priorite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "DECOUPEUSE_LASER_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "DECOUPEUSE_LASER_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "DECOUPEUSE_LASER_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "DECOUPEUSE_LASER_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "DECOUPEUSE_LASER_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC_8",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FRAISEUSE_CNC_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FRAISEUSE_CNC_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FRAISEUSE_CNC_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FRAISEUSE_CNC_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FRAISEUSE_CNC_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FRAISEUSE_CNC_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_PLIAGE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_PLIAGE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_PLIAGE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_PLIAGE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_8",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_9",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_10",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_SOUDURE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_SOUDURE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_SOUDURE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_SOUDURE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CABINE_PEINTURE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CABINE_PEINTURE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CABINE_PEINTURE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CABINE_PEINTURE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CABINE_PEINTURE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CABINE_PEINTURE_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "TUNNEL_PEINTURE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "TUNNEL_PEINTURE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "TUNNEL_PEINTURE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_8",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_9",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_10",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_11",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_12",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_7",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "STATION_CONTROLE_8",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_EBAVURAGE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_EBAVURAGE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_EBAVURAGE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_EBAVURAGE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_EBAVURAGE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_EBAVURAGE_6",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CENTRE_USINAGE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CENTRE_USINAGE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CENTRE_USINAGE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CENTRE_USINAGE_4",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CENTRE_USINAGE_5",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_POLISSAGE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_POLISSAGE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_POLISSAGE_3",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_POLISSAGE_4",
+      "nom": null,
+      "competences": []
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_PEINTURE_0001",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "duree": 63
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_USINAGE_0002",
+      "ressource": "FRAISEUSE_CNC_4",
+      "duree": 34
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT001_PEINTURE_0001",
+      "apres": "LOT001_USINAGE_0002"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_FINITION_0003",
+      "ressource": "POSTE_POLISSAGE_2",
+      "duree": 36
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT001_USINAGE_0002",
+      "apres": "LOT001_FINITION_0003"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_PREPARATION_0004",
+      "ressource": "DECOUPEUSE_LASER_2",
+      "duree": 23
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT001_FINITION_0003",
+      "apres": "LOT001_PREPARATION_0004"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_ASSEMBLAGE_0005",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 34
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT001_PREPARATION_0004",
+      "apres": "LOT001_ASSEMBLAGE_0005"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_SOUDURE_0006",
+      "ressource": "ROBOT_SOUDURE_1",
+      "duree": 90
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT001_ASSEMBLAGE_0005",
+      "apres": "LOT001_SOUDURE_0006"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_CONTROLE_0007",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 28
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT001_SOUDURE_0006",
+      "apres": "LOT001_CONTROLE_0007"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT001_FORMAGE_0008",
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 36
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT001_CONTROLE_0007",
+      "apres": "LOT001_FORMAGE_0008"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_PREPARATION_0009",
+      "ressource": "DECOUPEUSE_PLASMA_1",
+      "duree": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_ASSEMBLAGE_0010",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 35
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT002_PREPARATION_0009",
+      "apres": "LOT002_ASSEMBLAGE_0010"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_USINAGE_0011",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 30
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT002_ASSEMBLAGE_0010",
+      "apres": "LOT002_USINAGE_0011"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_FINITION_0012",
+      "ressource": "POSTE_EBAVURAGE_6",
+      "duree": 22
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT002_USINAGE_0011",
+      "apres": "LOT002_FINITION_0012"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_SOUDURE_0013",
+      "ressource": "POSTE_SOUDURE_5",
+      "duree": 102
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT002_FINITION_0012",
+      "apres": "LOT002_SOUDURE_0013"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_PEINTURE_0014",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "duree": 60
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT002_SOUDURE_0013",
+      "apres": "LOT002_PEINTURE_0014"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_CONTROLE_0015",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 19
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT002_PEINTURE_0014",
+      "apres": "LOT002_CONTROLE_0015"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT002_FORMAGE_0016",
+      "ressource": "PRESSE_PLIAGE_1",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT002_CONTROLE_0015",
+      "apres": "LOT002_FORMAGE_0016"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_CONTROLE_0017",
+      "ressource": "STATION_CONTROLE_7",
+      "duree": 13
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_SOUDURE_0018",
+      "ressource": "ROBOT_SOUDURE_2",
+      "duree": 70
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_CONTROLE_0017",
+      "apres": "LOT003_SOUDURE_0018"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_FORMAGE_0019",
+      "ressource": "PRESSE_PLIAGE_3",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_SOUDURE_0018",
+      "apres": "LOT003_FORMAGE_0019"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_PREPARATION_0020",
+      "ressource": "PERCEUSE_CNC_5",
+      "duree": 30
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_FORMAGE_0019",
+      "apres": "LOT003_PREPARATION_0020"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_USINAGE_0021",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_PREPARATION_0020",
+      "apres": "LOT003_USINAGE_0021"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_PEINTURE_0022",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 41
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_USINAGE_0021",
+      "apres": "LOT003_PEINTURE_0022"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_ASSEMBLAGE_0023",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 40
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_PEINTURE_0022",
+      "apres": "LOT003_ASSEMBLAGE_0023"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_FINITION_0024",
+      "ressource": "POSTE_POLISSAGE_2",
+      "duree": 47
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_ASSEMBLAGE_0023",
+      "apres": "LOT003_FINITION_0024"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_FINITION_0025",
+      "ressource": "POSTE_EBAVURAGE_5",
+      "duree": 35
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_SOUDURE_0026",
+      "ressource": "POSTE_SOUDURE_5",
+      "duree": 81
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT004_FINITION_0025",
+      "apres": "LOT004_SOUDURE_0026"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_CONTROLE_0027",
+      "ressource": "STATION_CONTROLE_5",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT004_SOUDURE_0026",
+      "apres": "LOT004_CONTROLE_0027"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_PREPARATION_0028",
+      "ressource": "DECOUPEUSE_LASER_1",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT004_CONTROLE_0027",
+      "apres": "LOT004_PREPARATION_0028"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_ASSEMBLAGE_0029",
+      "ressource": "POSTE_ASSEMBLAGE_11",
+      "duree": 55
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT004_PREPARATION_0028",
+      "apres": "LOT004_ASSEMBLAGE_0029"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_PEINTURE_0030",
+      "ressource": "CABINE_PEINTURE_2",
+      "duree": 34
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT004_ASSEMBLAGE_0029",
+      "apres": "LOT004_PEINTURE_0030"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_USINAGE_0031",
+      "ressource": "CENTRE_USINAGE_3",
+      "duree": 105
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT004_PEINTURE_0030",
+      "apres": "LOT004_USINAGE_0031"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT004_FORMAGE_0032",
+      "ressource": "PRESSE_PLIAGE_1",
+      "duree": 35
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT004_USINAGE_0031",
+      "apres": "LOT004_FORMAGE_0032"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_PEINTURE_0033",
+      "ressource": "TUNNEL_PEINTURE_3",
+      "duree": 54
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_USINAGE_0034",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT005_PEINTURE_0033",
+      "apres": "LOT005_USINAGE_0034"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_SOUDURE_0035",
+      "ressource": "ROBOT_SOUDURE_3",
+      "duree": 75
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT005_USINAGE_0034",
+      "apres": "LOT005_SOUDURE_0035"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_PREPARATION_0036",
+      "ressource": "DECOUPEUSE_PLASMA_2",
+      "duree": 26
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT005_SOUDURE_0035",
+      "apres": "LOT005_PREPARATION_0036"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_FINITION_0037",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 22
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT005_PREPARATION_0036",
+      "apres": "LOT005_FINITION_0037"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_ASSEMBLAGE_0038",
+      "ressource": "POSTE_ASSEMBLAGE_6",
+      "duree": 51
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT005_FINITION_0037",
+      "apres": "LOT005_ASSEMBLAGE_0038"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_FORMAGE_0039",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 27
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT005_ASSEMBLAGE_0038",
+      "apres": "LOT005_FORMAGE_0039"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT005_CONTROLE_0040",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 10
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT005_FORMAGE_0039",
+      "apres": "LOT005_CONTROLE_0040"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_PREPARATION_0041",
+      "ressource": "DECOUPEUSE_PLASMA_2",
+      "duree": 68
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_ASSEMBLAGE_0042",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT006_PREPARATION_0041",
+      "apres": "LOT006_ASSEMBLAGE_0042"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_CONTROLE_0043",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 14
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT006_ASSEMBLAGE_0042",
+      "apres": "LOT006_CONTROLE_0043"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_USINAGE_0044",
+      "ressource": "FRAISEUSE_CNC_6",
+      "duree": 87
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT006_CONTROLE_0043",
+      "apres": "LOT006_USINAGE_0044"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_FINITION_0045",
+      "ressource": "POSTE_POLISSAGE_3",
+      "duree": 28
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT006_USINAGE_0044",
+      "apres": "LOT006_FINITION_0045"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_FORMAGE_0046",
+      "ressource": "PRESSE_PLIAGE_2",
+      "duree": 21
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT006_FINITION_0045",
+      "apres": "LOT006_FORMAGE_0046"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_SOUDURE_0047",
+      "ressource": "ROBOT_SOUDURE_3",
+      "duree": 41
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT006_FORMAGE_0046",
+      "apres": "LOT006_SOUDURE_0047"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT006_PEINTURE_0048",
+      "ressource": "CABINE_PEINTURE_6",
+      "duree": 72
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT006_SOUDURE_0047",
+      "apres": "LOT006_PEINTURE_0048"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_PREPARATION_0049",
+      "ressource": "DECOUPEUSE_LASER_1",
+      "duree": 46
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_SOUDURE_0050",
+      "ressource": "POSTE_SOUDURE_7",
+      "duree": 116
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_PREPARATION_0049",
+      "apres": "LOT007_SOUDURE_0050"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_ASSEMBLAGE_0051",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 60
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_SOUDURE_0050",
+      "apres": "LOT007_ASSEMBLAGE_0051"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_FORMAGE_0052",
+      "ressource": "PRESSE_EMBOUTISSAGE_2",
+      "duree": 31
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_ASSEMBLAGE_0051",
+      "apres": "LOT007_FORMAGE_0052"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_USINAGE_0053",
+      "ressource": "FRAISEUSE_CNC_5",
+      "duree": 80
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_FORMAGE_0052",
+      "apres": "LOT007_USINAGE_0053"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_PEINTURE_0054",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "duree": 37
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_USINAGE_0053",
+      "apres": "LOT007_PEINTURE_0054"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_FINITION_0055",
+      "ressource": "POSTE_POLISSAGE_4",
+      "duree": 43
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_PEINTURE_0054",
+      "apres": "LOT007_FINITION_0055"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_CONTROLE_0056",
+      "ressource": "STATION_CONTROLE_8",
+      "duree": 22
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_FINITION_0055",
+      "apres": "LOT007_CONTROLE_0056"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_USINAGE_0057",
+      "ressource": "CENTRE_USINAGE_2",
+      "duree": 63
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_PREPARATION_0058",
+      "ressource": "PERCEUSE_CNC_4",
+      "duree": 24
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_USINAGE_0057",
+      "apres": "LOT008_PREPARATION_0058"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_FINITION_0059",
+      "ressource": "POSTE_POLISSAGE_1",
+      "duree": 29
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_PREPARATION_0058",
+      "apres": "LOT008_FINITION_0059"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_PEINTURE_0060",
+      "ressource": "TUNNEL_PEINTURE_3",
+      "duree": 64
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_FINITION_0059",
+      "apres": "LOT008_PEINTURE_0060"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_SOUDURE_0061",
+      "ressource": "POSTE_SOUDURE_1",
+      "duree": 51
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_PEINTURE_0060",
+      "apres": "LOT008_SOUDURE_0061"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_FORMAGE_0062",
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 46
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_SOUDURE_0061",
+      "apres": "LOT008_FORMAGE_0062"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_ASSEMBLAGE_0063",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 41
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_FORMAGE_0062",
+      "apres": "LOT008_ASSEMBLAGE_0063"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_CONTROLE_0064",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 14
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_ASSEMBLAGE_0063",
+      "apres": "LOT008_CONTROLE_0064"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_FINITION_0065",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 17
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_FORMAGE_0066",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 54
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_FINITION_0065",
+      "apres": "LOT009_FORMAGE_0066"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_ASSEMBLAGE_0067",
+      "ressource": "POSTE_ASSEMBLAGE_12",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_FORMAGE_0066",
+      "apres": "LOT009_ASSEMBLAGE_0067"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_USINAGE_0068",
+      "ressource": "POSTE_EBAVURAGE_6",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_ASSEMBLAGE_0067",
+      "apres": "LOT009_USINAGE_0068"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_CONTROLE_0069",
+      "ressource": "STATION_CONTROLE_8",
+      "duree": 27
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_USINAGE_0068",
+      "apres": "LOT009_CONTROLE_0069"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_PREPARATION_0070",
+      "ressource": "PERCEUSE_CNC_6",
+      "duree": 36
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_CONTROLE_0069",
+      "apres": "LOT009_PREPARATION_0070"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_PEINTURE_0071",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 43
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_PREPARATION_0070",
+      "apres": "LOT009_PEINTURE_0071"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_SOUDURE_0072",
+      "ressource": "POSTE_SOUDURE_3",
+      "duree": 89
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_PEINTURE_0071",
+      "apres": "LOT009_SOUDURE_0072"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_USINAGE_0073",
+      "ressource": "POSTE_EBAVURAGE_5",
+      "duree": 20
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_CONTROLE_0074",
+      "ressource": "STATION_CONTROLE_8",
+      "duree": 20
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT010_USINAGE_0073",
+      "apres": "LOT010_CONTROLE_0074"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_FORMAGE_0075",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "duree": 50
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT010_CONTROLE_0074",
+      "apres": "LOT010_FORMAGE_0075"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_PEINTURE_0076",
+      "ressource": "CABINE_PEINTURE_2",
+      "duree": 68
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT010_FORMAGE_0075",
+      "apres": "LOT010_PEINTURE_0076"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_ASSEMBLAGE_0077",
+      "ressource": "POSTE_ASSEMBLAGE_11",
+      "duree": 21
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT010_PEINTURE_0076",
+      "apres": "LOT010_ASSEMBLAGE_0077"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_FINITION_0078",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 32
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT010_ASSEMBLAGE_0077",
+      "apres": "LOT010_FINITION_0078"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_SOUDURE_0079",
+      "ressource": "ROBOT_SOUDURE_1",
+      "duree": 61
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT010_FINITION_0078",
+      "apres": "LOT010_SOUDURE_0079"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_PREPARATION_0080",
+      "ressource": "DECOUPEUSE_LASER_4",
+      "duree": 51
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT010_SOUDURE_0079",
+      "apres": "LOT010_PREPARATION_0080"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0081",
+      "ressource": "POSTE_ASSEMBLAGE_10",
+      "duree": 39
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0082",
+      "ressource": "FRAISEUSE_CNC_1",
+      "duree": 70
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0083",
+      "ressource": "CABINE_PEINTURE_6",
+      "duree": 60
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0084",
+      "ressource": "ROBOT_SOUDURE_2",
+      "duree": 38
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0085",
+      "ressource": "POSTE_SOUDURE_8",
+      "duree": 52
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0086",
+      "ressource": "POSTE_EBAVURAGE_5",
+      "duree": 31
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0087",
+      "ressource": "POSTE_ASSEMBLAGE_11",
+      "duree": 39
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0088",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 34
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0089",
+      "ressource": "POSTE_SOUDURE_8",
+      "duree": 85
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0090",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 23
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0091",
+      "ressource": "STATION_CONTROLE_8",
+      "duree": 12
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0092",
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 50
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0093",
+      "ressource": "CABINE_PEINTURE_1",
+      "duree": 68
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0094",
+      "ressource": "PERCEUSE_CNC_3",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0095",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 61
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0096",
+      "ressource": "POSTE_POLISSAGE_1",
+      "duree": 35
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0097",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 16
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0098",
+      "ressource": "POSTE_POLISSAGE_1",
+      "duree": 24
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0099",
+      "ressource": "FRAISEUSE_CNC_3",
+      "duree": 65
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COMP_0100",
+      "ressource": "PRESSE_PLIAGE_3",
+      "duree": 39
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT006_USINAGE_0044",
+      "echeance": 37
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0083",
+      "echeance": 37
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT002_ASSEMBLAGE_0010",
+      "echeance": 38
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_FORMAGE_0052",
+      "echeance": 39
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_USINAGE_0053",
+      "echeance": 39
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0082",
+      "echeance": 40
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT009_SOUDURE_0072",
+      "echeance": 41
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT010_FORMAGE_0075",
+      "echeance": 42
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_SOUDURE_0050",
+      "echeance": 42
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT009_PREPARATION_0070",
+      "echeance": 43
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0096",
+      "echeance": 44
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0094",
+      "echeance": 45
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_PREPARATION_0004",
+      "echeance": 45
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT004_SOUDURE_0026",
+      "echeance": 46
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0091",
+      "echeance": 47
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_PREPARATION_0049",
+      "echeance": 48
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT004_CONTROLE_0027",
+      "echeance": 48
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0084",
+      "echeance": 49
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT009_CONTROLE_0069",
+      "echeance": 50
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0095",
+      "echeance": 51
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_ASSEMBLAGE_0051",
+      "echeance": 51
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_CONTROLE_0056",
+      "echeance": 52
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT005_FORMAGE_0039",
+      "echeance": 53
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT004_ASSEMBLAGE_0029",
+      "echeance": 54
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0085",
+      "echeance": 54
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT004_PEINTURE_0030",
+      "echeance": 55
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT004_PREPARATION_0028",
+      "echeance": 56
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT004_USINAGE_0031",
+      "echeance": 56
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT010_PREPARATION_0080",
+      "echeance": 57
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT003_FINITION_0024",
+      "echeance": 58
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT010_FINITION_0078",
+      "echeance": 59
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT008_USINAGE_0057",
+      "echeance": 59
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT006_PEINTURE_0048",
+      "echeance": 60
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0100",
+      "echeance": 61
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT006_ASSEMBLAGE_0042",
+      "echeance": 62
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT006_CONTROLE_0043",
+      "echeance": 62
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_PEINTURE_0001",
+      "echeance": 63
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0092",
+      "echeance": 64
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0099",
+      "echeance": 65
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT002_FORMAGE_0016",
+      "echeance": 65
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_CONTROLE_0007",
+      "echeance": 66
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0097",
+      "echeance": 67
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT002_SOUDURE_0013",
+      "echeance": 68
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT009_ASSEMBLAGE_0067",
+      "echeance": 68
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT010_SOUDURE_0079",
+      "echeance": 69
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT003_PREPARATION_0020",
+      "echeance": 70
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT008_FINITION_0059",
+      "echeance": 71
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_FINITION_0003",
+      "echeance": 71
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_ASSEMBLAGE_0005",
+      "echeance": 72
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT002_PEINTURE_0014",
+      "echeance": 73
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_retards",
+      "poids": 0.7,
+      "fonction_penalite": "quadratique",
+      "seuil_grace": 10
+    },
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.3,
+      "makespan_cible": 70
+    }
+  ]
+}

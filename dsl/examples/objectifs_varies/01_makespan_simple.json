@@ -1,0 +1,87 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Préparation"
+    },
+    {
+      "id": "T2",
+      "nom": "Fabrication"
+    },
+    {
+      "id": "T3",
+      "nom": "Assemblage"
+    },
+    {
+      "id": "T4",
+      "nom": "Contrôle qualité"
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Poste de préparation"
+    },
+    {
+      "id": "R2",
+      "nom": "Machine de fabrication"
+    },
+    {
+      "id": "R3",
+      "nom": "Poste d'assemblage"
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R1",
+      "duree": 20
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 45
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R2",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R3",
+      "duree": 25
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R3",
+      "duree": 15
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0
+    }
+  ]
+}

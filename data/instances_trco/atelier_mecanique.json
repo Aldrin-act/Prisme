@@ -1,0 +1,176 @@
+{
+  "taches": [
+    {
+      "id": "DECOUP_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PERCAGE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PLIAGE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "SOUDURE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "SOUDURE_002",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "PEINTURE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "ASSEMBLAGE_FINAL",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "CONTROLE_QUALITE",
+      "nom": null,
+      "priorite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "DECOUPEUSE_LASER",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PERCEUSE_CNC",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "PRESSE_PLIAGE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "CABINE_PEINTURE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_CONTROLE",
+      "nom": null,
+      "competences": []
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUP_001",
+      "ressource": "DECOUPEUSE_LASER",
+      "duree": 45
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PERCAGE_001",
+      "ressource": "PERCEUSE_CNC",
+      "duree": 30
+    },
+    {
+      "type": "precedence",
+      "avant": "DECOUP_001",
+      "apres": "PERCAGE_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLIAGE_001",
+      "ressource": "PRESSE_PLIAGE",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "PERCAGE_001",
+      "apres": "PLIAGE_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_001",
+      "ressource": "POSTE_SOUDURE_1",
+      "duree": 60
+    },
+    {
+      "type": "precedence",
+      "avant": "PLIAGE_001",
+      "apres": "SOUDURE_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_002",
+      "ressource": "POSTE_SOUDURE_2",
+      "duree": 55
+    },
+    {
+      "type": "precedence",
+      "avant": "PLIAGE_001",
+      "apres": "SOUDURE_002"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_001",
+      "ressource": "CABINE_PEINTURE",
+      "duree": 40
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_001",
+      "apres": "PEINTURE_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_FINAL",
+      "ressource": "POSTE_ASSEMBLAGE",
+      "duree": 35
+    },
+    {
+      "type": "precedence",
+      "avant": "PEINTURE_001",
+      "apres": "ASSEMBLAGE_FINAL"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_QUALITE",
+      "ressource": "POSTE_CONTROLE",
+      "duree": 20
+    },
+    {
+      "type": "precedence",
+      "avant": "ASSEMBLAGE_FINAL",
+      "apres": "CONTROLE_QUALITE"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

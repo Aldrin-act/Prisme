@@ -1,0 +1,180 @@
+{
+  "taches": [
+    {
+      "id": "DIAG_PANNE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "CMD_PIECES_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "DEMONTAGE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "REPARATION_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "REMONTAGE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "TEST_MARCHE_001",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "NETTOYAGE_FINAL",
+      "nom": null,
+      "priorite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "EQUIPE_DIAG",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "SERVICE_ACHATS",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "EQUIPE_MECA",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ATELIER_REPARATION",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "EQUIPE_TEST",
+      "nom": null,
+      "competences": []
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DIAG_PANNE_001",
+      "ressource": "EQUIPE_DIAG",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CMD_PIECES_001",
+      "ressource": "SERVICE_ACHATS",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "DIAG_PANNE_001",
+      "apres": "CMD_PIECES_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEMONTAGE_001",
+      "ressource": "EQUIPE_MECA",
+      "duree": 90
+    },
+    {
+      "type": "precedence",
+      "avant": "CMD_PIECES_001",
+      "apres": "DEMONTAGE_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REPARATION_001",
+      "ressource": "ATELIER_REPARATION",
+      "duree": 120
+    },
+    {
+      "type": "precedence",
+      "avant": "DEMONTAGE_001",
+      "apres": "REPARATION_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REMONTAGE_001",
+      "ressource": "EQUIPE_MECA",
+      "duree": 80
+    },
+    {
+      "type": "precedence",
+      "avant": "REPARATION_001",
+      "apres": "REMONTAGE_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_MARCHE_001",
+      "ressource": "EQUIPE_TEST",
+      "duree": 45
+    },
+    {
+      "type": "precedence",
+      "avant": "REMONTAGE_001",
+      "apres": "TEST_MARCHE_001"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_FINAL",
+      "ressource": "EQUIPE_MECA",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "TEST_MARCHE_001",
+      "apres": "NETTOYAGE_FINAL"
+    },
+    {
+      "type": "echeance",
+      "tache": "REMONTAGE_001",
+      "echeance": 60
+    },
+    {
+      "type": "echeance",
+      "tache": "REPARATION_001",
+      "echeance": 80
+    },
+    {
+      "type": "echeance",
+      "tache": "CMD_PIECES_001",
+      "echeance": 100
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.25,
+      "makespan_cible": 70
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 0.25,
+      "methode": "gini"
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 0.2,
+      "fonction_penalite": "lineaire"
+    },
+    {
+      "type": "maximiser_utilisation",
+      "poids": 0.15
+    },
+    {
+      "type": "minimiser_changements",
+      "poids": 0.15
+    }
+  ]
+}

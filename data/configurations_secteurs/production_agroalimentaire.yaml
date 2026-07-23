@@ -1,0 +1,100 @@
+# Configuration du secteur : Production Agro-alimentaire
+nom: production_agroalimentaire
+description: Transformation alimentaire (lavage, cuisson, conditionnement)
+
+types_postes:
+  QUAI_RECEPTION:
+    duree_min: 20
+    duree_max: 45
+    capacite: 4
+
+  TUNNEL_LAVAGE:
+    duree_min: 30
+    duree_max: 60
+    capacite: 3
+
+  LIGNE_EPLUCHAGE:
+    duree_min: 40
+    duree_max: 80
+    capacite: 5
+
+  ROBOT_DECOUPE:
+    duree_min: 25
+    duree_max: 55
+    capacite: 6
+
+  AUTOCLAVE:
+    duree_min: 90
+    duree_max: 180
+    capacite: 8
+
+  TUNNEL_REFROIDISSEMENT:
+    duree_min: 60
+    duree_max: 120
+    capacite: 4
+
+  LIGNE_CONDITIONNEMENT:
+    duree_min: 35
+    duree_max: 70
+    capacite: 10
+
+  ETIQUETEUSE:
+    duree_min: 15
+    duree_max: 35
+    capacite: 6
+
+  ROBOT_PALETTISEUR:
+    duree_min: 25
+    duree_max: 50
+    capacite: 5
+
+  POSTE_CONTROLE_QUALITE:
+    duree_min: 10
+    duree_max: 25
+    capacite: 8
+
+phases_production:
+  - nom: RECEPTION
+    types_poste:
+      - QUAI_RECEPTION
+
+  - nom: LAVAGE
+    types_poste:
+      - TUNNEL_LAVAGE
+
+  - nom: EPLUCHAGE
+    types_poste:
+      - LIGNE_EPLUCHAGE
+
+  - nom: DECOUPE
+    types_poste:
+      - ROBOT_DECOUPE
+
+  - nom: CUISSON
+    types_poste:
+      - AUTOCLAVE
+
+  - nom: REFROIDISSEMENT
+    types_poste:
+      - TUNNEL_REFROIDISSEMENT
+
+  - nom: CONDITIONNEMENT
+    types_poste:
+      - LIGNE_CONDITIONNEMENT
+
+  - nom: ETIQUETAGE
+    types_poste:
+      - ETIQUETEUSE
+
+  - nom: CONTROLE
+    types_poste:
+      - POSTE_CONTROLE_QUALITE
+
+  - nom: PALETTISATION
+    types_poste:
+      - ROBOT_PALETTISEUR
+
+generation:
+  operations_par_lot_min: 7
+  operations_par_lot_max: 10
+  prefix_lot: "BATCH"

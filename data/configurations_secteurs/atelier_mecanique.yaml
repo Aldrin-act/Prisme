@@ -1,0 +1,129 @@
+# Configuration du secteur : Atelier de Fabrication Mécanique
+nom: atelier_mecanique
+description: Atelier de fabrication métallique (découpe, usinage, soudure, assemblage)
+
+# Types de postes disponibles et leurs caractéristiques
+types_postes:
+  DECOUPEUSE_LASER:
+    duree_min: 20
+    duree_max: 60
+    capacite: 5  # Nombre d'instances de ce type de poste
+
+  DECOUPEUSE_PLASMA:
+    duree_min: 25
+    duree_max: 70
+    capacite: 3
+
+  PERCEUSE_CNC:
+    duree_min: 15
+    duree_max: 45
+    capacite: 8
+
+  FRAISEUSE_CNC:
+    duree_min: 30
+    duree_max: 90
+    capacite: 6
+
+  PRESSE_PLIAGE:
+    duree_min: 20
+    duree_max: 50
+    capacite: 4
+
+  PRESSE_EMBOUTISSAGE:
+    duree_min: 25
+    duree_max: 55
+    capacite: 3
+
+  POSTE_SOUDURE:
+    duree_min: 40
+    duree_max: 120
+    capacite: 10
+
+  ROBOT_SOUDURE:
+    duree_min: 35
+    duree_max: 100
+    capacite: 4
+
+  CABINE_PEINTURE:
+    duree_min: 30
+    duree_max: 80
+    capacite: 6
+
+  TUNNEL_PEINTURE:
+    duree_min: 25
+    duree_max: 70
+    capacite: 3
+
+  POSTE_ASSEMBLAGE:
+    duree_min: 20
+    duree_max: 60
+    capacite: 12
+
+  STATION_CONTROLE:
+    duree_min: 10
+    duree_max: 30
+    capacite: 8
+
+  POSTE_EBAVURAGE:
+    duree_min: 15
+    duree_max: 40
+    capacite: 6
+
+  CENTRE_USINAGE:
+    duree_min: 40
+    duree_max: 120
+    capacite: 5
+
+  POSTE_POLISSAGE:
+    duree_min: 20
+    duree_max: 50
+    capacite: 4
+
+# Phases de production (workflow typique)
+# Chaque lot passe par plusieurs de ces phases
+phases_production:
+  - nom: PREPARATION
+    types_poste:
+      - DECOUPEUSE_LASER
+      - DECOUPEUSE_PLASMA
+      - PERCEUSE_CNC
+
+  - nom: USINAGE
+    types_poste:
+      - FRAISEUSE_CNC
+      - CENTRE_USINAGE
+      - POSTE_EBAVURAGE
+
+  - nom: FORMAGE
+    types_poste:
+      - PRESSE_PLIAGE
+      - PRESSE_EMBOUTISSAGE
+
+  - nom: SOUDURE
+    types_poste:
+      - POSTE_SOUDURE
+      - ROBOT_SOUDURE
+
+  - nom: FINITION
+    types_poste:
+      - POSTE_POLISSAGE
+      - POSTE_EBAVURAGE
+
+  - nom: PEINTURE
+    types_poste:
+      - CABINE_PEINTURE
+      - TUNNEL_PEINTURE
+
+  - nom: ASSEMBLAGE
+    types_poste:
+      - POSTE_ASSEMBLAGE
+
+  - nom: CONTROLE
+    types_poste:
+      - STATION_CONTROLE
+
+# Paramètres de génération
+generation:
+  operations_par_lot_min: 8
+  operations_par_lot_max: 12
+  prefix_lot: "LOT"

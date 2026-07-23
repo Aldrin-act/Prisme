@@ -1,0 +1,220 @@
+{
+  "taches": [
+    {
+      "id": "PREP_PCB",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "POSE_CMS_FACE_A",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "SOUDURE_REFUSION_A",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "INSPECTION_AOI_A",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "POSE_CMS_FACE_B",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "SOUDURE_REFUSION_B",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "SOUDURE_MANUELLE",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "TEST_FONCTIONNEL",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "CONFORMAL_COATING",
+      "nom": null,
+      "priorite": null
+    },
+    {
+      "id": "CONTROLE_FINAL",
+      "nom": null,
+      "priorite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "STATION_PREP",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "MACHINE_PICK_PLACE_1",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "MACHINE_PICK_PLACE_2",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "FOUR_REFUSION",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "AOI_AUTOMATIQUE",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "BANC_TEST",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "ROBOT_COATING",
+      "nom": null,
+      "competences": []
+    },
+    {
+      "id": "POSTE_CONTROLE_VISUEL",
+      "nom": null,
+      "competences": []
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_PCB",
+      "ressource": "STATION_PREP",
+      "duree": 15
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_FACE_A",
+      "ressource": "MACHINE_PICK_PLACE_1",
+      "duree": 90
+    },
+    {
+      "type": "precedence",
+      "avant": "PREP_PCB",
+      "apres": "POSE_CMS_FACE_A"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_REFUSION_A",
+      "ressource": "FOUR_REFUSION",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "POSE_CMS_FACE_A",
+      "apres": "SOUDURE_REFUSION_A"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INSPECTION_AOI_A",
+      "ressource": "AOI_AUTOMATIQUE",
+      "duree": 10
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_REFUSION_A",
+      "apres": "INSPECTION_AOI_A"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_FACE_B",
+      "ressource": "MACHINE_PICK_PLACE_2",
+      "duree": 75
+    },
+    {
+      "type": "precedence",
+      "avant": "INSPECTION_AOI_A",
+      "apres": "POSE_CMS_FACE_B"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_REFUSION_B",
+      "ressource": "FOUR_REFUSION",
+      "duree": 25
+    },
+    {
+      "type": "precedence",
+      "avant": "POSE_CMS_FACE_B",
+      "apres": "SOUDURE_REFUSION_B"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_MANUELLE",
+      "ressource": "POSTE_SOUDURE_MANUEL",
+      "duree": 45
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_REFUSION_B",
+      "apres": "SOUDURE_MANUELLE"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_FONCTIONNEL",
+      "ressource": "BANC_TEST",
+      "duree": 30
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_MANUELLE",
+      "apres": "TEST_FONCTIONNEL"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFORMAL_COATING",
+      "ressource": "ROBOT_COATING",
+      "duree": 20
+    },
+    {
+      "type": "precedence",
+      "avant": "TEST_FONCTIONNEL",
+      "apres": "CONFORMAL_COATING"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_FINAL",
+      "ressource": "POSTE_CONTROLE_VISUEL",
+      "duree": 15
+    },
+    {
+      "type": "precedence",
+      "avant": "CONFORMAL_COATING",
+      "apres": "CONTROLE_FINAL"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "equilibrer_charge",
+      "poids": 0.6,
+      "methode": "ecart_max"
+    },
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.4,
+      "makespan_cible": 70
+    }
+  ]
+}

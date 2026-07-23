@@ -1,0 +1,86 @@
+# Configuration du secteur : Hôpital - Bloc Opératoire
+nom: hopital_bloc_operatoire
+description: Planification des interventions chirurgicales et soins hospitaliers
+
+types_postes:
+  BLOC_CHIRURGIE_GENERALE:
+    duree_min: 60
+    duree_max: 240
+    capacite: 8
+
+  BLOC_CHIRURGIE_ORTHOPEDIQUE:
+    duree_min: 90
+    duree_max: 360
+    capacite: 6
+
+  BLOC_CHIRURGIE_CARDIAQUE:
+    duree_min: 180
+    duree_max: 480
+    capacite: 4
+
+  SALLE_REVEIL:
+    duree_min: 30
+    duree_max: 120
+    capacite: 12
+
+  SALLE_PREPARATION:
+    duree_min: 20
+    duree_max: 45
+    capacite: 10
+
+  UNITE_SOINS_INTENSIFS:
+    duree_min: 60
+    duree_max: 1440
+    capacite: 8
+
+  SALLE_RADIOLOGIE:
+    duree_min: 15
+    duree_max: 60
+    capacite: 6
+
+  LABORATOIRE_ANALYSES:
+    duree_min: 10
+    duree_max: 120
+    capacite: 5
+
+  BLOC_URGENCES:
+    duree_min: 30
+    duree_max: 180
+    capacite: 10
+
+phases_production:
+  - nom: ADMISSION
+    types_poste:
+      - SALLE_PREPARATION
+
+  - nom: EXAMENS_PREOP
+    types_poste:
+      - SALLE_RADIOLOGIE
+      - LABORATOIRE_ANALYSES
+
+  - nom: PREPARATION_PATIENT
+    types_poste:
+      - SALLE_PREPARATION
+
+  - nom: INTERVENTION
+    types_poste:
+      - BLOC_CHIRURGIE_GENERALE
+      - BLOC_CHIRURGIE_ORTHOPEDIQUE
+      - BLOC_CHIRURGIE_CARDIAQUE
+
+  - nom: REVEIL
+    types_poste:
+      - SALLE_REVEIL
+
+  - nom: SOINS_POSTOP
+    types_poste:
+      - UNITE_SOINS_INTENSIFS
+
+  - nom: CONTROLE_POSTOP
+    types_poste:
+      - SALLE_RADIOLOGIE
+
+generation:
+  operations_par_lot_min: 4
+  operations_par_lot_max: 7
+  prefix_lot: "PAT"  # Patient
