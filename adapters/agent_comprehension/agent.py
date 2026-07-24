@@ -33,10 +33,21 @@ _PROMPT_SYSTEME = (
 
 
 @dataclass(frozen=True)
+class Justification:
+    contrainte: str
+    raison: str
+
+
+@dataclass(frozen=True)
 class ResultatComprehension:
     reponse_brute: str
     instance_brute: dict[str, Any]
     avertissements: tuple[str, ...]
+    # Une entrée par contrainte precedence/echeance/competence_requise produite
+    # (pas compatibilite_ressource_tache, trop nombreuses) — citant le champ
+    # des données brutes qui l'a justifiée, pour qu'un humain puisse vérifier
+    # la déduction sans relire tout le fichier source (voir prompts/comprehension.md).
+    justifications: tuple[Justification, ...]
 
 
 def comprendre_donnees_erp(appel_llm: AppelLLM, donnees_brutes: str) -> ResultatComprehension:
@@ -49,4 +60,8 @@ def comprendre_donnees_erp(appel_llm: AppelLLM, donnees_brutes: str) -> Resultat
         reponse_brute=reponse,
         instance_brute=donnees["instance"],
         avertissements=tuple(donnees.get("avertissements", [])),
+        justifications=tuple(
+            Justification(contrainte=j["contrainte"], raison=j["raison"])
+            for j in donnees.get("justifications", [])
+        ),
     )

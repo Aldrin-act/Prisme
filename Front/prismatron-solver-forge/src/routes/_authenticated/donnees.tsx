@@ -1,8 +1,18 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
-import { ArrowRightLeft, CheckCircle2, AlertCircle, AlertTriangle, FolderOpen, Plus, Trash2 } from "lucide-react";
+import {
+  ArrowRightLeft,
+  CheckCircle2,
+  AlertCircle,
+  AlertTriangle,
+  FolderOpen,
+  Lightbulb,
+  Loader2,
+  Plus,
+  Trash2,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +40,7 @@ import {
   useProjets,
   useSupprimerProjet,
   PrismeAPIError,
+  type Justification,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
 
@@ -186,7 +197,11 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
   const queryClient = useQueryClient();
   const { data: projet, isLoading } = useProjet(projetId);
   const generer = useGenererInstanceDepuisProjet();
-  const [dernier, setDernier] = useState<{ instance_id: string; avertissements: string[] } | null>(null);
+  const [dernier, setDernier] = useState<{
+    instance_id: string;
+    avertissements: string[];
+    justifications: Justification[];
+  } | null>(null);
 
   const erreur = generer.error as PrismeAPIError | null;
 
@@ -194,7 +209,11 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
     setDernier(null);
     generer.mutate(projetId, {
       onSuccess: (data) => {
-        setDernier({ instance_id: data.instance_id, avertissements: data.avertissements });
+        setDernier({
+          instance_id: data.instance_id,
+          avertissements: data.avertissements,
+          justifications: data.justifications,
+        });
         queryClient.invalidateQueries({ queryKey: prismeKeys.projet(projetId) });
         queryClient.invalidateQueries({ queryKey: prismeKeys.projets() });
         queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
@@ -253,6 +272,26 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
           </div>
         )}
 
+        {dernier && dernier.justifications.length > 0 && (
+          <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+            <div className="flex items-center gap-2 font-medium text-primary">
+              <Lightbulb className="h-4 w-4" /> Comment les contraintes ont été choisies
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Précédences, échéances et compétences requises seulement — la compatibilité
+              ressource-tâche n'est pas détaillée ici, trop nombreuse pour être justifiée une à une.
+            </p>
+            <ul className="mt-2 space-y-2">
+              {dernier.justifications.map((j, i) => (
+                <li key={i} className="rounded-md border border-border/50 p-2">
+                  <div className="font-mono text-xs text-foreground">{j.contrainte}</div>
+                  <div className="mt-0.5 text-xs text-muted-foreground">{j.raison}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div className="flex items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
             Rejouable à volonté sur ces mêmes données brutes — chaque conversion ajoute une instance à
@@ -263,12 +302,7 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
             {generer.isPending ? "Conversion en cours..." : "Générer une instance"}
           </Button>
         </div>
-        {generer.isPending && (
-          <p className="text-right text-xs text-muted-foreground">
-            L'agent de compréhension lit vos données — jusqu'à quelques minutes sur un gros volume, merci de
-            patienter sans recharger la page.
-          </p>
-        )}
+        {generer.isPending && <IndicateurGeneration />}
       </div>
 
       <div className="glass rounded-2xl p-6">
@@ -289,6 +323,51 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
             ))}
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+const MESSAGES_GENERATION = [
+  "Envoi des données à l'agent de compréhension...",
+  "L'agent analyse la structure de vos données...",
+  "Traduction en tâches, ressources et contraintes...",
+  "Vérification par le garde-fou de validation...",
+];
+
+// Ni les étapes ni leur durée ne sont réelles — l'appel LLM côté serveur est
+// atomique (un seul aller-retour, voir `adapters/agent_comprehension/agent.py`),
+// il n'y a rien à observer entre le départ et l'arrivée. Ce chronomètre et ces
+// messages qui tournent servent uniquement à ce que l'attente ne semble pas
+// figée ; ils ne prétendent pas refléter un vrai avancement côté serveur.
+function IndicateurGeneration() {
+  const [secondes, setSecondes] = useState(0);
+  const [messageIndex, setMessageIndex] = useState(0);
+
+  useEffect(() => {
+    const debut = Date.now();
+    const timerSecondes = setInterval(() => setSecondes(Math.floor((Date.now() - debut) / 1000)), 1000);
+    const timerMessage = setInterval(
+      () => setMessageIndex((i) => (i + 1) % MESSAGES_GENERATION.length),
+      4000,
+    );
+    return () => {
+      clearInterval(timerSecondes);
+      clearInterval(timerMessage);
+    };
+  }, []);
+
+  const minutes = Math.floor(secondes / 60);
+  const reste = (secondes % 60).toString().padStart(2, "0");
+
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-border/50 bg-muted/30 p-3">
+      <Loader2 className="h-4 w-4 shrink-0 animate-spin text-primary" />
+      <div className="min-w-0">
+        <div className="text-sm font-medium">
+          Conversion en cours — {minutes}:{reste}
+        </div>
+        <div className="truncate text-xs text-muted-foreground">{MESSAGES_GENERATION[messageIndex]}</div>
       </div>
     </div>
   );

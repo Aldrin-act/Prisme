@@ -191,6 +191,16 @@ export function useSupprimerInstance() {
 }
 
 /**
+ * Mutation pour remplacer les objectifs d'une instance déjà ingérée.
+ */
+export function useModifierObjectifs() {
+  return useMutation({
+    mutationFn: ({ instanceId, objectifs }: { instanceId: string; objectifs: Types.Objectif[] }) =>
+      prismeClient.modifierObjectifs(instanceId, objectifs),
+  });
+}
+
+/**
  * Mutation pour déclencher une exécution
  */
 export function useDeclencherExecution() {
@@ -296,6 +306,16 @@ export function useCreerProjet() {
 export function useGenererInstanceDepuisProjet() {
   return useMutation({
     mutationFn: (projetId: string) => prismeClient.genererInstanceDepuisProjet(projetId),
+  });
+}
+
+/**
+ * Mutation pour lancer le pipeline de génération de solveur depuis une
+ * instance déjà ingérée (génération LLM → cascade → enregistrement).
+ */
+export function useGenererSolveur() {
+  return useMutation({
+    mutationFn: (instanceId: string) => prismeClient.genererSolveur(instanceId),
   });
 }
 

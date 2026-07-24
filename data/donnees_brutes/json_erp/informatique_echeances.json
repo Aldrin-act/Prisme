@@ -1,0 +1,151 @@
+{
+  "operations": [
+    {
+      "code_operation": "ANALYSE_BESOINS",
+      "duree_minutes": 90,
+      "poste_id": "ANALYSTE_METIER",
+      "operations_precedentes": [],
+      "date_limite_minutes": null,
+      "competence_requise": "habilitation_analyste_metier"
+    },
+    {
+      "code_operation": "CONCEPTION",
+      "duree_minutes": 120,
+      "poste_id": "ARCHITECTE",
+      "operations_precedentes": "ANALYSE_BESOINS",
+      "date_limite_minutes": null,
+      "competence_requise": "habilitation_architecte"
+    },
+    {
+      "code_operation": "DEV_BACKEND",
+      "duree_minutes": 240,
+      "poste_id": "EQUIPE_DEV_BACKEND",
+      "operations_precedentes": "CONCEPTION",
+      "date_limite_minutes": null,
+      "competence_requise": "habilitation_equipe_dev_backend"
+    },
+    {
+      "code_operation": "DEV_FRONTEND",
+      "duree_minutes": 200,
+      "poste_id": "EQUIPE_DEV_FRONTEND",
+      "operations_precedentes": "CONCEPTION",
+      "date_limite_minutes": null,
+      "competence_requise": "habilitation_equipe_dev_frontend"
+    },
+    {
+      "code_operation": "REVUE_CODE",
+      "duree_minutes": 45,
+      "poste_id": "RELECTEUR_CODE",
+      "operations_precedentes": [
+        "DEV_BACKEND",
+        "DEV_FRONTEND"
+      ],
+      "date_limite_minutes": 594,
+      "competence_requise": "habilitation_relecteur_code"
+    },
+    {
+      "code_operation": "TESTS_UNITAIRES",
+      "duree_minutes": 60,
+      "poste_id": "QA_AUTOMATISATION",
+      "operations_precedentes": "REVUE_CODE",
+      "date_limite_minutes": 666,
+      "competence_requise": "habilitation_qa_automatisation"
+    },
+    {
+      "code_operation": "TESTS_INTEGRATION",
+      "duree_minutes": 90,
+      "poste_id": "QA_AUTOMATISATION",
+      "operations_precedentes": "TESTS_UNITAIRES",
+      "date_limite_minutes": 774,
+      "competence_requise": "habilitation_qa_automatisation"
+    },
+    {
+      "code_operation": "DEPLOIEMENT_STAGING",
+      "duree_minutes": 30,
+      "poste_id": "INGENIEUR_DEVOPS",
+      "operations_precedentes": "TESTS_INTEGRATION",
+      "date_limite_minutes": 810,
+      "competence_requise": "habilitation_ingenieur_devops"
+    },
+    {
+      "code_operation": "TESTS_RECETTE",
+      "duree_minutes": 120,
+      "poste_id": "EQUIPE_RECETTE",
+      "operations_precedentes": "DEPLOIEMENT_STAGING",
+      "date_limite_minutes": 954,
+      "competence_requise": "habilitation_equipe_recette"
+    },
+    {
+      "code_operation": "DEPLOIEMENT_PRODUCTION",
+      "duree_minutes": 30,
+      "poste_id": "INGENIEUR_DEVOPS",
+      "operations_precedentes": "TESTS_RECETTE",
+      "date_limite_minutes": 990,
+      "competence_requise": "habilitation_ingenieur_devops"
+    },
+    {
+      "code_operation": "DOCUMENTATION",
+      "duree_minutes": 90,
+      "poste_id": "REDACTEUR_TECHNIQUE",
+      "operations_precedentes": "CONCEPTION",
+      "date_limite_minutes": 360,
+      "competence_requise": "habilitation_redacteur_technique"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "ANALYSTE_METIER",
+      "competences": [
+        "habilitation_analyste_metier"
+      ]
+    },
+    {
+      "code_poste": "ARCHITECTE",
+      "competences": [
+        "habilitation_architecte"
+      ]
+    },
+    {
+      "code_poste": "EQUIPE_DEV_BACKEND",
+      "competences": [
+        "habilitation_equipe_dev_backend"
+      ]
+    },
+    {
+      "code_poste": "EQUIPE_DEV_FRONTEND",
+      "competences": [
+        "habilitation_equipe_dev_frontend"
+      ]
+    },
+    {
+      "code_poste": "EQUIPE_RECETTE",
+      "competences": [
+        "habilitation_equipe_recette"
+      ]
+    },
+    {
+      "code_poste": "INGENIEUR_DEVOPS",
+      "competences": [
+        "habilitation_ingenieur_devops"
+      ]
+    },
+    {
+      "code_poste": "QA_AUTOMATISATION",
+      "competences": [
+        "habilitation_qa_automatisation"
+      ]
+    },
+    {
+      "code_poste": "REDACTEUR_TECHNIQUE",
+      "competences": [
+        "habilitation_redacteur_technique"
+      ]
+    },
+    {
+      "code_poste": "RELECTEUR_CODE",
+      "competences": [
+        "habilitation_relecteur_code"
+      ]
+    }
+  ]
+}

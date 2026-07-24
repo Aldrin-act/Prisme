@@ -1,7 +1,7 @@
 """Une tentative de génération unique, sans boucle (Étape 4) — jugée par la
-cascade complète de l'Étape 5. Le futur `loop.py` (Étape 6) enveloppera ce
-même bloc de base dans une boucle bornée, hors ligne, diagnostique ; il n'y
-a volontairement pas de réparation ici.
+cascade complète de l'Étape 5. Distinct de `generation.pipeline_avec_boucle`
+(Étape 6, pipeline multi-agents avec boucle de réparation Reviewer/Debugger) :
+ce module reste le mode simple, tir unique, sans agents ni réparation.
 """
 
 from __future__ import annotations

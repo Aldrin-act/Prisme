@@ -37,7 +37,7 @@ from generation.agents import (
     orchestrateur,
     testeur,
 )
-from generation.agents.client_llm import AppelLLM
+from generation.agents.client_llm import AppelLLM, construire_appel_llm_pour_agent
 from generation.agents.generateur import generer_code_depuis_plan
 from generation.agents.optimiseur import ResultatOptimisation
 from generation.agents.orchestrateur import EtapePlan
@@ -126,23 +126,30 @@ class ResultatPipelineAvecBoucle:
         )
 
 
-def tenter_generation_avec_boucle(appel_llm: AppelLLM) -> ResultatPipelineAvecBoucle:
+def tenter_generation_avec_boucle(appel_llm: AppelLLM | None = None) -> ResultatPipelineAvecBoucle:
     """Pipeline multi-agents AVEC boucle de réparation (Étape 6).
 
     Remplace l'appel unique au Debugger par une boucle bornée (max 3 tentatives)
     qui permet de corriger itérativement jusqu'à succès ou échec final.
+
+    `appel_llm` : obsolète, ignoré — chaque agent construit son propre client
+    via `construire_appel_llm_pour_agent(nom)` (§5.6, `config_fournisseurs.py`),
+    même principe que `pipeline_multi_agents.tenter_generation_multi_agents`.
+    Un unique client partagé pour tous les agents (comme avant ce correctif)
+    envoyait silencieusement chaque étape au fournisseur d'un seul agent,
+    ignorant la répartition par fournisseur optimisée par tâche.
     """
     # 1-4. Orchestrateur → Analyste → Architecte → Développeur
-    plan = orchestrateur.planifier(appel_llm)
-    analyse = analyste.analyser_mission(appel_llm)
-    conception = architecte.concevoir_modele(appel_llm, analyse)
-    brut = generer_code_depuis_plan(appel_llm, conception.en_texte())
+    plan = orchestrateur.planifier(construire_appel_llm_pour_agent("orchestrateur"))
+    analyse = analyste.analyser_mission(construire_appel_llm_pour_agent("analyste"))
+    conception = architecte.concevoir_modele(construire_appel_llm_pour_agent("architecte"), analyse)
+    brut = generer_code_depuis_plan(construire_appel_llm_pour_agent("generateur"), conception.en_texte())
 
     # 5. Testeur
-    tests = testeur.generer_tests(appel_llm, brut.code_source)
+    tests = testeur.generer_tests(construire_appel_llm_pour_agent("testeur"), brut.code_source)
 
     # 6. BOUCLE DE RÉPARATION (Étape 6) — max 3 tentatives
-    boucle = boucle_reparation_bornee(appel_llm, brut.code_source)
+    boucle = boucle_reparation_bornee(brut.code_source)
 
     if not boucle.reussi:
         # Échec après 3 tentatives → Retour avec échec
@@ -166,7 +173,7 @@ def tenter_generation_avec_boucle(appel_llm: AppelLLM) -> ResultatPipelineAvecBo
     code_candidat = boucle.code_final
 
     # 7. Optimiseur (si succès)
-    optimisation = optimiseur.optimiser_code(appel_llm, code_candidat)
+    optimisation = optimiseur.optimiser_code(construire_appel_llm_pour_agent("optimiseur"), code_candidat)
     code_final = code_candidat
     code_optimise_adopte = False
     resultat_final = _valider_completement(code_candidat)
@@ -179,7 +186,7 @@ def tenter_generation_avec_boucle(appel_llm: AppelLLM) -> ResultatPipelineAvecBo
             resultat_final = resultat_opt
 
     # 8. Documentation
-    doc = documentation.documenter_code(appel_llm, code_final)
+    doc = documentation.documenter_code(construire_appel_llm_pour_agent("documentation"), code_final)
 
     return ResultatPipelineAvecBoucle(
         plan_orchestrateur=plan.plan,

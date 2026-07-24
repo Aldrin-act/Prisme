@@ -117,9 +117,19 @@ export const prismeClient = {
     apiFetch<void>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}`, { method: 'DELETE' }),
 
   // Contenu T-R-C-O complet d'une instance déjà ingérée (tâches, ressources,
-  // contraintes, objectifs) — pour l'afficher, jamais pour la modifier.
+  // contraintes, objectifs).
   obtenirInstance: (instanceId: string) =>
     apiFetch<Types.InstanceDetail>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}`),
+
+  // Remplace les objectifs d'une instance déjà ingérée — seul champ pour
+  // lequel une modification en place a du sens (taches/ressources/
+  // contraintes définissent le problème, l'objectif ne fait qu'orienter le
+  // solveur dessus).
+  modifierObjectifs: (instanceId: string, objectifs: Types.Objectif[]) =>
+    apiFetch<Types.InstanceDetail>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}/objectifs`, {
+      method: 'PATCH',
+      body: JSON.stringify({ objectifs }),
+    }),
 
   // EXÉCUTION
   declencherExecution: (instanceId: string, clientId: string) =>
@@ -232,6 +242,17 @@ export const prismeClient = {
   genererInstanceDepuisProjet: (projetId: string) =>
     apiFetch<Types.ReponseComprehension>(
       `${PRISME_CONFIG.routes.projets}/${projetId}/generer-instance`,
+      { method: 'POST' },
+      null
+    ),
+
+  // GÉNÉRATION DE SOLVEUR — génération LLM + exécution sandboxée + cascade
+  // de validation complète + enregistrement si vert (POST /generation/{instance_id}).
+  // Pas de timeout (null) : peut prendre plusieurs dizaines de secondes,
+  // même logique que genererInstanceDepuisProjet ci-dessus.
+  genererSolveur: (instanceId: string) =>
+    apiFetch<Types.ReponseGenerationSolveur>(
+      `${PRISME_CONFIG.routes.generation}/${instanceId}`,
       { method: 'POST' },
       null
     ),

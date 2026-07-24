@@ -38,7 +38,7 @@ import psycopg
 from psycopg import sql
 
 from api.etat import Client, Decision, DecisionHumaine, Projet, structure_contraintes
-from dsl.schema import InstanceTRCO, OperationPlanifiee, Planning
+from dsl.schema import InstanceTRCO, Objectif, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from solver_store.registry import SCHEMA_PAR_DEFAUT, dsn_par_defaut
 from validation_engine.feasibility_checker import ResultatFaisabilite, Violation
@@ -300,6 +300,37 @@ class EtatPostgres:
             raise KeyError(instance_id)
         client_id, payload = ligne
         return client_id, InstanceTRCO.model_validate(payload)
+
+    def modifier_objectifs(self, instance_id: str, objectifs: list[Objectif]) -> InstanceTRCO:
+        """Remplace les objectifs d'une instance déjà ingérée — voir
+        `EtatAPI.modifier_objectifs` pour la justification. Relit le payload
+        existant, reconstruit l'instance entière (même garde-fou, §6.7) et
+        réécrit le blob JSONB — pas de colonne dédiée aux objectifs, même
+        logique que `payload` pour le reste (voir docstring de ce module)."""
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT payload FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+            if ligne is None:
+                raise KeyError(instance_id)
+
+            instance_existante = InstanceTRCO.model_validate(ligne[0])
+            nouvelle_instance = InstanceTRCO(
+                taches=instance_existante.taches,
+                ressources=instance_existante.ressources,
+                contraintes=instance_existante.contraintes,
+                objectifs=objectifs,
+            )
+
+            connexion.execute(
+                sql.SQL("UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s WHERE id = %s").format(
+                    self._table("instances_trco")
+                ),
+                (nouvelle_instance.model_dump_json(), structure_contraintes(nouvelle_instance), instance_id),
+            )
+            connexion.commit()
+        return nouvelle_instance
 
     def supprimer_instance(self, instance_id: str) -> None:
         """Supprime l'instance et tout son historique d'exécution (plannings,

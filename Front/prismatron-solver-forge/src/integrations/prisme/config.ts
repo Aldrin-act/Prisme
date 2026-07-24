@@ -34,5 +34,6 @@ export const PRISME_CONFIG = {
     adapters: '/adapters',
     projets: '/projets',
     clients: '/clients',
+    generation: '/generation',
   },
 } as const;

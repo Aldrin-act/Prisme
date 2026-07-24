@@ -22,7 +22,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from generation.agents import debugger, reviewer
-from generation.agents.client_llm import AppelLLM
+from generation.agents.client_llm import construire_appel_llm_pour_agent
 from generation.agents.reviewer import ResultatRevue
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
@@ -88,7 +88,7 @@ def _valider_completement(code: str) -> tuple[ResultatValidationStatique, str | 
     return validation, None, verdict
 
 
-def boucle_reparation_bornee(appel_llm: AppelLLM, code_initial: str) -> ResultatBoucleReparation:
+def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
     """Exécute la boucle de réparation bornée (max 3 tentatives).
 
     Workflow :
@@ -99,8 +99,11 @@ def boucle_reparation_bornee(appel_llm: AppelLLM, code_initial: str) -> Resultat
     3. Si rejeté → Debugger avec commentaires Reviewer → retry
     4. Répéter jusqu'à succès ou MAX_TENTATIVES
 
+    Reviewer et Debugger construisent chacun leur propre client LLM via
+    `construire_appel_llm_pour_agent` (§5.6) — le fournisseur optimal par
+    agent, pas un client partagé imposé par l'appelant.
+
     Args:
-        appel_llm: Client LLM pour appeler Reviewer et Debugger
         code_initial: Code à réparer (du Développeur)
 
     Returns:
@@ -111,7 +114,7 @@ def boucle_reparation_bornee(appel_llm: AppelLLM, code_initial: str) -> Resultat
 
     for numero_tentative in range(1, MAX_TENTATIVES_REPARATION + 1):
         # 1. Reviewer relit le code actuel
-        revue = reviewer.relire_code(appel_llm, code_candidat)
+        revue = reviewer.relire_code(construire_appel_llm_pour_agent("reviewer"), code_candidat)
 
         if revue.approuve:
             # 2a. Code approuvé → Validation complète
@@ -146,21 +149,29 @@ def boucle_reparation_bornee(appel_llm: AppelLLM, code_initial: str) -> Resultat
 
             # 2b. Validation échouée → Construire message d'erreur pour Debugger
             if not validation.valide:
-                erreur_detaillee = f"Validation statique échouée : {validation.raison}"
+                # ResultatValidationStatique n'a pas de champ `raison`, mais
+                # `violations` (tuple[str, ...]) — même bug que resumer() plus
+                # bas, corrigé ici.
+                erreur_detaillee = "Validation statique échouée : " + "; ".join(validation.violations)
             elif erreur_exec is not None:
                 erreur_detaillee = f"Erreur d'exécution : {erreur_exec}"
             elif verdict is None:
                 erreur_detaillee = "La validation cascade n'a pas pu être exécutée"
             else:
-                # Verdict existe mais échec → diagnostic cascade
-                erreur_detaillee = f"Validation cascade échouée : {verdict.resumer()}"
+                # Verdict existe mais échec → diagnostic cascade (VerdictCascade
+                # n'a pas de méthode resumer() — on construit le résumé ici,
+                # à partir des diagnostics en échec, chacun nommant sa brique).
+                details_echecs = "; ".join(
+                    f"[{d.brique_en_echec}] {d.nom} : {'; '.join(d.details)}" for d in verdict.echecs
+                )
+                erreur_detaillee = f"Validation cascade échouée : {details_echecs}"
 
             # Dernière tentative ? Pas de correction, on arrête
             if numero_tentative >= MAX_TENTATIVES_REPARATION:
                 break
 
             # Debugger corrige avec feedback de la validation
-            correction = debugger.corriger_code(appel_llm, code_candidat, erreur_detaillee)
+            correction = debugger.corriger_code(construire_appel_llm_pour_agent("debugger"), code_candidat, erreur_detaillee)
             code_candidat = correction.code_source
 
         else:
@@ -181,7 +192,7 @@ def boucle_reparation_bornee(appel_llm: AppelLLM, code_initial: str) -> Resultat
                 break
 
             # Debugger corrige avec commentaires du Reviewer
-            correction = debugger.corriger_code(appel_llm, code_candidat, revue.commentaires)
+            correction = debugger.corriger_code(construire_appel_llm_pour_agent("debugger"), code_candidat, revue.commentaires)
             code_candidat = correction.code_source
 
     # Échec après MAX_TENTATIVES

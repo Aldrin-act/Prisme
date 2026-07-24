@@ -1,0 +1,12 @@
+Issue key,Issue Type,Summary,Assignee,Status,Original Estimate,Due Date,Component/s,Blocked by
+PROJ-101,Story,Analyse des besoins client,Claire Béziat,To Do,1h 30m,,Analyse métier,
+PROJ-102,Story,Conception technique de l'architecture,Karim Haddad,To Do,2h,,Architecture,PROJ-101
+PROJ-103,Story,Développement du backend API,Lucas Ferreira,To Do,4h,,Backend,PROJ-102
+PROJ-104,Story,Développement de l'interface frontend,Sofia Martins,To Do,3h 20m,,Frontend,PROJ-102
+PROJ-111,Task,Rédaction de la documentation technique,Julie Lambert,To Do,1h 30m,2026-07-27,Documentation,PROJ-102
+PROJ-105,Task,Revue de code backend + frontend,Nadia Cohen,To Do,45m,2026-07-27,Revue de code,"PROJ-103, PROJ-104"
+PROJ-106,Task,Tests unitaires automatisés,Yanis Belkacem,To Do,1h,2026-07-27,QA,PROJ-105
+PROJ-107,Task,Tests d'intégration,Yanis Belkacem,To Do,1h 30m,2026-07-28,QA,PROJ-106
+PROJ-108,Task,Déploiement en pré-production,Emma Rousseau,To Do,30m,2026-07-28,DevOps,PROJ-107
+PROJ-109,Story,Tests de recette avec le client,Paul Girard,To Do,2h,2026-07-29,Recette,PROJ-108
+PROJ-110,Task,Déploiement en production,Emma Rousseau,To Do,30m,2026-07-30,DevOps,PROJ-109

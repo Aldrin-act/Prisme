@@ -67,7 +67,7 @@ interface ContrainteLigne {
   competence: string;
 }
 
-interface ObjectifLigne {
+export interface ObjectifLigne {
   clef: string;
   type: TypeObjectif;
   poids: string;
@@ -79,7 +79,7 @@ interface ObjectifLigne {
   ressourcesPrioritaires: string;
 }
 
-const LABELS_OBJECTIF: Record<TypeObjectif, string> = {
+export const LABELS_OBJECTIF: Record<TypeObjectif, string> = {
   minimiser_makespan: "Minimiser le makespan",
   equilibrer_charge: "Équilibrer la charge",
   minimiser_retards: "Minimiser les retards",
@@ -106,7 +106,7 @@ function nouvelleContrainte(): ContrainteLigne {
     competence: "",
   };
 }
-function nouvelObjectif(): ObjectifLigne {
+export function nouvelObjectif(): ObjectifLigne {
   return {
     clef: idLocal(),
     type: "minimiser_makespan",
@@ -120,7 +120,7 @@ function nouvelObjectif(): ObjectifLigne {
   };
 }
 
-function construireObjectifs(objectifs: ObjectifLigne[]): Objectif[] {
+export function construireObjectifs(objectifs: ObjectifLigne[]): Objectif[] {
   return objectifs.map((o): Objectif => {
     const poids = o.poids.trim() ? Number(o.poids) : undefined;
     switch (o.type) {
@@ -708,7 +708,30 @@ function SectionContraintes({
   );
 }
 
-function SectionObjectifs({
+// Inverse de construireObjectifs — pour préremplir le formulaire d'édition
+// à partir des objectifs déjà stockés d'une instance existante.
+export function objectifVersLigne(o: Objectif): ObjectifLigne {
+  const base = nouvelObjectif();
+  const ligne: ObjectifLigne = { ...base, clef: idLocal(), type: o.type, poids: o.poids?.toString() ?? "1" };
+  switch (o.type) {
+    case "minimiser_makespan":
+      return { ...ligne, makespanCible: o.makespan_cible?.toString() ?? "" };
+    case "equilibrer_charge":
+      return { ...ligne, methode: o.methode ?? "ecart_max", ressourcesCibles: o.ressources_cibles?.join(", ") ?? "" };
+    case "minimiser_retards":
+      return {
+        ...ligne,
+        fonctionPenalite: o.fonction_penalite ?? "lineaire",
+        seuilGrace: o.seuil_grace?.toString() ?? "",
+      };
+    case "maximiser_utilisation":
+      return { ...ligne, ressourcesPrioritaires: o.ressources_prioritaires?.join(", ") ?? "" };
+    case "minimiser_changements":
+      return ligne;
+  }
+}
+
+export function SectionObjectifs({
   objectifs,
   setObjectifs,
 }: {

@@ -1,0 +1,322 @@
+{
+  "taches": [
+    {
+      "id": "ANALYSE_BESOINS",
+      "nom": "Analyse des besoins"
+    },
+    {
+      "id": "CONCEPTION",
+      "nom": "Conception technique"
+    },
+    {
+      "id": "DEV_BACKEND",
+      "nom": "Développement backend"
+    },
+    {
+      "id": "DEV_FRONTEND",
+      "nom": "Développement frontend"
+    },
+    {
+      "id": "REVUE_CODE",
+      "nom": "Revue de code"
+    },
+    {
+      "id": "TESTS_UNITAIRES",
+      "nom": "Tests unitaires"
+    },
+    {
+      "id": "TESTS_INTEGRATION",
+      "nom": "Tests d'intégration"
+    },
+    {
+      "id": "DEPLOIEMENT_STAGING",
+      "nom": "Déploiement en pré-production"
+    },
+    {
+      "id": "TESTS_RECETTE",
+      "nom": "Tests de recette"
+    },
+    {
+      "id": "DEPLOIEMENT_PRODUCTION",
+      "nom": "Déploiement en production"
+    },
+    {
+      "id": "DOCUMENTATION",
+      "nom": "Rédaction de la documentation"
+    }
+  ],
+  "ressources": [
+    {
+      "id": "ANALYSTE_METIER",
+      "competences": [
+        "habilitation_analyste_metier"
+      ]
+    },
+    {
+      "id": "ARCHITECTE",
+      "competences": [
+        "habilitation_architecte"
+      ]
+    },
+    {
+      "id": "EQUIPE_DEV_BACKEND",
+      "competences": [
+        "habilitation_equipe_dev_backend"
+      ]
+    },
+    {
+      "id": "EQUIPE_DEV_FRONTEND",
+      "competences": [
+        "habilitation_equipe_dev_frontend"
+      ]
+    },
+    {
+      "id": "EQUIPE_RECETTE",
+      "competences": [
+        "habilitation_equipe_recette"
+      ]
+    },
+    {
+      "id": "INGENIEUR_DEVOPS",
+      "competences": [
+        "habilitation_ingenieur_devops"
+      ]
+    },
+    {
+      "id": "QA_AUTOMATISATION",
+      "competences": [
+        "habilitation_qa_automatisation"
+      ]
+    },
+    {
+      "id": "REDACTEUR_TECHNIQUE",
+      "competences": [
+        "habilitation_redacteur_technique"
+      ]
+    },
+    {
+      "id": "RELECTEUR_CODE",
+      "competences": [
+        "habilitation_relecteur_code"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ANALYSE_BESOINS",
+      "ressource": "ANALYSTE_METIER",
+      "duree": 90
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONCEPTION",
+      "ressource": "ARCHITECTE",
+      "duree": 120
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEV_BACKEND",
+      "ressource": "EQUIPE_DEV_BACKEND",
+      "duree": 240
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEV_FRONTEND",
+      "ressource": "EQUIPE_DEV_FRONTEND",
+      "duree": 200
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVUE_CODE",
+      "ressource": "RELECTEUR_CODE",
+      "duree": 45
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TESTS_UNITAIRES",
+      "ressource": "QA_AUTOMATISATION",
+      "duree": 60
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TESTS_INTEGRATION",
+      "ressource": "QA_AUTOMATISATION",
+      "duree": 90
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPLOIEMENT_STAGING",
+      "ressource": "INGENIEUR_DEVOPS",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TESTS_RECETTE",
+      "ressource": "EQUIPE_RECETTE",
+      "duree": 120
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPLOIEMENT_PRODUCTION",
+      "ressource": "INGENIEUR_DEVOPS",
+      "duree": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DOCUMENTATION",
+      "ressource": "REDACTEUR_TECHNIQUE",
+      "duree": 90
+    },
+    {
+      "type": "precedence",
+      "avant": "ANALYSE_BESOINS",
+      "apres": "CONCEPTION"
+    },
+    {
+      "type": "precedence",
+      "avant": "CONCEPTION",
+      "apres": "DEV_BACKEND"
+    },
+    {
+      "type": "precedence",
+      "avant": "CONCEPTION",
+      "apres": "DEV_FRONTEND"
+    },
+    {
+      "type": "precedence",
+      "avant": "CONCEPTION",
+      "apres": "DOCUMENTATION"
+    },
+    {
+      "type": "precedence",
+      "avant": "DEV_BACKEND",
+      "apres": "REVUE_CODE"
+    },
+    {
+      "type": "precedence",
+      "avant": "DEV_FRONTEND",
+      "apres": "REVUE_CODE"
+    },
+    {
+      "type": "precedence",
+      "avant": "REVUE_CODE",
+      "apres": "TESTS_UNITAIRES"
+    },
+    {
+      "type": "precedence",
+      "avant": "TESTS_UNITAIRES",
+      "apres": "TESTS_INTEGRATION"
+    },
+    {
+      "type": "precedence",
+      "avant": "TESTS_INTEGRATION",
+      "apres": "DEPLOIEMENT_STAGING"
+    },
+    {
+      "type": "precedence",
+      "avant": "DEPLOIEMENT_STAGING",
+      "apres": "TESTS_RECETTE"
+    },
+    {
+      "type": "precedence",
+      "avant": "TESTS_RECETTE",
+      "apres": "DEPLOIEMENT_PRODUCTION"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ANALYSE_BESOINS",
+      "competence": "habilitation_analyste_metier"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONCEPTION",
+      "competence": "habilitation_architecte"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DEV_BACKEND",
+      "competence": "habilitation_equipe_dev_backend"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DEV_FRONTEND",
+      "competence": "habilitation_equipe_dev_frontend"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REVUE_CODE",
+      "competence": "habilitation_relecteur_code"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TESTS_UNITAIRES",
+      "competence": "habilitation_qa_automatisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TESTS_INTEGRATION",
+      "competence": "habilitation_qa_automatisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DEPLOIEMENT_STAGING",
+      "competence": "habilitation_ingenieur_devops"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TESTS_RECETTE",
+      "competence": "habilitation_equipe_recette"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DEPLOIEMENT_PRODUCTION",
+      "competence": "habilitation_ingenieur_devops"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DOCUMENTATION",
+      "competence": "habilitation_redacteur_technique"
+    },
+    {
+      "type": "echeance",
+      "tache": "DEPLOIEMENT_PRODUCTION",
+      "echeance": 990
+    },
+    {
+      "type": "echeance",
+      "tache": "DEPLOIEMENT_STAGING",
+      "echeance": 810
+    },
+    {
+      "type": "echeance",
+      "tache": "DOCUMENTATION",
+      "echeance": 360
+    },
+    {
+      "type": "echeance",
+      "tache": "REVUE_CODE",
+      "echeance": 594
+    },
+    {
+      "type": "echeance",
+      "tache": "TESTS_INTEGRATION",
+      "echeance": 774
+    },
+    {
+      "type": "echeance",
+      "tache": "TESTS_RECETTE",
+      "echeance": 954
+    },
+    {
+      "type": "echeance",
+      "tache": "TESTS_UNITAIRES",
+      "echeance": 666
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

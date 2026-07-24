@@ -133,4 +133,5 @@ def generer_instance(
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(instance),
         "avertissements": list(resultat.avertissements),
+        "justifications": [{"contrainte": j.contrainte, "raison": j.raison} for j in resultat.justifications],
     }

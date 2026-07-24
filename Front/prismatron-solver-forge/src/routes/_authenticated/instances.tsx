@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient, useQueries } from "@tanstack/react-query";
-import { AlertCircle, Eye, FolderKanban, Plus, Trash2 } from "lucide-react";
+import { AlertCircle, Eye, FolderKanban, Pencil, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -30,7 +30,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
-import { IngestionDialog } from "@/components/ingestion/ingestion-dialog";
+import {
+  IngestionDialog,
+  SectionObjectifs,
+  construireObjectifs,
+  objectifVersLigne,
+  type ObjectifLigne,
+} from "@/components/ingestion/ingestion-dialog";
 import {
   prismeKeys,
   prismeClient,
@@ -38,6 +44,7 @@ import {
   useInstance,
   useProjets,
   useSupprimerInstance,
+  useModifierObjectifs,
   PrismeAPIError,
   type ProjetDetail,
   type Contrainte,
@@ -274,9 +281,44 @@ function DialogDetailInstance({
   onOpenChange: (open: boolean) => void;
 }) {
   const { data: instance, isLoading } = useInstance(instanceId);
+  const queryClient = useQueryClient();
+  const modifier = useModifierObjectifs();
+  const [enEdition, setEnEdition] = useState(false);
+  const [objectifsEdition, setObjectifsEdition] = useState<ObjectifLigne[]>([]);
+
+  const erreurModification = modifier.error as PrismeAPIError | null;
+
+  function fermer(open: boolean) {
+    if (!open) {
+      setEnEdition(false);
+      modifier.reset();
+    }
+    onOpenChange(open);
+  }
+
+  function commencerEdition() {
+    if (!instance) return;
+    setObjectifsEdition(instance.objectifs.map(objectifVersLigne));
+    modifier.reset();
+    setEnEdition(true);
+  }
+
+  function enregistrerObjectifs() {
+    if (!instanceId) return;
+    modifier.mutate(
+      { instanceId, objectifs: construireObjectifs(objectifsEdition) },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: prismeKeys.instance(instanceId) });
+          queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+          setEnEdition(false);
+        },
+      },
+    );
+  }
 
   return (
-    <Dialog open={!!instanceId} onOpenChange={onOpenChange}>
+    <Dialog open={!!instanceId} onOpenChange={fermer}>
       <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Détail de l'instance</DialogTitle>
@@ -332,14 +374,46 @@ function DialogDetailInstance({
             </div>
 
             <div>
-              <h4 className="mb-2 text-sm font-semibold">Objectifs ({instance.objectifs.length})</h4>
-              <div className="flex flex-wrap gap-1.5">
-                {instance.objectifs.map((o, i) => (
-                  <Badge key={i} variant="secondary" className="text-xs">
-                    {decrireObjectif(o)}
-                  </Badge>
-                ))}
+              <div className="mb-2 flex items-center justify-between">
+                <h4 className="text-sm font-semibold">Objectifs ({instance.objectifs.length})</h4>
+                {!enEdition && (
+                  <Button size="sm" variant="outline" onClick={commencerEdition}>
+                    <Pencil className="mr-1.5 h-3.5 w-3.5" /> Modifier
+                  </Button>
+                )}
               </div>
+
+              {enEdition ? (
+                <div className="space-y-3">
+                  <SectionObjectifs objectifs={objectifsEdition} setObjectifs={setObjectifsEdition} />
+
+                  {erreurModification && (
+                    <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+                      <div className="flex items-center gap-2 font-medium">
+                        <AlertCircle className="h-4 w-4" /> Échec de la modification
+                      </div>
+                      <p className="mt-1">{erreurModification.message}</p>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end gap-2">
+                    <Button variant="outline" size="sm" onClick={() => setEnEdition(false)} disabled={modifier.isPending}>
+                      <X className="mr-1.5 h-3.5 w-3.5" /> Annuler
+                    </Button>
+                    <Button size="sm" onClick={enregistrerObjectifs} disabled={modifier.isPending}>
+                      {modifier.isPending ? "Enregistrement..." : "Enregistrer"}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {instance.objectifs.map((o, i) => (
+                    <Badge key={i} variant="secondary" className="text-xs">
+                      {decrireObjectif(o)}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

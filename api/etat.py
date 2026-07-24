@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal
 
-from dsl.schema import InstanceTRCO
+from dsl.schema import InstanceTRCO, Objectif
 from sandbox.runner import ResultatExecution
 
 if TYPE_CHECKING:
@@ -178,6 +178,25 @@ class EtatAPI:
         if instance_id not in self.instances:
             raise KeyError(instance_id)
         return self.instances[instance_id]
+
+    def modifier_objectifs(self, instance_id: str, objectifs: list[Objectif]) -> InstanceTRCO:
+        """Remplace les objectifs d'une instance déjà ingérée, seul champ pour
+        lequel une modification en place a du sens (taches/ressources/
+        contraintes définissent le problème, l'objectif ne fait qu'orienter
+        le solveur dessus — changer d'objectif n'est pas réingérer un
+        problème différent). Reconstruit l'instance en entier pour repasser
+        par le même garde-fou (§6.7) que toute autre écriture."""
+        if instance_id not in self.instances:
+            raise KeyError(instance_id)
+        client_id, instance = self.instances[instance_id]
+        nouvelle_instance = InstanceTRCO(
+            taches=instance.taches,
+            ressources=instance.ressources,
+            contraintes=instance.contraintes,
+            objectifs=objectifs,
+        )
+        self.instances[instance_id] = (client_id, nouvelle_instance)
+        return nouvelle_instance
 
     def supprimer_instance(self, instance_id: str) -> None:
         """Supprime l'instance et tout son historique d'exécution (plannings,

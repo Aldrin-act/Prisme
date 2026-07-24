@@ -5,13 +5,19 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field, ValidationError
 
 from api.autorisation import verifier_acces_client
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
-from api.input_validation import valider_payload_trco
+from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
+from dsl.schema import Objectif
 
 router = APIRouter(prefix="/ingestion", tags=["ingestion"])
+
+
+class RequeteModificationObjectifs(BaseModel):
+    objectifs: list[Objectif] = Field(min_length=1)
 
 
 @router.post("/{client_id}")
@@ -43,6 +49,37 @@ def obtenir_instance(
         raise HTTPException(status_code=404, detail="instance inconnue") from None
 
     verifier_acces_client(utilisateur, client_id)
+
+    return {
+        "instance_id": instance_id,
+        "client_id": client_id,
+        "structure_contraintes": structure_contraintes(instance),
+        **instance.model_dump(mode="json"),
+    }
+
+
+@router.patch("/{instance_id}/objectifs")
+def modifier_objectifs_instance(
+    instance_id: str,
+    requete: RequeteModificationObjectifs,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Change l'objectif d'optimisation d'une instance déjà ingérée sans
+    devoir tout réingérer — seul champ pour lequel une modification en place
+    a du sens (taches/ressources/contraintes définissent le problème,
+    l'objectif ne fait qu'orienter le solveur dessus)."""
+    try:
+        client_id, _ = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+
+    verifier_acces_client(utilisateur, client_id)
+
+    try:
+        instance = etat.modifier_objectifs(instance_id, requete.objectifs)
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     return {
         "instance_id": instance_id,

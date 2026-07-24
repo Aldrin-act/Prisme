@@ -260,10 +260,44 @@ export type ReponseImportAdaptateur = ReponseIngestion;
 // Agent de compréhension (LLM) : propose une traduction de données brutes
 // (ERP sans adaptateur dédié) vers T-R-C-O, jamais une vérité — le même
 // garde-fou déterministe que les autres canaux d'ingestion tranche derrière.
+export interface Justification {
+  contrainte: string;
+  raison: string;
+}
+
 export interface ReponseComprehension {
   instance_id: string;
   structure_contraintes: string;
   avertissements: string[];
+  // Une entrée par contrainte precedence/echeance/competence_requise produite,
+  // citant le champ des données brutes qui l'a justifiée (jamais pour
+  // compatibilite_ressource_tache, trop nombreuses).
+  justifications: Justification[];
+}
+
+// ============================================================================
+// GÉNÉRATION DE SOLVEUR
+// ============================================================================
+
+// Pipeline génération LLM → cascade de validation → enregistrement
+// (POST /generation/{instance_id}). Un seul essai, pas de boucle de
+// réparation (Étape 6 non construite) — un échec est renvoyé tel quel.
+export interface EchecCascade {
+  nom: string;
+  brique_en_echec: string | null;
+  details: string[];
+}
+
+export interface ReponseGenerationSolveur {
+  reussi: boolean;
+  id_solveur: string | null;
+  structure_contraintes: string;
+  signature_objectifs: string;
+  // Boucle de réparation bornée (generation/pipeline_avec_boucle.py) : 1 à 3
+  // tentatives, Reviewer/Debugger corrigeant le code entre chaque essai.
+  nombre_tentatives: number;
+  erreur: string | null;
+  echecs_cascade: EchecCascade[];
 }
 
 // Projets : données brutes persistées + historique des instances générées
