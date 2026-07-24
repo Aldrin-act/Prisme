@@ -23,8 +23,9 @@ from collections.abc import Callable
 # (prompt_systeme, prompt_utilisateur) -> texte de réponse brut du LLM
 AppelLLM = Callable[[str, str], str]
 
-_TENTATIVES_MAX = 3
+_TENTATIVES_MAX = 5
 _DELAI_BASE_SECONDES = 2.0
+_DELAI_MAX_SECONDES = 30.0
 
 
 def _est_erreur_transitoire(erreur: Exception) -> bool:
@@ -52,7 +53,7 @@ def _avec_retry(appel: AppelLLM) -> AppelLLM:
                 derniere_est_transitoire = _est_erreur_transitoire(erreur)
                 if not derniere_est_transitoire or tentative == _TENTATIVES_MAX - 1:
                     raise
-                time.sleep(_DELAI_BASE_SECONDES * (2**tentative))
+                time.sleep(min(_DELAI_BASE_SECONDES * (2**tentative), _DELAI_MAX_SECONDES))
         raise AssertionError("inatteignable")  # la boucle retourne ou lève à chaque itération
 
     return appel_avec_retry

@@ -1,66 +1,313 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { FileCode2, Download } from "lucide-react";
+import { useQueries } from "@tanstack/react-query";
+import { AlertCircle, CheckCircle2, Cpu, Play, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/app-page";
-
-const SOLVERS = [
-  { name: "assembly-line-v3", instance: "Automobile · FR-01", status: "Actif", when: "il y a 2h" },
-  { name: "smt-line-v1", instance: "Électronique · Cellule A", status: "Brouillon", when: "hier" },
-  { name: "maintenance-q3", instance: "Ops usine", status: "Archivé", when: "il y a 3 jours" },
-];
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { PageHeader, EmptyState } from "@/components/app-page";
+import { GanttChart } from "@/components/planning/gantt-chart";
+import {
+  prismeKeys,
+  prismeClient,
+  useSolveurs,
+  useInstances,
+  useProjets,
+  useCodeSourceSolveur,
+  useDeclencherExecution,
+  usePlanning,
+  PrismeAPIError,
+  type ProjetDetail,
+  type SolveurInfo,
+} from "@/integrations/prisme";
 
 export const Route = createFileRoute("/_authenticated/solvers")({
   head: () => ({ meta: [{ title: "Solveurs générés — PRISME" }] }),
-  component: () => (
+  component: SolversPage,
+});
+
+function SolversPage() {
+  const { data: solveurs, isLoading } = useSolveurs();
+  const [aVoir, setAVoir] = useState<SolveurInfo | null>(null);
+
+  return (
     <>
       <PageHeader
         title="Solveurs générés"
-        desc="Chaque solveur rédigé, versionné et signé par PRISME. Exportez en Python ou promouvez en production."
+        desc="Chaque solveur validé par la cascade (faisabilité, optimalité, fidélité) puis enregistré par PRISME. Exécute-le sur une instance compatible pour obtenir un planning."
       />
-      <div className="glass overflow-hidden rounded-2xl">
-        <table className="w-full text-sm">
-          <thead className="border-b border-border/50 text-left text-xs uppercase tracking-widest text-muted-foreground">
-            <tr>
-              <th className="px-5 py-3">Solveur</th>
-              <th className="px-5 py-3">Instance</th>
-              <th className="px-5 py-3">Statut</th>
-              <th className="px-5 py-3">Généré</th>
-              <th className="px-5 py-3" />
-            </tr>
-          </thead>
-          <tbody>
-            {SOLVERS.map((s) => (
-              <tr key={s.name} className="border-b border-border/30 last:border-0">
-                <td className="px-5 py-4">
-                  <div className="flex items-center gap-2">
-                    <FileCode2 className="h-4 w-4 text-primary" /> {s.name}
-                  </div>
-                </td>
-                <td className="px-5 py-4 text-muted-foreground">{s.instance}</td>
-                <td className="px-5 py-4">
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${
-                      s.status === "Actif"
-                        ? "bg-primary/20 text-primary"
-                        : s.status === "Brouillon"
-                          ? "bg-accent/20 text-accent"
-                          : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {s.status}
-                  </span>
-                </td>
-                <td className="px-5 py-4 text-muted-foreground">{s.when}</td>
-                <td className="px-5 py-4 text-right">
-                  <Button variant="ghost" size="sm">
-                    <Download className="mr-2 h-4 w-4" /> Exporter
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      {!isLoading && solveurs && solveurs.length === 0 && (
+        <EmptyState
+          icon={Cpu}
+          title="Aucun solveur généré pour l'instant"
+          desc="Génère ton premier solveur depuis la page Générateur de solveurs."
+        />
+      )}
+
+      {solveurs && solveurs.length > 0 && (
+        <div className="glass overflow-hidden rounded-2xl">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Solveur</TableHead>
+                <TableHead>Client</TableHead>
+                <TableHead>Structure des contraintes</TableHead>
+                <TableHead>Objectifs</TableHead>
+                <TableHead>Généré</TableHead>
+                <TableHead />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {solveurs.map((s) => (
+                <TableRow key={s.id}>
+                  <TableCell className="font-mono text-xs" title={s.id}>
+                    {s.id.slice(0, 8)}…
+                  </TableCell>
+                  <TableCell>{s.client_id}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="font-mono text-xs">
+                      {s.structure_contraintes}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="font-mono text-xs">
+                      {s.signature_objectifs}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {new Date(s.date_validation).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button size="sm" variant="outline" onClick={() => setAVoir(s)}>
+                      <Play className="mr-1.5 h-3.5 w-3.5" /> Exécuter
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
+      <DialogSolveur solveur={aVoir} onOpenChange={(open) => !open && setAVoir(null)} />
     </>
-  ),
-});
+  );
+}
+
+function DialogSolveur({
+  solveur,
+  onOpenChange,
+}: {
+  solveur: SolveurInfo | null;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const { data: instances } = useInstances();
+  const { data: projets } = useProjets();
+  const [instanceId, setInstanceId] = useState("");
+  const [executionId, setExecutionId] = useState<string | null>(null);
+  const declencher = useDeclencherExecution();
+  const {
+    data: planning,
+    isLoading: chargementPlanning,
+    error: erreurPlanning,
+  } = usePlanning(executionId);
+  const { data: codeSource, isLoading: chargementCode } = useCodeSourceSolveur(solveur?.id ?? null);
+
+  // Même reconstruction "nom du projet + rang" que les pages Instances et
+  // Générateur de solveurs — /supervision/instances ne relie pas les
+  // instances à leur projet.
+  const detailsProjets = useQueries({
+    queries: (projets ?? []).map((projet) => ({
+      queryKey: prismeKeys.projet(projet.projet_id),
+      queryFn: () => prismeClient.obtenirProjet(projet.projet_id),
+    })),
+  });
+  const labelParInstance = new Map<string, string>();
+  detailsProjets.forEach((requete) => {
+    const detail = requete.data as ProjetDetail | undefined;
+    if (!detail) return;
+    const nom = detail.nom ?? "Sans nom";
+    [...detail.instances].reverse().forEach((instance, index) => {
+      labelParInstance.set(instance.instance_id, `${nom}-${index + 1}`);
+    });
+  });
+
+  // Filtré par client + structure des contraintes (les deux champs réels
+  // disponibles sur InstanceInfo) — approximatif sans les objectifs, comme
+  // ailleurs dans l'app ; /execution refait le matching exact côté serveur
+  // et renvoie une erreur 409 claire en cas de décalage sur les objectifs.
+  const instancesCompatibles = (instances ?? []).filter(
+    (i) =>
+      solveur &&
+      i.client_id === solveur.client_id &&
+      i.structure_contraintes === solveur.structure_contraintes,
+  );
+
+  function fermer(open: boolean) {
+    if (!open) {
+      setInstanceId("");
+      setExecutionId(null);
+      declencher.reset();
+    }
+    onOpenChange(open);
+  }
+
+  function changerInstance(id: string) {
+    setInstanceId(id);
+    setExecutionId(null);
+    declencher.reset();
+  }
+
+  function executer() {
+    if (!instanceId || !solveur) return;
+    setExecutionId(null);
+    declencher.mutate(
+      { instanceId, clientId: solveur.client_id },
+      {
+        onSuccess: (reponse) => {
+          if (reponse.reussi) setExecutionId(reponse.execution_id);
+        },
+      },
+    );
+  }
+
+  const erreurRequete = declencher.error as PrismeAPIError | null;
+  const reponseExecution = declencher.data;
+
+  return (
+    <Dialog open={!!solveur} onOpenChange={fermer}>
+      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Solveur</DialogTitle>
+          <DialogDescription className="font-mono text-xs">{solveur?.id}</DialogDescription>
+        </DialogHeader>
+
+        {solveur && (
+          <Tabs defaultValue="executer">
+            <TabsList>
+              <TabsTrigger value="executer">Exécuter</TabsTrigger>
+              <TabsTrigger value="planning">Planning</TabsTrigger>
+              <TabsTrigger value="code">Code source</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="executer" className="space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary">{solveur.client_id}</Badge>
+                <Badge variant="outline" className="font-mono text-xs">
+                  {solveur.structure_contraintes}
+                </Badge>
+                <Badge variant="outline" className="font-mono text-xs">
+                  {solveur.signature_objectifs}
+                </Badge>
+              </div>
+
+              {instancesCompatibles.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Aucune instance ingérée ne correspond à ce client et cette structure de
+                  contraintes. Ingère une instance compatible depuis la page Instances pour pouvoir
+                  exécuter ce solveur.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  <div>
+                    <p className="mb-2 text-sm font-medium">Instance à exécuter</p>
+                    <Select value={instanceId} onValueChange={changerInstance}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choisir une instance compatible..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {instancesCompatibles.map((i) => (
+                          <SelectItem key={i.instance_id} value={i.instance_id}>
+                            {labelParInstance.get(i.instance_id) ?? i.instance_id}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button onClick={executer} disabled={!instanceId || declencher.isPending}>
+                    <Play className="mr-2 h-4 w-4" />
+                    {declencher.isPending ? "Exécution en cours..." : "Exécuter le solveur"}
+                  </Button>
+
+                  {erreurRequete && (
+                    <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+                      <div className="flex items-center gap-2 font-medium">
+                        <AlertCircle className="h-4 w-4" /> Échec de la requête
+                      </div>
+                      <p className="mt-1">{erreurRequete.message}</p>
+                    </div>
+                  )}
+
+                  {reponseExecution && !reponseExecution.reussi && (
+                    <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+                      <div className="flex items-center gap-2 font-medium">
+                        <XCircle className="h-4 w-4" /> Exécution en échec
+                      </div>
+                      {reponseExecution.erreur && <p className="mt-1">{reponseExecution.erreur}</p>}
+                    </div>
+                  )}
+
+                  {reponseExecution?.reussi && (
+                    <div className="rounded-lg border border-primary/40 bg-primary/5 p-3 text-sm">
+                      <div className="flex items-center gap-2 font-medium text-primary">
+                        <CheckCircle2 className="h-4 w-4" /> Exécution réussie — voir l'onglet
+                        Planning
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="planning">
+              {chargementPlanning ? (
+                <p className="text-sm text-muted-foreground">Chargement du planning...</p>
+              ) : erreurPlanning ? (
+                <p className="text-sm text-destructive">
+                  {(erreurPlanning as PrismeAPIError).message}
+                </p>
+              ) : planning ? (
+                <GanttChart planning={planning} />
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Aucune exécution pour l'instant — lance le solveur depuis l'onglet Exécuter pour
+                  voir son planning ici.
+                </p>
+              )}
+            </TabsContent>
+
+            <TabsContent value="code">
+              <pre className="max-h-96 overflow-auto rounded-md border border-border/50 bg-muted/30 p-3 text-xs">
+                <code>{chargementCode ? "Chargement du code..." : codeSource?.code_source}</code>
+              </pre>
+            </TabsContent>
+          </Tabs>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

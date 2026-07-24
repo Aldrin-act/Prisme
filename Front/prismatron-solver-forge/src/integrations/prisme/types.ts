@@ -29,80 +29,74 @@ export interface Ressource {
 }
 
 export type TypeContrainte =
-  | 'precedence'
-  | 'compatibilite_ressource_tache'
-  | 'echeance'
-  | 'competence_requise';
+  "precedence" | "compatibilite_ressource_tache" | "echeance" | "competence_requise";
 
 export interface ContraintePrecedence {
-  type: 'precedence';
+  type: "precedence";
   avant: string;
   apres: string;
 }
 
 export interface CompatibiliteRessourceTache {
-  type: 'compatibilite_ressource_tache';
+  type: "compatibilite_ressource_tache";
   tache: string;
   ressource: string;
   duree: number; // minutes, > 0 — seul endroit où la durée existe
 }
 
 export interface ContrainteEcheance {
-  type: 'echeance';
+  type: "echeance";
   tache: string;
   echeance: number; // >= 0
 }
 
 export interface CompetenceRequise {
-  type: 'competence_requise';
+  type: "competence_requise";
   tache: string;
   competence: string;
 }
 
 export type Contrainte =
-  | ContraintePrecedence
-  | CompatibiliteRessourceTache
-  | ContrainteEcheance
-  | CompetenceRequise;
+  ContraintePrecedence | CompatibiliteRessourceTache | ContrainteEcheance | CompetenceRequise;
 
 export interface ObjectifMinimiserMakespan {
-  type: 'minimiser_makespan';
+  type: "minimiser_makespan";
   poids?: number;
   makespan_cible?: number | null;
   penalite_depassement?: number;
 }
 
 export interface ObjectifEquilibrerCharge {
-  type: 'equilibrer_charge';
+  type: "equilibrer_charge";
   poids?: number;
-  methode?: 'ecart_max' | 'variance' | 'gini';
+  methode?: "ecart_max" | "variance" | "gini";
   ressources_cibles?: string[] | null;
 }
 
 export interface ObjectifMinimiserRetards {
-  type: 'minimiser_retards';
+  type: "minimiser_retards";
   poids?: number;
-  fonction_penalite?: 'lineaire' | 'quadratique' | 'exponentielle';
+  fonction_penalite?: "lineaire" | "quadratique" | "exponentielle";
   seuil_grace?: number;
 }
 
 export interface ObjectifMaximiserUtilisation {
-  type: 'maximiser_utilisation';
+  type: "maximiser_utilisation";
   poids?: number;
   ressources_prioritaires?: string[];
 }
 
 export interface ObjectifMinimiserChangements {
-  type: 'minimiser_changements';
+  type: "minimiser_changements";
   poids?: number;
 }
 
 export type TypeObjectif =
-  | 'minimiser_makespan'
-  | 'equilibrer_charge'
-  | 'minimiser_retards'
-  | 'maximiser_utilisation'
-  | 'minimiser_changements';
+  | "minimiser_makespan"
+  | "equilibrer_charge"
+  | "minimiser_retards"
+  | "maximiser_utilisation"
+  | "minimiser_changements";
 
 export type Objectif =
   | ObjectifMinimiserMakespan
@@ -122,20 +116,21 @@ export interface InstanceTRCO {
 // PLANNING & OPÉRATIONS
 // ============================================================================
 
+// Pas de champ `fin` ni `makespan` sur le fil — `dsl/schema/planning.py` ne
+// les définit pas (volontairement permissif, voir ce module) : `fin` se
+// déduit de `debut + durees["tache|ressource"]`, `makespan` du max des `fin`.
 export interface OperationPlanifiee {
-  tache_id: string;
-  ressource_id: string;
+  tache: string;
+  ressource: string;
   debut: number;
-  fin: number;
 }
 
 export interface Planning {
   operations: OperationPlanifiee[];
-  makespan?: number;
 }
 
 export interface PlanningAvecDurees extends Planning {
-  durees: Record<string, number>; // Format: "tache_id|ressource_id" -> duree
+  durees: Record<string, number>; // Format: "tache|ressource" -> duree
 }
 
 // ============================================================================
@@ -183,10 +178,7 @@ export interface CodeSource {
 // ============================================================================
 
 export type CauseDiagnostic =
-  | 'code_defectueux'
-  | 'donnees_corrompues'
-  | 'mauvaise_specification'
-  | 'inconnu';
+  "code_defectueux" | "donnees_corrompues" | "mauvaise_specification" | "inconnu";
 
 export interface DiagnosticPayload {
   motif_declenchement: string;
@@ -245,7 +237,7 @@ export interface DecisionValidation {
 
 export interface ReponseValidation {
   instance_id: string;
-  decision: 'accepte' | 'rejete';
+  decision: "accepte" | "rejete";
   commentaire?: string;
 }
 
@@ -280,7 +272,7 @@ export interface ReponseComprehension {
 // GÉNÉRATION DE SOLVEUR
 // ============================================================================
 
-// Pipeline multi-agents avec boucle de réparation bornée (jusqu'à 3
+// Pipeline multi-agents avec boucle de réparation bornée (jusqu'à 10
 // tentatives) → cascade de validation → enregistrement
 // (POST /generation/{instance_id} ou /stream, même résultat final).
 export interface EchecCascade {
@@ -293,7 +285,7 @@ export interface EchecCascade {
 // Server-Sent Events, event: "etape").
 export interface EvenementGeneration {
   agent: string;
-  statut: 'en_cours' | 'termine' | 'echec';
+  statut: "en_cours" | "termine" | "echec";
   resume: string;
 }
 

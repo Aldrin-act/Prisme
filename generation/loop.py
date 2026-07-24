@@ -1,16 +1,16 @@
 """Boucle de réparation bornée (Étape 6, §6.6) — permet au Debugger de faire
-plusieurs tentatives de correction (max 3) plutôt qu'une seule.
+plusieurs tentatives de correction (max 10) plutôt qu'une seule.
 
 Cette boucle s'exécute après le Développeur et avant l'Optimiseur :
 - Le Reviewer relit le code à chaque itération
 - Le Debugger corrige les bugs détectés (Reviewer OU validation)
 - La validation complète (statique → exécution → cascade) vérifie le code
 - Si succès : on sort de la boucle
-- Si échec : on recommence (max 3 fois)
+- Si échec : on recommence (max 10 fois)
 
 Distinction avec `pipeline_multi_agents.py` (ancienne version sans boucle) :
 - Sans boucle : Debugger 1 seule fois, puis échec si validation échoue
-- Avec boucle : Debugger jusqu'à 3 fois, avec feedback de la validation
+- Avec boucle : Debugger jusqu'à 10 fois, avec feedback de la validation
 
 §6.6 : "La boucle doit rester **bornée** (max tentatives, puis échec honnête
 à un humain), **offline** (à la génération, jamais per-exécution), et
@@ -35,8 +35,11 @@ from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
 from validation_engine.cascade import VerdictCascade, evaluer_cascade
 
-# Constante : nombre max de tentatives de réparation
-MAX_TENTATIVES_REPARATION = 3
+# Constante : nombre max de tentatives de réparation. Un rejet du Reviewer
+# consomme une tentative sans jamais toucher la validation cascade (fail-fast
+# volontaire, voir plus bas) — porté à 10 pour garantir en pratique plusieurs
+# vraies tentatives de validation même si le Reviewer en "vole" une ou deux.
+MAX_TENTATIVES_REPARATION = 10
 
 EvenementEtape = dict[str, str]  # {"agent": ..., "statut": "en_cours"|"termine"|"echec", "resume": ...}
 

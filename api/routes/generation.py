@@ -1,7 +1,7 @@
 """Déclenche le pipeline de génération de solveur multi-agents avec boucle
 de réparation bornée (`generation.pipeline_avec_boucle`, Étape 6 — déjà
 construite : orchestrateur → analyste → architecte → développeur → testeur
-→ [Reviewer/Debugger, jusqu'à 3 tentatives] → optimiseur → documentation)
+→ [Reviewer/Debugger, jusqu'à 10 tentatives] → optimiseur → documentation)
 depuis une instance déjà ingérée. La boucle reste bornée : après épuisement
 des tentatives, l'échec est renvoyé tel quel à l'humain, jamais masqué par
 un acharnement automatique (§6.5).
@@ -165,7 +165,7 @@ def generer_solveur(
     registre: Registre = Depends(obtenir_registre),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
-    """Synchrone et bloquant (plusieurs appels LLM — 8 agents, jusqu'à 3
+    """Synchrone et bloquant (plusieurs appels LLM — 8 agents, jusqu'à 10
     tentatives de réparation — plus exécution sandboxée et cascade complète
     à chaque tentative : potentiellement plusieurs minutes). Voir
     `/{instance_id}/demarrer` pour suivre la progression agent par agent,

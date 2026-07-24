@@ -5,8 +5,8 @@
  * Copiez-collez et adaptez selon vos besoins.
  */
 
-import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   useInstances,
   useExecutions,
@@ -18,7 +18,7 @@ import {
   useSoumettreDecision,
   prismeKeys,
   type InstanceTRCO,
-} from './index';
+} from "./index";
 
 // ============================================================================
 // EXEMPLE 1 : Dashboard de supervision
@@ -38,19 +38,15 @@ export function DashboardSupervision() {
         <h2 className="text-lg font-semibold mb-3">Santé du Système</h2>
         <div className="flex gap-6">
           <div>
-            <span className={sante?.api ? 'text-green-600' : 'text-red-600'}>
-              {sante?.api ? '🟢' : '🔴'}
-            </span>{' '}
+            <span className={sante?.api ? "text-green-600" : "text-red-600"}>
+              {sante?.api ? "🟢" : "🔴"}
+            </span>{" "}
             API FastAPI
           </div>
           <div>
-            <span
-              className={
-                sante?.sandbox_docker ? 'text-green-600' : 'text-red-600'
-              }
-            >
-              {sante?.sandbox_docker ? '🟢' : '🔴'}
-            </span>{' '}
+            <span className={sante?.sandbox_docker ? "text-green-600" : "text-red-600"}>
+              {sante?.sandbox_docker ? "🟢" : "🔴"}
+            </span>{" "}
             Sandbox Docker
           </div>
         </div>
@@ -58,9 +54,7 @@ export function DashboardSupervision() {
 
       {/* Instances */}
       <div className="bg-white rounded-lg shadow p-4">
-        <h2 className="text-lg font-semibold mb-3">
-          Instances ({instances?.length || 0})
-        </h2>
+        <h2 className="text-lg font-semibold mb-3">Instances ({instances?.length || 0})</h2>
         {loadingInstances ? (
           <p>Chargement...</p>
         ) : (
@@ -85,7 +79,7 @@ export function DashboardSupervision() {
                     <td className="px-6 py-4 text-sm">{inst.instance_id}</td>
                     <td className="px-6 py-4 text-sm">{inst.client_id}</td>
                     <td className="px-6 py-4 text-sm">
-                      {inst.executee ? 'Exécutée' : 'En attente'}
+                      {inst.executee ? "Exécutée" : "En attente"}
                     </td>
                   </tr>
                 ))}
@@ -105,12 +99,8 @@ export function DashboardSupervision() {
               className="flex items-center justify-between p-3 bg-gray-50 rounded"
             >
               <span className="text-sm font-mono">{exec.execution_id}</span>
-              <span
-                className={
-                  exec.reussi ? 'text-green-600' : 'text-red-600'
-                }
-              >
-                {exec.reussi ? '✅ Succès' : '❌ Échec'}
+              <span className={exec.reussi ? "text-green-600" : "text-red-600"}>
+                {exec.reussi ? "✅ Succès" : "❌ Échec"}
               </span>
             </div>
           ))}
@@ -125,7 +115,7 @@ export function DashboardSupervision() {
 // ============================================================================
 
 export function IngestionForm() {
-  const [clientId, setClientId] = useState('client-001');
+  const [clientId, setClientId] = useState("client-001");
   const mutation = useIngererInstance();
   const queryClient = useQueryClient();
 
@@ -133,35 +123,31 @@ export function IngestionForm() {
     e.preventDefault();
 
     const instance: InstanceTRCO = {
-      taches: [
-        { id: 'T1' },
-        { id: 'T2' },
-        { id: 'T3' },
-      ],
+      taches: [{ id: "T1" }, { id: "T2" }, { id: "T3" }],
       ressources: [
-        { id: 'R1', competences: [] },
-        { id: 'R2', competences: [] },
+        { id: "R1", competences: [] },
+        { id: "R2", competences: [] },
       ],
       contraintes: [
         {
-          type: 'compatibilite_ressource_tache',
-          tache: 'T1',
-          ressource: 'R1',
+          type: "compatibilite_ressource_tache",
+          tache: "T1",
+          ressource: "R1",
           duree: 30,
         },
         {
-          type: 'compatibilite_ressource_tache',
-          tache: 'T2',
-          ressource: 'R2',
+          type: "compatibilite_ressource_tache",
+          tache: "T2",
+          ressource: "R2",
           duree: 45,
         },
         {
-          type: 'precedence',
-          avant: 'T1',
-          apres: 'T2',
+          type: "precedence",
+          avant: "T1",
+          apres: "T2",
         },
       ],
-      objectifs: [{ type: 'minimiser_makespan' }],
+      objectifs: [{ type: "minimiser_makespan" }],
     };
 
     mutation.mutate(
@@ -170,7 +156,7 @@ export function IngestionForm() {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
         },
-      }
+      },
     );
   };
 
@@ -193,13 +179,11 @@ export function IngestionForm() {
         disabled={mutation.isPending}
         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
       >
-        {mutation.isPending ? 'Ingestion en cours...' : 'Ingérer'}
+        {mutation.isPending ? "Ingestion en cours..." : "Ingérer"}
       </button>
 
       {mutation.isError && (
-        <div className="p-3 bg-red-50 text-red-700 rounded">
-          Erreur: {mutation.error.message}
-        </div>
+        <div className="p-3 bg-red-50 text-red-700 rounded">Erreur: {mutation.error.message}</div>
       )}
 
       {mutation.isSuccess && (
@@ -233,13 +217,13 @@ export function ExecutionPanel({ instanceId }: { instanceId: string }) {
 
   const handleExecute = () => {
     mutation.mutate(
-      { instanceId, clientId: 'client-001' },
+      { instanceId, clientId: "client-001" },
       {
         onSuccess: (data) => {
           setExecutionId(data.execution_id);
           queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
         },
-      }
+      },
     );
   };
 
@@ -252,7 +236,7 @@ export function ExecutionPanel({ instanceId }: { instanceId: string }) {
         disabled={mutation.isPending}
         className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
       >
-        {mutation.isPending ? '⏳ Exécution...' : '▶️ Exécuter'}
+        {mutation.isPending ? "⏳ Exécution..." : "▶️ Exécuter"}
       </button>
 
       {executionId && (
@@ -275,20 +259,24 @@ export function PlanningGantt({ executionId }: { executionId: string }) {
   if (isLoading) return <div className="p-6">Chargement du planning...</div>;
   if (!planning) return <div className="p-6">Aucun planning disponible</div>;
 
-  const makespan = planning.makespan || 100;
+  // Ni `fin` ni `makespan` n'existent sur le fil (`dsl/schema/planning.py`
+  // est volontairement permissif) — `fin` se déduit de `durees["tache|ressource"]`.
+  const operations = planning.operations.map((op) => ({
+    ...op,
+    fin: op.debut + (planning.durees[`${op.tache}|${op.ressource}`] ?? 0),
+  }));
+  const makespan = operations.length > 0 ? Math.max(...operations.map((op) => op.fin)) : 100;
   const scale = (time: number) => (time / makespan) * 100;
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">
-        Planning (Makespan: {makespan})
-      </h2>
+      <h2 className="text-xl font-bold mb-4">Planning (Makespan: {makespan})</h2>
 
       <div className="space-y-3">
-        {planning.operations.map((op, idx) => (
+        {operations.map((op, idx) => (
           <div key={idx} className="flex items-center gap-4">
             <span className="w-32 text-sm font-medium">
-              {op.tache_id} → {op.ressource_id}
+              {op.tache} → {op.ressource}
             </span>
             <div className="flex-1 h-8 bg-gray-100 rounded relative border">
               <div
@@ -313,7 +301,7 @@ export function PlanningGantt({ executionId }: { executionId: string }) {
 // ============================================================================
 
 export function DiagnosticPanel({ executionId }: { executionId: string }) {
-  const [motif, setMotif] = useState('');
+  const [motif, setMotif] = useState("");
   const mutation = useDiagnostiquer();
 
   const handleDiagnostic = () => {
@@ -337,9 +325,7 @@ export function DiagnosticPanel({ executionId }: { executionId: string }) {
         disabled={mutation.isPending || !motif}
         className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 disabled:opacity-50"
       >
-        {mutation.isPending
-          ? '🔍 Diagnostic en cours (2 min max)...'
-          : '🔍 Lancer Diagnostic'}
+        {mutation.isPending ? "🔍 Diagnostic en cours (2 min max)..." : "🔍 Lancer Diagnostic"}
       </button>
 
       {mutation.isError && (
@@ -382,7 +368,7 @@ export function DiagnosticPanel({ executionId }: { executionId: string }) {
 // ============================================================================
 
 export function ValidationPanel({ executionId }: { executionId: string }) {
-  const [commentaire, setCommentaire] = useState('');
+  const [commentaire, setCommentaire] = useState("");
   const mutation = useSoumettreDecision();
   const queryClient = useQueryClient();
 
@@ -395,9 +381,9 @@ export function ValidationPanel({ executionId }: { executionId: string }) {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
-          setCommentaire('');
+          setCommentaire("");
         },
-      }
+      },
     );
   };
 

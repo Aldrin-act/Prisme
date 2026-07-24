@@ -265,7 +265,7 @@ function SolverGeneratorPage() {
     <>
       <PageHeader
         title="Générateur de solveurs"
-        desc="Pipeline multi-agents avec boucle de réparation bornée (jusqu'à 3 tentatives, Reviewer et Debugger corrigeant le code entre chaque essai), suivi en direct agent par agent — un onglet par instance, comme un navigateur : chacun garde sa progression, même après un rechargement de page."
+        desc="Pipeline multi-agents avec boucle de réparation bornée (jusqu'à 10 tentatives, Reviewer et Debugger corrigeant le code entre chaque essai), suivi en direct agent par agent — un onglet par instance, comme un navigateur : chacun garde sa progression, même après un rechargement de page."
       />
 
       <Tabs value={ongletActifId} onValueChange={setOngletActifId}>

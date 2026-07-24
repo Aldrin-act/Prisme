@@ -2,7 +2,7 @@
 
 Différence avec `pipeline_multi_agents.py` (version sans boucle) :
 - SANS boucle : Reviewer → Debugger 1 fois → Validation → Stop si échec
-- AVEC boucle : Reviewer → Debugger → Validation → [Retry jusqu'à 3 fois]
+- AVEC boucle : Reviewer → Debugger → Validation → [Retry jusqu'à 10 fois]
 
 Cette version remplace l'appel unique au Debugger par un appel à
 `loop.boucle_reparation_bornee()` qui gère la boucle complète.
@@ -13,7 +13,7 @@ Workflow complet :
 3. Architecte (conception)
 4. Développeur (code initial)
 5. Testeur (tests pytest)
-6. ** BOUCLE DE RÉPARATION (max 3 tentatives) **
+6. ** BOUCLE DE RÉPARATION (max 10 tentatives) **
    - Reviewer
    - Debugger (si bugs détectés)
    - Validation (statique → exécution → cascade)
@@ -21,7 +21,7 @@ Workflow complet :
 7. Optimiseur (si succès)
 8. Documentation
 
-§6.6 : La boucle reste **bornée** (3 tentatives max), **offline** (génération),
+§6.6 : La boucle reste **bornée** (10 tentatives max), **offline** (génération),
 et **diagnostique** (feedback précis de la validation).
 """
 
@@ -132,7 +132,7 @@ def tenter_generation_avec_boucle_stream() -> Iterator[EvenementEtape | Resultat
     voir `generation.loop.boucle_reparation_bornee_stream`) ; le tout
     dernier élément produit est toujours le `ResultatPipelineAvecBoucle`
     final. Consommée par `api/routes/generation.py` pour le streaming SSE —
-    un pipeline à 8 agents + jusqu'à 3 tentatives de réparation peut prendre
+    un pipeline à 8 agents + jusqu'à 10 tentatives de réparation peut prendre
     plusieurs minutes, une attente aveugle n'est pas acceptable.
 
     Chaque agent construit son propre client LLM via
@@ -167,7 +167,7 @@ def tenter_generation_avec_boucle_stream() -> Iterator[EvenementEtape | Resultat
     tests = testeur.generer_tests(construire_appel_llm_pour_agent("testeur"), brut.code_source)
     yield etape("testeur", "termine", "Tests générés")
 
-    # 6. BOUCLE DE RÉPARATION (Étape 6) — max 3 tentatives, chaque sous-étape
+    # 6. BOUCLE DE RÉPARATION (Étape 6) — max 10 tentatives, chaque sous-étape
     # (reviewer/validation/debugger) est elle-même streamée.
     boucle: ResultatBoucleReparation | None = None
     for item in boucle_reparation_bornee_stream(brut.code_source):
@@ -178,7 +178,7 @@ def tenter_generation_avec_boucle_stream() -> Iterator[EvenementEtape | Resultat
     assert boucle is not None  # boucle_reparation_bornee_stream yield toujours un résultat final
 
     if not boucle.reussi:
-        # Échec après 3 tentatives → Retour avec échec
+        # Échec après 10 tentatives → Retour avec échec
         yield ResultatPipelineAvecBoucle(
             plan_orchestrateur=plan.plan,
             specification=analyse.en_texte(),
