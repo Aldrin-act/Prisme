@@ -17,10 +17,46 @@ Le SDK du fournisseur choisi est importé à la demande (`extra` optionnel
 from __future__ import annotations
 
 import os
+import time
 from collections.abc import Callable
 
 # (prompt_systeme, prompt_utilisateur) -> texte de réponse brut du LLM
 AppelLLM = Callable[[str, str], str]
+
+_TENTATIVES_MAX = 3
+_DELAI_BASE_SECONDES = 2.0
+
+
+def _est_erreur_transitoire(erreur: Exception) -> bool:
+    """5xx (surcharge/panne côté fournisseur) ou timeout/coupure réseau — jamais
+    une 4xx (clé invalide, prompt rejeté...) qui échouerait de façon identique
+    à chaque nouvelle tentative, retenter ne ferait que perdre du temps."""
+    code_statut = getattr(erreur, "status_code", None)
+    if isinstance(code_statut, int):
+        return code_statut >= 500
+    nom_type = type(erreur).__name__
+    return "Timeout" in nom_type or "Connection" in nom_type
+
+
+def _avec_retry(appel: AppelLLM) -> AppelLLM:
+    """Réessaie un appel LLM en cas d'erreur transitoire côté fournisseur
+    (ex. 504 Gateway Timeout, vu en pratique sur les endpoints compatibles
+    OpenAI de NVIDIA/Together) avec backoff exponentiel, pour qu'un blip
+    réseau ne fasse pas échouer toute une tentative de génération (§5.6)."""
+
+    def appel_avec_retry(prompt_systeme: str, prompt_utilisateur: str) -> str:
+        for tentative in range(_TENTATIVES_MAX):
+            try:
+                return appel(prompt_systeme, prompt_utilisateur)
+            except Exception as erreur:
+                derniere_est_transitoire = _est_erreur_transitoire(erreur)
+                if not derniere_est_transitoire or tentative == _TENTATIVES_MAX - 1:
+                    raise
+                time.sleep(_DELAI_BASE_SECONDES * (2**tentative))
+        raise AssertionError("inatteignable")  # la boucle retourne ou lève à chaque itération
+
+    return appel_avec_retry
+
 
 _MODELES_PAR_DEFAUT = {
     "mistral": "mistral-large-latest",
@@ -56,10 +92,7 @@ def _construire_appel_together(modele: str) -> AppelLLM:
     """Together AI utilise une API compatible OpenAI."""
     import openai
 
-    client = openai.OpenAI(
-        base_url="https://api.together.xyz/v1",
-        api_key=os.environ.get("TOGETHER_API_KEY")
-    )
+    client = openai.OpenAI(base_url="https://api.together.xyz/v1", api_key=os.environ.get("TOGETHER_API_KEY"))
 
     def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
         reponse = client.chat.completions.create(
@@ -180,7 +213,7 @@ def construire_appel_llm() -> AppelLLM:
     # alors l'appel avec "Missing model parameter" plutôt que d'utiliser son
     # propre défaut, l'erreur n'a rien d'évident depuis l'appelant.
     modele = os.environ.get("PRISME_LLM_MODEL") or _MODELES_PAR_DEFAUT[fournisseur]
-    return constructeur(modele)
+    return _avec_retry(constructeur(modele))
 
 
 def construire_appel_llm_pour_agent(nom_agent: str) -> AppelLLM:
@@ -215,4 +248,4 @@ def construire_appel_llm_pour_agent(nom_agent: str) -> AppelLLM:
     # Le modèle peut toujours être surchargé par PRISME_LLM_MODEL_<AGENT>
     var_modele = f"PRISME_LLM_MODEL_{nom_agent.upper()}"
     modele = os.environ.get(var_modele) or _MODELES_PAR_DEFAUT[fournisseur]
-    return constructeur(modele)
+    return _avec_retry(constructeur(modele))
