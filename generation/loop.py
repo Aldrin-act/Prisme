@@ -15,10 +15,17 @@ Distinction avec `pipeline_multi_agents.py` (ancienne version sans boucle) :
 §6.6 : "La boucle doit rester **bornée** (max tentatives, puis échec honnête
 à un humain), **offline** (à la génération, jamais per-exécution), et
 **diagnostique** (nomme quelle contrainte est violée)."
-"""
+
+`boucle_reparation_bornee_stream` est la vraie implémentation — elle yield
+un évènement `EvenementEtape` après chaque sous-étape (Reviewer, Validation,
+Debugger), pour qu'un pipeline de plusieurs minutes ne soit pas une attente
+aveugle côté appelant (voir `api/routes/generation.py`, streaming SSE).
+`boucle_reparation_bornee` reste la version bloquante, pour les appelants
+qui ne veulent que le résultat final (scripts/)."""
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from dataclasses import dataclass
 
 from generation.agents import debugger, reviewer
@@ -28,9 +35,14 @@ from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
 from validation_engine.cascade import VerdictCascade, evaluer_cascade
 
-
 # Constante : nombre max de tentatives de réparation
 MAX_TENTATIVES_REPARATION = 3
+
+EvenementEtape = dict[str, str]  # {"agent": ..., "statut": "en_cours"|"termine"|"echec", "resume": ...}
+
+
+def etape(agent: str, statut: str, resume: str) -> EvenementEtape:
+    return {"agent": agent, "statut": statut, "resume": resume}
 
 
 @dataclass(frozen=True)
@@ -88,36 +100,35 @@ def _valider_completement(code: str) -> tuple[ResultatValidationStatique, str | 
     return validation, None, verdict
 
 
-def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
-    """Exécute la boucle de réparation bornée (max 3 tentatives).
-
-    Workflow :
-    1. Reviewer relit le code
-    2. Si approuvé → Validation
-       - Si succès → STOP (succès)
-       - Si échec → Debugger avec erreur de validation → retry
-    3. Si rejeté → Debugger avec commentaires Reviewer → retry
-    4. Répéter jusqu'à succès ou MAX_TENTATIVES
+def boucle_reparation_bornee_stream(code_initial: str) -> Iterator[EvenementEtape | ResultatBoucleReparation]:
+    """Version streaming — yield un `EvenementEtape` après chaque sous-étape
+    (Reviewer, Validation, Debugger) de chaque tentative ; le tout dernier
+    élément produit est toujours le `ResultatBoucleReparation` final.
 
     Reviewer et Debugger construisent chacun leur propre client LLM via
     `construire_appel_llm_pour_agent` (§5.6) — le fournisseur optimal par
     agent, pas un client partagé imposé par l'appelant.
-
-    Args:
-        code_initial: Code à réparer (du Développeur)
-
-    Returns:
-        ResultatBoucleReparation avec historique complet des tentatives
     """
     code_candidat = code_initial
     tentatives: list[TentativeReparation] = []
 
     for numero_tentative in range(1, MAX_TENTATIVES_REPARATION + 1):
+        nom_reviewer = f"reviewer (tentative {numero_tentative}/{MAX_TENTATIVES_REPARATION})"
+        nom_validation = f"validation (tentative {numero_tentative}/{MAX_TENTATIVES_REPARATION})"
+        nom_debugger = f"debugger (tentative {numero_tentative}/{MAX_TENTATIVES_REPARATION})"
+
         # 1. Reviewer relit le code actuel
+        yield etape(nom_reviewer, "en_cours", "Relecture critique du code...")
         revue = reviewer.relire_code(construire_appel_llm_pour_agent("reviewer"), code_candidat)
+        yield etape(
+            nom_reviewer,
+            "termine" if revue.approuve else "echec",
+            "Code approuvé" if revue.approuve else f"{len(revue.problemes)} problème(s) relevé(s) par le reviewer",
+        )
 
         if revue.approuve:
             # 2a. Code approuvé → Validation complète
+            yield etape(nom_validation, "en_cours", "Validation statique → exécution → cascade complète...")
             validation, erreur_exec, verdict = _valider_completement(code_candidat)
 
             reussi = validation.valide and erreur_exec is None and verdict is not None and verdict.reussi
@@ -133,9 +144,15 @@ def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
             )
             tentatives.append(tentative)
 
+            yield etape(
+                nom_validation,
+                "termine" if reussi else "echec",
+                "Cascade de validation au vert" if reussi else "Cascade de validation en échec",
+            )
+
             if reussi:
                 # Succès ! On sort de la boucle
-                return ResultatBoucleReparation(
+                yield ResultatBoucleReparation(
                     code_initial=code_initial,
                     tentatives=tuple(tentatives),
                     code_final=code_candidat,
@@ -146,6 +163,7 @@ def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
                     derniere_erreur_execution=erreur_exec,
                     dernier_verdict_cascade=verdict,
                 )
+                return
 
             # 2b. Validation échouée → Construire message d'erreur pour Debugger
             if not validation.valide:
@@ -171,7 +189,11 @@ def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
                 break
 
             # Debugger corrige avec feedback de la validation
-            correction = debugger.corriger_code(construire_appel_llm_pour_agent("debugger"), code_candidat, erreur_detaillee)
+            yield etape(nom_debugger, "en_cours", "Correction du code d'après le diagnostic de validation...")
+            correction = debugger.corriger_code(
+                construire_appel_llm_pour_agent("debugger"), code_candidat, erreur_detaillee
+            )
+            yield etape(nom_debugger, "termine", "Code corrigé")
             code_candidat = correction.code_source
 
         else:
@@ -192,12 +214,16 @@ def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
                 break
 
             # Debugger corrige avec commentaires du Reviewer
-            correction = debugger.corriger_code(construire_appel_llm_pour_agent("debugger"), code_candidat, revue.commentaires)
+            yield etape(nom_debugger, "en_cours", "Correction du code d'après les commentaires du reviewer...")
+            correction = debugger.corriger_code(
+                construire_appel_llm_pour_agent("debugger"), code_candidat, revue.commentaires
+            )
+            yield etape(nom_debugger, "termine", "Code corrigé")
             code_candidat = correction.code_source
 
     # Échec après MAX_TENTATIVES
     derniere = tentatives[-1]
-    return ResultatBoucleReparation(
+    yield ResultatBoucleReparation(
         code_initial=code_initial,
         tentatives=tuple(tentatives),
         code_final=code_candidat,
@@ -208,3 +234,14 @@ def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
         derniere_erreur_execution=derniere.erreur_execution,
         dernier_verdict_cascade=derniere.verdict_cascade,
     )
+
+
+def boucle_reparation_bornee(code_initial: str) -> ResultatBoucleReparation:
+    """Version bloquante — ne renvoie que le résultat final, sans les
+    évènements intermédiaires. Voir `boucle_reparation_bornee_stream`."""
+    resultat: ResultatBoucleReparation | None = None
+    for item in boucle_reparation_bornee_stream(code_initial):
+        if isinstance(item, ResultatBoucleReparation):
+            resultat = item
+    assert resultat is not None  # boucle_reparation_bornee_stream yield toujours un résultat final
+    return resultat

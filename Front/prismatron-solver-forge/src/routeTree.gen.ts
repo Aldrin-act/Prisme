@@ -26,7 +26,6 @@ import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/ap
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedDonneesRouteImport } from './routes/_authenticated/donnees'
-import { Route as AuthenticatedDslRouteImport } from './routes/_authenticated/dsl'
 import { Route as AuthenticatedExecutionRouteImport } from './routes/_authenticated/execution'
 import { Route as AuthenticatedInstancesRouteImport } from './routes/_authenticated/instances'
 import { Route as AuthenticatedSchedulesRouteImport } from './routes/_authenticated/schedules'
@@ -119,11 +118,6 @@ const AuthenticatedDonneesRoute = AuthenticatedDonneesRouteImport.update({
   path: '/donnees',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedDslRoute = AuthenticatedDslRouteImport.update({
-  id: '/dsl',
-  path: '/dsl',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedExecutionRoute = AuthenticatedExecutionRouteImport.update({
   id: '/execution',
   path: '/execution',
@@ -178,7 +172,6 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuthenticatedAuditRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/donnees': typeof AuthenticatedDonneesRoute
-  '/dsl': typeof AuthenticatedDslRoute
   '/execution': typeof AuthenticatedExecutionRoute
   '/instances': typeof AuthenticatedInstancesRoute
   '/schedules': typeof AuthenticatedSchedulesRoute
@@ -204,7 +197,6 @@ export interface FileRoutesByTo {
   '/audit': typeof AuthenticatedAuditRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/donnees': typeof AuthenticatedDonneesRoute
-  '/dsl': typeof AuthenticatedDslRoute
   '/execution': typeof AuthenticatedExecutionRoute
   '/instances': typeof AuthenticatedInstancesRoute
   '/schedules': typeof AuthenticatedSchedulesRoute
@@ -232,7 +224,6 @@ export interface FileRoutesById {
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/donnees': typeof AuthenticatedDonneesRoute
-  '/_authenticated/dsl': typeof AuthenticatedDslRoute
   '/_authenticated/execution': typeof AuthenticatedExecutionRoute
   '/_authenticated/instances': typeof AuthenticatedInstancesRoute
   '/_authenticated/schedules': typeof AuthenticatedSchedulesRoute
@@ -260,7 +251,6 @@ export interface FileRouteTypes {
     | '/audit'
     | '/clients'
     | '/donnees'
-    | '/dsl'
     | '/execution'
     | '/instances'
     | '/schedules'
@@ -286,7 +276,6 @@ export interface FileRouteTypes {
     | '/audit'
     | '/clients'
     | '/donnees'
-    | '/dsl'
     | '/execution'
     | '/instances'
     | '/schedules'
@@ -313,7 +302,6 @@ export interface FileRouteTypes {
     | '/_authenticated/audit'
     | '/_authenticated/clients'
     | '/_authenticated/donnees'
-    | '/_authenticated/dsl'
     | '/_authenticated/execution'
     | '/_authenticated/instances'
     | '/_authenticated/schedules'
@@ -457,13 +445,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDonneesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/dsl': {
-      id: '/_authenticated/dsl'
-      path: '/dsl'
-      fullPath: '/dsl'
-      preLoaderRoute: typeof AuthenticatedDslRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/execution': {
       id: '/_authenticated/execution'
       path: '/execution'
@@ -524,7 +505,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedDonneesRoute: typeof AuthenticatedDonneesRoute
-  AuthenticatedDslRoute: typeof AuthenticatedDslRoute
   AuthenticatedExecutionRoute: typeof AuthenticatedExecutionRoute
   AuthenticatedInstancesRoute: typeof AuthenticatedInstancesRoute
   AuthenticatedSchedulesRoute: typeof AuthenticatedSchedulesRoute
@@ -542,7 +522,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAuditRoute: AuthenticatedAuditRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedDonneesRoute: AuthenticatedDonneesRoute,
-  AuthenticatedDslRoute: AuthenticatedDslRoute,
   AuthenticatedExecutionRoute: AuthenticatedExecutionRoute,
   AuthenticatedInstancesRoute: AuthenticatedInstancesRoute,
   AuthenticatedSchedulesRoute: AuthenticatedSchedulesRoute,

@@ -2,9 +2,9 @@
  * Client API PRISME - Fonctions d'appel à l'API FastAPI
  */
 
-import { PRISME_CONFIG } from './config';
-import { lireTokenStocke } from './auth/storage';
-import type * as Types from './types';
+import { PRISME_CONFIG } from "./config";
+import { lireTokenStocke } from "./auth/storage";
+import type * as Types from "./types";
 
 // ============================================================================
 // ERREURS
@@ -14,10 +14,10 @@ export class PrismeAPIError extends Error {
   constructor(
     message: string,
     public status?: number,
-    public detail?: string | Types.ErreurValidationChamp[]
+    public detail?: string | Types.ErreurValidationChamp[],
   ) {
     super(message);
-    this.name = 'PrismeAPIError';
+    this.name = "PrismeAPIError";
   }
 
   /** Erreurs de validation par champ (422), vide si `detail` est une simple chaîne. */
@@ -36,10 +36,11 @@ async function apiFetch<T>(
   // `null` = pas de timeout côté client (ex. agent de compréhension sur un
   // gros volume de données brutes) — la requête attend la réponse du
   // serveur aussi longtemps qu'il le faut, sans abandon automatique.
-  timeoutMs: number | null = PRISME_CONFIG.timeout
+  timeoutMs: number | null = PRISME_CONFIG.timeout,
 ): Promise<T> {
   const controller = new AbortController();
-  const timeoutId = timeoutMs === null ? undefined : setTimeout(() => controller.abort(), timeoutMs);
+  const timeoutId =
+    timeoutMs === null ? undefined : setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     // FormData (upload de fichier) : laisser le navigateur poser son propre
@@ -67,7 +68,7 @@ async function apiFetch<T>(
         errorDetail = response.statusText;
       }
       const message = Array.isArray(errorDetail)
-        ? errorDetail.map((e) => `${e.loc.join('.')} : ${e.msg}`).join(' ; ')
+        ? errorDetail.map((e) => `${e.loc.join(".")} : ${e.msg}`).join(" ; ")
         : errorDetail;
       throw new PrismeAPIError(`Erreur API: ${message}`, response.status, errorDetail);
     }
@@ -81,11 +82,11 @@ async function apiFetch<T>(
   } catch (error) {
     clearTimeout(timeoutId);
     if (error instanceof PrismeAPIError) throw error;
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new PrismeAPIError('Timeout: La requête a pris trop de temps', 408);
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new PrismeAPIError("Timeout: La requête a pris trop de temps", 408);
     }
     throw new PrismeAPIError(
-      `Erreur réseau: ${error instanceof Error ? error.message : 'Inconnue'}`
+      `Erreur réseau: ${error instanceof Error ? error.message : "Inconnue"}`,
     );
   }
 }
@@ -100,21 +101,21 @@ export const prismeClient = {
 
   creerClient: (clientId: string, nom?: string) =>
     apiFetch<Types.Client>(PRISME_CONFIG.routes.clients, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ client_id: clientId, nom: nom ?? null }),
     }),
 
   // INGESTION
   ingererInstance: (clientId: string, instance: Types.InstanceTRCO) =>
-    apiFetch<Types.ReponseIngestion>(
-      `${PRISME_CONFIG.routes.ingestion}/${clientId}`,
-      { method: 'POST', body: JSON.stringify(instance) }
-    ),
+    apiFetch<Types.ReponseIngestion>(`${PRISME_CONFIG.routes.ingestion}/${clientId}`, {
+      method: "POST",
+      body: JSON.stringify(instance),
+    }),
 
   // Supprime une instance et son historique d'exécution (n'affecte jamais
   // les solveurs enregistrés, indépendants).
   supprimerInstance: (instanceId: string) =>
-    apiFetch<void>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}`, { method: 'DELETE' }),
+    apiFetch<void>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}`, { method: "DELETE" }),
 
   // Contenu T-R-C-O complet d'une instance déjà ingérée (tâches, ressources,
   // contraintes, objectifs).
@@ -127,7 +128,7 @@ export const prismeClient = {
   // solveur dessus).
   modifierObjectifs: (instanceId: string, objectifs: Types.Objectif[]) =>
     apiFetch<Types.InstanceDetail>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}/objectifs`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify({ objectifs }),
     }),
 
@@ -135,57 +136,47 @@ export const prismeClient = {
   declencherExecution: (instanceId: string, clientId: string) =>
     apiFetch<Types.ReponseExecution>(
       `${PRISME_CONFIG.routes.execution}/${instanceId}?client_id=${clientId}`,
-      { method: 'POST' }
+      { method: "POST" },
     ),
 
   // PLANNING
   obtenirPlanning: (executionId: string) =>
-    apiFetch<Types.PlanningAvecDurees>(
-      `${PRISME_CONFIG.routes.planning}/${executionId}`
-    ),
+    apiFetch<Types.PlanningAvecDurees>(`${PRISME_CONFIG.routes.planning}/${executionId}`),
 
   // AUDIT
   obtenirCodeSource: (executionId: string) =>
     apiFetch<Types.CodeSource>(`${PRISME_CONFIG.routes.audit}/${executionId}`),
 
+  // Même canal, mais par id de solveur directement — utile pour un solveur
+  // enregistré mais jamais encore exécuté (pas d'execution_id qui y mène).
+  obtenirCodeSourceParSolveur: (idSolveur: string) =>
+    apiFetch<Types.CodeSource>(`${PRISME_CONFIG.routes.audit}/solveur/${idSolveur}`),
+
   // DIAGNOSTICS
-  diagnostiquerExecution: (
-    executionId: string,
-    payload: Types.DiagnosticPayload
-  ) =>
+  diagnostiquerExecution: (executionId: string, payload: Types.DiagnosticPayload) =>
     apiFetch<Types.DiagnosticResultat>(
       `${PRISME_CONFIG.routes.diagnostics}/${executionId}`,
-      { method: 'POST', body: JSON.stringify(payload) },
-      PRISME_CONFIG.timeoutDiagnostics
+      { method: "POST", body: JSON.stringify(payload) },
+      PRISME_CONFIG.timeoutDiagnostics,
     ),
 
   // SUPERVISION
   listerInstances: () =>
-    apiFetch<Types.InstanceInfo[]>(
-      `${PRISME_CONFIG.routes.supervision}/instances`
-    ),
+    apiFetch<Types.InstanceInfo[]>(`${PRISME_CONFIG.routes.supervision}/instances`),
 
   listerExecutions: () =>
-    apiFetch<Types.ExecutionInfo[]>(
-      `${PRISME_CONFIG.routes.supervision}/executions`
-    ),
+    apiFetch<Types.ExecutionInfo[]>(`${PRISME_CONFIG.routes.supervision}/executions`),
 
   listerSolveurs: () =>
-    apiFetch<Types.SolveurInfo[]>(
-      `${PRISME_CONFIG.routes.supervision}/solveurs`
-    ),
+    apiFetch<Types.SolveurInfo[]>(`${PRISME_CONFIG.routes.supervision}/solveurs`),
 
-  verifierSante: () =>
-    apiFetch<Types.Sante>(`${PRISME_CONFIG.routes.supervision}/sante`),
+  verifierSante: () => apiFetch<Types.Sante>(`${PRISME_CONFIG.routes.supervision}/sante`),
 
   // VALIDATION
-  soumettreDecision: (
-    executionId: string,
-    decision: Types.DecisionValidation
-  ) =>
+  soumettreDecision: (executionId: string, decision: Types.DecisionValidation) =>
     apiFetch<Types.ReponseValidation>(
       `${PRISME_CONFIG.routes.validation}/executions/${executionId}/decision`,
-      { method: 'POST', body: JSON.stringify(decision) }
+      { method: "POST", body: JSON.stringify(decision) },
     ),
 
   // ADAPTATEURS ERP — chaque adaptateur déterministe expose POST /adapters/{nom}/ingerer,
@@ -193,16 +184,16 @@ export const prismeClient = {
   importerViaAdaptateur: (nomAdaptateur: string) =>
     apiFetch<Types.ReponseImportAdaptateur>(
       `${PRISME_CONFIG.routes.adapters}/${nomAdaptateur}/ingerer`,
-      { method: 'POST' }
+      { method: "POST" },
     ),
 
   // Import depuis le gabarit xlsx (POST /adapters/tableur/{client_id}, multipart).
   importerFichierTableur: (clientId: string, fichier: File) => {
     const corps = new FormData();
-    corps.append('fichier', fichier);
+    corps.append("fichier", fichier);
     return apiFetch<Types.ReponseImportAdaptateur>(
       `${PRISME_CONFIG.routes.adapters}/tableur/${clientId}`,
-      { method: 'POST', body: corps }
+      { method: "POST", body: corps },
     );
   },
 
@@ -212,8 +203,11 @@ export const prismeClient = {
   convertirDonneesBrutes: (clientId: string, donneesBrutes: string) =>
     apiFetch<Types.ReponseComprehension>(
       `${PRISME_CONFIG.routes.adapters}/comprehension/ingerer`,
-      { method: 'POST', body: JSON.stringify({ client_id: clientId, donnees_brutes: donneesBrutes }) },
-      PRISME_CONFIG.timeoutComprehension
+      {
+        method: "POST",
+        body: JSON.stringify({ client_id: clientId, donnees_brutes: donneesBrutes }),
+      },
+      PRISME_CONFIG.timeoutComprehension,
     ),
 
   // PROJETS — données brutes persistées, reconvertibles à volonté. Le
@@ -222,8 +216,12 @@ export const prismeClient = {
   // autre client (voir `api/routes/projets.py`).
   creerProjet: (donneesBrutes: string, nom?: string, clientId?: string) =>
     apiFetch<Types.ReponseCreationProjet>(PRISME_CONFIG.routes.projets, {
-      method: 'POST',
-      body: JSON.stringify({ donnees_brutes: donneesBrutes, nom: nom ?? null, client_id: clientId ?? null }),
+      method: "POST",
+      body: JSON.stringify({
+        donnees_brutes: donneesBrutes,
+        nom: nom ?? null,
+        client_id: clientId ?? null,
+      }),
     }),
 
   listerProjets: () => apiFetch<Types.Projet[]>(PRISME_CONFIG.routes.projets),
@@ -234,7 +232,7 @@ export const prismeClient = {
   // Supprime les données brutes du projet — n'affecte jamais les instances
   // déjà générées à partir de lui.
   supprimerProjet: (projetId: string) =>
-    apiFetch<void>(`${PRISME_CONFIG.routes.projets}/${projetId}`, { method: 'DELETE' }),
+    apiFetch<void>(`${PRISME_CONFIG.routes.projets}/${projetId}`, { method: "DELETE" }),
 
   // Pas de timeout (null) : demande explicite — une conversion sur un gros
   // volume de données brutes peut prendre plusieurs minutes, on laisse
@@ -242,8 +240,8 @@ export const prismeClient = {
   genererInstanceDepuisProjet: (projetId: string) =>
     apiFetch<Types.ReponseComprehension>(
       `${PRISME_CONFIG.routes.projets}/${projetId}/generer-instance`,
-      { method: 'POST' },
-      null
+      { method: "POST" },
+      null,
     ),
 
   // GÉNÉRATION DE SOLVEUR — génération LLM + exécution sandboxée + cascade
@@ -253,7 +251,147 @@ export const prismeClient = {
   genererSolveur: (instanceId: string) =>
     apiFetch<Types.ReponseGenerationSolveur>(
       `${PRISME_CONFIG.routes.generation}/${instanceId}`,
-      { method: 'POST' },
-      null
+      { method: "POST" },
+      null,
     ),
 } as const;
+
+// ============================================================================
+// STREAMING (Server-Sent Events)
+// ============================================================================
+
+interface EvenementSSEBrut {
+  type: string;
+  data: string;
+}
+
+/**
+ * Lecteur SSE générique — `EventSource` natif ne permet pas d'envoyer l'en-
+ * tête `Authorization`, donc on lit le flux à la main via `fetch` plutôt que
+ * d'utiliser l'API EventSource. Ne décode pas le JSON de `data` : chaque
+ * appelant sait quel type attendre pour chaque nom d'évènement.
+ */
+async function* lireFluxSSE(url: string, options?: RequestInit): AsyncGenerator<EvenementSSEBrut> {
+  const token = lireTokenStocke();
+  const response = await fetch(`${PRISME_CONFIG.baseURL}${url}`, {
+    ...options,
+    headers: {
+      Accept: "text/event-stream",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options?.headers,
+    },
+  });
+
+  if (!response.ok || !response.body) {
+    let detail: string | Types.ErreurValidationChamp[] = response.statusText;
+    try {
+      const erreur: Types.ErreurAPI = await response.json();
+      detail = erreur.detail;
+    } catch {
+      // garder response.statusText
+    }
+    const message = Array.isArray(detail)
+      ? detail.map((e) => `${e.loc.join(".")} : ${e.msg}`).join(" ; ")
+      : detail;
+    throw new PrismeAPIError(`Erreur API: ${message}`, response.status, detail);
+  }
+
+  const lecteur = response.body.getReader();
+  const decodeur = new TextDecoder();
+  let tampon = "";
+
+  while (true) {
+    const { done, value } = await lecteur.read();
+    if (done) return;
+    tampon += decodeur.decode(value, { stream: true });
+
+    let indexSeparateur: number;
+    // Un évènement SSE = un bloc terminé par une ligne vide (\n\n).
+    while ((indexSeparateur = tampon.indexOf("\n\n")) !== -1) {
+      const bloc = tampon.slice(0, indexSeparateur);
+      tampon = tampon.slice(indexSeparateur + 2);
+
+      let type = "";
+      let data = "";
+      for (const ligne of bloc.split("\n")) {
+        if (ligne.startsWith("event: ")) type = ligne.slice("event: ".length);
+        else if (ligne.startsWith("data: ")) data = ligne.slice("data: ".length);
+      }
+      if (data) yield { type, data };
+    }
+  }
+}
+
+export interface ReponseDemarrageJob {
+  job_id: string;
+}
+
+/**
+ * Démarre la génération de solveur dans un job serveur indépendant de la
+ * requête HTTP (POST /generation/{id}/demarrer) — le job continue même si
+ * la page est rechargée ou perd le réseau. Suivre avec `suivreJobGeneration`.
+ */
+export function demarrerGenerationSolveur(instanceId: string): Promise<ReponseDemarrageJob> {
+  return apiFetch<ReponseDemarrageJob>(
+    `${PRISME_CONFIG.routes.generation}/${instanceId}/demarrer`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+/**
+ * Jobs de génération connus du serveur (GET /generation/jobs) — pour un
+ * indicateur "génération en cours" visible depuis n'importe quelle page
+ * (sidebar, liste d'instances...), pas seulement celle qui a lancé le job.
+ */
+export function listerJobsGeneration(instanceId?: string): Promise<Types.JobGenerationInfo[]> {
+  const requete = instanceId ? `?instance_id=${encodeURIComponent(instanceId)}` : "";
+  return apiFetch<Types.JobGenerationInfo[]>(`${PRISME_CONFIG.routes.generation}/jobs${requete}`);
+}
+
+export type EvenementGenererSolveurStream =
+  | { type: "etape"; data: Types.EvenementGeneration }
+  | { type: "resultat"; data: Types.ReponseGenerationSolveur };
+
+interface EvenementErreurBrut {
+  message: string;
+}
+
+/**
+ * Suit un job de génération déjà démarré (GET /generation/jobs/{id}/stream) —
+ * rejoue l'historique déjà produit puis continue en direct. Se reconnecter
+ * (après un rechargement de page) à un job en cours ou déjà terminé donne
+ * la même chronologie que si on l'avait suivi depuis le début.
+ */
+export async function* suivreJobGeneration(
+  jobId: string,
+): AsyncGenerator<EvenementGenererSolveurStream> {
+  let recuUnEvenementTerminal = false;
+
+  for await (const { type, data } of lireFluxSSE(
+    `${PRISME_CONFIG.routes.generation}/jobs/${jobId}/stream`,
+  )) {
+    if (type === "etape") {
+      yield { type: "etape", data: JSON.parse(data) as Types.EvenementGeneration };
+    } else if (type === "resultat") {
+      recuUnEvenementTerminal = true;
+      yield { type: "resultat", data: JSON.parse(data) as Types.ReponseGenerationSolveur };
+    } else if (type === "erreur") {
+      recuUnEvenementTerminal = true;
+      const { message } = JSON.parse(data) as EvenementErreurBrut;
+      throw new PrismeAPIError(`Erreur pendant la génération : ${message}`, undefined, message);
+    }
+  }
+
+  // Le flux s'est fermé sans évènement `resultat` ni `erreur` — coupure
+  // réseau, redémarrage du serveur en plein milieu (le job lui-même est
+  // alors perdu, en mémoire process, voir api/routes/generation.py), etc.
+  // Sans ça, l'appelant verrait juste la progression s'arrêter sans savoir
+  // pourquoi.
+  if (!recuUnEvenementTerminal) {
+    throw new PrismeAPIError(
+      "Erreur réseau: le suivi de la génération a été interrompu avant la fin, sans diagnostic du serveur.",
+    );
+  }
+}

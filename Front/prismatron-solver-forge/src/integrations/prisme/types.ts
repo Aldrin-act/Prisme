@@ -224,6 +224,7 @@ export interface SolveurInfo {
   id: string;
   client_id: string;
   structure_contraintes: string;
+  signature_objectifs: string;
   date_validation: string;
   empreinte_sha256: string;
 }
@@ -279,13 +280,21 @@ export interface ReponseComprehension {
 // GÉNÉRATION DE SOLVEUR
 // ============================================================================
 
-// Pipeline génération LLM → cascade de validation → enregistrement
-// (POST /generation/{instance_id}). Un seul essai, pas de boucle de
-// réparation (Étape 6 non construite) — un échec est renvoyé tel quel.
+// Pipeline multi-agents avec boucle de réparation bornée (jusqu'à 3
+// tentatives) → cascade de validation → enregistrement
+// (POST /generation/{instance_id} ou /stream, même résultat final).
 export interface EchecCascade {
   nom: string;
   brique_en_echec: string | null;
   details: string[];
+}
+
+// Un évènement de progression par agent/sous-étape (POST /generation/{id}/stream,
+// Server-Sent Events, event: "etape").
+export interface EvenementGeneration {
+  agent: string;
+  statut: 'en_cours' | 'termine' | 'echec';
+  resume: string;
 }
 
 export interface ReponseGenerationSolveur {
@@ -298,6 +307,16 @@ export interface ReponseGenerationSolveur {
   nombre_tentatives: number;
   erreur: string | null;
   echecs_cascade: EchecCascade[];
+}
+
+// Un job de génération connu du serveur (GET /generation/jobs) — pour savoir
+// qu'une génération tourne en arrière-plan pour une instance sans dépendre
+// du localStorage du navigateur qui l'a lancée (autre page, autre onglet...).
+export interface JobGenerationInfo {
+  job_id: string;
+  instance_id: string;
+  termine: boolean;
+  reussi: boolean | null;
 }
 
 // Projets : données brutes persistées + historique des instances générées

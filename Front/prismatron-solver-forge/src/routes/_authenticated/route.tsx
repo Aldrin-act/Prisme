@@ -1,10 +1,16 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  Link,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   Database,
   FolderKanban,
-  Code2,
   Cpu,
   FileCode2,
   Play,
@@ -18,10 +24,12 @@ import {
   LogOut,
   Search,
   Building2,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authService, useAuth } from "@/integrations/prisme/auth";
+import { useJobsGeneration } from "@/integrations/prisme";
 import { toast } from "sonner";
 import { PrismeLogo } from "@/components/prisme-logo";
 
@@ -39,7 +47,6 @@ const NAV = [
   { to: "/app", icon: LayoutDashboard, label: "Tableau de bord" },
   { to: "/donnees", icon: Database, label: "Données" },
   { to: "/instances", icon: FolderKanban, label: "Instances" },
-  { to: "/dsl", icon: Code2, label: "Concepteur DSL" },
   { to: "/solver-generator", icon: Cpu, label: "Générateur de solveurs" },
   { to: "/solvers", icon: FileCode2, label: "Solveurs générés" },
   { to: "/execution", icon: Play, label: "Centre d'exécution" },
@@ -69,9 +76,17 @@ function AppShell() {
   }
 
   const navVisible = NAV.filter(
-    (n) => !("rolesAutorises" in n) || (n.rolesAutorises as readonly string[]).includes(utilisateur.role)
+    (n) =>
+      !("rolesAutorises" in n) ||
+      (n.rolesAutorises as readonly string[]).includes(utilisateur.role),
   );
   const current = NAV.find((n) => n.to === pathname);
+
+  // Icône de progression sur l'onglet "Générateur de solveurs", visible
+  // depuis n'importe quelle page — même principe qu'un onglet de navigateur
+  // qui tourne tant qu'une page charge.
+  const { data: jobsGeneration } = useJobsGeneration();
+  const generationEnCours = jobsGeneration?.some((j) => !j.termine) ?? false;
 
   return (
     <div className="flex min-h-screen">
@@ -95,6 +110,9 @@ function AppShell() {
               >
                 <n.icon className="h-4 w-4" />
                 {n.label}
+                {n.to === "/solver-generator" && generationEnCours && (
+                  <Loader2 className="ml-auto h-3.5 w-3.5 shrink-0 animate-spin text-primary" />
+                )}
               </Link>
             );
           })}
@@ -103,12 +121,7 @@ function AppShell() {
           <div className="truncate px-2 text-xs text-muted-foreground">
             {utilisateur.prenom} {utilisateur.nom}
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="mt-2 w-full justify-start"
-            onClick={signOut}
-          >
+          <Button variant="ghost" size="sm" className="mt-2 w-full justify-start" onClick={signOut}>
             <LogOut className="mr-2 h-4 w-4" /> Se déconnecter
           </Button>
         </div>
@@ -117,7 +130,9 @@ function AppShell() {
       <main className="flex-1">
         <header className="glass sticky top-0 z-10 flex items-center justify-between border-b border-border/50 px-6 py-4">
           <div>
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Espace de travail</div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">
+              Espace de travail
+            </div>
             <h1 className="text-lg font-semibold">{current?.label ?? "PRISME"}</h1>
           </div>
           <div className="flex items-center gap-3">

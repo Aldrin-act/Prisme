@@ -2,26 +2,30 @@
  * React hooks pour l'API PRISME (avec TanStack Query)
  */
 
-import { useMutation, useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import { prismeClient } from './client';
-import type * as Types from './types';
+import { useMutation, useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import { prismeClient, listerJobsGeneration } from "./client";
+import type * as Types from "./types";
 
 // ============================================================================
 // QUERY KEYS
 // ============================================================================
 
 export const prismeKeys = {
-  all: ['prisme'] as const,
-  instances: () => [...prismeKeys.all, 'instances'] as const,
-  executions: () => [...prismeKeys.all, 'executions'] as const,
-  solveurs: () => [...prismeKeys.all, 'solveurs'] as const,
-  sante: () => [...prismeKeys.all, 'sante'] as const,
-  planning: (executionId: string) => [...prismeKeys.all, 'planning', executionId] as const,
-  codeSource: (executionId: string) => [...prismeKeys.all, 'codeSource', executionId] as const,
-  projets: () => [...prismeKeys.all, 'projets'] as const,
-  projet: (projetId: string) => [...prismeKeys.all, 'projets', projetId] as const,
-  clients: () => [...prismeKeys.all, 'clients'] as const,
-  instance: (instanceId: string) => [...prismeKeys.all, 'instance', instanceId] as const,
+  all: ["prisme"] as const,
+  instances: () => [...prismeKeys.all, "instances"] as const,
+  executions: () => [...prismeKeys.all, "executions"] as const,
+  solveurs: () => [...prismeKeys.all, "solveurs"] as const,
+  sante: () => [...prismeKeys.all, "sante"] as const,
+  planning: (executionId: string) => [...prismeKeys.all, "planning", executionId] as const,
+  codeSource: (executionId: string) => [...prismeKeys.all, "codeSource", executionId] as const,
+  codeSourceSolveur: (idSolveur: string) =>
+    [...prismeKeys.all, "codeSourceSolveur", idSolveur] as const,
+  projets: () => [...prismeKeys.all, "projets"] as const,
+  projet: (projetId: string) => [...prismeKeys.all, "projets", projetId] as const,
+  clients: () => [...prismeKeys.all, "clients"] as const,
+  instance: (instanceId: string) => [...prismeKeys.all, "instance", instanceId] as const,
+  jobsGeneration: (instanceId?: string) =>
+    [...prismeKeys.all, "jobsGeneration", instanceId ?? "tous"] as const,
 } as const;
 
 // ============================================================================
@@ -32,7 +36,7 @@ export const prismeKeys = {
  * Liste les clients (tenants) — public, pas besoin d'être connecté.
  */
 export function useClients(
-  options?: Omit<UseQueryOptions<Types.Client[]>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.Client[]>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: prismeKeys.clients(),
@@ -46,10 +50,10 @@ export function useClients(
  */
 export function useInstance(
   instanceId: string | null,
-  options?: Omit<UseQueryOptions<Types.InstanceDetail>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.InstanceDetail>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: prismeKeys.instance(instanceId || ''),
+    queryKey: prismeKeys.instance(instanceId || ""),
     queryFn: () => prismeClient.obtenirInstance(instanceId!),
     enabled: !!instanceId,
     ...options,
@@ -60,7 +64,7 @@ export function useInstance(
  * Liste les instances ingérées
  */
 export function useInstances(
-  options?: Omit<UseQueryOptions<Types.InstanceInfo[]>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.InstanceInfo[]>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: prismeKeys.instances(),
@@ -73,7 +77,7 @@ export function useInstances(
  * Liste les exécutions
  */
 export function useExecutions(
-  options?: Omit<UseQueryOptions<Types.ExecutionInfo[]>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.ExecutionInfo[]>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: prismeKeys.executions(),
@@ -86,7 +90,7 @@ export function useExecutions(
  * Liste les solveurs validés
  */
 export function useSolveurs(
-  options?: Omit<UseQueryOptions<Types.SolveurInfo[]>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.SolveurInfo[]>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: prismeKeys.solveurs(),
@@ -96,11 +100,27 @@ export function useSolveurs(
 }
 
 /**
+ * Jobs de génération en cours ou terminés (mémoire process du serveur) —
+ * pour un indicateur "génération en cours" visible depuis n'importe quelle
+ * page. Interrogé toutes les 4s tant qu'un job n'est pas terminé, comme
+ * l'icône de chargement d'un onglet de navigateur.
+ */
+export function useJobsGeneration(
+  instanceId?: string,
+  options?: Omit<UseQueryOptions<Types.JobGenerationInfo[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.jobsGeneration(instanceId),
+    queryFn: () => listerJobsGeneration(instanceId),
+    refetchInterval: (query) => (query.state.data?.some((j) => !j.termine) ? 4000 : 15000),
+    ...options,
+  });
+}
+
+/**
  * Vérifie la santé du système
  */
-export function useSante(
-  options?: Omit<UseQueryOptions<Types.Sante>, 'queryKey' | 'queryFn'>
-) {
+export function useSante(options?: Omit<UseQueryOptions<Types.Sante>, "queryKey" | "queryFn">) {
   return useQuery({
     queryKey: prismeKeys.sante(),
     queryFn: () => prismeClient.verifierSante(),
@@ -114,10 +134,10 @@ export function useSante(
  */
 export function usePlanning(
   executionId: string | null,
-  options?: Omit<UseQueryOptions<Types.PlanningAvecDurees>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.PlanningAvecDurees>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: prismeKeys.planning(executionId || ''),
+    queryKey: prismeKeys.planning(executionId || ""),
     queryFn: () => prismeClient.obtenirPlanning(executionId!),
     enabled: !!executionId,
     ...options,
@@ -128,7 +148,7 @@ export function usePlanning(
  * Liste les projets (données brutes persistées) d'un client
  */
 export function useProjets(
-  options?: Omit<UseQueryOptions<Types.Projet[]>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.Projet[]>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: prismeKeys.projets(),
@@ -142,10 +162,10 @@ export function useProjets(
  */
 export function useProjet(
   projetId: string | null,
-  options?: Omit<UseQueryOptions<Types.ProjetDetail>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.ProjetDetail>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: prismeKeys.projet(projetId || ''),
+    queryKey: prismeKeys.projet(projetId || ""),
     queryFn: () => prismeClient.obtenirProjet(projetId!),
     enabled: !!projetId,
     ...options,
@@ -157,12 +177,28 @@ export function useProjet(
  */
 export function useCodeSource(
   executionId: string | null,
-  options?: Omit<UseQueryOptions<Types.CodeSource>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<Types.CodeSource>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: prismeKeys.codeSource(executionId || ''),
+    queryKey: prismeKeys.codeSource(executionId || ""),
     queryFn: () => prismeClient.obtenirCodeSource(executionId!),
     enabled: !!executionId,
+    ...options,
+  });
+}
+
+/**
+ * Récupère le code source d'un solveur directement par son id (audit) —
+ * pour un solveur jamais encore exécuté, sans execution_id disponible.
+ */
+export function useCodeSourceSolveur(
+  idSolveur: string | null,
+  options?: Omit<UseQueryOptions<Types.CodeSource>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.codeSourceSolveur(idSolveur || ""),
+    queryFn: () => prismeClient.obtenirCodeSourceParSolveur(idSolveur!),
+    enabled: !!idSolveur,
     ...options,
   });
 }

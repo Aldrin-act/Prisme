@@ -24,7 +24,7 @@ function AppDashboard() {
           Prêt à construire avec <span className="gradient-text">PRISME</span>
         </h2>
         <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-          Démarrez une instance, décrivez vos contraintes en DSL, et laissez l'IA rédiger votre
+          Démarrez une instance, décrivez vos contraintes en T-R-C-O, et laissez l'IA rédiger votre
           premier solveur prêt pour la production.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
@@ -34,7 +34,7 @@ function AppDashboard() {
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link to="/dsl">Ouvrir le concepteur DSL</Link>
+            <Link to="/solver-generator">Générer un solveur</Link>
           </Button>
         </div>
       </div>

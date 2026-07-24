@@ -6,13 +6,20 @@
  */
 
 // Client API
-export { prismeClient, PrismeAPIError } from './client';
+export {
+  prismeClient,
+  PrismeAPIError,
+  demarrerGenerationSolveur,
+  suivreJobGeneration,
+  type EvenementGenererSolveurStream,
+  type ReponseDemarrageJob,
+} from "./client";
 
 // Hooks TanStack Query
-export * from './hooks';
+export * from "./hooks";
 
 // Types
-export * from './types';
+export * from "./types";
 
 // Configuration
-export { PRISME_CONFIG } from './config';
+export { PRISME_CONFIG } from "./config";
