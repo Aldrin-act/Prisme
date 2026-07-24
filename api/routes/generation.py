@@ -1,7 +1,7 @@
 """Déclenche le pipeline de génération de solveur multi-agents avec boucle
 de réparation bornée (`generation.pipeline_avec_boucle`, Étape 6 — déjà
 construite : orchestrateur → analyste → architecte → développeur → testeur
-→ [Reviewer/Debugger, jusqu'à 10 tentatives] → optimiseur → documentation)
+→ [Reviewer/Debugger, jusqu'à 10 tentatives] → documentation)
 depuis une instance déjà ingérée. La boucle reste bornée : après épuisement
 des tentatives, l'échec est renvoyé tel quel à l'humain, jamais masqué par
 un acharnement automatique (§6.5).
@@ -37,6 +37,7 @@ import time
 import uuid
 from collections.abc import Iterator
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -74,6 +75,7 @@ class _JobGeneration:
     resultat: dict[str, object] | None = None
     erreur: str | None = None
     termine: bool = False
+    cree_le: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
 
 _JOBS: dict[str, _JobGeneration] = {}
@@ -212,14 +214,23 @@ def lister_jobs_generation(
     pour qu'une page qui n'a pas déclenché le job (Instances, un autre
     onglet...) sache qu'une génération tourne en arrière-plan pour telle
     instance. Mêmes règles de visibilité que le reste de l'API : un compte
-    non-admin ne voit que les jobs de son propre client."""
+    non-admin ne voit que les jobs de son propre client.
+
+    Inclut `evenements` (l'historique agent par agent) et `nombre_tentatives`
+    — pas seulement `reussi`/`termine` — pour que la page Analytique puisse
+    calculer de vraies statistiques par agent (taux d'échec, fréquence...)
+    sans qu'un canal dédié soit nécessaire."""
     filtre_client = client_id_pour_filtre(utilisateur)
     return [
         {
             "job_id": job.id,
             "instance_id": job.instance_id,
+            "client_id": job.client_id,
             "termine": job.termine,
             "reussi": job.resultat.get("reussi") if job.resultat else None,
+            "nombre_tentatives": job.resultat.get("nombre_tentatives") if job.resultat else None,
+            "cree_le": job.cree_le,
+            "evenements": job.evenements,
         }
         for job in _JOBS.values()
         if (filtre_client is None or job.client_id == filtre_client)

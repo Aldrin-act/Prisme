@@ -18,8 +18,15 @@ Workflow complet :
    - Debugger (si bugs détectés)
    - Validation (statique → exécution → cascade)
    - Retry si échec
-7. Optimiseur (si succès)
-8. Documentation
+7. Documentation
+
+Pas d'Optimiseur : agent retiré du pipeline (réponse JSON trop fragile — il
+embarque un code Python multi-lignes complet comme valeur de chaîne JSON, un
+format que les LLM échouent régulièrement à échapper correctement — et
+l'enjeu n'en valait pas la fragilité : le code est déjà validé par la
+cascade à ce stade). `generation/agents/optimiseur.py` existe toujours mais
+n'est plus appelé ici ; `pipeline_multi_agents.py` (ancienne version sans
+boucle, non branchée sur l'API web) continue de l'utiliser séparément.
 
 §6.6 : La boucle reste **bornée** (10 tentatives max), **offline** (génération),
 et **diagnostique** (feedback précis de la validation).
@@ -34,13 +41,11 @@ from generation.agents import (
     analyste,
     architecte,
     documentation,
-    optimiseur,
     orchestrateur,
     testeur,
 )
 from generation.agents.client_llm import AppelLLM, construire_appel_llm_pour_agent
 from generation.agents.generateur import generer_code_depuis_plan
-from generation.agents.optimiseur import ResultatOptimisation
 from generation.agents.orchestrateur import EtapePlan
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.loop import EvenementEtape, ResultatBoucleReparation, boucle_reparation_bornee_stream, etape
@@ -108,10 +113,6 @@ class ResultatPipelineAvecBoucle:
     erreur_execution: str | None
     verdict_cascade: VerdictCascade | None
 
-    # Optimisation (si succès)
-    optimisation: ResultatOptimisation | None
-    code_optimise_adopte: bool
-
     # Documentation
     documentation: str | None
 
@@ -132,7 +133,7 @@ def tenter_generation_avec_boucle_stream() -> Iterator[EvenementEtape | Resultat
     voir `generation.loop.boucle_reparation_bornee_stream`) ; le tout
     dernier élément produit est toujours le `ResultatPipelineAvecBoucle`
     final. Consommée par `api/routes/generation.py` pour le streaming SSE —
-    un pipeline à 8 agents + jusqu'à 10 tentatives de réparation peut prendre
+    un pipeline à 7 agents + jusqu'à 10 tentatives de réparation peut prendre
     plusieurs minutes, une attente aveugle n'est pas acceptable.
 
     Chaque agent construit son propre client LLM via
@@ -190,36 +191,26 @@ def tenter_generation_avec_boucle_stream() -> Iterator[EvenementEtape | Resultat
             validation_statique=boucle.derniere_validation_statique,
             erreur_execution=boucle.derniere_erreur_execution,
             verdict_cascade=boucle.dernier_verdict_cascade,
-            optimisation=None,
-            code_optimise_adopte=False,
             documentation=None,
         )
         return
 
-    # Succès après boucle → On continue avec l'Optimiseur
-    code_candidat = boucle.code_final
+    # Succès après boucle → code déjà validé par la cascade (§6.6, le
+    # résultat qui compte vraiment).
+    code_final = boucle.code_final
+    resultat_final = _valider_completement(code_final)
 
-    # 7. Optimiseur (si succès)
-    yield etape("optimiseur", "en_cours", "Recherche d'optimisations...")
-    optimisation = optimiseur.optimiser_code(construire_appel_llm_pour_agent("optimiseur"), code_candidat)
-    code_final = code_candidat
-    code_optimise_adopte = False
-    resultat_final = _valider_completement(code_candidat)
-
-    if optimisation.proposee and optimisation.code_source:
-        resultat_opt = _valider_completement(optimisation.code_source)
-        if resultat_opt.reussi:
-            code_final = optimisation.code_source
-            code_optimise_adopte = True
-            resultat_final = resultat_opt
-    yield etape(
-        "optimiseur", "termine", "Optimisation adoptée" if code_optimise_adopte else "Code initial conservé"
-    )
-
-    # 8. Documentation
+    # 7. Documentation — meilleur-effort : un texte descriptif manqué ne doit
+    # jamais faire perdre un solveur déjà validé.
     yield etape("documentation", "en_cours", "Rédaction de la documentation...")
-    doc = documentation.documenter_code(construire_appel_llm_pour_agent("documentation"), code_final)
-    yield etape("documentation", "termine", "Documentation produite")
+    documentation_texte: str | None = None
+    try:
+        doc = documentation.documenter_code(construire_appel_llm_pour_agent("documentation"), code_final)
+    except Exception as erreur:
+        yield etape("documentation", "echec", f"Documentation ignorée ({type(erreur).__name__}) : {erreur}")
+    else:
+        documentation_texte = doc.en_texte()
+        yield etape("documentation", "termine", "Documentation produite")
 
     yield ResultatPipelineAvecBoucle(
         plan_orchestrateur=plan.plan,
@@ -232,9 +223,7 @@ def tenter_generation_avec_boucle_stream() -> Iterator[EvenementEtape | Resultat
         validation_statique=resultat_final.validation_statique,
         erreur_execution=resultat_final.erreur_execution,
         verdict_cascade=resultat_final.verdict_cascade,
-        optimisation=optimisation,
-        code_optimise_adopte=code_optimise_adopte,
-        documentation=doc.en_texte(),
+        documentation=documentation_texte,
     )
 
 

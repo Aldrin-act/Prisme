@@ -304,11 +304,18 @@ export interface ReponseGenerationSolveur {
 // Un job de génération connu du serveur (GET /generation/jobs) — pour savoir
 // qu'une génération tourne en arrière-plan pour une instance sans dépendre
 // du localStorage du navigateur qui l'a lancée (autre page, autre onglet...).
+// `evenements`/`nombre_tentatives`/`cree_le` alimentent la page Analytique
+// (statistiques réelles par agent) — mémoire process côté serveur, perdu au
+// redémarrage du backend (voir api/routes/generation.py).
 export interface JobGenerationInfo {
   job_id: string;
   instance_id: string;
+  client_id: string;
   termine: boolean;
   reussi: boolean | null;
+  nombre_tentatives: number | null;
+  cree_le: string;
+  evenements: EvenementGeneration[];
 }
 
 // Projets : données brutes persistées + historique des instances générées

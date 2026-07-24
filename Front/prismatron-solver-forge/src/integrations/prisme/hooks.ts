@@ -2,7 +2,7 @@
  * React hooks pour l'API PRISME (avec TanStack Query)
  */
 
-import { useMutation, useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { prismeClient, listerJobsGeneration } from "./client";
 import type * as Types from "./types";
 
@@ -170,6 +170,34 @@ export function useProjet(
     enabled: !!projetId,
     ...options,
   });
+}
+
+/**
+ * Reconstruit "nom du projet + rang" pour chaque instance connue —
+ * /supervision/instances ne relie pas les instances à leur projet, seul
+ * GET /projets/{id} le fait (`instances: [{instance_id, ...}]`). Centralise
+ * un calcul auparavant dupliqué dans plusieurs pages (Instances, Générateur
+ * de solveurs, Solveurs générés) pour tout endroit affichant une instance
+ * par un nom lisible plutôt que son UUID brut.
+ */
+export function useLabelsInstances(): Map<string, string> {
+  const { data: projets } = useProjets();
+  const detailsProjets = useQueries({
+    queries: (projets ?? []).map((projet) => ({
+      queryKey: prismeKeys.projet(projet.projet_id),
+      queryFn: () => prismeClient.obtenirProjet(projet.projet_id),
+    })),
+  });
+  const labelParInstance = new Map<string, string>();
+  detailsProjets.forEach((requete) => {
+    const detail = requete.data as Types.ProjetDetail | undefined;
+    if (!detail) return;
+    const nom = detail.nom ?? "Sans nom";
+    [...detail.instances].reverse().forEach((instance, index) => {
+      labelParInstance.set(instance.instance_id, `${nom}-${index + 1}`);
+    });
+  });
+  return labelParInstance;
 }
 
 /**
