@@ -207,9 +207,14 @@ export interface ExecutionInfo {
   execution_id: string;
   id_solveur: string;
   instance_id: string;
-  date_execution: string;
+  client_id: string;
+  date_execution: string | null;
   reussi: boolean;
   erreur: string | null;
+  // Décision humaine sur ce planning proposé (POST /executions/{id}/decision)
+  // — null tant qu'aucune décision n'a été soumise, jamais automatique
+  // (§ founding principle : human-in-the-loop non négociable).
+  decision: "accepte" | "rejete" | null;
 }
 
 export interface SolveurInfo {

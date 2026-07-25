@@ -518,7 +518,8 @@ class EtatPostgres:
     def lister_executions(self, client_id: str | None = None) -> list[dict[str, object]]:
         """`client_id=None` ne filtre rien (réservé à l'admin)."""
         requete = sql.SQL(
-            "SELECT e.id, e.solveur_id, e.instance_id, i.client_id, e.statut, e.erreur, d.decision "
+            "SELECT e.id, e.solveur_id, e.instance_id, i.client_id, e.date_execution, e.statut, e.erreur, "
+            "d.decision "
             "FROM {executions} e "
             "JOIN {instances} i ON i.id = e.instance_id "
             "LEFT JOIN {decisions} d ON d.execution_id = e.id WHERE 1 = 1"
@@ -531,6 +532,7 @@ class EtatPostgres:
         if client_id is not None:
             requete += sql.SQL(" AND i.client_id = %s")
             parametres.append(client_id)
+        requete += sql.SQL(" ORDER BY e.date_execution DESC")
 
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(requete, parametres).fetchall()
@@ -540,11 +542,12 @@ class EtatPostgres:
                 "id_solveur": id_solveur,
                 "instance_id": instance_id,
                 "client_id": client_id,
+                "date_execution": date_execution,
                 "reussi": statut == "reussi",
                 "erreur": erreur,
                 "decision": decision,
             }
-            for execution_id, id_solveur, instance_id, client_id, statut, erreur, decision in lignes
+            for execution_id, id_solveur, instance_id, client_id, date_execution, statut, erreur, decision in lignes
         ]
 
     # --- Décisions humaines ----------------------------------------------

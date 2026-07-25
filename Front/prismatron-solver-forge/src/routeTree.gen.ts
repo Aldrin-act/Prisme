@@ -19,11 +19,9 @@ import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as PlatformRouteImport } from './routes/platform'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as UseCasesRouteImport } from './routes/use-cases'
-import { Route as AuthenticatedAlertsRouteImport } from './routes/_authenticated/alerts'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
-import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedDonneesRouteImport } from './routes/_authenticated/donnees'
 import { Route as AuthenticatedExecutionRouteImport } from './routes/_authenticated/execution'
@@ -32,7 +30,6 @@ import { Route as AuthenticatedSchedulesRouteImport } from './routes/_authentica
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSolverGeneratorRouteImport } from './routes/_authenticated/solver-generator'
 import { Route as AuthenticatedSolversRouteImport } from './routes/_authenticated/solvers'
-import { Route as AuthenticatedValidationRouteImport } from './routes/_authenticated/validation'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -83,11 +80,6 @@ const UseCasesRoute = UseCasesRouteImport.update({
   path: '/use-cases',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAlertsRoute = AuthenticatedAlertsRouteImport.update({
-  id: '/alerts',
-  path: '/alerts',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -101,11 +93,6 @@ const AuthenticatedApiKeysRoute = AuthenticatedApiKeysRouteImport.update({
 const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
@@ -149,11 +136,6 @@ const AuthenticatedSolversRoute = AuthenticatedSolversRouteImport.update({
   path: '/solvers',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedValidationRoute = AuthenticatedValidationRouteImport.update({
-  id: '/validation',
-  path: '/validation',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -165,11 +147,9 @@ export interface FileRoutesByFullPath {
   '/platform': typeof PlatformRoute
   '/pricing': typeof PricingRoute
   '/use-cases': typeof UseCasesRoute
-  '/alerts': typeof AuthenticatedAlertsRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
-  '/audit': typeof AuthenticatedAuditRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/donnees': typeof AuthenticatedDonneesRoute
   '/execution': typeof AuthenticatedExecutionRoute
@@ -178,7 +158,6 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/solver-generator': typeof AuthenticatedSolverGeneratorRoute
   '/solvers': typeof AuthenticatedSolversRoute
-  '/validation': typeof AuthenticatedValidationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -190,11 +169,9 @@ export interface FileRoutesByTo {
   '/platform': typeof PlatformRoute
   '/pricing': typeof PricingRoute
   '/use-cases': typeof UseCasesRoute
-  '/alerts': typeof AuthenticatedAlertsRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
-  '/audit': typeof AuthenticatedAuditRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/donnees': typeof AuthenticatedDonneesRoute
   '/execution': typeof AuthenticatedExecutionRoute
@@ -203,7 +180,6 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/solver-generator': typeof AuthenticatedSolverGeneratorRoute
   '/solvers': typeof AuthenticatedSolversRoute
-  '/validation': typeof AuthenticatedValidationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -217,11 +193,9 @@ export interface FileRoutesById {
   '/platform': typeof PlatformRoute
   '/pricing': typeof PricingRoute
   '/use-cases': typeof UseCasesRoute
-  '/_authenticated/alerts': typeof AuthenticatedAlertsRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
-  '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/donnees': typeof AuthenticatedDonneesRoute
   '/_authenticated/execution': typeof AuthenticatedExecutionRoute
@@ -230,7 +204,6 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/solver-generator': typeof AuthenticatedSolverGeneratorRoute
   '/_authenticated/solvers': typeof AuthenticatedSolversRoute
-  '/_authenticated/validation': typeof AuthenticatedValidationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -244,11 +217,9 @@ export interface FileRouteTypes {
     | '/platform'
     | '/pricing'
     | '/use-cases'
-    | '/alerts'
     | '/analytics'
     | '/api-keys'
     | '/app'
-    | '/audit'
     | '/clients'
     | '/donnees'
     | '/execution'
@@ -257,7 +228,6 @@ export interface FileRouteTypes {
     | '/settings'
     | '/solver-generator'
     | '/solvers'
-    | '/validation'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -269,11 +239,9 @@ export interface FileRouteTypes {
     | '/platform'
     | '/pricing'
     | '/use-cases'
-    | '/alerts'
     | '/analytics'
     | '/api-keys'
     | '/app'
-    | '/audit'
     | '/clients'
     | '/donnees'
     | '/execution'
@@ -282,7 +250,6 @@ export interface FileRouteTypes {
     | '/settings'
     | '/solver-generator'
     | '/solvers'
-    | '/validation'
   id:
     | '__root__'
     | '/'
@@ -295,11 +262,9 @@ export interface FileRouteTypes {
     | '/platform'
     | '/pricing'
     | '/use-cases'
-    | '/_authenticated/alerts'
     | '/_authenticated/analytics'
     | '/_authenticated/api-keys'
     | '/_authenticated/app'
-    | '/_authenticated/audit'
     | '/_authenticated/clients'
     | '/_authenticated/donnees'
     | '/_authenticated/execution'
@@ -308,7 +273,6 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/solver-generator'
     | '/_authenticated/solvers'
-    | '/_authenticated/validation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -396,13 +360,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UseCasesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/alerts': {
-      id: '/_authenticated/alerts'
-      path: '/alerts'
-      fullPath: '/alerts'
-      preLoaderRoute: typeof AuthenticatedAlertsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/analytics': {
       id: '/_authenticated/analytics'
       path: '/analytics'
@@ -422,13 +379,6 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AuthenticatedAppRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/audit': {
-      id: '/_authenticated/audit'
-      path: '/audit'
-      fullPath: '/audit'
-      preLoaderRoute: typeof AuthenticatedAuditRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/clients': {
@@ -487,22 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSolversRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/validation': {
-      id: '/_authenticated/validation'
-      path: '/validation'
-      fullPath: '/validation'
-      preLoaderRoute: typeof AuthenticatedValidationRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAlertsRoute: typeof AuthenticatedAlertsRoute
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedApiKeysRoute: typeof AuthenticatedApiKeysRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
-  AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedDonneesRoute: typeof AuthenticatedDonneesRoute
   AuthenticatedExecutionRoute: typeof AuthenticatedExecutionRoute
@@ -511,15 +452,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSolverGeneratorRoute: typeof AuthenticatedSolverGeneratorRoute
   AuthenticatedSolversRoute: typeof AuthenticatedSolversRoute
-  AuthenticatedValidationRoute: typeof AuthenticatedValidationRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAlertsRoute: AuthenticatedAlertsRoute,
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedApiKeysRoute: AuthenticatedApiKeysRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
-  AuthenticatedAuditRoute: AuthenticatedAuditRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedDonneesRoute: AuthenticatedDonneesRoute,
   AuthenticatedExecutionRoute: AuthenticatedExecutionRoute,
@@ -528,7 +466,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSolverGeneratorRoute: AuthenticatedSolverGeneratorRoute,
   AuthenticatedSolversRoute: AuthenticatedSolversRoute,
-  AuthenticatedValidationRoute: AuthenticatedValidationRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

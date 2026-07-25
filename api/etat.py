@@ -93,6 +93,7 @@ class EtatAPI:
     projets: dict[str, Projet] = field(default_factory=dict)
     projet_par_instance: dict[str, str] = field(default_factory=dict)
     clients: dict[str, Client] = field(default_factory=dict)
+    dates_execution: dict[str, str] = field(default_factory=dict)
 
     def enregistrer_client(self, client_id: str, nom: str | None = None) -> None:
         """Idempotent au sens applicatif : ré-enregistrer un `client_id`
@@ -209,10 +210,12 @@ class EtatAPI:
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
             del self.executions[execution_id]
             self.decisions.pop(execution_id, None)
+            self.dates_execution.pop(execution_id, None)
 
     def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
         execution_id = str(uuid.uuid4())
         self.executions[execution_id] = (id_solveur, instance_id, resultat)
+        self.dates_execution[execution_id] = datetime.now(UTC).isoformat()
         return execution_id
 
     def recuperer_execution(self, execution_id: str) -> tuple[str, str, ResultatExecution]:
@@ -235,6 +238,7 @@ class EtatAPI:
                     "id_solveur": id_solveur,
                     "instance_id": instance_id,
                     "client_id": client_id_instance,
+                    "date_execution": self.dates_execution.get(execution_id),
                     "reussi": resultat.reussi,
                     "erreur": resultat.erreur,
                     "decision": decision.decision if decision else None,
