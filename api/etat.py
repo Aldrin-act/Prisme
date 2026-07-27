@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal
 
-from dsl.schema import InstanceTRCO, Objectif
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif
 from sandbox.runner import ResultatExecution
 
 if TYPE_CHECKING:
@@ -45,6 +45,19 @@ def signature_objectifs(instance: InstanceTRCO) -> str:
     silencieusement sur une instance visant `equilibrer_charge`."""
     types = sorted({objectif.type for objectif in instance.objectifs})
     return ",".join(types)
+
+
+def durees_par_contrainte(instance: InstanceTRCO) -> dict[str, int]:
+    """Durée par couple (tâche, ressource), clé `"tache|ressource"` — `Planning`
+    n'a délibérément pas de champ durée (`dsl/schema/planning.py`), elle vit
+    sur `CompatibiliteRessourceTache`. Partagé par `routes/planning.py` et
+    `routes/planifier.py` (le point d'entrée unique ingestion+exécution) pour
+    ne calculer ça qu'à un seul endroit."""
+    return {
+        f"{contrainte.tache}|{contrainte.ressource}": contrainte.duree
+        for contrainte in instance.contraintes
+        if isinstance(contrainte, CompatibiliteRessourceTache)
+    }
 
 
 @dataclass(frozen=True)
@@ -85,6 +98,62 @@ class Projet:
     date_creation: str
 
 
+@dataclass(frozen=True)
+class EvenementGeneration:
+    """Un pas du pipeline multi-agents (§6.6) — copie durable de l'évènement
+    déjà diffusé en direct par `api/routes/generation.py` (flux SSE, mémoire
+    process) : ici pour qu'il survive à un redémarrage serveur."""
+
+    ordre: int
+    agent: str
+    statut: str
+    resume: str
+
+
+@dataclass(frozen=True)
+class TentativeGeneration:
+    """Une tentative de la boucle de réparation bornée (§6.6, jusqu'à 10) —
+    conserve le code candidat même pour les tentatives rejetées, pour
+    comprendre après coup pourquoi une génération a mis plusieurs essais
+    (ou a fini par échouer)."""
+
+    numero: int
+    code_candidat: str
+    reussi: bool
+    erreur_execution: str | None
+    revue_approuve: bool | None
+    revue_reponse_brute: str | None
+    revue_problemes: tuple[str, ...]
+    validation_statique_valide: bool | None
+    validation_statique_violations: tuple[str, ...]
+
+
+@dataclass
+class JobGeneration:
+    """Historique complet et durable d'une génération de solveur — distinct
+    du `_JobGeneration` en mémoire process de `api/routes/generation.py`
+    (qui reste la source du flux SSE en direct) : celui-ci est la copie
+    persistée, pour l'audit après coup, y compris après redémarrage."""
+
+    id: str
+    instance_id: str
+    client_id: str
+    cree_le: str
+    termine: bool = False
+    reussi: bool | None = None
+    id_solveur: str | None = None
+    specification: str | None = None
+    plan_technique: str | None = None
+    code_genere: str | None = None
+    tests_generes: str | None = None
+    code_final: str | None = None
+    nombre_tentatives: int | None = None
+    erreur: str | None = None
+    termine_le: str | None = None
+    evenements: list[EvenementGeneration] = field(default_factory=list)
+    tentatives: list[TentativeGeneration] = field(default_factory=list)
+
+
 @dataclass
 class EtatAPI:
     instances: dict[str, tuple[str, InstanceTRCO]] = field(default_factory=dict)
@@ -94,6 +163,7 @@ class EtatAPI:
     projet_par_instance: dict[str, str] = field(default_factory=dict)
     clients: dict[str, Client] = field(default_factory=dict)
     dates_execution: dict[str, str] = field(default_factory=dict)
+    jobs_generation: dict[str, JobGeneration] = field(default_factory=dict)
 
     def enregistrer_client(self, client_id: str, nom: str | None = None) -> None:
         """Idempotent au sens applicatif : ré-enregistrer un `client_id`
@@ -272,6 +342,78 @@ class EtatAPI:
 
     def decision_pour(self, execution_id: str) -> DecisionHumaine | None:
         return self.decisions.get(execution_id)
+
+    # --- Historique de génération (§6.6) ----------------------------------
+
+    def enregistrer_job_generation(self, job_id: str, instance_id: str, client_id: str) -> None:
+        self.jobs_generation[job_id] = JobGeneration(
+            id=job_id,
+            instance_id=instance_id,
+            client_id=client_id,
+            cree_le=datetime.now(UTC).isoformat(),
+        )
+
+    def ajouter_evenement_generation(self, job_id: str, agent: str, statut: str, resume: str) -> None:
+        job = self.jobs_generation[job_id]
+        job.evenements.append(
+            EvenementGeneration(ordre=len(job.evenements), agent=agent, statut=statut, resume=resume)
+        )
+
+    def ajouter_tentative_generation(self, job_id: str, tentative: TentativeGeneration) -> None:
+        self.jobs_generation[job_id].tentatives.append(tentative)
+
+    def terminer_job_generation(
+        self,
+        job_id: str,
+        *,
+        reussi: bool | None,
+        id_solveur: str | None = None,
+        specification: str | None = None,
+        plan_technique: str | None = None,
+        code_genere: str | None = None,
+        tests_generes: str | None = None,
+        code_final: str | None = None,
+        nombre_tentatives: int | None = None,
+        erreur: str | None = None,
+    ) -> None:
+        job = self.jobs_generation[job_id]
+        job.termine = True
+        job.reussi = reussi
+        job.id_solveur = id_solveur
+        job.specification = specification
+        job.plan_technique = plan_technique
+        job.code_genere = code_genere
+        job.tests_generes = tests_generes
+        job.code_final = code_final
+        job.nombre_tentatives = nombre_tentatives
+        job.erreur = erreur
+        job.termine_le = datetime.now(UTC).isoformat()
+
+    def recuperer_job_generation(self, job_id: str) -> JobGeneration:
+        if job_id not in self.jobs_generation:
+            raise KeyError(job_id)
+        return self.jobs_generation[job_id]
+
+    def lister_jobs_generation_persistes(
+        self, client_id: str | None = None, instance_id: str | None = None
+    ) -> list[dict[str, object]]:
+        return [
+            {
+                "job_id": j.id,
+                "instance_id": j.instance_id,
+                "client_id": j.client_id,
+                "cree_le": j.cree_le,
+                "termine": j.termine,
+                "reussi": j.reussi,
+                "id_solveur": j.id_solveur,
+                "nombre_tentatives": j.nombre_tentatives,
+                "erreur": j.erreur,
+                "termine_le": j.termine_le,
+            }
+            for j in self.jobs_generation.values()
+            if (client_id is None or j.client_id == client_id)
+            and (instance_id is None or j.instance_id == instance_id)
+        ]
 
 
 _ETAT_GLOBAL: EtatAPI | EtatPostgres | None = None

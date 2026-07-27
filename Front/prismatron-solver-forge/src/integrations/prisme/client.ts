@@ -350,6 +350,17 @@ export function listerJobsGeneration(instanceId?: string): Promise<Types.JobGene
   return apiFetch<Types.JobGenerationInfo[]>(`${PRISME_CONFIG.routes.generation}/jobs${requete}`);
 }
 
+/**
+ * Historique complet et durable d'un job (GET /generation/jobs/{id}/historique) —
+ * contrairement au flux SSE (mémoire process), survit à un redémarrage du serveur
+ * et inclut le code candidat de chaque tentative de la boucle de réparation.
+ */
+export function obtenirHistoriqueJobGeneration(jobId: string): Promise<Types.HistoriqueJobGeneration> {
+  return apiFetch<Types.HistoriqueJobGeneration>(
+    `${PRISME_CONFIG.routes.generation}/jobs/${jobId}/historique`,
+  );
+}
+
 export type EvenementGenererSolveurStream =
   | { type: "etape"; data: Types.EvenementGeneration }
   | { type: "resultat"; data: Types.ReponseGenerationSolveur };

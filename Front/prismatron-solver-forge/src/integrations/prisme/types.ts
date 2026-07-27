@@ -214,7 +214,7 @@ export interface ExecutionInfo {
   // Décision humaine sur ce planning proposé (POST /executions/{id}/decision)
   // — null tant qu'aucune décision n'a été soumise, jamais automatique
   // (§ founding principle : human-in-the-loop non négociable).
-  decision: "accepte" | "rejete" | null;
+  decision: "acceptee" | "refusee" | null;
 }
 
 export interface SolveurInfo {
@@ -235,15 +235,16 @@ export interface Sante {
 // VALIDATION
 // ============================================================================
 
+// Valeurs exactes attendues par POST /executions/{id}/decision
+// (api/routes/validation.py, api/etat.py::Decision) — jamais "accepte"/"rejete".
 export interface DecisionValidation {
-  accepte: boolean;
+  decision: "acceptee" | "refusee";
   commentaire?: string;
 }
 
 export interface ReponseValidation {
-  instance_id: string;
-  decision: "accepte" | "rejete";
-  commentaire?: string;
+  execution_id: string;
+  decision: "acceptee" | "refusee";
 }
 
 // ============================================================================
@@ -321,6 +322,49 @@ export interface JobGenerationInfo {
   nombre_tentatives: number | null;
   cree_le: string;
   evenements: EvenementGeneration[];
+}
+
+// Historique complet et durable d'un job (GET /generation/jobs/{id}/historique),
+// distinct de `JobGenerationInfo` (mémoire process, source du direct SSE) : celui-ci
+// survit à un redémarrage du serveur et inclut le code candidat de chaque tentative
+// de la boucle de réparation — y compris les rejetées, pas seulement le code final.
+export interface EvenementGenerationHistorise {
+  ordre: number;
+  agent: string;
+  statut: "en_cours" | "termine" | "echec";
+  resume: string;
+}
+
+export interface TentativeGenerationHistorisee {
+  numero: number;
+  code_candidat: string;
+  reussi: boolean;
+  erreur_execution: string | null;
+  revue_approuve: boolean | null;
+  revue_reponse_brute: string | null;
+  revue_problemes: string[];
+  validation_statique_valide: boolean | null;
+  validation_statique_violations: string[];
+}
+
+export interface HistoriqueJobGeneration {
+  job_id: string;
+  instance_id: string;
+  client_id: string;
+  cree_le: string;
+  termine: boolean;
+  reussi: boolean | null;
+  id_solveur: string | null;
+  specification: string | null;
+  plan_technique: string | null;
+  code_genere: string | null;
+  tests_generes: string | null;
+  code_final: string | null;
+  nombre_tentatives: number | null;
+  erreur: string | null;
+  termine_le: string | null;
+  evenements: EvenementGenerationHistorise[];
+  tentatives: TentativeGenerationHistorisee[];
 }
 
 // Projets : données brutes persistées + historique des instances générées

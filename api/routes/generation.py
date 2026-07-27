@@ -44,9 +44,10 @@ from fastapi.responses import StreamingResponse
 
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.dependencies import obtenir_registre
-from api.etat import EtatAPI, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, TentativeGeneration, obtenir_etat, structure_contraintes
 from api.etat import signature_objectifs as calculer_signature_objectifs
 from api.routes.auth import obtenir_utilisateur_courant
+from generation.loop import ResultatBoucleReparation
 from generation.pipeline_avec_boucle import (
     ResultatPipelineAvecBoucle,
     tenter_generation_avec_boucle,
@@ -143,21 +144,77 @@ def _construire_reponse(
     }
 
 
+def _persister_tentatives(etat: EtatAPI, job_id: str, boucle: ResultatBoucleReparation) -> None:
+    """Écrit chaque tentative de la boucle de réparation (§6.6), y compris
+    celles rejetées — le code candidat de chacune est conservé, pas
+    seulement celui de la tentative finale (choix explicite : « historique
+    complet »)."""
+    for tentative in boucle.tentatives:
+        etat.ajouter_tentative_generation(
+            job_id,
+            TentativeGeneration(
+                numero=tentative.numero,
+                code_candidat=tentative.code_candidat,
+                reussi=tentative.reussi,
+                erreur_execution=tentative.erreur_execution,
+                revue_approuve=tentative.revue.approuve if tentative.revue else None,
+                revue_reponse_brute=tentative.revue.reponse_brute if tentative.revue else None,
+                revue_problemes=tentative.revue.problemes if tentative.revue else (),
+                validation_statique_valide=(
+                    tentative.validation_statique.valide if tentative.validation_statique else None
+                ),
+                validation_statique_violations=(
+                    tentative.validation_statique.violations if tentative.validation_statique else ()
+                ),
+            ),
+        )
+
+
 def _executer_job(
-    job: _JobGeneration, registre: Registre, client_id: str, structure: str, signature_obj: str
+    job: _JobGeneration, registre: Registre, etat: EtatAPI, client_id: str, structure: str, signature_obj: str
 ) -> None:
     """Corps du fil d'exécution — jamais laissé mourir en silence (§6.6 : le
-    pipeline peut échouer, la mesure/le suivi doit survivre)."""
+    pipeline peut échouer, la mesure/le suivi doit survivre). Persiste en
+    base au fil de l'eau (`etat`), en plus du suivi en mémoire process
+    (`job`) déjà utilisé par le flux SSE — les deux coexistent, le premier
+    survit à un redémarrage du serveur, le second reste la source du direct."""
+    resultat_pipeline: ResultatPipelineAvecBoucle | None = None
     try:
         for item in tenter_generation_avec_boucle_stream():
             if isinstance(item, ResultatPipelineAvecBoucle):
+                resultat_pipeline = item
                 job.resultat = _construire_reponse(item, registre, client_id, structure, signature_obj)
             else:
                 job.evenements.append(item)
+                etat.ajouter_evenement_generation(job.id, item["agent"], item["statut"], item["resume"])
     except Exception as erreur:  # noqa: BLE001 — le pipeline peut lever n'importe quoi (appel LLM, réseau...)
         job.erreur = str(erreur)
     finally:
         job.termine = True
+        if resultat_pipeline is not None:
+            _persister_tentatives(etat, job.id, resultat_pipeline.boucle_reparation)
+
+        if job.resultat is not None:
+            reussi = job.resultat.get("reussi")
+            id_solveur = job.resultat.get("id_solveur")
+            nombre_tentatives = job.resultat.get("nombre_tentatives")
+        else:
+            reussi = False if job.erreur is not None else None
+            id_solveur = None
+            nombre_tentatives = None
+
+        etat.terminer_job_generation(
+            job.id,
+            reussi=reussi,
+            id_solveur=id_solveur,
+            specification=resultat_pipeline.specification if resultat_pipeline else None,
+            plan_technique=resultat_pipeline.plan_technique if resultat_pipeline else None,
+            code_genere=resultat_pipeline.code_genere if resultat_pipeline else None,
+            tests_generes=resultat_pipeline.tests_generes if resultat_pipeline else None,
+            code_final=resultat_pipeline.code_final if resultat_pipeline else None,
+            nombre_tentatives=nombre_tentatives,
+            erreur=job.erreur,
+        )
 
 
 @router.post("/{instance_id}")
@@ -173,8 +230,27 @@ def generer_solveur(
     `/{instance_id}/demarrer` pour suivre la progression agent par agent,
     de façon résistante à un rechargement de page."""
     client_id, structure, signature_obj = _instance_et_cle(instance_id, etat, utilisateur)
+
+    job_id = str(uuid.uuid4())
+    etat.enregistrer_job_generation(job_id, instance_id, client_id)
+
     resultat = tenter_generation_avec_boucle()
-    return _construire_reponse(resultat, registre, client_id, structure, signature_obj)
+    reponse = _construire_reponse(resultat, registre, client_id, structure, signature_obj)
+
+    _persister_tentatives(etat, job_id, resultat.boucle_reparation)
+    etat.terminer_job_generation(
+        job_id,
+        reussi=reponse["reussi"],
+        id_solveur=reponse["id_solveur"],
+        specification=resultat.specification,
+        plan_technique=resultat.plan_technique,
+        code_genere=resultat.code_genere,
+        tests_generes=resultat.tests_generes,
+        code_final=resultat.code_final,
+        nombre_tentatives=reponse["nombre_tentatives"],
+        erreur=reponse["erreur"],
+    )
+    return reponse
 
 
 @router.post("/{instance_id}/demarrer")
@@ -194,10 +270,11 @@ def demarrer_generation_solveur(
     job_id = str(uuid.uuid4())
     job = _JobGeneration(id=job_id, instance_id=instance_id, client_id=client_id)
     _JOBS[job_id] = job
+    etat.enregistrer_job_generation(job_id, instance_id, client_id)
 
     fil = threading.Thread(
         target=_executer_job,
-        args=(job, registre, client_id, structure, signature_obj),
+        args=(job, registre, etat, client_id, structure, signature_obj),
         daemon=True,
     )
     fil.start()
@@ -267,3 +344,58 @@ def suivre_job_generation(job_id: str) -> StreamingResponse:
             time.sleep(_INTERVALLE_POLL_SECONDES)
 
     return StreamingResponse(flux(), media_type="text/event-stream")
+
+
+@router.get("/jobs/{job_id}/historique")
+def obtenir_historique_job_generation(
+    job_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Historique complet et durable d'un job (§6.6) : survit à un
+    redémarrage du serveur, contrairement à `_JOBS`/`GET .../stream`
+    (mémoire process). Inclut le code candidat de **chaque** tentative de la
+    boucle de réparation, y compris les rejetées — pas seulement le code
+    final retenu — pour permettre l'audit complet du raisonnement des
+    agents, un choix explicite plutôt qu'un historique tronqué."""
+    try:
+        job = etat.recuperer_job_generation(job_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="job de génération inconnu") from None
+
+    verifier_acces_client(utilisateur, job.client_id)
+
+    return {
+        "job_id": job.id,
+        "instance_id": job.instance_id,
+        "client_id": job.client_id,
+        "cree_le": job.cree_le,
+        "termine": job.termine,
+        "reussi": job.reussi,
+        "id_solveur": job.id_solveur,
+        "specification": job.specification,
+        "plan_technique": job.plan_technique,
+        "code_genere": job.code_genere,
+        "tests_generes": job.tests_generes,
+        "code_final": job.code_final,
+        "nombre_tentatives": job.nombre_tentatives,
+        "erreur": job.erreur,
+        "termine_le": job.termine_le,
+        "evenements": [
+            {"ordre": e.ordre, "agent": e.agent, "statut": e.statut, "resume": e.resume} for e in job.evenements
+        ],
+        "tentatives": [
+            {
+                "numero": t.numero,
+                "code_candidat": t.code_candidat,
+                "reussi": t.reussi,
+                "erreur_execution": t.erreur_execution,
+                "revue_approuve": t.revue_approuve,
+                "revue_reponse_brute": t.revue_reponse_brute,
+                "revue_problemes": list(t.revue_problemes),
+                "validation_statique_valide": t.validation_statique_valide,
+                "validation_statique_violations": list(t.validation_statique_violations),
+            }
+            for t in job.tentatives
+        ],
+    }

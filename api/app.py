@@ -19,6 +19,7 @@ from api.routes import (
     execution,
     generation,
     ingestion,
+    planifier,
     planning,
     projets,
     supervision,
@@ -53,6 +54,7 @@ app.include_router(projets.router)
 app.include_router(generation.router)
 app.include_router(execution.router)
 app.include_router(planning.router)
+app.include_router(planifier.router)
 app.include_router(audit.router)
 app.include_router(validation.router)
 app.include_router(diagnostics.router)

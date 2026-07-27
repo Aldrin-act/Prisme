@@ -7,9 +7,8 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.autorisation import verifier_acces_client
-from api.etat import EtatAPI, obtenir_etat
+from api.etat import EtatAPI, durees_par_contrainte, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
-from dsl.schema import CompatibiliteRessourceTache
 
 router = APIRouter(prefix="/planning", tags=["planning"])
 
@@ -34,10 +33,4 @@ def obtenir_planning(
     # Durées ajoutées pour le Gantt du dashboard : `Planning` n'a délibérément
     # pas de champ durée (§ dsl/schema/planning.py) — elle vit sur
     # `CompatibiliteRessourceTache`, propre au couple (tâche, ressource).
-    durees = {
-        f"{contrainte.tache}|{contrainte.ressource}": contrainte.duree
-        for contrainte in instance.contraintes
-        if isinstance(contrainte, CompatibiliteRessourceTache)
-    }
-
-    return {**resultat.planning.model_dump(mode="json"), "durees": durees}
+    return {**resultat.planning.model_dump(mode="json"), "durees": durees_par_contrainte(instance)}

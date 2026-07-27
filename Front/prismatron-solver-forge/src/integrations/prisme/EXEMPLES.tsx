@@ -372,11 +372,14 @@ export function ValidationPanel({ executionId }: { executionId: string }) {
   const mutation = useSoumettreDecision();
   const queryClient = useQueryClient();
 
-  const handleDecision = (accepte: boolean) => {
+  const handleDecision = (acceptee: boolean) => {
     mutation.mutate(
       {
         executionId,
-        decision: { accepte, commentaire: commentaire || undefined },
+        decision: {
+          decision: acceptee ? "acceptee" : "refusee",
+          commentaire: commentaire || undefined,
+        },
       },
       {
         onSuccess: () => {

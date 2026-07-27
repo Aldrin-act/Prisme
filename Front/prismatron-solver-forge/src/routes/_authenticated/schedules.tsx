@@ -34,14 +34,14 @@ export const Route = createFileRoute("/_authenticated/schedules")({
 });
 
 function BadgeDecision({ decision }: { decision: ExecutionInfo["decision"] }) {
-  if (decision === "accepte") {
+  if (decision === "acceptee") {
     return (
       <Badge variant="secondary" className="gap-1">
         <CheckCircle2 className="h-3 w-3" /> Approuvé
       </Badge>
     );
   }
-  if (decision === "rejete") {
+  if (decision === "refusee") {
     return (
       <Badge variant="destructive" className="gap-1">
         <XCircle className="h-3 w-3" /> Rejeté

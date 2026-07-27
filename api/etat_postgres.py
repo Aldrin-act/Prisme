@@ -4,9 +4,10 @@ publique d'`EtatAPI` (`api/etat.py`), mais en base plutôt qu'en mémoire —
 c'est le remplacement que `EtatAPI` annonce lui-même dans son docstring
 (« un déploiement réel remplacerait ceci par ... une base de données »).
 
-Sept tables, une par entité du modèle conceptuel :
+Dix tables, une par entité du modèle conceptuel :
 `clients`, `projets`, `instances_trco`, `executions`, `plannings`, `operations_planifiees`,
-`decisions_humaines`. `projets` porte les données brutes persistées (agent de compréhension,
+`decisions_humaines`, `jobs_generation`, `evenements_generation`, `tentatives_generation`
+(historique durable du pipeline multi-agents, §6.6 — voir plus bas). `projets` porte les données brutes persistées (agent de compréhension,
 §5.4 bis) et `instances_trco.projet_id` (nullable) relie une instance au projet qui l'a
 générée, quand c'est le cas — une instance ingérée par un autre canal (T-R-C-O, Excel, ERP)
 n'a pas de projet. `instances_trco.payload` reste un blob JSONB (pas une
@@ -37,7 +38,16 @@ from datetime import UTC, datetime
 import psycopg
 from psycopg import sql
 
-from api.etat import Client, Decision, DecisionHumaine, Projet, structure_contraintes
+from api.etat import (
+    Client,
+    Decision,
+    DecisionHumaine,
+    EvenementGeneration,
+    JobGeneration,
+    Projet,
+    TentativeGeneration,
+    structure_contraintes,
+)
 from dsl.schema import InstanceTRCO, Objectif, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from solver_store.registry import SCHEMA_PAR_DEFAUT, dsn_par_defaut
@@ -133,6 +143,61 @@ class EtatPostgres:
                     "commentaire TEXT)"
                 ).format(table=self._table("decisions_humaines"), executions=self._table("executions"))
             )
+            # Historique durable du pipeline multi-agents (§6.6) — distinct du
+            # job en mémoire process de `api/routes/generation.py` (source du
+            # flux SSE en direct) : copie persistée pour l'audit après coup,
+            # y compris après redémarrage serveur.
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "instance_id TEXT NOT NULL REFERENCES {instances}(id), "
+                    "client_id TEXT NOT NULL REFERENCES {clients}(id), "
+                    "cree_le TEXT NOT NULL, "
+                    "termine BOOLEAN NOT NULL DEFAULT FALSE, "
+                    "reussi BOOLEAN, "
+                    "id_solveur TEXT, "
+                    "specification TEXT, "
+                    "plan_technique TEXT, "
+                    "code_genere TEXT, "
+                    "tests_generes TEXT, "
+                    "code_final TEXT, "
+                    "nombre_tentatives INTEGER, "
+                    "erreur TEXT, "
+                    "termine_le TEXT)"
+                ).format(
+                    table=self._table("jobs_generation"),
+                    instances=self._table("instances_trco"),
+                    clients=self._table("clients"),
+                )
+            )
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "job_id TEXT NOT NULL REFERENCES {jobs}(id), "
+                    "ordre INTEGER NOT NULL, "
+                    "agent TEXT NOT NULL, "
+                    "statut TEXT NOT NULL, "
+                    "resume TEXT NOT NULL)"
+                ).format(table=self._table("evenements_generation"), jobs=self._table("jobs_generation"))
+            )
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "job_id TEXT NOT NULL REFERENCES {jobs}(id), "
+                    "numero INTEGER NOT NULL, "
+                    "code_candidat TEXT NOT NULL, "
+                    "reussi BOOLEAN NOT NULL, "
+                    "erreur_execution TEXT, "
+                    "revue_approuve BOOLEAN, "
+                    "revue_reponse_brute TEXT, "
+                    "revue_problemes JSONB, "
+                    "validation_statique_valide BOOLEAN, "
+                    "validation_statique_violations JSONB)"
+                ).format(table=self._table("tentatives_generation"), jobs=self._table("jobs_generation"))
+            )
             connexion.commit()
 
     def _connexion(self) -> psycopg.Connection:
@@ -205,7 +270,9 @@ class EtatPostgres:
         if ligne is None:
             raise KeyError(projet_id)
         id_, client_id, nom, donnees_brutes, date_creation = ligne
-        return Projet(id=id_, client_id=client_id, nom=nom, donnees_brutes=donnees_brutes, date_creation=date_creation)
+        return Projet(
+            id=id_, client_id=client_id, nom=nom, donnees_brutes=donnees_brutes, date_creation=date_creation
+        )
 
     def lister_projets(self, client_id: str | None = None) -> list[dict[str, object]]:
         """`client_id=None` ne filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
@@ -223,7 +290,13 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(requete, parametres).fetchall()
         return [
-            {"projet_id": id_, "client_id": client_id, "nom": nom, "date_creation": date_creation, "nb_instances": nb}
+            {
+                "projet_id": id_,
+                "client_id": client_id,
+                "nom": nom,
+                "date_creation": date_creation,
+                "nb_instances": nb,
+            }
             for id_, client_id, nom, date_creation, nb in lignes
         ]
 
@@ -580,3 +653,230 @@ class EtatPostgres:
         return DecisionHumaine(
             execution_id=execution_id_, decision=decision, horodatage=horodatage, commentaire=commentaire
         )
+
+    # --- Historique de génération (§6.6) -----------------------------------
+
+    def enregistrer_job_generation(self, job_id: str, instance_id: str, client_id: str) -> None:
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("INSERT INTO {} (id, instance_id, client_id, cree_le) VALUES (%s, %s, %s, %s)").format(
+                    self._table("jobs_generation")
+                ),
+                (job_id, instance_id, client_id, datetime.now(UTC).isoformat()),
+            )
+            connexion.commit()
+
+    def ajouter_evenement_generation(self, job_id: str, agent: str, statut: str, resume: str) -> None:
+        with closing(self._connexion()) as connexion:
+            (ordre,) = connexion.execute(
+                sql.SQL("SELECT COUNT(*) FROM {} WHERE job_id = %s").format(self._table("evenements_generation")),
+                (job_id,),
+            ).fetchone()
+            connexion.execute(
+                sql.SQL(
+                    "INSERT INTO {} (id, job_id, ordre, agent, statut, resume) VALUES (%s, %s, %s, %s, %s, %s)"
+                ).format(self._table("evenements_generation")),
+                (str(uuid.uuid4()), job_id, ordre, agent, statut, resume),
+            )
+            connexion.commit()
+
+    def ajouter_tentative_generation(self, job_id: str, tentative: TentativeGeneration) -> None:
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL(
+                    "INSERT INTO {} "
+                    "(id, job_id, numero, code_candidat, reussi, erreur_execution, revue_approuve, "
+                    "revue_reponse_brute, revue_problemes, validation_statique_valide, "
+                    "validation_statique_violations) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s::jsonb)"
+                ).format(self._table("tentatives_generation")),
+                (
+                    str(uuid.uuid4()),
+                    job_id,
+                    tentative.numero,
+                    tentative.code_candidat,
+                    tentative.reussi,
+                    tentative.erreur_execution,
+                    tentative.revue_approuve,
+                    tentative.revue_reponse_brute,
+                    json.dumps(list(tentative.revue_problemes)),
+                    tentative.validation_statique_valide,
+                    json.dumps(list(tentative.validation_statique_violations)),
+                ),
+            )
+            connexion.commit()
+
+    def terminer_job_generation(
+        self,
+        job_id: str,
+        *,
+        reussi: bool | None,
+        id_solveur: str | None = None,
+        specification: str | None = None,
+        plan_technique: str | None = None,
+        code_genere: str | None = None,
+        tests_generes: str | None = None,
+        code_final: str | None = None,
+        nombre_tentatives: int | None = None,
+        erreur: str | None = None,
+    ) -> None:
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL(
+                    "UPDATE {} SET termine = TRUE, reussi = %s, id_solveur = %s, specification = %s, "
+                    "plan_technique = %s, code_genere = %s, tests_generes = %s, code_final = %s, "
+                    "nombre_tentatives = %s, erreur = %s, termine_le = %s WHERE id = %s"
+                ).format(self._table("jobs_generation")),
+                (
+                    reussi,
+                    id_solveur,
+                    specification,
+                    plan_technique,
+                    code_genere,
+                    tests_generes,
+                    code_final,
+                    nombre_tentatives,
+                    erreur,
+                    datetime.now(UTC).isoformat(),
+                    job_id,
+                ),
+            )
+            connexion.commit()
+
+    def recuperer_job_generation(self, job_id: str) -> JobGeneration:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL(
+                    "SELECT id, instance_id, client_id, cree_le, termine, reussi, id_solveur, specification, "
+                    "plan_technique, code_genere, tests_generes, code_final, nombre_tentatives, erreur, "
+                    "termine_le FROM {} WHERE id = %s"
+                ).format(self._table("jobs_generation")),
+                (job_id,),
+            ).fetchone()
+            if ligne is None:
+                raise KeyError(job_id)
+
+            lignes_evenements = connexion.execute(
+                sql.SQL("SELECT ordre, agent, statut, resume FROM {} WHERE job_id = %s ORDER BY ordre").format(
+                    self._table("evenements_generation")
+                ),
+                (job_id,),
+            ).fetchall()
+
+            lignes_tentatives = connexion.execute(
+                sql.SQL(
+                    "SELECT numero, code_candidat, reussi, erreur_execution, revue_approuve, "
+                    "revue_reponse_brute, revue_problemes, validation_statique_valide, "
+                    "validation_statique_violations FROM {} WHERE job_id = %s ORDER BY numero"
+                ).format(self._table("tentatives_generation")),
+                (job_id,),
+            ).fetchall()
+
+        (
+            id_,
+            instance_id,
+            client_id,
+            cree_le,
+            termine,
+            reussi,
+            id_solveur,
+            specification,
+            plan_technique,
+            code_genere,
+            tests_generes,
+            code_final,
+            nombre_tentatives,
+            erreur,
+            termine_le,
+        ) = ligne
+
+        return JobGeneration(
+            id=id_,
+            instance_id=instance_id,
+            client_id=client_id,
+            cree_le=cree_le,
+            termine=termine,
+            reussi=reussi,
+            id_solveur=id_solveur,
+            specification=specification,
+            plan_technique=plan_technique,
+            code_genere=code_genere,
+            tests_generes=tests_generes,
+            code_final=code_final,
+            nombre_tentatives=nombre_tentatives,
+            erreur=erreur,
+            termine_le=termine_le,
+            evenements=[
+                EvenementGeneration(ordre=ordre, agent=agent, statut=statut, resume=resume)
+                for ordre, agent, statut, resume in lignes_evenements
+            ],
+            tentatives=[
+                TentativeGeneration(
+                    numero=numero,
+                    code_candidat=code_candidat,
+                    reussi=reussi_tentative,
+                    erreur_execution=erreur_execution,
+                    revue_approuve=revue_approuve,
+                    revue_reponse_brute=revue_reponse_brute,
+                    revue_problemes=tuple(revue_problemes or []),
+                    validation_statique_valide=validation_statique_valide,
+                    validation_statique_violations=tuple(validation_statique_violations or []),
+                )
+                for (
+                    numero,
+                    code_candidat,
+                    reussi_tentative,
+                    erreur_execution,
+                    revue_approuve,
+                    revue_reponse_brute,
+                    revue_problemes,
+                    validation_statique_valide,
+                    validation_statique_violations,
+                ) in lignes_tentatives
+            ],
+        )
+
+    def lister_jobs_generation_persistes(
+        self, client_id: str | None = None, instance_id: str | None = None
+    ) -> list[dict[str, object]]:
+        requete = sql.SQL(
+            "SELECT id, instance_id, client_id, cree_le, termine, reussi, id_solveur, nombre_tentatives, "
+            "erreur, termine_le FROM {} WHERE 1 = 1"
+        ).format(self._table("jobs_generation"))
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND client_id = %s")
+            parametres.append(client_id)
+        if instance_id is not None:
+            requete += sql.SQL(" AND instance_id = %s")
+            parametres.append(instance_id)
+        requete += sql.SQL(" ORDER BY cree_le DESC")
+
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(requete, parametres).fetchall()
+        return [
+            {
+                "job_id": job_id,
+                "instance_id": instance_id,
+                "client_id": client_id,
+                "cree_le": cree_le,
+                "termine": termine,
+                "reussi": reussi,
+                "id_solveur": id_solveur,
+                "nombre_tentatives": nombre_tentatives,
+                "erreur": erreur,
+                "termine_le": termine_le,
+            }
+            for (
+                job_id,
+                instance_id,
+                client_id,
+                cree_le,
+                termine,
+                reussi,
+                id_solveur,
+                nombre_tentatives,
+                erreur,
+                termine_le,
+            ) in lignes
+        ]

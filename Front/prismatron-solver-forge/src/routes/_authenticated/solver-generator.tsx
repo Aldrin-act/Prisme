@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueries } from "@tanstack/react-query";
-import { AlertCircle, CheckCircle2, Loader2, Plus, Sparkles, X, XCircle } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  History,
+  Loader2,
+  Plus,
+  Sparkles,
+  X,
+  XCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -13,6 +22,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
 import {
   prismeKeys,
@@ -21,6 +37,7 @@ import {
   useProjets,
   useSolveurs,
   useJobsGeneration,
+  useHistoriqueJobGeneration,
   demarrerGenerationSolveur,
   suivreJobGeneration,
   PrismeAPIError,
@@ -376,6 +393,7 @@ function ContenuOnglet({
   // Verrouillé dès qu'une génération a été lancée dans cet onglet — changer
   // d'instance en cours de route n'a pas de sens, on ouvre un autre onglet.
   const verrouille = onglet.enCours || !!onglet.jobId || !!onglet.resultat;
+  const [historiqueOuvert, setHistoriqueOuvert] = useState(false);
 
   return (
     <div className="space-y-4">
@@ -454,7 +472,19 @@ function ContenuOnglet({
 
       {onglet.evenements.length > 0 && (
         <div className="glass rounded-2xl p-6">
-          <h4 className="mb-3 text-sm font-semibold">Progression</h4>
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h4 className="text-sm font-semibold">Progression</h4>
+            {onglet.jobId && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
+                onClick={() => setHistoriqueOuvert(true)}
+              >
+                <History className="h-3.5 w-3.5" /> Historique complet
+              </Button>
+            )}
+          </div>
           <ul className="space-y-2">
             {onglet.evenements.map((e, i) => (
               <li
@@ -553,6 +583,141 @@ function ContenuOnglet({
           desc="Choisissez une instance et lancez la génération pour voir chaque agent progresser en direct."
         />
       )}
+
+      {onglet.jobId && (
+        <DialogHistoriqueGeneration
+          jobId={onglet.jobId}
+          open={historiqueOuvert}
+          onOpenChange={setHistoriqueOuvert}
+        />
+      )}
     </div>
+  );
+}
+
+function DialogHistoriqueGeneration({
+  jobId,
+  open,
+  onOpenChange,
+}: {
+  jobId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  // N'interroge le serveur que dialogue ouvert — pas de sens de charger tout
+  // le code candidat de chaque tentative tant que personne ne le regarde.
+  const { data: historique, isLoading, error } = useHistoriqueJobGeneration(open ? jobId : null);
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Historique complet de la génération</DialogTitle>
+        </DialogHeader>
+
+        {isLoading && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" /> Chargement de l'historique...
+          </div>
+        )}
+
+        {error && (
+          <p className="text-sm text-destructive">
+            Impossible de charger l'historique : {(error as PrismeAPIError).message}
+          </p>
+        )}
+
+        {historique && (
+          <div className="space-y-6">
+            <div>
+              <h4 className="mb-2 text-sm font-semibold">Évènements ({historique.evenements.length})</h4>
+              <ul className="space-y-1.5">
+                {historique.evenements.map((e) => (
+                  <li key={e.ordre} className="flex items-start gap-2 text-xs">
+                    <IconeStatut statut={e.statut} />
+                    <span className="font-medium capitalize">{e.agent}</span>
+                    <span className="text-muted-foreground">{e.resume}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="mb-2 text-sm font-semibold">
+                Tentatives de réparation ({historique.tentatives.length})
+              </h4>
+              {historique.tentatives.length === 0 ? (
+                <p className="text-xs text-muted-foreground">
+                  Aucune tentative enregistrée — le pipeline n'a pas encore atteint la boucle de
+                  réparation, ou n'a pas eu besoin de plus d'un essai.
+                </p>
+              ) : (
+                <Accordion type="single" collapsible className="w-full">
+                  {historique.tentatives.map((t) => (
+                    <AccordionItem key={t.numero} value={`tentative-${t.numero}`}>
+                      <AccordionTrigger className="text-sm">
+                        <span className="flex items-center gap-2">
+                          {t.reussi ? (
+                            <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                          ) : (
+                            <XCircle className="h-4 w-4 shrink-0 text-destructive" />
+                          )}
+                          Tentative {t.numero}
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-3">
+                        {t.erreur_execution && (
+                          <p className="text-xs text-destructive">
+                            Erreur d'exécution : {t.erreur_execution}
+                          </p>
+                        )}
+                        {t.validation_statique_valide === false &&
+                          t.validation_statique_violations.length > 0 && (
+                            <div className="text-xs text-destructive">
+                              Validation statique rejetée :
+                              <ul className="mt-1 list-disc space-y-0.5 pl-5">
+                                {t.validation_statique_violations.map((v, i) => (
+                                  <li key={i}>{v}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        {t.revue_approuve !== null && (
+                          <p className="text-xs">
+                            Revue :{" "}
+                            <Badge variant={t.revue_approuve ? "secondary" : "outline"}>
+                              {t.revue_approuve ? "approuvée" : "problèmes relevés"}
+                            </Badge>
+                          </p>
+                        )}
+                        {t.revue_problemes.length > 0 && (
+                          <ul className="list-disc space-y-0.5 pl-5 text-xs text-muted-foreground">
+                            {t.revue_problemes.map((p, i) => (
+                              <li key={i}>{p}</li>
+                            ))}
+                          </ul>
+                        )}
+                        <pre className="max-h-64 overflow-auto rounded-lg border border-border/50 bg-muted/30 p-3 text-xs">
+                          <code>{t.code_candidat}</code>
+                        </pre>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              )}
+            </div>
+
+            {historique.code_final && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">Code final retenu</h4>
+                <pre className="max-h-80 overflow-auto rounded-lg border border-primary/30 bg-muted/30 p-3 text-xs">
+                  <code>{historique.code_final}</code>
+                </pre>
+              </div>
+            )}
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

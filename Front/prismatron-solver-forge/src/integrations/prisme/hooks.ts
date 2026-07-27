@@ -3,7 +3,7 @@
  */
 
 import { useMutation, useQueries, useQuery, type UseQueryOptions } from "@tanstack/react-query";
-import { prismeClient, listerJobsGeneration } from "./client";
+import { prismeClient, listerJobsGeneration, obtenirHistoriqueJobGeneration } from "./client";
 import type * as Types from "./types";
 
 // ============================================================================
@@ -26,6 +26,8 @@ export const prismeKeys = {
   instance: (instanceId: string) => [...prismeKeys.all, "instance", instanceId] as const,
   jobsGeneration: (instanceId?: string) =>
     [...prismeKeys.all, "jobsGeneration", instanceId ?? "tous"] as const,
+  historiqueJobGeneration: (jobId: string) =>
+    [...prismeKeys.all, "historiqueJobGeneration", jobId] as const,
 } as const;
 
 // ============================================================================
@@ -113,6 +115,25 @@ export function useJobsGeneration(
     queryKey: prismeKeys.jobsGeneration(instanceId),
     queryFn: () => listerJobsGeneration(instanceId),
     refetchInterval: (query) => (query.state.data?.some((j) => !j.termine) ? 4000 : 15000),
+    ...options,
+  });
+}
+
+/**
+ * Historique complet et durable d'un job de génération (§6.6) — code candidat
+ * de chaque tentative de la boucle de réparation, y compris les rejetées.
+ * Distinct de `useJobsGeneration` (mémoire process, source du direct SSE) :
+ * celui-ci survit à un redémarrage du serveur. Désactivé tant que `jobId`
+ * est nul (ex. onglet de génération jamais encore lancé).
+ */
+export function useHistoriqueJobGeneration(
+  jobId: string | null,
+  options?: Omit<UseQueryOptions<Types.HistoriqueJobGeneration>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.historiqueJobGeneration(jobId || ""),
+    queryFn: () => obtenirHistoriqueJobGeneration(jobId!),
+    enabled: !!jobId,
     ...options,
   });
 }
