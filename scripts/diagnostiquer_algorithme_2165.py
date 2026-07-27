@@ -45,24 +45,24 @@ def main() -> None:
     print(f"Instance chargee : {len(instance_exemple['taches'])} taches\n")
 
     from generation.agents import analyste, architecte, benchmarker
-    from generation.agents.client_llm import construire_appel_llm_pour_agent
+    from generation.agents.benchmarker import parametres_cascade_pour_algorithme
+    from generation.agents.client_llm import construire_modele_pour_agent
     from generation.agents.generateur import generer_code_depuis_plan
     from generation.executer import ErreurExecutionGeneree, executer_code_genere
-    from generation.pipeline_multi_agents import _parametres_cascade_pour_algorithme
     from generation.validation_statique import valider_code_genere
     from validation_engine.cascade import evaluer_cascade
 
     print("=" * 70)
     print("  1/4 - ANALYSTE")
     print("=" * 70 + "\n")
-    analyse = analyste.analyser_mission(construire_appel_llm_pour_agent("analyste"))
+    analyse = analyste.analyser_mission(construire_modele_pour_agent("analyste"))
     print("OK\n")
 
     print("=" * 70)
     print("  2/4 - BENCHMARKER")
     print("=" * 70 + "\n")
     resultat_benchmark = benchmarker.benchmarker_algorithmes(
-        construire_appel_llm_pour_agent("benchmarker"), instance_exemple
+        construire_modele_pour_agent("benchmarker"), instance_exemple
     )
     algo = resultat_benchmark.recommandation.algorithme
     parametres = resultat_benchmark.recommandation.parametres_suggeres
@@ -73,7 +73,7 @@ def main() -> None:
     print("  3/4 - ARCHITECTE")
     print("=" * 70 + "\n")
     conception = architecte.concevoir_modele(
-        construire_appel_llm_pour_agent("architecte"), analyse, algorithme=algo, parametres=parametres
+        construire_modele_pour_agent("architecte"), analyse, algorithme=algo, parametres=parametres
     )
     print(conception.en_texte())
     print()
@@ -82,7 +82,7 @@ def main() -> None:
     print("  4/4 - DEVELOPPEUR")
     print("=" * 70 + "\n")
     brut = generer_code_depuis_plan(
-        construire_appel_llm_pour_agent("generateur"), conception.en_texte(), algorithme=algo, parametres=parametres
+        construire_modele_pour_agent("generateur"), conception.en_texte(), algorithme=algo, parametres=parametres
     )
     print(f"Code genere : {len(brut.code_source)} caracteres\n")
 
@@ -109,7 +109,7 @@ def main() -> None:
         return
     print("Execution : OK")
 
-    tolerance_relative, comparer_affectation = _parametres_cascade_pour_algorithme(algo)
+    tolerance_relative, comparer_affectation = parametres_cascade_pour_algorithme(algo)
     print(f"\nParametres cascade pour '{algo}' : tolerance={tolerance_relative:.0%}, "
           f"comparer_affectation={comparer_affectation}\n")
 

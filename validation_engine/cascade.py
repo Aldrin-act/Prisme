@@ -21,8 +21,9 @@ strictement (valeurs par défaut, exactitude requise) ; un algorithme approché
 est jugé sur la qualité de son makespan à une tolérance explicite près, sans
 exiger l'affectation tâche→ressource exacte d'un cas écrit à la main pour un
 autre algorithme. `evaluer_cascade` reste agnostique de *quel* algorithme a
-produit le solveur — c'est à l'appelant (`generation/pipeline_multi_agents.py`,
-qui connaît la recommandation du Benchmarker) de choisir ces deux valeurs.
+produit le solveur — c'est à l'appelant (`generation/graph.py`,
+via `generation.agents.benchmarker.parametres_cascade_pour_algorithme`, qui
+connaît la recommandation du Benchmarker) de choisir ces deux valeurs.
 """
 
 from __future__ import annotations
@@ -182,7 +183,7 @@ def evaluer_cascade(
     comportement est celui, strict, attendu d'un solveur CP-SAT — inchangé
     pour tous les appelants existants. Un algorithme approché recommandé par
     l'agent Benchmarker doit être évalué avec une tolérance non nulle et
-    `comparer_affectation=False` (voir `generation/pipeline_multi_agents.py`,
+    `comparer_affectation=False` (voir `generation/graph.py`,
     seul endroit qui connaît quel algorithme a produit le solveur candidat)."""
     verdict_banc = evaluer_optimalite_banc(solveur, tolerance_relative)
     verdict_reference = evaluer_fidelite_reference(solveur, tolerance_relative, comparer_affectation)

@@ -3,7 +3,7 @@ interne du module (variables/contraintes CP-SAT, ou l'équivalent pour un
 algorithme alternatif — encodage de solution, opérateurs...) à partir de la
 spécification de l'agent Analyste et de l'algorithme recommandé par l'agent
 Benchmarker (qui s'exécute avant lui dans le pipeline, voir
-`generation.pipeline_multi_agents` — le Benchmarker ne dépend que des
+`generation.graph` — le Benchmarker ne dépend que des
 caractéristiques de l'instance, jamais du plan de l'Architecte). Le contrat
 impose un seul module/une seule fonction publique `resoudre()` : pas de
 découpage en plusieurs fichiers, contrairement à un agent architecte
@@ -14,10 +14,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+from langchain_core.messages import HumanMessage, SystemMessage
+from pydantic import BaseModel, Field
 
 from generation.agents.analyste import ResultatAnalyse
-from generation.agents.base import charger_mission, extraire_json
-from generation.agents.client_llm import AppelLLM
+from generation.agents.base import ErreurReponseAgentInvalide, charger_mission, extraire_texte_brut
+from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+
+if TYPE_CHECKING:
+    from langchain_core.language_models.chat_models import BaseChatModel
 
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "architecte.md"
 
@@ -26,6 +33,13 @@ _PROMPT_SYSTEME = (
     "métaheuristiques d'ordonnancement — génétique, ACO, recuit simulé, tabou, dispatching). "
     "Tu réponds toujours en JSON strict, jamais en texte libre."
 )
+
+
+class _SchemaConception(BaseModel):
+    variables: str = Field(description="Représentation de la solution (variables, encodage...).")
+    contraintes_modele: str = Field(description="Contraintes métier à respecter dans le modèle.")
+    objectif: str = Field(description="Objectif à optimiser.")
+    fonctions_internes: str | None = Field(default=None, description="Fonctions internes éventuelles.")
 
 
 @dataclass(frozen=True)
@@ -56,13 +70,13 @@ def _rendre_parametres(parametres: dict | None) -> str:
 
 
 def concevoir_modele(
-    appel_llm: AppelLLM,
+    modele: BaseChatModel,
     analyse: ResultatAnalyse,
     algorithme: str = "cp_sat",
     parametres: dict | None = None,
 ) -> ResultatConception:
     """Args:
-    appel_llm: Client LLM.
+    modele: `BaseChatModel` LangChain (voir `client_llm.construire_modele_pour_agent`).
     analyse: Spécification produite par l'agent Analyste.
     algorithme: Algorithme recommandé par l'agent Benchmarker (ex. "cp_sat",
         "genetic", "tabu_search"...) — "cp_sat" par défaut si l'appelant
@@ -76,12 +90,22 @@ def concevoir_modele(
         algorithme=algorithme,
         parametres=_rendre_parametres(parametres),
     )
-    reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    donnees = extraire_json(reponse)
+
+    structure = modele.with_structured_output(
+        _SchemaConception, include_raw=True, method=methode_sortie_structuree(modele)
+    )
+    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
+    reponse_brute = extraire_texte_brut(sortie["raw"])
+    if sortie["parsing_error"] is not None:
+        raise ErreurReponseAgentInvalide(
+            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
+        ) from sortie["parsing_error"]
+
+    donnees = sortie["parsed"]
     return ResultatConception(
-        reponse_brute=reponse,
-        variables=donnees["variables"],
-        contraintes_modele=donnees["contraintes_modele"],
-        objectif=donnees["objectif"],
-        fonctions_internes=donnees.get("fonctions_internes"),
+        reponse_brute=reponse_brute,
+        variables=donnees.variables,
+        contraintes_modele=donnees.contraintes_modele,
+        objectif=donnees.objectif,
+        fonctions_internes=donnees.fonctions_internes,
     )

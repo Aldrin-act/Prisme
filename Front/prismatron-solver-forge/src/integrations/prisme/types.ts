@@ -300,6 +300,11 @@ export interface ReponseGenerationSolveur {
   id_solveur: string | null;
   structure_contraintes: string;
   signature_objectifs: string;
+  // Algorithme recommandé par l'agent Benchmarker (toujours appelé,
+  // generation/pipeline_avec_boucle.py) — connu même en cas d'échec, choisi
+  // avant la boucle de réparation.
+  algorithme: string;
+  algorithme_raison: string;
   // Boucle de réparation bornée (generation/pipeline_avec_boucle.py) : 1 à 3
   // tentatives, Reviewer/Debugger corrigeant le code entre chaque essai.
   nombre_tentatives: number;
@@ -357,6 +362,9 @@ export interface HistoriqueJobGeneration {
   id_solveur: string | null;
   specification: string | null;
   plan_technique: string | null;
+  algorithme: string | null;
+  algorithme_raison: string | null;
+  algorithme_parametres: Record<string, unknown> | null;
   code_genere: string | null;
   tests_generes: string | null;
   code_final: string | null;

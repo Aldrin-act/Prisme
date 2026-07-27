@@ -23,8 +23,7 @@ except ImportError:
     pass
 
 from dsl.schema import InstanceTRCO
-from generation.agents.client_llm import construire_appel_llm
-from generation.pipeline_avec_boucle import tenter_generation_avec_boucle
+from generation.graph import tenter_generation_avec_boucle
 from solver_store.registry import Registre
 
 
@@ -58,7 +57,7 @@ def main():
     print("=" * 80)
 
     # Charger l'instance
-    print(f"\n[1/4] Chargement de l'instance : {args.instance.name}")
+    print(f"\n[1/3] Chargement de l'instance : {args.instance.name}")
     try:
         with open(args.instance, encoding="utf-8") as f:
             data = json.load(f)
@@ -68,27 +67,15 @@ def main():
         print(f"      [ERREUR] Impossible de charger l'instance : {e}")
         sys.exit(1)
 
-    # Construire le client LLM
-    print(f"\n[2/4] Configuration du client LLM...")
-    try:
-        appel_llm = construire_appel_llm()
-        print(f"      [OK] Client LLM pret")
-    except Exception as e:
-        print(f"      [ERREUR] Configuration LLM incorrecte : {e}")
-        print("\n      Verifiez votre .env :")
-        print("        - PRISME_LLM_PROVIDER=mistral")
-        print("        - MISTRAL_API_KEY=<votre_cle>")
-        sys.exit(1)
-
     # Générer le solveur
-    print(f"\n[3/4] Generation du solveur avec IA...")
+    print(f"\n[2/3] Generation du solveur avec IA...")
     print(f"      Pipeline multi-agents avec boucle (max {args.max_tentatives} tentatives)")
     print(f"      Duree estimee : 2-5 minutes")
     print(f"      Cout estime : ~$0.50-1.00")
     print()
 
     try:
-        resultat = tenter_generation_avec_boucle(appel_llm)
+        resultat = tenter_generation_avec_boucle(instance_exemple=instance.model_dump(mode="json"))
     except Exception as e:
         print(f"      [ERREUR] Generation echouee : {e}")
         import traceback
@@ -116,7 +103,7 @@ def main():
     print(f"           Code sauvegarde : {code_path}")
 
     # Enregistrer dans le store
-    print(f"\n[4/4] Enregistrement dans le solver store...")
+    print(f"\n[3/3] Enregistrement dans le solver store...")
     try:
         registre = Registre()
 

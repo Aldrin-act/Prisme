@@ -26,8 +26,10 @@ dev = [
 ]
 llm = [
     "anthropic>=0.40",
-    "openai>=1.50",
-    "mistralai>=1.0",
+    "langchain-core>=0.3",
+    "langchain-openai>=0.3",
+    "langchain-mistralai>=0.2",
+    "langgraph>=0.6",
 ]
 sandbox = [
     "docker>=7.0",

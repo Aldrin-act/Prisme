@@ -539,6 +539,15 @@ function ContenuOnglet({
                   {onglet.resultat.signature_objectifs}
                 </Badge>
               </div>
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                <span className="text-muted-foreground">algorithme :</span>
+                <Badge variant="outline" className="font-mono text-xs">
+                  {onglet.resultat.algorithme}
+                </Badge>
+              </div>
+              {onglet.resultat.algorithme_raison && (
+                <p className="mt-1 text-xs text-muted-foreground">{onglet.resultat.algorithme_raison}</p>
+              )}
             </>
           ) : (
             <>
@@ -547,6 +556,14 @@ function ContenuOnglet({
                 tentative
                 {onglet.resultat.nombre_tentatives > 1 ? "s" : ""} — rien n'a été enregistré
               </div>
+              {onglet.resultat.algorithme && (
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                  <span className="text-muted-foreground">algorithme tenté :</span>
+                  <Badge variant="outline" className="font-mono text-xs">
+                    {onglet.resultat.algorithme}
+                  </Badge>
+                </div>
+              )}
               {onglet.resultat.erreur && (
                 <p className="mt-2 text-sm text-muted-foreground">{onglet.resultat.erreur}</p>
               )}
@@ -629,6 +646,18 @@ function DialogHistoriqueGeneration({
 
         {historique && (
           <div className="space-y-6">
+            {historique.algorithme && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">Algorithme recommandé</h4>
+                <Badge variant="outline" className="font-mono text-xs">
+                  {historique.algorithme}
+                </Badge>
+                {historique.algorithme_raison && (
+                  <p className="mt-1 text-xs text-muted-foreground">{historique.algorithme_raison}</p>
+                )}
+              </div>
+            )}
+
             <div>
               <h4 className="mb-2 text-sm font-semibold">Évènements ({historique.evenements.length})</h4>
               <ul className="space-y-1.5">

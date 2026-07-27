@@ -96,11 +96,9 @@ def main():
     debut_generation = time.time()
 
     try:
-        from generation.agents.client_llm import construire_appel_llm
-        from generation.pipeline_avec_boucle import tenter_generation_avec_boucle
+        from generation.graph import tenter_generation_avec_boucle
 
-        appel_llm = construire_appel_llm()
-        resultat = tenter_generation_avec_boucle(appel_llm)
+        resultat = tenter_generation_avec_boucle()
 
     except Exception as e:
         print(f"❌ Erreur durant la génération : {e}")

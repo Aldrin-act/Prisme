@@ -5,7 +5,7 @@ voir `solveur_greensig.py` à la racine — issu de
 
 Aucun nouvel appel LLM ici : le code existe déjà, on rejoue seulement la
 cascade de validation (§5, avec la tolérance propre à un algorithme
-non-CP-SAT — voir `generation.pipeline_multi_agents._parametres_cascade_pour_algorithme`)
+non-CP-SAT — voir `generation.agents.benchmarker.parametres_cascade_pour_algorithme`)
 pour obtenir un `VerdictCascade` réel à passer à `Registre.enregistrer_solveur`
 — le store n'accepte jamais un verdict qu'on n'a pas vérifié.
 
@@ -17,8 +17,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from generation.agents.benchmarker import parametres_cascade_pour_algorithme
 from generation.executer import executer_code_genere
-from generation.pipeline_multi_agents import _parametres_cascade_pour_algorithme
 from generation.validation_statique import valider_code_genere
 from solver_store.registry import Registre
 from validation_engine.cascade import evaluer_cascade
@@ -45,7 +45,7 @@ def enregistrer(registre: Registre) -> str:
 
     solveur = executer_code_genere(code_source)
 
-    tolerance_relative, comparer_affectation = _parametres_cascade_pour_algorithme(ALGORITHME)
+    tolerance_relative, comparer_affectation = parametres_cascade_pour_algorithme(ALGORITHME)
     verdict = evaluer_cascade(solveur, tolerance_relative, comparer_affectation)
     if not verdict.reussi:
         raise RuntimeError(f"cascade de validation échouée : {verdict.echecs}")

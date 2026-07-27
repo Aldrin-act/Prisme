@@ -1,7 +1,8 @@
 """Déclenche le pipeline de génération de solveur multi-agents avec boucle
-de réparation bornée (`generation.pipeline_avec_boucle`, Étape 6 — déjà
-construite : orchestrateur → analyste → architecte → développeur → testeur
-→ [Reviewer/Debugger, jusqu'à 10 tentatives] → documentation)
+de réparation bornée (`generation.graph`, StateGraph LangGraph, Étape 6 —
+déjà construite : orchestrateur → analyste → benchmarker → architecte →
+développeur → testeur → [Reviewer/Debugger, jusqu'à 10 tentatives] →
+documentation)
 depuis une instance déjà ingérée. La boucle reste bornée : après épuisement
 des tentatives, l'échec est renvoyé tel quel à l'humain, jamais masqué par
 un acharnement automatique (§6.5).
@@ -47,8 +48,8 @@ from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, TentativeGeneration, obtenir_etat, structure_contraintes
 from api.etat import signature_objectifs as calculer_signature_objectifs
 from api.routes.auth import obtenir_utilisateur_courant
-from generation.loop import ResultatBoucleReparation
-from generation.pipeline_avec_boucle import (
+from generation.graph import (
+    ResultatBoucleReparation,
     ResultatPipelineAvecBoucle,
     tenter_generation_avec_boucle,
     tenter_generation_avec_boucle_stream,
@@ -82,17 +83,26 @@ class _JobGeneration:
 _JOBS: dict[str, _JobGeneration] = {}
 
 
-def _instance_et_cle(instance_id: str, etat: EtatAPI, utilisateur: dict) -> tuple[str, str, str]:
+def _instance_et_cle(instance_id: str, etat: EtatAPI, utilisateur: dict) -> tuple[str, dict, str, str]:
     """Résout l'instance et sa clé de matching, avec le contrôle d'accès —
     partagé par les routes ci-dessous, appelé avant tout streaming/job pour
-    qu'une instance inconnue ou interdite renvoie un vrai 404/403 immédiat."""
+    qu'une instance inconnue ou interdite renvoie un vrai 404/403 immédiat.
+
+    Renvoie désormais aussi l'instance elle-même (dict JSON,
+    `InstanceTRCO.model_dump(mode="json")`) — jusqu'ici jetée après
+    extraction de la clé de matching, elle alimente maintenant l'agent
+    Benchmarker (voir `generation/graph.py`, `instance_exemple`). Toujours
+    pas injectée dans un prompt de génération de code : seule l'analyse de
+    taille/structure/flexibilité du Benchmarker
+    la consomme."""
     try:
         client_id, instance = etat.recuperer_instance(instance_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="instance inconnue") from None
 
     verifier_acces_client(utilisateur, client_id)
-    return client_id, structure_contraintes(instance), calculer_signature_objectifs(instance)
+    instance_dict = instance.model_dump(mode="json")
+    return client_id, instance_dict, structure_contraintes(instance), calculer_signature_objectifs(instance)
 
 
 def _construire_reponse(
@@ -121,6 +131,8 @@ def _construire_reponse(
             "id_solveur": None,
             "structure_contraintes": structure,
             "signature_objectifs": signature_obj,
+            "algorithme": resultat.algorithme_recommande,
+            "algorithme_raison": resultat.justification_algorithme,
             "nombre_tentatives": nombre_tentatives,
             "erreur": erreur,
             "echecs_cascade": [
@@ -138,6 +150,8 @@ def _construire_reponse(
         "id_solveur": id_solveur,
         "structure_contraintes": structure,
         "signature_objectifs": signature_obj,
+        "algorithme": resultat.algorithme_recommande,
+        "algorithme_raison": resultat.justification_algorithme,
         "nombre_tentatives": nombre_tentatives,
         "erreur": None,
         "echecs_cascade": [],
@@ -171,7 +185,13 @@ def _persister_tentatives(etat: EtatAPI, job_id: str, boucle: ResultatBoucleRepa
 
 
 def _executer_job(
-    job: _JobGeneration, registre: Registre, etat: EtatAPI, client_id: str, structure: str, signature_obj: str
+    job: _JobGeneration,
+    registre: Registre,
+    etat: EtatAPI,
+    client_id: str,
+    structure: str,
+    signature_obj: str,
+    instance_dict: dict,
 ) -> None:
     """Corps du fil d'exécution — jamais laissé mourir en silence (§6.6 : le
     pipeline peut échouer, la mesure/le suivi doit survivre). Persiste en
@@ -180,7 +200,7 @@ def _executer_job(
     survit à un redémarrage du serveur, le second reste la source du direct."""
     resultat_pipeline: ResultatPipelineAvecBoucle | None = None
     try:
-        for item in tenter_generation_avec_boucle_stream():
+        for item in tenter_generation_avec_boucle_stream(instance_dict):
             if isinstance(item, ResultatPipelineAvecBoucle):
                 resultat_pipeline = item
                 job.resultat = _construire_reponse(item, registre, client_id, structure, signature_obj)
@@ -209,6 +229,9 @@ def _executer_job(
             id_solveur=id_solveur,
             specification=resultat_pipeline.specification if resultat_pipeline else None,
             plan_technique=resultat_pipeline.plan_technique if resultat_pipeline else None,
+            algorithme=resultat_pipeline.algorithme_recommande if resultat_pipeline else None,
+            algorithme_raison=resultat_pipeline.justification_algorithme if resultat_pipeline else None,
+            algorithme_parametres=resultat_pipeline.parametres_algorithme if resultat_pipeline else None,
             code_genere=resultat_pipeline.code_genere if resultat_pipeline else None,
             tests_generes=resultat_pipeline.tests_generes if resultat_pipeline else None,
             code_final=resultat_pipeline.code_final if resultat_pipeline else None,
@@ -229,12 +252,12 @@ def generer_solveur(
     à chaque tentative : potentiellement plusieurs minutes). Voir
     `/{instance_id}/demarrer` pour suivre la progression agent par agent,
     de façon résistante à un rechargement de page."""
-    client_id, structure, signature_obj = _instance_et_cle(instance_id, etat, utilisateur)
+    client_id, instance_dict, structure, signature_obj = _instance_et_cle(instance_id, etat, utilisateur)
 
     job_id = str(uuid.uuid4())
     etat.enregistrer_job_generation(job_id, instance_id, client_id)
 
-    resultat = tenter_generation_avec_boucle()
+    resultat = tenter_generation_avec_boucle(instance_exemple=instance_dict)
     reponse = _construire_reponse(resultat, registre, client_id, structure, signature_obj)
 
     _persister_tentatives(etat, job_id, resultat.boucle_reparation)
@@ -244,6 +267,9 @@ def generer_solveur(
         id_solveur=reponse["id_solveur"],
         specification=resultat.specification,
         plan_technique=resultat.plan_technique,
+        algorithme=resultat.algorithme_recommande,
+        algorithme_raison=resultat.justification_algorithme,
+        algorithme_parametres=resultat.parametres_algorithme,
         code_genere=resultat.code_genere,
         tests_generes=resultat.tests_generes,
         code_final=resultat.code_final,
@@ -265,7 +291,7 @@ def demarrer_generation_solveur(
     (rechargement de page, perte réseau...). Suivre la progression via
     `GET /jobs/{job_id}/stream`, qui peut être rejoint ou rejoué à tout
     moment — c'est ce qui permet à la page de survivre à un F5."""
-    client_id, structure, signature_obj = _instance_et_cle(instance_id, etat, utilisateur)
+    client_id, instance_dict, structure, signature_obj = _instance_et_cle(instance_id, etat, utilisateur)
 
     job_id = str(uuid.uuid4())
     job = _JobGeneration(id=job_id, instance_id=instance_id, client_id=client_id)
@@ -274,7 +300,7 @@ def demarrer_generation_solveur(
 
     fil = threading.Thread(
         target=_executer_job,
-        args=(job, registre, etat, client_id, structure, signature_obj),
+        args=(job, registre, etat, client_id, structure, signature_obj, instance_dict),
         daemon=True,
     )
     fil.start()
@@ -375,6 +401,9 @@ def obtenir_historique_job_generation(
         "id_solveur": job.id_solveur,
         "specification": job.specification,
         "plan_technique": job.plan_technique,
+        "algorithme": job.algorithme,
+        "algorithme_raison": job.algorithme_raison,
+        "algorithme_parametres": job.algorithme_parametres,
         "code_genere": job.code_genere,
         "tests_generes": job.tests_generes,
         "code_final": job.code_final,

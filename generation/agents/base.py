@@ -1,10 +1,14 @@
-"""Utilitaires partagés par les 9 agents du pipeline de génération (§5.6) :
-charger la mission commune (le contrat que `resoudre()` doit respecter) et
-parser la réponse d'un agent. Le pipeline multi-agents (`pipeline_multi_agents.py`)
-répond en JSON structuré partout (jamais en texte libre ni en marqueurs ad
-hoc) — `extraire_json`. Le mode simple à un seul agent (Étape 4,
-`tentative_unique.py`) garde son format historique, un bloc de code Python
-nu — `extraire_bloc_code`.
+"""Utilitaires partagés par les agents de génération (§5.6) : charger la
+mission commune (le contrat que `resoudre()` doit respecter) et parser la
+réponse d'un agent. Les 9 agents du pipeline actif
+(`generation/graph.py`) répondent en sortie structurée
+LangChain (`with_structured_output`, Pydantic) — `extraire_texte_brut`
+reconstruit le texte brut depuis cette réponse pour `reponse_brute`.
+`extraire_json` reste utilisé par l'agent de compréhension
+(`adapters/agent_comprehension/`) et l'agent Optimiseur orphelin
+(`generation/agents/optimiseur.py`), pas encore migrés. Le mode simple à un
+seul agent (Étape 4, `tentative_unique.py`) garde son format historique, un
+bloc de code Python nu — `extraire_bloc_code`.
 """
 
 from __future__ import annotations
@@ -12,7 +16,10 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from langchain_core.messages import AIMessage
 
 CHEMIN_MISSION = Path(__file__).resolve().parents[1] / "prompts" / "generation_solveur.md"
 
@@ -67,3 +74,14 @@ def extraire_json(reponse: str) -> dict[str, Any]:
             return objet
 
     raise ErreurReponseAgentInvalide(f"réponse non JSON reçue de l'agent : {reponse[:200]!r}")
+
+
+def extraire_texte_brut(message: AIMessage) -> str:
+    """Reconstruit un texte brut depuis le `AIMessage` renvoyé par
+    `with_structured_output(..., include_raw=True)["raw"]` — `.content` est
+    `str | list[str | dict]` selon le fournisseur (certains renvoient des
+    blocs de contenu structurés plutôt qu'une simple chaîne). Alimente
+    `reponse_brute` sur chaque `ResultatXxx`, lu par
+    `api/routes/generation.py`."""
+    contenu = message.content
+    return contenu if isinstance(contenu, str) else str(contenu)

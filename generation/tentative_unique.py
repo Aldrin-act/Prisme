@@ -1,5 +1,5 @@
 """Une tentative de génération unique, sans boucle (Étape 4) — jugée par la
-cascade complète de l'Étape 5. Distinct de `generation.pipeline_avec_boucle`
+cascade complète de l'Étape 5. Distinct de `generation.graph`
 (Étape 6, pipeline multi-agents avec boucle de réparation Reviewer/Debugger) :
 ce module reste le mode simple, tir unique, sans agents ni réparation.
 """

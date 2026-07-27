@@ -22,9 +22,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from generation.agents.base import extraire_json
-from generation.agents.client_llm import AppelLLM
+from langchain_core.messages import HumanMessage, SystemMessage
+from pydantic import BaseModel, Field
+
+from generation.agents.base import ErreurReponseAgentInvalide, extraire_texte_brut
+from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+
+if TYPE_CHECKING:
+    from langchain_core.language_models.chat_models import BaseChatModel
 
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "benchmarker.md"
 
@@ -35,9 +42,24 @@ _PROMPT_SYSTEME = (
 )
 
 
+class _SchemaRecommandation(BaseModel):
+    algorithme: str = Field(description='"cp_sat", "genetic", "aco", "simulated_annealing", etc.')
+    raison: str = Field(description="Justification du choix.")
+    parametres: dict = Field(default_factory=dict, description="Paramètres recommandés pour cet algorithme.")
+    temps_estime: str = Field(default="inconnu", description='"secondes", "minutes", "dizaines de minutes"...')
+    qualite_attendue: str = Field(default="inconnue", description='"optimale", "très bonne (>95%)"...')
+    alternatives: list[str] = Field(default_factory=list, description="Autres algorithmes envisageables.")
+
+
+class _SchemaBenchmark(BaseModel):
+    recommandation: _SchemaRecommandation
+    comparaison: str = Field(default="", description="Tableau comparatif des algorithmes considérés.")
+
+
 @dataclass(frozen=True)
 class CaracteristiquesInstance:
     """Caractéristiques d'une instance FJSP pour le benchmark."""
+
     nb_taches: int
     nb_ressources: int
     nb_contraintes: int
@@ -50,6 +72,7 @@ class CaracteristiquesInstance:
 @dataclass(frozen=True)
 class RecommandationAlgorithme:
     """Recommandation d'algorithme par le benchmarker."""
+
     algorithme: str  # "cp_sat", "genetic", "aco", "simulated_annealing", etc.
     raison: str  # Justification du choix
     parametres_suggeres: dict[str, any]  # Paramètres recommandés
@@ -66,26 +89,61 @@ class ResultatBenchmark:
     comparaison: str  # Tableau comparatif des algorithmes
 
 
+# Seul CP-SAT est jugé à l'identique (exactitude requise) ; tout autre
+# algorithme recommandé par le Benchmarker est approché par nature et n'a
+# aucune raison de retomber exactement sur l'optimum du banc synthétique ni
+# sur l'affectation tâche→ressource des cas de référence. Lieu naturel pour
+# tout appelant (`graph.py`, `loop.py`, `scripts/`) puisque
+# c'est ce module qui produit les chaînes `algorithme`.
+_ALGORITHMES_EXACTS = frozenset({"cp_sat"})
+TOLERANCE_MAKESPAN_ALGORITHME_APPROCHE = 0.10  # 10 % au-dessus de l'optimum/de la référence
+
+
+def parametres_cascade_pour_algorithme(algorithme: str) -> tuple[float, bool]:
+    """Renvoie `(tolerance_relative, comparer_affectation)` à passer à
+    `evaluer_cascade` selon l'algorithme choisi par le Benchmarker."""
+    if algorithme in _ALGORITHMES_EXACTS:
+        return 0.0, True
+    return TOLERANCE_MAKESPAN_ALGORITHME_APPROCHE, False
+
+
+def creer_instance_exemple_defaut() -> dict:
+    """Petite instance par défaut (10 tâches, 5 ressources, pas de
+    précédences) pour le Benchmarker quand l'appelant n'a pas d'instance
+    réelle sous la main (scripts, tests) — typiquement classée « petite »,
+    oriente vers cp_sat, préservant le comportement de ces appelants
+    d'avant le branchement du Benchmarker sur le pipeline."""
+    return {
+        "taches": [{"id": f"T{i}"} for i in range(1, 11)],
+        "ressources": [{"id": f"R{i}"} for i in range(1, 6)],
+        "contraintes": [
+            {
+                "type": "compatibilite_ressource_tache",
+                "tache": f"T{i}",
+                "ressource": f"R{((i - 1) % 5) + 1}",
+                "duree": 30,
+            }
+            for i in range(1, 11)
+        ],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+
+
 def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesInstance:
     """Analyse les caractéristiques d'une instance T-R-C-O."""
     nb_taches = len(instance_json["taches"])
     nb_ressources = len(instance_json["ressources"])
 
     # Compter les compatibilités et précédences
-    compatibilites = [
-        c for c in instance_json["contraintes"]
-        if c.get("type") == "compatibilite_ressource_tache"
-    ]
-    precedences = [
-        c for c in instance_json["contraintes"]
-        if c.get("type") == "precedence"
-    ]
+    compatibilites = [c for c in instance_json["contraintes"] if c.get("type") == "compatibilite_ressource_tache"]
+    precedences = [c for c in instance_json["contraintes"] if c.get("type") == "precedence"]
 
     nb_contraintes = len(compatibilites) + len(precedences)
     a_precedences = len(precedences) > 0
 
     # Flexibilité moyenne (équipes par tâche)
     from collections import Counter
+
     comp_par_tache = Counter(c["tache"] for c in compatibilites)
     flexibilite_moyenne = sum(comp_par_tache.values()) / len(comp_par_tache) if comp_par_tache else 0
 
@@ -109,15 +167,15 @@ def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesI
         flexibilite_moyenne=flexibilite_moyenne,
         a_precedences=a_precedences,
         taille_categorie=taille_categorie,
-        densite_contraintes=densite_contraintes
+        densite_contraintes=densite_contraintes,
     )
 
 
-def benchmarker_algorithmes(appel_llm: AppelLLM, instance_json: dict) -> ResultatBenchmark:
+def benchmarker_algorithmes(modele: BaseChatModel, instance_json: dict) -> ResultatBenchmark:
     """Benchmark plusieurs algorithmes et recommande le meilleur.
 
     Args:
-        appel_llm: Client LLM
+        modele: `BaseChatModel` LangChain (voir `client_llm.construire_modele_pour_agent`).
         instance_json: Instance T-R-C-O au format dict (pour analyse)
 
     Returns:
@@ -136,26 +194,32 @@ def benchmarker_algorithmes(appel_llm: AppelLLM, instance_json: dict) -> Resulta
         flexibilite_moyenne=carac.flexibilite_moyenne,
         a_precedences="Oui" if carac.a_precedences else "Non",
         taille_categorie=carac.taille_categorie,
-        densite_contraintes=carac.densite_contraintes
+        densite_contraintes=carac.densite_contraintes,
     )
 
-    # Appel LLM
-    reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    donnees = extraire_json(reponse)
+    structure = modele.with_structured_output(
+        _SchemaBenchmark, include_raw=True, method=methode_sortie_structuree(modele)
+    )
+    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
+    reponse_brute = extraire_texte_brut(sortie["raw"])
+    if sortie["parsing_error"] is not None:
+        raise ErreurReponseAgentInvalide(
+            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
+        ) from sortie["parsing_error"]
 
-    # Parser la recommandation
+    donnees = sortie["parsed"]
     recommandation = RecommandationAlgorithme(
-        algorithme=donnees["recommandation"]["algorithme"],
-        raison=donnees["recommandation"]["raison"],
-        parametres_suggeres=donnees["recommandation"].get("parametres", {}),
-        temps_execution_estime=donnees["recommandation"].get("temps_estime", "inconnu"),
-        qualite_attendue=donnees["recommandation"].get("qualite_attendue", "inconnue"),
-        alternatives=donnees["recommandation"].get("alternatives", [])
+        algorithme=donnees.recommandation.algorithme,
+        raison=donnees.recommandation.raison,
+        parametres_suggeres=donnees.recommandation.parametres,
+        temps_execution_estime=donnees.recommandation.temps_estime,
+        qualite_attendue=donnees.recommandation.qualite_attendue,
+        alternatives=donnees.recommandation.alternatives,
     )
 
     return ResultatBenchmark(
-        reponse_brute=reponse,
+        reponse_brute=reponse_brute,
         caracteristiques=carac,
         recommandation=recommandation,
-        comparaison=donnees.get("comparaison", "")
+        comparaison=donnees.comparaison,
     )

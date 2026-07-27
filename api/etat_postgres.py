@@ -171,6 +171,25 @@ class EtatPostgres:
                     clients=self._table("clients"),
                 )
             )
+            # Migration idempotente : algorithme recommandé par l'agent
+            # Benchmarker (toujours appelé désormais, voir
+            # generation/graph.py) — NULL pour tout job généré
+            # avant cette migration.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS algorithme TEXT").format(
+                    table=self._table("jobs_generation")
+                )
+            )
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS algorithme_raison TEXT").format(
+                    table=self._table("jobs_generation")
+                )
+            )
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS algorithme_parametres JSONB").format(
+                    table=self._table("jobs_generation")
+                )
+            )
             connexion.execute(
                 sql.SQL(
                     "CREATE TABLE IF NOT EXISTS {table} ("
@@ -714,6 +733,9 @@ class EtatPostgres:
         id_solveur: str | None = None,
         specification: str | None = None,
         plan_technique: str | None = None,
+        algorithme: str | None = None,
+        algorithme_raison: str | None = None,
+        algorithme_parametres: dict | None = None,
         code_genere: str | None = None,
         tests_generes: str | None = None,
         code_final: str | None = None,
@@ -724,7 +746,8 @@ class EtatPostgres:
             connexion.execute(
                 sql.SQL(
                     "UPDATE {} SET termine = TRUE, reussi = %s, id_solveur = %s, specification = %s, "
-                    "plan_technique = %s, code_genere = %s, tests_generes = %s, code_final = %s, "
+                    "plan_technique = %s, algorithme = %s, algorithme_raison = %s, "
+                    "algorithme_parametres = %s::jsonb, code_genere = %s, tests_generes = %s, code_final = %s, "
                     "nombre_tentatives = %s, erreur = %s, termine_le = %s WHERE id = %s"
                 ).format(self._table("jobs_generation")),
                 (
@@ -732,6 +755,9 @@ class EtatPostgres:
                     id_solveur,
                     specification,
                     plan_technique,
+                    algorithme,
+                    algorithme_raison,
+                    json.dumps(algorithme_parametres) if algorithme_parametres is not None else None,
                     code_genere,
                     tests_generes,
                     code_final,
@@ -748,8 +774,8 @@ class EtatPostgres:
             ligne = connexion.execute(
                 sql.SQL(
                     "SELECT id, instance_id, client_id, cree_le, termine, reussi, id_solveur, specification, "
-                    "plan_technique, code_genere, tests_generes, code_final, nombre_tentatives, erreur, "
-                    "termine_le FROM {} WHERE id = %s"
+                    "plan_technique, algorithme, algorithme_raison, algorithme_parametres, code_genere, "
+                    "tests_generes, code_final, nombre_tentatives, erreur, termine_le FROM {} WHERE id = %s"
                 ).format(self._table("jobs_generation")),
                 (job_id,),
             ).fetchone()
@@ -782,6 +808,9 @@ class EtatPostgres:
             id_solveur,
             specification,
             plan_technique,
+            algorithme,
+            algorithme_raison,
+            algorithme_parametres,
             code_genere,
             tests_generes,
             code_final,
@@ -800,6 +829,9 @@ class EtatPostgres:
             id_solveur=id_solveur,
             specification=specification,
             plan_technique=plan_technique,
+            algorithme=algorithme,
+            algorithme_raison=algorithme_raison,
+            algorithme_parametres=algorithme_parametres,
             code_genere=code_genere,
             tests_generes=tests_generes,
             code_final=code_final,

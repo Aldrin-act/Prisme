@@ -1,7 +1,8 @@
 """Génération avec boucle de réparation (Étape 6 implémentée).
 
-Ce script utilise le nouveau pipeline `pipeline_avec_boucle.py` qui permet
-au Debugger de faire jusqu'à 3 tentatives de correction au lieu d'une seule.
+Ce script utilise le pipeline `generation/graph.py` (StateGraph LangGraph)
+qui permet au Debugger de faire jusqu'à 10 tentatives de correction au lieu
+d'une seule.
 
 Différence avec `generer_solveur.py` (sans boucle) :
 - SANS boucle : 1 tentative Debugger → échec si validation échoue
@@ -35,7 +36,7 @@ except ImportError:
     pass
 
 from generation.agents.client_llm import construire_appel_llm
-from generation.pipeline_avec_boucle import tenter_generation_avec_boucle
+from generation.graph import tenter_generation_avec_boucle
 
 
 def afficher_tentative(tentative, numero: int):

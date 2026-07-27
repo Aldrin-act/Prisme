@@ -144,6 +144,9 @@ class JobGeneration:
     id_solveur: str | None = None
     specification: str | None = None
     plan_technique: str | None = None
+    algorithme: str | None = None
+    algorithme_raison: str | None = None
+    algorithme_parametres: dict | None = None
     code_genere: str | None = None
     tests_generes: str | None = None
     code_final: str | None = None
@@ -370,6 +373,9 @@ class EtatAPI:
         id_solveur: str | None = None,
         specification: str | None = None,
         plan_technique: str | None = None,
+        algorithme: str | None = None,
+        algorithme_raison: str | None = None,
+        algorithme_parametres: dict | None = None,
         code_genere: str | None = None,
         tests_generes: str | None = None,
         code_final: str | None = None,
@@ -382,6 +388,9 @@ class EtatAPI:
         job.id_solveur = id_solveur
         job.specification = specification
         job.plan_technique = plan_technique
+        job.algorithme = algorithme
+        job.algorithme_raison = algorithme_raison
+        job.algorithme_parametres = algorithme_parametres
         job.code_genere = code_genere
         job.tests_generes = tests_generes
         job.code_final = code_final

@@ -4,8 +4,10 @@ formats de sortie coexistent :
 
 - `generer_code_solveur` — mode simple (Étape 4, tir unique, historique) :
   un bloc de code Python nu, format hérité de `generation.tentative_unique`.
+  Reste sur `AppelLLM`/`extraire_bloc_code` — hors périmètre de la migration
+  vers la sortie structurée (pas de JSON à parser dans ce mode).
 - `generer_code_depuis_plan` — mode multi-agents
-  (`generation.pipeline_multi_agents`) : réponse JSON `{"code": "..."}`,
+  (`generation.graph`) : sortie structurée `{"code": "..."}`,
   comme les 8 autres agents du pipeline.
 
 Le contrat de sortie attendu dans les deux cas — une fonction
@@ -18,9 +20,21 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from generation.agents.base import charger_mission, extraire_bloc_code, extraire_json
-from generation.agents.client_llm import AppelLLM
+from langchain_core.messages import HumanMessage, SystemMessage
+from pydantic import BaseModel, Field
+
+from generation.agents.base import (
+    ErreurReponseAgentInvalide,
+    charger_mission,
+    extraire_bloc_code,
+    extraire_texte_brut,
+)
+from generation.agents.client_llm import AppelLLM, _avec_retry, methode_sortie_structuree
+
+if TYPE_CHECKING:
+    from langchain_core.language_models.chat_models import BaseChatModel
 
 CHEMIN_PROMPT_DEPUIS_PLAN = Path(__file__).resolve().parents[1] / "prompts" / "developpeur.md"
 
@@ -32,6 +46,10 @@ _ADDENDUM_FORMAT_BLOC_CODE = (
     "Réponds avec un unique bloc de code Python (` ```python ... ``` `), sans "
     "texte avant ni après. Aucune explication, aucun commentaire de conversation.\n"
 )
+
+
+class _SchemaGenerationCode(BaseModel):
+    code: str = Field(description="Module Python complet, une seule fonction publique resoudre().")
 
 
 @dataclass(frozen=True)
@@ -54,17 +72,17 @@ def generer_code_solveur(appel_llm: AppelLLM) -> ResultatGenerationBrute:
 
 
 def generer_code_depuis_plan(
-    appel_llm: AppelLLM,
+    modele: BaseChatModel,
     plan_technique: str,
     algorithme: str | None = None,
     parametres: dict | None = None,
 ) -> ResultatGenerationBrute:
     """Variante utilisée par le pipeline multi-agents : écrit le code en
     suivant le plan produit par l'agent Architecte plutôt que la seule
-    mission brute, et répond en JSON comme le reste du pipeline.
+    mission brute, et répond en sortie structurée comme le reste du pipeline.
 
     Args:
-        appel_llm: Client LLM
+        modele: `BaseChatModel` LangChain (voir `client_llm.construire_modele_pour_agent`).
         plan_technique: Plan de l'agent Architecte
         algorithme: Algorithme recommandé par le Benchmarker (ex: "cp_sat", "genetic")
         parametres: Paramètres suggérés pour l'algorithme
@@ -74,8 +92,8 @@ def generer_code_depuis_plan(
     # Construire la section algorithme si fournie
     section_algorithme = ""
     if algorithme:
-        section_algorithme = f"\n## Algorithme recommandé par le Benchmarker\n\n"
-        section_algorithme += f"L'agent Benchmarker a analysé les caractéristiques de "
+        section_algorithme = "\n## Algorithme recommandé par le Benchmarker\n\n"
+        section_algorithme += "L'agent Benchmarker a analysé les caractéristiques de "
         section_algorithme += f"l'instance et recommande d'utiliser : **{algorithme.upper()}**\n\n"
 
         if parametres:
@@ -90,6 +108,18 @@ def generer_code_depuis_plan(
         mission=charger_mission(),
         plan_technique=plan_technique + section_algorithme,
     )
-    reponse = appel_llm(_PROMPT_SYSTEME_JSON, prompt)
-    donnees = extraire_json(reponse)
-    return ResultatGenerationBrute(reponse_brute=reponse, code_source=donnees["code"])
+
+    structure = modele.with_structured_output(
+        _SchemaGenerationCode, include_raw=True, method=methode_sortie_structuree(modele)
+    )
+    sortie = _avec_retry(structure.invoke)(
+        [SystemMessage(content=_PROMPT_SYSTEME_JSON), HumanMessage(content=prompt)]
+    )
+    reponse_brute = extraire_texte_brut(sortie["raw"])
+    if sortie["parsing_error"] is not None:
+        raise ErreurReponseAgentInvalide(
+            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
+        ) from sortie["parsing_error"]
+
+    donnees = sortie["parsed"]
+    return ResultatGenerationBrute(reponse_brute=reponse_brute, code_source=donnees.code)

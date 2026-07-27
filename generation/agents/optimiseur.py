@@ -1,6 +1,7 @@
-"""Agent Optimiseur (pipeline multi-agents, §5.6) — propose une amélioration
-sur du code déjà validé par la cascade. `generation.pipeline_multi_agents`
-ne l'adopte que si le code optimisé repasse lui-même intégralement la
+"""Agent Optimiseur — propose une amélioration sur du code déjà validé par la
+cascade. N'est plus appelé par le pipeline actif (`generation/graph.py`,
+voir son docstring) — orphelin, conservé tel quel. Un appelant ne devrait
+adopter le code optimisé que s'il repasse lui-même intégralement la
 validation statique, l'exécution et la cascade — jamais en confiance
 aveugle sur la seule parole de l'agent."""
 
