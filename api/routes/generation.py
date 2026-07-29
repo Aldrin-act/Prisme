@@ -1,6 +1,6 @@
 """Déclenche le pipeline de génération de solveur multi-agents avec boucle
 de réparation bornée (`generation.graph`, StateGraph LangGraph, Étape 6 —
-déjà construite : orchestrateur → analyste → benchmarker → architecte →
+déjà construite : analyste → benchmarker → architecte →
 développeur → testeur → [Reviewer/Debugger, jusqu'à 10 tentatives] →
 documentation)
 depuis une instance déjà ingérée. La boucle reste bornée : après épuisement

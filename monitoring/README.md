@@ -90,7 +90,6 @@ Vous verrez :
 | `prisme_agent_tokens{agent="..."}` | agent | Tokens utilisés |
 
 **Agents trackés** :
-- Orchestrateur
 - Analyste
 - Architecte
 - Développeur

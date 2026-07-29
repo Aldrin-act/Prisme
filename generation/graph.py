@@ -6,13 +6,12 @@ un `StateGraph` LangGraph — seul pipeline de génération branché sur l'API
 helper `etape()`/`EvenementEtape`, auparavant dans `loop.py`, vivent ici.
 
 Workflow complet :
-1. Orchestrateur (planification)
-2. Analyste (spécification)
-3. Benchmarker (choix de l'algorithme — toujours appelé, catalogue complet)
-4. Architecte (conception, pour l'algorithme choisi)
-5. Développeur (code initial)
-6. Testeur (tests pytest)
-7. ** BOUCLE DE RÉPARATION (max 10 tentatives, `MAX_TENTATIVES_REPARATION`) **
+1. Analyste (spécification)
+2. Benchmarker (choix de l'algorithme — toujours appelé, catalogue complet)
+3. Architecte (conception, pour l'algorithme choisi)
+4. Développeur (code initial)
+5. Testeur (tests pytest)
+6. ** BOUCLE DE RÉPARATION (max 10 tentatives, `MAX_TENTATIVES_REPARATION`) **
    - Reviewer relit le code
    - Si rejeté : Debugger corrige avec les commentaires du Reviewer (la
      validation est sautée pour cette tentative), puis retour au Reviewer.
@@ -21,7 +20,7 @@ Workflow complet :
      avec le diagnostic de la validation, puis retour au Reviewer.
    - Le nombre de tentatives est vérifié **avant** d'appeler le Debugger sur
      la toute dernière tentative — jamais de correction au-delà de la borne.
-8. Documentation (meilleur-effort, après re-validation finale du code)
+7. Documentation (meilleur-effort, après re-validation finale du code)
 
 Pas d'Optimiseur : agent retiré du pipeline (réponse JSON trop fragile — il
 embarque un code Python multi-lignes complet comme valeur de chaîne JSON, un
@@ -29,6 +28,13 @@ format que les LLM échouent régulièrement à échapper correctement — et
 l'enjeu n'en valait pas la fragilité : le code est déjà validé par la
 cascade à ce stade). `generation/agents/optimiseur.py` existe toujours mais
 n'est plus appelé nulle part (orphelin).
+
+Pas d'Orchestrateur non plus : il ne faisait jamais que produire un plan JSON
+jamais lu par personne — l'ordre d'exécution a toujours été câblé en Python
+ici (voir `_construire_graphe`), jamais décidé dynamiquement par sa réponse,
+et son plan n'était même pas renvoyé par `api/routes/generation.py`.
+`generation/agents/orchestrateur.py` a été supprimé (contrairement à
+l'Optimiseur, laissé orphelin) — aucun code ne dépendait de sa sortie.
 
 §6.6 : La boucle reste **bornée** (10 tentatives max), **offline** (génération),
 et **diagnostique** (feedback précis de la validation).
@@ -45,13 +51,12 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.config import get_stream_writer
 from langgraph.graph import END, START, StateGraph
 
-from generation.agents import analyste, architecte, benchmarker, documentation, orchestrateur, reviewer, testeur
+from generation.agents import analyste, architecte, benchmarker, documentation, reviewer, testeur
 from generation.agents.analyste import ResultatAnalyse
 from generation.agents.architecte import ResultatConception
 from generation.agents.client_llm import AppelLLM, construire_modele_pour_agent
 from generation.agents.debugger import corriger_code
 from generation.agents.generateur import generer_code_depuis_plan
-from generation.agents.orchestrateur import EtapePlan, ResultatOrchestration
 from generation.agents.reviewer import ResultatRevue
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
@@ -62,7 +67,7 @@ from validation_engine.cascade import VerdictCascade, evaluer_cascade
 # volontaire) — porté à 10 pour garantir en pratique plusieurs vraies
 # tentatives de validation même si le Reviewer en "vole" une ou deux. La
 # limite de récursion du graphe (§ `_obtenir_graphe_compile`) doit rester
-# largement au-dessus de `6 + 3 * MAX_TENTATIVES_REPARATION` pour ne jamais
+# largement au-dessus de `5 + 3 * MAX_TENTATIVES_REPARATION` pour ne jamais
 # couper la boucle avant qu'elle n'ait épuisé ses tentatives légitimes.
 MAX_TENTATIVES_REPARATION = 10
 
@@ -112,7 +117,6 @@ class ResultatPipelineAvecBoucle:
     `_construire_reponse`/`_persister_tentatives`/`etat.terminer_job_generation`.
     """
 
-    plan_orchestrateur: tuple[EtapePlan, ...]
     specification: str
     plan_technique: str
 
@@ -190,7 +194,6 @@ def _message_echec_validation(
 class EtatGeneration(TypedDict, total=False):
     instance_exemple: dict | None
 
-    resultat_orchestration: ResultatOrchestration
     analyse: ResultatAnalyse
 
     algo: str
@@ -230,14 +233,6 @@ def _modele(config: RunnableConfig, nom_agent: str):
 
 
 # --- Nœuds du pipeline (avant la boucle) -----------------------------------
-
-
-def _noeud_orchestrateur(etat: EtatGeneration, config: RunnableConfig) -> dict:
-    writer = get_stream_writer()
-    writer(etape("orchestrateur", "en_cours", "Planification de la mission..."))
-    resultat = orchestrateur.planifier(_modele(config, "orchestrateur"))
-    writer(etape("orchestrateur", "termine", f"{len(resultat.plan)} étape(s) planifiée(s)"))
-    return {"resultat_orchestration": resultat}
 
 
 def _noeud_analyste(etat: EtatGeneration, config: RunnableConfig) -> dict:
@@ -428,7 +423,6 @@ def _noeud_fin_boucle(etat: EtatGeneration) -> dict:
     sautée : pas de code retenu à documenter."""
     boucle = _construire_boucle_reparation(etat, reussi=False)
     resultat = ResultatPipelineAvecBoucle(
-        plan_orchestrateur=etat["resultat_orchestration"].plan,
         specification=etat["analyse"].en_texte(),
         plan_technique=etat["conception"].en_texte(),
         algorithme_recommande=etat["algo"],
@@ -469,7 +463,6 @@ def _noeud_documentation(etat: EtatGeneration, config: RunnableConfig) -> dict:
         writer(etape("documentation", "termine", "Documentation produite"))
 
     resultat = ResultatPipelineAvecBoucle(
-        plan_orchestrateur=etat["resultat_orchestration"].plan,
         specification=etat["analyse"].en_texte(),
         plan_technique=etat["conception"].en_texte(),
         algorithme_recommande=etat["algo"],
@@ -489,7 +482,6 @@ def _noeud_documentation(etat: EtatGeneration, config: RunnableConfig) -> dict:
 
 def _construire_graphe() -> StateGraph:
     graphe = StateGraph(EtatGeneration)
-    graphe.add_node("orchestrateur", _noeud_orchestrateur)
     graphe.add_node("analyste", _noeud_analyste)
     graphe.add_node("benchmarker", _noeud_benchmarker)
     graphe.add_node("architecte", _noeud_architecte)
@@ -501,8 +493,7 @@ def _construire_graphe() -> StateGraph:
     graphe.add_node("fin_boucle", _noeud_fin_boucle)
     graphe.add_node("documentation", _noeud_documentation)
 
-    graphe.add_edge(START, "orchestrateur")
-    graphe.add_edge("orchestrateur", "analyste")
+    graphe.add_edge(START, "analyste")
     graphe.add_edge("analyste", "benchmarker")
     graphe.add_edge("benchmarker", "architecte")
     graphe.add_edge("architecte", "developpeur")
@@ -536,8 +527,8 @@ def _obtenir_graphe_compile():
     return _GRAPHE_COMPILE
 
 
-# 6 nœuds de mise en place + jusqu'à 10 × (reviewer + validation + debugger)
-# ≈ 36 super-steps dans le pire cas — grande marge au-dessus de la limite par
+# 5 nœuds de mise en place + jusqu'à 10 × (reviewer + validation + debugger)
+# ≈ 35 super-steps dans le pire cas — grande marge au-dessus de la limite par
 # défaut de LangGraph (25) pour ne jamais couper la boucle avant qu'elle
 # n'épuise légitimement ses tentatives (`GraphRecursionError` silencieux
 # sinon, voir tests/integration/test_graph_pipeline.py).
@@ -551,7 +542,7 @@ def tenter_generation_avec_boucle_stream(
     après chaque agent (et chaque sous-étape de la boucle de réparation) ;
     le tout dernier élément produit est toujours le `ResultatPipelineAvecBoucle`
     final. Consommée par `api/routes/generation.py` pour le streaming SSE —
-    un pipeline à 8 agents + jusqu'à 10 tentatives de réparation peut prendre
+    un pipeline à 7 agents + jusqu'à 10 tentatives de réparation peut prendre
     plusieurs minutes, une attente aveugle n'est pas acceptable.
 
     `instance_exemple` : instance T-R-C-O (dict JSON, ex.

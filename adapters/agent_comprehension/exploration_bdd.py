@@ -27,12 +27,17 @@ import re
 from contextlib import closing
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import psycopg
+from langchain_core.messages import HumanMessage, SystemMessage
+from pydantic import BaseModel, Field
 
-from generation.agents.base import extraire_json
-from generation.agents.client_llm import AppelLLM
+from generation.agents.base import ErreurReponseAgentInvalide, extraire_texte_brut
+from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+
+if TYPE_CHECKING:
+    from langchain_core.language_models.chat_models import BaseChatModel
 
 CHEMIN_PROMPT = Path(__file__).resolve().parent / "prompts" / "exploration_bdd.md"
 
@@ -57,6 +62,18 @@ _PROMPT_SYSTEME = (
     "d'ordonnancement depuis des schémas ERP quelconques. Tu réponds toujours en JSON strict, "
     "jamais en texte libre, et ne proposes jamais rien d'autre qu'une requête SELECT en lecture seule."
 )
+
+
+class _SchemaRequete(BaseModel):
+    nom: str = Field(description="Nom court identifiant le besoin (ex: 'taches', 'ressources').")
+    sql: str = Field(description="Requête SELECT/WITH en lecture seule, une seule instruction.")
+
+
+class _SchemaExploration(BaseModel):
+    requetes: list[_SchemaRequete] = Field(default_factory=list)
+    avertissements: list[str] = Field(
+        default_factory=list, description="Incertitudes ou besoins hors de portée du schéma fourni."
+    )
 
 _STATEMENT_TIMEOUT_MS = 5000
 
@@ -199,7 +216,7 @@ def _executer(connexion: psycopg.Connection, requete_sql: str) -> list[dict[str,
 
 
 def explorer_base_de_donnees(
-    appel_llm: AppelLLM, dsn_lecture_seule: str, schemas: tuple[str, ...] = ("public",)
+    modele: BaseChatModel, dsn_lecture_seule: str, schemas: tuple[str, ...] = ("public",)
 ) -> ResultatExplorationBDD:
     """Le sous-agent complet : introspection déterministe, un seul appel LLM
     pour décider des requêtes, validation puis exécution sur une connexion
@@ -215,19 +232,30 @@ def explorer_base_de_donnees(
     ) as connexion:
         schema = introspecter_schema(connexion, schemas=schemas)
         prompt = gabarit.format(schema_description=schema.formatte())
-        reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-        donnees = extraire_json(reponse)
 
+        structure = modele.with_structured_output(
+            _SchemaExploration, include_raw=True, method=methode_sortie_structuree(modele)
+        )
+        sortie = _avec_retry(structure.invoke)(
+            [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
+        )
+        reponse_brute = extraire_texte_brut(sortie["raw"])
+        if sortie["parsing_error"] is not None:
+            raise ErreurReponseAgentInvalide(
+                f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
+            ) from sortie["parsing_error"]
+
+        donnees = sortie["parsed"]
         requetes_executees: list[str] = []
         donnees_json: dict[str, Any] = {}
-        for requete in donnees.get("requetes", []):
-            sql_valide = _valider_requete_lecture_seule(requete["sql"])
+        for requete in donnees.requetes:
+            sql_valide = _valider_requete_lecture_seule(requete.sql)
             requetes_executees.append(sql_valide)
-            donnees_json[requete["nom"]] = _executer(connexion, sql_valide)
+            donnees_json[requete.nom] = _executer(connexion, sql_valide)
 
     return ResultatExplorationBDD(
-        reponse_brute=reponse,
+        reponse_brute=reponse_brute,
         requetes_executees=tuple(requetes_executees),
         donnees_json=donnees_json,
-        avertissements=tuple(donnees.get("avertissements", [])),
+        avertissements=tuple(donnees.avertissements),
     )

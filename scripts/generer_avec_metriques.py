@@ -38,7 +38,6 @@ except ImportError:
 # Imports
 try:
     from generation.agents import (
-        orchestrateur,
         analyste,
         architecte,
         debugger,
@@ -295,73 +294,65 @@ def executer_avec_metriques(appel_llm: AppelLLM, provider: str) -> MetriquesPipe
     print("📊" * 35 + "\n")
 
     try:
-        # 1. Orchestrateur
-        print("🤖 [1/9] Orchestrateur...")
-        ctx = collecteur.demarrer_agent(1, "Orchestrateur")
-        plan = orchestrateur.planifier(appel_llm)
-        output = "\n".join([str(e) for e in plan.plan])
-        m = collecteur.terminer_agent(ctx, "success", output)
-        print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f} | {m.tokens_total:,} tokens")
-
-        # 2. Analyste
-        print("🤖 [2/9] Analyste...")
-        ctx = collecteur.demarrer_agent(2, "Analyste")
+        # 1. Analyste
+        print("🤖 [1/8] Analyste...")
+        ctx = collecteur.demarrer_agent(1, "Analyste")
         analyse = analyste.analyser_mission(appel_llm)
         m = collecteur.terminer_agent(ctx, "success", analyse.en_texte())
         print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f} | {m.tokens_total:,} tokens")
 
-        # 3. Architecte
-        print("🤖 [3/9] Architecte...")
-        ctx = collecteur.demarrer_agent(3, "Architecte", analyse.en_texte())
+        # 2. Architecte
+        print("🤖 [2/8] Architecte...")
+        ctx = collecteur.demarrer_agent(2, "Architecte", analyse.en_texte())
         conception = architecte.concevoir_modele(appel_llm, analyse)
         m = collecteur.terminer_agent(ctx, "success", conception.en_texte())
         print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f} | {m.tokens_total:,} tokens")
 
-        # 4. Développeur
-        print("🤖 [4/9] Développeur...")
-        ctx = collecteur.demarrer_agent(4, "Développeur", conception.en_texte())
+        # 3. Développeur
+        print("🤖 [3/8] Développeur...")
+        ctx = collecteur.demarrer_agent(3, "Développeur", conception.en_texte())
         brut = generer_code_depuis_plan(appel_llm, conception.en_texte())
         m = collecteur.terminer_agent(ctx, "success", brut.code_source)
         print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f} | {m.tokens_total:,} tokens | {len(brut.code_source.split('\\n'))} lignes")
 
-        # 5. Testeur
-        print("🤖 [5/9] Testeur...")
-        ctx = collecteur.demarrer_agent(5, "Testeur", brut.code_source)
+        # 4. Testeur
+        print("🤖 [4/8] Testeur...")
+        ctx = collecteur.demarrer_agent(4, "Testeur", brut.code_source)
         tests = testeur.generer_tests(appel_llm, brut.code_source)
         m = collecteur.terminer_agent(ctx, "success", tests.code_tests)
         print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f} | {m.tokens_total:,} tokens")
 
-        # 6. Reviewer
-        print("🤖 [6/9] Reviewer...")
-        ctx = collecteur.demarrer_agent(6, "Reviewer", brut.code_source)
+        # 5. Reviewer
+        print("🤖 [5/8] Reviewer...")
+        ctx = collecteur.demarrer_agent(5, "Reviewer", brut.code_source)
         revue = reviewer.relire_code(appel_llm, brut.code_source)
         m = collecteur.terminer_agent(ctx, "success", str(revue.commentaires))
         print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f} | Approuvé: {revue.approuve}")
 
-        # 7. Debugger (conditionnel)
+        # 6. Debugger (conditionnel)
         code_final = brut.code_source
         if not revue.approuve:
-            print("🤖 [7/9] Debugger...")
-            ctx = collecteur.demarrer_agent(7, "Debugger", brut.code_source + revue.commentaires)
+            print("🤖 [6/8] Debugger...")
+            ctx = collecteur.demarrer_agent(6, "Debugger", brut.code_source + revue.commentaires)
             correction = debugger.corriger_code(appel_llm, brut.code_source, revue.commentaires)
             code_final = correction.code_source
             m = collecteur.terminer_agent(ctx, "success", code_final)
             print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f}")
         else:
-            print("🤖 [7/9] Debugger... ⏭️  SKIP")
+            print("🤖 [6/8] Debugger... ⏭️  SKIP")
             collecteur.terminer_agent(
-                {'nom': 'Debugger', 'numero': 7, 'debut': time.time(), 'tokens_input': 0},
+                {'nom': 'Debugger', 'numero': 6, 'debut': time.time(), 'tokens_input': 0},
                 "skip"
             )
 
-        # 8. Validation
-        print("🤖 [8/9] Validation...")
+        # 7. Validation
+        print("🤖 [7/8] Validation...")
         ctx_start = time.time()
         validation = valider_code_genere(code_final)
 
         if not validation.valide:
             collecteur.terminer_agent(
-                {'nom': 'Validation', 'numero': 8, 'debut': ctx_start, 'tokens_input': 0},
+                {'nom': 'Validation', 'numero': 7, 'debut': ctx_start, 'tokens_input': 0},
                 "error",
                 erreur="Validation statique échouée"
             )
@@ -373,7 +364,7 @@ def executer_avec_metriques(appel_llm: AppelLLM, provider: str) -> MetriquesPipe
             verdict = evaluer_cascade(solveur)
 
             collecteur.terminer_agent(
-                {'nom': 'Validation', 'numero': 8, 'debut': ctx_start, 'tokens_input': 0},
+                {'nom': 'Validation', 'numero': 7, 'debut': ctx_start, 'tokens_input': 0},
                 "success",
                 str(verdict)
             )
@@ -381,7 +372,7 @@ def executer_avec_metriques(appel_llm: AppelLLM, provider: str) -> MetriquesPipe
 
         except Exception as e:
             collecteur.terminer_agent(
-                {'nom': 'Validation', 'numero': 8, 'debut': ctx_start, 'tokens_input': 0},
+                {'nom': 'Validation', 'numero': 7, 'debut': ctx_start, 'tokens_input': 0},
                 "error",
                 erreur=str(e)
             )
@@ -395,17 +386,17 @@ def executer_avec_metriques(appel_llm: AppelLLM, provider: str) -> MetriquesPipe
 
             return pipeline
 
-        # 9. Optimiseur (si succès)
+        # 8. Optimiseur (si succès)
         if verdict and verdict.reussi:
-            print("🤖 [9/9] Optimiseur...")
-            ctx = collecteur.demarrer_agent(9, "Optimiseur", code_final)
+            print("🤖 [8/8] Optimiseur...")
+            ctx = collecteur.demarrer_agent(8, "Optimiseur", code_final)
             optimisation = optimiseur.optimiser_code(appel_llm, code_final, str(verdict))
             m = collecteur.terminer_agent(ctx, "success", "Optimisation proposée")
             print(f"   ✅ {m.duree_secondes:.1f}s | ${m.cout_usd:.4f}")
         else:
-            print("🤖 [9/9] Optimiseur... ⏭️  SKIP")
+            print("🤖 [8/8] Optimiseur... ⏭️  SKIP")
             collecteur.terminer_agent(
-                {'nom': 'Optimiseur', 'numero': 9, 'debut': time.time(), 'tokens_input': 0},
+                {'nom': 'Optimiseur', 'numero': 8, 'debut': time.time(), 'tokens_input': 0},
                 "skip"
             )
 

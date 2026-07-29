@@ -1,35 +1,35 @@
-# Fonctionnement Détaillé des 9 Agents PRISME
+# Fonctionnement Détaillé des 8 Agents PRISME
 
-Ce document explique le rôle, l'input, l'output et le fonctionnement de chaque agent du pipeline multi-agents.
+Ce document explique le rôle, l'input, l'output et le fonctionnement de chaque agent du pipeline multi-agents (`generation/graph.py`, StateGraph LangGraph — Étape 6).
 
 ---
 
 ## 🎯 Vue d'Ensemble
 
-Le pipeline multi-agents est une **chaîne de responsabilité** où chaque agent a un rôle précis :
+Le pipeline multi-agents est une **chaîne de responsabilité** où chaque agent a un rôle précis. Pas d'Orchestrateur : il ne faisait que produire un plan JSON jamais lu par personne, l'ordre d'exécution ci-dessous a toujours été câblé en Python (`_construire_graphe`), jamais décidé dynamiquement par sa réponse — le fichier a été supprimé.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                     PIPELINE MULTI-AGENTS (9 agents)                │
+│                     PIPELINE MULTI-AGENTS (8 agents)                 │
 └─────────────────────────────────────────────────────────────────────┘
 
 Instance T-R-C-O  ──┐
                     │
                     ▼
     ┌───────────────────────────┐
-    │ 1. ORCHESTRATEUR          │  Planifie les étapes (meta-analyse)
-    │    Durée : ~20s           │
-    └───────────┬───────────────┘
-                │ Plan général (6-8 étapes)
-                ▼
-    ┌───────────────────────────┐
-    │ 2. ANALYSTE               │  Analyse le problème (tâches, ressources, contraintes)
+    │ 1. ANALYSTE               │  Analyse le problème (tâches, ressources, contraintes)
     │    Durée : ~10s           │
     └───────────┬───────────────┘
                 │ Spécification détaillée
                 ▼
     ┌───────────────────────────┐
-    │ 3. ARCHITECTE             │  Conçoit le modèle CP-SAT (variables, contraintes)
+    │ 2. BENCHMARKER            │  Choisit l'algorithme (cp_sat, genetic, aco, ...)
+    │    Durée : variable       │
+    └───────────┬───────────────┘
+                │ Algorithme + paramètres
+                ▼
+    ┌───────────────────────────┐
+    │ 3. ARCHITECTE             │  Conçoit le modèle (variables, contraintes)
     │    Durée : ~15s           │
     └───────────┬───────────────┘
                 │ Plan technique (architecture)
@@ -44,104 +44,35 @@ Instance T-R-C-O  ──┐
     │ 5. TESTEUR                │  Génère les tests unitaires
     │    Durée : ~17s           │
     └───────────┬───────────────┘
-                │ Code tests
+                │ Code candidat + tests
                 ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │ BOUCLE DE RÉPARATION BORNÉE (max 10 tentatives)              │
+    │                                                               │
+    │  6. REVIEWER relit le code                                   │
+    │      │ Rejeté ──────────► 7. DEBUGGER corrige, retour Reviewer│
+    │      │ Approuvé                                              │
+    │      ▼                                                       │
+    │  VALIDATION (statique → exécution → cascade)                 │
+    │      │ Échec ────────────► 7. DEBUGGER corrige, retour Reviewer│
+    │      │ Succès                                                │
+    └──────┼────────────────────────────────────────────────────────┘
+           │                (tentatives épuisées → échec honnête, STOP)
+           ▼
     ┌───────────────────────────┐
-    │ 6. REVIEWER               │  Relit le code, détecte bugs potentiels
-    │    Durée : ~10s           │
+    │ 8. DOCUMENTATION          │  Best-effort, ne fait jamais échouer un solveur validé
     └───────────┬───────────────┘
-                │ Approuvé OU Liste de bugs
-                │
-                ├─── SI APPROUVÉ ──────┐
-                │                      │
-                │                      ▼
-                │              ┌───────────────────┐
-                │              │ 8. VALIDATION     │  Statique → Exécution → Cascade
-                │              │    Durée : ~0.5s  │
-                │              └─────┬─────────────┘
-                │                    │
-                └─── SI REJETÉ ──┐   │
-                                 │   │
-                                 ▼   │
-                    ┌──────────────────────────┐
-                    │ 7. DEBUGGER (conditionnel)│  Corrige les bugs identifiés
-                    │    Durée : ~15s           │
-                    └──────────┬───────────────┘
-                               │ Code corrigé
-                               │
-                               ▼
-                       ┌───────────────────┐
-                       │ 8. VALIDATION     │
-                       └─────┬─────────────┘
-                             │
-                             ├─── SI ÉCHEC ─────► STOP (erreur finale)
-                             │
-                             └─── SI SUCCÈS ───┐
-                                               │
-                                               ▼
-                                    ┌────────────────────────┐
-                                    │ 9. OPTIMISEUR          │  Propose optimisations
-                                    │    Durée : ~12s        │
-                                    └──────┬─────────────────┘
-                                           │ Code optimisé (optionnel)
-                                           │
-                                           ▼
-                                    ┌────────────────────────┐
-                                    │ VALIDATION (bis)       │  Vérifie l'optimisation
-                                    └──────┬─────────────────┘
-                                           │
-                                           ├─── SI ÉCHEC ────► Garde code non-optimisé
-                                           └─── SI SUCCÈS ───► Adopte code optimisé
-                                                   │
-                                                   ▼
-                                           ┌────────────────────┐
-                                           │ 10. DOCUMENTATION  │  Génère doc Markdown
-                                           └────────────────────┘
-                                                   │
-                                                   ▼
-                                              RÉSULTAT FINAL
+                ▼
+           RÉSULTAT FINAL
 ```
+
+Pas d'Optimiseur non plus dans ce pipeline : agent retiré (réponse JSON trop fragile pour embarquer du code Python complet). `generation/agents/optimiseur.py` existe toujours mais n'est plus appelé — orphelin.
 
 ---
 
 ## 📋 Détail Agent par Agent
 
-### 1️⃣ ORCHESTRATEUR
-
-**Rôle** : Planificateur stratégique (meta-analyse).
-
-**Input** :
-- Instance T-R-C-O (via `AppelLLM` qui contient l'instance en contexte)
-
-**Prompt** :
-```
-Tu es un orchestrateur de projet. Analyse cette instance de planification 
-et propose un plan en 6-8 étapes pour résoudre ce problème FJSP avec OR-Tools.
-```
-
-**Output** : `PlanOrchestration`
-- Liste d'étapes (`EtapePlan`) avec description
-- Exemple :
-  ```
-  1. Analyser les tâches et leurs dépendances
-  2. Identifier les ressources disponibles
-  3. Modéliser les variables (start_times, assigned_resources)
-  4. Ajouter contraintes de précédence
-  5. Ajouter contraintes de capacité
-  6. Définir objectif (minimiser makespan)
-  7. Résoudre avec CP-SAT
-  8. Construire Planning de sortie
-  ```
-
-**Durée moyenne** : ~20s
-
-**Fichier** : `generation/agents/orchestrateur.py`
-
-**Note importante** : L'ordre d'exécution est **câblé en Python** dans `pipeline_multi_agents.py`, pas décidé dynamiquement par cet agent. Son output est informatif, jamais exécuté.
-
----
-
-### 2️⃣ ANALYSTE
+### 1️⃣ ANALYSTE
 
 **Rôle** : Analyser le problème en profondeur (tâches, ressources, contraintes).
 
@@ -178,6 +109,23 @@ Produis une spécification détaillée.
 **Durée moyenne** : ~10s
 
 **Fichier** : `generation/agents/analyste.py`
+
+---
+
+### 2️⃣ BENCHMARKER
+
+**Rôle** : Choisir l'algorithme le mieux adapté à l'instance — toujours appelé, avant l'Architecte.
+
+**Input** :
+- Instance T-R-C-O (ou une petite instance d'exemple par défaut si aucune n'est fournie)
+
+**Output** : `Recommandation`
+- Algorithme choisi (`cp_sat` — seul traité comme *exact* — ou une heuristique : `genetic`/`aco`/`tabu_search`/`simulated_annealing`/`dispatching`/`greedy_local`, pour les très grandes instances)
+- Justification + paramètres suggérés (ex. `limite_temps_s`, `population_size`...)
+
+**Fichier** : `generation/agents/benchmarker.py`
+
+**Note** : détermine aussi la tolérance de la cascade de validation qui suit (§5 — un algorithme heuristique n'est pas comparé au strict optimum du banc synthétique comme `cp_sat`).
 
 ---
 
@@ -271,7 +219,7 @@ Génère le code Python complet d'un solveur OR-Tools CP-SAT qui :
       return None
   ```
 
-**Durée moyenne** : ~21s (agent le plus lent avec Orchestrateur)
+**Durée moyenne** : ~21s (agent le plus lent du pipeline)
 
 **Fichier** : `generation/agents/generateur.py`
 
@@ -391,11 +339,11 @@ Corrige ces bugs et retourne le code corrigé complet.
 
 **Fichier** : `generation/agents/debugger.py`
 
-**Note importante** : Le Debugger n'intervient **qu'une seule fois**, jamais en boucle (§6.6). Si son code échoue encore à la validation, c'est un échec final.
+**Note importante** : Le Debugger peut intervenir **jusqu'à 10 fois** (`MAX_TENTATIVES_REPARATION`, §6.6) — boucle bornée Reviewer ⇄ Debugger, pas un essai unique. Si les tentatives s'épuisent sans validation réussie, c'est un échec final honnête (jamais masqué).
 
 ---
 
-### 8️⃣ VALIDATION (Pas un agent LLM, mais une fonction)
+### VALIDATION (pas un agent LLM, mais une fonction — appelée à chaque tentative de la boucle)
 
 **Rôle** : Valider le code en 3 passes.
 
@@ -426,50 +374,25 @@ Corrige ces bugs et retourne le code corrigé complet.
 - `verdict_cascade: VerdictCascade | None`
 - `reussi: bool` (True seulement si les 3 passes OK)
 
-**Durée totale** : ~0.5s
+**Durée totale** : ~0.5s par tentative
 
-**Fichier** : `pipeline_multi_agents.py` (fonction `_valider_completement`)
+**Fichier** : `generation/graph.py` (fonction `_valider_completement`)
 
-**Point clé** : Cette validation est appelée **2 fois** :
-1. Sur le code du Développeur/Debugger
-2. Sur le code de l'Optimiseur (si optimisation proposée)
+**Point clé** : Appelée à chaque tentative de la boucle (jusqu'à 10 fois) — jamais sur du code d'Optimiseur, cet agent n'est plus dans le pipeline (voir ci-dessous).
 
 ---
 
-### 9️⃣ OPTIMISEUR (Conditionnel)
+### OPTIMISEUR — orphelin, plus appelé par le pipeline
 
-**Rôle** : Proposer des optimisations de performance.
-
-**Condition d'exécution** : Seulement si la validation cascade a **réussi**
-
-**Input** :
-- Code source validé
-- Verdict cascade (métriques de performance)
-
-**Prompt** :
-```
-Ce code solveur fonctionne et passe la validation. Propose des optimisations :
-- Réduire le temps de résolution (ajout de hints, symmetry breaking)
-- Améliorer la modélisation (contraintes redondantes, variables auxiliaires)
-- Optimiser la recherche (branching strategy)
-
-Si aucune optimisation pertinente : retourne le code original.
-```
-
-**Output** : `ResultatOptimisation`
-- `proposee: bool`
-- `code_source: str | None` (code optimisé)
-- `justification: str`
-
-**Durée moyenne** : ~12s
-
-**Fichier** : `generation/agents/optimiseur.py`
-
-**Note critique** : Le code optimisé est **re-validé** (validation complète bis). Si la validation échoue, on garde le code non-optimisé. L'Optimiseur n'est **jamais** cru sur parole.
+`generation/agents/optimiseur.py` existe toujours mais n'est plus invoqué
+depuis `generation/graph.py` : sa réponse JSON devait embarquer un code
+Python complet comme valeur de chaîne, un format que les LLM échouent
+régulièrement à échapper correctement — et l'enjeu n'en valait pas la
+fragilité, le code est déjà validé par la cascade à ce stade.
 
 ---
 
-### 🔟 DOCUMENTATION (Optionnel mais toujours exécuté si succès)
+### 8️⃣ DOCUMENTATION (best-effort, après re-validation finale du code)
 
 **Rôle** : Générer une documentation Markdown du code final.
 
@@ -527,49 +450,36 @@ Génère une documentation Markdown pour ce solveur :
 ```
 Instance T-R-C-O
     │
-    ├───► ORCHESTRATEUR ───► Plan général (tuple[EtapePlan])
-    │
     ├───► ANALYSTE ───► Spécification (str)
+    │
+    ├───► BENCHMARKER ───► Algorithme + paramètres
     │
     └───► ARCHITECTE ───► Plan technique (str)
               │
               ▼
-         DÉVELOPPEUR ───► Code source (~100-200 lignes)
+         DÉVELOPPEUR ───► Code candidat
               │
-              ├───► TESTEUR ───► Code tests pytest
+              ▼
+         TESTEUR ───► Tests pytest générés (jamais exécutés automatiquement)
               │
-              └───► REVIEWER ───► Approuvé (bool) + Commentaires (str)
-                         │
-                         ├─── SI REJETÉ ───► DEBUGGER ───► Code corrigé
-                         │                        │
-                         └─── SI APPROUVÉ ────────┤
-                                                   │
-                                                   ▼
-                                            VALIDATION (3 passes)
-                                                   │
-                                                   ├─── ÉCHEC ───► STOP
-                                                   │
-                                                   └─── SUCCÈS ───┐
-                                                                  │
-                                                                  ▼
-                                                           OPTIMISEUR
-                                                                  │
-                                                                  ├─── Pas d'optimisation
-                                                                  │
-                                                                  └─── Optimisation proposée
-                                                                         │
-                                                                         ▼
-                                                                  VALIDATION (bis)
-                                                                         │
-                                                                         ├─── ÉCHEC → Code non-optimisé
-                                                                         │
-                                                                         └─── SUCCÈS → Code optimisé
-                                                                                │
-                                                                                ▼
-                                                                         DOCUMENTATION
-                                                                                │
-                                                                                ▼
-                                                                       RÉSULTAT FINAL
+              ▼
+    ┌─── BOUCLE (max 10 tentatives) ──────────────────────────────┐
+    │                                                              │
+    │   REVIEWER ───► Approuvé (bool) + Commentaires (str)        │
+    │       │                                                      │
+    │       ├─ REJETÉ ──► DEBUGGER ──► Code corrigé ──► retour Reviewer
+    │       │                                                      │
+    │       └─ APPROUVÉ ──► VALIDATION (statique → exécution → cascade)
+    │                             │                                │
+    │                             ├─ ÉCHEC ──► DEBUGGER ──► retour Reviewer
+    │                             └─ SUCCÈS ──► sort de la boucle  │
+    └──────────────────────────────────────────────────────────────┘
+              │ (tentatives épuisées → échec honnête, STOP)
+              ▼ (succès)
+         DOCUMENTATION (best-effort)
+              │
+              ▼
+       RÉSULTAT FINAL
 ```
 
 ---
@@ -580,7 +490,6 @@ Sur une instance de **12 tâches, 5 ressources, 10 contraintes** :
 
 | Agent | Durée (s) | Tokens Input | Tokens Output | Coût ($) |
 |-------|-----------|--------------|---------------|----------|
-| Orchestrateur | 21.1 | 800 | 200 | 0.045 |
 | Analyste | 10.6 | 600 | 300 | 0.038 |
 | Architecte | 14.9 | 900 | 400 | 0.051 |
 | Développeur | 21.0 | 1200 | 800 | 0.075 |
@@ -655,8 +564,8 @@ uv run python scripts/generer_avec_metriques.py # Avec métriques Grafana
 
 ## 📚 Fichiers Liés
 
-- **Pipeline** : `generation/pipeline_multi_agents.py`
-- **Agents** : `generation/agents/{orchestrateur,analyste,architecte,generateur,testeur,reviewer,debugger,optimiseur,documentation}.py`
+- **Pipeline + boucle** : `generation/graph.py` (StateGraph LangGraph, Étape 6)
+- **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,reviewer,debugger,documentation}.py` (`optimiseur.py` orphelin)
 - **Client LLM** : `generation/agents/client_llm.py`
 - **Validation** : `generation/validation_statique.py`, `generation/executer.py`, `validation_engine/cascade.py`
 - **Script monitoring** : `scripts/generer_avec_metriques.py`

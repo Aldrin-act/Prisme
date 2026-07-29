@@ -17,10 +17,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from generation.agents.base import extraire_json
-from generation.agents.client_llm import AppelLLM
+from langchain_core.messages import HumanMessage, SystemMessage
+from pydantic import BaseModel, Field
+
+from generation.agents.base import ErreurReponseAgentInvalide, extraire_texte_brut
+from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+
+if TYPE_CHECKING:
+    from langchain_core.language_models.chat_models import BaseChatModel
 
 CHEMIN_PROMPT = Path(__file__).resolve().parent / "prompts" / "comprehension.md"
 CHEMIN_REGLES_DSL = Path(__file__).resolve().parents[2] / "docs" / "dsl" / "modele_ingestion_client.md"
@@ -30,6 +36,24 @@ _PROMPT_SYSTEME = (
     "propriétaires vers un format d'ordonnancement canonique. Tu réponds toujours en JSON strict, "
     "jamais en texte libre."
 )
+
+
+class _SchemaJustification(BaseModel):
+    contrainte: str = Field(description="La contrainte produite (ex: 'precedence: T1 → T2').")
+    raison: str = Field(description="Citation exacte du champ des données brutes qui l'a justifiée.")
+
+
+class _SchemaComprehension(BaseModel):
+    # `dict[str, Any]` volontairement : le schéma T-R-C-O réel (union discriminée
+    # de contraintes, axes optionnels...) n'est jamais dupliqué ici — la seule
+    # validation qui compte est celle, déterministe, d'`InstanceTRCO` en aval
+    # (§6.7, `api.input_validation.valider_payload_trco`), jamais une contrainte
+    # imposée au LLM au moment de la génération.
+    instance: dict[str, Any] = Field(description="Instance T-R-C-O candidate, format canonique.")
+    avertissements: list[str] = Field(
+        default_factory=list, description="Incertitudes à faire vérifier par un humain."
+    )
+    justifications: list[_SchemaJustification] = Field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -50,18 +74,27 @@ class ResultatComprehension:
     justifications: tuple[Justification, ...]
 
 
-def comprendre_donnees_erp(appel_llm: AppelLLM, donnees_brutes: str) -> ResultatComprehension:
+def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> ResultatComprehension:
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     regles_dsl = CHEMIN_REGLES_DSL.read_text(encoding="utf-8")
     prompt = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes)
-    reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    donnees = extraire_json(reponse)
+
+    structure = modele.with_structured_output(
+        _SchemaComprehension, include_raw=True, method=methode_sortie_structuree(modele)
+    )
+    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
+    reponse_brute = extraire_texte_brut(sortie["raw"])
+    if sortie["parsing_error"] is not None:
+        raise ErreurReponseAgentInvalide(
+            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
+        ) from sortie["parsing_error"]
+
+    donnees = sortie["parsed"]
     return ResultatComprehension(
-        reponse_brute=reponse,
-        instance_brute=donnees["instance"],
-        avertissements=tuple(donnees.get("avertissements", [])),
+        reponse_brute=reponse_brute,
+        instance_brute=donnees.instance,
+        avertissements=tuple(donnees.avertissements),
         justifications=tuple(
-            Justification(contrainte=j["contrainte"], raison=j["raison"])
-            for j in donnees.get("justifications", [])
+            Justification(contrainte=j.contrainte, raison=j.raison) for j in donnees.justifications
         ),
     )

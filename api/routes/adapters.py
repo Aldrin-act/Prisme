@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import psycopg
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import comprendre_donnees_erp
@@ -33,7 +34,7 @@ from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from generation.agents.base import ErreurReponseAgentInvalide
-from generation.agents.client_llm import AppelLLM, construire_appel_llm
+from generation.agents.client_llm import construire_modele_comprehension
 
 CLIENT_ID_GREENSIG = "greensig"
 
@@ -93,12 +94,12 @@ class RequeteComprehension(BaseModel):
 def ingerer_via_comprehension(
     requete: RequeteComprehension,
     etat: EtatAPI = Depends(obtenir_etat),
-    appel_llm: AppelLLM = Depends(construire_appel_llm),
+    modele: BaseChatModel = Depends(construire_modele_comprehension),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
     verifier_acces_client(utilisateur, requete.client_id)
     try:
-        resultat = comprendre_donnees_erp(appel_llm, requete.donnees_brutes)
+        resultat = comprendre_donnees_erp(modele, requete.donnees_brutes)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 

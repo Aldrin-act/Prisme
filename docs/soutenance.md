@@ -65,7 +65,7 @@ Pydantic v2, `extra="forbid"` — un identifiant borné (`Identifiant`) restrein
 Huit agents spécialisés, une boucle de réparation bornée :
 
 ```
-Orchestrateur → Analyste → Architecte → Développeur → Testeur →
+Analyste → Benchmarker → Architecte → Développeur → Testeur →
    ┌─ Boucle bornée (10 tentatives max) ─────────────┐
    │  Reviewer ⇄ Debugger → Validation (cascade)      │
    └───────────────────────────────────────────────────┘

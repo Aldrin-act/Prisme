@@ -1,6 +1,6 @@
 # Schéma Complet des Agents PRISME
 
-Ce document présente l'architecture détaillée des 9 agents du pipeline multi-agents.
+Ce document présente l'architecture détaillée des 8 agents du pipeline multi-agents.
 
 ---
 
@@ -13,20 +13,19 @@ generation/
 │   ├── base.py                       # Utilitaires communs
 │   ├── client_llm.py                 # Interface LLM (Mistral, Claude, GPT)
 │   │
-│   ├── orchestrateur.py              # Agent 1 : Planification
-│   ├── analyste.py                   # Agent 2 : Analyse
+│   ├── analyste.py                   # Agent 1 : Analyse
+│   ├── benchmarker.py                # Agent 2 : Choix de l'algorithme
 │   ├── architecte.py                 # Agent 3 : Conception
 │   ├── generateur.py                 # Agent 4 : Développement
 │   ├── testeur.py                    # Agent 5 : Tests
 │   ├── reviewer.py                   # Agent 6 : Revue de code
 │   ├── debugger.py                   # Agent 7 : Correction
-│   ├── optimiseur.py                 # Agent 8 : Optimisation
-│   └── documentation.py              # Agent 9 : Documentation
+│   ├── documentation.py              # Agent 8 : Documentation
+│   └── optimiseur.py                 # Orphelin, plus appelé par le pipeline
 │
 ├── prompts/                          # Prompts des agents (Markdown)
 │   ├── generation_solveur.md         # Mission commune (contrat T-R-C-O)
 │   │
-│   ├── orchestrateur.md              # Prompt Orchestrateur
 │   ├── analyste.md                   # Prompt Analyste
 │   ├── architecte.md                 # Prompt Architecte
 │   ├── developpeur.md                # Prompt Développeur
@@ -36,9 +35,7 @@ generation/
 │   ├── optimiseur.md                 # Prompt Optimiseur
 │   └── documentation.md              # Prompt Documentation
 │
-├── pipeline_multi_agents.py          # Pipeline SANS boucle (1 tentative)
-├── pipeline_avec_boucle.py           # Pipeline AVEC boucle (3 tentatives)
-├── loop.py                           # Boucle de réparation (Étape 6)
+├── graph.py                           # Pipeline + boucle de réparation (StateGraph LangGraph, Étape 6, max 10 tentatives)
 ├── tentative_unique.py               # Mode simple (1 agent, Étape 4)
 ├── validation_statique.py            # AST allowlist
 └── executer.py                       # exec() isolé
@@ -95,53 +92,15 @@ def fonction_agent(appel_llm: AppelLLM, *args) -> ResultatAgent:
 
 ---
 
-## 🤖 Les 9 Agents en Détail
+## 🤖 Les 8 Agents en Détail
 
-### 1️⃣ ORCHESTRATEUR
+> Pas d'Orchestrateur : l'agent a été supprimé (`generation/agents/orchestrateur.py`,
+> `generation/prompts/orchestrateur.md`). Il ne faisait que produire un plan
+> JSON jamais lu par personne — l'ordre d'exécution du pipeline a toujours
+> été câblé en Python dans `generation/graph.py` (`_construire_graphe`),
+> jamais décidé dynamiquement par sa réponse.
 
-**Fichier** : `generation/agents/orchestrateur.py`  
-**Prompt** : `generation/prompts/orchestrateur.md`
-
-**Fonction** :
-```python
-def planifier(appel_llm: AppelLLM) -> PlanOrchestration
-```
-
-**Input** : Instance T-R-C-O (via contexte LLM)
-
-**Output** : `PlanOrchestration`
-```python
-@dataclass
-class EtapePlan:
-    numero: int
-    description: str
-
-@dataclass
-class PlanOrchestration:
-    reponse_brute: str
-    plan: tuple[EtapePlan, ...]  # 6-8 étapes
-```
-
-**Prompt système** :
-```
-"Tu es un chef de projet technique spécialisé en optimisation combinatoire. 
-Tu réponds toujours en JSON strict."
-```
-
-**Format JSON attendu** :
-```json
-{
-  "plan": [
-    {"numero": 1, "description": "Analyser les tâches et dépendances"},
-    {"numero": 2, "description": "Identifier les ressources disponibles"},
-    ...
-  ]
-}
-```
-
----
-
-### 2️⃣ ANALYSTE
+### 1️⃣ ANALYSTE
 
 **Fichier** : `generation/agents/analyste.py`  
 **Prompt** : `generation/prompts/analyste.md`
@@ -187,7 +146,7 @@ modélisation. Tu réponds toujours en JSON strict."
 
 ---
 
-### 3️⃣ ARCHITECTE
+### 2️⃣ ARCHITECTE
 
 **Fichier** : `generation/agents/architecte.py`  
 **Prompt** : `generation/prompts/architecte.md`
@@ -229,7 +188,7 @@ Tu réponds toujours en JSON strict."
 
 ---
 
-### 4️⃣ DÉVELOPPEUR (Générateur)
+### 3️⃣ DÉVELOPPEUR (Générateur)
 
 **Fichier** : `generation/agents/generateur.py`  
 **Prompt** : `generation/prompts/developpeur.md`
@@ -264,7 +223,7 @@ en JSON strict avec un champ 'code' contenant le code Python."
 
 ---
 
-### 5️⃣ TESTEUR
+### 4️⃣ TESTEUR
 
 **Fichier** : `generation/agents/testeur.py`  
 **Prompt** : `generation/prompts/testeur.md`
@@ -301,7 +260,7 @@ avec un champ 'tests' contenant le code pytest."
 
 ---
 
-### 6️⃣ REVIEWER
+### 5️⃣ REVIEWER
 
 **Fichier** : `generation/agents/reviewer.py`  
 **Prompt** : `generation/prompts/reviewer.md`
@@ -338,7 +297,7 @@ en JSON strict avec 'approuve' (bool) et 'commentaires' (string)."
 
 ---
 
-### 7️⃣ DEBUGGER
+### 6️⃣ DEBUGGER
 
 **Fichier** : `generation/agents/debugger.py`  
 **Prompt** : `generation/prompts/debugger.md`
@@ -375,7 +334,7 @@ strict avec un champ 'code_corrige' contenant le code Python corrigé."
 
 ---
 
-### 8️⃣ OPTIMISEUR
+### 7️⃣ OPTIMISEUR (orphelin, plus appelé par le pipeline)
 
 **Fichier** : `generation/agents/optimiseur.py`  
 **Prompt** : `generation/prompts/optimiseur.md`
@@ -417,7 +376,7 @@ class ResultatOptimisation:
 
 ---
 
-### 9️⃣ DOCUMENTATION
+### 8️⃣ DOCUMENTATION
 
 **Fichier** : `generation/agents/documentation.py`  
 **Prompt** : `generation/prompts/documentation.md`
@@ -520,10 +479,6 @@ ANTHROPIC_API_KEY=...
 ```
 Instance T-R-C-O (DSL)
     │
-    ├────► ORCHESTRATEUR
-    │          │
-    │          ▼ PlanOrchestration (tuple[EtapePlan])
-    │
     ├────► ANALYSTE
     │          │
     │          ▼ ResultatAnalyse (entrees, sorties, contraintes)
@@ -616,7 +571,6 @@ IMPORTANT : Tu réponds UNIQUEMENT en JSON strict, format :
 
 **Prompts existants** :
 - `generation_solveur.md` : Mission commune (contrat T-R-C-O, signature `resoudre()`)
-- `orchestrateur.md` : Planification 6-8 étapes
 - `analyste.md` : Analyse inputs/outputs/contraintes
 - `architecte.md` : Architecture CP-SAT (variables, contraintes, objectif)
 - `developpeur.md` : Code Python complet
@@ -728,7 +682,6 @@ Estimation (instance 12 tâches, Mistral Large) :
 
 | Agent | Durée (s) | Tokens In | Tokens Out | Coût ($) |
 |-------|-----------|-----------|------------|----------|
-| Orchestrateur | 21 | 800 | 200 | 0.045 |
 | Analyste | 11 | 600 | 300 | 0.038 |
 | Architecte | 15 | 900 | 400 | 0.051 |
 | Développeur | 21 | 1200 | 800 | 0.075 |
@@ -793,12 +746,11 @@ for i, tentative in enumerate(resultat.boucle_reparation.tentatives, 1):
 
 ## 📚 Fichiers Liés
 
-- **Agents** : `generation/agents/{orchestrateur,analyste,architecte,generateur,testeur,reviewer,debugger,optimiseur,documentation}.py`
+- **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,reviewer,debugger,documentation}.py` (`optimiseur.py` orphelin)
 - **Prompts** : `generation/prompts/*.md`
-- **Pipeline** : `generation/pipeline_multi_agents.py`, `generation/pipeline_avec_boucle.py`
-- **Boucle** : `generation/loop.py`
+- **Pipeline + boucle** : `generation/graph.py` (StateGraph LangGraph, remplace les anciens `pipeline_multi_agents.py`/`pipeline_avec_boucle.py`/`loop.py`, supprimés)
 - **Documentation** : `docs/agents_fonctionnement_detaille.md`, `docs/boucle_reparation.md`
 
 ---
 
-**Schéma complet des 9 agents documenté ! 🎉**
+**Schéma complet des 8 agents documenté ! 🎉**

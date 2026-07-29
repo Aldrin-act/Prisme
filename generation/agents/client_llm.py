@@ -275,6 +275,14 @@ def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel:
     return _construire_modele(fournisseur, modele_nom, _timeout_pour_agent(nom_agent))
 
 
+def construire_modele_comprehension() -> BaseChatModel:
+    """Dépendance FastAPI zero-arg (`Depends(...)`) pour l'agent de
+    compréhension ERP (`adapters/agent_comprehension/`, §5.4 bis) — routé
+    comme n'importe quel agent du pipeline via `config_fournisseurs.py`
+    (clé `"comprehension"`), pas un client LLM à part."""
+    return construire_modele_pour_agent("comprehension")
+
+
 def construire_appel_llm_pour_agent(nom_agent: str) -> AppelLLM:
     """Construit l'appel LLM optimal pour un agent spécifique, sous la forme
     `AppelLLM` historique (texte brut) — pont de compatibilité pour les
@@ -282,14 +290,14 @@ def construire_appel_llm_pour_agent(nom_agent: str) -> AppelLLM:
     `construire_modele_pour_agent` pour la version `BaseChatModel` brute.
 
     Args:
-        nom_agent: Nom de l'agent (ex: "generateur", "debugger", "orchestrateur")
+        nom_agent: Nom de l'agent (ex: "generateur", "debugger", "documentation")
 
     Returns:
         Callable LLM configuré pour le fournisseur optimal de cet agent
 
     Exemples:
         >>> appel = construire_appel_llm_pour_agent("generateur")  # → deepseek
-        >>> appel = construire_appel_llm_pour_agent("orchestrateur")  # → nvidia
+        >>> appel = construire_appel_llm_pour_agent("documentation")  # → nvidia
     """
     modele = construire_modele_pour_agent(nom_agent)
     return _avec_retry(_appel_texte_brut(modele))

@@ -118,13 +118,12 @@ uv run python -m scripts.demo_benchmarker
 Le Benchmarker peut s'intégrer **avant** l'agent Développeur :
 
 ```
-1. Orchestrateur
-2. Analyste
-3. Architecte
-4. 🆕 Benchmarker ← Choisit l'algorithme
-5. Développeur (adapte le code selon l'algo choisi)
-6. Testeur
-7. Reviewer
+1. Analyste
+2. Architecte
+3. 🆕 Benchmarker ← Choisit l'algorithme
+4. Développeur (adapte le code selon l'algo choisi)
+5. Testeur
+6. Reviewer
 ...
 ```
 

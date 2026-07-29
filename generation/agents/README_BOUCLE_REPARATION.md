@@ -108,7 +108,7 @@ L'échec après 3 tentatives est **un comportement attendu et souhaitable** :
 La boucle s'intègre après l'agent Reviewer et avant les agents Optimiseur/Documentation :
 
 ```
-Orchestrateur → Analyste → Architecte → Benchmarker
+Analyste → Architecte → Benchmarker
     ↓
 Générateur → Testeur → Reviewer
     ↓

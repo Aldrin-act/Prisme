@@ -54,16 +54,15 @@ Vous avez 3 scripts principaux :
 
 **Script** : `generer_multi_agents.py`
 
-**Agents** : 9 agents séquentiels
-1. Orchestrateur → Planification
-2. Analyste → Spécification
-3. Architecte → Conception
-4. Développeur → Code
-5. Testeur → Tests
-6. Reviewer → Revue
-7. Debugger → Corrections (si bugs)
-8. Optimiseur → Optimisation
-9. Documentation → Doc
+**Agents** : 8 agents séquentiels
+1. Analyste → Spécification
+2. Architecte → Conception
+3. Développeur → Code
+4. Testeur → Tests
+5. Reviewer → Revue
+6. Debugger → Corrections (si bugs)
+7. Optimiseur → Optimisation
+8. Documentation → Doc
 
 **Durée** : 2-5 minutes
 
@@ -140,59 +139,54 @@ Quelle que soit l'option choisie, voici ce qui se passe :
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│ 1. ORCHESTRATEUR                                        │
-│    Planifie les étapes du pipeline                     │
-└─────────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│ 2. ANALYSTE                                             │
+│ 1. ANALYSTE                                             │
 │    Analyse la mission → spécification technique         │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 3. ARCHITECTE                                           │
+│ 2. ARCHITECTE                                           │
 │    Conception du modèle CP-SAT                          │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 4. DÉVELOPPEUR                                          │
+│ 3. DÉVELOPPEUR                                          │
 │    Génère le code Python (fonction resoudre)           │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 5. VALIDATION STATIQUE                                  │
+│ 4. VALIDATION STATIQUE                                  │
 │    Vérifie l'AST (allowlist : ortools, dsl, etc.)      │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 6. EXÉCUTION                                            │
+│ 5. EXÉCUTION                                            │
 │    Teste le code sur une instance simple               │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 7. CASCADE DE VALIDATION                                │
+│ 6. CASCADE DE VALIDATION                                │
 │    ✓ Faisabilité (toutes instances)                    │
 │    ✓ Optimalité (banc synthétique)                     │
 │    ✓ Fidélité (cas de référence)                       │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 8. TESTEUR (si cascade OK)                             │
+│ 7. TESTEUR (si cascade OK)                             │
 │    Génère des tests pytest                             │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 9. REVIEWER                                             │
+│ 8. REVIEWER                                             │
 │    Revoit le code, suggère améliorations               │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 10. OPTIMISEUR (optionnel)                             │
+│ 9. OPTIMISEUR (optionnel)                              │
 │     Optimise le code si déjà fonctionnel               │
 └─────────────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 11. DOCUMENTATION                                       │
+│ 10. DOCUMENTATION                                       │
 │     Génère la documentation Markdown                    │
 └─────────────────────────────────────────────────────────┘
 ```

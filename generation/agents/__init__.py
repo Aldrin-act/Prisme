@@ -1,5 +1,5 @@
 """agents — Client LLM (`client_llm.py`, LangChain) et les agents du pipeline
-de génération (§5.6) : Orchestrateur, Analyste, Benchmarker, Architecte,
+de génération (§5.6) : Analyste, Benchmarker, Architecte,
 Développeur (`generateur.py`), Testeur, Reviewer, Debugger, Documentation
 (Optimiseur orphelin, plus appelé). Chaque agent est une fonction pure
 `(BaseChatModel, ...) -> Resultat...` (sortie structurée Pydantic) — voir

@@ -21,26 +21,26 @@ import pytest
 
 from adapters.agent_comprehension.exploration_bdd import (
     ErreurRequeteNonAutorisee,
+    _SchemaExploration,
+    _SchemaRequete,
     explorer_base_de_donnees,
     introspecter_schema,
 )
-
-
-def _appel_factice(reponse: str):
-    def appel(_prompt_systeme: str, _prompt_utilisateur: str) -> str:
-        return reponse
-
-    return appel
+from tests.unit.aides_test_agents import ModeleFactice
 
 
 def test_exploration_execute_une_requete_sure_et_retourne_du_json(greensig_dsn_lecture_seule: str) -> None:
-    reponse = (
-        '{"requetes": [{"nom": "types_tache", '
-        '"sql": "SELECT id, nom_tache FROM api_planification_typetache ORDER BY id LIMIT 3"}], '
-        '"avertissements": []}'
+    schema = _SchemaExploration(
+        requetes=[
+            _SchemaRequete(
+                nom="types_tache",
+                sql="SELECT id, nom_tache FROM api_planification_typetache ORDER BY id LIMIT 3",
+            )
+        ],
     )
+    modele = ModeleFactice(raw_content="{}", parsed=schema)
 
-    resultat = explorer_base_de_donnees(_appel_factice(reponse), greensig_dsn_lecture_seule)
+    resultat = explorer_base_de_donnees(modele, greensig_dsn_lecture_seule)
 
     assert resultat.requetes_executees
     assert "types_tache" in resultat.donnees_json
@@ -50,10 +50,13 @@ def test_exploration_execute_une_requete_sure_et_retourne_du_json(greensig_dsn_l
 
 
 def test_exploration_rejette_une_requete_decriture_avant_la_base(greensig_dsn_lecture_seule: str) -> None:
-    reponse = '{"requetes": [{"nom": "x", "sql": "DELETE FROM api_planification_tache"}], "avertissements": []}'
+    schema = _SchemaExploration(
+        requetes=[_SchemaRequete(nom="x", sql="DELETE FROM api_planification_tache")],
+    )
+    modele = ModeleFactice(raw_content="{}", parsed=schema)
 
     with pytest.raises(ErreurRequeteNonAutorisee):
-        explorer_base_de_donnees(_appel_factice(reponse), greensig_dsn_lecture_seule)
+        explorer_base_de_donnees(modele, greensig_dsn_lecture_seule)
 
 
 def test_introspection_detecte_les_tables_reelles(greensig_dsn_lecture_seule: str) -> None:

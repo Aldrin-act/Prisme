@@ -119,8 +119,8 @@ class TestConstructeursModeleParite:
 
 def test_construire_modele_pour_agent_respecte_la_surcharge_de_modele(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("NVIDIA_API_KEY", "cle-test")
-    monkeypatch.setenv("PRISME_LLM_MODEL_ORCHESTRATEUR", "un-modele-precis")
+    monkeypatch.setenv("PRISME_LLM_MODEL_DOCUMENTATION", "un-modele-precis")
 
-    modele = client_llm.construire_modele_pour_agent("orchestrateur")
+    modele = client_llm.construire_modele_pour_agent("documentation")
 
     assert modele.model_name == "un-modele-precis"

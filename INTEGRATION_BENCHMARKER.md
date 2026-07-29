@@ -35,11 +35,9 @@ Exemple : GreenSig (2165 taches)
 
 ### Position dans le pipeline
 
-Le pipeline passe de **9 agents a 10 agents** :
+Le pipeline passe de **8 agents a 9 agents** :
 
 ```
-Orchestrateur
-    |
 Analyste
     |
 Architecte

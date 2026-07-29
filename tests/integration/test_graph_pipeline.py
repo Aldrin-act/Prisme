@@ -17,7 +17,6 @@ from generation.agents import (
     debugger,
     documentation,
     generateur,
-    orchestrateur,
     testeur,
 )
 from generation.agents import (
@@ -113,12 +112,6 @@ def _reponses_communes() -> dict[str, object]:
     Reviewer sans jamais échouer avant — chaque test surcharge ensuite
     `reviewer`/`debugger` selon le scénario."""
     return {
-        "orchestrateur": ModeleFactice(
-            raw_content="{}",
-            parsed=orchestrateur._SchemaOrchestration(
-                plan=[orchestrateur._SchemaEtapePlan(agent="analyste", instruction="Analyser.")]
-            ),
-        ),
         "analyste": ModeleFactice(
             raw_content="{}",
             parsed=analyste._SchemaAnalyse(entrees="I", sorties="P", contraintes_a_couvrir=["c1"]),
@@ -254,7 +247,7 @@ def test_debugger_jamais_appele_sur_la_derniere_tentative_epuisee() -> None:
 
 
 def test_boucle_epuisee_ne_leve_pas_graphrecursionerror() -> None:
-    """Couvre le risque de limite de récursion : 6 nœuds de mise en place +
+    """Couvre le risque de limite de récursion : 5 nœuds de mise en place +
     10 × (reviewer + validation + debugger) doit rester sous la limite
     passée à `.invoke()` (voir `generation.graph._LIMITE_RECURSION`)."""
     specs = _reponses_communes()
@@ -286,7 +279,6 @@ def test_stream_produit_des_evenements_etape_puis_le_resultat_final() -> None:
             elements.append(payload)
 
     noms_agents = [e["agent"] for e in elements]
-    assert "orchestrateur" in noms_agents
     assert "benchmarker" in noms_agents
     assert "documentation" in noms_agents
     assert all(e["statut"] in ("en_cours", "termine", "echec") for e in elements)

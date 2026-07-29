@@ -26,12 +26,11 @@ Utilisé pour les tâches nécessitant créativité et exploration :
 - **Benchmarker** : Exploration créative d'algorithmes alternatifs (CP-SAT, GA, ACO, etc.)
 - **Optimiseur** : Optimisations non évidentes, approches créatives
 
-### NVIDIA Qwen3-Next-80B (2 agents) 🎯
+### NVIDIA Qwen3-Next-80B (1 agent) 🎯
 **Caractéristiques** : Déterministe (temp=0.6), 4K tokens
 
 Utilisé pour les tâches simples et structurées :
 
-- **Orchestrateur** : Génération de plan JSON simple, besoin de cohérence
 - **Documentation** : Tâche simple, peu de tokens, sortie structurée
 
 ### Together Qwen2.5-72B (1 agent) ⚖️
@@ -104,7 +103,6 @@ FOURNISSEURS_PAR_AGENT = {
     "reviewer": "deepseek",
     "benchmarker": "minimax",
     "optimiseur": "minimax",
-    "orchestrateur": "nvidia",
     "documentation": "nvidia",
     "testeur": "together",
     "comprehension": "deepseek",  # Agent ERP

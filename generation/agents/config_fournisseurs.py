@@ -8,8 +8,8 @@ Répartition justifiée :
   → Développeur, Debugger, Architecte, Analyste, Reviewer, Agent ERP
 - **minimax** (2 agents) : Créativité maximale (temp=1.0) pour exploration
   → Benchmarker, Optimiseur
-- **nvidia** (2 agents) : Déterministe (temp=0.6) pour tâches simples/structurées
-  → Orchestrateur, Documentation
+- **nvidia** (1 agent) : Déterministe (temp=0.6) pour tâches simples/structurées
+  → Documentation
 - **together** (1 agent) : Équilibré créativité/structure
   → Testeur
 
@@ -35,7 +35,6 @@ FOURNISSEURS_PAR_AGENT: dict[str, str] = {
     "benchmarker": "minimax",  # Exploration d'algorithmes alternatifs
     "optimiseur": "minimax",  # Optimisations non évidentes
     # Agents utilitaires simples — NVIDIA
-    "orchestrateur": "nvidia",  # JSON plan simple, déterministe
     "documentation": "nvidia",  # Tâche simple, peu de tokens
     # Agents équilibrés — DeepSeek (fallback depuis Together)
     "testeur": "deepseek",  # Équilibre créativité/structure (16K tokens)

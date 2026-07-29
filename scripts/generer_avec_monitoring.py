@@ -1,4 +1,4 @@
-"""Génération avec monitoring détaillé en temps réel des 9 agents."""
+"""Génération avec monitoring détaillé en temps réel des 8 agents."""
 
 from __future__ import annotations
 
@@ -22,7 +22,6 @@ except ImportError:
 # Imports
 try:
     from generation.agents import (
-        orchestrateur,
         analyste,
         architecte,
         debugger,
@@ -47,7 +46,7 @@ class MoniteurAgents:
         self.debut_total = None
         self.debut_agent = None
         self.etape_actuelle = 0
-        self.total_etapes = 9
+        self.total_etapes = 8
 
     def demarrer(self):
         """Démarre le monitoring."""
@@ -135,25 +134,8 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
 
     resultats = {}
 
-    # 1. ORCHESTRATEUR
-    moniteur.demarrer_agent(1, "Orchestrateur", "Planification des étapes du pipeline")
-    try:
-        plan = orchestrateur.planifier(appel_llm)
-        resultats['plan'] = plan
-        moniteur.terminer_agent(
-            "Orchestrateur",
-            f"{len(plan.plan)} étapes planifiées",
-            "\n".join([f"{i+1}. {etape.agent}" for i, etape in enumerate(plan.plan[:3])])
-        )
-    except Exception as e:
-        print(f"❌ Erreur : {e}")
-        moniteur.terminer(False)
-        return None
-
-    moniteur.afficher_progression_totale()
-
-    # 2. ANALYSTE
-    moniteur.demarrer_agent(2, "Analyste", "Analyse de l'instance et spécification technique")
+    # 1. ANALYSTE
+    moniteur.demarrer_agent(1, "Analyste", "Analyse de l'instance et spécification technique")
     try:
         analyse = analyste.analyser_mission(appel_llm)
         resultats['analyse'] = analyse
@@ -170,8 +152,8 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
 
     moniteur.afficher_progression_totale()
 
-    # 3. ARCHITECTE
-    moniteur.demarrer_agent(3, "Architecte", "Conception du modèle CP-SAT")
+    # 2. ARCHITECTE
+    moniteur.demarrer_agent(2, "Architecte", "Conception du modèle CP-SAT")
     try:
         conception = architecte.concevoir_modele(appel_llm, analyse)
         resultats['conception'] = conception
@@ -188,8 +170,8 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
 
     moniteur.afficher_progression_totale()
 
-    # 4. DÉVELOPPEUR
-    moniteur.demarrer_agent(4, "Développeur", "Génération du code Python selon le plan")
+    # 3. DÉVELOPPEUR
+    moniteur.demarrer_agent(3, "Développeur", "Génération du code Python selon le plan")
     try:
         brut = generer_code_depuis_plan(appel_llm, conception.en_texte())
         resultats['code_initial'] = brut.code_source
@@ -206,8 +188,8 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
 
     moniteur.afficher_progression_totale()
 
-    # 5. TESTEUR
-    moniteur.demarrer_agent(5, "Testeur", "Génération des tests unitaires")
+    # 4. TESTEUR
+    moniteur.demarrer_agent(4, "Testeur", "Génération des tests unitaires")
     try:
         tests = testeur.generer_tests(appel_llm, brut.code_source)
         resultats['tests'] = tests
@@ -223,8 +205,8 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
 
     moniteur.afficher_progression_totale()
 
-    # 6. REVIEWER
-    moniteur.demarrer_agent(6, "Reviewer", "Revue de code et détection de bugs")
+    # 5. REVIEWER
+    moniteur.demarrer_agent(5, "Reviewer", "Revue de code et détection de bugs")
     try:
         revue = reviewer.relire_code(appel_llm, brut.code_source)
         resultats['revue'] = revue
@@ -248,10 +230,10 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
 
     moniteur.afficher_progression_totale()
 
-    # 7. DEBUGGER (conditionnel)
+    # 6. DEBUGGER (conditionnel)
     code_candidat = brut.code_source
     if not revue.approuve:
-        moniteur.demarrer_agent(7, "Debugger", "Correction des bugs détectés")
+        moniteur.demarrer_agent(6, "Debugger", "Correction des bugs détectés")
         try:
             correction = debugger.corriger_code(appel_llm, code_candidat, revue.commentaires)
             code_candidat = correction.code_source
@@ -267,7 +249,7 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
             return None
     else:
         print(f"\n{'='*70}")
-        print(f"⏭️  AGENT 7 : DEBUGGER - SKIP")
+        print(f"⏭️  AGENT 6 : DEBUGGER - SKIP")
         print(f"{'='*70}")
         print("Code déjà approuvé, pas de correction nécessaire")
         print(f"{'─'*70}")
@@ -275,8 +257,8 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
     resultats['code_final'] = code_candidat
     moniteur.afficher_progression_totale()
 
-    # 8. VALIDATION (pas un agent, mais important à monitorer)
-    moniteur.demarrer_agent(8, "Validation", "Validation statique + Exécution + Cascade")
+    # 7. VALIDATION (pas un agent, mais important à monitorer)
+    moniteur.demarrer_agent(7, "Validation", "Validation statique + Exécution + Cascade")
 
     # Validation statique
     print("   🔍 Validation statique...")
@@ -323,9 +305,9 @@ def executer_pipeline_avec_monitoring(appel_llm: AppelLLM) -> dict:
 
     moniteur.afficher_progression_totale()
 
-    # 9. OPTIMISEUR (si validation OK)
+    # 8. OPTIMISEUR (si validation OK)
     if verdict and verdict.reussi:
-        moniteur.demarrer_agent(9, "Optimiseur", "Optimisation du code validé")
+        moniteur.demarrer_agent(8, "Optimiseur", "Optimisation du code validé")
         try:
             optimisation = optimiseur.optimiser_code(appel_llm, code_candidat, str(verdict))
             resultats['optimisation'] = optimisation
@@ -396,7 +378,6 @@ def main():
 
     print(f"\n📊 Agents exécutés :")
     agents_executes = []
-    if 'plan' in resultats: agents_executes.append("✅ Orchestrateur")
     if 'analyse' in resultats: agents_executes.append("✅ Analyste")
     if 'conception' in resultats: agents_executes.append("✅ Architecte")
     if 'code_initial' in resultats: agents_executes.append("✅ Développeur")

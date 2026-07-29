@@ -111,41 +111,38 @@ PRISME_LLM_MODEL=
 
 ## 📋 Pipeline Multi-Agents Détaillé
 
-### Les 9 Agents
+### Les 8 Agents
 
 ```
-1. ORCHESTRATEUR
-   └─> Planifie les 8 étapes suivantes
-
-2. ANALYSTE
+1. ANALYSTE
    └─> Analyse l'instance T-R-C-O
    └─> Identifie les défis (contraintes, flexibilité, etc.)
 
-3. ARCHITECTE
+2. ARCHITECTE
    └─> Conçoit le plan technique
    └─> Définit variables, contraintes, objectif CP-SAT
 
-4. DÉVELOPPEUR
+3. DÉVELOPPEUR
    └─> Génère le code selon le plan de l'Architecte
    └─> Fonction resoudre(instance) → Planning | None
 
-5. TESTEUR
+4. TESTEUR
    └─> Génère tests unitaires pytest
    └─> Couvre cas nominaux et edge cases
 
-6. REVIEWER
+5. REVIEWER
    └─> Revoit le code du Développeur
    └─> Détecte bugs, problèmes de structure, violations
 
-7. DEBUGGER (si besoin)
+6. DEBUGGER (si besoin)
    └─> Corrige les bugs détectés par le Reviewer
    └─> Génère code corrigé
 
-8. OPTIMISEUR (si succès)
+7. OPTIMISEUR (si succès)
    └─> Améliore performances du code validé
    └─> Refactoring, optimisations CP-SAT
 
-9. DOCUMENTATION (si succès)
+8. DOCUMENTATION (si succès)
    └─> Génère docstrings complètes
    └─> Commentaires explicatifs
    └─> Documentation markdown
