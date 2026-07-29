@@ -21,7 +21,7 @@ except ImportError:
     pass
 
 from generation.agents import analyste
-from generation.agents.client_llm import construire_appel_llm
+from generation.agents.client_llm import construire_modele_pour_agent
 
 
 def main():
@@ -42,7 +42,7 @@ def main():
 
     # Construction client LLM
     try:
-        appel_llm = construire_appel_llm()
+        modele = construire_modele_pour_agent("analyste")
     except Exception as e:
         print(f"❌ Erreur construction client LLM : {e}")
         sys.exit(1)
@@ -54,7 +54,7 @@ def main():
     debut = time.time()
 
     try:
-        resultat = analyste.analyser_mission(appel_llm)
+        resultat = analyste.analyser_mission(modele)
     except Exception as e:
         print(f"❌ Erreur durant l'appel : {e}")
         import traceback

@@ -4,11 +4,11 @@ formats de sortie coexistent :
 
 - `generer_code_solveur` — mode simple (Étape 4, tir unique, historique) :
   un bloc de code Python nu, format hérité de `generation.tentative_unique`.
-  Reste sur `AppelLLM`/`extraire_bloc_code` — hors périmètre de la migration
-  vers la sortie structurée (pas de JSON à parser dans ce mode).
+  Un simple `.invoke()`/`extraire_bloc_code`, sans sortie structurée (pas de
+  JSON à parser dans ce mode).
 - `generer_code_depuis_plan` — mode multi-agents
   (`generation.graph`) : sortie structurée `{"code": "..."}`,
-  comme les 8 autres agents du pipeline.
+  comme les autres agents du pipeline.
 
 Le contrat de sortie attendu dans les deux cas — une fonction
 `resoudre(instance) -> Planning | None` (`Callable[[InstanceTRCO], Planning | None]`,
@@ -31,7 +31,7 @@ from generation.agents.base import (
     extraire_bloc_code,
     extraire_texte_brut,
 )
-from generation.agents.client_llm import AppelLLM, _avec_retry, methode_sortie_structuree
+from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -60,15 +60,16 @@ class ResultatGenerationBrute:
     code_source: str
 
 
-def generer_code_solveur(appel_llm: AppelLLM) -> ResultatGenerationBrute:
+def generer_code_solveur(modele: BaseChatModel) -> ResultatGenerationBrute:
     """Un seul essai de génération, sans plan technique préalable (Étape 4,
     tir unique) : construit le prompt à partir de la seule mission, appelle
     le LLM, extrait le code. Ne valide ni n'exécute rien — voir
     `generation.validation_statique` et `generation.executer`.
     """
     prompt = charger_mission() + _ADDENDUM_FORMAT_BLOC_CODE
-    reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    return ResultatGenerationBrute(reponse_brute=reponse, code_source=extraire_bloc_code(reponse))
+    reponse = _avec_retry(modele.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
+    reponse_brute = extraire_texte_brut(reponse)
+    return ResultatGenerationBrute(reponse_brute=reponse_brute, code_source=extraire_bloc_code(reponse_brute))
 
 
 def generer_code_depuis_plan(

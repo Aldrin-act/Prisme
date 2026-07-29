@@ -163,7 +163,7 @@ calendars, priorities/due dates, capacity stay **out of scope** by design; guard
 | `Front/prismatron-solver-forge/` | TanStack Start + React + TS + Tailwind — auth, clients, instances, solver-generator (SSE), execution, schedules, analytics |
 | `tests/` | `unit/`, `integration/` only — no separate property-based/generation-stability suites (see below) |
 | `docs/` | Substantial by now: agent pipeline (`agents_utilises.md`, `agents_fonctionnement_detaille.md`, `schema_agents.md`), `boucle_reparation.md`, DSL nomenclature |
-| `scripts/` | Dev env, synthetic-bench generation, CI tasks, `_solveur_minimal.py` (dev/demo/test fixture); `monitoring/` (optional Prometheus+Grafana) reads its metrics |
+| `scripts/` | Dev env, synthetic-bench generation, CI tasks, `_solveur_minimal.py` (dev/demo/test fixture); LangSmith for LLM-call observability, no custom metrics stack |
 
 ## Validation & testing philosophy (§6)
 

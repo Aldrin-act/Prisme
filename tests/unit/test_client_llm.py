@@ -1,4 +1,4 @@
-"""Couche 1 (§6.1) : `construire_appel_llm`/`construire_modele_pour_agent` ne
+"""Couche 1 (§6.1) : `construire_modele`/`construire_modele_pour_agent` ne
 doivent jamais transmettre un fournisseur/modèle vide à un SDK — régression
 trouvée en testant l'agent de compréhension en conditions réelles : `.env`
 déclare `PRISME_LLM_MODEL=` (présent, vide), distinct d'une variable absente
@@ -29,7 +29,7 @@ def test_modele_vide_dans_env_retombe_sur_le_defaut(monkeypatch: pytest.MonkeyPa
         lambda modele, timeout: modeles_construits.append(modele),
     )
 
-    client_llm.construire_appel_llm()
+    client_llm.construire_modele()
 
     assert modeles_construits == ["modele-par-defaut"]
 
@@ -45,7 +45,7 @@ def test_modele_explicite_dans_env_est_respecte(monkeypatch: pytest.MonkeyPatch)
         lambda modele, timeout: modeles_construits.append(modele),
     )
 
-    client_llm.construire_appel_llm()
+    client_llm.construire_modele()
 
     assert modeles_construits == ["mon-modele-precis"]
 
@@ -56,7 +56,7 @@ def test_fournisseur_vide_dans_env_retombe_sur_mistral(monkeypatch: pytest.Monke
     appels: list[str] = []
     monkeypatch.setitem(client_llm._CONSTRUCTEURS_MODELE, "mistral", lambda modele, timeout: appels.append(modele))
 
-    client_llm.construire_appel_llm()
+    client_llm.construire_modele()
 
     assert appels  # bien passé par le constructeur "mistral" (défaut du module), pas une KeyError sur ""
 
@@ -65,7 +65,7 @@ def test_fournisseur_inconnu_leve_une_erreur_explicite(monkeypatch: pytest.Monke
     monkeypatch.setenv("PRISME_LLM_PROVIDER", "fournisseur-qui-n-existe-pas")
 
     with pytest.raises(ValueError, match="fournisseur LLM inconnu"):
-        client_llm.construire_appel_llm()
+        client_llm.construire_modele()
 
 
 class TestTimeoutParAgent:

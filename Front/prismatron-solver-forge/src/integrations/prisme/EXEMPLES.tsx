@@ -199,7 +199,7 @@ export function IngestionForm() {
 // EXEMPLE 3 : Exécution avec polling
 // ============================================================================
 
-export function ExecutionPanel({ instanceId }: { instanceId: string }) {
+export function ExecutionPanel({ projetId }: { projetId: string }) {
   const [executionId, setExecutionId] = useState<string | null>(null);
   const mutation = useDeclencherExecution();
   const queryClient = useQueryClient();
@@ -217,7 +217,7 @@ export function ExecutionPanel({ instanceId }: { instanceId: string }) {
 
   const handleExecute = () => {
     mutation.mutate(
-      { instanceId, clientId: "client-001" },
+      { projetId, clientId: "client-001" },
       {
         onSuccess: (data) => {
           setExecutionId(data.execution_id);

@@ -194,12 +194,31 @@ export function useProjet(
 }
 
 /**
+ * "Nom du projet" pour chaque projet connu, par projet_id — pour tout
+ * endroit affichant une exécution/un planning par son projet propriétaire
+ * (`ExecutionInfo.projet_id`, §annexe modèle Instance/Projet) plutôt que
+ * par l'instance historiquement exécutée. Contrairement à
+ * `useLabelsInstances`, ne nécessite aucune reconstruction N+1 : le nom
+ * est déjà sur `Projet` (`GET /projets`).
+ */
+export function useLabelsProjets(): Map<string, string> {
+  const { data: projets } = useProjets();
+  const labelParProjet = new Map<string, string>();
+  (projets ?? []).forEach((projet) => {
+    labelParProjet.set(projet.projet_id, projet.nom ?? "Sans nom");
+  });
+  return labelParProjet;
+}
+
+/**
  * Reconstruit "nom du projet + rang" pour chaque instance connue —
  * /supervision/instances ne relie pas les instances à leur projet, seul
  * GET /projets/{id} le fait (`instances: [{instance_id, ...}]`). Centralise
  * un calcul auparavant dupliqué dans plusieurs pages (Instances, Générateur
  * de solveurs, Solveurs générés) pour tout endroit affichant une instance
- * par un nom lisible plutôt que son UUID brut.
+ * par un nom lisible plutôt que son UUID brut. Reflète la provenance
+ * (génération), distincte de l'instance courante d'un projet
+ * (`Projet.instance_id`) depuis l'inversion Instance/Projet.
  */
 export function useLabelsInstances(): Map<string, string> {
   const { data: projets } = useProjets();
@@ -286,12 +305,13 @@ export function useModifierObjectifs() {
 }
 
 /**
- * Mutation pour déclencher une exécution
+ * Mutation pour déclencher une exécution — par projet, pas par instance
+ * (§annexe modèle Instance/Projet) : chaque projet a son planning attitré.
  */
 export function useDeclencherExecution() {
   return useMutation({
-    mutationFn: ({ instanceId, clientId }: { instanceId: string; clientId: string }) =>
-      prismeClient.declencherExecution(instanceId, clientId),
+    mutationFn: ({ projetId, clientId }: { projetId: string; clientId: string }) =>
+      prismeClient.declencherExecution(projetId, clientId),
   });
 }
 
@@ -406,10 +426,24 @@ export function useGenererSolveur() {
 
 /**
  * Mutation pour supprimer un projet (données brutes) — n'affecte jamais les
- * instances déjà générées à partir de lui.
+ * instances déjà générées à partir de lui, mais supprime en cascade son
+ * propre historique d'exécution (plannings, décisions), désormais rattaché
+ * au projet et non plus à l'instance (§annexe modèle Instance/Projet).
  */
 export function useSupprimerProjet() {
   return useMutation({
     mutationFn: (projetId: string) => prismeClient.supprimerProjet(projetId),
+  });
+}
+
+/**
+ * Mutation pour faire d'une instance existante (gabarit métier réutilisable)
+ * l'instance courante d'un projet — §annexe modèle Instance/Projet. Refusée
+ * (403) si l'instance et le projet n'appartiennent pas au même client.
+ */
+export function useAssocierInstanceAuProjet() {
+  return useMutation({
+    mutationFn: ({ projetId, instanceId }: { projetId: string; instanceId: string }) =>
+      prismeClient.associerInstanceAuProjet(projetId, instanceId),
   });
 }

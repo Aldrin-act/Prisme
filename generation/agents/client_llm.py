@@ -1,4 +1,4 @@
-"""Client LLM générique pour l'agent générateur (§5.6).
+"""Client LLM générique pour les agents du pipeline (§5.6).
 
 Le fournisseur et le modèle sont choisis par variables d'environnement,
 jamais codés en dur, pour ne lier ce projet à aucun fournisseur particulier :
@@ -14,11 +14,12 @@ Construit sur LangChain (`langchain-core`/`langchain-openai`/`langchain-mistrala
 `extra` optionnel `llm` du projet) plutôt que sur les SDK bruts : donne un
 timeout HTTP réel par appel (absent de la version précédente — un blip réseau
 pouvait bloquer indéfiniment, voir `_TIMEOUT_DEFAUT_SECONDES`) et prépare le
-terrain pour la sortie structurée (`with_structured_output`, migration en
-cours des 9 agents). `construire_appel_llm_pour_agent`/`construire_appel_llm`
-gardent la forme `AppelLLM` (texte brut en sortie) pour les agents pas
-encore convertis ; `construire_modele_pour_agent` expose le `BaseChatModel`
-LangChain brut pour ceux qui le sont déjà.
+terrain pour la sortie structurée (`with_structured_output`). Tous les
+agents exposent désormais un `BaseChatModel` LangChain brut — l'ancienne
+forme `AppelLLM` (`Callable[[str, str], str]`, texte brut) a été retirée une
+fois le dernier appelant converti ; `construire_modele_pour_agent` (par
+agent) et `construire_modele` (générique, sans identité d'agent) sont les
+seuls points d'entrée désormais.
 """
 
 from __future__ import annotations
@@ -30,9 +31,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
-
-# (prompt_systeme, prompt_utilisateur) -> texte de réponse brut du LLM
-AppelLLM = Callable[[str, str], str]
 
 _TENTATIVES_MAX = 5
 _DELAI_BASE_SECONDES = 2.0
@@ -64,11 +62,11 @@ def _avec_retry(appel: Callable) -> Callable:
     NVIDIA/Together) avec backoff exponentiel, pour qu'un blip réseau ne fasse
     pas échouer toute une tentative de génération (§5.6).
 
-    Générique sur la signature de `appel` (pas seulement `AppelLLM`) : sert
-    aussi bien à envelopper une fonction texte-brut qu'un appel
-    `.invoke(messages)` sur un `Runnable` de sortie structurée (Étape 2 de la
-    migration LangChain) — le prédicat de retry (`_est_erreur_transitoire`)
-    ne dépend que de l'exception levée, jamais de la forme de `appel`.
+    Générique sur la signature de `appel` : sert aussi bien à envelopper
+    `modele.invoke(messages)` en sortie brute qu'un appel `.invoke(messages)`
+    sur un `Runnable` de sortie structurée — le prédicat de retry
+    (`_est_erreur_transitoire`) ne dépend que de l'exception levée, jamais
+    de la forme de `appel`.
     """
 
     def appel_avec_retry(*args, **kwargs):
@@ -220,22 +218,11 @@ def methode_sortie_structuree(modele: BaseChatModel) -> str:
     return "json_mode"
 
 
-def _appel_texte_brut(modele: BaseChatModel) -> AppelLLM:
-    """Adapte un `BaseChatModel` LangChain à la forme `AppelLLM` historique
-    (texte brut en sortie) — pont de compatibilité pour les agents pas
-    encore convertis à la sortie structurée (Étape 2 de la migration)."""
-    from langchain_core.messages import HumanMessage, SystemMessage
-
-    def appel(prompt_systeme: str, prompt_utilisateur: str) -> str:
-        reponse = modele.invoke([SystemMessage(content=prompt_systeme), HumanMessage(content=prompt_utilisateur)])
-        contenu = reponse.content
-        return contenu if isinstance(contenu, str) else str(contenu)
-
-    return appel
-
-
-def construire_appel_llm() -> AppelLLM:
-    """Construit l'appel LLM à utiliser, d'après `PRISME_LLM_PROVIDER` / `PRISME_LLM_MODEL`."""
+def construire_modele() -> BaseChatModel:
+    """Construit le `BaseChatModel` générique, d'après `PRISME_LLM_PROVIDER` /
+    `PRISME_LLM_MODEL` — sans identité d'agent, pour les chemins qui n'en ont
+    pas (Étape 4 historique, scripts de connectivité). Voir
+    `construire_modele_pour_agent` pour le routage par agent."""
     fournisseur = os.environ.get("PRISME_LLM_PROVIDER") or "mistral"
     # `.get(..., defaut)` ne renvoie le défaut que si la variable est absente —
     # or `.env` la déclare toujours, vide par défaut (`PRISME_LLM_MODEL=`), ce
@@ -245,17 +232,15 @@ def construire_appel_llm() -> AppelLLM:
     if fournisseur not in _CONSTRUCTEURS_MODELE:
         raise ValueError(f"fournisseur LLM inconnu : {fournisseur!r} (attendu : {sorted(_CONSTRUCTEURS_MODELE)})")
     modele_nom = os.environ.get("PRISME_LLM_MODEL") or _MODELES_PAR_DEFAUT[fournisseur]
-    modele = _construire_modele(fournisseur, modele_nom, _timeout_pour_agent(None))
-    return _avec_retry(_appel_texte_brut(modele))
+    return _construire_modele(fournisseur, modele_nom, _timeout_pour_agent(None))
 
 
 def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel:
     """Construit le `BaseChatModel` LangChain optimal pour un agent
-    spécifique — sans wrapper `AppelLLM`, pour les agents convertis à la
-    sortie structurée (`with_structured_output`, Étape 2 de la migration).
-    Le retry (`_avec_retry`) reste à la charge de l'appelant, qui l'applique
-    au point d'appel réel (`.invoke(...)` sur le `Runnable` structuré),
-    puisque le modèle brut renvoyé ici n'est pas encore l'objet invoqué.
+    spécifique. Le retry (`_avec_retry`) reste à la charge de l'appelant, qui
+    l'applique au point d'appel réel (`.invoke(...)` sur le `Runnable`
+    structuré ou brut), puisque le modèle renvoyé ici n'est pas encore
+    l'objet invoqué.
 
     Utilise la configuration centralisée (`config_fournisseurs.py`) pour
     sélectionner le fournisseur le mieux adapté à cet agent. Permet une
@@ -281,23 +266,3 @@ def construire_modele_comprehension() -> BaseChatModel:
     comme n'importe quel agent du pipeline via `config_fournisseurs.py`
     (clé `"comprehension"`), pas un client LLM à part."""
     return construire_modele_pour_agent("comprehension")
-
-
-def construire_appel_llm_pour_agent(nom_agent: str) -> AppelLLM:
-    """Construit l'appel LLM optimal pour un agent spécifique, sous la forme
-    `AppelLLM` historique (texte brut) — pont de compatibilité pour les
-    agents pas encore convertis à la sortie structurée. Voir
-    `construire_modele_pour_agent` pour la version `BaseChatModel` brute.
-
-    Args:
-        nom_agent: Nom de l'agent (ex: "generateur", "debugger", "documentation")
-
-    Returns:
-        Callable LLM configuré pour le fournisseur optimal de cet agent
-
-    Exemples:
-        >>> appel = construire_appel_llm_pour_agent("generateur")  # → deepseek
-        >>> appel = construire_appel_llm_pour_agent("documentation")  # → nvidia
-    """
-    modele = construire_modele_pour_agent(nom_agent)
-    return _avec_retry(_appel_texte_brut(modele))

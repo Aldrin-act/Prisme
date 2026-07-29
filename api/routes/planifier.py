@@ -2,14 +2,20 @@
 un seul appel qui ingère un payload T-R-C-O, exécute le solveur déjà validé
 pour ce client/cette structure de contraintes/ces objectifs, et renvoie
 directement le planning — sans que l'appelant ait à enchaîner lui-même les
-trois appels séparés que ça recouvre normalement (`POST /ingestion/{client_id}`
-puis `POST /execution/{instance_id}` puis `GET /planning/{execution_id}`,
-voir ces modules).
+appels séparés que ça recouvre normalement (`POST /ingestion/{client_id}`,
+un projet wrapper implicite, puis `POST /execution/{projet_id}` puis
+`GET /planning/{execution_id}`, voir ces modules).
+
+Un projet sans nom ni données brutes (`donnees_brutes=""`, ce payload est déjà
+T-R-C-O canonique, pas de l'ERP brut à convertir) est créé à la volée pour
+porter l'instance ingérée — l'exécution reste toujours déclenchée par projet
+(§annexe modèle Instance/Projet), même pour ce chemin one-shot qui n'a pas de
+notion de projet dans son contrat d'origine.
 
 Ne génère jamais de solveur à la volée (principe fondateur "generate once,
 re-execute many", voir CLAUDE.md) : si aucun solveur validé n'existe pour
 cette structure de contraintes et ces objectifs, l'appel échoue avec un 409
-explicite (propagé depuis `executer_pour_instance`) — la génération reste un
+explicite (propagé depuis `executer_pour_projet`) — la génération reste un
 geste humain, hors ligne, déclenché depuis le Générateur de solveurs, jamais
 un effet de bord d'un appel ERP.
 
@@ -29,7 +35,7 @@ from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, durees_par_contrainte, obtenir_etat, structure_contraintes
 from api.input_validation import valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
-from api.routes.execution import executer_pour_instance
+from api.routes.execution import executer_pour_projet
 from solver_store.registry import Registre
 
 router = APIRouter(prefix="/planifier", tags=["planifier"])
@@ -48,8 +54,10 @@ def planifier(
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
     instance_id = etat.enregistrer_instance(client_id, instance)
+    projet_id = etat.enregistrer_projet(client_id, donnees_brutes="")
+    etat.associer_instance_projet(projet_id, instance_id)
 
-    execution_id, resultat = executer_pour_instance(etat, registre, instance_id, client_id, utilisateur)
+    execution_id, resultat = executer_pour_projet(etat, registre, projet_id, client_id, utilisateur)
 
     planning = None
     if resultat.planning is not None:
@@ -57,6 +65,7 @@ def planifier(
 
     return {
         "instance_id": instance_id,
+        "projet_id": projet_id,
         "execution_id": execution_id,
         "structure_contraintes": structure_contraintes(instance),
         "reussi": resultat.reussi,

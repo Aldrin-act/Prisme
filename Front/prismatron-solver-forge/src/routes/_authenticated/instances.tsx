@@ -244,8 +244,10 @@ function InstancesPage() {
             <AlertDialogTitle>Supprimer cette instance ?</AlertDialogTitle>
             <AlertDialogDescription>
               Cette action supprime définitivement l'instance{" "}
-              <span className="font-mono text-xs">{aSupprimer}</span> ainsi que tout son historique
-              d'exécution (plannings, décisions humaines). Les solveurs enregistrés ne sont pas
+              <span className="font-mono text-xs">{aSupprimer}</span>. Refusée si un projet la
+              réutilise encore comme instance courante — détachez-la d'abord depuis la page Données.
+              Les exécutions passées qui l'ont utilisée survivent (rattachées à leur projet), seule
+              leur référence à cette instance est coupée ; les solveurs enregistrés ne sont pas
               affectés. Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>

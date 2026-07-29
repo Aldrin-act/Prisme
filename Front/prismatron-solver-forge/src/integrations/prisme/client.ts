@@ -132,10 +132,12 @@ export const prismeClient = {
       body: JSON.stringify({ objectifs }),
     }),
 
-  // EXÉCUTION
-  declencherExecution: (instanceId: string, clientId: string) =>
+  // EXÉCUTION — déclenchée par projet, pas par instance (§annexe modèle
+  // Instance/Projet) : chaque projet a son planning attitré, l'instance
+  // n'est qu'un gabarit réutilisable désigné par `Projet.instance_id`.
+  declencherExecution: (projetId: string, clientId: string) =>
     apiFetch<Types.ReponseExecution>(
-      `${PRISME_CONFIG.routes.execution}/${instanceId}?client_id=${clientId}`,
+      `${PRISME_CONFIG.routes.execution}/${projetId}?client_id=${clientId}`,
       { method: "POST" },
     ),
 
@@ -224,7 +226,14 @@ export const prismeClient = {
       }),
     }),
 
-  listerProjets: () => apiFetch<Types.Projet[]>(PRISME_CONFIG.routes.projets),
+  // `instanceId` filtre sur les projets ayant cette instance comme instance
+  // courante (voir `api/routes/projets.py`, `EtatAPI.lister_projets`).
+  listerProjets: (instanceId?: string) =>
+    apiFetch<Types.Projet[]>(
+      instanceId
+        ? `${PRISME_CONFIG.routes.projets}?instance_id=${encodeURIComponent(instanceId)}`
+        : PRISME_CONFIG.routes.projets,
+    ),
 
   obtenirProjet: (projetId: string) =>
     apiFetch<Types.ProjetDetail>(`${PRISME_CONFIG.routes.projets}/${projetId}`),
@@ -233,6 +242,15 @@ export const prismeClient = {
   // déjà générées à partir de lui.
   supprimerProjet: (projetId: string) =>
     apiFetch<void>(`${PRISME_CONFIG.routes.projets}/${projetId}`, { method: "DELETE" }),
+
+  // Fait d'une instance existante (gabarit métier réutilisable) l'instance
+  // courante du projet — reste-t-il compatible seulement si même client_id
+  // (§7, POST /projets/{id}/instance).
+  associerInstanceAuProjet: (projetId: string, instanceId: string) =>
+    apiFetch<Types.ReponseAssociationInstance>(`${PRISME_CONFIG.routes.projets}/${projetId}/instance`, {
+      method: "POST",
+      body: JSON.stringify({ instance_id: instanceId }),
+    }),
 
   // Pas de timeout (null) : demande explicite — une conversion sur un gros
   // volume de données brutes peut prendre plusieurs minutes, on laisse

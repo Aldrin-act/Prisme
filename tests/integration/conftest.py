@@ -72,7 +72,10 @@ def image_sandbox() -> str:
     client = docker.from_env()
     client.images.build(
         path=str(RACINE_DEPOT),
-        dockerfile=str(RACINE_DEPOT / "sandbox" / "container" / "Dockerfile"),
+        # Relatif au contexte de build (`path` ci-dessus), en slashes POSIX :
+        # un chemin absolu avec des antislashs Windows fait échouer la
+        # résolution côté démon Docker ("Cannot locate specified Dockerfile").
+        dockerfile="sandbox/container/Dockerfile",
         tag=IMAGE_SANDBOX,
     )
     return IMAGE_SANDBOX

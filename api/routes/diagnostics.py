@@ -29,7 +29,7 @@ def diagnostiquer_execution(
     registre: Registre = Depends(obtenir_registre),
 ) -> dict[str, Any]:
     try:
-        id_solveur, instance_id, resultat = etat.recuperer_execution(execution_id)
+        id_solveur, _, instance_id, resultat = etat.recuperer_execution(execution_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="exécution inconnue") from None
 
@@ -38,6 +38,10 @@ def diagnostiquer_execution(
             status_code=422, detail="aucun planning produit pour cette exécution, rien à diagnostiquer"
         )
 
+    if instance_id is None:
+        raise HTTPException(
+            status_code=422, detail="instance sous-jacente supprimée depuis, diagnostic impossible"
+        )
     _, instance = etat.recuperer_instance(instance_id)
     solveur = construire_solveur_sandbox(registre, id_solveur)
 

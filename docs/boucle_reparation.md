@@ -220,19 +220,6 @@ uv run python scripts/generer_avec_boucle.py
    • Optimisation : ✅ Adoptée
 ```
 
-### Intégration dans le Monitoring
-
-Le script `generer_avec_metriques.py` peut être adapté pour tracer les tentatives :
-
-```python
-# Métrique : Nombre de tentatives par run
-prisme_reparation_tentatives{run="20260720_123045"} 2
-
-# Métrique : Taux de succès par tentative
-prisme_reparation_succes_tentative_1 0  # Échec
-prisme_reparation_succes_tentative_2 1  # Succès
-```
-
 ---
 
 ## 📈 Résultats Attendus
@@ -347,31 +334,6 @@ Le Debugger peut ainsi **cibler précisément** le problème à corriger.
 
 ---
 
-## 🎨 Monitoring Grafana
-
-Pour tracer les tentatives dans Grafana, ajoutez ces métriques :
-
-```prometheus
-# Nombre de tentatives par run
-prisme_reparation_tentatives{run_id="..."} 2
-
-# Succès par tentative (bool)
-prisme_reparation_succes{run_id="...", tentative="1"} 0
-prisme_reparation_succes{run_id="...", tentative="2"} 1
-
-# Durée par tentative
-prisme_reparation_duree_tentative{run_id="...", tentative="1"} 15.2
-prisme_reparation_duree_tentative{run_id="...", tentative="2"} 18.7
-
-# Taux de succès global (avec boucle vs sans)
-prisme_taux_succes{mode="sans_boucle"} 0.85
-prisme_taux_succes{mode="avec_boucle"} 0.93
-```
-
-**Dashboard panel** : Graphique en barres empilées montrant la distribution des tentatives (1, 2, 3).
-
----
-
 ## 📚 Références
 
 - **Spécification** : [PRISME_Note_de_Cadrage (2).md](<../PRISME_Note_de_Cadrage (2).md>) §6.6
@@ -388,8 +350,7 @@ prisme_taux_succes{mode="avec_boucle"} 0.93
 1. **Tester** : `uv run python scripts/generer_avec_boucle.py`
 2. **Comparer** : Lancer 10 générations avec/sans boucle, mesurer taux succès
 3. **Intégrer** : Remplacer `pipeline_multi_agents.py` par `pipeline_avec_boucle.py` comme défaut
-4. **Monitoring** : Ajouter métriques boucle dans `generer_avec_metriques.py`
-5. **Documentation** : Mettre à jour `docs/agents_fonctionnement_detaille.md`
+4. **Documentation** : Mettre à jour `docs/agents_fonctionnement_detaille.md`
 
 ---
 

@@ -1,12 +1,8 @@
-"""Génération avec boucle de réparation (Étape 6 implémentée).
+"""Génération avec boucle de réparation (Étape 6, `generation/graph.py`).
 
 Ce script utilise le pipeline `generation/graph.py` (StateGraph LangGraph)
-qui permet au Debugger de faire jusqu'à 10 tentatives de correction au lieu
-d'une seule.
-
-Différence avec `generer_solveur.py` (sans boucle) :
-- SANS boucle : 1 tentative Debugger → échec si validation échoue
-- AVEC boucle : 3 tentatives max → feedback précis à chaque itération
+qui permet au Debugger de faire jusqu'à `MAX_TENTATIVES_REPARATION`
+tentatives de correction au lieu d'une seule.
 
 Usage :
     python scripts/generer_avec_boucle.py
@@ -14,14 +10,14 @@ Usage :
 Output :
     - solveur_genere.py (code final)
     - test_solveur_genere.py (tests pytest)
-    - solveur_genere_doc.md (documentation)
+    - solveur_genere_doc.md (documentation, si produite)
     - Affichage détaillé de chaque tentative de la boucle
 """
 
 from __future__ import annotations
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ajouter le projet au PYTHONPATH
@@ -35,11 +31,20 @@ try:
 except ImportError:
     pass
 
-from generation.agents.client_llm import construire_appel_llm
-from generation.graph import tenter_generation_avec_boucle
+from generation.graph import MAX_TENTATIVES_REPARATION, TentativeReparation, tenter_generation_avec_boucle
 
 
-def afficher_tentative(tentative, numero: int):
+def _resumer_echecs_cascade(verdict) -> str:
+    """`VerdictCascade` n'a pas de `.resumer()` — construit un résumé court
+    à partir de `.echecs` (une entrée par instance/cas en échec)."""
+    if verdict is None:
+        return "cascade non atteinte"
+    if verdict.reussi:
+        return "cascade au vert"
+    return "; ".join(f"[{d.brique_en_echec}] {d.nom}" for d in verdict.echecs)
+
+
+def afficher_tentative(tentative: TentativeReparation, numero: int) -> None:
     """Affiche les détails d'une tentative de réparation."""
     print(f"\n   ┌─ Tentative #{numero}")
     print(f"   │  Reviewer : {'✅ APPROUVÉ' if tentative.revue.approuve else '❌ REJETÉ'}")
@@ -49,43 +54,36 @@ def afficher_tentative(tentative, numero: int):
     else:
         # Validation effectuée
         if tentative.validation_statique is None:
-            print(f"   │  Validation : ⏭️  Non effectuée")
+            print("   │  Validation : ⏭️  Non effectuée")
         elif not tentative.validation_statique.valide:
-            print(f"   │  Validation statique : ❌ {tentative.validation_statique.raison}")
+            print(f"   │  Validation statique : ❌ {'; '.join(tentative.validation_statique.violations)}")
         elif tentative.erreur_execution:
             print(f"   │  Exécution : ❌ {tentative.erreur_execution[:100]}...")
         elif tentative.verdict_cascade is None:
-            print(f"   │  Cascade : ❌ Échec avant cascade")
+            print("   │  Cascade : ❌ Échec avant cascade")
         elif not tentative.verdict_cascade.reussi:
-            print(f"   │  Cascade : ❌ {tentative.verdict_cascade.resumer()[:100]}...")
+            print(f"   │  Cascade : ❌ {_resumer_echecs_cascade(tentative.verdict_cascade)[:100]}...")
         else:
-            print(f"   │  Validation : ✅ SUCCÈS COMPLET")
+            print("   │  Validation : ✅ SUCCÈS COMPLET")
 
     print(f"   │  Résultat : {'🎉 SUCCÈS' if tentative.reussi else '🔄 RETRY'}")
-    print(f"   └─")
+    print("   └─")
 
 
 def main():
     print("\n" + "="*70)
-    print("  GÉNÉRATION AVEC BOUCLE DE RÉPARATION (max 3 tentatives)")
+    print(f"  GÉNÉRATION AVEC BOUCLE DE RÉPARATION (max {MAX_TENTATIVES_REPARATION} tentatives)")
     print("="*70 + "\n")
 
     provider = os.getenv('PRISME_LLM_PROVIDER', 'mistral')
     print(f"📡 Provider : {provider}")
     print(f"🔑 API Key : {os.getenv(f'{provider.upper()}_API_KEY', 'NON DÉFINIE')[:20]}...")
 
-    # Construction client LLM
-    try:
-        appel_llm = construire_appel_llm()
-    except Exception as e:
-        print(f"\n❌ Erreur construction client LLM : {e}")
-        sys.exit(1)
-
     # Génération avec boucle
     print("\n🚀 Démarrage pipeline multi-agents AVEC boucle...\n")
 
     try:
-        resultat = tenter_generation_avec_boucle(appel_llm)
+        resultat = tenter_generation_avec_boucle()
     except Exception as e:
         print(f"\n❌ Erreur durant génération : {e}")
         import traceback
@@ -98,7 +96,7 @@ def main():
     print("─"*70)
 
     boucle = resultat.boucle_reparation
-    print(f"\n📊 Nombre de tentatives : {boucle.nombre_tentatives} / 3")
+    print(f"\n📊 Nombre de tentatives : {boucle.nombre_tentatives} / {MAX_TENTATIVES_REPARATION}")
     print(f"📋 Code initial : {len(boucle.code_initial)} caractères")
     print(f"📋 Code final : {len(boucle.code_final)} caractères")
 
@@ -111,7 +109,7 @@ def main():
     if resultat.reussi:
         print("  ✅ GÉNÉRATION RÉUSSIE")
     else:
-        print("  ❌ GÉNÉRATION ÉCHOUÉE (après 3 tentatives)")
+        print(f"  ❌ GÉNÉRATION ÉCHOUÉE (après {boucle.nombre_tentatives} tentatives)")
     print("="*70 + "\n")
 
     # Sauvegarde
@@ -137,27 +135,25 @@ def main():
             print(f"   • {chemin_doc}")
 
     # Statistiques finales
-    print(f"\n📊 Statistiques :")
+    print("\n📊 Statistiques :")
     print(f"   • Code généré : {len(resultat.code_genere)} caractères")
     print(f"   • Tests générés : {len(resultat.tests_generes)} caractères")
     print(f"   • Tentatives de réparation : {boucle.nombre_tentatives}")
-
-    if resultat.optimisation and resultat.optimisation.proposee:
-        print(f"   • Optimisation : {'✅ Adoptée' if resultat.code_optimise_adopte else '❌ Rejetée'}")
+    print(f"   • Algorithme recommandé : {resultat.algorithme_recommande} ({resultat.justification_algorithme})")
 
     # Diagnostic si échec
     if not resultat.reussi:
-        print(f"\n❌ Raison de l'échec :")
+        print("\n❌ Raison de l'échec :")
         if resultat.validation_statique and not resultat.validation_statique.valide:
-            print(f"   • Validation statique : {resultat.validation_statique.raison}")
+            print(f"   • Validation statique : {'; '.join(resultat.validation_statique.violations)}")
         elif resultat.erreur_execution:
             print(f"   • Exécution : {resultat.erreur_execution}")
         elif resultat.verdict_cascade:
-            print(f"   • Cascade : {resultat.verdict_cascade.resumer()}")
+            print(f"   • Cascade : {_resumer_echecs_cascade(resultat.verdict_cascade)}")
         else:
-            print(f"   • Erreur inconnue")
+            print("   • Erreur inconnue")
 
-        print(f"\n💡 Le code a été sauvegardé malgré l'échec pour inspection.")
+        print("\n💡 Le code a été sauvegardé malgré l'échec pour inspection.")
 
     print()
 

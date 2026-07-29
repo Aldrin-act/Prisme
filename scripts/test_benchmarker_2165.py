@@ -67,11 +67,11 @@ def main():
     print("(Cela peut prendre 10-30 secondes selon le provider)\n")
 
     try:
-        from generation.agents.client_llm import construire_appel_llm
+        from generation.agents.client_llm import construire_modele_pour_agent
         from generation.agents.benchmarker import benchmarker_algorithmes
 
-        appel_llm = construire_appel_llm()
-        resultat = benchmarker_algorithmes(appel_llm, instance_json)
+        modele = construire_modele_pour_agent("benchmarker")
+        resultat = benchmarker_algorithmes(modele, instance_json)
 
     except ImportError as e:
         print(f"ERREUR d'import : {e}")

@@ -54,7 +54,7 @@ from langgraph.graph import END, START, StateGraph
 from generation.agents import analyste, architecte, benchmarker, documentation, reviewer, testeur
 from generation.agents.analyste import ResultatAnalyse
 from generation.agents.architecte import ResultatConception
-from generation.agents.client_llm import AppelLLM, construire_modele_pour_agent
+from generation.agents.client_llm import construire_modele_pour_agent
 from generation.agents.debugger import corriger_code
 from generation.agents.generateur import generer_code_depuis_plan
 from generation.agents.reviewer import ResultatRevue
@@ -582,12 +582,11 @@ def tenter_generation_avec_boucle_stream(
 
 
 def tenter_generation_avec_boucle(
-    appel_llm: AppelLLM | None = None,
     instance_exemple: dict | None = None,
 ) -> ResultatPipelineAvecBoucle:
     """Version bloquante — ne renvoie que le résultat final, sans les
-    évènements intermédiaires. `appel_llm` : obsolète, ignoré. `instance_exemple` :
-    voir `tenter_generation_avec_boucle_stream`. Voir cette dernière pour le
+    évènements intermédiaires. `instance_exemple` : voir
+    `tenter_generation_avec_boucle_stream`. Voir cette dernière pour le
     streaming SSE (`api/routes/generation.py`)."""
     resultat: ResultatPipelineAvecBoucle | None = None
     for item in tenter_generation_avec_boucle_stream(instance_exemple):

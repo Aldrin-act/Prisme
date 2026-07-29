@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQueries } from "@tanstack/react-query";
 import { AlertCircle, CheckCircle2, Cpu, Play, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,16 +29,12 @@ import {
 import { PageHeader, EmptyState } from "@/components/app-page";
 import { GanttChart } from "@/components/planning/gantt-chart";
 import {
-  prismeKeys,
-  prismeClient,
   useSolveurs,
-  useInstances,
   useProjets,
   useCodeSourceSolveur,
   useDeclencherExecution,
   usePlanning,
   PrismeAPIError,
-  type ProjetDetail,
   type SolveurInfo,
 } from "@/integrations/prisme";
 
@@ -124,9 +119,8 @@ function DialogSolveur({
   solveur: SolveurInfo | null;
   onOpenChange: (open: boolean) => void;
 }) {
-  const { data: instances } = useInstances();
   const { data: projets } = useProjets();
-  const [instanceId, setInstanceId] = useState("");
+  const [projetId, setProjetId] = useState("");
   const [executionId, setExecutionId] = useState<string | null>(null);
   const declencher = useDeclencherExecution();
   const {
@@ -136,56 +130,39 @@ function DialogSolveur({
   } = usePlanning(executionId);
   const { data: codeSource, isLoading: chargementCode } = useCodeSourceSolveur(solveur?.id ?? null);
 
-  // Même reconstruction "nom du projet + rang" que les pages Instances et
-  // Générateur de solveurs — /supervision/instances ne relie pas les
-  // instances à leur projet.
-  const detailsProjets = useQueries({
-    queries: (projets ?? []).map((projet) => ({
-      queryKey: prismeKeys.projet(projet.projet_id),
-      queryFn: () => prismeClient.obtenirProjet(projet.projet_id),
-    })),
-  });
-  const labelParInstance = new Map<string, string>();
-  detailsProjets.forEach((requete) => {
-    const detail = requete.data as ProjetDetail | undefined;
-    if (!detail) return;
-    const nom = detail.nom ?? "Sans nom";
-    [...detail.instances].reverse().forEach((instance, index) => {
-      labelParInstance.set(instance.instance_id, `${nom}-${index + 1}`);
-    });
-  });
-
-  // Filtré par client + structure des contraintes (les deux champs réels
-  // disponibles sur InstanceInfo) — approximatif sans les objectifs, comme
-  // ailleurs dans l'app ; /execution refait le matching exact côté serveur
-  // et renvoie une erreur 409 claire en cas de décalage sur les objectifs.
-  const instancesCompatibles = (instances ?? []).filter(
-    (i) =>
+  // L'exécution se déclenche par projet, pas par instance (§annexe modèle
+  // Instance/Projet) : on choisit un projet dont l'instance courante
+  // correspond au client + à la structure de contraintes du solveur — les
+  // deux champs réels disponibles sur `Projet`, approximatif sans les
+  // objectifs comme ailleurs dans l'app ; /execution refait le matching
+  // exact côté serveur et renvoie une erreur 409 claire en cas de décalage.
+  const projetsCompatibles = (projets ?? []).filter(
+    (p) =>
       solveur &&
-      i.client_id === solveur.client_id &&
-      i.structure_contraintes === solveur.structure_contraintes,
+      p.client_id === solveur.client_id &&
+      p.structure_contraintes === solveur.structure_contraintes,
   );
 
   function fermer(open: boolean) {
     if (!open) {
-      setInstanceId("");
+      setProjetId("");
       setExecutionId(null);
       declencher.reset();
     }
     onOpenChange(open);
   }
 
-  function changerInstance(id: string) {
-    setInstanceId(id);
+  function changerProjet(id: string) {
+    setProjetId(id);
     setExecutionId(null);
     declencher.reset();
   }
 
   function executer() {
-    if (!instanceId || !solveur) return;
+    if (!projetId || !solveur) return;
     setExecutionId(null);
     declencher.mutate(
-      { instanceId, clientId: solveur.client_id },
+      { projetId, clientId: solveur.client_id },
       {
         onSuccess: (reponse) => {
           if (reponse.reussi) setExecutionId(reponse.execution_id);
@@ -224,31 +201,31 @@ function DialogSolveur({
                 </Badge>
               </div>
 
-              {instancesCompatibles.length === 0 ? (
+              {projetsCompatibles.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Aucune instance ingérée ne correspond à ce client et cette structure de
-                  contraintes. Ingère une instance compatible depuis la page Instances pour pouvoir
-                  exécuter ce solveur.
+                  Aucun projet dont l'instance courante correspond à ce client et cette structure de
+                  contraintes. Associe une instance compatible à un projet depuis la page Données
+                  pour pouvoir exécuter ce solveur.
                 </p>
               ) : (
                 <div className="space-y-3">
                   <div>
-                    <p className="mb-2 text-sm font-medium">Instance à exécuter</p>
-                    <Select value={instanceId} onValueChange={changerInstance}>
+                    <p className="mb-2 text-sm font-medium">Projet à exécuter</p>
+                    <Select value={projetId} onValueChange={changerProjet}>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choisir une instance compatible..." />
+                        <SelectValue placeholder="Choisir un projet compatible..." />
                       </SelectTrigger>
                       <SelectContent>
-                        {instancesCompatibles.map((i) => (
-                          <SelectItem key={i.instance_id} value={i.instance_id}>
-                            {labelParInstance.get(i.instance_id) ?? i.instance_id}
+                        {projetsCompatibles.map((p) => (
+                          <SelectItem key={p.projet_id} value={p.projet_id}>
+                            {p.nom ?? p.projet_id}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <Button onClick={executer} disabled={!instanceId || declencher.isPending}>
+                  <Button onClick={executer} disabled={!projetId || declencher.isPending}>
                     <Play className="mr-2 h-4 w-4" />
                     {declencher.isPending ? "Exécution en cours..." : "Exécuter le solveur"}
                   </Button>

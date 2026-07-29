@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   FolderOpen,
   Lightbulb,
+  Link2,
   Loader2,
   Plus,
   Trash2,
@@ -21,6 +22,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,9 +46,12 @@ import {
   useGenererInstanceDepuisProjet,
   useProjet,
   useProjets,
+  useInstances,
   useSupprimerProjet,
+  useAssocierInstanceAuProjet,
   PrismeAPIError,
   type Justification,
+  type ProjetDetail,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
 
@@ -305,6 +316,8 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
         {generer.isPending && <IndicateurGeneration />}
       </div>
 
+      <InstanceCourantePanel projet={projet} />
+
       <div className="glass rounded-2xl p-6">
         <h4 className="mb-3 text-sm font-semibold">Instances générées ({projet.instances.length})</h4>
         {projet.instances.length === 0 ? (
@@ -324,6 +337,87 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+// Instance courante du projet (§annexe modèle Instance/Projet) : celle sur
+// laquelle une exécution se déclenche (POST /execution/{projet_id}) —
+// distincte de `projet.instances` ci-dessus, qui reste l'historique de
+// provenance (génération). Une instance déjà ingérée pour n'importe quel
+// projet du même client peut être réutilisée ici, sans redevoir la générer.
+function InstanceCourantePanel({ projet }: { projet: ProjetDetail }) {
+  const queryClient = useQueryClient();
+  const { data: instances } = useInstances();
+  const associer = useAssocierInstanceAuProjet();
+  const [choix, setChoix] = useState("");
+
+  const erreur = associer.error as PrismeAPIError | null;
+  const instancesDuClient = (instances ?? []).filter((i) => i.client_id === projet.client_id);
+
+  function associerInstance(instanceId: string) {
+    setChoix(instanceId);
+    associer.mutate(
+      { projetId: projet.projet_id, instanceId },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: prismeKeys.projet(projet.projet_id) });
+          queryClient.invalidateQueries({ queryKey: prismeKeys.projets() });
+          setChoix("");
+        },
+      },
+    );
+  }
+
+  return (
+    <div className="glass space-y-3 rounded-2xl p-6">
+      <h4 className="text-sm font-semibold">Instance courante</h4>
+      <p className="text-xs text-muted-foreground">
+        L'instance sur laquelle ce projet exécute ses solveurs — son propre planning attitré,
+        indépendant des autres projets qui réutiliseraient la même instance.
+      </p>
+
+      {projet.instance_id ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary" className="font-mono text-xs">
+            {projet.instance_id}
+          </Badge>
+          {projet.structure_contraintes && (
+            <Badge variant="outline" className="font-mono text-xs">
+              {projet.structure_contraintes}
+            </Badge>
+          )}
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">Aucune instance associée pour l'instant.</p>
+      )}
+
+      {erreur && (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 font-medium">
+            <AlertCircle className="h-4 w-4" /> Échec de l'association
+          </div>
+          <p className="mt-1">{erreur.message}</p>
+        </div>
+      )}
+
+      {instancesDuClient.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <Select value={choix} onValueChange={associerInstance} disabled={associer.isPending}>
+            <SelectTrigger className="w-full sm:w-64">
+              <SelectValue placeholder="Utiliser une instance existante..." />
+            </SelectTrigger>
+            <SelectContent>
+              {instancesDuClient.map((i) => (
+                <SelectItem key={i.instance_id} value={i.instance_id}>
+                  {i.instance_id} · {i.structure_contraintes}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Link2 className="h-4 w-4 text-muted-foreground" />
+        </div>
+      )}
     </div>
   );
 }
@@ -459,9 +553,10 @@ function ListeProjets({ onOuvrir }: { onOuvrir: (projetId: string) => void }) {
           <AlertDialogHeader>
             <AlertDialogTitle>Supprimer ce projet ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action supprime définitivement les données brutes du projet. Les instances déjà générées
-              à partir de lui restent intactes — seul le lien vers ce projet disparaît. Cette action est
-              irréversible.
+              Cette action supprime définitivement les données brutes du projet ainsi que son propre
+              historique d'exécution (plannings, décisions humaines). Les instances déjà générées à partir
+              de lui restent intactes et réutilisables par d'autres projets — seul le lien de provenance
+              disparaît. Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
 

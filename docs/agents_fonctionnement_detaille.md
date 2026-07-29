@@ -557,7 +557,6 @@ ANTHROPIC_API_KEY=sk-ant-...
 Script de génération :
 ```bash
 uv run python scripts/generer_solveur.py        # Multi-agents (défaut)
-uv run python scripts/generer_avec_metriques.py # Avec métriques Grafana
 ```
 
 ---
@@ -568,5 +567,4 @@ uv run python scripts/generer_avec_metriques.py # Avec métriques Grafana
 - **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,reviewer,debugger,documentation}.py` (`optimiseur.py` orphelin)
 - **Client LLM** : `generation/agents/client_llm.py`
 - **Validation** : `generation/validation_statique.py`, `generation/executer.py`, `validation_engine/cascade.py`
-- **Script monitoring** : `scripts/generer_avec_metriques.py`
-- **Dashboard Grafana** : `monitoring/grafana/dashboards/json/prisme-agents.json`
+- **Observabilité** : LangSmith (tracing natif LangChain/LangGraph, aucune instrumentation maison)

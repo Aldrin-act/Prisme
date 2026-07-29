@@ -22,7 +22,7 @@ except ImportError:
 # Imports du projet
 try:
     from generation.tentative_unique import tenter_generation_unique
-    from generation.agents.client_llm import construire_appel_llm
+    from generation.agents.client_llm import construire_modele
     from dsl.validation.validator import charger_instance
     import json
 except ImportError as e:
@@ -70,7 +70,7 @@ def main():
     print("🔧 Étape 2 : Configuration du client LLM")
 
     try:
-        appel_llm = construire_appel_llm()
+        modele = construire_modele()
         print(f"   ✅ Client {os.getenv('PRISME_LLM_PROVIDER', 'mistral')} créé")
         print()
     except Exception as e:
@@ -90,7 +90,7 @@ def main():
     print()
 
     try:
-        resultat = tenter_generation_unique(appel_llm)
+        resultat = tenter_generation_unique(modele)
 
     except Exception as e:
         print(f"❌ Erreur lors de la génération : {e}")

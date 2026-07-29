@@ -73,31 +73,7 @@ Vous avez 3 scripts principaux :
 uv run python -m scripts.generer_multi_agents
 ```
 
-### Option 2 : Pipeline avec métriques (recommandé pour analyse)
-
-**Script** : `generer_avec_metriques.py`
-
-**Identique à Option 1, mais avec** :
-- ⏱️ Durée par agent
-- 💰 Coût estimé par agent
-- 📊 Tokens consommés
-- 📁 Export JSON pour dashboard
-
-**Durée** : 2-5 minutes
-
-**Coût** : ~$0.50-1.00
-
-**Commande** :
-```bash
-uv run python -m scripts.generer_avec_metriques
-```
-
-**Fichiers générés** :
-- `metriques/run_YYYYMMDD_HHMMSS.json` - Métriques détaillées
-- `metriques/temps_reel.json` - État actuel
-- `metriques/grafana_metrics.prom` - Export Prometheus
-
-### Option 3 : Pipeline avec boucle de réparation
+### Option 2 : Pipeline avec boucle de réparation
 
 **Script** : `generer_avec_boucle.py`
 
@@ -115,7 +91,7 @@ uv run python -m scripts.generer_avec_metriques
 uv run python -m scripts.generer_avec_boucle
 ```
 
-### Option 4 : Génération + exécution GreenSig
+### Option 3 : Génération + exécution GreenSig
 
 **Script** : `generer_et_executer_greensig.py`
 
@@ -238,12 +214,6 @@ Quelle que soit l'option choisie, voici ce qui se passe :
 uv run python -m scripts.generer_multi_agents
 ```
 
-### Génération avec métriques (recommandé pour analyser)
-
-```bash
-uv run python -m scripts.generer_avec_metriques
-```
-
 ### Génération robuste (boucle de réparation)
 
 ```bash
@@ -265,10 +235,6 @@ Après une génération réussie :
 ├── solveur_genere.py              # Code du solveur
 ├── test_solveur_genere.py         # Tests pytest
 ├── solveur_genere_doc.md          # Documentation
-├── metriques/                     # Métriques (si generer_avec_metriques.py)
-│   ├── run_20260720_143022.json
-│   ├── temps_reel.json
-│   └── grafana_metrics.prom
 └── generation/                    # Logs internes
     └── failures/                  # Diagnostics (si échecs)
 ```
@@ -364,9 +330,7 @@ uv sync --extra llm
 **Commande recommandée pour démarrer** :
 
 ```bash
-uv run python -m scripts.generer_avec_metriques
+uv run python -m scripts.generer_avec_boucle
 ```
-
-Cela génère le solveur ET collecte des métriques détaillées pour analyser le processus.
 
 Bonne génération ! 🚀

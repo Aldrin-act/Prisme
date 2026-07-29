@@ -14,19 +14,26 @@ from solver_store.registry import Registre
 router = APIRouter(prefix="/execution", tags=["execution"])
 
 
-def executer_pour_instance(
-    etat: EtatAPI, registre: Registre, instance_id: str, client_id: str, utilisateur: dict
+def executer_pour_projet(
+    etat: EtatAPI, registre: Registre, projet_id: str, client_id: str, utilisateur: dict
 ) -> tuple[str, ResultatExecution]:
-    """Chaîne lookup instance → recherche solveur validé → sandbox →
-    enregistrement. Un aléa (panne, retard...) se traite en réingérant
-    l'instance avec ses contraintes mises à jour, puis en rappelant cette
-    même fonction — aucun mécanisme d'alerte dédié dans le noyau."""
+    """Chaîne lookup projet → instance courante → recherche solveur validé →
+    sandbox → enregistrement (§annexe modèle Instance/Projet : chaque projet
+    a son planning attitré, indépendant des autres projets réutilisant la
+    même instance). Un aléa (panne, retard...) se traite en réingérant une
+    instance avec ses contraintes mises à jour puis en la ré-associant à ce
+    projet (`associer_instance_projet`), avant de rappeler cette même
+    fonction — aucun mécanisme d'alerte dédié dans le noyau."""
     try:
-        client_id_instance, instance = etat.recuperer_instance(instance_id)
+        projet = etat.recuperer_projet(projet_id)
     except KeyError:
-        raise HTTPException(status_code=404, detail="instance inconnue") from None
+        raise HTTPException(status_code=404, detail="projet inconnu") from None
 
-    verifier_acces_client(utilisateur, client_id_instance)
+    verifier_acces_client(utilisateur, projet.client_id)
+
+    if projet.instance_id is None:
+        raise HTTPException(status_code=409, detail="ce projet n'a pas encore d'instance T-R-C-O associée")
+    _, instance = etat.recuperer_instance(projet.instance_id)
 
     structure = structure_contraintes(instance)
     objectifs = signature_objectifs(instance)
@@ -36,22 +43,25 @@ def executer_pour_instance(
     if not solveurs:
         raise HTTPException(
             status_code=409,
-            detail=f"aucun solveur validé pour client={client_id!r}, structure={structure!r}, objectifs={objectifs!r}",
+            detail=(
+                f"aucun solveur validé pour client={client_id!r}, "
+                f"structure={structure!r}, objectifs={objectifs!r}"
+            ),
         )
     artefact = solveurs[0]
 
     resultat = executer_solveur_valide(registre, artefact.id, instance)
-    execution_id = etat.enregistrer_execution(artefact.id, instance_id, resultat)
+    execution_id = etat.enregistrer_execution(artefact.id, projet_id, projet.instance_id, resultat)
     return execution_id, resultat
 
 
-@router.post("/{instance_id}")
+@router.post("/{projet_id}")
 def declencher_execution(
-    instance_id: str,
+    projet_id: str,
     client_id: str,
     etat: EtatAPI = Depends(obtenir_etat),
     registre: Registre = Depends(obtenir_registre),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str | bool | None]:
-    execution_id, resultat = executer_pour_instance(etat, registre, instance_id, client_id, utilisateur)
+    execution_id, resultat = executer_pour_projet(etat, registre, projet_id, client_id, utilisateur)
     return {"execution_id": execution_id, "reussi": resultat.reussi, "erreur": resultat.erreur}

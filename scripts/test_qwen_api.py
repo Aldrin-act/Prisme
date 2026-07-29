@@ -32,17 +32,20 @@ if not os.environ.get("TOGETHER_API_KEY") or os.environ.get("TOGETHER_API_KEY") 
 print("Test de connexion a l'API Qwen...\n")
 
 try:
-    from generation.agents.client_llm import construire_appel_llm
+    from langchain_core.messages import HumanMessage, SystemMessage
 
-    appel_llm = construire_appel_llm()
-    print(f"Client LLM cree : {type(appel_llm).__name__}")
+    from generation.agents.client_llm import construire_modele
+
+    modele = construire_modele()
+    print(f"Client LLM cree : {type(modele).__name__}")
     print()
 
     print("Envoi d'un prompt de test...")
-    reponse = appel_llm(
-        "Tu es un assistant utile.",
-        "Reponds simplement 'Bonjour! Je suis Qwen et je fonctionne correctement.'"
-    )
+    message = modele.invoke([
+        SystemMessage(content="Tu es un assistant utile."),
+        HumanMessage(content="Reponds simplement 'Bonjour! Je suis Qwen et je fonctionne correctement.'"),
+    ])
+    reponse = message.content if isinstance(message.content, str) else str(message.content)
 
     print("\nReponse recue :")
     print(f"  {reponse}")

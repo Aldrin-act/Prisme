@@ -17,17 +17,17 @@ from __future__ import annotations
 
 import sys
 
-from generation.agents.client_llm import construire_appel_llm
+from generation.agents.client_llm import construire_modele
 from generation.tentative_unique import tenter_generation_unique
 
 
 def main() -> None:
     n_essais = int(sys.argv[1]) if len(sys.argv) > 1 else 5
-    appel_llm = construire_appel_llm()
+    modele = construire_modele()
 
     reussites = 0
     for indice in range(n_essais):
-        resultat = tenter_generation_unique(appel_llm)
+        resultat = tenter_generation_unique(modele)
         statut = "OK" if resultat.reussi else "ECHEC"
         print(f"essai {indice + 1}/{n_essais} : {statut}")
 

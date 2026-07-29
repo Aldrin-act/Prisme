@@ -131,17 +131,14 @@ FOURNISSEURS_PAR_AGENT = {
 - **8K tokens** : Suffisant pour batterie de tests
 - Bon rapport qualité/prix
 
-## Monitoring et métriques
-
-Pour comparer les performances des différents fournisseurs :
+## Comparer les fournisseurs
 
 ```bash
-# Générer avec métriques
-uv run python -m scripts.generer_avec_metriques
-
-# Mesurer taux de succès
+# Mesurer taux de succès (Étape 4, tir unique)
 uv run python -m scripts.mesurer_taux_succes_generation
 ```
+
+Observabilité (durée/coût/tokens par agent, tracing des appels LLM) : LangSmith, pas d'instrumentation maison.
 
 ## Fournisseurs disponibles
 

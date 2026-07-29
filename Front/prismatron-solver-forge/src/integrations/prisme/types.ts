@@ -206,7 +206,15 @@ export interface InstanceInfo {
 export interface ExecutionInfo {
   execution_id: string;
   id_solveur: string;
-  instance_id: string;
+  // Clé de groupement/propriété réelle depuis l'inversion Instance/Projet :
+  // chaque projet a son planning attitré, indépendant des autres projets
+  // réutilisant la même instance (voir `Projet.instance_id`).
+  projet_id: string;
+  // Informatif seulement désormais : l'instance réellement exécutée à
+  // l'instant T, `null` si elle a été supprimée depuis (voir
+  // `EtatAPI.supprimer_instance`) — ne jamais l'utiliser pour retrouver le
+  // projet propriétaire, utiliser `projet_id`.
+  instance_id: string | null;
   client_id: string;
   date_execution: string | null;
   reussi: boolean;
@@ -377,13 +385,19 @@ export interface HistoriqueJobGeneration {
 
 // Projets : données brutes persistées + historique des instances générées
 // à partir d'elles (une même donnée brute peut être reconvertie plusieurs
-// fois, sans jamais devoir être re-saisie).
+// fois, sans jamais devoir être re-saisie). Depuis l'inversion Instance/Projet
+// (§annexe modèle Instance/Projet), une instance est un gabarit métier
+// réutilisable et chaque projet a son planning attitré : `instance_id` est
+// l'instance courante du projet (peut être réassignée), distincte de
+// `instances` ci-dessous qui reste l'historique de provenance (génération).
 export interface Projet {
   projet_id: string;
   client_id: string;
   nom: string | null;
   date_creation: string;
   nb_instances: number;
+  instance_id: string | null;
+  structure_contraintes: string | null;
 }
 
 export interface InstanceDeProjet {
@@ -391,17 +405,18 @@ export interface InstanceDeProjet {
   structure_contraintes: string;
 }
 
-export interface ProjetDetail {
-  projet_id: string;
-  client_id: string;
-  nom: string | null;
+export interface ProjetDetail extends Projet {
   donnees_brutes: string;
-  date_creation: string;
   instances: InstanceDeProjet[];
 }
 
 export interface ReponseCreationProjet {
   projet_id: string;
+}
+
+export interface ReponseAssociationInstance {
+  projet_id: string;
+  instance_id: string;
 }
 
 // ============================================================================

@@ -1,8 +1,8 @@
 """Couche 1 (§6.1) : `generateur.generer_code_depuis_plan` construit
 correctement son `ResultatGenerationBrute` depuis une sortie structurée —
 aucun appel LLM réel (voir `tests/unit/aides_test_agents.py`).
-`generer_code_solveur` (mode simple, Étape 4) reste sur `AppelLLM`/
-`extraire_bloc_code`, hors périmètre de cette migration — non retesté ici."""
+`generer_code_solveur` (mode simple, Étape 4) reste sur un simple `.invoke()`/
+`extraire_bloc_code`, sans sortie structurée — non retesté ici."""
 
 from __future__ import annotations
 

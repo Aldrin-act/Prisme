@@ -7,12 +7,15 @@ ce module reste le mode simple, tir unique, sans agents ni réparation.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from generation.agents.client_llm import AppelLLM
 from generation.agents.generateur import generer_code_solveur
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
 from validation_engine.cascade import VerdictCascade, evaluer_cascade
+
+if TYPE_CHECKING:
+    from langchain_core.language_models.chat_models import BaseChatModel
 
 
 @dataclass(frozen=True)
@@ -35,11 +38,11 @@ class ResultatTentative:
         )
 
 
-def tenter_generation_unique(appel_llm: AppelLLM) -> ResultatTentative:
+def tenter_generation_unique(modele: BaseChatModel) -> ResultatTentative:
     """Génère, valide statiquement, exécute, puis juge par la cascade —
     sans jamais laisser une erreur inattendue du code généré interrompre la
     mesure (§6.6 : le code peut échouer, la mesure doit survivre)."""
-    brut = generer_code_solveur(appel_llm)
+    brut = generer_code_solveur(modele)
     validation = valider_code_genere(brut.code_source)
     if not validation.valide:
         return ResultatTentative(brut.code_source, validation, None, None)
