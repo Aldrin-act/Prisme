@@ -48,9 +48,9 @@ def test_bout_en_bout_erp_vers_planning_et_audit(image_sandbox: str, registre_te
 
         # L'exécution se déclenche par projet (§annexe modèle Instance/Projet) —
         # un projet réutilise l'instance ingérée comme instance courante.
-        projet_id = client.post(
-            "/projets", json={"donnees_brutes": "", "client_id": "client_test"}
-        ).json()["projet_id"]
+        projet_id = client.post("/projets", json={"donnees_brutes": "", "client_id": "client_test"}).json()[
+            "projet_id"
+        ]
         reponse = client.post(f"/projets/{projet_id}/instance", json={"instance_id": instance_id})
         assert reponse.status_code == 200
 

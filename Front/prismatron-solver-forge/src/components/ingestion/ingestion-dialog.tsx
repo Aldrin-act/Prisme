@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Upload, FileJson, FileSpreadsheet, Braces, CheckCircle2, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Upload, FileJson, FileSpreadsheet, Files, Braces, CheckCircle2, AlertCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,8 @@ import {
   useIngererInstance,
   useImporterViaAdaptateur,
   useImporterFichierTableur,
+  useImporterFichiersCsv,
+  useImporterJsonAvecCompetences,
   PrismeAPIError,
   type Contrainte,
   type InstanceTRCO,
@@ -237,6 +239,8 @@ export function IngestionDialog({
   const ingerer = useIngererInstance();
   const importer = useImporterViaAdaptateur();
   const importerFichier = useImporterFichierTableur();
+  const importerCsv = useImporterFichiersCsv();
+  const importerJson = useImporterJsonAvecCompetences();
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
@@ -251,6 +255,12 @@ export function IngestionDialog({
   const [fichierJson, setFichierJson] = useState<File | null>(null);
   const inputJsonRef = useRef<HTMLInputElement>(null);
   const [erreurParseJson, setErreurParseJson] = useState<string | null>(null);
+  const [fichierTachesCsv, setFichierTachesCsv] = useState<File | null>(null);
+  const [fichierRessourcesCsv, setFichierRessourcesCsv] = useState<File | null>(null);
+  const [fichierContraintesCsv, setFichierContraintesCsv] = useState<File | null>(null);
+  const inputTachesCsvRef = useRef<HTMLInputElement>(null);
+  const inputRessourcesCsvRef = useRef<HTMLInputElement>(null);
+  const inputContraintesCsvRef = useRef<HTMLInputElement>(null);
   const [succes, setSucces] = useState<{ instance_id: string; structure_contraintes: string } | null>(null);
 
   function reinitialiser() {
@@ -264,10 +274,18 @@ export function IngestionDialog({
     setFichierJson(null);
     if (inputJsonRef.current) inputJsonRef.current.value = "";
     setErreurParseJson(null);
+    setFichierTachesCsv(null);
+    setFichierRessourcesCsv(null);
+    setFichierContraintesCsv(null);
+    if (inputTachesCsvRef.current) inputTachesCsvRef.current.value = "";
+    if (inputRessourcesCsvRef.current) inputRessourcesCsvRef.current.value = "";
+    if (inputContraintesCsvRef.current) inputContraintesCsvRef.current.value = "";
     setSucces(null);
     ingerer.reset();
     importer.reset();
     importerFichier.reset();
+    importerCsv.reset();
+    importerJson.reset();
   }
 
   function fermer(open: boolean) {
@@ -294,21 +312,39 @@ export function IngestionDialog({
     importerFichier.mutate({ clientId, fichier }, { onSuccess: onIngestionReussie });
   }
 
+  function soumettreCsv() {
+    if (!fichierTachesCsv || !fichierRessourcesCsv || !fichierContraintesCsv) return;
+    importerCsv.mutate(
+      {
+        clientId,
+        fichiers: {
+          taches: fichierTachesCsv,
+          ressources: fichierRessourcesCsv,
+          contraintes: fichierContraintesCsv,
+        },
+      },
+      { onSuccess: onIngestionReussie },
+    );
+  }
+
   async function soumettreJson() {
     if (!fichierJson) return;
     setErreurParseJson(null);
-    let instance: InstanceTRCO;
+    let payload: Record<string, unknown>;
     try {
-      instance = JSON.parse(await fichierJson.text()) as InstanceTRCO;
+      payload = JSON.parse(await fichierJson.text()) as Record<string, unknown>;
     } catch {
       setErreurParseJson("Le fichier n'est pas un JSON valide.");
       return;
     }
-    ingerer.mutate({ clientId, instance }, { onSuccess: onIngestionReussie });
+    importerJson.mutate({ clientId, payload }, { onSuccess: onIngestionReussie });
   }
 
-  const erreur = (ingerer.error ?? importer.error ?? importerFichier.error) as PrismeAPIError | null;
-  const enCours = ingerer.isPending || importer.isPending || importerFichier.isPending;
+  const erreur = (ingerer.error ?? importer.error ?? importerFichier.error ?? importerCsv.error ?? importerJson.error) as
+    | PrismeAPIError
+    | null;
+  const enCours =
+    ingerer.isPending || importer.isPending || importerFichier.isPending || importerCsv.isPending || importerJson.isPending;
 
   return (
     <Dialog open={open} onOpenChange={fermer}>
@@ -316,8 +352,8 @@ export function IngestionDialog({
         <DialogHeader>
           <DialogTitle>Nouvelle instance</DialogTitle>
           <DialogDescription>
-            Ingérez une instance T-R-C-O directement, importez-la depuis un ERP connecté, ou depuis un fichier Excel
-            ou JSON rempli.
+            Ingérez une instance T-R-C-O directement, importez-la depuis un ERP connecté, ou depuis un fichier Excel,
+            des fichiers CSV, ou un fichier JSON rempli.
           </DialogDescription>
         </DialogHeader>
 
@@ -347,6 +383,7 @@ export function IngestionDialog({
               <TabsTrigger value="trco">Saisie T-R-C-O</TabsTrigger>
               <TabsTrigger value="import">Import ERP</TabsTrigger>
               <TabsTrigger value="fichier">Fichier Excel</TabsTrigger>
+              <TabsTrigger value="csv">Fichiers CSV</TabsTrigger>
               <TabsTrigger value="json">Fichier JSON</TabsTrigger>
             </TabsList>
 
@@ -439,6 +476,94 @@ export function IngestionDialog({
               </DialogFooter>
             </TabsContent>
 
+            <TabsContent value="csv" className="space-y-4">
+              <ChampClient clientId={clientId} setClientId={setClientId} estAdmin={estAdmin} idChamp="client_id_csv" />
+
+              <div className="space-y-1.5">
+                <Label htmlFor="fichier_csv_taches">Tâches (.csv)</Label>
+                <Input
+                  id="fichier_csv_taches"
+                  ref={inputTachesCsvRef}
+                  type="file"
+                  accept=".csv,text/csv"
+                  onChange={(e) => setFichierTachesCsv(e.target.files?.[0] ?? null)}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="fichier_csv_ressources">Ressources (.csv)</Label>
+                <Input
+                  id="fichier_csv_ressources"
+                  ref={inputRessourcesCsvRef}
+                  type="file"
+                  accept=".csv,text/csv"
+                  onChange={(e) => setFichierRessourcesCsv(e.target.files?.[0] ?? null)}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="fichier_csv_contraintes">Contraintes (.csv)</Label>
+                <Input
+                  id="fichier_csv_contraintes"
+                  ref={inputContraintesCsvRef}
+                  type="file"
+                  accept=".csv,text/csv"
+                  onChange={(e) => setFichierContraintesCsv(e.target.files?.[0] ?? null)}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Trois fichiers séparés, un par axe — colonnes attendues :{" "}
+                  <code className="font-mono">id,nom,duree_estimee_minutes</code> pour Tâches,{" "}
+                  <code className="font-mono">id,nom,competences</code> (séparées par{" "}
+                  <code className="font-mono">;</code>) pour Ressources,{" "}
+                  <code className="font-mono">
+                    type,tache_avant,tache_apres,tache,ressource,duree_minutes,competence
+                  </code>{" "}
+                  pour Contraintes (<code className="font-mono">type</code> vaut{" "}
+                  <code className="font-mono">precedence</code>,{" "}
+                  <code className="font-mono">compatibilite_ressource_tache</code> ou{" "}
+                  <code className="font-mono">competence_requise</code>).
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Plutôt que de saisir chaque compatibilité à la main, déclarez qu'une ressource possède une
+                  compétence et qu'une tâche l'exige (<code className="font-mono">competence_requise</code>) —
+                  la compatibilité et sa durée (<code className="font-mono">duree_estimee_minutes</code> de la
+                  tâche) sont calculées automatiquement pour chaque ressource qualifiée.
+                </p>
+                <p className="text-xs">
+                  Gabarits d'exemple :{" "}
+                  {[
+                    { nom: "taches.csv", href: "/gabarits/taches.csv" },
+                    { nom: "ressources.csv", href: "/gabarits/ressources.csv" },
+                    { nom: "contraintes.csv", href: "/gabarits/contraintes.csv" },
+                  ].map((gabarit, i) => (
+                    <span key={gabarit.href}>
+                      {i > 0 && ", "}
+                      <a
+                        href={gabarit.href}
+                        download
+                        className="text-primary underline-offset-2 hover:underline"
+                      >
+                        {gabarit.nom}
+                      </a>
+                    </span>
+                  ))}
+                </p>
+              </div>
+
+              {erreur && importerCsv.error && <ErreursAPI erreur={erreur} />}
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => fermer(false)}>Annuler</Button>
+                <Button
+                  onClick={soumettreCsv}
+                  disabled={enCours || !fichierTachesCsv || !fichierRessourcesCsv || !fichierContraintesCsv}
+                >
+                  <Files className="mr-2 h-4 w-4" />
+                  {importerCsv.isPending ? "Import..." : "Importer les fichiers"}
+                </Button>
+              </DialogFooter>
+            </TabsContent>
+
             <TabsContent value="json" className="space-y-4">
               <ChampClient clientId={clientId} setClientId={setClientId} estAdmin={estAdmin} idChamp="client_id_json" />
 
@@ -455,8 +580,22 @@ export function IngestionDialog({
                   }}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Déposez un fichier JSON déjà au format T-R-C-O (mêmes champs que la saisie manuelle :
-                  taches, ressources, contraintes, objectifs) — il est ingéré tel quel, sans transformation.
+                  Déposez un fichier JSON au format T-R-C-O (mêmes champs que la saisie manuelle : taches,
+                  ressources, contraintes, objectifs) — ingéré tel quel si déjà complet. Plutôt que de
+                  déclarer chaque compatibilité à la main, une tâche peut aussi porter une durée estimée
+                  (<code className="font-mono">duree_estimee_minutes</code>) : sa compatibilité avec toute
+                  ressource dont les <code className="font-mono">competences</code> couvrent ses{" "}
+                  <code className="font-mono">competence_requise</code> est alors calculée automatiquement.
+                </p>
+                <p className="text-xs">
+                  Gabarit d'exemple :{" "}
+                  <a
+                    href="/gabarits/instance_exemple.json"
+                    download
+                    className="text-primary underline-offset-2 hover:underline"
+                  >
+                    instance_exemple.json
+                  </a>
                 </p>
               </div>
 
@@ -467,13 +606,13 @@ export function IngestionDialog({
                   </div>
                 </div>
               )}
-              {erreur && ingerer.error && <ErreursAPI erreur={erreur} />}
+              {erreur && importerJson.error && <ErreursAPI erreur={erreur} />}
 
               <DialogFooter>
                 <Button variant="outline" onClick={() => fermer(false)}>Annuler</Button>
                 <Button onClick={soumettreJson} disabled={enCours || !fichierJson}>
                   <Braces className="mr-2 h-4 w-4" />
-                  {ingerer.isPending ? "Ingestion..." : "Importer le fichier"}
+                  {importerJson.isPending ? "Import..." : "Importer le fichier"}
                 </Button>
               </DialogFooter>
             </TabsContent>

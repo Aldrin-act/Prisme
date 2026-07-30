@@ -367,6 +367,35 @@ export function useImporterFichierTableur() {
 }
 
 /**
+ * Mutation pour importer une instance depuis trois fichiers CSV séparés —
+ * Tâches, Ressources, Contraintes (gabarit `docs/dsl/gabarit_csv/`).
+ */
+export function useImporterFichiersCsv() {
+  return useMutation({
+    mutationFn: ({
+      clientId,
+      fichiers,
+    }: {
+      clientId: string;
+      fichiers: { taches: File; ressources: File; contraintes: File };
+    }) => prismeClient.importerFichiersCsv(clientId, fichiers),
+  });
+}
+
+/**
+ * Mutation pour importer une instance depuis un JSON "brut avec compétences" —
+ * sur-ensemble du format T-R-C-O canonique, une tâche peut y porter une durée
+ * estimée pour dériver sa compatibilité depuis des compétences plutôt que de
+ * la déclarer à la main (gabarit `public/gabarits/instance_exemple.json`).
+ */
+export function useImporterJsonAvecCompetences() {
+  return useMutation({
+    mutationFn: ({ clientId, payload }: { clientId: string; payload: Record<string, unknown> }) =>
+      prismeClient.importerJsonAvecCompetences(clientId, payload),
+  });
+}
+
+/**
  * Mutation pour convertir des données brutes (ERP sans adaptateur dédié)
  * en instance T-R-C-O via l'agent de compréhension (LLM).
  */

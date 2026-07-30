@@ -88,9 +88,9 @@ def test_cycle_ingestion_execution_visible_en_supervision(image_sandbox: str, re
 
         # L'exécution se déclenche par projet (§annexe modèle Instance/Projet) —
         # un projet réutilise l'instance ingérée comme instance courante.
-        projet_id = client.post(
-            "/projets", json={"donnees_brutes": "", "client_id": "client_test"}
-        ).json()["projet_id"]
+        projet_id = client.post("/projets", json={"donnees_brutes": "", "client_id": "client_test"}).json()[
+            "projet_id"
+        ]
         client.post(f"/projets/{projet_id}/instance", json={"instance_id": instance_id})
 
         execution_id = client.post(f"/execution/{projet_id}?client_id=client_test").json()["execution_id"]

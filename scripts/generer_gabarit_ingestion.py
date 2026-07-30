@@ -8,6 +8,12 @@ est ingéré tel quel via `POST /adapters/tableur/{client_id}`
 colonnes d'onglets changent, mettre à jour `adapters/tableur/traducteur.py`
 en même temps, les deux doivent rester en accord.
 
+Le frontend (page Données, import de données brutes) sert sa propre copie en
+téléchargement direct — `Front/prismatron-solver-forge/public/gabarits/
+gabarit_ingestion_trco.xlsx` — jamais lue dynamiquement depuis `docs/dsl/`
+(le frontend peut être déployé sans le dépôt Python à côté). Recopier
+manuellement après régénération, ce script ne le fait pas lui-même.
+
     uv run python -m scripts.generer_gabarit_ingestion
 """
 

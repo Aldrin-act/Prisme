@@ -202,11 +202,9 @@ Script de test complet avec 4 scenarios :
 ### Usage basique (instance par defaut)
 
 ```python
-from generation.agents.client_llm import construire_appel_llm
-from generation.pipeline_multi_agents import tenter_generation_multi_agents
+from generation.graph import tenter_generation_avec_boucle
 
-appel_llm = construire_appel_llm()
-resultat = tenter_generation_multi_agents(appel_llm)
+resultat = tenter_generation_avec_boucle()
 
 print(f"Algorithme recommande : {resultat.algorithme_recommande}")
 print(f"Justification : {resultat.justification_algorithme}")
@@ -222,7 +220,7 @@ with open("greensig_instance_trco_simulee.json") as f:
     instance = json.load(f)
 
 # Lancer le pipeline avec cette instance
-resultat = tenter_generation_multi_agents(appel_llm, instance_exemple=instance)
+resultat = tenter_generation_avec_boucle(instance_exemple=instance)
 
 print(f"Algorithme recommande : {resultat.algorithme_recommande}")
 print(f"Parametres : {resultat.parametres_algorithme}")

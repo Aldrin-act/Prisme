@@ -11,7 +11,7 @@ generation/
 ├── agents/                           # Code des agents
 │   ├── __init__.py                   # Exports publics
 │   ├── base.py                       # Utilitaires communs
-│   ├── client_llm.py                 # Interface LLM (Mistral, Claude, GPT)
+│   ├── client_llm.py                 # Interface LLM LangChain (Mistral, Qwen, Together, NVIDIA, MiniMax, DeepSeek)
 │   │
 │   ├── analyste.py                   # Agent 1 : Analyse
 │   ├── benchmarker.py                # Agent 2 : Choix de l'algorithme
@@ -52,8 +52,9 @@ Chaque agent suit le **même pattern** :
 ```python
 # 1. Imports
 from dataclasses import dataclass
-from generation.agents.base import charger_mission, extraire_json
-from generation.agents.client_llm import AppelLLM
+from langchain_core.messages import HumanMessage, SystemMessage
+from generation.agents.base import charger_mission, extraire_texte_brut
+from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
 
 # 2. Prompt système (personnalité)
 _PROMPT_SYSTEME = "Tu es un [rôle]. Tu réponds toujours en JSON strict."
@@ -70,22 +71,29 @@ class ResultatAgent:
         """Rendu lisible pour l'agent suivant."""
         return f"..."
 
-# 4. Fonction principale
-def fonction_agent(appel_llm: AppelLLM, *args) -> ResultatAgent:
+# 4. Fonction principale — `modele` est un `BaseChatModel` LangChain construit
+# par `construire_modele_pour_agent(nom_agent)` (routage par fournisseur/agent,
+# voir client_llm.py) ; la sortie structurée (schéma Pydantic) évite le
+# parsing JSON manuel de l'ancienne convention `AppelLLM`.
+def fonction_agent(modele: BaseChatModel, *args) -> ResultatAgent:
     # Charger prompt depuis fichier
     prompt = CHEMIN_PROMPT.read_text(encoding="utf-8")
-    
-    # Appeler LLM
-    reponse = appel_llm(_PROMPT_SYSTEME, prompt)
-    
-    # Parser JSON
-    donnees = extraire_json(reponse)
-    
+
+    # Appeler LLM (sortie structurée, retry sur erreur transitoire)
+    structure = modele.with_structured_output(
+        _SchemaAgent, include_raw=True, method=methode_sortie_structuree(modele)
+    )
+    sortie = _avec_retry(structure.invoke)(
+        [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
+    )
+    reponse_brute = extraire_texte_brut(sortie["raw"])
+    donnees = sortie["parsed"]
+
     # Retourner résultat structuré
     return ResultatAgent(
-        reponse_brute=reponse,
-        champ_1=donnees["champ_1"],
-        champ_2=donnees["champ_2"],
+        reponse_brute=reponse_brute,
+        champ_1=donnees.champ_1,
+        champ_2=donnees.champ_2,
         ...
     )
 ```
@@ -703,44 +711,39 @@ Estimation (instance 12 tâches, Mistral Large) :
 
 ```python
 from generation.agents import analyste
-from generation.agents.client_llm import construire_appel_llm
+from generation.agents.client_llm import construire_modele_pour_agent
 
-appel_llm = construire_appel_llm()
-resultat = analyste.analyser_mission(appel_llm)
+modele = construire_modele_pour_agent("analyste")
+resultat = analyste.analyser_mission(modele)
 
 print(resultat.entrees)
 print(resultat.sorties)
 print(resultat.contraintes_a_couvrir)
 ```
 
-### Pipeline Complet
+### Pipeline AVEC Boucle (Étape 6, production)
+
+`generation/graph.py` construit lui-même le `BaseChatModel` de chaque agent
+(routage par fournisseur via `construire_modele_pour_agent`, voir
+`config_fournisseurs.py`) — aucun client LLM à passer en argument.
 
 ```python
-from generation.pipeline_multi_agents import tenter_generation_multi_agents
-from generation.agents.client_llm import construire_appel_llm
+from generation.graph import tenter_generation_avec_boucle
 
-appel_llm = construire_appel_llm()
-resultat = tenter_generation_multi_agents(appel_llm)
+resultat = tenter_generation_avec_boucle(instance_exemple=instance.model_dump(mode="json"))
 
-if resultat.reussi:
+if resultat.reussi:  # propriété : validation statique + exécution + cascade toutes vertes
     print(f"✅ Code généré : {len(resultat.code_final)} caractères")
 else:
     print(f"❌ Échec : {resultat.erreur_execution}")
-```
 
-### Pipeline AVEC Boucle (Étape 6)
-
-```python
-from generation.pipeline_avec_boucle import tenter_generation_avec_boucle
-from generation.agents.client_llm import construire_appel_llm
-
-appel_llm = construire_appel_llm()
-resultat = tenter_generation_avec_boucle(appel_llm)
-
-# Historique des tentatives
+# Historique des tentatives de la boucle de réparation
 for i, tentative in enumerate(resultat.boucle_reparation.tentatives, 1):
     print(f"Tentative {i} : {'✅ SUCCÈS' if tentative.reussi else '❌ ÉCHEC'}")
 ```
+
+Version streaming (un `EvenementEtape` par agent/sous-étape, consommée par
+`api/routes/generation.py` pour le SSE) : `tenter_generation_avec_boucle_stream(...)`.
 
 ---
 

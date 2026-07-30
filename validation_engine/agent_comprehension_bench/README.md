@@ -87,8 +87,9 @@ python -m scripts.tester_agent_comprehension
 ### Phase 2 : Test avec LLM réel (🚧 à faire)
 
 **Prérequis** :
-- Variable d'environnement `PRISME_LLM_PROVIDER` (anthropic/openai)
-- Variable d'environnement avec clé API (`ANTHROPIC_API_KEY` ou `OPENAI_API_KEY`)
+- Variable d'environnement `PRISME_LLM_PROVIDER` (`mistral` par défaut, ou `qwen`/`together`/
+  `nvidia`/`minimax`/`deepseek`)
+- Variable d'environnement avec la clé API du fournisseur choisi (ex. `MISTRAL_API_KEY`)
 - Extra `.[llm]` installé (`uv sync --extra llm`)
 
 **Modifications nécessaires** dans `tester_agent_comprehension.py` :
@@ -97,13 +98,13 @@ python -m scripts.tester_agent_comprehension
 def tester_exemple_reel(exemple: dict[str, Any]) -> ResultatTest:
     """Teste avec un vrai appel LLM."""
     from adapters.agent_comprehension import comprendre_donnees_erp
-    from generation.client_llm import creer_client_llm
-    
-    client = creer_client_llm()
-    
+    from generation.agents.client_llm import construire_modele_comprehension
+
+    modele = construire_modele_comprehension()
+
     # Appeler l'agent
     resultat = comprendre_donnees_erp(
-        appel_llm=client.appeler,
+        modele=modele,
         donnees_brutes=exemple["donnees_brutes"]
     )
     

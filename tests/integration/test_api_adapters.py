@@ -103,6 +103,195 @@ def test_ingestion_via_comprehension_relaie_le_rejet_du_garde_fou() -> None:
         app.dependency_overrides.clear()
 
 
+def test_ingestion_depuis_csv_accepte_trois_fichiers_valides() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            files={
+                "taches": ("taches.csv", b"id,nom\nT1,Decoupe\nT2,Assemblage\n", "text/csv"),
+                "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n"
+                    b"precedence,T1,T2,,,\n"
+                    b"compatibilite_ressource_tache,,,T1,R1,10\n"
+                    b"compatibilite_ressource_tache,,,T2,R1,15\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["structure_contraintes"] == "compatibilite_ressource_tache,precedence"
+        assert corps["instance_id"] in etat_test.instances
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
+    """Bout en bout (§5.4) : plutôt que de saisir tache/ressource/duree à la
+    main, une ressource déclare une compétence et une tâche l'exige — la
+    compatibilité (et sa durée) est calculée par l'adaptateur, pas par
+    l'utilisateur (`adapters/csv_import/traducteur.py`)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            files={
+                "taches": ("taches.csv", b"id,duree_estimee_minutes\nT1,25\n", "text/csv"),
+                "ressources": ("ressources.csv", b"id,competences\nR1,decoupe\nR2,assemblage\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type,tache,competence\ncompetence_requise,T1,decoupe\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["structure_contraintes"] == "compatibilite_ressource_tache,competence_requise"
+        instance_id = corps["instance_id"]
+        _, instance = etat_test.instances[instance_id]
+        compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
+        assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_csv_rejette_une_extension_invalide() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            files={
+                "taches": ("taches.txt", b"id,nom\nT1,Decoupe\n", "text/plain"),
+                "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 422
+        assert etat_test.instances == {}
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_csv_relaie_une_colonne_manquante() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            files={
+                "taches": ("taches.csv", b"identifiant,nom\nT1,Decoupe\n", "text/csv"),
+                "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 422
+        assert "colonne" in reponse.json()["detail"]
+        assert etat_test.instances == {}
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_json_ingere_une_instance_canonique_sans_transformation() -> None:
+    """Sur-ensemble strict du format canonique (§5.4, `adapters/json_import/`) :
+    un payload sans compétence ni durée estimée est ingéré tel quel."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/json/client_test",
+            json={
+                "taches": [{"id": "T1"}],
+                "ressources": [{"id": "R1"}],
+                "contraintes": [
+                    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}
+                ],
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["structure_contraintes"] == "compatibilite_ressource_tache"
+        assert corps["instance_id"] in etat_test.instances
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_json_derive_la_compatibilite_par_competence() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/json/client_test",
+            json={
+                "taches": [{"id": "T1", "duree_estimee_minutes": 25}],
+                "ressources": [{"id": "R1", "competences": ["decoupe"]}, {"id": "R2", "competences": []}],
+                "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        instance_id = corps["instance_id"]
+        _, instance = etat_test.instances[instance_id]
+        compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
+        assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_json_relaie_une_duree_estimee_manquante() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/json/client_test",
+            json={
+                "taches": [{"id": "T1"}],
+                "ressources": [{"id": "R1", "competences": ["decoupe"]}],
+                "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
+            },
+        )
+
+        assert reponse.status_code == 422
+        assert "durée estimée manquante" in reponse.json()["detail"]
+        assert etat_test.instances == {}
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_ingestion_via_comprehension_signale_une_reponse_llm_non_conforme() -> None:
     app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
     app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(

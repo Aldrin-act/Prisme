@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import readXlsxFile from "read-excel-file/browser";
 import { z } from "zod";
 import {
   ArrowRightLeft,
   CheckCircle2,
   AlertCircle,
   AlertTriangle,
+  Download,
   FolderOpen,
   Lightbulb,
   Link2,
@@ -106,21 +108,91 @@ function DonneesPage() {
   );
 }
 
+type FormatFichierBrut = "csv" | "json" | "excel";
+
+const ACCEPT_PAR_FORMAT: Record<FormatFichierBrut, string> = {
+  csv: ".csv,text/csv",
+  json: ".json,application/json",
+  excel: ".xlsx",
+};
+
+// CSV/Excel : un export ERP tient rarement en un seul fichier (tâches,
+// ressources, contraintes sont souvent des tables séparées) — JSON reste à
+// un seul fichier, une instance déjà structurée n'a pas besoin d'être scindée.
+const NB_FICHIERS_PAR_FORMAT: Record<FormatFichierBrut, number> = { csv: 3, json: 1, excel: 3 };
+
+// Gabarits d'exemple téléchargeables (Front/prismatron-solver-forge/public/gabarits/,
+// voir scripts/generer_gabarit_csv.py et scripts/generer_gabarit_ingestion.py pour
+// la source de vérité régénérée côté backend — copie manuelle après changement).
+const GABARITS_PAR_FORMAT: Record<FormatFichierBrut, { nom: string; href: string }[]> = {
+  csv: [
+    { nom: "taches.csv", href: "/gabarits/taches.csv" },
+    { nom: "ressources.csv", href: "/gabarits/ressources.csv" },
+    { nom: "contraintes.csv", href: "/gabarits/contraintes.csv" },
+  ],
+  json: [{ nom: "instance_exemple.json", href: "/gabarits/instance_exemple.json" }],
+  excel: [{ nom: "gabarit_ingestion_trco.xlsx", href: "/gabarits/gabarit_ingestion_trco.xlsx" }],
+};
+
+// Convertit chaque feuille en un bloc texte lisible (comma-séparé) — l'agent
+// de compréhension attend du texte brut, jamais un classeur binaire tel quel.
+function feuillesExcelEnTexte(feuilles: Awaited<ReturnType<typeof readXlsxFile>>): string {
+  return feuilles
+    .map(
+      ({ sheet, data }) =>
+        `# ${sheet}\n` + data.map((ligne) => ligne.map((cellule) => cellule ?? "").join(",")).join("\n"),
+    )
+    .join("\n\n");
+}
+
 function FormulaireNouveauProjet({ onCree }: { onCree: (projetId: string) => void }) {
   const creer = useCreerProjet();
-  const inputFichierRef = useRef<HTMLInputElement>(null);
+  const inputFichierRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
   const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
   const [nom, setNom] = useState("");
   const [donneesBrutes, setDonneesBrutes] = useState("");
+  const [formatFichier, setFormatFichier] = useState<FormatFichierBrut>("csv");
+  const [fichiers, setFichiers] = useState<(File | null)[]>([null, null, null]);
+  const [chargementFichier, setChargementFichier] = useState(false);
+  const [erreurFichier, setErreurFichier] = useState<string | null>(null);
 
   const erreur = creer.error as PrismeAPIError | null;
 
-  async function chargerFichier(fichier: File | null) {
-    if (!fichier) return;
-    setDonneesBrutes(await fichier.text());
+  function changerFormat(format: FormatFichierBrut) {
+    setFormatFichier(format);
+    setFichiers([null, null, null]);
+    setErreurFichier(null);
+    inputFichierRefs.forEach((ref) => {
+      if (ref.current) ref.current.value = "";
+    });
+  }
+
+  async function lireFichier(fichier: File): Promise<string> {
+    if (formatFichier === "excel") return feuillesExcelEnTexte(await readXlsxFile(fichier));
+    return fichier.text();
+  }
+
+  async function definirFichier(index: number, fichier: File | null) {
+    const nouveauxFichiers = fichiers.map((f, i) => (i === index ? fichier : f));
+    setFichiers(nouveauxFichiers);
+    setErreurFichier(null);
+    setChargementFichier(true);
+    try {
+      const presents = nouveauxFichiers.filter((f): f is File => f !== null);
+      const contenus = await Promise.all(presents.map((f) => lireFichier(f)));
+      setDonneesBrutes(
+        presents.length > 1
+          ? contenus.map((c, i) => `--- ${presents[i].name} ---\n${c}`).join("\n\n")
+          : (contenus[0] ?? ""),
+      );
+    } catch {
+      setErreurFichier("Fichier illisible — vérifiez qu'il correspond bien au format sélectionné ci-dessus.");
+    } finally {
+      setChargementFichier(false);
+    }
   }
 
   function enregistrer() {
@@ -158,15 +230,49 @@ function FormulaireNouveauProjet({ onCree }: { onCree: (projetId: string) => voi
 
       <div className="space-y-1.5">
         <Label htmlFor="fichier_brut">Fichier de données brutes (optionnel)</Label>
-        <Input
-          id="fichier_brut"
-          ref={inputFichierRef}
-          type="file"
-          onChange={(e) => chargerFichier(e.target.files?.[0] ?? null)}
-        />
+        <Tabs value={formatFichier} onValueChange={(v) => changerFormat(v as FormatFichierBrut)}>
+          <TabsList className="h-8">
+            <TabsTrigger value="csv" className="text-xs">CSV</TabsTrigger>
+            <TabsTrigger value="json" className="text-xs">JSON</TabsTrigger>
+            <TabsTrigger value="excel" className="text-xs">Excel</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          <span className="text-muted-foreground">Gabarit d'exemple :</span>
+          {GABARITS_PAR_FORMAT[formatFichier].map((gabarit) => (
+            <a
+              key={gabarit.href}
+              href={gabarit.href}
+              download
+              className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
+            >
+              <Download className="h-3 w-3" /> {gabarit.nom}
+            </a>
+          ))}
+        </div>
+        <div className="space-y-2">
+          {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => (
+            <Input
+              key={index}
+              id={index === 0 ? "fichier_brut" : undefined}
+              ref={inputFichierRefs[index]}
+              type="file"
+              accept={ACCEPT_PAR_FORMAT[formatFichier]}
+              onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
+            />
+          ))}
+        </div>
+        {chargementFichier && <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>}
+        {erreurFichier && (
+          <p className="flex items-center gap-1.5 text-xs text-destructive">
+            <AlertCircle className="h-3.5 w-3.5" /> {erreurFichier}
+          </p>
+        )}
         <p className="text-xs text-muted-foreground">
-          Charge le contenu du fichier dans le champ ci-dessous — vous pouvez aussi coller le texte
-          directement, quel que soit son format (export CSV, JSON, tableau collé...).
+          {NB_FICHIERS_PAR_FORMAT[formatFichier] > 1
+            ? "Jusqu'à 3 fichiers — un par table si votre export en a plusieurs (tâches, ressources, contraintes...), leur contenu est concaténé ci-dessous."
+            : "Charge le contenu du fichier dans le champ ci-dessous."}{" "}
+          Vous pouvez aussi coller le texte directement (export CSV, JSON, tableau collé...).
         </p>
       </div>
 

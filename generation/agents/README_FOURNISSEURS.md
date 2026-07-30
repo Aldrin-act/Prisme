@@ -18,7 +18,7 @@ Utilisé pour les tâches nécessitant un raisonnement complexe et de grands con
 - **Reviewer** : Thinking mode pour revue critique approfondie
 - **Agent ERP Compréhension** : 16K tokens pour grandes données ERP, mapping complexe
 
-### MiniMax M2.7 (2 agents) 💡
+### MiniMax M3 (2 agents) 💡
 **Caractéristiques** : Créativité maximale (temp=1.0), 8K tokens
 
 Utilisé pour les tâches nécessitant créativité et exploration :
@@ -26,19 +26,18 @@ Utilisé pour les tâches nécessitant créativité et exploration :
 - **Benchmarker** : Exploration créative d'algorithmes alternatifs (CP-SAT, GA, ACO, etc.)
 - **Optimiseur** : Optimisations non évidentes, approches créatives
 
-### NVIDIA Qwen3-Next-80B (1 agent) 🎯
+### NVIDIA Llama-3.3-70B (1 agent) 🎯
 **Caractéristiques** : Déterministe (temp=0.6), 4K tokens
 
 Utilisé pour les tâches simples et structurées :
 
 - **Documentation** : Tâche simple, peu de tokens, sortie structurée
 
-### Together Qwen2.5-72B (1 agent) ⚖️
-**Caractéristiques** : Équilibré (temp=0.7), 8K tokens
+### Testeur : DeepSeek (fallback depuis Together)
 
-Utilisé pour équilibre créativité/structure :
-
-- **Testeur** : Bon équilibre entre créativité (edge cases) et structure (pytest)
+- **Testeur** : routé sur DeepSeek (16K tokens) dans `config_fournisseurs.py`,
+  Together n'est plus utilisé pour aucun agent par défaut malgré son
+  intégration (`_construire_modele_together` dans `client_llm.py`).
 
 ### Mistral Large (fallback) 🔄
 **Utilisé comme** : Provider par défaut si non spécifié
@@ -47,13 +46,13 @@ Utilisé pour équilibre créativité/structure :
 
 ### Mode automatique (recommandé)
 
-Le pipeline multi-agents utilise automatiquement la configuration optimale :
+Le pipeline (`generation/graph.py`, StateGraph LangGraph) utilise automatiquement la configuration optimale :
 
 ```python
-from generation.pipeline_multi_agents import tenter_generation_multi_agents
+from generation.graph import tenter_generation_avec_boucle
 
 # Chaque agent utilisera automatiquement son fournisseur optimal
-resultat = tenter_generation_multi_agents()
+resultat = tenter_generation_avec_boucle(instance_exemple=instance.model_dump(mode="json"))
 ```
 
 ### Surcharge par agent (avancé)
@@ -77,17 +76,17 @@ Vous pouvez aussi surcharger le modèle pour un agent :
 export PRISME_LLM_MODEL_DEBUGGER=deepseek-ai/deepseek-v4-ultra
 ```
 
-### Mode manuel (ancien comportement)
+### Mode manuel
 
 Pour utiliser un agent individuellement avec un fournisseur personnalisé :
 
 ```python
-from generation.agents.client_llm import construire_appel_llm_pour_agent
+from generation.agents.client_llm import construire_modele_pour_agent
 from generation.agents import analyste
 
 # Utilise automatiquement DeepSeek (config optimale)
-appel = construire_appel_llm_pour_agent("analyste")
-resultat = analyste.analyser_mission(appel)
+modele = construire_modele_pour_agent("analyste")
+resultat = analyste.analyser_mission(modele)
 ```
 
 ## Configuration
@@ -142,34 +141,26 @@ Observabilité (durée/coût/tokens par agent, tracing des appels LLM) : LangSmi
 
 ## Fournisseurs disponibles
 
-| Provider | Modèle | Temp | Top P | Max Tokens | Spécialité |
+| Provider | Modèle par défaut | Temp | Top P | Max Tokens | Spécialité |
 |----------|--------|------|-------|------------|------------|
 | deepseek | deepseek-v4-pro | 1.0 | 0.95 | 16384 | Raisonnement complexe |
-| minimax | minimax-m2.7 | 1.0 | 0.95 | 8192 | Créativité |
-| nvidia | qwen3-next-80b | 0.6 | 0.7 | 4096 | Déterminisme |
-| together | Qwen2.5-72B | 0.7 | 0.9 | 8192 | Équilibré |
-| mistral | mistral-large | N/A | N/A | N/A | Fallback |
+| minimax | minimax-m3 | 1.0 | 0.95 | 8192 | Créativité |
+| nvidia | llama-3.3-70b-instruct | 0.6 | 0.7 | 4096 | Déterminisme |
+| together | Qwen2.5-72B | 0.7 | 0.9 | 8192 | Équilibré (non utilisé par défaut, voir ci-dessus) |
+| mistral | mistral-large-latest | N/A | N/A | N/A | Fallback |
 
-## Migration depuis l'ancien système
+Modèles par défaut définis dans `_MODELES_PAR_DEFAUT` (`client_llm.py`), surchageables par
+`PRISME_LLM_MODEL_<AGENT>` — les défauts NVIDIA/MiniMax ont déjà été mis à jour une fois en
+pratique après que les modèles précédents (qwen3-next-80b, minimax-m2.7) ont atteint leur fin
+de vie côté catalogue.
 
-### Avant (unique fournisseur)
-```python
-from generation.agents.client_llm import construire_appel_llm
+## Historique
 
-# Tous les agents utilisaient le même fournisseur
-appel = construire_appel_llm()
-resultat = tenter_generation_multi_agents(appel)
-```
-
-### Après (configuration optimale)
-```python
-from generation.pipeline_multi_agents import tenter_generation_multi_agents
-
-# Chaque agent utilise son fournisseur optimal automatiquement
-resultat = tenter_generation_multi_agents()
-```
-
-Le paramètre `appel_llm` est conservé pour rétrocompatibilité mais est ignoré.
+L'ancienne convention (avant l'introduction de LangChain/LangGraph) exposait un type
+`AppelLLM` (`Callable[[str, str], str]`, texte brut) construit par `construire_appel_llm()`,
+un unique fournisseur pour tous les agents. Entièrement retiré une fois le dernier appelant
+converti aux `BaseChatModel` LangChain de `client_llm.py` — il n'existe plus de mode « ancien
+comportement » ni de paramètre `appel_llm` conservé pour compatibilité.
 
 ## Troubleshooting
 

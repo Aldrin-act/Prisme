@@ -199,6 +199,32 @@ export const prismeClient = {
     );
   },
 
+  // Import depuis trois fichiers CSV séparés — Tâches, Ressources, Contraintes
+  // (POST /adapters/csv/{client_id}, multipart, voir adapters/csv_import/).
+  importerFichiersCsv: (
+    clientId: string,
+    fichiers: { taches: File; ressources: File; contraintes: File },
+  ) => {
+    const corps = new FormData();
+    corps.append("taches", fichiers.taches);
+    corps.append("ressources", fichiers.ressources);
+    corps.append("contraintes", fichiers.contraintes);
+    return apiFetch<Types.ReponseImportAdaptateur>(
+      `${PRISME_CONFIG.routes.adapters}/csv/${clientId}`,
+      { method: "POST", body: corps },
+    );
+  },
+
+  // Import depuis un JSON "brut avec compétences" (POST /adapters/json/{client_id},
+  // voir adapters/json_import/) — sur-ensemble du format T-R-C-O canonique :
+  // une tâche peut porter une durée estimée, permettant de dériver sa
+  // compatibilité depuis des compétences plutôt que de la déclarer à la main.
+  importerJsonAvecCompetences: (clientId: string, payload: Record<string, unknown>) =>
+    apiFetch<Types.ReponseImportAdaptateur>(`${PRISME_CONFIG.routes.adapters}/json/${clientId}`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
   // Agent de compréhension : convertit des données brutes (texte libre, ERP
   // sans adaptateur dédié) en instance T-R-C-O via un LLM, sous le même
   // garde-fou de validation que les autres canaux d'ingestion.

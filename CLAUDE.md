@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.Must stay at 200 lines 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## What this is
 
@@ -102,17 +102,17 @@ found and fixed then.
   `validation_engine/` — both §6.7 guardrails run on the **host**; it registers the loaded module in
   `sys.modules` before `exec_module` (`dataclasses` needs `cls.__module__` resolvable) — **verified
   (PH0-T4):** omitting this crashed every frozen `@dataclass` solver on the first real Docker run.
-- **Étape 8 — API + adapters** (`api/`, `adapters/`): grew into a multi-tenant surface — `Client`/
-  `Projet` (raw ingested data → curated `InstanceTRCO`, both in `api/etat.py`) sit above
-  `routes/ingestion.py` (→ `input_validation/`, §6.7 guardrail), `routes/execution.py` (solver
-  lookup by `client_id` + **exact** constraint-type-signature match — deliberate literal reading:
-  `"precedence,compatibilite_ressource_tache"` won't match an instance using only one),
-  `routes/planning.py`/`planifier.py`/`audit.py` (source, explicit request only), `routes/auth.py`/
-  `clients.py` (JWT, see env vars above); `adapters/` gained `tableur/` (xlsx, §5.4, `openpyxl`)
-  and `agent_comprehension/` (LLM-proposed mapping, never trusted directly — same guardrail judges
-  it) alongside `erp_reference/`/`greensig/`. **Verified (PH0-T4):** `demo_bout_en_bout`/
-  `test_api_bout_en_bout.py` run clean end to end (predates multi-tenant/auth). Docker/Postgres
-  tests **skip**, not fail, if unreachable (`conftest.py` fixtures).
+- **Étape 8 — API + adapters** (`api/`, `adapters/`): a multi-tenant surface — **Instance**
+  (`api/etat.py`) is a reusable, sector-specific business-rule template; **Projet** reuses one as
+  `Projet.instance_id` (reassignable) and owns its own independent execution/planning history —
+  inverted from the original one-Projet-to-many-Instances model, execution triggers on **Projet**.
+  Sits above `routes/ingestion.py` (→ `input_validation/`, §6.7 guardrail), `routes/execution.py`
+  (**`POST /execution/{projet_id}`**, not by instance — solver lookup by `client_id` + the projet's
+  current instance's **exact** constraint-type-signature match), `routes/planning.py`/`planifier.py`/
+  `audit.py` (source, explicit request only), `routes/auth.py`/`clients.py` (JWT, see env vars
+  above); `adapters/` — see module map below. **Verified (PH0-T4):** `demo_bout_en_bout`/
+  `test_api_bout_en_bout.py` run clean end to end. Docker/Postgres tests **skip**, not fail, if
+  unreachable (`conftest.py` fixtures).
 
 Codebase is **French** (identifiers, docstrings, domain terms) — match it (`Tache`, `Ressource`,
 `faisabilité`...). Commit messages: short imperative French, focusing on *why* over *what* (e.g.,
@@ -159,7 +159,7 @@ calendars, priorities/due dates, capacity stay **out of scope** by design; guard
 | `validation_engine/` | Validation cascade + `stability_test.py` |
 | `solver_store/` + `sandbox/` | Persistent registry (`registry.py`) + frozen `artifacts/`; ephemeral disposable-container execution (`runner.py`, `container/`) |
 | `api/` | `auth`/`clients` (JWT, multi-tenant), `projets`/`ingestion`/`adapters`, `generation` (SSE), `execution`/`planning`/`planifier`/`audit`/`validation`/`diagnostics`/`supervision`; state via `etat.py` (in-memory, tests) or `etat_postgres.py` (prod), same interface |
-| `adapters/` | ERP anti-corruption layer: `erp_reference/` (PoC), `greensig/` (real ERP), `tableur/` (xlsx), `agent_comprehension/` (LLM-proposed mapping, never trusted directly) |
+| `adapters/` | ERP anti-corruption layer: `erp_reference/` (PoC), `greensig/` (real ERP), `tableur/`/`csv_import/`/`json_import/` (xlsx/CSV/JSON; the latter two can derive `CompatibiliteRessourceTache` from declared competences + an estimated duration instead of it being hand-typed, shared logic in `competence_derivation.py`), `agent_comprehension/` (LLM-proposed mapping, never trusted directly) |
 | `Front/prismatron-solver-forge/` | TanStack Start + React + TS + Tailwind — auth, clients, instances, solver-generator (SSE), execution, schedules, analytics |
 | `tests/` | `unit/`, `integration/` only — no separate property-based/generation-stability suites (see below) |
 | `docs/` | Substantial by now: agent pipeline (`agents_utilises.md`, `agents_fonctionnement_detaille.md`, `schema_agents.md`), `boucle_reparation.md`, DSL nomenclature |

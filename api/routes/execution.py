@@ -44,8 +44,7 @@ def executer_pour_projet(
         raise HTTPException(
             status_code=409,
             detail=(
-                f"aucun solveur validé pour client={client_id!r}, "
-                f"structure={structure!r}, objectifs={objectifs!r}"
+                f"aucun solveur validé pour client={client_id!r}, structure={structure!r}, objectifs={objectifs!r}"
             ),
         )
     artefact = solveurs[0]

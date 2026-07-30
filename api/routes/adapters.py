@@ -20,13 +20,19 @@ instance silencieusement tronquée.
 
 from __future__ import annotations
 
+from typing import Any
+
 import psycopg
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Body, Depends, File, HTTPException, UploadFile
 from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import comprendre_donnees_erp
+from adapters.csv_import import ErreurFichierInvalide as ErreurFichierCsvInvalide
+from adapters.csv_import import traduire as traduire_csv
 from adapters.greensig import extraire_payload, traduire
+from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
+from adapters.json_import import traduire as traduire_json
 from adapters.tableur import ErreurFichierInvalide
 from adapters.tableur import traduire as traduire_tableur
 from api.autorisation import verifier_acces_client
@@ -77,6 +83,66 @@ async def ingerer_depuis_tableur(
     try:
         instance = traduire_tableur(contenu)
     except ErreurFichierInvalide as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    instance_id = etat.enregistrer_instance(client_id, instance)
+    return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
+
+
+@router.post("/csv/{client_id}")
+async def ingerer_depuis_csv(
+    client_id: str,
+    taches: UploadFile = File(...),
+    ressources: UploadFile = File(...),
+    contraintes: UploadFile = File(...),
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, str]:
+    """Ingestion depuis trois fichiers CSV séparés (§5.4) — Tâches, Ressources
+    et Contraintes, mêmes colonnes que les onglets du gabarit xlsx
+    (`adapters/csv_import/`), pour qui préfère exporter en CSV plutôt que
+    remplir un classeur Excel."""
+    verifier_acces_client(utilisateur, client_id)
+    for fichier in (taches, ressources, contraintes):
+        if not (fichier.filename or "").lower().endswith(".csv"):
+            nom = fichier.filename or "(sans nom)"
+            raise HTTPException(status_code=422, detail=f"{nom} doit être un fichier .csv")
+
+    taches_octets, ressources_octets, contraintes_octets = (
+        await taches.read(),
+        await ressources.read(),
+        await contraintes.read(),
+    )
+    try:
+        instance = traduire_csv(taches_octets, ressources_octets, contraintes_octets)
+    except ErreurFichierCsvInvalide as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    instance_id = etat.enregistrer_instance(client_id, instance)
+    return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
+
+
+@router.post("/json/{client_id}")
+def ingerer_depuis_json_avec_competences(
+    client_id: str,
+    payload: dict[str, Any] = Body(...),
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, str]:
+    """Ingestion depuis un JSON « brut avec compétences » (§5.4, `adapters/json_import/`)
+    — sur-ensemble strict d'une instance T-R-C-O canonique : une tâche peut y
+    porter une durée estimée (`duree_estimee_minutes`), permettant de dériver
+    sa compatibilité depuis des `CompetenceRequise`/`Ressource.competences`
+    plutôt que de la déclarer à la main. Un payload sans rien de tout ça est
+    ingéré tel quel, sans transformation."""
+    verifier_acces_client(utilisateur, client_id)
+    try:
+        instance = traduire_json(payload)
+    except ErreurPayloadJsonInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
