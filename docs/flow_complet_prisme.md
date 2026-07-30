@@ -21,7 +21,9 @@ Ce document décrit le cycle de vie complet d'une instance de scheduling dans PR
        ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ ÉTAPE 2 : GÉNÉRATION DU SOLVEUR (première fois seulement)   │
-│ • LLM génère code CP-SAT OR-Tools                           │
+│ • Benchmarker choisit l'algorithme (cp_sat exact, ou une     │
+│   heuristique genetic/aco/tabu/... pour les grandes instances)│
+│ • LLM génère le code pour cet algorithme                    │
 │ • Validation statique (AST allowlist)                       │
 │ • Exécution test sur instance source                        │
 │ • Cascade de validation (faisabilité, optimalité, fidélité)│

@@ -200,13 +200,13 @@ def construire(chemin_sortie: Path) -> None:
             ("tache *", 22, "Doit être un id déclaré dans l'onglet Tâches."),
             ("ressource *", 22, "Doit être un id déclaré dans l'onglet Ressources."),
             (
-                "duree_minutes *",
+                "duree_jours *",
                 18,
-                "Durée en minutes pour CE couple tâche-ressource précisément (nombre entier positif).",
+                "Durée en jours pour CE couple tâche-ressource précisément (nombre entier positif).",
             ),
         ],
     )
-    _ligne_exemple(ws, ["T1", "R1", 30], note="← exemple : T1 prend 30 min sur M1")
+    _ligne_exemple(ws, ["T1", "R1", 3], note="← exemple : T1 prend 3 jours sur R1")
     _bordures_vides(ws, 3)
     dv_c_tache = DataValidation(
         type="list", formula1=f"='Tâches'!$A$2:$A${N_LIGNES_VALIDATION}", allow_blank=True, showErrorMessage=True
@@ -226,7 +226,7 @@ def construire(chemin_sortie: Path) -> None:
     dv_duree = DataValidation(
         type="whole", operator="greaterThan", formula1="0", allow_blank=True, showErrorMessage=True
     )
-    dv_duree.error = "La durée doit être un nombre entier positif (en minutes)."
+    dv_duree.error = "La durée doit être un nombre entier positif (en jours)."
     ws.add_data_validation(dv_duree)
     dv_duree.add(f"C3:C{N_LIGNES_VALIDATION}")
 

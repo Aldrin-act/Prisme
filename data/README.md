@@ -158,12 +158,16 @@ python -m scripts.transformer_donnees_brutes --input-dir data/donnees_brutes/jso
 │ Instance TRCO  │  Format canonique validé (DSL)
 └────────┬───────┘
          │
-         │  generation/tentative_unique.py
+         │  generation/tentative_unique.py (mode single-shot legacy)
          ▼
 ┌────────────────┐
-│ Solveur CP-SAT │  Code Python généré par LLM
-└────────────────┘
+│ Solveur CP-SAT │  Code Python généré par LLM (ce module ne choisit pas
+└────────────────┘  d'algorithme — pas de Benchmarker sur ce chemin)
 ```
+
+Chemin de production réel : `generation/graph.py`, où un agent Benchmarker choisit l'algorithme
+(`cp_sat` exact, ou une heuristique genetic/aco/tabu/... pour les grandes instances) avant que le
+code soit généré — voir [CLAUDE.md](../CLAUDE.md), section Étape 6.
 
 ## Documentation
 

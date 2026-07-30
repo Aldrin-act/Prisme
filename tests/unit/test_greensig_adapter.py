@@ -43,9 +43,9 @@ def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
     assert {r.id for r in instance.ressources} == {"E100", "E200"}
 
 
-def test_duree_convertie_en_minutes_depuis_la_charge_estimee() -> None:
+def test_duree_convertie_en_jours_depuis_la_charge_estimee() -> None:
     payload = PayloadGreenSIG(
-        taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=2.5, equipes_ids=[100])],
+        taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=48.0, equipes_ids=[100])],
         equipes=[EquipeGreenSIG(id=100, nom_equipe="Equipe Nord", actif=True)],
         types_tache=[TypeTacheGreenSIG(id=10, nom_tache="Tonte")],
     )
@@ -54,7 +54,7 @@ def test_duree_convertie_en_minutes_depuis_la_charge_estimee() -> None:
 
     compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
     assert len(compatibilites) == 1
-    assert compatibilites[0] == CompatibiliteRessourceTache(tache="T1", ressource="E100", duree=150)
+    assert compatibilites[0] == CompatibiliteRessourceTache(tache="T1", ressource="E100", duree=2)
 
 
 def test_duree_par_defaut_si_charge_estimee_absente() -> None:
@@ -67,17 +67,18 @@ def test_duree_par_defaut_si_charge_estimee_absente() -> None:
     instance = traduire(payload)
 
     compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
-    assert compatibilites[0].duree == 30
+    assert compatibilites[0].duree == 1
 
 
-def test_duree_plancher_a_une_minute_si_charge_arrondit_a_zero() -> None:
-    """Observé sur données réelles (`backup_20260503.sql`) : une
-    charge_estimee_heures non nulle mais minuscule (quelques secondes)
-    arrondit à 0 minute — `CompatibiliteRessourceTache.duree` exige `> 0`,
-    donc jamais 0, mais pas non plus le défaut de 30 min (qui ne vaut que
-    pour une charge réellement absente)."""
+def test_duree_plancher_a_un_jour_pour_une_charge_typique_de_quelques_heures() -> None:
+    """Conséquence assumée du passage du DSL en jours : GreenSIG ne stocke
+    que `charge_estimee_heures`, typiquement quelques heures (tondre,
+    désherber...) — bien en-dessous d'un jour. `round(heures / 24)` ramène
+    donc quasi toute charge non nulle à 0, plancher à 1 (`CompatibiliteRessourceTache.duree`
+    exige `> 0`) : la quasi-totalité des tâches GreenSIG deviennent 1 jour,
+    la granularité fine en heures est perdue (voir `duree_jours_pour`)."""
     payload = PayloadGreenSIG(
-        taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=0.00064453125, equipes_ids=[100])],
+        taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=2.5, equipes_ids=[100])],
         equipes=[EquipeGreenSIG(id=100, nom_equipe="Equipe Nord", actif=True)],
         types_tache=[TypeTacheGreenSIG(id=10, nom_tache="Tonte")],
     )
@@ -101,7 +102,7 @@ def test_meme_duree_appliquee_a_chaque_equipe_compatible() -> None:
     instance = traduire(payload)
 
     durees = {c.ressource: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)}
-    assert durees == {"E100": 60, "E200": 60}
+    assert durees == {"E100": 1, "E200": 1}
 
 
 def test_taches_supprimees_exclues() -> None:

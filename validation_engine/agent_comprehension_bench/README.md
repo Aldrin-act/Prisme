@@ -218,18 +218,18 @@ Une fois le benchmark de l'agent validé (taux > 95%), vous pouvez passer aux ph
 
 ### Option A : Améliorer la génération de solveurs
 
-**Objectif** : Mesurer et améliorer le taux de succès du générateur de code CP-SAT.
+> Étape 6 (boucle de réparation bornée) est **implémentée** (`generation/graph.py`, StateGraph
+> LangGraph avec agent Benchmarker choisissant l'algorithme par instance — cp_sat ou une
+> heuristique) et câblée à l'API (`api/routes/generation.py`) — ce n'est plus un « à faire ».
+
+**Objectif** : Mesurer et améliorer le taux de succès de la génération.
 
 **À faire** :
-1. Lancer `scripts/mesurer_taux_succes_generation.py` (nécessite LLM)
-2. Analyser quels types d'instances échouent
-3. Améliorer les prompts dans `generation/agents/`
-4. Implémenter la boucle de réparation (Étape 6, actuellement skippée)
-
-**Fichiers concernés** :
-- `generation/tentative_unique.py` (génération single-shot)
-- `generation/loop.py` (boucle de réparation, à créer)
-- `generation/failures/` (diagnostic d'échecs, à créer)
+1. Lancer `scripts/mesurer_taux_succes_generation.py` (mode single-shot legacy, pour itération
+   rapide/économique — nécessite LLM)
+2. Analyser quels types d'instances échouent (voir l'historique de tentatives par job,
+   `GET /generation/jobs/{id}/historique`)
+3. Améliorer les prompts dans `generation/prompts/`
 
 ### Option B : Compléter le dashboard
 

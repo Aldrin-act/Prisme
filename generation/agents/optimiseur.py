@@ -23,6 +23,10 @@ if TYPE_CHECKING:
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "optimiseur.md"
 
 _PROMPT_SYSTEME = (
+    # CP-SAT-only, jamais mis à jour pour être algorithme-agnostique comme
+    # l'Architecte/le Développeur/le Debugger — sans conséquence tant que cet
+    # agent reste orphelin (non appelé par generation/graph.py, voir le
+    # docstring du module).
     "Tu es un ingénieur performance spécialisé en modèles CP-SAT et en code Python sobre. "
     "Tu réponds toujours en JSON strict, jamais en texte libre."
 )

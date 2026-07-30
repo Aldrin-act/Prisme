@@ -3,7 +3,7 @@
 **Génération de solveurs d'ordonnancement pilotée par IA**
 Projet de Fin d'Études — EIGSI Casablanca × BARAA Consult
 
-FJSP (Flexible Job-Shop Scheduling) résolu par OR-Tools CP-SAT — code généré une fois, ré-exécuté en bac à sable.
+FJSP (Flexible Job-Shop Scheduling), algorithme choisi par instance (CP-SAT exact ou heuristique) — code généré une fois, ré-exécuté en bac à sable.
 
 | | |
 |---|---|
@@ -71,6 +71,8 @@ Analyste → Benchmarker → Architecte → Développeur → Testeur →
    └───────────────────────────────────────────────────┘
 → Documentation
 ```
+
+**Benchmarker** — toujours appelé, avant l'Architecte : choisit l'algorithme dans un catalogue (CP-SAT exact, ou génétique/ACO/tabu/recuit simulé/dispatching/greedy) selon la taille et la structure de l'instance, jamais un choix fixé en dur.
 
 Bornée, hors-ligne, diagnostique (§6.6) : après épuisement des tentatives, l'échec remonte tel quel à un humain — jamais d'acharnement automatique silencieux.
 

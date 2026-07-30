@@ -131,25 +131,25 @@ Produis une spécification détaillée.
 
 ### 3️⃣ ARCHITECTE
 
-**Rôle** : Concevoir l'architecture du modèle CP-SAT.
+**Rôle** : Concevoir la structure interne du solveur — algorithme-agnostique : reçoit
+`algorithme`/`parametres` du Benchmarker (`concevoir_modele(modele, analyse, algorithme="cp_sat",
+parametres=None)`), et adapte son plan en conséquence (variables/contraintes CP-SAT pour un
+algorithme exact, ou encodage de solution/opérateurs pour une heuristique génétique/ACO/tabu/recuit
+simulé/dispatching). Prompt système réel : *« Tu es un architecte logiciel spécialisé en
+optimisation combinatoire (CP-SAT/OR-Tools et métaheuristiques d'ordonnancement) »*.
 
 **Input** :
-- Spécification (output de l'Analyste)
+- Spécification (output de l'Analyste) + algorithme et paramètres recommandés par le Benchmarker
 
-**Prompt** :
-```
-À partir de cette spécification, conçois l'architecture du modèle OR-Tools :
-- Quelles variables (start_times, durations, assigned_resources) ?
-- Quelles contraintes (precedence, no_overlap, compatibility) ?
-- Comment modéliser l'objectif (makespan) ?
-```
+**Output** : `ResultatConception` — champs volontairement génériques (pas « CP-SAT » en dur, car le
+contenu peut décrire un algorithme alternatif) :
+- `variables` : représentation de la solution (variables CP-SAT, ou encodage chromosomique pour un
+  GA, structure de solution pour ACO/tabu...)
+- `contraintes_modele` : contraintes métier à respecter dans le modèle
+- `objectif` : objectif à optimiser
+- `fonctions_internes` : fonctions internes éventuelles
 
-**Output** : `PlanTechnique`
-- Architecture détaillée :
-  - Variables à créer
-  - Contraintes à ajouter
-  - Objectif à minimiser
-- Exemple :
+Exemple pour `algorithme="cp_sat"` :
   ```
   Variables :
   - start[t] : IntVar(0, 1000) pour chaque tâche t
@@ -165,6 +165,10 @@ Produis une spécification détaillée.
   - Minimize(makespan)
   ```
 
+Pour `algorithme="genetic"` (ou une autre heuristique), le contenu décrit à la place l'encodage
+chromosomique, les opérateurs de croisement/mutation, la fonction de fitness, etc. — la structure
+`ResultatConception` reste la même, seul son contenu textuel change.
+
 **Durée moyenne** : ~15s
 
 **Fichier** : `generation/agents/architecte.py`
@@ -173,25 +177,21 @@ Produis une spécification détaillée.
 
 ### 4️⃣ DÉVELOPPEUR (Générateur)
 
-**Rôle** : Générer le code Python implémentant le modèle CP-SAT.
+**Rôle** : Générer le code Python implémentant le plan de l'Architecte — algorithme-agnostique,
+prompt système réel : *« Tu es un générateur de code Python expert en optimisation combinatoire »*
+(`generation/agents/generateur.py`, pas de « CP-SAT » en dur). Le code produit importe
+`ortools.sat.python.cp_model` seulement quand l'algorithme choisi par le Benchmarker est `cp_sat` ;
+pour une heuristique, il implémente plutôt l'algorithme décrit par l'Architecte (boucle génétique,
+ACO, tabu search...) sans dépendre d'OR-Tools.
 
 **Input** :
-- Plan technique (output de l'Architecte)
-
-**Prompt** :
-```
-Génère le code Python complet d'un solveur OR-Tools CP-SAT qui :
-- Prend en entrée une InstanceTRCO
-- Retourne un Planning ou None
-- Utilise la signature : def resoudre(instance: InstanceTRCO) -> Planning | None
-- Respecte l'architecture décrite dans le plan technique
-```
+- Plan technique (output de l'Architecte) + algorithme recommandé par le Benchmarker
 
 **Output** : `CodeGenere`
 - Code source Python (~100-200 lignes)
-- Imports : `from ortools.sat.python import cp_model`, `from dsl.schema import *`
-- Fonction `resoudre(instance)` implémentée
-- Exemple (extrait) :
+- Fonction `resoudre(instance: InstanceTRCO) -> Planning | None` implémentée, quel que soit
+  l'algorithme
+- Exemple pour `algorithme="cp_sat"` (extrait) :
   ```python
   from ortools.sat.python import cp_model
   from dsl.schema.instance import InstanceTRCO

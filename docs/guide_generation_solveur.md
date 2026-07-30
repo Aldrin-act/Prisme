@@ -1,8 +1,15 @@
-# Guide : Génération du Solveur (Étape 4)
+# Guide : Génération du Solveur (Étape 4, mode single-shot legacy)
+
+> Ce guide décrit `generation/tentative_unique.py` (un seul appel LLM, sans boucle de réparation
+> ni choix d'algorithme) — utile pour l'itération rapide/économique en dev, mais **pas** le chemin
+> de production : voir `generation/graph.py` (Étape 6, LangGraph) pour le pipeline réel, où un
+> agent Benchmarker choisit l'algorithme par instance (`cp_sat` exact, ou une heuristique pour les
+> grandes instances) avant la génération.
 
 ## 🎯 Objectif
 
-Faire générer par un LLM (Claude, GPT) du code Python utilisant OR-Tools CP-SAT qui résout votre problème de scheduling.
+Faire générer par un LLM (fournisseur configuré via `PRISME_LLM_PROVIDER` — Mistral par défaut,
+voir `generation/agents/client_llm.py`) du code Python utilisant OR-Tools CP-SAT qui résout votre problème de scheduling.
 
 **Innovation PRISME** : Le code est généré **UNE FOIS**, puis **ré-exécuté des milliers de fois** sur des données changeantes sans jamais rappeler le LLM.
 

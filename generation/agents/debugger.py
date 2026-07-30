@@ -1,7 +1,10 @@
 """Agent Debugger (pipeline multi-agents, §5.6) — corrige le code face à un
 problème précis (revue défavorable, échec de validation statique,
-d'exécution ou de cascade). Appelé jusqu'à `generation.loop.MAX_TENTATIVES_REPARATION`
-fois par tentative de génération (boucle de réparation bornée, Étape 6)."""
+d'exécution ou de cascade). Appelé jusqu'à `generation.graph.MAX_TENTATIVES_REPARATION`
+fois par tentative de génération (boucle de réparation bornée, Étape 6). Doit
+rester algorithme-agnostique comme l'Architecte/le Développeur : le code à
+corriger peut implémenter n'importe quel algorithme choisi par le Benchmarker
+(cp_sat ou une heuristique), jamais uniquement CP-SAT."""
 
 from __future__ import annotations
 
@@ -21,8 +24,9 @@ if TYPE_CHECKING:
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "debugger.md"
 
 _PROMPT_SYSTEME = (
-    "Tu es un développeur Python expert en débogage de modèles d'optimisation combinatoire (CP-SAT). "
-    "Tu réponds toujours en JSON strict, jamais en texte libre."
+    "Tu es un développeur Python expert en débogage de modèles d'optimisation combinatoire "
+    "(CP-SAT/OR-Tools et métaheuristiques d'ordonnancement — génétique, ACO, recuit simulé, "
+    "tabou, dispatching). Tu réponds toujours en JSON strict, jamais en texte libre."
 )
 
 

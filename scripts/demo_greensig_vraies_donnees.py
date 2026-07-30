@@ -222,7 +222,7 @@ def main():
     print(f"  • {len(instance.ressources)} ressources actives")
     print(f"  • {len(compatibilites)} compatibilités dérivées")
     print()
-    print(f"💡 Cette instance peut maintenant être résolue par un solveur CP-SAT !")
+    print("💡 Cette instance peut maintenant être passée au Benchmarker pour choisir l'algorithme adapté !")
     print()
 
 

@@ -25,8 +25,8 @@ ERP bruts jusqu'à l'exécution d'un planning optimisé.
            │
            ▼
 ┌─────────────────────┐
-│  Génération Solveur │  ← LLM génère code CP-SAT
-│  (generation/)      │
+│  Génération Solveur │  ← Benchmarker choisit l'algorithme (cp_sat ou
+│  (generation/)      │    heuristique), puis le LLM génère le code
 └──────────┬──────────┘
            │
            ▼

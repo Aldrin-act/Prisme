@@ -37,7 +37,7 @@ def test_traduire_ingere_une_instance_canonique_sans_transformation() -> None:
 
 def test_traduire_derive_la_compatibilite_par_competence() -> None:
     payload = {
-        "taches": [{"id": "T1", "duree_estimee_minutes": 25}],
+        "taches": [{"id": "T1", "duree_estimee_jours": 25}],
         "ressources": [
             {"id": "R1", "competences": ["decoupe", "affutage"]},
             {"id": "R2", "competences": ["assemblage"]},

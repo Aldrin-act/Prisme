@@ -29,14 +29,14 @@ DOSSIER_SORTIE = Path(__file__).resolve().parent.parent / "docs" / "dsl" / "gaba
 def construire(dossier_sortie: Path) -> None:
     dossier_sortie.mkdir(parents=True, exist_ok=True)
 
-    # `duree_estimee_minutes` : nécessaire pour toute tâche dont la
+    # `duree_estimee_jours` : nécessaire pour toute tâche dont la
     # compatibilité est dérivée par compétence — c'est le cas de T1 et T2 ici,
     # aucune des deux ne déclare de compatibilite_ressource_tache directement.
     with (dossier_sortie / "taches.csv").open("w", newline="", encoding="utf-8") as f:
         ecrivain = csv.writer(f)
-        ecrivain.writerow(["id", "nom", "duree_estimee_minutes"])
-        ecrivain.writerow(["T1", "Decoupe", "30"])
-        ecrivain.writerow(["T2", "Assemblage", "20"])
+        ecrivain.writerow(["id", "nom", "duree_estimee_jours"])
+        ecrivain.writerow(["T1", "Decoupe", "3"])
+        ecrivain.writerow(["T2", "Assemblage", "2"])
 
     # `competences` : liste séparée par `;` (la virgule est déjà le
     # délimiteur CSV) — R1 sait faire les deux, utilisé pour dériver sa
@@ -52,7 +52,7 @@ def construire(dossier_sortie: Path) -> None:
     with (dossier_sortie / "contraintes.csv").open("w", newline="", encoding="utf-8") as f:
         ecrivain = csv.writer(f)
         ecrivain.writerow(
-            ["type", "tache_avant", "tache_apres", "tache", "ressource", "duree_minutes", "competence"]
+            ["type", "tache_avant", "tache_apres", "tache", "ressource", "duree_jours", "competence"]
         )
         ecrivain.writerow(["precedence", "T1", "T2", "", "", "", ""])
         ecrivain.writerow(["competence_requise", "", "", "T1", "", "", "decoupe"])

@@ -1,11 +1,13 @@
-"""C — Contraintes : précédence, compatibilité ressource-tâche, échéance et
-compétence requise (§3.1, §4). Les trois premières forment le noyau minimal ;
-`Echeance`/`CompetenceRequise` sont des extensions optionnelles (aucun effet
-sur une instance qui ne les utilise pas) — voir `docs/dsl/modele_ingestion_client.md`.
+"""C — Contraintes : précédence, compatibilité ressource-tâche, échéance,
+compétence requise, capacité et incompatibilité (§3.1, §4). Les deux
+premières forment le noyau minimal ; `Echeance`/`CompetenceRequise`/
+`ContrainteCapacite`/`ContrainteIncompatibilite` sont des extensions
+optionnelles (aucun effet sur une instance qui ne les utilise pas) — voir
+`docs/dsl/modele_ingestion_client.md`.
 
 Une contrainte est un objet discriminé par son champ `type`, pour rester
-homogène et extensible : capacité, calendrier, incompatibilité, etc.
-viendront s'ajouter à cette union sans toucher aux contraintes existantes.
+homogène et extensible : calendrier, etc. pourront encore s'ajouter à cette
+union sans toucher aux contraintes existantes.
 """
 
 from __future__ import annotations
@@ -48,22 +50,22 @@ class CompatibiliteRessourceTache(BaseModel):
     type: Literal["compatibilite_ressource_tache"] = "compatibilite_ressource_tache"
     tache: Identifiant
     ressource: Identifiant
-    duree: int = Field(gt=0, description="Durée de l'opération sur cette ressource, en minutes")
+    duree: int = Field(gt=0, description="Durée de l'opération sur cette ressource, en jours")
 
 
 class Echeance(BaseModel):
     """La tâche `tache` doit être terminée au plus tard à l'instant `echeance`
     — même référentiel que `OperationPlanifiee.debut`/`CompatibiliteRessourceTache.duree`
-    (minutes relatives à un instant de référence implicite, pas une date
-    calendaire : convertir une vraie date en minutes reste un problème
-    d'adaptateur, comme pour la conversion heures→minutes déjà faite dans
+    (jours relatifs à un instant de référence implicite, pas une date
+    calendaire : convertir une vraie date en jours reste un problème
+    d'adaptateur, comme pour la conversion heures→jours déjà faite dans
     `adapters/greensig/translator.py`)."""
 
     model_config = ConfigDict(extra="forbid")
 
     type: Literal["echeance"] = "echeance"
     tache: Identifiant
-    echeance: int = Field(ge=0, description="Instant limite de fin de la tâche, en minutes")
+    echeance: int = Field(ge=0, description="Instant limite de fin de la tâche, en jours")
 
 
 class CompetenceRequise(BaseModel):
@@ -86,7 +88,54 @@ class CompetenceRequise(BaseModel):
     competence: str = Field(min_length=1)
 
 
+class ContrainteCapacite(BaseModel):
+    """La ressource `ressource` peut traiter jusqu'à `capacite` opérations
+    simultanément — sans cette contrainte, une ressource a une capacité
+    implicite de 1 (le comportement historique : jamais deux opérations en
+    même temps, vérifié par `chevauchement_ressource` dans le vérificateur
+    de faisabilité). Avec elle, jusqu'à `capacite` opérations peuvent se
+    chevaucher sur cette ressource sans que ce soit une anomalie.
+
+    Une ressource sans `ContrainteCapacite` déclarée n'est pas affectée —
+    extension optionnelle, comme `Echeance`/`CompetenceRequise` (§4.2)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["capacite"] = "capacite"
+    ressource: Identifiant
+    capacite: int = Field(ge=1, description="Nombre d'opérations que cette ressource peut traiter simultanément")
+
+
+class ContrainteIncompatibilite(BaseModel):
+    """Les tâches `tache` et `tache_incompatible` ne peuvent jamais être
+    affectées à la même ressource — quelle que soit l'heure, contrairement à
+    `chevauchement_ressource` qui n'interdit qu'un chevauchement temporel.
+    Relation symétrique (l'ordre des deux tâches n'a pas de sens métier),
+    déclarée une seule fois par paire.
+
+    Une tâche non citée dans une `ContrainteIncompatibilite` n'est affectée
+    par aucune restriction de ce type — extension optionnelle, comme
+    `Echeance`/`CompetenceRequise`/`ContrainteCapacite` (§4.2)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["incompatibilite"] = "incompatibilite"
+    tache: Identifiant
+    tache_incompatible: Identifiant
+
+    @model_validator(mode="after")
+    def _pas_d_autoreference(self) -> ContrainteIncompatibilite:
+        if self.tache == self.tache_incompatible:
+            raise ValueError("une tâche ne peut pas être incompatible avec elle-même")
+        return self
+
+
 Contrainte = Annotated[
-    Precedence | CompatibiliteRessourceTache | Echeance | CompetenceRequise,
+    Precedence
+    | CompatibiliteRessourceTache
+    | Echeance
+    | CompetenceRequise
+    | ContrainteCapacite
+    | ContrainteIncompatibilite,
     Field(discriminator="type"),
 ]

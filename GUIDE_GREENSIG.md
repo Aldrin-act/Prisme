@@ -184,7 +184,10 @@ Après l'exécution, vous trouverez à la racine :
 
 - **greensig_instance_trco_reel.json** : Instance canonique T-R-C-O
   - Structure : `{taches, ressources, contraintes, objectifs}`
-  - Prête à être résolue par un solveur CP-SAT
+  - Prête à être résolue — à cette échelle (des milliers de tâches), l'agent
+    Benchmarker recommande une heuristique (génétique), pas CP-SAT : voir
+    `RESULTAT_BENCHMARK_2165.md`, où CP-SAT timeoute sans solution sur ces
+    mêmes données
   - Taille : ~2-5 MB
 
 ## ➡️ Prochaine étape

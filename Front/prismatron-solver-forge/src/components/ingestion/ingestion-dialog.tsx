@@ -512,11 +512,11 @@ export function IngestionDialog({
                 />
                 <p className="text-xs text-muted-foreground">
                   Trois fichiers séparés, un par axe — colonnes attendues :{" "}
-                  <code className="font-mono">id,nom,duree_estimee_minutes</code> pour Tâches,{" "}
+                  <code className="font-mono">id,nom,duree_estimee_jours</code> pour Tâches,{" "}
                   <code className="font-mono">id,nom,competences</code> (séparées par{" "}
                   <code className="font-mono">;</code>) pour Ressources,{" "}
                   <code className="font-mono">
-                    type,tache_avant,tache_apres,tache,ressource,duree_minutes,competence
+                    type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
                   </code>{" "}
                   pour Contraintes (<code className="font-mono">type</code> vaut{" "}
                   <code className="font-mono">precedence</code>,{" "}
@@ -526,7 +526,7 @@ export function IngestionDialog({
                 <p className="text-xs text-muted-foreground">
                   Plutôt que de saisir chaque compatibilité à la main, déclarez qu'une ressource possède une
                   compétence et qu'une tâche l'exige (<code className="font-mono">competence_requise</code>) —
-                  la compatibilité et sa durée (<code className="font-mono">duree_estimee_minutes</code> de la
+                  la compatibilité et sa durée (<code className="font-mono">duree_estimee_jours</code> de la
                   tâche) sont calculées automatiquement pour chaque ressource qualifiée.
                 </p>
                 <p className="text-xs">
@@ -583,7 +583,7 @@ export function IngestionDialog({
                   Déposez un fichier JSON au format T-R-C-O (mêmes champs que la saisie manuelle : taches,
                   ressources, contraintes, objectifs) — ingéré tel quel si déjà complet. Plutôt que de
                   déclarer chaque compatibilité à la main, une tâche peut aussi porter une durée estimée
-                  (<code className="font-mono">duree_estimee_minutes</code>) : sa compatibilité avec toute
+                  (<code className="font-mono">duree_estimee_jours</code>) : sa compatibilité avec toute
                   ressource dont les <code className="font-mono">competences</code> couvrent ses{" "}
                   <code className="font-mono">competence_requise</code> est alors calculée automatiquement.
                 </p>
@@ -792,7 +792,7 @@ function SectionContraintes({
                 <ChampSelectId placeholder="tâche" value={c.tache} options={taches} onChange={(v) => majLigne(i, { tache: v })} />
                 <ChampSelectId placeholder="ressource" value={c.ressource} options={ressources} onChange={(v) => majLigne(i, { ressource: v })} />
                 <Input
-                  placeholder="durée (min)"
+                  placeholder="durée (jours)"
                   type="number"
                   min={1}
                   value={c.duree}
@@ -959,7 +959,7 @@ export function SectionObjectifs({
                   </SelectContent>
                 </Select>
                 <Input
-                  placeholder="seuil de grâce (min)"
+                  placeholder="seuil de grâce (jours)"
                   type="number"
                   min={0}
                   value={o.seuilGrace}

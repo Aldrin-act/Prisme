@@ -62,13 +62,13 @@ def _lire_compatibilites(feuille: Worksheet) -> list[Contrainte]:
     compatibilites: list[Contrainte] = []
     for tache, ressource, duree in _lignes(feuille, 3):
         try:
-            duree_minutes = int(float(duree))
+            duree_jours = int(float(duree))
         except ValueError as erreur:
             raise ErreurFichierInvalide(
                 f"onglet Compatibilités : durée invalide « {duree} » pour {tache}/{ressource} "
-                "— doit être un nombre entier de minutes."
+                "— doit être un nombre entier de jours."
             ) from erreur
-        compatibilites.append(CompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=duree_minutes))
+        compatibilites.append(CompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=duree_jours))
     return compatibilites
 
 

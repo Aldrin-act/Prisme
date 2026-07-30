@@ -1,6 +1,14 @@
 """Schéma typé des quatre axes du DSL T-R-C-O — le noyau minimal (§3.1, §4)."""
 
-from .contraintes import CompatibiliteRessourceTache, CompetenceRequise, Contrainte, Echeance, Precedence
+from .contraintes import (
+    CompatibiliteRessourceTache,
+    CompetenceRequise,
+    Contrainte,
+    ContrainteCapacite,
+    ContrainteIncompatibilite,
+    Echeance,
+    Precedence,
+)
 from .instance import InstanceTRCO
 from .objectifs import (
     EquilibrerCharge,
@@ -11,13 +19,15 @@ from .objectifs import (
     Objectif,
 )
 from .planning import OperationPlanifiee, Planning
-from .ressources import Ressource
-from .taches import Tache
+from .ressources import Ressource, TypeRessource
+from .taches import StatutTache, Tache
 
 __all__ = [
     "CompatibiliteRessourceTache",
     "CompetenceRequise",
     "Contrainte",
+    "ContrainteCapacite",
+    "ContrainteIncompatibilite",
     "Echeance",
     "EquilibrerCharge",
     "InstanceTRCO",
@@ -30,5 +40,7 @@ __all__ = [
     "Planning",
     "Precedence",
     "Ressource",
+    "StatutTache",
     "Tache",
+    "TypeRessource",
 ]

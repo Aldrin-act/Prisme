@@ -15,10 +15,10 @@ couple (tâche, ressource, durée), on peut déclarer qu'une ressource possède
 une compétence (`ressources.csv`) et qu'une tâche l'exige (`competence_requise`
 dans `contraintes.csv`) — l'adaptateur calcule alors lui-même une
 `CompatibiliteRessourceTache` pour chaque ressource qualifiée, avec la durée
-estimée de la tâche (`taches.csv`, colonne `duree_estimee_minutes`), appliquée
+estimée de la tâche (`taches.csv`, colonne `duree_estimee_jours`), appliquée
 telle quelle à toutes ces ressources — même principe que
 `adapters/greensig/translator.py` (`equipes_compatibles_pour`/
-`duree_minutes_pour`). Le DSL lui-même (`dsl/schema/instance.py`,
+`duree_jours_pour`). Le DSL lui-même (`dsl/schema/instance.py`,
 `_competences_requises_respectees`) revérifie ensuite que chaque compatibilité
 déclarée pour une tâche à compétences requises couvre bien toutes ces
 compétences — un garde-fou de plus, pas remplacé ici.
@@ -46,7 +46,7 @@ from dsl.schema import (
 )
 
 COLONNES_TACHES_REQUISES = ("id",)
-COLONNES_TACHES_OPTIONNELLES = ("nom", "duree_estimee_minutes")
+COLONNES_TACHES_OPTIONNELLES = ("nom", "duree_estimee_jours")
 COLONNES_RESSOURCES_REQUISES = ("id",)
 COLONNES_RESSOURCES_OPTIONNELLES = ("nom", "competences")
 COLONNES_CONTRAINTES_REQUISES = ("type",)
@@ -55,7 +55,7 @@ COLONNES_CONTRAINTES_OPTIONNELLES = (
     "tache_apres",
     "tache",
     "ressource",
-    "duree_minutes",
+    "duree_jours",
     "competence",
 )
 TYPES_CONTRAINTE_SUPPORTES = ("precedence", "compatibilite_ressource_tache", "competence_requise")
@@ -84,7 +84,7 @@ def _lire_lignes(
     de fichier...), même tolérance que `adapters/tableur/traducteur.py`.
     Les colonnes optionnelles absentes du fichier valent simplement "" partout
     plutôt que de faire échouer la lecture — ex. `competences`/
-    `duree_estimee_minutes`, inutiles tant qu'aucune compatibilité n'est
+    `duree_estimee_jours`, inutiles tant qu'aucune compatibilité n'est
     dérivée par compétence."""
     try:
         texte = contenu.decode("utf-8-sig")
@@ -113,20 +113,20 @@ def _lire_lignes(
 
 def _lire_taches(contenu: bytes) -> tuple[list[Tache], dict[str, int | None]]:
     """Renvoie les tâches ainsi que, par id, leur durée estimée (colonne
-    `duree_estimee_minutes`) — `None` si absente, seulement nécessaire pour
+    `duree_estimee_jours`) — `None` si absente, seulement nécessaire pour
     les tâches dont la compatibilité est dérivée par compétence."""
     lignes = _lire_lignes(contenu, "taches.csv", COLONNES_TACHES_REQUISES, COLONNES_TACHES_OPTIONNELLES)
     taches = [Tache(id=ligne["id"], **({"nom": ligne["nom"]} if ligne["nom"] else {})) for ligne in lignes]
     durees_estimees: dict[str, int | None] = {}
     for ligne in lignes:
-        if not ligne["duree_estimee_minutes"]:
+        if not ligne["duree_estimee_jours"]:
             durees_estimees[ligne["id"]] = None
             continue
         try:
-            durees_estimees[ligne["id"]] = int(float(ligne["duree_estimee_minutes"]))
+            durees_estimees[ligne["id"]] = int(float(ligne["duree_estimee_jours"]))
         except ValueError as erreur:
             raise ErreurFichierInvalide(
-                f"taches.csv : durée estimée invalide « {ligne['duree_estimee_minutes']} » pour {ligne['id']}"
+                f"taches.csv : durée estimée invalide « {ligne['duree_estimee_jours']} » pour {ligne['id']}"
             ) from erreur
     return taches, durees_estimees
 
@@ -165,16 +165,14 @@ def _lire_contraintes(contenu: bytes) -> list[Contrainte]:
             contraintes.append(Precedence(avant=ligne["tache_avant"], apres=ligne["tache_apres"]))
         elif type_ == "compatibilite_ressource_tache":
             try:
-                duree_minutes = int(float(ligne["duree_minutes"]))
+                duree_jours = int(float(ligne["duree_jours"]))
             except ValueError as erreur:
                 raise ErreurFichierInvalide(
-                    f"contraintes.csv : durée invalide « {ligne['duree_minutes']} » pour "
-                    f"{ligne['tache']}/{ligne['ressource']} — doit être un nombre entier de minutes."
+                    f"contraintes.csv : durée invalide « {ligne['duree_jours']} » pour "
+                    f"{ligne['tache']}/{ligne['ressource']} — doit être un nombre entier de jours."
                 ) from erreur
             contraintes.append(
-                CompatibiliteRessourceTache(
-                    tache=ligne["tache"], ressource=ligne["ressource"], duree=duree_minutes
-                )
+                CompatibiliteRessourceTache(tache=ligne["tache"], ressource=ligne["ressource"], duree=duree_jours)
             )
         elif type_ == "competence_requise":
             contraintes.append(CompetenceRequise(tache=ligne["tache"], competence=ligne["competence"]))
@@ -203,7 +201,7 @@ def traduire(taches_csv: bytes, ressources_csv: bytes, contraintes_csv: bytes) -
             contraintes, ressources, durees_estimees_connues
         )
     except CompetenceSansDureeEstimee as erreur:
-        raise ErreurFichierInvalide(f"taches.csv : {erreur} (colonne duree_estimee_minutes)") from erreur
+        raise ErreurFichierInvalide(f"taches.csv : {erreur} (colonne duree_estimee_jours)") from erreur
 
     return InstanceTRCO(
         taches=taches,

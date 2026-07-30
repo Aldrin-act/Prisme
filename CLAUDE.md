@@ -7,9 +7,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 PRISME is a PFE (EIGSI Casablanca × BARAA Consult): an API that **generates the code of a
 scheduling solver from a business description, then re-executes that frozen code repeatedly**
 without calling the AI again. The problem is the **Flexible Job-Shop Scheduling Problem (FJSP)**;
-`cp_sat` (OR-Tools CP-SAT) is the default/reference algorithm, but the generation pipeline's
-Benchmarker agent can instead target genetic/ACO/tabu/simulated-annealing/dispatching/greedy
-heuristics for very large instances (see Étape 6 below). The authoritative spec is
+no algorithm is hardcoded — the generation pipeline's Benchmarker agent always runs first and picks
+one per instance: `cp_sat` (OR-Tools CP-SAT, the only *exact* one, for small/medium instances) or a
+genetic/ACO/tabu/simulated-annealing/dispatching/greedy heuristic for very large ones (Étape 6).
+The authoritative spec is
 [`PRISME_Note_de_Cadrage (2).md`](<./PRISME_Note_de_Cadrage (2).md>) (French) — source of truth for
 every design decision, read before architectural changes. Code comments cite sections as `§N`.
 
@@ -147,8 +148,19 @@ control — `dsl/schema/common.py`'s `Identifiant`). Four axes: **T**âches, **R
 `Literal["type"]`-discriminated `Union` so new kinds join without touching existing ones;
 `InstanceTRCO` enforces per-axis unique IDs and that every constraint references a declared
 `Tache`/`Ressource` — that cross-axis check *is* the §6.7 upstream guardrail. **Minimal viable
-core (in scope):** precedence, ressource-task compatibility, durations only — setup times,
-calendars, priorities/due dates, capacity stay **out of scope** by design; guard against scope creep.
+core:** precedence, ressource-task compatibility, durations. **Optional extensions** (`Contrainte`
+subtypes with no effect on an instance that doesn't use them, taught to the generation prompts —
+`generation/prompts/generation_solveur.md`/`architecte.md` — and checked by
+`feasibility_checker.py`): `Echeance` (deadline in relative days, never a calendar date),
+`CompetenceRequise` (task↔resource skill match — can also *derive* `CompatibiliteRessourceTache`
+at the ingestion layer only, see `adapters/competence_derivation.py`), `ContrainteCapacite` (a
+resource processes up to N operations concurrently — `AddCumulative` in generated CP-SAT code
+instead of `AddNoOverlap`; implicit capacity 1, i.e. today's behavior, if absent),
+`ContrainteIncompatibilite` (two named tasks can never share a resource, regardless of time —
+independent of any temporal overlap check). `Tache.statut`/`Ressource.type` are purely
+informative fields (no constraint or objective reads them). Calendars (business days,
+availability windows) and setup times stay **out of scope** by design; guard against further
+scope creep.
 
 ## Module map
 

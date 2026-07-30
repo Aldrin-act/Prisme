@@ -16,7 +16,8 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
 
 - `InstanceTRCO`, `Planning`, `OperationPlanifiee`, `Tache`, `Ressource`,
   `Contrainte`, `Precedence`, `CompatibiliteRessourceTache`, `Echeance`,
-  `CompetenceRequise` s'importent depuis `dsl.schema`.
+  `CompetenceRequise`, `ContrainteCapacite`, `ContrainteIncompatibilite`
+  s'importent depuis `dsl.schema`.
 - `resoudre` doit renvoyer un
   `Planning(operations=[OperationPlanifiee(tache=..., ressource=..., debut=...), ...])`
   légal et de makespan minimal, ou `None` si l'instance est infaisable.
@@ -49,15 +50,35 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
   plan technique de l'agent Architecte pour le schéma exact) — la recherche
   (génétique, ACO, recuit...) n'optimise alors que le makespan du planning
   déjà légal, jamais un score composite mêlant faisabilité et qualité.
-- `Echeance`/`CompetenceRequise` sont des extensions optionnelles du noyau
-  minimal (absentes de la plupart des instances) : si l'instance contient des
-  `Echeance`, encode-les en contrainte dure sur la fin de la tâche concernée
-  (`modele.Add(fin <= echeance)`) — sinon ignore-les, elles n'existent pas.
-  `CompetenceRequise` ne demande aucun traitement côté solveur :
-  `InstanceTRCO` garantit déjà, avant que `resoudre` ne soit appelé, que
-  toute `CompatibiliteRessourceTache` respecte les compétences requises —
-  `CompatibiliteRessourceTache` reste la seule source de compatibilité et de
-  durée à utiliser.
+- `Echeance`/`CompetenceRequise`/`ContrainteCapacite`/`ContrainteIncompatibilite`
+  sont des extensions optionnelles du noyau minimal (absentes de la plupart
+  des instances) : si l'instance contient des `Echeance`, encode-les en
+  contrainte dure sur la fin de la tâche concernée (`modele.Add(fin <=
+  echeance)`) — sinon ignore-les, elles n'existent pas. `CompetenceRequise`
+  ne demande aucun traitement côté solveur : `InstanceTRCO` garantit déjà,
+  avant que `resoudre` ne soit appelé, que toute `CompatibiliteRessourceTache`
+  respecte les compétences requises — `CompatibiliteRessourceTache` reste la
+  seule source de compatibilité et de durée à utiliser.
+- `ContrainteCapacite(ressource, capacite)` : sans elle, une ressource a une
+  capacité implicite de **1** (jamais deux opérations en même temps —
+  `AddNoOverlap`/décodeur qui refuse tout chevauchement). Pour une ressource
+  couverte par une `ContrainteCapacite`, jusqu'à `capacite` opérations
+  peuvent s'y chevaucher : en CP-SAT, remplace `AddNoOverlap` par
+  `modele.AddCumulative(intervalles, demandes=[1] * len(intervalles),
+  capacite)` sur les intervalles de cette ressource (une "demande" de 1 par
+  opération) ; pour un décodeur non-CP-SAT, remplace la disponibilité
+  "libre/occupée" par un compteur d'opérations actives sur la ressource à
+  l'instant considéré, autorisant un nouveau départ tant que ce compteur est
+  strictement inférieur à `capacite`.
+- `ContrainteIncompatibilite(tache, tache_incompatible)` : les deux tâches
+  citées ne peuvent **jamais** être affectées à la même ressource, quelle que
+  soit l'heure — indépendant de tout chevauchement temporel. En CP-SAT, pour
+  chaque ressource compatible avec les deux tâches, ajoute
+  `modele.Add(litteral_presence_tache + litteral_presence_tache_incompatible
+  <= 1)` sur les littéraux de présence des intervalles optionnels
+  correspondants ; pour un décodeur non-CP-SAT, exclut simplement toute
+  ressource déjà occupée (à n'importe quel instant) par la tâche incompatible
+  au moment de choisir une ressource pour l'autre tâche.
 
 ## Accès aux données de l'instance (noms de champs exacts — ne pas en deviner d'autres)
 
@@ -65,13 +86,16 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
 `contraintes`, `objectifs`. Il n'existe **aucun** raccourci du type
 `instance.precedences` ou `instance.compatibilite_ressource_tache` —
 `contraintes` est une **liste polymorphe unique** (`Precedence |
-CompatibiliteRessourceTache | Echeance | CompetenceRequise`), à filtrer par
-type avec `isinstance` :
+CompatibiliteRessourceTache | Echeance | CompetenceRequise |
+ContrainteCapacite | ContrainteIncompatibilite`), à filtrer par type avec
+`isinstance` :
 
 ```python
 compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
 precedences = [c for c in instance.contraintes if isinstance(c, Precedence)]
 echeances = [c for c in instance.contraintes if isinstance(c, Echeance)]
+capacites = [c for c in instance.contraintes if isinstance(c, ContrainteCapacite)]
+incompatibilites = [c for c in instance.contraintes if isinstance(c, ContrainteIncompatibilite)]
 ```
 
 Champs exacts de chaque type — vérifie-les avant d'écrire du code qui y
@@ -81,7 +105,12 @@ accède, ne les devine jamais par analogie avec un autre projet :
   la tâche `avant` doit être terminée avant que `apres` ne commence.
 - `CompatibiliteRessourceTache.tache`, `.ressource`, `.duree`.
 - `Echeance.tache`, `.echeance` (pas `date_limite`) : instant limite de fin
-  de la tâche, en minutes.
+  de la tâche, en jours.
+- `ContrainteCapacite.ressource`, `.capacite` : nombre d'opérations que
+  cette ressource peut traiter simultanément (jamais 0, jamais négatif).
+- `ContrainteIncompatibilite.tache`, `.tache_incompatible` (pas
+  `tache_1`/`tache_2`) : relation symétrique, l'ordre des deux champs n'a
+  aucun sens métier.
 - `Tache.id`, `Ressource.id` (type `Identifiant`, une chaîne) sont les
   **seuls** identifiants stables à utiliser partout où une tâche/ressource
   doit être référencée : clé de dictionnaire, gène de chromosome,
@@ -115,6 +144,16 @@ compatibilites_par_tache: dict[str, list[tuple[str, int]]] = {}
 for c in instance.contraintes:
     if isinstance(c, CompatibiliteRessourceTache):
         compatibilites_par_tache.setdefault(c.tache, []).append((c.ressource, c.duree))
+
+# Capacité implicite de 1 si absente de cette table.
+capacite_par_ressource = {
+    c.ressource: c.capacite for c in instance.contraintes if isinstance(c, ContrainteCapacite)
+}
+taches_incompatibles: dict[str, set[str]] = {}
+for c in instance.contraintes:
+    if isinstance(c, ContrainteIncompatibilite):
+        taches_incompatibles.setdefault(c.tache, set()).add(c.tache_incompatible)
+        taches_incompatibles.setdefault(c.tache_incompatible, set()).add(c.tache)
 ```
 
 Pour un algorithme non-CP-SAT dont le décodeur/la fitness est appelé des

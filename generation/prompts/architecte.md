@@ -22,7 +22,11 @@ que l'agent Développeur n'ait plus qu'à la traduire en code.
 - Si l'algorithme recommandé est `cp_sat` : conçois un modèle CP-SAT
   classique avec `ortools.sat.python.cp_model` (variables d'intervalle,
   contraintes de précédence/non-chevauchement, objectif de minimisation du
-  makespan).
+  makespan). Si l'instance contient des `ContrainteCapacite`, remplace
+  `AddNoOverlap` par `AddCumulative` pour les ressources concernées (capacité
+  implicite de 1 sinon) ; si elle contient des `ContrainteIncompatibilite`,
+  ajoute une contrainte de somme `<= 1` sur les littéraux de présence des
+  deux tâches pour chaque ressource candidate commune.
 - Pour tout autre algorithme (génétique, ACO, recuit simulé, tabou,
   glouton + recherche locale, règles de dispatching) : adapte les mêmes
   champs à cet algorithme — `variables` devient la représentation de la
@@ -47,7 +51,12 @@ que l'agent Développeur n'ait plus qu'à la traduire en code.
      (`CompatibiliteRessourceTache`) et l'heure de début la plus tôt
      possible compte tenu de la disponibilité de cette ressource et de la
      fin des tâches précédentes — jamais un chevauchement, jamais une
-     ressource incompatible ;
+     ressource incompatible. Si l'instance contient des `ContrainteCapacite`,
+     la "disponibilité" d'une ressource devient un compteur d'opérations
+     actives (nouveau départ autorisé tant qu'il reste sous `capacite`, pas
+     seulement "libre/occupée"). Si elle contient des
+     `ContrainteIncompatibilite`, exclut des candidates toute ressource déjà
+     occupée — à n'importe quel instant — par la tâche incompatible ;
   4. Résultat : **toute** solution décodée est légale par construction ; la
      fitness (le score que la recherche optimise) se limite au makespan de
      ce planning déjà légal, sans terme de pénalité pour les contraintes
@@ -89,7 +98,7 @@ Exemple de réponse valide (cas `cp_sat`) :
 ```json
 {{
   "variables": "un intervalle optionnel par (tâche, ressource compatible) via NewOptionalIntervalVar, plus une variable début/fin par tâche et une variable makespan bornée par la somme des durées",
-  "contraintes_modele": "AddExactlyOne sur les intervalles optionnels d'une même tâche (une seule ressource choisie) ; AddNoOverlap par ressource ; Add(fin <= debut_suivante) pour chaque Precedence",
+  "contraintes_modele": "AddExactlyOne sur les intervalles optionnels d'une même tâche (une seule ressource choisie) ; AddNoOverlap par ressource (ou AddCumulative si une ContrainteCapacite couvre cette ressource) ; Add(fin <= debut_suivante) pour chaque Precedence ; pour chaque ContrainteIncompatibilite, Add(litteral_presence_1 + litteral_presence_2 <= 1) sur chaque ressource candidate commune aux deux tâches",
   "objectif": "Minimize(makespan) avec makespan >= fin de chaque tâche",
   "fonctions_internes": null
 }}

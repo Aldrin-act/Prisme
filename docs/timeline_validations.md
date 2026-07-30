@@ -25,7 +25,9 @@ Trigger : Nouveau client OU nouvelle signature de contraintes
                        ↓
 ┌─────────────────────────────────────────────────────────────────┐
 │ 2. GÉNÉRATION DU CODE                                           │
-│    LLM reçoit InstanceTRCO → Génère code Python CP-SAT         │
+│    Benchmarker choisit l'algorithme (cp_sat, ou une heuristique │
+│    genetic/aco/tabu/... pour les grandes instances), puis le    │
+│    LLM génère le code Python pour cet algorithme                │
 │    Validation : AST allowlist (pas d'eval, exec, etc.)         │
 └──────────────────────┬──────────────────────────────────────────┘
                        ↓

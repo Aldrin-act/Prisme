@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    ContrainteCapacite,
+    ContrainteIncompatibilite,
     Echeance,
     InstanceTRCO,
     MinimiserMakespan,
@@ -232,3 +234,104 @@ def test_echeance_depassee_est_detectee() -> None:
     assert not resultat.legal
     assert [v.type for v in resultat.violations] == ["echeance_depassee"]
     assert resultat.violations[0].tache == "T1"
+
+
+def test_capacite_respectee_est_legale() -> None:
+    """Deux tâches simultanées sur une ressource de capacité 2 : légal — le
+    chevauchement seul (`chevauchement_ressource`, capacité implicite de 1)
+    ne s'applique plus dès qu'une `ContrainteCapacite` couvre la ressource."""
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=10),
+            ContrainteCapacite(ressource="R1", capacite=2),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 5))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_capacite_depassee_est_detectee() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2"), Tache(id="T3")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T3", ressource="R1", duree=10),
+            ContrainteCapacite(ressource="R1", capacite=2),
+        ],
+    )
+    # T1 [0,10), T2 [0,10), T3 [5,15) : 3 tâches actives à l'instant 5 > capacité 2.
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 0), _op("T3", "R1", 5))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["capacite_depassee"]
+    assert resultat.violations[0].ressource == "R1"
+
+
+def test_capacite_bout_a_bout_reste_legale() -> None:
+    """Une ressource de capacité 2 qui ne voit jamais plus de 2 tâches
+    simultanées reste légale même avec plusieurs tâches au total."""
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2"), Tache(id="T3")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T3", ressource="R1", duree=10),
+            ContrainteCapacite(ressource="R1", capacite=2),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 0), _op("T3", "R1", 10))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_incompatibilite_taches_respectee_est_legale() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2")],
+        ressources=[Ressource(id="R1"), Ressource(id="R2")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R2", duree=10),
+            ContrainteIncompatibilite(tache="T1", tache_incompatible="T2"),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R2", 0))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_incompatibilite_taches_violee_est_detectee() -> None:
+    """Même sans chevauchement temporel : deux tâches incompatibles sur la
+    même ressource sont illégales quelle que soit l'heure."""
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=10),
+            ContrainteIncompatibilite(tache="T1", tache_incompatible="T2"),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 10))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert "incompatibilite_taches_violee" in [v.type for v in resultat.violations]
+    violation = next(v for v in resultat.violations if v.type == "incompatibilite_taches_violee")
+    assert {violation.tache, violation.tache_secondaire} == {"T1", "T2"}
+    assert violation.ressource == "R1"

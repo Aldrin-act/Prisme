@@ -34,9 +34,9 @@ from dsl.schema import (
 from .mapping.competences_types_tache import COMPETENCES_PAR_TYPE_TACHE
 from .schema_greensig import OperateurGreenSIG, PayloadGreenSIG, TacheGreenSIG
 
-_MINUTES_PAR_HEURE = 60
-_DUREE_PAR_DEFAUT_MINUTES = 30  # tâche sans charge_estimee_heures renseignée
-_DUREE_MINIMALE_MINUTES = 1  # `CompatibiliteRessourceTache.duree` exige > 0 ; jamais 0 par arrondi
+_HEURES_PAR_JOUR = 24
+_DUREE_PAR_DEFAUT_JOURS = 1  # tâche sans charge_estimee_heures renseignée
+_DUREE_MINIMALE_JOURS = 1  # `CompatibiliteRessourceTache.duree` exige > 0 ; jamais 0 par arrondi
 
 
 def id_tache(id_brut: int) -> str:
@@ -47,19 +47,23 @@ def id_ressource(id_brut: int) -> str:
     return f"E{id_brut}"
 
 
-def duree_minutes_pour(charge_estimee_heures: float | None) -> int:
+def duree_jours_pour(charge_estimee_heures: float | None) -> int:
     """La règle de conversion durée exacte utilisée par `traduire` — publique
     pour que d'autres outils (ex. `scripts/rapport_greensig_dsl.py`) puissent
     reproduire le même calcul sans dupliquer la logique.
 
-    Sur données réelles (voir `tests/integration/test_greensig_extraction.py`),
-    une charge non nulle mais minuscule (ex. 0.0006h, quelques secondes)
-    arrondirait à 0 minute — `max(..., _DUREE_MINIMALE_MINUTES)` l'empêche
-    sans pour autant gonfler ces tâches au défaut de 30 min (qui ne vaut que
-    pour une charge réellement absente)."""
+    Conséquence assumée du passage du DSL en jours (au lieu de minutes) :
+    GreenSIG ne stocke que `charge_estimee_heures`, typiquement de l'ordre de
+    quelques heures (tondre, désherber...) — bien en-dessous d'un jour. Un
+    arrondi classique (`round(heures / 24)`) ramène donc presque toute charge
+    non nulle à 0, plafonné à `_DUREE_MINIMALE_JOURS` : la quasi-totalité des
+    tâches GreenSIG deviennent indiscernables en durée (toutes à 1 jour) —
+    la granularité fine en heures est perdue. Accepté délibérément au profit
+    d'une unité de temps homogène dans tout le DSL plutôt que de garder cet
+    adaptateur seul en minutes."""
     if not charge_estimee_heures:
-        return _DUREE_PAR_DEFAUT_MINUTES
-    return max(round(charge_estimee_heures * _MINUTES_PAR_HEURE), _DUREE_MINIMALE_MINUTES)
+        return _DUREE_PAR_DEFAUT_JOURS
+    return max(round(charge_estimee_heures / _HEURES_PAR_JOUR), _DUREE_MINIMALE_JOURS)
 
 
 def equipes_competentes_pour(
@@ -88,7 +92,7 @@ def equipes_compatibles_pour(
     """Équipes compatibles avec cette tâche — compétence si le type est mappé,
     sinon affectation historique. Publique : réutilisée par
     `scripts/rapport_greensig_dsl.py` pour ne pas dupliquer la règle de
-    dérivation (même motif que `duree_minutes_pour`)."""
+    dérivation (même motif que `duree_jours_pour`)."""
     equipes_par_competence = equipes_competentes_pour(tache.id_type_tache_id, operateurs, ids_ressources_actives)
     if equipes_par_competence is not None:
         return equipes_par_competence
@@ -114,10 +118,10 @@ def traduire(payload: PayloadGreenSIG) -> InstanceTRCO:
 
     contraintes: list[Contrainte] = []
     for tache in taches_actives:
-        duree_minutes = duree_minutes_pour(tache.charge_estimee_heures)
+        duree_jours = duree_jours_pour(tache.charge_estimee_heures)
         for id_ress in equipes_compatibles_pour(tache, payload.operateurs, ids_ressources_actives):
             contraintes.append(
-                CompatibiliteRessourceTache(tache=id_tache(tache.id), ressource=id_ress, duree=duree_minutes)
+                CompatibiliteRessourceTache(tache=id_tache(tache.id), ressource=id_ress, duree=duree_jours)
             )
 
     return InstanceTRCO(

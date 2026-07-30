@@ -197,3 +197,105 @@ def test_compatibilite_sans_competence_requise_rejetee() -> None:
     )
     with pytest.raises(ValidationError, match="sans les compétences requises"):
         charger_instance(payload)
+
+
+def test_statut_valide_accepte() -> None:
+    payload = _instance_minimale(taches=[{"id": "T1", "statut": "en_cours"}])
+    instance = charger_instance(payload)
+    assert instance.taches[0].statut == "en_cours"
+
+
+def test_statut_absent_par_defaut_none() -> None:
+    instance = charger_instance(_instance_minimale())
+    assert instance.taches[0].statut is None
+
+
+def test_statut_hors_enum_rejete() -> None:
+    payload = _instance_minimale(taches=[{"id": "T1", "statut": "annule"}])
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_type_ressource_valide_accepte() -> None:
+    payload = _instance_minimale(ressources=[{"id": "R1", "type": "machine"}])
+    instance = charger_instance(payload)
+    assert instance.ressources[0].type == "machine"
+
+
+def test_type_ressource_absent_par_defaut_none() -> None:
+    instance = charger_instance(_instance_minimale())
+    assert instance.ressources[0].type is None
+
+
+def test_type_ressource_hors_enum_rejete() -> None:
+    payload = _instance_minimale(ressources=[{"id": "R1", "type": "robot"}])
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_capacite_valide_acceptee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "capacite", "ressource": "R1", "capacite": 3},
+        ]
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 2
+
+
+def test_capacite_nulle_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "capacite", "ressource": "R1", "capacite": 0},
+        ]
+    )
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_capacite_vers_ressource_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "capacite", "ressource": "R99", "capacite": 2},
+        ]
+    )
+    with pytest.raises(ValidationError, match="capacité référence une ressource inconnue"):
+        charger_instance(payload)
+
+
+def test_incompatibilite_valide_acceptee() -> None:
+    payload = _instance_minimale(
+        taches=[{"id": "T1"}, {"id": "T2"}],
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 10},
+            {"type": "incompatibilite", "tache": "T1", "tache_incompatible": "T2"},
+        ],
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 3
+
+
+def test_incompatibilite_autoreference_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "incompatibilite", "tache": "T1", "tache_incompatible": "T1"},
+        ]
+    )
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_incompatibilite_vers_tache_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "incompatibilite", "tache": "T1", "tache_incompatible": "T99"},
+        ]
+    )
+    with pytest.raises(ValidationError, match="incompatibilité référence une tâche inconnue"):
+        charger_instance(payload)

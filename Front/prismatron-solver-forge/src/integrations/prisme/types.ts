@@ -41,7 +41,7 @@ export interface CompatibiliteRessourceTache {
   type: "compatibilite_ressource_tache";
   tache: string;
   ressource: string;
-  duree: number; // minutes, > 0 — seul endroit où la durée existe
+  duree: number; // jours, > 0 — seul endroit où la durée existe
 }
 
 export interface ContrainteEcheance {

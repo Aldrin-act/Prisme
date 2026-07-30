@@ -1,11 +1,14 @@
 """Vérificateur de faisabilité — le planning est-il légal ? (§6.2 brique 1, §6.7)
 
 Écrit une seule fois, à la main, déterministe. Confronte une `InstanceTRCO` à
-un `Planning` proposé et vérifie trois choses :
+un `Planning` proposé et vérifie :
 
 1. aucune précédence violée ;
-2. aucune ressource occupée par deux tâches en même temps ;
-3. aucune tâche affectée à une ressource incompatible.
+2. aucune ressource occupée au-delà de sa capacité (1 par défaut, ou celle
+   déclarée par `ContrainteCapacite` — extension optionnelle, §4.2) ;
+3. aucune tâche affectée à une ressource incompatible ;
+4. aucune paire de tâches déclarées incompatibles (`ContrainteIncompatibilite`)
+   affectée à la même ressource, quelle que soit l'heure.
 
 Sert deux fois (§6.7, garde-fou déterministe) : hors ligne dans la validation
 du code généré (couche 2, §6.1), et en ligne comme garde-fou de production
@@ -32,6 +35,8 @@ from typing import Literal
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    ContrainteCapacite,
+    ContrainteIncompatibilite,
     Echeance,
     InstanceTRCO,
     OperationPlanifiee,
@@ -48,6 +53,8 @@ TypeViolation = Literal[
     "incompatibilite_ressource_tache",
     "chevauchement_ressource",
     "echeance_depassee",
+    "capacite_depassee",
+    "incompatibilite_taches_violee",
 ]
 
 
@@ -207,21 +214,80 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
         fin = operation.debut + duree_operation
         operations_par_ressource[operation.ressource].append((tache_id, operation.debut, fin))
 
+    capacite_par_ressource: dict[str, int] = {
+        contrainte.ressource: contrainte.capacite
+        for contrainte in instance.contraintes
+        if isinstance(contrainte, ContrainteCapacite)
+    }
+
     for ressource_id, intervalles in operations_par_ressource.items():
-        intervalles_tries = sorted(intervalles, key=lambda intervalle: intervalle[1])
-        for (tache_a, _debut_a, fin_a), (tache_b, debut_b, _fin_b) in zip(
-            intervalles_tries, intervalles_tries[1:]
-        ):
-            if debut_b < fin_a:
+        capacite = capacite_par_ressource.get(ressource_id, 1)
+        if capacite == 1:
+            # Comportement historique inchangé (pas de ContrainteCapacite pour
+            # cette ressource) : deux opérations ne peuvent jamais se chevaucher.
+            intervalles_tries = sorted(intervalles, key=lambda intervalle: intervalle[1])
+            for (tache_a, _debut_a, fin_a), (tache_b, debut_b, _fin_b) in zip(
+                intervalles_tries, intervalles_tries[1:]
+            ):
+                if debut_b < fin_a:
+                    violations.append(
+                        Violation(
+                            "chevauchement_ressource",
+                            f"ressource {ressource_id!r} occupée deux fois : "
+                            f"{tache_a!r} et {tache_b!r} se chevauchent",
+                            ressource=ressource_id,
+                            tache=tache_a,
+                            tache_secondaire=tache_b,
+                        )
+                    )
+            continue
+
+        # Capacité > 1 (`ContrainteCapacite`) : jusqu'à `capacite` opérations
+        # peuvent se chevaucher simultanément — balayage des évènements
+        # (début, +1)/(fin, -1) triés par instant, une fin traitée avant un
+        # début au même instant (intervalle [debut, fin[ semi-ouvert, comme
+        # le chevauchement à capacité 1 ci-dessus : `fin == debut` n'est
+        # jamais un chevauchement).
+        evenements: list[tuple[int, int, str]] = []
+        for tache_id, debut, fin in intervalles:
+            evenements.append((debut, 1, tache_id))
+            evenements.append((fin, 0, tache_id))
+        evenements.sort(key=lambda evenement: (evenement[0], evenement[1]))
+
+        actives: set[str] = set()
+        for instant, type_evenement, tache_id in evenements:
+            if type_evenement == 0:
+                actives.discard(tache_id)
+                continue
+            actives.add(tache_id)
+            if len(actives) > capacite:
                 violations.append(
                     Violation(
-                        "chevauchement_ressource",
-                        f"ressource {ressource_id!r} occupée deux fois : "
-                        f"{tache_a!r} et {tache_b!r} se chevauchent",
+                        "capacite_depassee",
+                        f"capacité de la ressource {ressource_id!r} dépassée à l'instant {instant} : "
+                        f"{len(actives)} tâches simultanées {sorted(actives)!r} pour une capacité de {capacite}",
                         ressource=ressource_id,
-                        tache=tache_a,
-                        tache_secondaire=tache_b,
+                        tache=tache_id,
                     )
                 )
+
+    for contrainte in instance.contraintes:
+        if not isinstance(contrainte, ContrainteIncompatibilite):
+            continue
+        operation_1 = operations_valides.get(contrainte.tache)
+        operation_2 = operations_valides.get(contrainte.tache_incompatible)
+        if operation_1 is None or operation_2 is None:
+            continue
+        if operation_1.ressource == operation_2.ressource:
+            violations.append(
+                Violation(
+                    "incompatibilite_taches_violee",
+                    f"tâches incompatibles {contrainte.tache!r} et {contrainte.tache_incompatible!r} "
+                    f"affectées à la même ressource : {operation_1.ressource!r}",
+                    tache=contrainte.tache,
+                    tache_secondaire=contrainte.tache_incompatible,
+                    ressource=operation_1.ressource,
+                )
+            )
 
     return ResultatFaisabilite(tuple(violations))

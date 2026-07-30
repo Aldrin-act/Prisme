@@ -8,13 +8,13 @@ ressource porte des compétences (`Ressource.competences`, déjà un champ réel
 du DSL) et une tâche les exige (`CompetenceRequise`, déjà un type de
 contrainte réel du DSL) — la seule différence avec une instance T-R-C-O
 canonique est que chaque tâche peut porter ici une durée estimée
-(`duree_estimee_minutes`), absente du DSL lui-même (`Tache` n'a
+(`duree_estimee_jours`), absente du DSL lui-même (`Tache` n'a
 délibérément aucun champ de durée, §4.2 — elle dépend de la ressource en
 vrai FJSP flexible) mais nécessaire pour dériver une compatibilité. La
 dérivation elle-même est partagée avec `adapters/csv_import/`, voir
 `adapters/competence_derivation.py`.
 
-Un payload sans aucune `CompetenceRequise` ni `duree_estimee_minutes` est une
+Un payload sans aucune `CompetenceRequise` ni `duree_estimee_jours` est une
 instance T-R-C-O tout à fait ordinaire, ingérée sans transformation — cet
 adaptateur est un sur-ensemble strict du format canonique, jamais un format
 concurrent : le remplace donc sans rien casser pour qui l'utilisait déjà tel quel.
@@ -42,7 +42,7 @@ class TacheAvecDureeEstimee(Tache):
     optionnelle, seulement nécessaire si cette tâche exige une compétence
     (`CompetenceRequise`) sans compatibilité explicite déjà déclarée."""
 
-    duree_estimee_minutes: int | None = Field(default=None, gt=0)
+    duree_estimee_jours: int | None = Field(default=None, gt=0)
 
 
 class InstanceBrute(BaseModel):
@@ -70,15 +70,15 @@ def traduire(payload: dict[str, Any]) -> InstanceTRCO:
     except ValidationError as erreur:
         raise ErreurPayloadInvalide(str(erreur)) from erreur
 
-    taches = [Tache(id=t.id, nom=t.nom, priorite=t.priorite) for t in brute.taches]
-    durees_estimees = {t.id: t.duree_estimee_minutes for t in brute.taches if t.duree_estimee_minutes is not None}
+    taches = [Tache(id=t.id, nom=t.nom, priorite=t.priorite, statut=t.statut) for t in brute.taches]
+    durees_estimees = {t.id: t.duree_estimee_jours for t in brute.taches if t.duree_estimee_jours is not None}
 
     try:
         compatibilites_derivees = deriver_compatibilites_par_competence(
             brute.contraintes, brute.ressources, durees_estimees
         )
     except CompetenceSansDureeEstimee as erreur:
-        raise ErreurPayloadInvalide(f"{erreur} (champ taches[].duree_estimee_minutes)") from erreur
+        raise ErreurPayloadInvalide(f"{erreur} (champ taches[].duree_estimee_jours)") from erreur
 
     return InstanceTRCO(
         taches=taches,

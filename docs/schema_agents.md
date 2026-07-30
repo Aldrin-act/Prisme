@@ -1,6 +1,8 @@
 # Schéma Complet des Agents PRISME
 
-Ce document présente l'architecture détaillée des 8 agents du pipeline multi-agents.
+Ce document présente l'architecture détaillée des 8 agents actifs du pipeline multi-agents
+(Analyste, Benchmarker, Architecte, Développeur, Testeur, Reviewer, Debugger, Documentation —
+Optimiseur existe mais est orphelin, plus appelé par `generation/graph.py`).
 
 ---
 
@@ -115,7 +117,7 @@ def fonction_agent(modele: BaseChatModel, *args) -> ResultatAgent:
 
 **Fonction** :
 ```python
-def analyser_mission(appel_llm: AppelLLM) -> ResultatAnalyse
+def analyser_mission(modele: BaseChatModel) -> ResultatAnalyse
 ```
 
 **Input** : Mission (contrat T-R-C-O)
@@ -154,26 +156,53 @@ modélisation. Tu réponds toujours en JSON strict."
 
 ---
 
-### 2️⃣ ARCHITECTE
+### 2️⃣ BENCHMARKER
+
+**Fichier** : `generation/agents/benchmarker.py`  
+**Prompt** : `generation/prompts/benchmarker.md`
+
+Toujours appelé, avant l'Architecte — aucun seuil de taille, aucun raccourci déterministe : choisit
+l'algorithme le mieux adapté à l'instance dans son catalogue complet (`cp_sat` — seul traité comme
+*exact* — ou une heuristique `genetic`/`aco`/`tabu_search`/`simulated_annealing`/`dispatching`/
+`greedy_local` pour les très grandes instances où CP-SAT ne passe pas à l'échelle).
+
+**Fonction** :
+```python
+def benchmarker_algorithmes(modele: BaseChatModel, instance: InstanceTRCO) -> ResultatBenchmark
+```
+
+**Input** : Instance T-R-C-O (ou une petite instance d'exemple par défaut si aucune fournie)
+
+**Output** : `ResultatBenchmark` — algorithme choisi, justification, paramètres suggérés (ex.
+`limite_temps_s`, `population_size`...). Détermine aussi la tolérance de la cascade de validation
+qui suit — une heuristique n'est jamais comparée au strict optimum comme `cp_sat`.
+
+---
+
+### 3️⃣ ARCHITECTE
 
 **Fichier** : `generation/agents/architecte.py`  
 **Prompt** : `generation/prompts/architecte.md`
 
 **Fonction** :
 ```python
-def concevoir_modele(appel_llm: AppelLLM, analyse: ResultatAnalyse) -> PlanTechnique
+def concevoir_modele(
+    modele: BaseChatModel, analyse: ResultatAnalyse, algorithme: str = "cp_sat", parametres: dict | None = None
+) -> ResultatConception
 ```
 
-**Input** : `ResultatAnalyse` (spécification)
+**Input** : `ResultatAnalyse` (spécification) + algorithme et paramètres recommandés par le Benchmarker
 
-**Output** : `PlanTechnique`
+**Output** : `ResultatConception` — champs génériques, jamais « CP-SAT » en dur, car le contenu peut
+décrire un algorithme alternatif :
 ```python
 @dataclass
-class PlanTechnique:
+class ResultatConception:
     reponse_brute: str
-    variables: str        # Variables CP-SAT à créer
-    contraintes: str      # Contraintes à ajouter
-    objectif: str         # Objectif à minimiser
+    variables: str        # Représentation de la solution (variables CP-SAT, encodage GA, ...)
+    contraintes_modele: str  # Contraintes métier à respecter
+    objectif: str          # Objectif à optimiser
+    fonctions_internes: str | None
     
     def en_texte(self) -> str:
         """Pour le Développeur."""
@@ -181,29 +210,31 @@ class PlanTechnique:
 
 **Prompt système** :
 ```
-"Tu es un architecte logiciel expert en programmation par contraintes (CP-SAT). 
-Tu réponds toujours en JSON strict."
+"Tu es un architecte logiciel spécialisé en optimisation combinatoire
+(CP-SAT/OR-Tools et métaheuristiques d'ordonnancement — génétique, ACO,
+recuit simulé, tabou, dispatching). Tu réponds toujours en JSON strict."
 ```
 
-**Format JSON attendu** :
+**Format JSON attendu** (cas `algorithme="cp_sat"`) :
 ```json
 {
   "variables": "start_times[t]: IntVar(0, 1000), assigned_resources[t]: IntVar(...)",
-  "contraintes": "Précédence: start[t2] >= start[t1] + duration[t1], No-overlap: AddNoOverlap(intervals)",
+  "contraintes_modele": "Précédence: start[t2] >= start[t1] + duration[t1], No-overlap: AddNoOverlap(intervals)",
   "objectif": "Minimize(makespan)"
 }
 ```
+Pour une heuristique, `variables` décrit plutôt l'encodage chromosomique/la structure de solution.
 
 ---
 
-### 3️⃣ DÉVELOPPEUR (Générateur)
+### 4️⃣ DÉVELOPPEUR (Générateur)
 
 **Fichier** : `generation/agents/generateur.py`  
 **Prompt** : `generation/prompts/developpeur.md`
 
 **Fonction** :
 ```python
-def generer_code_depuis_plan(appel_llm: AppelLLM, plan_technique: str) -> CodeGenere
+def generer_code_depuis_plan(modele: BaseChatModel, plan_technique: str) -> CodeGenere
 ```
 
 **Input** : Plan technique (architecture)
@@ -216,10 +247,10 @@ class CodeGenere:
     code_source: str      # Code Python complet (~100-200 lignes)
 ```
 
-**Prompt système** :
+**Prompt système** (algorithme-agnostique, pas de « CP-SAT » en dur) :
 ```
-"Tu es un développeur Python expert en OR-Tools CP-SAT. Tu réponds toujours 
-en JSON strict avec un champ 'code' contenant le code Python."
+"Tu es un générateur de code Python expert en optimisation combinatoire.
+Tu réponds toujours en JSON strict avec un champ 'code' contenant le code Python."
 ```
 
 **Format JSON attendu** :
@@ -231,14 +262,14 @@ en JSON strict avec un champ 'code' contenant le code Python."
 
 ---
 
-### 4️⃣ TESTEUR
+### 5️⃣ TESTEUR
 
 **Fichier** : `generation/agents/testeur.py`  
 **Prompt** : `generation/prompts/testeur.md`
 
 **Fonction** :
 ```python
-def generer_tests(appel_llm: AppelLLM, code_source: str) -> CodeTests
+def generer_tests(modele: BaseChatModel, code_source: str) -> CodeTests
 ```
 
 **Input** : Code source (du Développeur)
@@ -268,14 +299,14 @@ avec un champ 'tests' contenant le code pytest."
 
 ---
 
-### 5️⃣ REVIEWER
+### 6️⃣ REVIEWER
 
 **Fichier** : `generation/agents/reviewer.py`  
 **Prompt** : `generation/prompts/reviewer.md`
 
 **Fonction** :
 ```python
-def relire_code(appel_llm: AppelLLM, code_source: str) -> ResultatRevue
+def relire_code(modele: BaseChatModel, code_source: str) -> ResultatRevue
 ```
 
 **Input** : Code source (du Développeur)
@@ -305,51 +336,54 @@ en JSON strict avec 'approuve' (bool) et 'commentaires' (string)."
 
 ---
 
-### 6️⃣ DEBUGGER
+### 7️⃣ DEBUGGER
 
 **Fichier** : `generation/agents/debugger.py`  
 **Prompt** : `generation/prompts/debugger.md`
 
 **Fonction** :
 ```python
-def corriger_code(appel_llm: AppelLLM, code_source: str, erreurs: str) -> CodeCorrige
+def corriger_code(modele: BaseChatModel, code_source: str, erreurs: str) -> ResultatCorrection
 ```
 
 **Input** :
-- Code source bugué
+- Code source bugué (peut implémenter n'importe quel algorithme choisi par le Benchmarker)
 - Erreurs (commentaires Reviewer OU erreurs validation)
 
-**Output** : `CodeCorrige`
+**Output** : `ResultatCorrection`
 ```python
 @dataclass
-class CodeCorrige:
+class ResultatCorrection:
     reponse_brute: str
     code_source: str      # Code corrigé complet
+    cause: str | None     # Cause identifiée (aide diagnostic, jamais bloquant si absent)
 ```
 
-**Prompt système** :
+**Prompt système** (algorithme-agnostique) :
 ```
-"Tu es un debugger expert en OR-Tools et Python. Tu réponds toujours en JSON 
-strict avec un champ 'code_corrige' contenant le code Python corrigé."
+"Tu es un développeur Python expert en débogage de modèles d'optimisation
+combinatoire (CP-SAT/OR-Tools et métaheuristiques d'ordonnancement). Tu
+réponds toujours en JSON strict, jamais en texte libre."
 ```
 
 **Format JSON attendu** :
 ```json
 {
-  "code_corrige": "from ortools.sat.python import cp_model\n\ndef resoudre(instance):\n    # CORRIGÉ: ligne 42, tache.id au lieu de tache\n    ..."
+  "code": "from ortools.sat.python import cp_model\n\ndef resoudre(instance):\n    # CORRIGÉ: ligne 42, tache.id au lieu de tache\n    ...",
+  "cause": "tache.id manquant, objet tache passé directement"
 }
 ```
 
 ---
 
-### 7️⃣ OPTIMISEUR (orphelin, plus appelé par le pipeline)
+### 8️⃣ OPTIMISEUR (orphelin, plus appelé par le pipeline)
 
 **Fichier** : `generation/agents/optimiseur.py`  
 **Prompt** : `generation/prompts/optimiseur.md`
 
 **Fonction** :
 ```python
-def optimiser_code(appel_llm: AppelLLM, code_source: str, verdict: str = "") -> ResultatOptimisation
+def optimiser_code(modele: BaseChatModel, code_source: str, verdict: str = "") -> ResultatOptimisation
 ```
 
 **Input** :
@@ -366,7 +400,8 @@ class ResultatOptimisation:
     justification: str           # Explications
 ```
 
-**Prompt système** :
+**Prompt système** (orphelin — agent non appelé par `generation/graph.py`, prompt jamais mis à
+jour pour être algorithme-agnostique comme les autres) :
 ```
 "Tu es un expert en optimisation CP-SAT. Tu réponds toujours en JSON strict."
 ```
@@ -384,14 +419,14 @@ class ResultatOptimisation:
 
 ---
 
-### 8️⃣ DOCUMENTATION
+### 9️⃣ DOCUMENTATION
 
 **Fichier** : `generation/agents/documentation.py`  
 **Prompt** : `generation/prompts/documentation.md`
 
 **Fonction** :
 ```python
-def documenter_code(appel_llm: AppelLLM, code_source: str) -> ResultatDocumentation
+def documenter_code(modele: BaseChatModel, code_source: str) -> ResultatDocumentation
 ```
 
 **Input** : Code source final
@@ -449,36 +484,32 @@ class ErreurReponseAgentInvalide(Exception):
 
 ---
 
-### `client_llm.py` - Interface LLM
+### `client_llm.py` - Interface LLM (LangChain)
 
-**Type** :
-```python
-AppelLLM = Callable[[str, str], str]
-# Signature: appel_llm(prompt_systeme: str, prompt_user: str) -> str
-```
+Chaque agent expose désormais un `BaseChatModel` LangChain brut — l'ancienne convention `AppelLLM`
+(`Callable[[str, str], str]`, texte brut) a été entièrement retirée une fois le dernier appelant
+converti.
 
-**Fonction** :
+**Fonctions** :
 ```python
-def construire_appel_llm() -> AppelLLM
+def construire_modele() -> BaseChatModel
+# Générique, sans identité d'agent — d'après PRISME_LLM_PROVIDER/PRISME_LLM_MODEL.
+
+def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel
+# Routage par agent via config_fournisseurs.py — point d'entrée réel du pipeline.
 ```
 
 **Providers supportés** :
-- `mistral` (via `MISTRAL_API_KEY`)
-- `anthropic` (via `ANTHROPIC_API_KEY`)
-- `openai` (via `OPENAI_API_KEY`)
+- `mistral` (défaut, via `MISTRAL_API_KEY`)
+- `qwen` / `together` (via `TOGETHER_API_KEY`, Qwen hébergé sur Together)
+- `nvidia` (via `NVIDIA_API_KEY`)
+- `minimax` (via `MINIMAX_API_KEY`, hébergé via NVIDIA)
+- `deepseek` (via `DEEPSEEK_API_KEY`, hébergé via NVIDIA)
 
-**Sélection** : Variable d'environnement `PRISME_LLM_PROVIDER`
-
-**Configuration** :
-```python
-# .env
-PRISME_LLM_PROVIDER=mistral
-MISTRAL_API_KEY=...
-
-# Ou
-PRISME_LLM_PROVIDER=anthropic
-ANTHROPIC_API_KEY=...
-```
+**Sélection** : `PRISME_LLM_PROVIDER`/`PRISME_LLM_MODEL` (fallback générique), ou par agent via
+`PRISME_LLM_PROVIDER_<AGENT>`/`PRISME_LLM_MODEL_<AGENT>`/`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>` —
+voir `generation/agents/config_fournisseurs.py` et `README_FOURNISSEURS.md` pour la répartition
+par défaut. Anthropic/OpenAI ne sont pas des fournisseurs supportés par ce module.
 
 ---
 
@@ -487,55 +518,54 @@ ANTHROPIC_API_KEY=...
 ```
 Instance T-R-C-O (DSL)
     │
-    ├────► ANALYSTE
-    │          │
-    │          ▼ ResultatAnalyse (entrees, sorties, contraintes)
-    │          │
-    │          ▼
-    └────► ARCHITECTE
+    ▼
+ANALYSTE
+    │
+    ▼ ResultatAnalyse (entrees, sorties, contraintes)
+    │
+    ▼
+BENCHMARKER  (toujours appelé — choisit l'algorithme : cp_sat exact, ou une
+    │         heuristique genetic/aco/tabu_search/simulated_annealing/
+    │         dispatching/greedy_local pour les très grandes instances)
+    ▼ algorithme + paramètres
+    │
+    ▼
+ARCHITECTE
+    │
+    ▼ ResultatConception (variables, contraintes_modele, objectif)
+    │
+    ▼
+DÉVELOPPEUR
+    │
+    ▼ CodeGenere (code_source)
+    │
+    ├────► TESTEUR ────► CodeTests (code_tests)
+    │
+    └────► REVIEWER
                │
-               ▼ PlanTechnique (variables, contraintes, objectif)
+               ▼ ResultatRevue (approuve, commentaires)
                │
-               ▼
-           DÉVELOPPEUR
-               │
-               ▼ CodeGenere (code_source)
-               │
-               ├────► TESTEUR ────► CodeTests (code_tests)
-               │
-               └────► REVIEWER
-                          │
-                          ▼ ResultatRevue (approuve, commentaires)
-                          │
-                          ├─── APPROUVÉ ────► VALIDATION (3 passes)
-                          │                       │
-                          │                       ├─ SUCCÈS ───┐
-                          │                       │            │
-                          │                       └─ ÉCHEC ────┼─► DEBUGGER
-                          │                                    │      │
-                          └─── REJETÉ ─────────────────────────┘      │
-                                                                       │
-                                                                       ▼ CodeCorrige
-                                                                       │
-                                                                       └─► VALIDATION (retry)
-                                                                              │
-                                                                              ├─ SUCCÈS ───┐
-                                                                              │            │
-                                                                              └─ ÉCHEC ────┤
-                                                                                           │
-                                                                                           ▼
-                                                                                      OPTIMISEUR
-                                                                                           │
-                                                                                           ▼ ResultatOptimisation
-                                                                                           │
-                                                                                           └─► VALIDATION (bis)
-                                                                                                  │
-                                                                                                  ▼
-                                                                                           DOCUMENTATION
-                                                                                                  │
-                                                                                                  ▼
-                                                                                          ResultatPipeline
+               ├─── APPROUVÉ ────► VALIDATION (statique → exécution → cascade)
+               │                       │
+               │                       ├─ SUCCÈS ───┐
+               │                       │            │
+               │                       └─ ÉCHEC ────┼─► DEBUGGER (max 10 tentatives,
+               │                                    │      MAX_TENTATIVES_REPARATION)
+               └─── REJETÉ ─────────────────────────┘      │
+                                                            ▼ ResultatCorrection
+                                                            │
+                                                            └─► retour REVIEWER
+                                                                   │
+                                                                   ▼ (tentatives épuisées → échec honnête, STOP)
+                                                                   ▼ (succès)
+                                                            DOCUMENTATION (best-effort)
+                                                                   │
+                                                                   ▼
+                                                            ResultatPipelineAvecBoucle
 ```
+
+Optimiseur n'apparaît pas dans ce flux : agent orphelin, plus appelé par `generation/graph.py`
+(réponse JSON jugée trop fragile pour embarquer du code Python complet).
 
 ---
 
@@ -580,12 +610,13 @@ IMPORTANT : Tu réponds UNIQUEMENT en JSON strict, format :
 **Prompts existants** :
 - `generation_solveur.md` : Mission commune (contrat T-R-C-O, signature `resoudre()`)
 - `analyste.md` : Analyse inputs/outputs/contraintes
-- `architecte.md` : Architecture CP-SAT (variables, contraintes, objectif)
+- `benchmarker.md` : Choix de l'algorithme (cp_sat ou heuristique) selon l'instance
+- `architecte.md` : Conception du modèle (variables/contraintes, ou l'équivalent pour l'algorithme choisi)
 - `developpeur.md` : Code Python complet
 - `testeur.md` : Tests pytest
 - `reviewer.md` : Revue de code (approuve/commentaires)
 - `debugger.md` : Correction bugs
-- `optimiseur.md` : Optimisations performance
+- `optimiseur.md` : Optimisations performance (orphelin, plus appelé)
 - `documentation.md` : Documentation Markdown
 
 ---
@@ -598,16 +629,16 @@ IMPORTANT : Tu réponds UNIQUEMENT en JSON strict, format :
 
 ```python
 # ❌ Mauvais : prompt hardcodé
-def analyser(appel_llm):
+def analyser(modele: BaseChatModel):
     prompt = "Tu es un analyste. Analyse cette instance..."
-    return appel_llm(prompt)
+    return modele.invoke(prompt)
 
 # ✅ Bon : prompt dans fichier externe
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "analyste.md"
 
-def analyser(appel_llm):
+def analyser(modele: BaseChatModel):
     prompt = CHEMIN_PROMPT.read_text(encoding="utf-8")
-    return appel_llm(prompt)
+    return modele.invoke(prompt)
 ```
 
 ### 2. JSON Strict Partout

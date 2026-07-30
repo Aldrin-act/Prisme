@@ -13,7 +13,7 @@ Ce document liste **toutes les étapes** du projet PRISME de bout en bout, leur 
 | 3 | Synthetic Bench | ✅ Terminé | - | - |
 | 4 | Générateur Single-Shot | ✅ Terminé | - | - |
 | 5 | Cascade de Validation | ✅ Terminé | - | - |
-| 6 | Boucle de Réparation | ❌ Skippée | Moyenne | 2-3 jours |
+| 6 | Boucle de Réparation | ✅ Terminé (`generation/graph.py`, LangGraph) | - | - |
 | 7 | Store + Sandbox | ✅ Terminé | - | - |
 | 8 | API + Adaptateurs ERP | ✅ Terminé | - | - |
 | 9 | Documentation Technique | 🚧 Partiel | Haute | 1 semaine |
@@ -123,9 +123,11 @@ Ce document liste **toutes les étapes** du projet PRISME de bout en bout, leur 
 - ✅ Gestion erreurs (runtime exceptions swallowed)
 
 **Ce qui manque** :
-- ⏳ Boucle de réparation (Étape 6)
 - ⏳ Few-shot learning avec exemples réussis
 - ⏳ Mesure taux de succès en production (jamais lancé avec vrai LLM)
+
+(La boucle de réparation — Étape 6 — est faite, mais dans un pipeline séparé qui a remplacé ce
+mode single-shot comme chemin de production, voir plus bas.)
 
 **Tests** :
 - `tests/unit/test_agent_comprehension.py` - 3 tests (mock LLM)
@@ -156,41 +158,26 @@ Ce document liste **toutes les étapes** du projet PRISME de bout en bout, leur 
 
 ---
 
-### ❌ Étape 6 : Boucle de Réparation (Skippée)
+### ✅ Étape 6 : Boucle de Réparation (Terminé)
+
+> Arrivée plus tard que prévu (après l'Étape 8, voir « Build order » dans `CLAUDE.md`), sous forme
+> d'une réécriture complète en LangGraph plutôt que le `generation/loop.py` initialement envisagé.
 
 **Objectif** : Retry intelligente en cas d'échec de génération avec feedback diagnostic.
 
-**Livrables prévus** :
-- `generation/loop.py` - Boucle bornée (max tentatives)
-- `generation/failures/diagnostic.py` - Attribution de cause
-- `generation/failures/strategies.py` - Stratégies de réparation
+**Livrables réels** :
+- `generation/graph.py` — `StateGraph` LangGraph : analyste → **benchmarker** (choisit
+  l'algorithme — `cp_sat` exact, ou une heuristique genetic/aco/tabu_search/simulated_annealing/
+  dispatching/greedy_local pour les grandes instances) → architecte → développeur → testeur →
+  boucle reviewer/debugger (max `MAX_TENTATIVES_REPARATION = 10` tentatives) → documentation
+  (best-effort)
+- Câblé à l'API (`api/routes/generation.py`) : `POST /generation/{instance_id}` (bloquant) ou
+  `/demarrer` + SSE `/jobs/{job_id}/stream` (suivi en direct, survit à une déconnexion)
+- Diagnostic à chaque tentative : le Reviewer nomme le problème avant que le Debugger corrige,
+  jamais un « ça ne marche pas » générique
 
-**Pourquoi skippée** :
-- Décision de priorisation (Étape 8 avant Étape 6)
-- Le single-shot suffit pour la démo
-- Complexité élevée pour gain incertain
-
-**Ce qui reste à faire** :
-```python
-def generer_avec_reparation(instance, max_tentatives=3):
-    for i in range(max_tentatives):
-        code = generer_single_shot(instance)
-        verdict = cascade(code)
-        
-        if verdict.vert:
-            return code  # Succès
-        
-        # Diagnostic
-        feedback = diagnostiquer(verdict)
-        
-        # Enrichir prompt avec feedback
-        # TODO: implémenter stratégies de réparation
-    
-    return None  # Échec après N tentatives
-```
-
-**Temps estimé** : 2-3 jours
-**Priorité** : Moyenne (nice-to-have, pas bloquant)
+`generation/tentative_unique.py` (single-shot, sans boucle) existe toujours mais n'est plus le
+chemin de production — utilisé par des scripts de dev pour de l'itération rapide/économique.
 
 ---
 
@@ -427,7 +414,7 @@ api_request_duration_seconds    # histogram
 4. 🚧 Créer tutoriel "Premiers pas"
 
 **Semaine 2** :
-1. 🚧 Implémenter boucle de réparation (Étape 6)
+1. ✅ Boucle de réparation (Étape 6, fait — `generation/graph.py`)
 2. 🚧 Tests property-based pour cascade
 3. 🚧 Documentation API complète
 4. 🚧 Guide déploiement

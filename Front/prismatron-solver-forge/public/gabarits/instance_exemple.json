@@ -1,7 +1,7 @@
 {
   "taches": [
-    { "id": "T1", "nom": "Decoupe", "duree_estimee_minutes": 30 },
-    { "id": "T2", "nom": "Assemblage", "duree_estimee_minutes": 20 }
+    { "id": "T1", "nom": "Decoupe", "duree_estimee_jours": 3 },
+    { "id": "T2", "nom": "Assemblage", "duree_estimee_jours": 2 }
   ],
   "ressources": [
     { "id": "R1", "nom": "Decoupeuse", "competences": ["decoupe", "assemblage"] }

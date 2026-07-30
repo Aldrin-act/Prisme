@@ -13,7 +13,7 @@ Utilisé pour les tâches nécessitant un raisonnement complexe et de grands con
 
 - **Développeur/Générateur** : 16K tokens pour code long, thinking mode pour logique complexe
 - **Debugger** : Thinking mode excellent pour analyse d'erreurs et corrections
-- **Architecte** : Raisonnement structurel complexe sur l'architecture CP-SAT
+- **Architecte** : Raisonnement structurel complexe sur le modèle (CP-SAT ou l'algorithme choisi par le Benchmarker)
 - **Analyste** : Compréhension profonde de la mission T-R-C-O
 - **Reviewer** : Thinking mode pour revue critique approfondie
 - **Agent ERP Compréhension** : 16K tokens pour grandes données ERP, mapping complexe

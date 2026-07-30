@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field
 
 from .common import Identifiant
+
+StatutTache = Literal["a_faire", "en_cours", "termine", "bloque"]
 
 
 class Tache(BaseModel):
@@ -31,4 +35,9 @@ class Tache(BaseModel):
         le=5,
         description="Priorité métier, 1 (critique) à 5 (faible) — optionnel, purement "
         "informatif : aucune contrainte ni objectif n'en dépend aujourd'hui.",
+    )
+    statut: StatutTache | None = Field(
+        default=None,
+        description="Statut de suivi métier (a_faire/en_cours/termine/bloque) — optionnel, purement "
+        "informatif : ni le solveur ni le vérificateur de faisabilité n'en dépendent aujourd'hui.",
     )

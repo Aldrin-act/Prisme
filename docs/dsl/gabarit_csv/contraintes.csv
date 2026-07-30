@@ -1,4 +1,4 @@
-type,tache_avant,tache_apres,tache,ressource,duree_minutes,competence
+type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
 precedence,T1,T2,,,,
 competence_requise,,,T1,,,decoupe
 competence_requise,,,T2,,,assemblage

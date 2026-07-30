@@ -17,7 +17,15 @@ from collections import defaultdict
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .contraintes import CompatibiliteRessourceTache, CompetenceRequise, Contrainte, Echeance, Precedence
+from .contraintes import (
+    CompatibiliteRessourceTache,
+    CompetenceRequise,
+    Contrainte,
+    ContrainteCapacite,
+    ContrainteIncompatibilite,
+    Echeance,
+    Precedence,
+)
 from .objectifs import Objectif
 from .ressources import Ressource
 from .taches import Tache
@@ -66,6 +74,13 @@ class InstanceTRCO(BaseModel):
             elif isinstance(contrainte, CompetenceRequise):
                 if contrainte.tache not in ids_taches:
                     raise ValueError(f"compétence requise référence une tâche inconnue : {contrainte.tache!r}")
+            elif isinstance(contrainte, ContrainteCapacite):
+                if contrainte.ressource not in ids_ressources:
+                    raise ValueError(f"capacité référence une ressource inconnue : {contrainte.ressource!r}")
+            elif isinstance(contrainte, ContrainteIncompatibilite):
+                for id_tache in (contrainte.tache, contrainte.tache_incompatible):
+                    if id_tache not in ids_taches:
+                        raise ValueError(f"incompatibilité référence une tâche inconnue : {id_tache!r}")
 
         return self
 

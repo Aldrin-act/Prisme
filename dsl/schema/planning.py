@@ -22,7 +22,7 @@ class OperationPlanifiee(BaseModel):
 
     tache: Identifiant
     ressource: Identifiant
-    debut: int = Field(ge=0, description="Instant de début, en minutes")
+    debut: int = Field(ge=0, description="Instant de début, en jours")
 
 
 class Planning(BaseModel):

@@ -13,7 +13,7 @@ from adapters.csv_import import ErreurFichierInvalide, traduire
 TACHES_CSV = b"id,nom\nT1,Decoupe\nT2,Assemblage\n"
 RESSOURCES_CSV = b"id,nom\nR1,Decoupeuse\n"
 CONTRAINTES_CSV = (
-    b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n"
+    b"type,tache_avant,tache_apres,tache,ressource,duree_jours\n"
     b"precedence,T1,T2,,,\n"
     b"compatibilite_ressource_tache,,,T1,R1,10\n"
     b"compatibilite_ressource_tache,,,T2,R1,15\n"
@@ -55,14 +55,14 @@ def test_fichier_vide_leve_erreur_fichier_invalide() -> None:
 
 
 def test_type_contrainte_inconnu_leve_erreur_fichier_invalide() -> None:
-    contraintes_type_invalide = b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\nechance,T1,T2,,,\n"
+    contraintes_type_invalide = b"type,tache_avant,tache_apres,tache,ressource,duree_jours\nechance,T1,T2,,,\n"
     with pytest.raises(ErreurFichierInvalide, match="type de contrainte inconnu"):
         traduire(TACHES_CSV, RESSOURCES_CSV, contraintes_type_invalide)
 
 
 def test_duree_non_numerique_leve_erreur_fichier_invalide() -> None:
     contraintes_duree_invalide = (
-        b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n"
+        b"type,tache_avant,tache_apres,tache,ressource,duree_jours\n"
         b"compatibilite_ressource_tache,,,T1,R1,pas-un-nombre\n"
     )
     with pytest.raises(ErreurFichierInvalide, match="durée invalide"):
@@ -73,7 +73,7 @@ def test_tache_sans_compatibilite_rejetee_par_le_garde_fou_dsl() -> None:
     """Le garde-fou (§6.7) tranche pareil, quel que soit le canal d'ingestion :
     T2 n'a aucune compatibilité ressource-tâche ici."""
     contraintes_incompletes = (
-        b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\ncompatibilite_ressource_tache,,,T1,R1,10\n"
+        b"type,tache_avant,tache_apres,tache,ressource,duree_jours\ncompatibilite_ressource_tache,,,T1,R1,10\n"
     )
     with pytest.raises(ValidationError):
         traduire(TACHES_CSV, RESSOURCES_CSV, contraintes_incompletes)
@@ -83,7 +83,7 @@ def test_tache_sans_compatibilite_rejetee_par_le_garde_fou_dsl() -> None:
 
 
 def test_compatibilite_derivee_pour_chaque_ressource_competente() -> None:
-    taches_csv = b"id,nom,duree_estimee_minutes\nT1,Decoupe,25\n"
+    taches_csv = b"id,nom,duree_estimee_jours\nT1,Decoupe,25\n"
     ressources_csv = b"id,nom,competences\nR1,Decoupeuse,decoupe;affutage\nR2,Assembleuse,assemblage\n"
     contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
 
@@ -105,7 +105,7 @@ def test_compatibilite_derivee_exige_toutes_les_competences_requises() -> None:
     ressource qui les couvre TOUTES — même exigence que le garde-fou DSL
     (`InstanceTRCO._competences_requises_respectees`), pas une simple
     intersection non vide."""
-    taches_csv = b"id,duree_estimee_minutes\nT1,25\n"
+    taches_csv = b"id,duree_estimee_jours\nT1,25\n"
     ressources_csv = b"id,competences\nR1,decoupe\nR2,decoupe;affutage\n"
     contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\ncompetence_requise,T1,affutage\n"
 
@@ -131,10 +131,10 @@ def test_compatibilite_explicite_et_derivee_par_competence_coexistent() -> None:
     toute compatibilité, explicite ou dérivée, dès qu'une compétence est
     requise) mais avec une durée déclarée à la main, différente de celle,
     dérivée, appliquée à R1."""
-    taches_csv = b"id,duree_estimee_minutes\nT1,25\n"
+    taches_csv = b"id,duree_estimee_jours\nT1,25\n"
     ressources_csv = b"id,competences\nR1,decoupe\nR2,decoupe\n"
     contraintes_csv = (
-        b"type,tache,ressource,duree_minutes,competence\n"
+        b"type,tache,ressource,duree_jours,competence\n"
         b"compatibilite_ressource_tache,T1,R2,40,\n"
         b"competence_requise,T1,,,decoupe\n"
     )

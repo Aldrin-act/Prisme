@@ -98,7 +98,7 @@ class MinimiserRetards(BaseModel):
     seuil_grace: int = Field(
         default=0,
         ge=0,
-        description="Minutes de grâce avant que le retard ne soit pénalisé"
+        description="Jours de grâce avant que le retard ne soit pénalisé"
     )
 
 

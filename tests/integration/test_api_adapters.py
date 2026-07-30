@@ -116,7 +116,7 @@ def test_ingestion_depuis_csv_accepte_trois_fichiers_valides() -> None:
                 "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
                 "contraintes": (
                     "contraintes.csv",
-                    b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n"
+                    b"type,tache_avant,tache_apres,tache,ressource,duree_jours\n"
                     b"precedence,T1,T2,,,\n"
                     b"compatibilite_ressource_tache,,,T1,R1,10\n"
                     b"compatibilite_ressource_tache,,,T2,R1,15\n",
@@ -146,7 +146,7 @@ def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
         reponse = client.post(
             "/adapters/csv/client_test",
             files={
-                "taches": ("taches.csv", b"id,duree_estimee_minutes\nT1,25\n", "text/csv"),
+                "taches": ("taches.csv", b"id,duree_estimee_jours\nT1,25\n", "text/csv"),
                 "ressources": ("ressources.csv", b"id,competences\nR1,decoupe\nR2,assemblage\n", "text/csv"),
                 "contraintes": (
                     "contraintes.csv",
@@ -180,7 +180,7 @@ def test_ingestion_depuis_csv_rejette_une_extension_invalide() -> None:
                 "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
                 "contraintes": (
                     "contraintes.csv",
-                    b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n",
+                    b"type,tache_avant,tache_apres,tache,ressource,duree_jours\n",
                     "text/csv",
                 ),
             },
@@ -205,7 +205,7 @@ def test_ingestion_depuis_csv_relaie_une_colonne_manquante() -> None:
                 "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
                 "contraintes": (
                     "contraintes.csv",
-                    b"type,tache_avant,tache_apres,tache,ressource,duree_minutes\n",
+                    b"type,tache_avant,tache_apres,tache,ressource,duree_jours\n",
                     "text/csv",
                 ),
             },
@@ -254,7 +254,7 @@ def test_ingestion_depuis_json_derive_la_compatibilite_par_competence() -> None:
         reponse = client.post(
             "/adapters/json/client_test",
             json={
-                "taches": [{"id": "T1", "duree_estimee_minutes": 25}],
+                "taches": [{"id": "T1", "duree_estimee_jours": 25}],
                 "ressources": [{"id": "R1", "competences": ["decoupe"]}, {"id": "R2", "competences": []}],
                 "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
             },

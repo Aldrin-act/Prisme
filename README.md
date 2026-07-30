@@ -12,20 +12,19 @@ du projet (problème, architecture, stratégie de validation, roadmap), et
 Le code du solveur est **généré une seule fois** par une boucle multi-agent (`generation/`), puis
 **persisté** (`solver_store/`) et **réexécuté** à chaque itération dans un conteneur éphémère
 (`sandbox/`), sans nouvelle sollicitation de l'IA. Le problème résolu est le *Flexible Job-Shop
-Scheduling Problem* (FJSP), via OR-Tools CP-SAT.
+Scheduling Problem* (FJSP) ; l'agent Benchmarker choisit dynamiquement l'algorithme par instance
+(OR-Tools CP-SAT, exact, ou une heuristique — génétique, ACO, tabu, recuit simulé, dispatching,
+greedy — pour les instances trop grandes pour CP-SAT), jamais un algorithme fixé en dur.
 
 ## État du projet
 
-Scaffolding précoce. Étapes 1–5, 7 et 8 de la roadmap (§8) sont implémentées, dans un ordre qui
-dévie volontairement de l'ordre listé (l'Étape 6, la boucle de réparation bornée, est sautée pour
-l'instant — voir §8 de la note de cadrage pour le détail des dépendances). En dehors de `dsl/`,
-`validation_engine/`, `generation/`, `solver_store/`, `sandbox/`,
-`adapters/` et `api/`, chaque répertoire de module ne contient pour l'instant qu'un
-`README.md` décrivant son contenu prévu (`diagnostics/`, `dashboard/`, `docs/`).
+Étapes 1 à 8 de la roadmap (§8) sont implémentées, dans un ordre qui dévie volontairement de
+l'ordre listé (voir « Build order » dans [CLAUDE.md](CLAUDE.md) pour le détail). En dehors de
+`dsl/`, `validation_engine/`, `generation/`, `solver_store/`, `sandbox/`, `adapters/`, `api/` et
+`Front/prismatron-solver-forge/`, chaque répertoire de module ne contient pour l'instant qu'un
+`README.md` décrivant son contenu prévu (`diagnostics/`).
 
-Rien dans `solver_store/`, `sandbox/`, `api/` ou `adapters/` n'a encore été exécuté en conditions
-réelles (pas de Docker ni de connexion LLM disponibles au moment de leur écriture) — voir
-[CLAUDE.md](CLAUDE.md) pour le détail de ce qui reste à vérifier.
+Voir [CLAUDE.md](CLAUDE.md) pour l'état détaillé de chaque étape et ce qui reste à vérifier.
 
 ## Prérequis
 
@@ -120,7 +119,7 @@ bout-en-bout s'exécutent réellement, pas seulement en `skip`). Un run rouge do
 ```
 dsl/                  Modèle pivot T-R-C-O — Tâches, Ressources, Contraintes, Objectifs (Étape 1)
 validation_engine/    Cascade de validation : faisabilité → banc synthétique → cas de référence (Étapes 2, 3, 5)
-generation/           Générateur tir unique piloté par LLM → code CP-SAT (Étape 4 ; boucle de réparation Étape 6 non faite)
+generation/           Pipeline multi-agents (LangGraph) : Benchmarker choisit l'algorithme, boucle de réparation bornée (Étape 6)
 solver_store/         Store des solveurs validés, code figé (Étape 7)
 sandbox/              Exécution éphémère en conteneur jetable (Étape 7)
 api/                  API PRISME — ingestion, exécution, canaux opérationnel/audit (Étape 8)
@@ -138,9 +137,10 @@ Voir §8 de la note de cadrage. Ordre de construction prévu : DSL → vérifica
 banc synthétique → générateur (tir unique) → cascade de validation → boucle
 generate-test-repair → store + sandbox → API + adaptateur ERP → tableau de bord.
 
-L'ordre de construction réel a dévié de cet ordre (cascade de validation avant le générateur,
-Étape 6 sautée, API avant la boucle de réparation) — voir la section « Build order » de
-[CLAUDE.md](CLAUDE.md) pour le détail et les raisons de chaque écart.
+L'ordre de construction réel a dévié de cet ordre (cascade de validation avant le générateur, API
+avant la boucle de réparation, Étape 6 arrivée en dernier sous forme de réécriture complète en
+LangGraph) — voir la section « Build order » de [CLAUDE.md](CLAUDE.md) pour le détail et les
+raisons de chaque écart.
 
 ## Contribuer
 
