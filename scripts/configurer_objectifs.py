@@ -168,6 +168,13 @@ def ajouter_echeances(instance: dict, strategie: str = "uniforme") -> dict:
 def ajouter_competences(instance: dict, taux_specialisation: float = 0.3) -> dict:
     """Ajoute des compétences aux ressources et des exigences aux tâches.
 
+    Une exigence n'est ajoutée que si toutes les ressources compatibles avec
+    la tâche (via `compatibilite_ressource_tache`) possèdent déjà cette
+    compétence — sinon `InstanceTRCO` rejette l'instance (§6.7, cohérence
+    compétence/compatibilité) : tirer une compétence requise indépendamment
+    des compétences réellement attribuées peut produire une instance
+    invalide selon l'aléa.
+
     Args:
         taux_specialisation: Proportion de tâches nécessitant des compétences (0.0 à 1.0)
     """
@@ -195,17 +202,31 @@ def ajouter_competences(instance: dict, taux_specialisation: float = 0.3) -> dic
             min(n_competences, len(competences_disponibles))
         )
 
+    competences_par_ressource = {r["id"]: set(r["competences"]) for r in instance["ressources"]}
+    ressources_compatibles_par_tache: dict[str, list[str]] = {}
+    for contrainte in instance["contraintes"]:
+        if contrainte.get("type") == "compatibilite_ressource_tache":
+            ressources_compatibles_par_tache.setdefault(contrainte["tache"], []).append(contrainte["ressource"])
+
     # Ajouter des exigences de compétences à certaines tâches
     n_taches_specialisees = int(len(instance["taches"]) * taux_specialisation)
     taches_specialisees = random.sample(instance["taches"], n_taches_specialisees)
 
     for tache in taches_specialisees:
-        # Choisir 1-2 compétences requises
-        n_competences_requises = random.randint(1, 2)
-        competences_requises = random.sample(
-            competences_disponibles,
-            min(n_competences_requises, len(competences_disponibles))
+        ressources_compatibles = ressources_compatibles_par_tache.get(tache["id"], [])
+        if not ressources_compatibles:
+            continue
+
+        # Compétences communes à toutes les ressources compatibles : seules
+        # candidates possibles pour une exigence cohérente sur cette tâche.
+        competences_communes = set.intersection(
+            *(competences_par_ressource[r] for r in ressources_compatibles)
         )
+        if not competences_communes:
+            continue
+
+        n_competences_requises = min(random.randint(1, 2), len(competences_communes))
+        competences_requises = random.sample(sorted(competences_communes), n_competences_requises)
 
         for competence in competences_requises:
             instance["contraintes"].append({

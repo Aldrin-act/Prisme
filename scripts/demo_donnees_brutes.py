@@ -123,7 +123,7 @@ def demo_workflow_complet():
                 fin = op.debut + duree
                 makespan = max(makespan, fin)
 
-            print(f"Makespan: {makespan} minutes")
+            print(f"Makespan: {makespan} jours")
             print(f"Nombre d'operations planifiees: {len(planning.operations)}")
             print()
 

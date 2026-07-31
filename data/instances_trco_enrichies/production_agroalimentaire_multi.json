@@ -3,93 +3,111 @@
     {
       "id": "RECEPTION_MP",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LAVAGE_LEGUMES",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "EPLUCHAGE",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "DECOUPE",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "CUISSON",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "REFROIDISSEMENT",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "CONDITIONNEMENT",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "ETIQUETAGE",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "PALETTISATION",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     }
   ],
   "ressources": [
     {
       "id": "QUAI_RECEPTION",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_LAVAGE",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_EPLUCHAGE",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_DECOUPE",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_REFROIDISSEMENT",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ETIQUETEUSE_AUTO",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_PALETTISEUR",
       "nom": null,
+      "type": null,
       "competences": []
     }
   ],
@@ -98,13 +116,13 @@
       "type": "compatibilite_ressource_tache",
       "tache": "RECEPTION_MP",
       "ressource": "QUAI_RECEPTION",
-      "duree": 30
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LAVAGE_LEGUMES",
       "ressource": "TUNNEL_LAVAGE",
-      "duree": 45
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -115,7 +133,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "EPLUCHAGE",
       "ressource": "LIGNE_EPLUCHAGE",
-      "duree": 60
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -126,7 +144,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "DECOUPE",
       "ressource": "ROBOT_DECOUPE",
-      "duree": 40
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -137,7 +155,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "CUISSON",
       "ressource": "AUTOCLAVE_1",
-      "duree": 120
+      "duree": 3
     },
     {
       "type": "precedence",
@@ -148,7 +166,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "REFROIDISSEMENT",
       "ressource": "TUNNEL_REFROIDISSEMENT",
-      "duree": 90
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -159,7 +177,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "CONDITIONNEMENT",
       "ressource": "LIGNE_CONDITIONNEMENT",
-      "duree": 50
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -170,7 +188,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "ETIQUETAGE",
       "ressource": "ETIQUETEUSE_AUTO",
-      "duree": 25
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -181,7 +199,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "PALETTISATION",
       "ressource": "ROBOT_PALETTISEUR",
-      "duree": 35
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -190,30 +208,30 @@
     },
     {
       "type": "echeance",
+      "tache": "ETIQUETAGE",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "CUISSON",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
       "tache": "REFROIDISSEMENT",
-      "echeance": 41
-    },
-    {
-      "type": "echeance",
-      "tache": "LAVAGE_LEGUMES",
-      "echeance": 51
-    },
-    {
-      "type": "echeance",
-      "tache": "DECOUPE",
-      "echeance": 61
+      "echeance": 1
     },
     {
       "type": "echeance",
       "tache": "CONDITIONNEMENT",
-      "echeance": 71
+      "echeance": 1
     }
   ],
   "objectifs": [
     {
       "type": "minimiser_makespan",
       "poids": 0.25,
-      "makespan_cible": 70
+      "makespan_cible": 2
     },
     {
       "type": "equilibrer_charge",

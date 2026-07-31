@@ -2,61 +2,61 @@
   "operations": [
     {
       "code_operation": "PREP_PCB",
-      "duree_minutes": 15,
+      "duree_jours": 1,
       "poste_id": "STATION_PREP",
       "operation_precedente": null
     },
     {
       "code_operation": "POSE_CMS_FACE_A",
-      "duree_minutes": 90,
+      "duree_jours": 2,
       "poste_id": "MACHINE_PICK_PLACE_1",
       "operation_precedente": "PREP_PCB"
     },
     {
       "code_operation": "SOUDURE_REFUSION_A",
-      "duree_minutes": 25,
+      "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
       "operation_precedente": "POSE_CMS_FACE_A"
     },
     {
       "code_operation": "INSPECTION_AOI_A",
-      "duree_minutes": 10,
+      "duree_jours": 1,
       "poste_id": "AOI_AUTOMATIQUE",
       "operation_precedente": "SOUDURE_REFUSION_A"
     },
     {
       "code_operation": "POSE_CMS_FACE_B",
-      "duree_minutes": 75,
+      "duree_jours": 2,
       "poste_id": "MACHINE_PICK_PLACE_2",
       "operation_precedente": "INSPECTION_AOI_A"
     },
     {
       "code_operation": "SOUDURE_REFUSION_B",
-      "duree_minutes": 25,
+      "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
       "operation_precedente": "POSE_CMS_FACE_B"
     },
     {
       "code_operation": "SOUDURE_MANUELLE",
-      "duree_minutes": 45,
+      "duree_jours": 2,
       "poste_id": "POSTE_SOUDURE_MANUEL",
       "operation_precedente": "SOUDURE_REFUSION_B"
     },
     {
       "code_operation": "TEST_FONCTIONNEL",
-      "duree_minutes": 30,
+      "duree_jours": 1,
       "poste_id": "BANC_TEST",
       "operation_precedente": "SOUDURE_MANUELLE"
     },
     {
       "code_operation": "CONFORMAL_COATING",
-      "duree_minutes": 20,
+      "duree_jours": 1,
       "poste_id": "ROBOT_COATING",
       "operation_precedente": "TEST_FONCTIONNEL"
     },
     {
       "code_operation": "CONTROLE_FINAL",
-      "duree_minutes": 15,
+      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_VISUEL",
       "operation_precedente": "CONFORMAL_COATING"
     }

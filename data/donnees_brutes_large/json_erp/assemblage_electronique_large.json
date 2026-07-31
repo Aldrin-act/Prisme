@@ -1,604 +1,604 @@
 {
   "operations": [
     {
-      "code_operation": "PCB0001_PREP_0001",
-      "duree_minutes": 44,
-      "poste_id": "STATION_ASSEMBLAGE_5",
+      "code_operation": "PCB0001_POSE_CMS_B_0001",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_5",
       "operation_precedente": null
     },
     {
-      "code_operation": "PCB0001_REFUSION_B_0002",
-      "duree_minutes": 32,
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PCB0001_PREP_0001"
-    },
-    {
-      "code_operation": "PCB0001_TEST_ICT_0003",
-      "duree_minutes": 40,
-      "poste_id": "BANC_TEST_ICT_2",
-      "operation_precedente": "PCB0001_REFUSION_B_0002"
-    },
-    {
-      "code_operation": "PCB0001_AOI_A_0004",
-      "duree_minutes": 11,
-      "poste_id": "AOI_3",
-      "operation_precedente": "PCB0001_TEST_ICT_0003"
-    },
-    {
-      "code_operation": "PCB0001_POSE_CMS_B_0005",
-      "duree_minutes": 84,
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "PCB0001_AOI_A_0004"
-    },
-    {
-      "code_operation": "PCB0001_PACKAGE_0006",
-      "duree_minutes": 13,
-      "poste_id": "STATION_PACKAGING_6",
-      "operation_precedente": "PCB0001_POSE_CMS_B_0005"
-    },
-    {
-      "code_operation": "PCB0001_TEST_FONC_0007",
-      "duree_minutes": 66,
-      "poste_id": "BANC_TEST_FONCTIONNEL_1",
-      "operation_precedente": "PCB0001_PACKAGE_0006"
-    },
-    {
-      "code_operation": "PCB0001_POSE_CMS_A_0008",
-      "duree_minutes": 74,
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "PCB0001_TEST_FONC_0007"
-    },
-    {
-      "code_operation": "PCB0001_REFUSION_A_0009",
-      "duree_minutes": 31,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "PCB0001_POSE_CMS_A_0008"
-    },
-    {
-      "code_operation": "PCB0001_COATING_0010",
-      "duree_minutes": 22,
-      "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "PCB0001_REFUSION_A_0009"
-    },
-    {
-      "code_operation": "PCB0002_AOI_A_0011",
-      "duree_minutes": 15,
-      "poste_id": "AOI_2",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "PCB0002_POSE_CMS_A_0012",
-      "duree_minutes": 74,
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "PCB0002_AOI_A_0011"
-    },
-    {
-      "code_operation": "PCB0002_POSE_CMS_B_0013",
-      "duree_minutes": 71,
-      "poste_id": "PICK_PLACE_4",
-      "operation_precedente": "PCB0002_POSE_CMS_A_0012"
-    },
-    {
-      "code_operation": "PCB0002_SOUDURE_THT_0014",
-      "duree_minutes": 46,
-      "poste_id": "POSTE_SOUDURE_MANUEL_1",
-      "operation_precedente": "PCB0002_POSE_CMS_B_0013"
-    },
-    {
-      "code_operation": "PCB0002_COATING_0015",
-      "duree_minutes": 24,
+      "code_operation": "PCB0001_COATING_0002",
+      "duree_jours": 1,
       "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "PCB0002_SOUDURE_THT_0014"
+      "operation_precedente": "PCB0001_POSE_CMS_B_0001"
     },
     {
-      "code_operation": "PCB0002_DEPANEL_0016",
-      "duree_minutes": 12,
-      "poste_id": "POSTE_DEPANNELISATION_1",
-      "operation_precedente": "PCB0002_COATING_0015"
-    },
-    {
-      "code_operation": "PCB0002_PACKAGE_0017",
-      "duree_minutes": 23,
-      "poste_id": "STATION_PACKAGING_7",
-      "operation_precedente": "PCB0002_DEPANEL_0016"
-    },
-    {
-      "code_operation": "PCB0002_REFUSION_A_0018",
-      "duree_minutes": 22,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "PCB0002_PACKAGE_0017"
-    },
-    {
-      "code_operation": "PCB0002_PREP_0019",
-      "duree_minutes": 25,
-      "poste_id": "STATION_ASSEMBLAGE_6",
-      "operation_precedente": "PCB0002_REFUSION_A_0018"
-    },
-    {
-      "code_operation": "PCB0002_TEST_FONC_0020",
-      "duree_minutes": 45,
-      "poste_id": "BANC_TEST_FONCTIONNEL_4",
-      "operation_precedente": "PCB0002_PREP_0019"
-    },
-    {
-      "code_operation": "PCB0002_REFUSION_B_0021",
-      "duree_minutes": 22,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "PCB0002_TEST_FONC_0020"
-    },
-    {
-      "code_operation": "PCB0002_TEST_ICT_0022",
-      "duree_minutes": 29,
-      "poste_id": "BANC_TEST_ICT_8",
-      "operation_precedente": "PCB0002_REFUSION_B_0021"
-    },
-    {
-      "code_operation": "PCB0003_AOI_A_0023",
-      "duree_minutes": 8,
-      "poste_id": "AOI_5",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "PCB0003_REFUSION_B_0024",
-      "duree_minutes": 21,
-      "poste_id": "FOUR_REFUSION_1",
-      "operation_precedente": "PCB0003_AOI_A_0023"
-    },
-    {
-      "code_operation": "PCB0003_POSE_CMS_A_0025",
-      "duree_minutes": 111,
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "PCB0003_REFUSION_B_0024"
-    },
-    {
-      "code_operation": "PCB0003_REFUSION_A_0026",
-      "duree_minutes": 35,
-      "poste_id": "FOUR_REFUSION_1",
-      "operation_precedente": "PCB0003_POSE_CMS_A_0025"
-    },
-    {
-      "code_operation": "PCB0003_TEST_ICT_0027",
-      "duree_minutes": 59,
-      "poste_id": "BANC_TEST_ICT_6",
-      "operation_precedente": "PCB0003_REFUSION_A_0026"
-    },
-    {
-      "code_operation": "PCB0003_TEST_FONC_0028",
-      "duree_minutes": 52,
-      "poste_id": "BANC_TEST_FONCTIONNEL_5",
-      "operation_precedente": "PCB0003_TEST_ICT_0027"
-    },
-    {
-      "code_operation": "PCB0003_COATING_0029",
-      "duree_minutes": 32,
-      "poste_id": "ROBOT_COATING_2",
-      "operation_precedente": "PCB0003_TEST_FONC_0028"
-    },
-    {
-      "code_operation": "PCB0003_DEPANEL_0030",
-      "duree_minutes": 14,
-      "poste_id": "POSTE_DEPANNELISATION_4",
-      "operation_precedente": "PCB0003_COATING_0029"
-    },
-    {
-      "code_operation": "PCB0003_PACKAGE_0031",
-      "duree_minutes": 11,
-      "poste_id": "STATION_PACKAGING_3",
-      "operation_precedente": "PCB0003_DEPANEL_0030"
-    },
-    {
-      "code_operation": "PCB0003_PREP_0032",
-      "duree_minutes": 39,
-      "poste_id": "STATION_ASSEMBLAGE_8",
-      "operation_precedente": "PCB0003_PACKAGE_0031"
-    },
-    {
-      "code_operation": "PCB0003_SOUDURE_THT_0033",
-      "duree_minutes": 49,
+      "code_operation": "PCB0001_SOUDURE_THT_0003",
+      "duree_jours": 2,
       "poste_id": "POSTE_SOUDURE_MANUEL_11",
-      "operation_precedente": "PCB0003_PREP_0032"
+      "operation_precedente": "PCB0001_COATING_0002"
     },
     {
-      "code_operation": "PCB0004_REFUSION_B_0034",
-      "duree_minutes": 27,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": null
+      "code_operation": "PCB0001_DEPANEL_0004",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_1",
+      "operation_precedente": "PCB0001_SOUDURE_THT_0003"
     },
     {
-      "code_operation": "PCB0004_TEST_FONC_0035",
-      "duree_minutes": 58,
-      "poste_id": "BANC_TEST_FONCTIONNEL_2",
-      "operation_precedente": "PCB0004_REFUSION_B_0034"
+      "code_operation": "PCB0001_TEST_ICT_0005",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT_7",
+      "operation_precedente": "PCB0001_DEPANEL_0004"
     },
     {
-      "code_operation": "PCB0004_PACKAGE_0036",
-      "duree_minutes": 19,
-      "poste_id": "STATION_PACKAGING_2",
-      "operation_precedente": "PCB0004_TEST_FONC_0035"
+      "code_operation": "PCB0001_REFUSION_A_0006",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_4",
+      "operation_precedente": "PCB0001_TEST_ICT_0005"
     },
     {
-      "code_operation": "PCB0004_POSE_CMS_B_0037",
-      "duree_minutes": 99,
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "PCB0004_PACKAGE_0036"
+      "code_operation": "PCB0001_POSE_CMS_A_0007",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_6",
+      "operation_precedente": "PCB0001_REFUSION_A_0006"
     },
     {
-      "code_operation": "PCB0004_TEST_ICT_0038",
-      "duree_minutes": 54,
-      "poste_id": "BANC_TEST_ICT_6",
-      "operation_precedente": "PCB0004_POSE_CMS_B_0037"
+      "code_operation": "PCB0001_REFUSION_B_0008",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "PCB0001_POSE_CMS_A_0007"
     },
     {
-      "code_operation": "PCB0004_PREP_0039",
-      "duree_minutes": 25,
-      "poste_id": "STATION_ASSEMBLAGE_1",
-      "operation_precedente": "PCB0004_TEST_ICT_0038"
-    },
-    {
-      "code_operation": "PCB0004_AOI_A_0040",
-      "duree_minutes": 12,
-      "poste_id": "AOI_2",
-      "operation_precedente": "PCB0004_PREP_0039"
-    },
-    {
-      "code_operation": "PCB0004_REFUSION_A_0041",
-      "duree_minutes": 21,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "PCB0004_AOI_A_0040"
-    },
-    {
-      "code_operation": "PCB0004_SOUDURE_THT_0042",
-      "duree_minutes": 59,
-      "poste_id": "POSTE_SOUDURE_MANUEL_1",
-      "operation_precedente": "PCB0004_REFUSION_A_0041"
-    },
-    {
-      "code_operation": "PCB0004_COATING_0043",
-      "duree_minutes": 30,
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "PCB0004_SOUDURE_THT_0042"
-    },
-    {
-      "code_operation": "PCB0005_REFUSION_A_0044",
-      "duree_minutes": 30,
+      "code_operation": "PCB0002_REFUSION_A_0009",
+      "duree_jours": 1,
       "poste_id": "FOUR_REFUSION_2",
       "operation_precedente": null
     },
     {
-      "code_operation": "PCB0005_SOUDURE_THT_0045",
-      "duree_minutes": 81,
-      "poste_id": "POSTE_SOUDURE_MANUEL_2",
-      "operation_precedente": "PCB0005_REFUSION_A_0044"
+      "code_operation": "PCB0002_AOI_A_0010",
+      "duree_jours": 1,
+      "poste_id": "AOI_2",
+      "operation_precedente": "PCB0002_REFUSION_A_0009"
     },
     {
-      "code_operation": "PCB0005_PACKAGE_0046",
-      "duree_minutes": 14,
-      "poste_id": "STATION_PACKAGING_3",
-      "operation_precedente": "PCB0005_SOUDURE_THT_0045"
-    },
-    {
-      "code_operation": "PCB0005_PREP_0047",
-      "duree_minutes": 39,
-      "poste_id": "STATION_ASSEMBLAGE_7",
-      "operation_precedente": "PCB0005_PACKAGE_0046"
-    },
-    {
-      "code_operation": "PCB0005_TEST_ICT_0048",
-      "duree_minutes": 29,
-      "poste_id": "BANC_TEST_ICT_7",
-      "operation_precedente": "PCB0005_PREP_0047"
-    },
-    {
-      "code_operation": "PCB0005_COATING_0049",
-      "duree_minutes": 29,
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "PCB0005_TEST_ICT_0048"
-    },
-    {
-      "code_operation": "PCB0005_TEST_FONC_0050",
-      "duree_minutes": 49,
-      "poste_id": "BANC_TEST_FONCTIONNEL_1",
-      "operation_precedente": "PCB0005_COATING_0049"
-    },
-    {
-      "code_operation": "PCB0005_AOI_A_0051",
-      "duree_minutes": 15,
-      "poste_id": "AOI_3",
-      "operation_precedente": "PCB0005_TEST_FONC_0050"
-    },
-    {
-      "code_operation": "PCB0005_POSE_CMS_A_0052",
-      "duree_minutes": 121,
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "PCB0005_AOI_A_0051"
-    },
-    {
-      "code_operation": "PCB0005_POSE_CMS_B_0053",
-      "duree_minutes": 109,
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "PCB0005_POSE_CMS_A_0052"
-    },
-    {
-      "code_operation": "PCB0006_TEST_FONC_0054",
-      "duree_minutes": 51,
-      "poste_id": "BANC_TEST_FONCTIONNEL_2",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "PCB0006_REFUSION_B_0055",
-      "duree_minutes": 24,
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PCB0006_TEST_FONC_0054"
-    },
-    {
-      "code_operation": "PCB0006_PACKAGE_0056",
-      "duree_minutes": 18,
-      "poste_id": "STATION_PACKAGING_6",
-      "operation_precedente": "PCB0006_REFUSION_B_0055"
-    },
-    {
-      "code_operation": "PCB0006_REFUSION_A_0057",
-      "duree_minutes": 27,
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PCB0006_PACKAGE_0056"
-    },
-    {
-      "code_operation": "PCB0006_POSE_CMS_B_0058",
-      "duree_minutes": 92,
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "PCB0006_REFUSION_A_0057"
-    },
-    {
-      "code_operation": "PCB0006_POSE_CMS_A_0059",
-      "duree_minutes": 70,
-      "poste_id": "PICK_PLACE_5",
-      "operation_precedente": "PCB0006_POSE_CMS_B_0058"
-    },
-    {
-      "code_operation": "PCB0006_TEST_ICT_0060",
-      "duree_minutes": 49,
-      "poste_id": "BANC_TEST_ICT_3",
-      "operation_precedente": "PCB0006_POSE_CMS_A_0059"
-    },
-    {
-      "code_operation": "PCB0006_PREP_0061",
-      "duree_minutes": 32,
-      "poste_id": "STATION_ASSEMBLAGE_2",
-      "operation_precedente": "PCB0006_TEST_ICT_0060"
-    },
-    {
-      "code_operation": "PCB0007_POSE_CMS_A_0062",
-      "duree_minutes": 148,
-      "poste_id": "PICK_PLACE_1",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "PCB0007_PREP_0063",
-      "duree_minutes": 26,
-      "poste_id": "STATION_ASSEMBLAGE_5",
-      "operation_precedente": "PCB0007_POSE_CMS_A_0062"
-    },
-    {
-      "code_operation": "PCB0007_POSE_CMS_B_0064",
-      "duree_minutes": 123,
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "PCB0007_PREP_0063"
-    },
-    {
-      "code_operation": "PCB0007_TEST_FONC_0065",
-      "duree_minutes": 33,
-      "poste_id": "BANC_TEST_FONCTIONNEL_6",
-      "operation_precedente": "PCB0007_POSE_CMS_B_0064"
-    },
-    {
-      "code_operation": "PCB0007_SOUDURE_THT_0066",
-      "duree_minutes": 54,
-      "poste_id": "POSTE_SOUDURE_MANUEL_7",
-      "operation_precedente": "PCB0007_TEST_FONC_0065"
-    },
-    {
-      "code_operation": "PCB0007_TEST_ICT_0067",
-      "duree_minutes": 26,
-      "poste_id": "BANC_TEST_ICT_2",
-      "operation_precedente": "PCB0007_SOUDURE_THT_0066"
-    },
-    {
-      "code_operation": "PCB0007_COATING_0068",
-      "duree_minutes": 27,
-      "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "PCB0007_TEST_ICT_0067"
-    },
-    {
-      "code_operation": "PCB0007_AOI_A_0069",
-      "duree_minutes": 13,
-      "poste_id": "AOI_3",
-      "operation_precedente": "PCB0007_COATING_0068"
-    },
-    {
-      "code_operation": "PCB0007_PACKAGE_0070",
-      "duree_minutes": 10,
-      "poste_id": "STATION_PACKAGING_6",
-      "operation_precedente": "PCB0007_AOI_A_0069"
-    },
-    {
-      "code_operation": "PCB0008_REFUSION_B_0071",
-      "duree_minutes": 26,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "PCB0008_TEST_FONC_0072",
-      "duree_minutes": 26,
-      "poste_id": "BANC_TEST_FONCTIONNEL_6",
-      "operation_precedente": "PCB0008_REFUSION_B_0071"
-    },
-    {
-      "code_operation": "PCB0008_POSE_CMS_A_0073",
-      "duree_minutes": 133,
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "PCB0008_TEST_FONC_0072"
-    },
-    {
-      "code_operation": "PCB0008_AOI_A_0074",
-      "duree_minutes": 9,
-      "poste_id": "AOI_5",
-      "operation_precedente": "PCB0008_POSE_CMS_A_0073"
-    },
-    {
-      "code_operation": "PCB0008_TEST_ICT_0075",
-      "duree_minutes": 38,
-      "poste_id": "BANC_TEST_ICT_5",
-      "operation_precedente": "PCB0008_AOI_A_0074"
-    },
-    {
-      "code_operation": "PCB0008_DEPANEL_0076",
-      "duree_minutes": 15,
+      "code_operation": "PCB0002_DEPANEL_0011",
+      "duree_jours": 1,
       "poste_id": "POSTE_DEPANNELISATION_2",
-      "operation_precedente": "PCB0008_TEST_ICT_0075"
+      "operation_precedente": "PCB0002_AOI_A_0010"
     },
     {
-      "code_operation": "PCB0008_REFUSION_A_0077",
-      "duree_minutes": 29,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "PCB0008_DEPANEL_0076"
+      "code_operation": "PCB0002_PREP_0012",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_8",
+      "operation_precedente": "PCB0002_DEPANEL_0011"
     },
     {
-      "code_operation": "PCB0008_PREP_0078",
-      "duree_minutes": 40,
-      "poste_id": "STATION_ASSEMBLAGE_2",
-      "operation_precedente": "PCB0008_REFUSION_A_0077"
+      "code_operation": "PCB0002_REFUSION_B_0013",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "PCB0002_PREP_0012"
     },
     {
-      "code_operation": "PCB0008_SOUDURE_THT_0079",
-      "duree_minutes": 31,
-      "poste_id": "POSTE_SOUDURE_MANUEL_2",
-      "operation_precedente": "PCB0008_PREP_0078"
+      "code_operation": "PCB0002_TEST_FONC_0014",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_3",
+      "operation_precedente": "PCB0002_REFUSION_B_0013"
     },
     {
-      "code_operation": "PCB0008_POSE_CMS_B_0080",
-      "duree_minutes": 65,
-      "poste_id": "PICK_PLACE_1",
-      "operation_precedente": "PCB0008_SOUDURE_THT_0079"
+      "code_operation": "PCB0002_COATING_0015",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_1",
+      "operation_precedente": "PCB0002_TEST_FONC_0014"
     },
     {
-      "code_operation": "PCB0008_COATING_0081",
-      "duree_minutes": 15,
+      "code_operation": "PCB0002_TEST_ICT_0016",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_2",
+      "operation_precedente": "PCB0002_COATING_0015"
+    },
+    {
+      "code_operation": "PCB0002_POSE_CMS_B_0017",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB0002_TEST_ICT_0016"
+    },
+    {
+      "code_operation": "PCB0003_TEST_FONC_0018",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_3",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "PCB0003_PREP_0019",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_10",
+      "operation_precedente": "PCB0003_TEST_FONC_0018"
+    },
+    {
+      "code_operation": "PCB0003_AOI_A_0020",
+      "duree_jours": 1,
+      "poste_id": "AOI_1",
+      "operation_precedente": "PCB0003_PREP_0019"
+    },
+    {
+      "code_operation": "PCB0003_DEPANEL_0021",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_1",
+      "operation_precedente": "PCB0003_AOI_A_0020"
+    },
+    {
+      "code_operation": "PCB0003_SOUDURE_THT_0022",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_6",
+      "operation_precedente": "PCB0003_DEPANEL_0021"
+    },
+    {
+      "code_operation": "PCB0003_PACKAGE_0023",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_4",
+      "operation_precedente": "PCB0003_SOUDURE_THT_0022"
+    },
+    {
+      "code_operation": "PCB0003_POSE_CMS_A_0024",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB0003_PACKAGE_0023"
+    },
+    {
+      "code_operation": "PCB0003_POSE_CMS_B_0025",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_4",
+      "operation_precedente": "PCB0003_POSE_CMS_A_0024"
+    },
+    {
+      "code_operation": "PCB0004_PREP_0026",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_5",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "PCB0004_COATING_0027",
+      "duree_jours": 1,
       "poste_id": "ROBOT_COATING_2",
-      "operation_precedente": "PCB0008_POSE_CMS_B_0080"
+      "operation_precedente": "PCB0004_PREP_0026"
     },
     {
-      "code_operation": "PCB0009_PACKAGE_0082",
-      "duree_minutes": 22,
+      "code_operation": "PCB0004_REFUSION_A_0028",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "PCB0004_COATING_0027"
+    },
+    {
+      "code_operation": "PCB0004_TEST_FONC_0029",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_FONCTIONNEL_3",
+      "operation_precedente": "PCB0004_REFUSION_A_0028"
+    },
+    {
+      "code_operation": "PCB0004_PACKAGE_0030",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_8",
+      "operation_precedente": "PCB0004_TEST_FONC_0029"
+    },
+    {
+      "code_operation": "PCB0004_SOUDURE_THT_0031",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL_3",
+      "operation_precedente": "PCB0004_PACKAGE_0030"
+    },
+    {
+      "code_operation": "PCB0004_AOI_A_0032",
+      "duree_jours": 1,
+      "poste_id": "AOI_3",
+      "operation_precedente": "PCB0004_SOUDURE_THT_0031"
+    },
+    {
+      "code_operation": "PCB0004_REFUSION_B_0033",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "PCB0004_AOI_A_0032"
+    },
+    {
+      "code_operation": "PCB0004_POSE_CMS_A_0034",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB0004_REFUSION_B_0033"
+    },
+    {
+      "code_operation": "PCB0004_POSE_CMS_B_0035",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB0004_POSE_CMS_A_0034"
+    },
+    {
+      "code_operation": "PCB0005_SOUDURE_THT_0036",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_8",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "PCB0005_PACKAGE_0037",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_7",
+      "operation_precedente": "PCB0005_SOUDURE_THT_0036"
+    },
+    {
+      "code_operation": "PCB0005_REFUSION_B_0038",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "PCB0005_PACKAGE_0037"
+    },
+    {
+      "code_operation": "PCB0005_AOI_A_0039",
+      "duree_jours": 1,
+      "poste_id": "AOI_1",
+      "operation_precedente": "PCB0005_REFUSION_B_0038"
+    },
+    {
+      "code_operation": "PCB0005_TEST_ICT_0040",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT_3",
+      "operation_precedente": "PCB0005_AOI_A_0039"
+    },
+    {
+      "code_operation": "PCB0005_DEPANEL_0041",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_1",
+      "operation_precedente": "PCB0005_TEST_ICT_0040"
+    },
+    {
+      "code_operation": "PCB0005_COATING_0042",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_3",
+      "operation_precedente": "PCB0005_DEPANEL_0041"
+    },
+    {
+      "code_operation": "PCB0005_POSE_CMS_A_0043",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_1",
+      "operation_precedente": "PCB0005_COATING_0042"
+    },
+    {
+      "code_operation": "PCB0005_PREP_0044",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE_2",
+      "operation_precedente": "PCB0005_POSE_CMS_A_0043"
+    },
+    {
+      "code_operation": "PCB0005_POSE_CMS_B_0045",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_3",
+      "operation_precedente": "PCB0005_PREP_0044"
+    },
+    {
+      "code_operation": "PCB0006_PACKAGE_0046",
+      "duree_jours": 1,
       "poste_id": "STATION_PACKAGING_8",
       "operation_precedente": null
     },
     {
-      "code_operation": "PCB0009_REFUSION_A_0083",
-      "duree_minutes": 32,
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": "PCB0009_PACKAGE_0082"
+      "code_operation": "PCB0006_AOI_A_0047",
+      "duree_jours": 1,
+      "poste_id": "AOI_5",
+      "operation_precedente": "PCB0006_PACKAGE_0046"
     },
     {
-      "code_operation": "PCB0009_AOI_A_0084",
-      "duree_minutes": 15,
-      "poste_id": "AOI_4",
-      "operation_precedente": "PCB0009_REFUSION_A_0083"
-    },
-    {
-      "code_operation": "PCB0009_SOUDURE_THT_0085",
-      "duree_minutes": 78,
-      "poste_id": "POSTE_SOUDURE_MANUEL_4",
-      "operation_precedente": "PCB0009_AOI_A_0084"
-    },
-    {
-      "code_operation": "PCB0009_DEPANEL_0086",
-      "duree_minutes": 15,
-      "poste_id": "POSTE_DEPANNELISATION_3",
-      "operation_precedente": "PCB0009_SOUDURE_THT_0085"
-    },
-    {
-      "code_operation": "PCB0009_REFUSION_B_0087",
-      "duree_minutes": 33,
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "PCB0009_DEPANEL_0086"
-    },
-    {
-      "code_operation": "PCB0009_POSE_CMS_B_0088",
-      "duree_minutes": 70,
+      "code_operation": "PCB0006_POSE_CMS_B_0048",
+      "duree_jours": 2,
       "poste_id": "PICK_PLACE_5",
-      "operation_precedente": "PCB0009_REFUSION_B_0087"
+      "operation_precedente": "PCB0006_AOI_A_0047"
     },
     {
-      "code_operation": "PCB0009_POSE_CMS_A_0089",
-      "duree_minutes": 122,
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "PCB0009_POSE_CMS_B_0088"
+      "code_operation": "PCB0006_PREP_0049",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE_6",
+      "operation_precedente": "PCB0006_POSE_CMS_B_0048"
     },
     {
-      "code_operation": "PCB0009_TEST_ICT_0090",
-      "duree_minutes": 54,
-      "poste_id": "BANC_TEST_ICT_2",
-      "operation_precedente": "PCB0009_POSE_CMS_A_0089"
+      "code_operation": "PCB0006_REFUSION_B_0050",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_4",
+      "operation_precedente": "PCB0006_PREP_0049"
     },
     {
-      "code_operation": "PCB0009_TEST_FONC_0091",
-      "duree_minutes": 66,
-      "poste_id": "BANC_TEST_FONCTIONNEL_4",
-      "operation_precedente": "PCB0009_TEST_ICT_0090"
+      "code_operation": "PCB0006_REFUSION_A_0051",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "PCB0006_REFUSION_B_0050"
     },
     {
-      "code_operation": "PCB0009_COATING_0092",
-      "duree_minutes": 28,
+      "code_operation": "PCB0006_TEST_ICT_0052",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_6",
+      "operation_precedente": "PCB0006_REFUSION_A_0051"
+    },
+    {
+      "code_operation": "PCB0006_TEST_FONC_0053",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_FONCTIONNEL_3",
+      "operation_precedente": "PCB0006_TEST_ICT_0052"
+    },
+    {
+      "code_operation": "PCB0006_SOUDURE_THT_0054",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL_12",
+      "operation_precedente": "PCB0006_TEST_FONC_0053"
+    },
+    {
+      "code_operation": "PCB0006_COATING_0055",
+      "duree_jours": 1,
       "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "PCB0009_TEST_FONC_0091"
+      "operation_precedente": "PCB0006_SOUDURE_THT_0054"
     },
     {
-      "code_operation": "PCB0010_POSE_CMS_A_0093",
-      "duree_minutes": 85,
-      "poste_id": "PICK_PLACE_6",
+      "code_operation": "PCB0007_SOUDURE_THT_0056",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_8",
       "operation_precedente": null
     },
     {
-      "code_operation": "PCB0010_SOUDURE_THT_0094",
-      "duree_minutes": 53,
-      "poste_id": "POSTE_SOUDURE_MANUEL_11",
-      "operation_precedente": "PCB0010_POSE_CMS_A_0093"
+      "code_operation": "PCB0007_REFUSION_A_0057",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "PCB0007_SOUDURE_THT_0056"
     },
     {
-      "code_operation": "PCB0010_COATING_0095",
-      "duree_minutes": 33,
+      "code_operation": "PCB0007_COATING_0058",
+      "duree_jours": 1,
       "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "PCB0010_SOUDURE_THT_0094"
+      "operation_precedente": "PCB0007_REFUSION_A_0057"
     },
     {
-      "code_operation": "PCB0010_TEST_ICT_0096",
-      "duree_minutes": 46,
-      "poste_id": "BANC_TEST_ICT_4",
-      "operation_precedente": "PCB0010_COATING_0095"
+      "code_operation": "PCB0007_POSE_CMS_A_0059",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB0007_COATING_0058"
     },
     {
-      "code_operation": "PCB0010_REFUSION_A_0097",
-      "duree_minutes": 28,
+      "code_operation": "PCB0007_DEPANEL_0060",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_2",
+      "operation_precedente": "PCB0007_POSE_CMS_A_0059"
+    },
+    {
+      "code_operation": "PCB0007_TEST_FONC_0061",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_3",
+      "operation_precedente": "PCB0007_DEPANEL_0060"
+    },
+    {
+      "code_operation": "PCB0007_REFUSION_B_0062",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_3",
+      "operation_precedente": "PCB0007_TEST_FONC_0061"
+    },
+    {
+      "code_operation": "PCB0007_PREP_0063",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_6",
+      "operation_precedente": "PCB0007_REFUSION_B_0062"
+    },
+    {
+      "code_operation": "PCB0007_TEST_ICT_0064",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT_5",
+      "operation_precedente": "PCB0007_PREP_0063"
+    },
+    {
+      "code_operation": "PCB0007_POSE_CMS_B_0065",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_2",
+      "operation_precedente": "PCB0007_TEST_ICT_0064"
+    },
+    {
+      "code_operation": "PCB0007_PACKAGE_0066",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_6",
+      "operation_precedente": "PCB0007_POSE_CMS_B_0065"
+    },
+    {
+      "code_operation": "PCB0007_AOI_A_0067",
+      "duree_jours": 1,
+      "poste_id": "AOI_4",
+      "operation_precedente": "PCB0007_PACKAGE_0066"
+    },
+    {
+      "code_operation": "PCB0008_COATING_0068",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_2",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "PCB0008_TEST_ICT_0069",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT_2",
+      "operation_precedente": "PCB0008_COATING_0068"
+    },
+    {
+      "code_operation": "PCB0008_PREP_0070",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_1",
+      "operation_precedente": "PCB0008_TEST_ICT_0069"
+    },
+    {
+      "code_operation": "PCB0008_REFUSION_B_0071",
+      "duree_jours": 1,
       "poste_id": "FOUR_REFUSION_1",
-      "operation_precedente": "PCB0010_TEST_ICT_0096"
+      "operation_precedente": "PCB0008_PREP_0070"
     },
     {
-      "code_operation": "PCB0010_REFUSION_B_0098",
-      "duree_minutes": 20,
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PCB0010_REFUSION_A_0097"
+      "code_operation": "PCB0008_DEPANEL_0072",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_4",
+      "operation_precedente": "PCB0008_REFUSION_B_0071"
     },
     {
-      "code_operation": "PCB0010_PREP_0099",
-      "duree_minutes": 24,
+      "code_operation": "PCB0008_POSE_CMS_A_0073",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_1",
+      "operation_precedente": "PCB0008_DEPANEL_0072"
+    },
+    {
+      "code_operation": "PCB0008_PACKAGE_0074",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_2",
+      "operation_precedente": "PCB0008_POSE_CMS_A_0073"
+    },
+    {
+      "code_operation": "PCB0008_POSE_CMS_B_0075",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_1",
+      "operation_precedente": "PCB0008_PACKAGE_0074"
+    },
+    {
+      "code_operation": "PCB0008_AOI_A_0076",
+      "duree_jours": 1,
+      "poste_id": "AOI_3",
+      "operation_precedente": "PCB0008_POSE_CMS_B_0075"
+    },
+    {
+      "code_operation": "PCB0008_SOUDURE_THT_0077",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_2",
+      "operation_precedente": "PCB0008_AOI_A_0076"
+    },
+    {
+      "code_operation": "PCB0009_REFUSION_A_0078",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "PCB0009_AOI_A_0079",
+      "duree_jours": 1,
+      "poste_id": "AOI_1",
+      "operation_precedente": "PCB0009_REFUSION_A_0078"
+    },
+    {
+      "code_operation": "PCB0009_COATING_0080",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_2",
+      "operation_precedente": "PCB0009_AOI_A_0079"
+    },
+    {
+      "code_operation": "PCB0009_TEST_ICT_0081",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_1",
+      "operation_precedente": "PCB0009_COATING_0080"
+    },
+    {
+      "code_operation": "PCB0009_TEST_FONC_0082",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_4",
+      "operation_precedente": "PCB0009_TEST_ICT_0081"
+    },
+    {
+      "code_operation": "PCB0009_DEPANEL_0083",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_1",
+      "operation_precedente": "PCB0009_TEST_FONC_0082"
+    },
+    {
+      "code_operation": "PCB0009_PREP_0084",
+      "duree_jours": 2,
       "poste_id": "STATION_ASSEMBLAGE_10",
-      "operation_precedente": "PCB0010_REFUSION_B_0098"
+      "operation_precedente": "PCB0009_DEPANEL_0083"
     },
     {
-      "code_operation": "PCB0010_POSE_CMS_B_0100",
-      "duree_minutes": 139,
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "PCB0010_PREP_0099"
+      "code_operation": "PCB0009_POSE_CMS_A_0085",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB0009_PREP_0084"
+    },
+    {
+      "code_operation": "PCB0009_REFUSION_B_0086",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "PCB0009_POSE_CMS_A_0085"
+    },
+    {
+      "code_operation": "PCB0010_POSE_CMS_B_0087",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "PCB0010_PACKAGE_0088",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_8",
+      "operation_precedente": "PCB0010_POSE_CMS_B_0087"
+    },
+    {
+      "code_operation": "PCB0010_AOI_A_0089",
+      "duree_jours": 1,
+      "poste_id": "AOI_2",
+      "operation_precedente": "PCB0010_PACKAGE_0088"
+    },
+    {
+      "code_operation": "PCB0010_REFUSION_A_0090",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_4",
+      "operation_precedente": "PCB0010_AOI_A_0089"
+    },
+    {
+      "code_operation": "PCB0010_POSE_CMS_A_0091",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB0010_REFUSION_A_0090"
+    },
+    {
+      "code_operation": "PCB0010_PREP_0092",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE_6",
+      "operation_precedente": "PCB0010_POSE_CMS_A_0091"
+    },
+    {
+      "code_operation": "PCB0010_COATING_0093",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_2",
+      "operation_precedente": "PCB0010_PREP_0092"
+    },
+    {
+      "code_operation": "PCB0010_TEST_FONC_0094",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_FONCTIONNEL_4",
+      "operation_precedente": "PCB0010_COATING_0093"
+    },
+    {
+      "code_operation": "PCB0011_TEST_FONC_0095",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_FONCTIONNEL_6",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "PCB0011_COATING_0096",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_3",
+      "operation_precedente": "PCB0011_TEST_FONC_0095"
+    },
+    {
+      "code_operation": "PCB0011_REFUSION_B_0097",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "PCB0011_COATING_0096"
+    },
+    {
+      "code_operation": "PCB0011_SOUDURE_THT_0098",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL_2",
+      "operation_precedente": "PCB0011_REFUSION_B_0097"
+    },
+    {
+      "code_operation": "PCB0011_POSE_CMS_A_0099",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_1",
+      "operation_precedente": "PCB0011_SOUDURE_THT_0098"
+    },
+    {
+      "code_operation": "PCB0011_REFUSION_A_0100",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_4",
+      "operation_precedente": "PCB0011_POSE_CMS_A_0099"
     }
   ],
   "postes": [

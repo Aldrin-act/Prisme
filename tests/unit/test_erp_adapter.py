@@ -11,10 +11,10 @@ from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Precedence
 def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
     payload = PayloadERP(
         operations=[
-            OperationERP(code_operation="OP10", duree_minutes=30, poste_id="POSTE_A"),
+            OperationERP(code_operation="OP10", duree_jours=2, poste_id="POSTE_A"),
             OperationERP(
                 code_operation="OP20",
-                duree_minutes=45,
+                duree_jours=3,
                 poste_id="POSTE_B",
                 operation_precedente="OP10",
             ),
@@ -27,15 +27,15 @@ def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
     assert isinstance(instance, InstanceTRCO)
     assert {tache.id for tache in instance.taches} == {"OP10", "OP20"}
     assert {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)} == {
-        "OP10": 30,
-        "OP20": 45,
+        "OP10": 2,
+        "OP20": 3,
     }
     assert {ressource.id for ressource in instance.ressources} == {"POSTE_A", "POSTE_B"}
 
 
 def test_traduction_produit_une_compatibilite_unique_par_tache() -> None:
     payload = PayloadERP(
-        operations=[OperationERP(code_operation="OP10", duree_minutes=10, poste_id="POSTE_A")],
+        operations=[OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A")],
         postes=[PosteERP(code_poste="POSTE_A")],
     )
 
@@ -50,10 +50,10 @@ def test_traduction_produit_une_compatibilite_unique_par_tache() -> None:
 def test_traduction_reporte_la_precedence_uniquement_si_declaree() -> None:
     payload = PayloadERP(
         operations=[
-            OperationERP(code_operation="OP10", duree_minutes=10, poste_id="POSTE_A"),
+            OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A"),
             OperationERP(
                 code_operation="OP20",
-                duree_minutes=10,
+                duree_jours=1,
                 poste_id="POSTE_A",
                 operation_precedente="OP10",
             ),
@@ -71,7 +71,7 @@ def test_traduction_reporte_la_precedence_uniquement_si_declaree() -> None:
 
 def test_traduction_sans_operation_precedente_ne_produit_aucune_precedence() -> None:
     payload = PayloadERP(
-        operations=[OperationERP(code_operation="OP10", duree_minutes=10, poste_id="POSTE_A")],
+        operations=[OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A")],
         postes=[PosteERP(code_poste="POSTE_A")],
     )
 
@@ -86,10 +86,10 @@ def test_instance_produite_est_valide_par_construction() -> None:
     données incohérentes vers le solveur."""
     payload = PayloadERP(
         operations=[
-            OperationERP(code_operation="OP10", duree_minutes=20, poste_id="POSTE_A"),
+            OperationERP(code_operation="OP10", duree_jours=2, poste_id="POSTE_A"),
             OperationERP(
                 code_operation="OP20",
-                duree_minutes=15,
+                duree_jours=1,
                 poste_id="POSTE_B",
                 operation_precedente="OP10",
             ),

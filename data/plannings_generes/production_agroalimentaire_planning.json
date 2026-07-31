@@ -1,70 +1,70 @@
 {
   "instance": "data\\instances_trco\\production_agroalimentaire.json",
-  "makespan": 495,
+  "makespan": 12,
   "nb_operations": 9,
   "operations": [
     {
       "tache": "RECEPTION_MP",
       "ressource": "QUAI_RECEPTION",
       "debut": 0,
-      "duree": 30,
-      "fin": 30
+      "duree": 1,
+      "fin": 1
     },
     {
       "tache": "LAVAGE_LEGUMES",
       "ressource": "TUNNEL_LAVAGE",
-      "debut": 30,
-      "duree": 45,
-      "fin": 75
+      "debut": 1,
+      "duree": 1,
+      "fin": 2
     },
     {
       "tache": "EPLUCHAGE",
       "ressource": "LIGNE_EPLUCHAGE",
-      "debut": 75,
-      "duree": 60,
-      "fin": 135
+      "debut": 2,
+      "duree": 1,
+      "fin": 3
     },
     {
       "tache": "DECOUPE",
       "ressource": "ROBOT_DECOUPE",
-      "debut": 135,
-      "duree": 40,
-      "fin": 175
+      "debut": 3,
+      "duree": 1,
+      "fin": 4
     },
     {
       "tache": "CUISSON",
       "ressource": "AUTOCLAVE_1",
-      "debut": 175,
-      "duree": 120,
-      "fin": 295
+      "debut": 4,
+      "duree": 3,
+      "fin": 7
     },
     {
       "tache": "REFROIDISSEMENT",
       "ressource": "TUNNEL_REFROIDISSEMENT",
-      "debut": 295,
-      "duree": 90,
-      "fin": 385
+      "debut": 7,
+      "duree": 2,
+      "fin": 9
     },
     {
       "tache": "CONDITIONNEMENT",
       "ressource": "LIGNE_CONDITIONNEMENT",
-      "debut": 385,
-      "duree": 50,
-      "fin": 435
+      "debut": 9,
+      "duree": 1,
+      "fin": 10
     },
     {
       "tache": "ETIQUETAGE",
       "ressource": "ETIQUETEUSE_AUTO",
-      "debut": 435,
-      "duree": 25,
-      "fin": 460
+      "debut": 10,
+      "duree": 1,
+      "fin": 11
     },
     {
       "tache": "PALETTISATION",
       "ressource": "ROBOT_PALETTISEUR",
-      "debut": 460,
-      "duree": 35,
-      "fin": 495
+      "debut": 11,
+      "duree": 1,
+      "fin": 12
     }
   ]
 }

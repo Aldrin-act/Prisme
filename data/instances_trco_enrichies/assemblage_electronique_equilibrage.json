@@ -3,98 +3,117 @@
     {
       "id": "PREP_PCB",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "POSE_CMS_FACE_A",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SOUDURE_REFUSION_A",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "INSPECTION_AOI_A",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "POSE_CMS_FACE_B",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SOUDURE_REFUSION_B",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SOUDURE_MANUELLE",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "TEST_FONCTIONNEL",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "CONFORMAL_COATING",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "CONTROLE_FINAL",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     }
   ],
   "ressources": [
     {
       "id": "STATION_PREP",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "MACHINE_PICK_PLACE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "MACHINE_PICK_PLACE_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "FOUR_REFUSION",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AOI_AUTOMATIQUE",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_SOUDURE_MANUEL",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "BANC_TEST",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_COATING",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_VISUEL",
       "nom": null,
+      "type": null,
       "competences": []
     }
   ],
@@ -103,13 +122,13 @@
       "type": "compatibilite_ressource_tache",
       "tache": "PREP_PCB",
       "ressource": "STATION_PREP",
-      "duree": 15
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "POSE_CMS_FACE_A",
       "ressource": "MACHINE_PICK_PLACE_1",
-      "duree": 90
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -120,7 +139,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "SOUDURE_REFUSION_A",
       "ressource": "FOUR_REFUSION",
-      "duree": 25
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -131,7 +150,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "INSPECTION_AOI_A",
       "ressource": "AOI_AUTOMATIQUE",
-      "duree": 10
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -142,7 +161,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "POSE_CMS_FACE_B",
       "ressource": "MACHINE_PICK_PLACE_2",
-      "duree": 75
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -153,7 +172,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "SOUDURE_REFUSION_B",
       "ressource": "FOUR_REFUSION",
-      "duree": 25
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -164,7 +183,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "SOUDURE_MANUELLE",
       "ressource": "POSTE_SOUDURE_MANUEL",
-      "duree": 45
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -175,7 +194,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "TEST_FONCTIONNEL",
       "ressource": "BANC_TEST",
-      "duree": 30
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -186,7 +205,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "CONFORMAL_COATING",
       "ressource": "ROBOT_COATING",
-      "duree": 20
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -197,7 +216,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "CONTROLE_FINAL",
       "ressource": "POSTE_CONTROLE_VISUEL",
-      "duree": 15
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -214,7 +233,7 @@
     {
       "type": "minimiser_makespan",
       "poids": 0.4,
-      "makespan_cible": 70
+      "makespan_cible": 2
     }
   ]
 }

@@ -20,23 +20,23 @@ from pathlib import Path
 
 def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
     """Atelier de fabrication mécanique - grande échelle."""
-    # Définir les types de postes et leurs caractéristiques
+    # Définir les types de postes et leurs caractéristiques (durées en jours)
     types_postes = {
-        "DECOUPEUSE_LASER": {"duree_min": 20, "duree_max": 60, "capacite": 5},
-        "DECOUPEUSE_PLASMA": {"duree_min": 25, "duree_max": 70, "capacite": 3},
-        "PERCEUSE_CNC": {"duree_min": 15, "duree_max": 45, "capacite": 8},
-        "FRAISEUSE_CNC": {"duree_min": 30, "duree_max": 90, "capacite": 6},
-        "PRESSE_PLIAGE": {"duree_min": 20, "duree_max": 50, "capacite": 4},
-        "PRESSE_EMBOUTISSAGE": {"duree_min": 25, "duree_max": 55, "capacite": 3},
-        "POSTE_SOUDURE": {"duree_min": 40, "duree_max": 120, "capacite": 10},
-        "ROBOT_SOUDURE": {"duree_min": 35, "duree_max": 100, "capacite": 4},
-        "CABINE_PEINTURE": {"duree_min": 30, "duree_max": 80, "capacite": 6},
-        "TUNNEL_PEINTURE": {"duree_min": 25, "duree_max": 70, "capacite": 3},
-        "POSTE_ASSEMBLAGE": {"duree_min": 20, "duree_max": 60, "capacite": 12},
-        "STATION_CONTROLE": {"duree_min": 10, "duree_max": 30, "capacite": 8},
-        "POSTE_EBAVURAGE": {"duree_min": 15, "duree_max": 40, "capacite": 6},
-        "CENTRE_USINAGE": {"duree_min": 40, "duree_max": 120, "capacite": 5},
-        "POSTE_POLISSAGE": {"duree_min": 20, "duree_max": 50, "capacite": 4},
+        "DECOUPEUSE_LASER": {"duree_min": 1, "duree_max": 2, "capacite": 5},
+        "DECOUPEUSE_PLASMA": {"duree_min": 1, "duree_max": 2, "capacite": 3},
+        "PERCEUSE_CNC": {"duree_min": 1, "duree_max": 1, "capacite": 8},
+        "FRAISEUSE_CNC": {"duree_min": 1, "duree_max": 3, "capacite": 6},
+        "PRESSE_PLIAGE": {"duree_min": 1, "duree_max": 2, "capacite": 4},
+        "PRESSE_EMBOUTISSAGE": {"duree_min": 1, "duree_max": 2, "capacite": 3},
+        "POSTE_SOUDURE": {"duree_min": 1, "duree_max": 4, "capacite": 10},
+        "ROBOT_SOUDURE": {"duree_min": 1, "duree_max": 3, "capacite": 4},
+        "CABINE_PEINTURE": {"duree_min": 1, "duree_max": 3, "capacite": 6},
+        "TUNNEL_PEINTURE": {"duree_min": 1, "duree_max": 2, "capacite": 3},
+        "POSTE_ASSEMBLAGE": {"duree_min": 1, "duree_max": 2, "capacite": 12},
+        "STATION_CONTROLE": {"duree_min": 1, "duree_max": 1, "capacite": 8},
+        "POSTE_EBAVURAGE": {"duree_min": 1, "duree_max": 1, "capacite": 6},
+        "CENTRE_USINAGE": {"duree_min": 1, "duree_max": 4, "capacite": 5},
+        "POSTE_POLISSAGE": {"duree_min": 1, "duree_max": 2, "capacite": 4},
     }
 
     # Créer les postes (instances multiples de chaque type)
@@ -88,7 +88,7 @@ def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
             code_op = f"LOT{lot:03d}_{phase_nom}_{op_id:04d}"
             operations.append({
                 "code_operation": code_op,
-                "duree_minutes": duree,
+                "duree_jours": duree,
                 "poste_id": poste_choisi,
                 "operation_precedente": precedente,
             })
@@ -117,7 +117,7 @@ def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
         code_op = f"COMP_{op_id:04d}"
         operations.append({
             "code_operation": code_op,
-            "duree_minutes": duree,
+            "duree_jours": duree,
             "poste_id": poste_choisi,
             "operation_precedente": None,
         })
@@ -129,16 +129,16 @@ def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
 def generer_assemblage_electronique_large(n_operations: int = 100) -> dict:
     """Assemblage électronique - grande échelle."""
     types_postes = {
-        "PICK_PLACE": {"duree_min": 60, "duree_max": 150, "capacite": 6},
-        "FOUR_REFUSION": {"duree_min": 20, "duree_max": 35, "capacite": 4},
-        "AOI": {"duree_min": 8, "duree_max": 15, "capacite": 5},
-        "POSTE_SOUDURE_MANUEL": {"duree_min": 30, "duree_max": 90, "capacite": 15},
-        "BANC_TEST_ICT": {"duree_min": 25, "duree_max": 60, "capacite": 8},
-        "BANC_TEST_FONCTIONNEL": {"duree_min": 20, "duree_max": 70, "capacite": 6},
-        "ROBOT_COATING": {"duree_min": 15, "duree_max": 35, "capacite": 3},
-        "STATION_ASSEMBLAGE": {"duree_min": 20, "duree_max": 50, "capacite": 10},
-        "POSTE_DEPANNELISATION": {"duree_min": 5, "duree_max": 15, "capacite": 4},
-        "STATION_PACKAGING": {"duree_min": 10, "duree_max": 25, "capacite": 8},
+        "PICK_PLACE": {"duree_min": 1, "duree_max": 3, "capacite": 6},
+        "FOUR_REFUSION": {"duree_min": 1, "duree_max": 1, "capacite": 4},
+        "AOI": {"duree_min": 1, "duree_max": 1, "capacite": 5},
+        "POSTE_SOUDURE_MANUEL": {"duree_min": 1, "duree_max": 2, "capacite": 15},
+        "BANC_TEST_ICT": {"duree_min": 1, "duree_max": 2, "capacite": 8},
+        "BANC_TEST_FONCTIONNEL": {"duree_min": 1, "duree_max": 2, "capacite": 6},
+        "ROBOT_COATING": {"duree_min": 1, "duree_max": 1, "capacite": 3},
+        "STATION_ASSEMBLAGE": {"duree_min": 1, "duree_max": 2, "capacite": 10},
+        "POSTE_DEPANNELISATION": {"duree_min": 1, "duree_max": 1, "capacite": 4},
+        "STATION_PACKAGING": {"duree_min": 1, "duree_max": 1, "capacite": 8},
     }
 
     postes = []
@@ -186,7 +186,7 @@ def generer_assemblage_electronique_large(n_operations: int = 100) -> dict:
             code_op = f"PCB{carte:04d}_{phase_nom}_{op_id:04d}"
             operations.append({
                 "code_operation": code_op,
-                "duree_minutes": duree,
+                "duree_jours": duree,
                 "poste_id": poste_choisi,
                 "operation_precedente": precedente,
             })
@@ -214,7 +214,7 @@ def generer_assemblage_electronique_large(n_operations: int = 100) -> dict:
         code_op = f"EXTRA_{op_id:04d}"
         operations.append({
             "code_operation": code_op,
-            "duree_minutes": duree,
+            "duree_jours": duree,
             "poste_id": poste_choisi,
             "operation_precedente": None,
         })
@@ -226,16 +226,16 @@ def generer_assemblage_electronique_large(n_operations: int = 100) -> dict:
 def generer_agroalimentaire_large(n_operations: int = 100) -> dict:
     """Production agro-alimentaire - grande échelle."""
     types_postes = {
-        "QUAI_RECEPTION": {"duree_min": 20, "duree_max": 45, "capacite": 4},
-        "TUNNEL_LAVAGE": {"duree_min": 30, "duree_max": 60, "capacite": 3},
-        "LIGNE_EPLUCHAGE": {"duree_min": 40, "duree_max": 80, "capacite": 5},
-        "ROBOT_DECOUPE": {"duree_min": 25, "duree_max": 55, "capacite": 6},
-        "AUTOCLAVE": {"duree_min": 90, "duree_max": 180, "capacite": 8},
-        "TUNNEL_REFROIDISSEMENT": {"duree_min": 60, "duree_max": 120, "capacite": 4},
-        "LIGNE_CONDITIONNEMENT": {"duree_min": 35, "duree_max": 70, "capacite": 10},
-        "ETIQUETEUSE": {"duree_min": 15, "duree_max": 35, "capacite": 6},
-        "ROBOT_PALETTISEUR": {"duree_min": 25, "duree_max": 50, "capacite": 5},
-        "POSTE_CONTROLE_QUALITE": {"duree_min": 10, "duree_max": 25, "capacite": 8},
+        "QUAI_RECEPTION": {"duree_min": 1, "duree_max": 1, "capacite": 4},
+        "TUNNEL_LAVAGE": {"duree_min": 1, "duree_max": 1, "capacite": 3},
+        "LIGNE_EPLUCHAGE": {"duree_min": 1, "duree_max": 2, "capacite": 5},
+        "ROBOT_DECOUPE": {"duree_min": 1, "duree_max": 1, "capacite": 6},
+        "AUTOCLAVE": {"duree_min": 2, "duree_max": 5, "capacite": 8},
+        "TUNNEL_REFROIDISSEMENT": {"duree_min": 1, "duree_max": 3, "capacite": 4},
+        "LIGNE_CONDITIONNEMENT": {"duree_min": 1, "duree_max": 2, "capacite": 10},
+        "ETIQUETEUSE": {"duree_min": 1, "duree_max": 1, "capacite": 6},
+        "ROBOT_PALETTISEUR": {"duree_min": 1, "duree_max": 1, "capacite": 5},
+        "POSTE_CONTROLE_QUALITE": {"duree_min": 1, "duree_max": 1, "capacite": 8},
     }
 
     postes = []
@@ -279,7 +279,7 @@ def generer_agroalimentaire_large(n_operations: int = 100) -> dict:
             code_op = f"BATCH{lot:03d}_{phase_nom}_{op_id:04d}"
             operations.append({
                 "code_operation": code_op,
-                "duree_minutes": duree,
+                "duree_jours": duree,
                 "poste_id": poste_choisi,
                 "operation_precedente": precedente,
             })
@@ -307,7 +307,7 @@ def generer_agroalimentaire_large(n_operations: int = 100) -> dict:
         code_op = f"SUPP_{op_id:04d}"
         operations.append({
             "code_operation": code_op,
-            "duree_minutes": duree,
+            "duree_jours": duree,
             "poste_id": poste_choisi,
             "operation_precedente": None,
         })
@@ -334,7 +334,7 @@ def sauvegarder_donnees(nom: str, data: dict, output_dir: Path) -> None:
     ops_path = csv_dir / f"{nom}_operations.csv"
     with open(ops_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
-            f, fieldnames=["code_operation", "duree_minutes", "poste_id", "operation_precedente"]
+            f, fieldnames=["code_operation", "duree_jours", "poste_id", "operation_precedente"]
         )
         writer.writeheader()
         writer.writerows(data["operations"])

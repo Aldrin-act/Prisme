@@ -2,602 +2,602 @@
   "operations": [
     {
       "code_operation": "BATCH001_EPLUCHAGE_0001",
-      "duree_minutes": 50,
-      "poste_id": "LIGNE_EPLUCHAGE_3",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_5",
       "operation_precedente": null
     },
     {
-      "code_operation": "BATCH001_CUISSON_0002",
-      "duree_minutes": 135,
-      "poste_id": "AUTOCLAVE_4",
+      "code_operation": "BATCH001_CONDITIONNEMENT_0002",
+      "duree_jours": 2,
+      "poste_id": "LIGNE_CONDITIONNEMENT_2",
       "operation_precedente": "BATCH001_EPLUCHAGE_0001"
     },
     {
-      "code_operation": "BATCH001_CONDITIONNEMENT_0003",
-      "duree_minutes": 41,
-      "poste_id": "LIGNE_CONDITIONNEMENT_2",
-      "operation_precedente": "BATCH001_CUISSON_0002"
+      "code_operation": "BATCH001_PALETTISATION_0003",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_2",
+      "operation_precedente": "BATCH001_CONDITIONNEMENT_0002"
     },
     {
-      "code_operation": "BATCH001_RECEPTION_0004",
-      "duree_minutes": 22,
-      "poste_id": "QUAI_RECEPTION_2",
-      "operation_precedente": "BATCH001_CONDITIONNEMENT_0003"
+      "code_operation": "BATCH001_DECOUPE_0004",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_3",
+      "operation_precedente": "BATCH001_PALETTISATION_0003"
     },
     {
-      "code_operation": "BATCH001_PALETTISATION_0005",
-      "duree_minutes": 39,
-      "poste_id": "ROBOT_PALETTISEUR_5",
-      "operation_precedente": "BATCH001_RECEPTION_0004"
+      "code_operation": "BATCH001_REFROIDISSEMENT_0005",
+      "duree_jours": 2,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+      "operation_precedente": "BATCH001_DECOUPE_0004"
     },
     {
-      "code_operation": "BATCH001_CONTROLE_0006",
-      "duree_minutes": 21,
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": "BATCH001_PALETTISATION_0005"
+      "code_operation": "BATCH001_ETIQUETAGE_0006",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_6",
+      "operation_precedente": "BATCH001_REFROIDISSEMENT_0005"
     },
     {
-      "code_operation": "BATCH001_REFROIDISSEMENT_0007",
-      "duree_minutes": 81,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_2",
-      "operation_precedente": "BATCH001_CONTROLE_0006"
+      "code_operation": "BATCH001_CONTROLE_0007",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_6",
+      "operation_precedente": "BATCH001_ETIQUETAGE_0006"
     },
     {
-      "code_operation": "BATCH001_LAVAGE_0008",
-      "duree_minutes": 37,
-      "poste_id": "TUNNEL_LAVAGE_1",
-      "operation_precedente": "BATCH001_REFROIDISSEMENT_0007"
-    },
-    {
-      "code_operation": "BATCH001_ETIQUETAGE_0009",
-      "duree_minutes": 35,
-      "poste_id": "ETIQUETEUSE_3",
-      "operation_precedente": "BATCH001_LAVAGE_0008"
-    },
-    {
-      "code_operation": "BATCH001_DECOUPE_0010",
-      "duree_minutes": 30,
-      "poste_id": "ROBOT_DECOUPE_4",
-      "operation_precedente": "BATCH001_ETIQUETAGE_0009"
-    },
-    {
-      "code_operation": "BATCH002_CONDITIONNEMENT_0011",
-      "duree_minutes": 51,
-      "poste_id": "LIGNE_CONDITIONNEMENT_1",
+      "code_operation": "BATCH002_CONTROLE_0008",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_2",
       "operation_precedente": null
     },
     {
-      "code_operation": "BATCH002_CONTROLE_0012",
-      "duree_minutes": 13,
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": "BATCH002_CONDITIONNEMENT_0011"
+      "code_operation": "BATCH002_ETIQUETAGE_0009",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_1",
+      "operation_precedente": "BATCH002_CONTROLE_0008"
     },
     {
-      "code_operation": "BATCH002_RECEPTION_0013",
-      "duree_minutes": 42,
-      "poste_id": "QUAI_RECEPTION_3",
-      "operation_precedente": "BATCH002_CONTROLE_0012"
+      "code_operation": "BATCH002_CONDITIONNEMENT_0010",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_CONDITIONNEMENT_4",
+      "operation_precedente": "BATCH002_ETIQUETAGE_0009"
     },
     {
-      "code_operation": "BATCH002_CUISSON_0014",
-      "duree_minutes": 157,
-      "poste_id": "AUTOCLAVE_5",
-      "operation_precedente": "BATCH002_RECEPTION_0013"
+      "code_operation": "BATCH002_CUISSON_0011",
+      "duree_jours": 3,
+      "poste_id": "AUTOCLAVE_3",
+      "operation_precedente": "BATCH002_CONDITIONNEMENT_0010"
     },
     {
-      "code_operation": "BATCH002_DECOUPE_0015",
-      "duree_minutes": 28,
-      "poste_id": "ROBOT_DECOUPE_6",
-      "operation_precedente": "BATCH002_CUISSON_0014"
+      "code_operation": "BATCH002_RECEPTION_0012",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_4",
+      "operation_precedente": "BATCH002_CUISSON_0011"
     },
     {
-      "code_operation": "BATCH002_ETIQUETAGE_0016",
-      "duree_minutes": 31,
-      "poste_id": "ETIQUETEUSE_4",
-      "operation_precedente": "BATCH002_DECOUPE_0015"
+      "code_operation": "BATCH002_EPLUCHAGE_0013",
+      "duree_jours": 2,
+      "poste_id": "LIGNE_EPLUCHAGE_3",
+      "operation_precedente": "BATCH002_RECEPTION_0012"
     },
     {
-      "code_operation": "BATCH002_EPLUCHAGE_0017",
-      "duree_minutes": 54,
-      "poste_id": "LIGNE_EPLUCHAGE_4",
-      "operation_precedente": "BATCH002_ETIQUETAGE_0016"
+      "code_operation": "BATCH002_LAVAGE_0014",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE_2",
+      "operation_precedente": "BATCH002_EPLUCHAGE_0013"
+    },
+    {
+      "code_operation": "BATCH002_PALETTISATION_0015",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_2",
+      "operation_precedente": "BATCH002_LAVAGE_0014"
+    },
+    {
+      "code_operation": "BATCH002_REFROIDISSEMENT_0016",
+      "duree_jours": 2,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_2",
+      "operation_precedente": "BATCH002_PALETTISATION_0015"
+    },
+    {
+      "code_operation": "BATCH002_DECOUPE_0017",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_2",
+      "operation_precedente": "BATCH002_REFROIDISSEMENT_0016"
     },
     {
       "code_operation": "BATCH003_ETIQUETAGE_0018",
-      "duree_minutes": 25,
-      "poste_id": "ETIQUETEUSE_5",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_2",
       "operation_precedente": null
     },
     {
       "code_operation": "BATCH003_LAVAGE_0019",
-      "duree_minutes": 30,
-      "poste_id": "TUNNEL_LAVAGE_1",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE_2",
       "operation_precedente": "BATCH003_ETIQUETAGE_0018"
     },
     {
-      "code_operation": "BATCH003_REFROIDISSEMENT_0020",
-      "duree_minutes": 76,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_4",
+      "code_operation": "BATCH003_PALETTISATION_0020",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_3",
       "operation_precedente": "BATCH003_LAVAGE_0019"
     },
     {
-      "code_operation": "BATCH003_CUISSON_0021",
-      "duree_minutes": 94,
-      "poste_id": "AUTOCLAVE_2",
-      "operation_precedente": "BATCH003_REFROIDISSEMENT_0020"
+      "code_operation": "BATCH003_CONTROLE_0021",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_8",
+      "operation_precedente": "BATCH003_PALETTISATION_0020"
     },
     {
       "code_operation": "BATCH003_CONDITIONNEMENT_0022",
-      "duree_minutes": 65,
-      "poste_id": "LIGNE_CONDITIONNEMENT_1",
-      "operation_precedente": "BATCH003_CUISSON_0021"
+      "duree_jours": 2,
+      "poste_id": "LIGNE_CONDITIONNEMENT_8",
+      "operation_precedente": "BATCH003_CONTROLE_0021"
     },
     {
-      "code_operation": "BATCH003_DECOUPE_0023",
-      "duree_minutes": 35,
-      "poste_id": "ROBOT_DECOUPE_1",
+      "code_operation": "BATCH003_EPLUCHAGE_0023",
+      "duree_jours": 2,
+      "poste_id": "LIGNE_EPLUCHAGE_4",
       "operation_precedente": "BATCH003_CONDITIONNEMENT_0022"
     },
     {
       "code_operation": "BATCH003_RECEPTION_0024",
-      "duree_minutes": 31,
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_4",
+      "operation_precedente": "BATCH003_EPLUCHAGE_0023"
+    },
+    {
+      "code_operation": "BATCH004_CUISSON_0025",
+      "duree_jours": 3,
+      "poste_id": "AUTOCLAVE_6",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "BATCH004_ETIQUETAGE_0026",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_6",
+      "operation_precedente": "BATCH004_CUISSON_0025"
+    },
+    {
+      "code_operation": "BATCH004_DECOUPE_0027",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_1",
+      "operation_precedente": "BATCH004_ETIQUETAGE_0026"
+    },
+    {
+      "code_operation": "BATCH004_RECEPTION_0028",
+      "duree_jours": 1,
       "poste_id": "QUAI_RECEPTION_3",
-      "operation_precedente": "BATCH003_DECOUPE_0023"
+      "operation_precedente": "BATCH004_DECOUPE_0027"
     },
     {
-      "code_operation": "BATCH003_CONTROLE_0025",
-      "duree_minutes": 13,
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": "BATCH003_RECEPTION_0024"
+      "code_operation": "BATCH004_REFROIDISSEMENT_0029",
+      "duree_jours": 3,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+      "operation_precedente": "BATCH004_RECEPTION_0028"
     },
     {
-      "code_operation": "BATCH003_PALETTISATION_0026",
-      "duree_minutes": 27,
+      "code_operation": "BATCH004_CONTROLE_0030",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_7",
+      "operation_precedente": "BATCH004_REFROIDISSEMENT_0029"
+    },
+    {
+      "code_operation": "BATCH004_LAVAGE_0031",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE_3",
+      "operation_precedente": "BATCH004_CONTROLE_0030"
+    },
+    {
+      "code_operation": "BATCH004_PALETTISATION_0032",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_4",
+      "operation_precedente": "BATCH004_LAVAGE_0031"
+    },
+    {
+      "code_operation": "BATCH004_CONDITIONNEMENT_0033",
+      "duree_jours": 2,
+      "poste_id": "LIGNE_CONDITIONNEMENT_1",
+      "operation_precedente": "BATCH004_PALETTISATION_0032"
+    },
+    {
+      "code_operation": "BATCH004_EPLUCHAGE_0034",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_3",
+      "operation_precedente": "BATCH004_CONDITIONNEMENT_0033"
+    },
+    {
+      "code_operation": "BATCH005_DECOUPE_0035",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_2",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "BATCH005_RECEPTION_0036",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_1",
+      "operation_precedente": "BATCH005_DECOUPE_0035"
+    },
+    {
+      "code_operation": "BATCH005_CONDITIONNEMENT_0037",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_CONDITIONNEMENT_8",
+      "operation_precedente": "BATCH005_RECEPTION_0036"
+    },
+    {
+      "code_operation": "BATCH005_CUISSON_0038",
+      "duree_jours": 3,
+      "poste_id": "AUTOCLAVE_7",
+      "operation_precedente": "BATCH005_CONDITIONNEMENT_0037"
+    },
+    {
+      "code_operation": "BATCH005_CONTROLE_0039",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_8",
+      "operation_precedente": "BATCH005_CUISSON_0038"
+    },
+    {
+      "code_operation": "BATCH005_REFROIDISSEMENT_0040",
+      "duree_jours": 2,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+      "operation_precedente": "BATCH005_CONTROLE_0039"
+    },
+    {
+      "code_operation": "BATCH005_ETIQUETAGE_0041",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_6",
+      "operation_precedente": "BATCH005_REFROIDISSEMENT_0040"
+    },
+    {
+      "code_operation": "BATCH005_PALETTISATION_0042",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_2",
+      "operation_precedente": "BATCH005_ETIQUETAGE_0041"
+    },
+    {
+      "code_operation": "BATCH006_DECOUPE_0043",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_6",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "BATCH006_PALETTISATION_0044",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_3",
+      "operation_precedente": "BATCH006_DECOUPE_0043"
+    },
+    {
+      "code_operation": "BATCH006_ETIQUETAGE_0045",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_3",
+      "operation_precedente": "BATCH006_PALETTISATION_0044"
+    },
+    {
+      "code_operation": "BATCH006_EPLUCHAGE_0046",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_5",
+      "operation_precedente": "BATCH006_ETIQUETAGE_0045"
+    },
+    {
+      "code_operation": "BATCH006_CUISSON_0047",
+      "duree_jours": 4,
+      "poste_id": "AUTOCLAVE_4",
+      "operation_precedente": "BATCH006_EPLUCHAGE_0046"
+    },
+    {
+      "code_operation": "BATCH006_CONDITIONNEMENT_0048",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_CONDITIONNEMENT_4",
+      "operation_precedente": "BATCH006_CUISSON_0047"
+    },
+    {
+      "code_operation": "BATCH006_REFROIDISSEMENT_0049",
+      "duree_jours": 2,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+      "operation_precedente": "BATCH006_CONDITIONNEMENT_0048"
+    },
+    {
+      "code_operation": "BATCH006_CONTROLE_0050",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_1",
+      "operation_precedente": "BATCH006_REFROIDISSEMENT_0049"
+    },
+    {
+      "code_operation": "BATCH007_EPLUCHAGE_0051",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_4",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "BATCH007_LAVAGE_0052",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE_2",
+      "operation_precedente": "BATCH007_EPLUCHAGE_0051"
+    },
+    {
+      "code_operation": "BATCH007_DECOUPE_0053",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_4",
+      "operation_precedente": "BATCH007_LAVAGE_0052"
+    },
+    {
+      "code_operation": "BATCH007_ETIQUETAGE_0054",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_4",
+      "operation_precedente": "BATCH007_DECOUPE_0053"
+    },
+    {
+      "code_operation": "BATCH007_PALETTISATION_0055",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_3",
+      "operation_precedente": "BATCH007_ETIQUETAGE_0054"
+    },
+    {
+      "code_operation": "BATCH007_RECEPTION_0056",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_2",
+      "operation_precedente": "BATCH007_PALETTISATION_0055"
+    },
+    {
+      "code_operation": "BATCH007_CONTROLE_0057",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_6",
+      "operation_precedente": "BATCH007_RECEPTION_0056"
+    },
+    {
+      "code_operation": "BATCH007_CONDITIONNEMENT_0058",
+      "duree_jours": 2,
+      "poste_id": "LIGNE_CONDITIONNEMENT_3",
+      "operation_precedente": "BATCH007_CONTROLE_0057"
+    },
+    {
+      "code_operation": "BATCH007_CUISSON_0059",
+      "duree_jours": 2,
+      "poste_id": "AUTOCLAVE_6",
+      "operation_precedente": "BATCH007_CONDITIONNEMENT_0058"
+    },
+    {
+      "code_operation": "BATCH007_REFROIDISSEMENT_0060",
+      "duree_jours": 2,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+      "operation_precedente": "BATCH007_CUISSON_0059"
+    },
+    {
+      "code_operation": "BATCH008_LAVAGE_0061",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE_2",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "BATCH008_CONTROLE_0062",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_3",
+      "operation_precedente": "BATCH008_LAVAGE_0061"
+    },
+    {
+      "code_operation": "BATCH008_PALETTISATION_0063",
+      "duree_jours": 1,
       "poste_id": "ROBOT_PALETTISEUR_1",
-      "operation_precedente": "BATCH003_CONTROLE_0025"
+      "operation_precedente": "BATCH008_CONTROLE_0062"
     },
     {
-      "code_operation": "BATCH004_CONDITIONNEMENT_0027",
-      "duree_minutes": 47,
+      "code_operation": "BATCH008_EPLUCHAGE_0064",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_3",
+      "operation_precedente": "BATCH008_PALETTISATION_0063"
+    },
+    {
+      "code_operation": "BATCH008_CUISSON_0065",
+      "duree_jours": 4,
+      "poste_id": "AUTOCLAVE_8",
+      "operation_precedente": "BATCH008_EPLUCHAGE_0064"
+    },
+    {
+      "code_operation": "BATCH008_RECEPTION_0066",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_3",
+      "operation_precedente": "BATCH008_CUISSON_0065"
+    },
+    {
+      "code_operation": "BATCH008_ETIQUETAGE_0067",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_5",
+      "operation_precedente": "BATCH008_RECEPTION_0066"
+    },
+    {
+      "code_operation": "BATCH008_CONDITIONNEMENT_0068",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_CONDITIONNEMENT_8",
+      "operation_precedente": "BATCH008_ETIQUETAGE_0067"
+    },
+    {
+      "code_operation": "BATCH008_DECOUPE_0069",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_3",
+      "operation_precedente": "BATCH008_CONDITIONNEMENT_0068"
+    },
+    {
+      "code_operation": "BATCH008_REFROIDISSEMENT_0070",
+      "duree_jours": 3,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+      "operation_precedente": "BATCH008_DECOUPE_0069"
+    },
+    {
+      "code_operation": "BATCH009_CONDITIONNEMENT_0071",
+      "duree_jours": 1,
       "poste_id": "LIGNE_CONDITIONNEMENT_4",
       "operation_precedente": null
     },
     {
-      "code_operation": "BATCH004_ETIQUETAGE_0028",
-      "duree_minutes": 23,
-      "poste_id": "ETIQUETEUSE_4",
-      "operation_precedente": "BATCH004_CONDITIONNEMENT_0027"
-    },
-    {
-      "code_operation": "BATCH004_EPLUCHAGE_0029",
-      "duree_minutes": 74,
-      "poste_id": "LIGNE_EPLUCHAGE_2",
-      "operation_precedente": "BATCH004_ETIQUETAGE_0028"
-    },
-    {
-      "code_operation": "BATCH004_CONTROLE_0030",
-      "duree_minutes": 16,
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": "BATCH004_EPLUCHAGE_0029"
-    },
-    {
-      "code_operation": "BATCH004_REFROIDISSEMENT_0031",
-      "duree_minutes": 108,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-      "operation_precedente": "BATCH004_CONTROLE_0030"
-    },
-    {
-      "code_operation": "BATCH004_DECOUPE_0032",
-      "duree_minutes": 33,
-      "poste_id": "ROBOT_DECOUPE_1",
-      "operation_precedente": "BATCH004_REFROIDISSEMENT_0031"
-    },
-    {
-      "code_operation": "BATCH004_PALETTISATION_0033",
-      "duree_minutes": 28,
-      "poste_id": "ROBOT_PALETTISEUR_2",
-      "operation_precedente": "BATCH004_DECOUPE_0032"
-    },
-    {
-      "code_operation": "BATCH005_PALETTISATION_0034",
-      "duree_minutes": 28,
-      "poste_id": "ROBOT_PALETTISEUR_4",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "BATCH005_REFROIDISSEMENT_0035",
-      "duree_minutes": 64,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_1",
-      "operation_precedente": "BATCH005_PALETTISATION_0034"
-    },
-    {
-      "code_operation": "BATCH005_CUISSON_0036",
-      "duree_minutes": 127,
-      "poste_id": "AUTOCLAVE_6",
-      "operation_precedente": "BATCH005_REFROIDISSEMENT_0035"
-    },
-    {
-      "code_operation": "BATCH005_ETIQUETAGE_0037",
-      "duree_minutes": 33,
-      "poste_id": "ETIQUETEUSE_6",
-      "operation_precedente": "BATCH005_CUISSON_0036"
-    },
-    {
-      "code_operation": "BATCH005_LAVAGE_0038",
-      "duree_minutes": 60,
-      "poste_id": "TUNNEL_LAVAGE_3",
-      "operation_precedente": "BATCH005_ETIQUETAGE_0037"
-    },
-    {
-      "code_operation": "BATCH005_EPLUCHAGE_0039",
-      "duree_minutes": 75,
-      "poste_id": "LIGNE_EPLUCHAGE_5",
-      "operation_precedente": "BATCH005_LAVAGE_0038"
-    },
-    {
-      "code_operation": "BATCH005_CONTROLE_0040",
-      "duree_minutes": 25,
-      "poste_id": "POSTE_CONTROLE_QUALITE_6",
-      "operation_precedente": "BATCH005_EPLUCHAGE_0039"
-    },
-    {
-      "code_operation": "BATCH005_DECOUPE_0041",
-      "duree_minutes": 48,
-      "poste_id": "ROBOT_DECOUPE_2",
-      "operation_precedente": "BATCH005_CONTROLE_0040"
-    },
-    {
-      "code_operation": "BATCH005_CONDITIONNEMENT_0042",
-      "duree_minutes": 38,
-      "poste_id": "LIGNE_CONDITIONNEMENT_8",
-      "operation_precedente": "BATCH005_DECOUPE_0041"
-    },
-    {
-      "code_operation": "BATCH006_RECEPTION_0043",
-      "duree_minutes": 35,
-      "poste_id": "QUAI_RECEPTION_3",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "BATCH006_CONDITIONNEMENT_0044",
-      "duree_minutes": 54,
-      "poste_id": "LIGNE_CONDITIONNEMENT_9",
-      "operation_precedente": "BATCH006_RECEPTION_0043"
-    },
-    {
-      "code_operation": "BATCH006_CUISSON_0045",
-      "duree_minutes": 111,
-      "poste_id": "AUTOCLAVE_2",
-      "operation_precedente": "BATCH006_CONDITIONNEMENT_0044"
-    },
-    {
-      "code_operation": "BATCH006_REFROIDISSEMENT_0046",
-      "duree_minutes": 108,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-      "operation_precedente": "BATCH006_CUISSON_0045"
-    },
-    {
-      "code_operation": "BATCH006_LAVAGE_0047",
-      "duree_minutes": 48,
-      "poste_id": "TUNNEL_LAVAGE_2",
-      "operation_precedente": "BATCH006_REFROIDISSEMENT_0046"
-    },
-    {
-      "code_operation": "BATCH006_PALETTISATION_0048",
-      "duree_minutes": 38,
-      "poste_id": "ROBOT_PALETTISEUR_4",
-      "operation_precedente": "BATCH006_LAVAGE_0047"
-    },
-    {
-      "code_operation": "BATCH006_EPLUCHAGE_0049",
-      "duree_minutes": 47,
-      "poste_id": "LIGNE_EPLUCHAGE_3",
-      "operation_precedente": "BATCH006_PALETTISATION_0048"
-    },
-    {
-      "code_operation": "BATCH007_CONDITIONNEMENT_0050",
-      "duree_minutes": 55,
-      "poste_id": "LIGNE_CONDITIONNEMENT_3",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "BATCH007_REFROIDISSEMENT_0051",
-      "duree_minutes": 114,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-      "operation_precedente": "BATCH007_CONDITIONNEMENT_0050"
-    },
-    {
-      "code_operation": "BATCH007_PALETTISATION_0052",
-      "duree_minutes": 38,
-      "poste_id": "ROBOT_PALETTISEUR_5",
-      "operation_precedente": "BATCH007_REFROIDISSEMENT_0051"
-    },
-    {
-      "code_operation": "BATCH007_RECEPTION_0053",
-      "duree_minutes": 41,
-      "poste_id": "QUAI_RECEPTION_1",
-      "operation_precedente": "BATCH007_PALETTISATION_0052"
-    },
-    {
-      "code_operation": "BATCH007_CONTROLE_0054",
-      "duree_minutes": 17,
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "BATCH007_RECEPTION_0053"
-    },
-    {
-      "code_operation": "BATCH007_DECOUPE_0055",
-      "duree_minutes": 35,
-      "poste_id": "ROBOT_DECOUPE_6",
-      "operation_precedente": "BATCH007_CONTROLE_0054"
-    },
-    {
-      "code_operation": "BATCH007_LAVAGE_0056",
-      "duree_minutes": 55,
-      "poste_id": "TUNNEL_LAVAGE_2",
-      "operation_precedente": "BATCH007_DECOUPE_0055"
-    },
-    {
-      "code_operation": "BATCH007_EPLUCHAGE_0057",
-      "duree_minutes": 50,
-      "poste_id": "LIGNE_EPLUCHAGE_2",
-      "operation_precedente": "BATCH007_LAVAGE_0056"
-    },
-    {
-      "code_operation": "BATCH007_ETIQUETAGE_0058",
-      "duree_minutes": 30,
-      "poste_id": "ETIQUETEUSE_4",
-      "operation_precedente": "BATCH007_EPLUCHAGE_0057"
-    },
-    {
-      "code_operation": "BATCH008_RECEPTION_0059",
-      "duree_minutes": 45,
-      "poste_id": "QUAI_RECEPTION_2",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "BATCH008_LAVAGE_0060",
-      "duree_minutes": 44,
-      "poste_id": "TUNNEL_LAVAGE_3",
-      "operation_precedente": "BATCH008_RECEPTION_0059"
-    },
-    {
-      "code_operation": "BATCH008_REFROIDISSEMENT_0061",
-      "duree_minutes": 60,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-      "operation_precedente": "BATCH008_LAVAGE_0060"
-    },
-    {
-      "code_operation": "BATCH008_PALETTISATION_0062",
-      "duree_minutes": 31,
-      "poste_id": "ROBOT_PALETTISEUR_4",
-      "operation_precedente": "BATCH008_REFROIDISSEMENT_0061"
-    },
-    {
-      "code_operation": "BATCH008_CONDITIONNEMENT_0063",
-      "duree_minutes": 44,
-      "poste_id": "LIGNE_CONDITIONNEMENT_7",
-      "operation_precedente": "BATCH008_PALETTISATION_0062"
-    },
-    {
-      "code_operation": "BATCH008_ETIQUETAGE_0064",
-      "duree_minutes": 19,
-      "poste_id": "ETIQUETEUSE_5",
-      "operation_precedente": "BATCH008_CONDITIONNEMENT_0063"
-    },
-    {
-      "code_operation": "BATCH008_EPLUCHAGE_0065",
-      "duree_minutes": 66,
-      "poste_id": "LIGNE_EPLUCHAGE_5",
-      "operation_precedente": "BATCH008_ETIQUETAGE_0064"
-    },
-    {
-      "code_operation": "BATCH008_CUISSON_0066",
-      "duree_minutes": 175,
-      "poste_id": "AUTOCLAVE_2",
-      "operation_precedente": "BATCH008_EPLUCHAGE_0065"
-    },
-    {
-      "code_operation": "BATCH008_CONTROLE_0067",
-      "duree_minutes": 20,
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": "BATCH008_CUISSON_0066"
-    },
-    {
-      "code_operation": "BATCH009_PALETTISATION_0068",
-      "duree_minutes": 45,
+      "code_operation": "BATCH009_PALETTISATION_0072",
+      "duree_jours": 1,
       "poste_id": "ROBOT_PALETTISEUR_3",
-      "operation_precedente": null
+      "operation_precedente": "BATCH009_CONDITIONNEMENT_0071"
     },
     {
-      "code_operation": "BATCH009_DECOUPE_0069",
-      "duree_minutes": 31,
-      "poste_id": "ROBOT_DECOUPE_6",
-      "operation_precedente": "BATCH009_PALETTISATION_0068"
-    },
-    {
-      "code_operation": "BATCH009_CONDITIONNEMENT_0070",
-      "duree_minutes": 50,
-      "poste_id": "LIGNE_CONDITIONNEMENT_5",
-      "operation_precedente": "BATCH009_DECOUPE_0069"
-    },
-    {
-      "code_operation": "BATCH009_EPLUCHAGE_0071",
-      "duree_minutes": 79,
-      "poste_id": "LIGNE_EPLUCHAGE_2",
-      "operation_precedente": "BATCH009_CONDITIONNEMENT_0070"
-    },
-    {
-      "code_operation": "BATCH009_LAVAGE_0072",
-      "duree_minutes": 35,
-      "poste_id": "TUNNEL_LAVAGE_2",
-      "operation_precedente": "BATCH009_EPLUCHAGE_0071"
-    },
-    {
-      "code_operation": "BATCH009_RECEPTION_0073",
-      "duree_minutes": 34,
-      "poste_id": "QUAI_RECEPTION_3",
-      "operation_precedente": "BATCH009_LAVAGE_0072"
-    },
-    {
-      "code_operation": "BATCH009_CONTROLE_0074",
-      "duree_minutes": 13,
-      "poste_id": "POSTE_CONTROLE_QUALITE_7",
-      "operation_precedente": "BATCH009_RECEPTION_0073"
-    },
-    {
-      "code_operation": "BATCH009_REFROIDISSEMENT_0075",
-      "duree_minutes": 98,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-      "operation_precedente": "BATCH009_CONTROLE_0074"
-    },
-    {
-      "code_operation": "BATCH010_PALETTISATION_0076",
-      "duree_minutes": 35,
-      "poste_id": "ROBOT_PALETTISEUR_2",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "BATCH010_CONTROLE_0077",
-      "duree_minutes": 13,
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "BATCH010_PALETTISATION_0076"
-    },
-    {
-      "code_operation": "BATCH010_EPLUCHAGE_0078",
-      "duree_minutes": 64,
-      "poste_id": "LIGNE_EPLUCHAGE_1",
-      "operation_precedente": "BATCH010_CONTROLE_0077"
-    },
-    {
-      "code_operation": "BATCH010_CUISSON_0079",
-      "duree_minutes": 116,
+      "code_operation": "BATCH009_CUISSON_0073",
+      "duree_jours": 2,
       "poste_id": "AUTOCLAVE_4",
-      "operation_precedente": "BATCH010_EPLUCHAGE_0078"
+      "operation_precedente": "BATCH009_PALETTISATION_0072"
     },
     {
-      "code_operation": "BATCH010_ETIQUETAGE_0080",
-      "duree_minutes": 23,
-      "poste_id": "ETIQUETEUSE_3",
-      "operation_precedente": "BATCH010_CUISSON_0079"
+      "code_operation": "BATCH009_EPLUCHAGE_0074",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_5",
+      "operation_precedente": "BATCH009_CUISSON_0073"
+    },
+    {
+      "code_operation": "BATCH009_RECEPTION_0075",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_3",
+      "operation_precedente": "BATCH009_EPLUCHAGE_0074"
+    },
+    {
+      "code_operation": "BATCH009_CONTROLE_0076",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_6",
+      "operation_precedente": "BATCH009_RECEPTION_0075"
+    },
+    {
+      "code_operation": "BATCH009_ETIQUETAGE_0077",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_6",
+      "operation_precedente": "BATCH009_CONTROLE_0076"
+    },
+    {
+      "code_operation": "BATCH009_DECOUPE_0078",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_2",
+      "operation_precedente": "BATCH009_ETIQUETAGE_0077"
+    },
+    {
+      "code_operation": "BATCH009_LAVAGE_0079",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE_3",
+      "operation_precedente": "BATCH009_DECOUPE_0078"
+    },
+    {
+      "code_operation": "BATCH010_RECEPTION_0080",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_1",
+      "operation_precedente": null
     },
     {
       "code_operation": "BATCH010_LAVAGE_0081",
-      "duree_minutes": 60,
+      "duree_jours": 1,
       "poste_id": "TUNNEL_LAVAGE_3",
-      "operation_precedente": "BATCH010_ETIQUETAGE_0080"
+      "operation_precedente": "BATCH010_RECEPTION_0080"
     },
     {
-      "code_operation": "BATCH010_CONDITIONNEMENT_0082",
-      "duree_minutes": 62,
-      "poste_id": "LIGNE_CONDITIONNEMENT_7",
+      "code_operation": "BATCH010_ETIQUETAGE_0082",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_1",
       "operation_precedente": "BATCH010_LAVAGE_0081"
     },
     {
-      "code_operation": "BATCH011_LAVAGE_0083",
-      "duree_minutes": 33,
-      "poste_id": "TUNNEL_LAVAGE_1",
+      "code_operation": "BATCH010_REFROIDISSEMENT_0083",
+      "duree_jours": 2,
+      "poste_id": "TUNNEL_REFROIDISSEMENT_2",
+      "operation_precedente": "BATCH010_ETIQUETAGE_0082"
+    },
+    {
+      "code_operation": "BATCH010_DECOUPE_0084",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_4",
+      "operation_precedente": "BATCH010_REFROIDISSEMENT_0083"
+    },
+    {
+      "code_operation": "BATCH010_CUISSON_0085",
+      "duree_jours": 4,
+      "poste_id": "AUTOCLAVE_4",
+      "operation_precedente": "BATCH010_DECOUPE_0084"
+    },
+    {
+      "code_operation": "BATCH010_CONTROLE_0086",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_6",
+      "operation_precedente": "BATCH010_CUISSON_0085"
+    },
+    {
+      "code_operation": "BATCH011_LAVAGE_0087",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE_2",
       "operation_precedente": null
     },
     {
-      "code_operation": "BATCH011_PALETTISATION_0084",
-      "duree_minutes": 28,
-      "poste_id": "ROBOT_PALETTISEUR_5",
-      "operation_precedente": "BATCH011_LAVAGE_0083"
-    },
-    {
-      "code_operation": "BATCH011_CONTROLE_0085",
-      "duree_minutes": 20,
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": "BATCH011_PALETTISATION_0084"
-    },
-    {
-      "code_operation": "BATCH011_RECEPTION_0086",
-      "duree_minutes": 37,
-      "poste_id": "QUAI_RECEPTION_1",
-      "operation_precedente": "BATCH011_CONTROLE_0085"
-    },
-    {
-      "code_operation": "BATCH011_DECOUPE_0087",
-      "duree_minutes": 31,
-      "poste_id": "ROBOT_DECOUPE_3",
-      "operation_precedente": "BATCH011_RECEPTION_0086"
-    },
-    {
-      "code_operation": "BATCH011_EPLUCHAGE_0088",
-      "duree_minutes": 64,
-      "poste_id": "LIGNE_EPLUCHAGE_5",
-      "operation_precedente": "BATCH011_DECOUPE_0087"
-    },
-    {
-      "code_operation": "BATCH011_REFROIDISSEMENT_0089",
-      "duree_minutes": 109,
+      "code_operation": "BATCH011_REFROIDISSEMENT_0088",
+      "duree_jours": 1,
       "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-      "operation_precedente": "BATCH011_EPLUCHAGE_0088"
+      "operation_precedente": "BATCH011_LAVAGE_0087"
     },
     {
-      "code_operation": "BATCH011_ETIQUETAGE_0090",
-      "duree_minutes": 35,
-      "poste_id": "ETIQUETEUSE_2",
-      "operation_precedente": "BATCH011_REFROIDISSEMENT_0089"
+      "code_operation": "BATCH011_ETIQUETAGE_0089",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_6",
+      "operation_precedente": "BATCH011_REFROIDISSEMENT_0088"
     },
     {
-      "code_operation": "BATCH011_CUISSON_0091",
-      "duree_minutes": 163,
-      "poste_id": "AUTOCLAVE_1",
-      "operation_precedente": "BATCH011_ETIQUETAGE_0090"
+      "code_operation": "BATCH011_CUISSON_0090",
+      "duree_jours": 4,
+      "poste_id": "AUTOCLAVE_8",
+      "operation_precedente": "BATCH011_ETIQUETAGE_0089"
     },
     {
-      "code_operation": "BATCH011_CONDITIONNEMENT_0092",
-      "duree_minutes": 61,
-      "poste_id": "LIGNE_CONDITIONNEMENT_6",
-      "operation_precedente": "BATCH011_CUISSON_0091"
+      "code_operation": "BATCH011_PALETTISATION_0091",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR_5",
+      "operation_precedente": "BATCH011_CUISSON_0090"
     },
     {
-      "code_operation": "SUPP_0093",
-      "duree_minutes": 66,
+      "code_operation": "BATCH011_EPLUCHAGE_0092",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_2",
+      "operation_precedente": "BATCH011_PALETTISATION_0091"
+    },
+    {
+      "code_operation": "BATCH011_DECOUPE_0093",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_1",
+      "operation_precedente": "BATCH011_EPLUCHAGE_0092"
+    },
+    {
+      "code_operation": "BATCH011_CONDITIONNEMENT_0094",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_CONDITIONNEMENT_7",
+      "operation_precedente": "BATCH011_DECOUPE_0093"
+    },
+    {
+      "code_operation": "BATCH011_RECEPTION_0095",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION_4",
+      "operation_precedente": "BATCH011_CONDITIONNEMENT_0094"
+    },
+    {
+      "code_operation": "BATCH011_CONTROLE_0096",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_4",
+      "operation_precedente": "BATCH011_RECEPTION_0095"
+    },
+    {
+      "code_operation": "SUPP_0097",
+      "duree_jours": 3,
       "poste_id": "TUNNEL_REFROIDISSEMENT_2",
       "operation_precedente": null
     },
     {
-      "code_operation": "SUPP_0094",
-      "duree_minutes": 58,
-      "poste_id": "LIGNE_CONDITIONNEMENT_10",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "SUPP_0095",
-      "duree_minutes": 71,
-      "poste_id": "LIGNE_EPLUCHAGE_3",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "SUPP_0096",
-      "duree_minutes": 36,
-      "poste_id": "TUNNEL_LAVAGE_1",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "SUPP_0097",
-      "duree_minutes": 96,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-      "operation_precedente": null
-    },
-    {
       "code_operation": "SUPP_0098",
-      "duree_minutes": 35,
-      "poste_id": "TUNNEL_LAVAGE_3",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE_1",
       "operation_precedente": null
     },
     {
       "code_operation": "SUPP_0099",
-      "duree_minutes": 82,
-      "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE_4",
       "operation_precedente": null
     },
     {
       "code_operation": "SUPP_0100",
-      "duree_minutes": 43,
-      "poste_id": "TUNNEL_LAVAGE_2",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE_1",
       "operation_precedente": null
     }
   ],

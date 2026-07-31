@@ -1,603 +1,603 @@
 {
   "operations": [
     {
-      "code_operation": "LOT001_PEINTURE_0001",
-      "duree_minutes": 63,
-      "poste_id": "TUNNEL_PEINTURE_1",
+      "code_operation": "LOT001_FINITION_0001",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_4",
       "operation_precedente": null
     },
     {
-      "code_operation": "LOT001_USINAGE_0002",
-      "duree_minutes": 34,
-      "poste_id": "FRAISEUSE_CNC_4",
-      "operation_precedente": "LOT001_PEINTURE_0001"
+      "code_operation": "LOT001_SOUDURE_0002",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_4",
+      "operation_precedente": "LOT001_FINITION_0001"
     },
     {
-      "code_operation": "LOT001_FINITION_0003",
-      "duree_minutes": 36,
-      "poste_id": "POSTE_POLISSAGE_2",
-      "operation_precedente": "LOT001_USINAGE_0002"
+      "code_operation": "LOT001_FORMAGE_0003",
+      "duree_jours": 2,
+      "poste_id": "PRESSE_PLIAGE_3",
+      "operation_precedente": "LOT001_SOUDURE_0002"
     },
     {
       "code_operation": "LOT001_PREPARATION_0004",
-      "duree_minutes": 23,
-      "poste_id": "DECOUPEUSE_LASER_2",
-      "operation_precedente": "LOT001_FINITION_0003"
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_1",
+      "operation_precedente": "LOT001_FORMAGE_0003"
     },
     {
-      "code_operation": "LOT001_ASSEMBLAGE_0005",
-      "duree_minutes": 34,
-      "poste_id": "POSTE_ASSEMBLAGE_2",
+      "code_operation": "LOT001_USINAGE_0005",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_4",
       "operation_precedente": "LOT001_PREPARATION_0004"
     },
     {
-      "code_operation": "LOT001_SOUDURE_0006",
-      "duree_minutes": 90,
-      "poste_id": "ROBOT_SOUDURE_1",
-      "operation_precedente": "LOT001_ASSEMBLAGE_0005"
+      "code_operation": "LOT001_ASSEMBLAGE_0006",
+      "duree_jours": 2,
+      "poste_id": "POSTE_ASSEMBLAGE_7",
+      "operation_precedente": "LOT001_USINAGE_0005"
     },
     {
       "code_operation": "LOT001_CONTROLE_0007",
-      "duree_minutes": 28,
-      "poste_id": "STATION_CONTROLE_1",
-      "operation_precedente": "LOT001_SOUDURE_0006"
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_6",
+      "operation_precedente": "LOT001_ASSEMBLAGE_0006"
     },
     {
-      "code_operation": "LOT001_FORMAGE_0008",
-      "duree_minutes": 36,
-      "poste_id": "PRESSE_PLIAGE_4",
+      "code_operation": "LOT001_PEINTURE_0008",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_PEINTURE_2",
       "operation_precedente": "LOT001_CONTROLE_0007"
     },
     {
-      "code_operation": "LOT002_PREPARATION_0009",
-      "duree_minutes": 42,
-      "poste_id": "DECOUPEUSE_PLASMA_1",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "LOT002_ASSEMBLAGE_0010",
-      "duree_minutes": 35,
-      "poste_id": "POSTE_ASSEMBLAGE_3",
-      "operation_precedente": "LOT002_PREPARATION_0009"
-    },
-    {
-      "code_operation": "LOT002_USINAGE_0011",
-      "duree_minutes": 30,
-      "poste_id": "POSTE_EBAVURAGE_3",
-      "operation_precedente": "LOT002_ASSEMBLAGE_0010"
-    },
-    {
-      "code_operation": "LOT002_FINITION_0012",
-      "duree_minutes": 22,
-      "poste_id": "POSTE_EBAVURAGE_6",
-      "operation_precedente": "LOT002_USINAGE_0011"
-    },
-    {
-      "code_operation": "LOT002_SOUDURE_0013",
-      "duree_minutes": 102,
-      "poste_id": "POSTE_SOUDURE_5",
-      "operation_precedente": "LOT002_FINITION_0012"
-    },
-    {
-      "code_operation": "LOT002_PEINTURE_0014",
-      "duree_minutes": 60,
-      "poste_id": "TUNNEL_PEINTURE_1",
-      "operation_precedente": "LOT002_SOUDURE_0013"
-    },
-    {
-      "code_operation": "LOT002_CONTROLE_0015",
-      "duree_minutes": 19,
-      "poste_id": "STATION_CONTROLE_4",
-      "operation_precedente": "LOT002_PEINTURE_0014"
-    },
-    {
-      "code_operation": "LOT002_FORMAGE_0016",
-      "duree_minutes": 25,
-      "poste_id": "PRESSE_PLIAGE_1",
-      "operation_precedente": "LOT002_CONTROLE_0015"
-    },
-    {
-      "code_operation": "LOT003_CONTROLE_0017",
-      "duree_minutes": 13,
-      "poste_id": "STATION_CONTROLE_7",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "LOT003_SOUDURE_0018",
-      "duree_minutes": 70,
-      "poste_id": "ROBOT_SOUDURE_2",
-      "operation_precedente": "LOT003_CONTROLE_0017"
-    },
-    {
-      "code_operation": "LOT003_FORMAGE_0019",
-      "duree_minutes": 32,
-      "poste_id": "PRESSE_PLIAGE_3",
-      "operation_precedente": "LOT003_SOUDURE_0018"
-    },
-    {
-      "code_operation": "LOT003_PREPARATION_0020",
-      "duree_minutes": 30,
-      "poste_id": "PERCEUSE_CNC_5",
-      "operation_precedente": "LOT003_FORMAGE_0019"
-    },
-    {
-      "code_operation": "LOT003_USINAGE_0021",
-      "duree_minutes": 15,
-      "poste_id": "POSTE_EBAVURAGE_4",
-      "operation_precedente": "LOT003_PREPARATION_0020"
-    },
-    {
-      "code_operation": "LOT003_PEINTURE_0022",
-      "duree_minutes": 41,
-      "poste_id": "TUNNEL_PEINTURE_2",
-      "operation_precedente": "LOT003_USINAGE_0021"
-    },
-    {
-      "code_operation": "LOT003_ASSEMBLAGE_0023",
-      "duree_minutes": 40,
-      "poste_id": "POSTE_ASSEMBLAGE_1",
-      "operation_precedente": "LOT003_PEINTURE_0022"
-    },
-    {
-      "code_operation": "LOT003_FINITION_0024",
-      "duree_minutes": 47,
-      "poste_id": "POSTE_POLISSAGE_2",
-      "operation_precedente": "LOT003_ASSEMBLAGE_0023"
-    },
-    {
-      "code_operation": "LOT004_FINITION_0025",
-      "duree_minutes": 35,
+      "code_operation": "LOT002_FINITION_0009",
+      "duree_jours": 1,
       "poste_id": "POSTE_EBAVURAGE_5",
       "operation_precedente": null
     },
     {
-      "code_operation": "LOT004_SOUDURE_0026",
-      "duree_minutes": 81,
-      "poste_id": "POSTE_SOUDURE_5",
-      "operation_precedente": "LOT004_FINITION_0025"
+      "code_operation": "LOT002_PEINTURE_0010",
+      "duree_jours": 1,
+      "poste_id": "CABINE_PEINTURE_4",
+      "operation_precedente": "LOT002_FINITION_0009"
     },
     {
-      "code_operation": "LOT004_CONTROLE_0027",
-      "duree_minutes": 29,
-      "poste_id": "STATION_CONTROLE_5",
-      "operation_precedente": "LOT004_SOUDURE_0026"
+      "code_operation": "LOT002_CONTROLE_0011",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_4",
+      "operation_precedente": "LOT002_PEINTURE_0010"
     },
     {
-      "code_operation": "LOT004_PREPARATION_0028",
-      "duree_minutes": 29,
-      "poste_id": "DECOUPEUSE_LASER_1",
-      "operation_precedente": "LOT004_CONTROLE_0027"
+      "code_operation": "LOT002_FORMAGE_0012",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_PLIAGE_3",
+      "operation_precedente": "LOT002_CONTROLE_0011"
     },
     {
-      "code_operation": "LOT004_ASSEMBLAGE_0029",
-      "duree_minutes": 55,
-      "poste_id": "POSTE_ASSEMBLAGE_11",
-      "operation_precedente": "LOT004_PREPARATION_0028"
+      "code_operation": "LOT002_PREPARATION_0013",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_8",
+      "operation_precedente": "LOT002_FORMAGE_0012"
     },
     {
-      "code_operation": "LOT004_PEINTURE_0030",
-      "duree_minutes": 34,
-      "poste_id": "CABINE_PEINTURE_2",
-      "operation_precedente": "LOT004_ASSEMBLAGE_0029"
+      "code_operation": "LOT002_ASSEMBLAGE_0014",
+      "duree_jours": 2,
+      "poste_id": "POSTE_ASSEMBLAGE_8",
+      "operation_precedente": "LOT002_PREPARATION_0013"
     },
     {
-      "code_operation": "LOT004_USINAGE_0031",
-      "duree_minutes": 105,
-      "poste_id": "CENTRE_USINAGE_3",
-      "operation_precedente": "LOT004_PEINTURE_0030"
+      "code_operation": "LOT002_USINAGE_0015",
+      "duree_jours": 2,
+      "poste_id": "CENTRE_USINAGE_5",
+      "operation_precedente": "LOT002_ASSEMBLAGE_0014"
     },
     {
-      "code_operation": "LOT004_FORMAGE_0032",
-      "duree_minutes": 35,
-      "poste_id": "PRESSE_PLIAGE_1",
-      "operation_precedente": "LOT004_USINAGE_0031"
+      "code_operation": "LOT002_SOUDURE_0016",
+      "duree_jours": 2,
+      "poste_id": "ROBOT_SOUDURE_1",
+      "operation_precedente": "LOT002_USINAGE_0015"
     },
     {
-      "code_operation": "LOT005_PEINTURE_0033",
-      "duree_minutes": 54,
-      "poste_id": "TUNNEL_PEINTURE_3",
+      "code_operation": "LOT003_ASSEMBLAGE_0017",
+      "duree_jours": 1,
+      "poste_id": "POSTE_ASSEMBLAGE_2",
       "operation_precedente": null
     },
     {
-      "code_operation": "LOT005_USINAGE_0034",
-      "duree_minutes": 32,
-      "poste_id": "POSTE_EBAVURAGE_2",
-      "operation_precedente": "LOT005_PEINTURE_0033"
+      "code_operation": "LOT003_PEINTURE_0018",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_PEINTURE_1",
+      "operation_precedente": "LOT003_ASSEMBLAGE_0017"
     },
     {
-      "code_operation": "LOT005_SOUDURE_0035",
-      "duree_minutes": 75,
-      "poste_id": "ROBOT_SOUDURE_3",
-      "operation_precedente": "LOT005_USINAGE_0034"
+      "code_operation": "LOT003_FINITION_0019",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_6",
+      "operation_precedente": "LOT003_PEINTURE_0018"
     },
     {
-      "code_operation": "LOT005_PREPARATION_0036",
-      "duree_minutes": 26,
-      "poste_id": "DECOUPEUSE_PLASMA_2",
-      "operation_precedente": "LOT005_SOUDURE_0035"
+      "code_operation": "LOT003_SOUDURE_0020",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_10",
+      "operation_precedente": "LOT003_FINITION_0019"
     },
     {
-      "code_operation": "LOT005_FINITION_0037",
-      "duree_minutes": 22,
+      "code_operation": "LOT003_CONTROLE_0021",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_2",
+      "operation_precedente": "LOT003_SOUDURE_0020"
+    },
+    {
+      "code_operation": "LOT003_FORMAGE_0022",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_EMBOUTISSAGE_1",
+      "operation_precedente": "LOT003_CONTROLE_0021"
+    },
+    {
+      "code_operation": "LOT003_PREPARATION_0023",
+      "duree_jours": 1,
+      "poste_id": "DECOUPEUSE_LASER_2",
+      "operation_precedente": "LOT003_FORMAGE_0022"
+    },
+    {
+      "code_operation": "LOT003_USINAGE_0024",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_1",
+      "operation_precedente": "LOT003_PREPARATION_0023"
+    },
+    {
+      "code_operation": "LOT004_FINITION_0025",
+      "duree_jours": 1,
       "poste_id": "POSTE_EBAVURAGE_4",
-      "operation_precedente": "LOT005_PREPARATION_0036"
+      "operation_precedente": null
     },
     {
-      "code_operation": "LOT005_ASSEMBLAGE_0038",
-      "duree_minutes": 51,
-      "poste_id": "POSTE_ASSEMBLAGE_6",
-      "operation_precedente": "LOT005_FINITION_0037"
+      "code_operation": "LOT004_FORMAGE_0026",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_EMBOUTISSAGE_2",
+      "operation_precedente": "LOT004_FINITION_0025"
     },
     {
-      "code_operation": "LOT005_FORMAGE_0039",
-      "duree_minutes": 27,
-      "poste_id": "PRESSE_EMBOUTISSAGE_3",
-      "operation_precedente": "LOT005_ASSEMBLAGE_0038"
+      "code_operation": "LOT004_PREPARATION_0027",
+      "duree_jours": 1,
+      "poste_id": "DECOUPEUSE_PLASMA_3",
+      "operation_precedente": "LOT004_FORMAGE_0026"
     },
     {
-      "code_operation": "LOT005_CONTROLE_0040",
-      "duree_minutes": 10,
-      "poste_id": "STATION_CONTROLE_1",
-      "operation_precedente": "LOT005_FORMAGE_0039"
+      "code_operation": "LOT004_USINAGE_0028",
+      "duree_jours": 2,
+      "poste_id": "FRAISEUSE_CNC_1",
+      "operation_precedente": "LOT004_PREPARATION_0027"
+    },
+    {
+      "code_operation": "LOT004_ASSEMBLAGE_0029",
+      "duree_jours": 2,
+      "poste_id": "POSTE_ASSEMBLAGE_10",
+      "operation_precedente": "LOT004_USINAGE_0028"
+    },
+    {
+      "code_operation": "LOT004_PEINTURE_0030",
+      "duree_jours": 2,
+      "poste_id": "CABINE_PEINTURE_1",
+      "operation_precedente": "LOT004_ASSEMBLAGE_0029"
+    },
+    {
+      "code_operation": "LOT004_SOUDURE_0031",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_SOUDURE_3",
+      "operation_precedente": "LOT004_PEINTURE_0030"
+    },
+    {
+      "code_operation": "LOT004_CONTROLE_0032",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_4",
+      "operation_precedente": "LOT004_SOUDURE_0031"
+    },
+    {
+      "code_operation": "LOT005_USINAGE_0033",
+      "duree_jours": 3,
+      "poste_id": "FRAISEUSE_CNC_5",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "LOT005_ASSEMBLAGE_0034",
+      "duree_jours": 2,
+      "poste_id": "POSTE_ASSEMBLAGE_11",
+      "operation_precedente": "LOT005_USINAGE_0033"
+    },
+    {
+      "code_operation": "LOT005_CONTROLE_0035",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_5",
+      "operation_precedente": "LOT005_ASSEMBLAGE_0034"
+    },
+    {
+      "code_operation": "LOT005_FORMAGE_0036",
+      "duree_jours": 2,
+      "poste_id": "PRESSE_PLIAGE_2",
+      "operation_precedente": "LOT005_CONTROLE_0035"
+    },
+    {
+      "code_operation": "LOT005_PREPARATION_0037",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_5",
+      "operation_precedente": "LOT005_FORMAGE_0036"
+    },
+    {
+      "code_operation": "LOT005_FINITION_0038",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_3",
+      "operation_precedente": "LOT005_PREPARATION_0037"
+    },
+    {
+      "code_operation": "LOT005_PEINTURE_0039",
+      "duree_jours": 3,
+      "poste_id": "CABINE_PEINTURE_6",
+      "operation_precedente": "LOT005_FINITION_0038"
+    },
+    {
+      "code_operation": "LOT005_SOUDURE_0040",
+      "duree_jours": 3,
+      "poste_id": "POSTE_SOUDURE_5",
+      "operation_precedente": "LOT005_PEINTURE_0039"
     },
     {
       "code_operation": "LOT006_PREPARATION_0041",
-      "duree_minutes": 68,
-      "poste_id": "DECOUPEUSE_PLASMA_2",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_4",
       "operation_precedente": null
     },
     {
       "code_operation": "LOT006_ASSEMBLAGE_0042",
-      "duree_minutes": 29,
-      "poste_id": "POSTE_ASSEMBLAGE_2",
+      "duree_jours": 1,
+      "poste_id": "POSTE_ASSEMBLAGE_6",
       "operation_precedente": "LOT006_PREPARATION_0041"
     },
     {
       "code_operation": "LOT006_CONTROLE_0043",
-      "duree_minutes": 14,
-      "poste_id": "STATION_CONTROLE_3",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_2",
       "operation_precedente": "LOT006_ASSEMBLAGE_0042"
     },
     {
       "code_operation": "LOT006_USINAGE_0044",
-      "duree_minutes": 87,
-      "poste_id": "FRAISEUSE_CNC_6",
+      "duree_jours": 1,
+      "poste_id": "CENTRE_USINAGE_4",
       "operation_precedente": "LOT006_CONTROLE_0043"
     },
     {
       "code_operation": "LOT006_FINITION_0045",
-      "duree_minutes": 28,
+      "duree_jours": 1,
       "poste_id": "POSTE_POLISSAGE_3",
       "operation_precedente": "LOT006_USINAGE_0044"
     },
     {
-      "code_operation": "LOT006_FORMAGE_0046",
-      "duree_minutes": 21,
-      "poste_id": "PRESSE_PLIAGE_2",
+      "code_operation": "LOT006_PEINTURE_0046",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_PEINTURE_3",
       "operation_precedente": "LOT006_FINITION_0045"
     },
     {
       "code_operation": "LOT006_SOUDURE_0047",
-      "duree_minutes": 41,
+      "duree_jours": 2,
       "poste_id": "ROBOT_SOUDURE_3",
-      "operation_precedente": "LOT006_FORMAGE_0046"
+      "operation_precedente": "LOT006_PEINTURE_0046"
     },
     {
-      "code_operation": "LOT006_PEINTURE_0048",
-      "duree_minutes": 72,
-      "poste_id": "CABINE_PEINTURE_6",
+      "code_operation": "LOT006_FORMAGE_0048",
+      "duree_jours": 2,
+      "poste_id": "PRESSE_EMBOUTISSAGE_3",
       "operation_precedente": "LOT006_SOUDURE_0047"
     },
     {
       "code_operation": "LOT007_PREPARATION_0049",
-      "duree_minutes": 46,
-      "poste_id": "DECOUPEUSE_LASER_1",
+      "duree_jours": 1,
+      "poste_id": "DECOUPEUSE_LASER_2",
       "operation_precedente": null
     },
     {
-      "code_operation": "LOT007_SOUDURE_0050",
-      "duree_minutes": 116,
-      "poste_id": "POSTE_SOUDURE_7",
+      "code_operation": "LOT007_PEINTURE_0050",
+      "duree_jours": 2,
+      "poste_id": "CABINE_PEINTURE_6",
       "operation_precedente": "LOT007_PREPARATION_0049"
     },
     {
-      "code_operation": "LOT007_ASSEMBLAGE_0051",
-      "duree_minutes": 60,
-      "poste_id": "POSTE_ASSEMBLAGE_2",
-      "operation_precedente": "LOT007_SOUDURE_0050"
-    },
-    {
-      "code_operation": "LOT007_FORMAGE_0052",
-      "duree_minutes": 31,
-      "poste_id": "PRESSE_EMBOUTISSAGE_2",
-      "operation_precedente": "LOT007_ASSEMBLAGE_0051"
-    },
-    {
-      "code_operation": "LOT007_USINAGE_0053",
-      "duree_minutes": 80,
-      "poste_id": "FRAISEUSE_CNC_5",
-      "operation_precedente": "LOT007_FORMAGE_0052"
-    },
-    {
-      "code_operation": "LOT007_PEINTURE_0054",
-      "duree_minutes": 37,
-      "poste_id": "TUNNEL_PEINTURE_1",
-      "operation_precedente": "LOT007_USINAGE_0053"
-    },
-    {
-      "code_operation": "LOT007_FINITION_0055",
-      "duree_minutes": 43,
-      "poste_id": "POSTE_POLISSAGE_4",
-      "operation_precedente": "LOT007_PEINTURE_0054"
-    },
-    {
-      "code_operation": "LOT007_CONTROLE_0056",
-      "duree_minutes": 22,
-      "poste_id": "STATION_CONTROLE_8",
-      "operation_precedente": "LOT007_FINITION_0055"
-    },
-    {
-      "code_operation": "LOT008_USINAGE_0057",
-      "duree_minutes": 63,
-      "poste_id": "CENTRE_USINAGE_2",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "LOT008_PREPARATION_0058",
-      "duree_minutes": 24,
-      "poste_id": "PERCEUSE_CNC_4",
-      "operation_precedente": "LOT008_USINAGE_0057"
-    },
-    {
-      "code_operation": "LOT008_FINITION_0059",
-      "duree_minutes": 29,
-      "poste_id": "POSTE_POLISSAGE_1",
-      "operation_precedente": "LOT008_PREPARATION_0058"
-    },
-    {
-      "code_operation": "LOT008_PEINTURE_0060",
-      "duree_minutes": 64,
-      "poste_id": "TUNNEL_PEINTURE_3",
-      "operation_precedente": "LOT008_FINITION_0059"
-    },
-    {
-      "code_operation": "LOT008_SOUDURE_0061",
-      "duree_minutes": 51,
-      "poste_id": "POSTE_SOUDURE_1",
-      "operation_precedente": "LOT008_PEINTURE_0060"
-    },
-    {
-      "code_operation": "LOT008_FORMAGE_0062",
-      "duree_minutes": 46,
-      "poste_id": "PRESSE_PLIAGE_4",
-      "operation_precedente": "LOT008_SOUDURE_0061"
-    },
-    {
-      "code_operation": "LOT008_ASSEMBLAGE_0063",
-      "duree_minutes": 41,
-      "poste_id": "POSTE_ASSEMBLAGE_1",
-      "operation_precedente": "LOT008_FORMAGE_0062"
-    },
-    {
-      "code_operation": "LOT008_CONTROLE_0064",
-      "duree_minutes": 14,
-      "poste_id": "STATION_CONTROLE_2",
-      "operation_precedente": "LOT008_ASSEMBLAGE_0063"
-    },
-    {
-      "code_operation": "LOT009_FINITION_0065",
-      "duree_minutes": 17,
-      "poste_id": "POSTE_EBAVURAGE_1",
-      "operation_precedente": null
-    },
-    {
-      "code_operation": "LOT009_FORMAGE_0066",
-      "duree_minutes": 54,
-      "poste_id": "PRESSE_EMBOUTISSAGE_3",
-      "operation_precedente": "LOT009_FINITION_0065"
-    },
-    {
-      "code_operation": "LOT009_ASSEMBLAGE_0067",
-      "duree_minutes": 32,
-      "poste_id": "POSTE_ASSEMBLAGE_12",
-      "operation_precedente": "LOT009_FORMAGE_0066"
-    },
-    {
-      "code_operation": "LOT009_USINAGE_0068",
-      "duree_minutes": 15,
-      "poste_id": "POSTE_EBAVURAGE_6",
-      "operation_precedente": "LOT009_ASSEMBLAGE_0067"
-    },
-    {
-      "code_operation": "LOT009_CONTROLE_0069",
-      "duree_minutes": 27,
-      "poste_id": "STATION_CONTROLE_8",
-      "operation_precedente": "LOT009_USINAGE_0068"
-    },
-    {
-      "code_operation": "LOT009_PREPARATION_0070",
-      "duree_minutes": 36,
-      "poste_id": "PERCEUSE_CNC_6",
-      "operation_precedente": "LOT009_CONTROLE_0069"
-    },
-    {
-      "code_operation": "LOT009_PEINTURE_0071",
-      "duree_minutes": 43,
-      "poste_id": "TUNNEL_PEINTURE_2",
-      "operation_precedente": "LOT009_PREPARATION_0070"
-    },
-    {
-      "code_operation": "LOT009_SOUDURE_0072",
-      "duree_minutes": 89,
-      "poste_id": "POSTE_SOUDURE_3",
-      "operation_precedente": "LOT009_PEINTURE_0071"
-    },
-    {
-      "code_operation": "LOT010_USINAGE_0073",
-      "duree_minutes": 20,
+      "code_operation": "LOT007_USINAGE_0051",
+      "duree_jours": 1,
       "poste_id": "POSTE_EBAVURAGE_5",
+      "operation_precedente": "LOT007_PEINTURE_0050"
+    },
+    {
+      "code_operation": "LOT007_ASSEMBLAGE_0052",
+      "duree_jours": 2,
+      "poste_id": "POSTE_ASSEMBLAGE_2",
+      "operation_precedente": "LOT007_USINAGE_0051"
+    },
+    {
+      "code_operation": "LOT007_CONTROLE_0053",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_2",
+      "operation_precedente": "LOT007_ASSEMBLAGE_0052"
+    },
+    {
+      "code_operation": "LOT007_FINITION_0054",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_1",
+      "operation_precedente": "LOT007_CONTROLE_0053"
+    },
+    {
+      "code_operation": "LOT007_SOUDURE_0055",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_8",
+      "operation_precedente": "LOT007_FINITION_0054"
+    },
+    {
+      "code_operation": "LOT007_FORMAGE_0056",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_EMBOUTISSAGE_3",
+      "operation_precedente": "LOT007_SOUDURE_0055"
+    },
+    {
+      "code_operation": "LOT008_PEINTURE_0057",
+      "duree_jours": 1,
+      "poste_id": "CABINE_PEINTURE_5",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "LOT008_FORMAGE_0058",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_EMBOUTISSAGE_1",
+      "operation_precedente": "LOT008_PEINTURE_0057"
+    },
+    {
+      "code_operation": "LOT008_USINAGE_0059",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_6",
+      "operation_precedente": "LOT008_FORMAGE_0058"
+    },
+    {
+      "code_operation": "LOT008_ASSEMBLAGE_0060",
+      "duree_jours": 2,
+      "poste_id": "POSTE_ASSEMBLAGE_2",
+      "operation_precedente": "LOT008_USINAGE_0059"
+    },
+    {
+      "code_operation": "LOT008_PREPARATION_0061",
+      "duree_jours": 2,
+      "poste_id": "DECOUPEUSE_PLASMA_1",
+      "operation_precedente": "LOT008_ASSEMBLAGE_0060"
+    },
+    {
+      "code_operation": "LOT008_SOUDURE_0062",
+      "duree_jours": 3,
+      "poste_id": "ROBOT_SOUDURE_4",
+      "operation_precedente": "LOT008_PREPARATION_0061"
+    },
+    {
+      "code_operation": "LOT008_CONTROLE_0063",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_3",
+      "operation_precedente": "LOT008_SOUDURE_0062"
+    },
+    {
+      "code_operation": "LOT008_FINITION_0064",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_5",
+      "operation_precedente": "LOT008_CONTROLE_0063"
+    },
+    {
+      "code_operation": "LOT009_USINAGE_0065",
+      "duree_jours": 2,
+      "poste_id": "FRAISEUSE_CNC_4",
+      "operation_precedente": null
+    },
+    {
+      "code_operation": "LOT009_PREPARATION_0066",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_8",
+      "operation_precedente": "LOT009_USINAGE_0065"
+    },
+    {
+      "code_operation": "LOT009_FORMAGE_0067",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_EMBOUTISSAGE_2",
+      "operation_precedente": "LOT009_PREPARATION_0066"
+    },
+    {
+      "code_operation": "LOT009_CONTROLE_0068",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_8",
+      "operation_precedente": "LOT009_FORMAGE_0067"
+    },
+    {
+      "code_operation": "LOT009_ASSEMBLAGE_0069",
+      "duree_jours": 1,
+      "poste_id": "POSTE_ASSEMBLAGE_3",
+      "operation_precedente": "LOT009_CONTROLE_0068"
+    },
+    {
+      "code_operation": "LOT009_FINITION_0070",
+      "duree_jours": 1,
+      "poste_id": "POSTE_POLISSAGE_1",
+      "operation_precedente": "LOT009_ASSEMBLAGE_0069"
+    },
+    {
+      "code_operation": "LOT009_SOUDURE_0071",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_SOUDURE_1",
+      "operation_precedente": "LOT009_FINITION_0070"
+    },
+    {
+      "code_operation": "LOT009_PEINTURE_0072",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_PEINTURE_3",
+      "operation_precedente": "LOT009_SOUDURE_0071"
+    },
+    {
+      "code_operation": "LOT010_PREPARATION_0073",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_8",
       "operation_precedente": null
     },
     {
       "code_operation": "LOT010_CONTROLE_0074",
-      "duree_minutes": 20,
-      "poste_id": "STATION_CONTROLE_8",
-      "operation_precedente": "LOT010_USINAGE_0073"
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE_4",
+      "operation_precedente": "LOT010_PREPARATION_0073"
     },
     {
       "code_operation": "LOT010_FORMAGE_0075",
-      "duree_minutes": 50,
-      "poste_id": "PRESSE_EMBOUTISSAGE_1",
+      "duree_jours": 2,
+      "poste_id": "PRESSE_PLIAGE_4",
       "operation_precedente": "LOT010_CONTROLE_0074"
     },
     {
-      "code_operation": "LOT010_PEINTURE_0076",
-      "duree_minutes": 68,
-      "poste_id": "CABINE_PEINTURE_2",
+      "code_operation": "LOT010_ASSEMBLAGE_0076",
+      "duree_jours": 1,
+      "poste_id": "POSTE_ASSEMBLAGE_3",
       "operation_precedente": "LOT010_FORMAGE_0075"
     },
     {
-      "code_operation": "LOT010_ASSEMBLAGE_0077",
-      "duree_minutes": 21,
-      "poste_id": "POSTE_ASSEMBLAGE_11",
-      "operation_precedente": "LOT010_PEINTURE_0076"
+      "code_operation": "LOT010_USINAGE_0077",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_4",
+      "operation_precedente": "LOT010_ASSEMBLAGE_0076"
     },
     {
       "code_operation": "LOT010_FINITION_0078",
-      "duree_minutes": 32,
-      "poste_id": "POSTE_EBAVURAGE_2",
-      "operation_precedente": "LOT010_ASSEMBLAGE_0077"
+      "duree_jours": 2,
+      "poste_id": "POSTE_POLISSAGE_4",
+      "operation_precedente": "LOT010_USINAGE_0077"
     },
     {
       "code_operation": "LOT010_SOUDURE_0079",
-      "duree_minutes": 61,
-      "poste_id": "ROBOT_SOUDURE_1",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_7",
       "operation_precedente": "LOT010_FINITION_0078"
     },
     {
-      "code_operation": "LOT010_PREPARATION_0080",
-      "duree_minutes": 51,
-      "poste_id": "DECOUPEUSE_LASER_4",
+      "code_operation": "LOT010_PEINTURE_0080",
+      "duree_jours": 2,
+      "poste_id": "TUNNEL_PEINTURE_2",
       "operation_precedente": "LOT010_SOUDURE_0079"
     },
     {
       "code_operation": "COMP_0081",
-      "duree_minutes": 39,
-      "poste_id": "POSTE_ASSEMBLAGE_10",
+      "duree_jours": 3,
+      "poste_id": "CENTRE_USINAGE_3",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0082",
-      "duree_minutes": 70,
-      "poste_id": "FRAISEUSE_CNC_1",
+      "duree_jours": 2,
+      "poste_id": "DECOUPEUSE_PLASMA_3",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0083",
-      "duree_minutes": 60,
-      "poste_id": "CABINE_PEINTURE_6",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_4",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0084",
-      "duree_minutes": 38,
-      "poste_id": "ROBOT_SOUDURE_2",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_4",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0085",
-      "duree_minutes": 52,
-      "poste_id": "POSTE_SOUDURE_8",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_6",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0086",
-      "duree_minutes": 31,
-      "poste_id": "POSTE_EBAVURAGE_5",
+      "duree_jours": 1,
+      "poste_id": "POSTE_POLISSAGE_3",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0087",
-      "duree_minutes": 39,
-      "poste_id": "POSTE_ASSEMBLAGE_11",
+      "duree_jours": 2,
+      "poste_id": "POSTE_POLISSAGE_2",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0088",
-      "duree_minutes": 34,
-      "poste_id": "POSTE_EBAVURAGE_1",
+      "duree_jours": 4,
+      "poste_id": "POSTE_SOUDURE_4",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0089",
-      "duree_minutes": 85,
-      "poste_id": "POSTE_SOUDURE_8",
+      "duree_jours": 1,
+      "poste_id": "POSTE_ASSEMBLAGE_11",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0090",
-      "duree_minutes": 23,
-      "poste_id": "POSTE_EBAVURAGE_3",
+      "duree_jours": 2,
+      "poste_id": "PRESSE_PLIAGE_2",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0091",
-      "duree_minutes": 12,
-      "poste_id": "STATION_CONTROLE_8",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_EMBOUTISSAGE_3",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0092",
-      "duree_minutes": 50,
-      "poste_id": "PRESSE_PLIAGE_4",
+      "duree_jours": 4,
+      "poste_id": "POSTE_SOUDURE_6",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0093",
-      "duree_minutes": 68,
-      "poste_id": "CABINE_PEINTURE_1",
+      "duree_jours": 2,
+      "poste_id": "PRESSE_PLIAGE_4",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0094",
-      "duree_minutes": 25,
-      "poste_id": "PERCEUSE_CNC_3",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_PLIAGE_4",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0095",
-      "duree_minutes": 61,
-      "poste_id": "TUNNEL_PEINTURE_2",
+      "duree_jours": 2,
+      "poste_id": "FRAISEUSE_CNC_5",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0096",
-      "duree_minutes": 35,
-      "poste_id": "POSTE_POLISSAGE_1",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_5",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0097",
-      "duree_minutes": 16,
-      "poste_id": "POSTE_EBAVURAGE_2",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC_1",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0098",
-      "duree_minutes": 24,
-      "poste_id": "POSTE_POLISSAGE_1",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_2",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0099",
-      "duree_minutes": 65,
-      "poste_id": "FRAISEUSE_CNC_3",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE_6",
       "operation_precedente": null
     },
     {
       "code_operation": "COMP_0100",
-      "duree_minutes": 39,
-      "poste_id": "PRESSE_PLIAGE_3",
+      "duree_jours": 2,
+      "poste_id": "POSTE_ASSEMBLAGE_4",
       "operation_precedente": null
     }
   ],

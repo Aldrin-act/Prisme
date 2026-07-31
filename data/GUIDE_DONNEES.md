@@ -74,13 +74,13 @@ data/
   "operations": [
     {
       "code_operation": "DECOUP_001",
-      "duree_minutes": 45,
+      "duree_jours": 1,
       "poste_id": "DECOUPEUSE_LASER",
       "operation_precedente": null
     },
     {
       "code_operation": "PERCAGE_001",
-      "duree_minutes": 30,
+      "duree_jours": 1,
       "poste_id": "PERCEUSE_CNC",
       "operation_precedente": "DECOUP_001"
     }
@@ -105,9 +105,9 @@ data/
 
 **operations.csv**:
 ```csv
-code_operation,duree_minutes,poste_id,operation_precedente
-DECOUP_001,45,DECOUPEUSE_LASER,
-PERCAGE_001,30,PERCEUSE_CNC,DECOUP_001
+code_operation,duree_jours,poste_id,operation_precedente
+DECOUP_001,1,DECOUPEUSE_LASER,
+PERCAGE_001,1,PERCEUSE_CNC,DECOUP_001
 ```
 
 **postes.csv**:
@@ -283,7 +283,7 @@ planning = executer_dans_sandbox(artifact_path, instance)
 
 if planning:
     makespan = max(op.debut + op.duree for op in planning.operations)
-    print(f"Planning genere avec makespan: {makespan} minutes")
+    print(f"Planning genere avec makespan: {makespan} jours")
 
     # Afficher le planning
     for op in planning.operations:
@@ -342,7 +342,7 @@ planning = executer_dans_sandbox(artifact_path, instance_trco)
 # Étape 7: Résultat
 if planning:
     makespan = max(op.debut + op.duree for op in planning.operations)
-    print(f"\nPlanning final - Makespan: {makespan} minutes")
+    print(f"\nPlanning final - Makespan: {makespan} jours")
     print(f"Operations planifiees: {len(planning.operations)}")
 else:
     print("Aucune solution trouvee")
@@ -435,7 +435,7 @@ cur.execute("SELECT code, duree, poste_id, operation_precedente FROM operations 
 operations = [
     OperationERP(
         code_operation=row[0],
-        duree_minutes=row[1],
+        duree_jours=row[1],
         poste_id=row[2],
         operation_precedente=row[3],
     )

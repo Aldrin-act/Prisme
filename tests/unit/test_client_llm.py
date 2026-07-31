@@ -124,3 +124,58 @@ def test_construire_modele_pour_agent_respecte_la_surcharge_de_modele(monkeypatc
     modele = client_llm.construire_modele_pour_agent("documentation")
 
     assert modele.model_name == "un-modele-precis"
+
+
+class _ErreurAvecStatut(Exception):
+    def __init__(self, status_code: int) -> None:
+        super().__init__(f"erreur {status_code}")
+        self.status_code = status_code
+
+
+class TestErreurTransitoire:
+    """429 (quota/débit dépassé) doit être retenté comme un 5xx — vu en
+    pratique : la répartition par défaut envoie la majorité des agents
+    (`config_fournisseurs.FOURNISSEURS_PAR_AGENT`) vers un seul fournisseur
+    (DeepSeek), ce qui peut suffire à dépasser son débit pendant la boucle de
+    réparation. Les autres 4xx (clé invalide...) restent définitifs."""
+
+    @pytest.mark.parametrize("code_statut", [500, 502, 503, 504, 429])
+    def test_erreurs_retentables(self, code_statut: int) -> None:
+        assert client_llm._est_erreur_transitoire(_ErreurAvecStatut(code_statut))
+
+    @pytest.mark.parametrize("code_statut", [400, 401, 403, 404])
+    def test_erreurs_non_retentables(self, code_statut: int) -> None:
+        assert not client_llm._est_erreur_transitoire(_ErreurAvecStatut(code_statut))
+
+    def test_timeout_est_retentable_sans_status_code(self) -> None:
+        class FauxAPITimeoutError(Exception):
+            pass
+
+        assert client_llm._est_erreur_transitoire(FauxAPITimeoutError("timeout"))
+
+    def test_erreur_sans_rapport_n_est_pas_retentable(self) -> None:
+        assert not client_llm._est_erreur_transitoire(ValueError("prompt rejeté"))
+
+
+class TestAvecRetry:
+    def test_reessaie_jusqu_au_succes_sur_erreur_transitoire(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(client_llm.time, "sleep", lambda _: None)
+        appels = {"n": 0}
+
+        def appel() -> str:
+            appels["n"] += 1
+            if appels["n"] < 3:
+                raise _ErreurAvecStatut(429)
+            return "ok"
+
+        resultat = client_llm._avec_retry(appel)()
+
+        assert resultat == "ok"
+        assert appels["n"] == 3
+
+    def test_ne_reessaie_pas_sur_erreur_definitive(self) -> None:
+        def appel() -> str:
+            raise _ErreurAvecStatut(401)
+
+        with pytest.raises(_ErreurAvecStatut):
+            client_llm._avec_retry(appel)()

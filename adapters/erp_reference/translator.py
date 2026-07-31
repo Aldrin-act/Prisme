@@ -29,7 +29,7 @@ def traduire(payload: PayloadERP) -> InstanceTRCO:
     for operation in payload.operations:
         contraintes.append(
             CompatibiliteRessourceTache(
-                tache=operation.code_operation, ressource=operation.poste_id, duree=operation.duree_minutes
+                tache=operation.code_operation, ressource=operation.poste_id, duree=operation.duree_jours
             )
         )
         if operation.operation_precedente is not None:

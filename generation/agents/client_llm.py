@@ -46,12 +46,14 @@ _TIMEOUT_DEFAUT_SECONDES = 120.0
 
 
 def _est_erreur_transitoire(erreur: Exception) -> bool:
-    """5xx (surcharge/panne côté fournisseur) ou timeout/coupure réseau — jamais
-    une 4xx (clé invalide, prompt rejeté...) qui échouerait de façon identique
-    à chaque nouvelle tentative, retenter ne ferait que perdre du temps."""
+    """5xx (surcharge/panne côté fournisseur), 429 (quota/débit dépassé, lui
+    aussi transitoire par nature — le sur-débit retombe avec le temps), ou
+    timeout/coupure réseau. Jamais les autres 4xx (clé invalide, prompt
+    rejeté...) qui échoueraient de façon identique à chaque nouvelle
+    tentative, retenter ne ferait que perdre du temps."""
     code_statut = getattr(erreur, "status_code", None)
     if isinstance(code_statut, int):
-        return code_statut >= 500
+        return code_statut >= 500 or code_statut == 429
     nom_type = type(erreur).__name__
     return "Timeout" in nom_type or "Connection" in nom_type
 

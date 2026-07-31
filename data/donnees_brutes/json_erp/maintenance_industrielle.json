@@ -2,43 +2,43 @@
   "operations": [
     {
       "code_operation": "DIAG_PANNE_001",
-      "duree_minutes": 30,
+      "duree_jours": 1,
       "poste_id": "EQUIPE_DIAG",
       "operation_precedente": null
     },
     {
       "code_operation": "CMD_PIECES_001",
-      "duree_minutes": 15,
+      "duree_jours": 3,
       "poste_id": "SERVICE_ACHATS",
       "operation_precedente": "DIAG_PANNE_001"
     },
     {
       "code_operation": "DEMONTAGE_001",
-      "duree_minutes": 90,
+      "duree_jours": 1,
       "poste_id": "EQUIPE_MECA",
       "operation_precedente": "CMD_PIECES_001"
     },
     {
       "code_operation": "REPARATION_001",
-      "duree_minutes": 120,
+      "duree_jours": 2,
       "poste_id": "ATELIER_REPARATION",
       "operation_precedente": "DEMONTAGE_001"
     },
     {
       "code_operation": "REMONTAGE_001",
-      "duree_minutes": 80,
+      "duree_jours": 1,
       "poste_id": "EQUIPE_MECA",
       "operation_precedente": "REPARATION_001"
     },
     {
       "code_operation": "TEST_MARCHE_001",
-      "duree_minutes": 45,
+      "duree_jours": 1,
       "poste_id": "EQUIPE_TEST",
       "operation_precedente": "REMONTAGE_001"
     },
     {
       "code_operation": "NETTOYAGE_FINAL",
-      "duree_minutes": 25,
+      "duree_jours": 1,
       "poste_id": "EQUIPE_MECA",
       "operation_precedente": "TEST_MARCHE_001"
     }

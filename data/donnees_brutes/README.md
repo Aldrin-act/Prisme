@@ -38,7 +38,7 @@ donnees_brutes/
 - **Secteur**: Transformation alimentaire
 - **Opérations**: 9 (réception, lavage, cuisson, conditionnement...)
 - **Postes**: 9 (tunnel lavage, autoclave, étiqueteuse...)
-- **Particularité**: Longues durées (cuisson 120min), séquence stricte
+- **Particularité**: Longues durées (cuisson 3 jours), séquence stricte
 
 ### 4. Maintenance Industrielle
 - **Secteur**: Gestion de pannes/réparations
@@ -61,7 +61,7 @@ donnees_brutes/
   "operations": [
     {
       "code_operation": "OP_001",
-      "duree_minutes": 45,
+      "duree_jours": 2,
       "poste_id": "POSTE_A",
       "operation_precedente": null  // ou "OP_000"
     }
@@ -76,9 +76,9 @@ donnees_brutes/
 
 **Fichier `*_operations.csv`**:
 ```csv
-code_operation,duree_minutes,poste_id,operation_precedente
-OP_001,45,POSTE_A,
-OP_002,30,POSTE_B,OP_001
+code_operation,duree_jours,poste_id,operation_precedente
+OP_001,2,POSTE_A,
+OP_002,1,POSTE_B,OP_001
 ```
 
 **Fichier `*_postes.csv`**:

@@ -45,7 +45,7 @@ def charger_depuis_csv(chemin_operations: Path, chemin_postes: Path) -> PayloadE
             operations.append(
                 {
                     "code_operation": row["code_operation"],
-                    "duree_minutes": int(row["duree_minutes"]),
+                    "duree_jours": int(row["duree_jours"]),
                     "poste_id": row["poste_id"],
                     "operation_precedente": row["operation_precedente"] if row["operation_precedente"] else None,
                 }

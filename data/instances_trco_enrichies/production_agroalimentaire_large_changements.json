@@ -3,798 +3,957 @@
     {
       "id": "BATCH001_EPLUCHAGE_0001",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_CUISSON_0002",
+      "id": "BATCH001_CONDITIONNEMENT_0002",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_CONDITIONNEMENT_0003",
+      "id": "BATCH001_PALETTISATION_0003",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_RECEPTION_0004",
+      "id": "BATCH001_DECOUPE_0004",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_PALETTISATION_0005",
+      "id": "BATCH001_REFROIDISSEMENT_0005",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_CONTROLE_0006",
+      "id": "BATCH001_ETIQUETAGE_0006",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_REFROIDISSEMENT_0007",
+      "id": "BATCH001_CONTROLE_0007",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_LAVAGE_0008",
+      "id": "BATCH002_CONTROLE_0008",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_ETIQUETAGE_0009",
+      "id": "BATCH002_ETIQUETAGE_0009",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH001_DECOUPE_0010",
+      "id": "BATCH002_CONDITIONNEMENT_0010",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH002_CONDITIONNEMENT_0011",
+      "id": "BATCH002_CUISSON_0011",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH002_CONTROLE_0012",
+      "id": "BATCH002_RECEPTION_0012",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH002_RECEPTION_0013",
+      "id": "BATCH002_EPLUCHAGE_0013",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH002_CUISSON_0014",
+      "id": "BATCH002_LAVAGE_0014",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH002_DECOUPE_0015",
+      "id": "BATCH002_PALETTISATION_0015",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH002_ETIQUETAGE_0016",
+      "id": "BATCH002_REFROIDISSEMENT_0016",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH002_EPLUCHAGE_0017",
+      "id": "BATCH002_DECOUPE_0017",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "BATCH003_ETIQUETAGE_0018",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "BATCH003_LAVAGE_0019",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH003_REFROIDISSEMENT_0020",
+      "id": "BATCH003_PALETTISATION_0020",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH003_CUISSON_0021",
+      "id": "BATCH003_CONTROLE_0021",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "BATCH003_CONDITIONNEMENT_0022",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH003_DECOUPE_0023",
+      "id": "BATCH003_EPLUCHAGE_0023",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "BATCH003_RECEPTION_0024",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH003_CONTROLE_0025",
+      "id": "BATCH004_CUISSON_0025",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH003_PALETTISATION_0026",
+      "id": "BATCH004_ETIQUETAGE_0026",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH004_CONDITIONNEMENT_0027",
+      "id": "BATCH004_DECOUPE_0027",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH004_ETIQUETAGE_0028",
+      "id": "BATCH004_RECEPTION_0028",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH004_EPLUCHAGE_0029",
+      "id": "BATCH004_REFROIDISSEMENT_0029",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "BATCH004_CONTROLE_0030",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH004_REFROIDISSEMENT_0031",
+      "id": "BATCH004_LAVAGE_0031",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH004_DECOUPE_0032",
+      "id": "BATCH004_PALETTISATION_0032",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH004_PALETTISATION_0033",
+      "id": "BATCH004_CONDITIONNEMENT_0033",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_PALETTISATION_0034",
+      "id": "BATCH004_EPLUCHAGE_0034",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_REFROIDISSEMENT_0035",
+      "id": "BATCH005_DECOUPE_0035",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_CUISSON_0036",
+      "id": "BATCH005_RECEPTION_0036",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_ETIQUETAGE_0037",
+      "id": "BATCH005_CONDITIONNEMENT_0037",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_LAVAGE_0038",
+      "id": "BATCH005_CUISSON_0038",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_EPLUCHAGE_0039",
+      "id": "BATCH005_CONTROLE_0039",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_CONTROLE_0040",
+      "id": "BATCH005_REFROIDISSEMENT_0040",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_DECOUPE_0041",
+      "id": "BATCH005_ETIQUETAGE_0041",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH005_CONDITIONNEMENT_0042",
+      "id": "BATCH005_PALETTISATION_0042",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH006_RECEPTION_0043",
+      "id": "BATCH006_DECOUPE_0043",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH006_CONDITIONNEMENT_0044",
+      "id": "BATCH006_PALETTISATION_0044",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH006_CUISSON_0045",
+      "id": "BATCH006_ETIQUETAGE_0045",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH006_REFROIDISSEMENT_0046",
+      "id": "BATCH006_EPLUCHAGE_0046",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH006_LAVAGE_0047",
+      "id": "BATCH006_CUISSON_0047",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH006_PALETTISATION_0048",
+      "id": "BATCH006_CONDITIONNEMENT_0048",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH006_EPLUCHAGE_0049",
+      "id": "BATCH006_REFROIDISSEMENT_0049",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_CONDITIONNEMENT_0050",
+      "id": "BATCH006_CONTROLE_0050",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_REFROIDISSEMENT_0051",
+      "id": "BATCH007_EPLUCHAGE_0051",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_PALETTISATION_0052",
+      "id": "BATCH007_LAVAGE_0052",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_RECEPTION_0053",
+      "id": "BATCH007_DECOUPE_0053",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_CONTROLE_0054",
+      "id": "BATCH007_ETIQUETAGE_0054",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_DECOUPE_0055",
+      "id": "BATCH007_PALETTISATION_0055",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_LAVAGE_0056",
+      "id": "BATCH007_RECEPTION_0056",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_EPLUCHAGE_0057",
+      "id": "BATCH007_CONTROLE_0057",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH007_ETIQUETAGE_0058",
+      "id": "BATCH007_CONDITIONNEMENT_0058",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_RECEPTION_0059",
+      "id": "BATCH007_CUISSON_0059",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_LAVAGE_0060",
+      "id": "BATCH007_REFROIDISSEMENT_0060",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_REFROIDISSEMENT_0061",
+      "id": "BATCH008_LAVAGE_0061",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_PALETTISATION_0062",
+      "id": "BATCH008_CONTROLE_0062",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_CONDITIONNEMENT_0063",
+      "id": "BATCH008_PALETTISATION_0063",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_ETIQUETAGE_0064",
+      "id": "BATCH008_EPLUCHAGE_0064",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_EPLUCHAGE_0065",
+      "id": "BATCH008_CUISSON_0065",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_CUISSON_0066",
+      "id": "BATCH008_RECEPTION_0066",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH008_CONTROLE_0067",
+      "id": "BATCH008_ETIQUETAGE_0067",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_PALETTISATION_0068",
+      "id": "BATCH008_CONDITIONNEMENT_0068",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_DECOUPE_0069",
+      "id": "BATCH008_DECOUPE_0069",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_CONDITIONNEMENT_0070",
+      "id": "BATCH008_REFROIDISSEMENT_0070",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_EPLUCHAGE_0071",
+      "id": "BATCH009_CONDITIONNEMENT_0071",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_LAVAGE_0072",
+      "id": "BATCH009_PALETTISATION_0072",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_RECEPTION_0073",
+      "id": "BATCH009_CUISSON_0073",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_CONTROLE_0074",
+      "id": "BATCH009_EPLUCHAGE_0074",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH009_REFROIDISSEMENT_0075",
+      "id": "BATCH009_RECEPTION_0075",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH010_PALETTISATION_0076",
+      "id": "BATCH009_CONTROLE_0076",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH010_CONTROLE_0077",
+      "id": "BATCH009_ETIQUETAGE_0077",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH010_EPLUCHAGE_0078",
+      "id": "BATCH009_DECOUPE_0078",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH010_CUISSON_0079",
+      "id": "BATCH009_LAVAGE_0079",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH010_ETIQUETAGE_0080",
+      "id": "BATCH010_RECEPTION_0080",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "BATCH010_LAVAGE_0081",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH010_CONDITIONNEMENT_0082",
+      "id": "BATCH010_ETIQUETAGE_0082",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_LAVAGE_0083",
+      "id": "BATCH010_REFROIDISSEMENT_0083",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_PALETTISATION_0084",
+      "id": "BATCH010_DECOUPE_0084",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_CONTROLE_0085",
+      "id": "BATCH010_CUISSON_0085",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_RECEPTION_0086",
+      "id": "BATCH010_CONTROLE_0086",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_DECOUPE_0087",
+      "id": "BATCH011_LAVAGE_0087",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_EPLUCHAGE_0088",
+      "id": "BATCH011_REFROIDISSEMENT_0088",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_REFROIDISSEMENT_0089",
+      "id": "BATCH011_ETIQUETAGE_0089",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_ETIQUETAGE_0090",
+      "id": "BATCH011_CUISSON_0090",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_CUISSON_0091",
+      "id": "BATCH011_PALETTISATION_0091",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "BATCH011_CONDITIONNEMENT_0092",
+      "id": "BATCH011_EPLUCHAGE_0092",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "SUPP_0093",
+      "id": "BATCH011_DECOUPE_0093",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "SUPP_0094",
+      "id": "BATCH011_CONDITIONNEMENT_0094",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "SUPP_0095",
+      "id": "BATCH011_RECEPTION_0095",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "SUPP_0096",
+      "id": "BATCH011_CONTROLE_0096",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SUPP_0097",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SUPP_0098",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SUPP_0099",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SUPP_0100",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     }
   ],
   "ressources": [
     {
       "id": "QUAI_RECEPTION_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "QUAI_RECEPTION_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "QUAI_RECEPTION_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "QUAI_RECEPTION_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_LAVAGE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_LAVAGE_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_LAVAGE_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_EPLUCHAGE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_EPLUCHAGE_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_EPLUCHAGE_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_EPLUCHAGE_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_EPLUCHAGE_5",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_DECOUPE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_DECOUPE_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_DECOUPE_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_DECOUPE_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_DECOUPE_5",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_DECOUPE_6",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_5",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_6",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_7",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "AUTOCLAVE_8",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_REFROIDISSEMENT_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_REFROIDISSEMENT_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_REFROIDISSEMENT_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_REFROIDISSEMENT_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_5",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_6",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_7",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_8",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_9",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "LIGNE_CONDITIONNEMENT_10",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ETIQUETEUSE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ETIQUETEUSE_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ETIQUETEUSE_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ETIQUETEUSE_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ETIQUETEUSE_5",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ETIQUETEUSE_6",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_PALETTISEUR_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_PALETTISEUR_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_PALETTISEUR_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_PALETTISEUR_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "ROBOT_PALETTISEUR_5",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_3",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_4",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_5",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_6",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_7",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_CONTROLE_QUALITE_8",
       "nom": null,
+      "type": null,
       "competences": []
     }
   ],
@@ -802,191 +961,191 @@
     {
       "type": "compatibilite_ressource_tache",
       "tache": "BATCH001_EPLUCHAGE_0001",
-      "ressource": "LIGNE_EPLUCHAGE_3",
-      "duree": 50
+      "ressource": "LIGNE_EPLUCHAGE_5",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_CUISSON_0002",
-      "ressource": "AUTOCLAVE_4",
-      "duree": 135
+      "tache": "BATCH001_CONDITIONNEMENT_0002",
+      "ressource": "LIGNE_CONDITIONNEMENT_2",
+      "duree": 2
     },
     {
       "type": "precedence",
       "avant": "BATCH001_EPLUCHAGE_0001",
-      "apres": "BATCH001_CUISSON_0002"
+      "apres": "BATCH001_CONDITIONNEMENT_0002"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_CONDITIONNEMENT_0003",
-      "ressource": "LIGNE_CONDITIONNEMENT_2",
-      "duree": 41
+      "tache": "BATCH001_PALETTISATION_0003",
+      "ressource": "ROBOT_PALETTISEUR_2",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH001_CUISSON_0002",
-      "apres": "BATCH001_CONDITIONNEMENT_0003"
+      "avant": "BATCH001_CONDITIONNEMENT_0002",
+      "apres": "BATCH001_PALETTISATION_0003"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_RECEPTION_0004",
-      "ressource": "QUAI_RECEPTION_2",
-      "duree": 22
+      "tache": "BATCH001_DECOUPE_0004",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH001_CONDITIONNEMENT_0003",
-      "apres": "BATCH001_RECEPTION_0004"
+      "avant": "BATCH001_PALETTISATION_0003",
+      "apres": "BATCH001_DECOUPE_0004"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_PALETTISATION_0005",
-      "ressource": "ROBOT_PALETTISEUR_5",
-      "duree": 39
+      "tache": "BATCH001_REFROIDISSEMENT_0005",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "BATCH001_RECEPTION_0004",
-      "apres": "BATCH001_PALETTISATION_0005"
+      "avant": "BATCH001_DECOUPE_0004",
+      "apres": "BATCH001_REFROIDISSEMENT_0005"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_CONTROLE_0006",
-      "ressource": "POSTE_CONTROLE_QUALITE_1",
-      "duree": 21
+      "tache": "BATCH001_ETIQUETAGE_0006",
+      "ressource": "ETIQUETEUSE_6",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH001_PALETTISATION_0005",
-      "apres": "BATCH001_CONTROLE_0006"
+      "avant": "BATCH001_REFROIDISSEMENT_0005",
+      "apres": "BATCH001_ETIQUETAGE_0006"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_REFROIDISSEMENT_0007",
+      "tache": "BATCH001_CONTROLE_0007",
+      "ressource": "POSTE_CONTROLE_QUALITE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH001_ETIQUETAGE_0006",
+      "apres": "BATCH001_CONTROLE_0007"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_CONTROLE_0008",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_ETIQUETAGE_0009",
+      "ressource": "ETIQUETEUSE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH002_CONTROLE_0008",
+      "apres": "BATCH002_ETIQUETAGE_0009"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_CONDITIONNEMENT_0010",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH002_ETIQUETAGE_0009",
+      "apres": "BATCH002_CONDITIONNEMENT_0010"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_CUISSON_0011",
+      "ressource": "AUTOCLAVE_3",
+      "duree": 3
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH002_CONDITIONNEMENT_0010",
+      "apres": "BATCH002_CUISSON_0011"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_RECEPTION_0012",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH002_CUISSON_0011",
+      "apres": "BATCH002_RECEPTION_0012"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_EPLUCHAGE_0013",
+      "ressource": "LIGNE_EPLUCHAGE_3",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH002_RECEPTION_0012",
+      "apres": "BATCH002_EPLUCHAGE_0013"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_LAVAGE_0014",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH002_EPLUCHAGE_0013",
+      "apres": "BATCH002_LAVAGE_0014"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_PALETTISATION_0015",
+      "ressource": "ROBOT_PALETTISEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH002_LAVAGE_0014",
+      "apres": "BATCH002_PALETTISATION_0015"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH002_REFROIDISSEMENT_0016",
       "ressource": "TUNNEL_REFROIDISSEMENT_2",
-      "duree": 81
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "BATCH001_CONTROLE_0006",
-      "apres": "BATCH001_REFROIDISSEMENT_0007"
+      "avant": "BATCH002_PALETTISATION_0015",
+      "apres": "BATCH002_REFROIDISSEMENT_0016"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_LAVAGE_0008",
-      "ressource": "TUNNEL_LAVAGE_1",
-      "duree": 37
+      "tache": "BATCH002_DECOUPE_0017",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH001_REFROIDISSEMENT_0007",
-      "apres": "BATCH001_LAVAGE_0008"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_ETIQUETAGE_0009",
-      "ressource": "ETIQUETEUSE_3",
-      "duree": 35
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH001_LAVAGE_0008",
-      "apres": "BATCH001_ETIQUETAGE_0009"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH001_DECOUPE_0010",
-      "ressource": "ROBOT_DECOUPE_4",
-      "duree": 30
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH001_ETIQUETAGE_0009",
-      "apres": "BATCH001_DECOUPE_0010"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH002_CONDITIONNEMENT_0011",
-      "ressource": "LIGNE_CONDITIONNEMENT_1",
-      "duree": 51
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH002_CONTROLE_0012",
-      "ressource": "POSTE_CONTROLE_QUALITE_1",
-      "duree": 13
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH002_CONDITIONNEMENT_0011",
-      "apres": "BATCH002_CONTROLE_0012"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH002_RECEPTION_0013",
-      "ressource": "QUAI_RECEPTION_3",
-      "duree": 42
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH002_CONTROLE_0012",
-      "apres": "BATCH002_RECEPTION_0013"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH002_CUISSON_0014",
-      "ressource": "AUTOCLAVE_5",
-      "duree": 157
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH002_RECEPTION_0013",
-      "apres": "BATCH002_CUISSON_0014"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH002_DECOUPE_0015",
-      "ressource": "ROBOT_DECOUPE_6",
-      "duree": 28
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH002_CUISSON_0014",
-      "apres": "BATCH002_DECOUPE_0015"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH002_ETIQUETAGE_0016",
-      "ressource": "ETIQUETEUSE_4",
-      "duree": 31
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH002_DECOUPE_0015",
-      "apres": "BATCH002_ETIQUETAGE_0016"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH002_EPLUCHAGE_0017",
-      "ressource": "LIGNE_EPLUCHAGE_4",
-      "duree": 54
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH002_ETIQUETAGE_0016",
-      "apres": "BATCH002_EPLUCHAGE_0017"
+      "avant": "BATCH002_REFROIDISSEMENT_0016",
+      "apres": "BATCH002_DECOUPE_0017"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "BATCH003_ETIQUETAGE_0018",
-      "ressource": "ETIQUETEUSE_5",
-      "duree": 25
+      "ressource": "ETIQUETEUSE_2",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "BATCH003_LAVAGE_0019",
-      "ressource": "TUNNEL_LAVAGE_1",
-      "duree": 30
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -995,814 +1154,834 @@
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH003_REFROIDISSEMENT_0020",
-      "ressource": "TUNNEL_REFROIDISSEMENT_4",
-      "duree": 76
+      "tache": "BATCH003_PALETTISATION_0020",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "BATCH003_LAVAGE_0019",
-      "apres": "BATCH003_REFROIDISSEMENT_0020"
+      "apres": "BATCH003_PALETTISATION_0020"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH003_CUISSON_0021",
-      "ressource": "AUTOCLAVE_2",
-      "duree": 94
+      "tache": "BATCH003_CONTROLE_0021",
+      "ressource": "POSTE_CONTROLE_QUALITE_8",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH003_REFROIDISSEMENT_0020",
-      "apres": "BATCH003_CUISSON_0021"
+      "avant": "BATCH003_PALETTISATION_0020",
+      "apres": "BATCH003_CONTROLE_0021"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "BATCH003_CONDITIONNEMENT_0022",
-      "ressource": "LIGNE_CONDITIONNEMENT_1",
-      "duree": 65
+      "ressource": "LIGNE_CONDITIONNEMENT_8",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "BATCH003_CUISSON_0021",
+      "avant": "BATCH003_CONTROLE_0021",
       "apres": "BATCH003_CONDITIONNEMENT_0022"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH003_DECOUPE_0023",
-      "ressource": "ROBOT_DECOUPE_1",
-      "duree": 35
+      "tache": "BATCH003_EPLUCHAGE_0023",
+      "ressource": "LIGNE_EPLUCHAGE_4",
+      "duree": 2
     },
     {
       "type": "precedence",
       "avant": "BATCH003_CONDITIONNEMENT_0022",
-      "apres": "BATCH003_DECOUPE_0023"
+      "apres": "BATCH003_EPLUCHAGE_0023"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "BATCH003_RECEPTION_0024",
-      "ressource": "QUAI_RECEPTION_3",
-      "duree": 31
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH003_DECOUPE_0023",
+      "avant": "BATCH003_EPLUCHAGE_0023",
       "apres": "BATCH003_RECEPTION_0024"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH003_CONTROLE_0025",
-      "ressource": "POSTE_CONTROLE_QUALITE_5",
-      "duree": 13
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH003_RECEPTION_0024",
-      "apres": "BATCH003_CONTROLE_0025"
+      "tache": "BATCH004_CUISSON_0025",
+      "ressource": "AUTOCLAVE_6",
+      "duree": 3
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH003_PALETTISATION_0026",
-      "ressource": "ROBOT_PALETTISEUR_1",
-      "duree": 27
+      "tache": "BATCH004_ETIQUETAGE_0026",
+      "ressource": "ETIQUETEUSE_6",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH003_CONTROLE_0025",
-      "apres": "BATCH003_PALETTISATION_0026"
+      "avant": "BATCH004_CUISSON_0025",
+      "apres": "BATCH004_ETIQUETAGE_0026"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH004_CONDITIONNEMENT_0027",
-      "ressource": "LIGNE_CONDITIONNEMENT_4",
-      "duree": 47
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH004_ETIQUETAGE_0028",
-      "ressource": "ETIQUETEUSE_4",
-      "duree": 23
+      "tache": "BATCH004_DECOUPE_0027",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH004_CONDITIONNEMENT_0027",
-      "apres": "BATCH004_ETIQUETAGE_0028"
+      "avant": "BATCH004_ETIQUETAGE_0026",
+      "apres": "BATCH004_DECOUPE_0027"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH004_EPLUCHAGE_0029",
-      "ressource": "LIGNE_EPLUCHAGE_2",
-      "duree": 74
+      "tache": "BATCH004_RECEPTION_0028",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH004_ETIQUETAGE_0028",
-      "apres": "BATCH004_EPLUCHAGE_0029"
+      "avant": "BATCH004_DECOUPE_0027",
+      "apres": "BATCH004_RECEPTION_0028"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH004_REFROIDISSEMENT_0029",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 3
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH004_RECEPTION_0028",
+      "apres": "BATCH004_REFROIDISSEMENT_0029"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "BATCH004_CONTROLE_0030",
-      "ressource": "POSTE_CONTROLE_QUALITE_2",
-      "duree": 16
+      "ressource": "POSTE_CONTROLE_QUALITE_7",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH004_EPLUCHAGE_0029",
+      "avant": "BATCH004_REFROIDISSEMENT_0029",
       "apres": "BATCH004_CONTROLE_0030"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH004_REFROIDISSEMENT_0031",
-      "ressource": "TUNNEL_REFROIDISSEMENT_4",
-      "duree": 108
+      "tache": "BATCH004_LAVAGE_0031",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "BATCH004_CONTROLE_0030",
-      "apres": "BATCH004_REFROIDISSEMENT_0031"
+      "apres": "BATCH004_LAVAGE_0031"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH004_DECOUPE_0032",
-      "ressource": "ROBOT_DECOUPE_1",
-      "duree": 33
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH004_REFROIDISSEMENT_0031",
-      "apres": "BATCH004_DECOUPE_0032"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH004_PALETTISATION_0033",
-      "ressource": "ROBOT_PALETTISEUR_2",
-      "duree": 28
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH004_DECOUPE_0032",
-      "apres": "BATCH004_PALETTISATION_0033"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_PALETTISATION_0034",
+      "tache": "BATCH004_PALETTISATION_0032",
       "ressource": "ROBOT_PALETTISEUR_4",
-      "duree": 28
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_REFROIDISSEMENT_0035",
-      "ressource": "TUNNEL_REFROIDISSEMENT_1",
-      "duree": 64
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH005_PALETTISATION_0034",
-      "apres": "BATCH005_REFROIDISSEMENT_0035"
+      "avant": "BATCH004_LAVAGE_0031",
+      "apres": "BATCH004_PALETTISATION_0032"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_CUISSON_0036",
-      "ressource": "AUTOCLAVE_6",
-      "duree": 127
+      "tache": "BATCH004_CONDITIONNEMENT_0033",
+      "ressource": "LIGNE_CONDITIONNEMENT_1",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "BATCH005_REFROIDISSEMENT_0035",
-      "apres": "BATCH005_CUISSON_0036"
+      "avant": "BATCH004_PALETTISATION_0032",
+      "apres": "BATCH004_CONDITIONNEMENT_0033"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_ETIQUETAGE_0037",
-      "ressource": "ETIQUETEUSE_6",
-      "duree": 33
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH005_CUISSON_0036",
-      "apres": "BATCH005_ETIQUETAGE_0037"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_LAVAGE_0038",
-      "ressource": "TUNNEL_LAVAGE_3",
-      "duree": 60
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH005_ETIQUETAGE_0037",
-      "apres": "BATCH005_LAVAGE_0038"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_EPLUCHAGE_0039",
-      "ressource": "LIGNE_EPLUCHAGE_5",
-      "duree": 75
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH005_LAVAGE_0038",
-      "apres": "BATCH005_EPLUCHAGE_0039"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_CONTROLE_0040",
-      "ressource": "POSTE_CONTROLE_QUALITE_6",
-      "duree": 25
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH005_EPLUCHAGE_0039",
-      "apres": "BATCH005_CONTROLE_0040"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_DECOUPE_0041",
-      "ressource": "ROBOT_DECOUPE_2",
-      "duree": 48
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH005_CONTROLE_0040",
-      "apres": "BATCH005_DECOUPE_0041"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH005_CONDITIONNEMENT_0042",
-      "ressource": "LIGNE_CONDITIONNEMENT_8",
-      "duree": 38
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH005_DECOUPE_0041",
-      "apres": "BATCH005_CONDITIONNEMENT_0042"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH006_RECEPTION_0043",
-      "ressource": "QUAI_RECEPTION_3",
-      "duree": 35
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH006_CONDITIONNEMENT_0044",
-      "ressource": "LIGNE_CONDITIONNEMENT_9",
-      "duree": 54
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH006_RECEPTION_0043",
-      "apres": "BATCH006_CONDITIONNEMENT_0044"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH006_CUISSON_0045",
-      "ressource": "AUTOCLAVE_2",
-      "duree": 111
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH006_CONDITIONNEMENT_0044",
-      "apres": "BATCH006_CUISSON_0045"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH006_REFROIDISSEMENT_0046",
-      "ressource": "TUNNEL_REFROIDISSEMENT_4",
-      "duree": 108
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH006_CUISSON_0045",
-      "apres": "BATCH006_REFROIDISSEMENT_0046"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH006_LAVAGE_0047",
-      "ressource": "TUNNEL_LAVAGE_2",
-      "duree": 48
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH006_REFROIDISSEMENT_0046",
-      "apres": "BATCH006_LAVAGE_0047"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH006_PALETTISATION_0048",
-      "ressource": "ROBOT_PALETTISEUR_4",
-      "duree": 38
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH006_LAVAGE_0047",
-      "apres": "BATCH006_PALETTISATION_0048"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH006_EPLUCHAGE_0049",
+      "tache": "BATCH004_EPLUCHAGE_0034",
       "ressource": "LIGNE_EPLUCHAGE_3",
-      "duree": 47
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH006_PALETTISATION_0048",
-      "apres": "BATCH006_EPLUCHAGE_0049"
+      "avant": "BATCH004_CONDITIONNEMENT_0033",
+      "apres": "BATCH004_EPLUCHAGE_0034"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_CONDITIONNEMENT_0050",
-      "ressource": "LIGNE_CONDITIONNEMENT_3",
-      "duree": 55
+      "tache": "BATCH005_DECOUPE_0035",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_REFROIDISSEMENT_0051",
-      "ressource": "TUNNEL_REFROIDISSEMENT_4",
-      "duree": 114
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH007_CONDITIONNEMENT_0050",
-      "apres": "BATCH007_REFROIDISSEMENT_0051"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_PALETTISATION_0052",
-      "ressource": "ROBOT_PALETTISEUR_5",
-      "duree": 38
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH007_REFROIDISSEMENT_0051",
-      "apres": "BATCH007_PALETTISATION_0052"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_RECEPTION_0053",
+      "tache": "BATCH005_RECEPTION_0036",
       "ressource": "QUAI_RECEPTION_1",
-      "duree": 41
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH007_PALETTISATION_0052",
-      "apres": "BATCH007_RECEPTION_0053"
+      "avant": "BATCH005_DECOUPE_0035",
+      "apres": "BATCH005_RECEPTION_0036"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_CONTROLE_0054",
-      "ressource": "POSTE_CONTROLE_QUALITE_3",
-      "duree": 17
+      "tache": "BATCH005_CONDITIONNEMENT_0037",
+      "ressource": "LIGNE_CONDITIONNEMENT_8",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH007_RECEPTION_0053",
-      "apres": "BATCH007_CONTROLE_0054"
+      "avant": "BATCH005_RECEPTION_0036",
+      "apres": "BATCH005_CONDITIONNEMENT_0037"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_DECOUPE_0055",
-      "ressource": "ROBOT_DECOUPE_6",
-      "duree": 35
+      "tache": "BATCH005_CUISSON_0038",
+      "ressource": "AUTOCLAVE_7",
+      "duree": 3
     },
     {
       "type": "precedence",
-      "avant": "BATCH007_CONTROLE_0054",
-      "apres": "BATCH007_DECOUPE_0055"
+      "avant": "BATCH005_CONDITIONNEMENT_0037",
+      "apres": "BATCH005_CUISSON_0038"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_LAVAGE_0056",
-      "ressource": "TUNNEL_LAVAGE_2",
-      "duree": 55
+      "tache": "BATCH005_CONTROLE_0039",
+      "ressource": "POSTE_CONTROLE_QUALITE_8",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH007_DECOUPE_0055",
-      "apres": "BATCH007_LAVAGE_0056"
+      "avant": "BATCH005_CUISSON_0038",
+      "apres": "BATCH005_CONTROLE_0039"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_EPLUCHAGE_0057",
-      "ressource": "LIGNE_EPLUCHAGE_2",
-      "duree": 50
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH007_LAVAGE_0056",
-      "apres": "BATCH007_EPLUCHAGE_0057"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH007_ETIQUETAGE_0058",
-      "ressource": "ETIQUETEUSE_4",
-      "duree": 30
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH007_EPLUCHAGE_0057",
-      "apres": "BATCH007_ETIQUETAGE_0058"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_RECEPTION_0059",
-      "ressource": "QUAI_RECEPTION_2",
-      "duree": 45
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_LAVAGE_0060",
-      "ressource": "TUNNEL_LAVAGE_3",
-      "duree": 44
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH008_RECEPTION_0059",
-      "apres": "BATCH008_LAVAGE_0060"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_REFROIDISSEMENT_0061",
+      "tache": "BATCH005_REFROIDISSEMENT_0040",
       "ressource": "TUNNEL_REFROIDISSEMENT_3",
-      "duree": 60
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "BATCH008_LAVAGE_0060",
-      "apres": "BATCH008_REFROIDISSEMENT_0061"
+      "avant": "BATCH005_CONTROLE_0039",
+      "apres": "BATCH005_REFROIDISSEMENT_0040"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_PALETTISATION_0062",
-      "ressource": "ROBOT_PALETTISEUR_4",
-      "duree": 31
+      "tache": "BATCH005_ETIQUETAGE_0041",
+      "ressource": "ETIQUETEUSE_6",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH008_REFROIDISSEMENT_0061",
-      "apres": "BATCH008_PALETTISATION_0062"
+      "avant": "BATCH005_REFROIDISSEMENT_0040",
+      "apres": "BATCH005_ETIQUETAGE_0041"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_CONDITIONNEMENT_0063",
-      "ressource": "LIGNE_CONDITIONNEMENT_7",
-      "duree": 44
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH008_PALETTISATION_0062",
-      "apres": "BATCH008_CONDITIONNEMENT_0063"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_ETIQUETAGE_0064",
-      "ressource": "ETIQUETEUSE_5",
-      "duree": 19
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH008_CONDITIONNEMENT_0063",
-      "apres": "BATCH008_ETIQUETAGE_0064"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_EPLUCHAGE_0065",
-      "ressource": "LIGNE_EPLUCHAGE_5",
-      "duree": 66
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH008_ETIQUETAGE_0064",
-      "apres": "BATCH008_EPLUCHAGE_0065"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_CUISSON_0066",
-      "ressource": "AUTOCLAVE_2",
-      "duree": 175
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH008_EPLUCHAGE_0065",
-      "apres": "BATCH008_CUISSON_0066"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH008_CONTROLE_0067",
-      "ressource": "POSTE_CONTROLE_QUALITE_5",
-      "duree": 20
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH008_CUISSON_0066",
-      "apres": "BATCH008_CONTROLE_0067"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_PALETTISATION_0068",
-      "ressource": "ROBOT_PALETTISEUR_3",
-      "duree": 45
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_DECOUPE_0069",
-      "ressource": "ROBOT_DECOUPE_6",
-      "duree": 31
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH009_PALETTISATION_0068",
-      "apres": "BATCH009_DECOUPE_0069"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_CONDITIONNEMENT_0070",
-      "ressource": "LIGNE_CONDITIONNEMENT_5",
-      "duree": 50
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH009_DECOUPE_0069",
-      "apres": "BATCH009_CONDITIONNEMENT_0070"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_EPLUCHAGE_0071",
-      "ressource": "LIGNE_EPLUCHAGE_2",
-      "duree": 79
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH009_CONDITIONNEMENT_0070",
-      "apres": "BATCH009_EPLUCHAGE_0071"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_LAVAGE_0072",
-      "ressource": "TUNNEL_LAVAGE_2",
-      "duree": 35
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH009_EPLUCHAGE_0071",
-      "apres": "BATCH009_LAVAGE_0072"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_RECEPTION_0073",
-      "ressource": "QUAI_RECEPTION_3",
-      "duree": 34
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH009_LAVAGE_0072",
-      "apres": "BATCH009_RECEPTION_0073"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_CONTROLE_0074",
-      "ressource": "POSTE_CONTROLE_QUALITE_7",
-      "duree": 13
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH009_RECEPTION_0073",
-      "apres": "BATCH009_CONTROLE_0074"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH009_REFROIDISSEMENT_0075",
-      "ressource": "TUNNEL_REFROIDISSEMENT_3",
-      "duree": 98
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH009_CONTROLE_0074",
-      "apres": "BATCH009_REFROIDISSEMENT_0075"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH010_PALETTISATION_0076",
+      "tache": "BATCH005_PALETTISATION_0042",
       "ressource": "ROBOT_PALETTISEUR_2",
-      "duree": 35
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH010_CONTROLE_0077",
-      "ressource": "POSTE_CONTROLE_QUALITE_3",
-      "duree": 13
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH010_PALETTISATION_0076",
-      "apres": "BATCH010_CONTROLE_0077"
+      "avant": "BATCH005_ETIQUETAGE_0041",
+      "apres": "BATCH005_PALETTISATION_0042"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH010_EPLUCHAGE_0078",
-      "ressource": "LIGNE_EPLUCHAGE_1",
-      "duree": 64
+      "tache": "BATCH006_DECOUPE_0043",
+      "ressource": "ROBOT_DECOUPE_6",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH006_PALETTISATION_0044",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH010_CONTROLE_0077",
-      "apres": "BATCH010_EPLUCHAGE_0078"
+      "avant": "BATCH006_DECOUPE_0043",
+      "apres": "BATCH006_PALETTISATION_0044"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH010_CUISSON_0079",
-      "ressource": "AUTOCLAVE_4",
-      "duree": 116
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH010_EPLUCHAGE_0078",
-      "apres": "BATCH010_CUISSON_0079"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH010_ETIQUETAGE_0080",
+      "tache": "BATCH006_ETIQUETAGE_0045",
       "ressource": "ETIQUETEUSE_3",
-      "duree": 23
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH010_CUISSON_0079",
-      "apres": "BATCH010_ETIQUETAGE_0080"
+      "avant": "BATCH006_PALETTISATION_0044",
+      "apres": "BATCH006_ETIQUETAGE_0045"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH006_EPLUCHAGE_0046",
+      "ressource": "LIGNE_EPLUCHAGE_5",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH006_ETIQUETAGE_0045",
+      "apres": "BATCH006_EPLUCHAGE_0046"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH006_CUISSON_0047",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 4
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH006_EPLUCHAGE_0046",
+      "apres": "BATCH006_CUISSON_0047"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH006_CONDITIONNEMENT_0048",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH006_CUISSON_0047",
+      "apres": "BATCH006_CONDITIONNEMENT_0048"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH006_REFROIDISSEMENT_0049",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH006_CONDITIONNEMENT_0048",
+      "apres": "BATCH006_REFROIDISSEMENT_0049"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH006_CONTROLE_0050",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH006_REFROIDISSEMENT_0049",
+      "apres": "BATCH006_CONTROLE_0050"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_EPLUCHAGE_0051",
+      "ressource": "LIGNE_EPLUCHAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_LAVAGE_0052",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_EPLUCHAGE_0051",
+      "apres": "BATCH007_LAVAGE_0052"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_DECOUPE_0053",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_LAVAGE_0052",
+      "apres": "BATCH007_DECOUPE_0053"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_ETIQUETAGE_0054",
+      "ressource": "ETIQUETEUSE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_DECOUPE_0053",
+      "apres": "BATCH007_ETIQUETAGE_0054"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_PALETTISATION_0055",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_ETIQUETAGE_0054",
+      "apres": "BATCH007_PALETTISATION_0055"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_RECEPTION_0056",
+      "ressource": "QUAI_RECEPTION_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_PALETTISATION_0055",
+      "apres": "BATCH007_RECEPTION_0056"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_CONTROLE_0057",
+      "ressource": "POSTE_CONTROLE_QUALITE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_RECEPTION_0056",
+      "apres": "BATCH007_CONTROLE_0057"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_CONDITIONNEMENT_0058",
+      "ressource": "LIGNE_CONDITIONNEMENT_3",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_CONTROLE_0057",
+      "apres": "BATCH007_CONDITIONNEMENT_0058"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_CUISSON_0059",
+      "ressource": "AUTOCLAVE_6",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_CONDITIONNEMENT_0058",
+      "apres": "BATCH007_CUISSON_0059"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH007_REFROIDISSEMENT_0060",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH007_CUISSON_0059",
+      "apres": "BATCH007_REFROIDISSEMENT_0060"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_LAVAGE_0061",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_CONTROLE_0062",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_LAVAGE_0061",
+      "apres": "BATCH008_CONTROLE_0062"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_PALETTISATION_0063",
+      "ressource": "ROBOT_PALETTISEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_CONTROLE_0062",
+      "apres": "BATCH008_PALETTISATION_0063"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_EPLUCHAGE_0064",
+      "ressource": "LIGNE_EPLUCHAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_PALETTISATION_0063",
+      "apres": "BATCH008_EPLUCHAGE_0064"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_CUISSON_0065",
+      "ressource": "AUTOCLAVE_8",
+      "duree": 4
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_EPLUCHAGE_0064",
+      "apres": "BATCH008_CUISSON_0065"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_RECEPTION_0066",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_CUISSON_0065",
+      "apres": "BATCH008_RECEPTION_0066"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_ETIQUETAGE_0067",
+      "ressource": "ETIQUETEUSE_5",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_RECEPTION_0066",
+      "apres": "BATCH008_ETIQUETAGE_0067"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_CONDITIONNEMENT_0068",
+      "ressource": "LIGNE_CONDITIONNEMENT_8",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_ETIQUETAGE_0067",
+      "apres": "BATCH008_CONDITIONNEMENT_0068"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_DECOUPE_0069",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_CONDITIONNEMENT_0068",
+      "apres": "BATCH008_DECOUPE_0069"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH008_REFROIDISSEMENT_0070",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 3
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH008_DECOUPE_0069",
+      "apres": "BATCH008_REFROIDISSEMENT_0070"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_CONDITIONNEMENT_0071",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_PALETTISATION_0072",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_CONDITIONNEMENT_0071",
+      "apres": "BATCH009_PALETTISATION_0072"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_CUISSON_0073",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_PALETTISATION_0072",
+      "apres": "BATCH009_CUISSON_0073"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_EPLUCHAGE_0074",
+      "ressource": "LIGNE_EPLUCHAGE_5",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_CUISSON_0073",
+      "apres": "BATCH009_EPLUCHAGE_0074"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_RECEPTION_0075",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_EPLUCHAGE_0074",
+      "apres": "BATCH009_RECEPTION_0075"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_CONTROLE_0076",
+      "ressource": "POSTE_CONTROLE_QUALITE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_RECEPTION_0075",
+      "apres": "BATCH009_CONTROLE_0076"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_ETIQUETAGE_0077",
+      "ressource": "ETIQUETEUSE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_CONTROLE_0076",
+      "apres": "BATCH009_ETIQUETAGE_0077"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_DECOUPE_0078",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_ETIQUETAGE_0077",
+      "apres": "BATCH009_DECOUPE_0078"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH009_LAVAGE_0079",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH009_DECOUPE_0078",
+      "apres": "BATCH009_LAVAGE_0079"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH010_RECEPTION_0080",
+      "ressource": "QUAI_RECEPTION_1",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "BATCH010_LAVAGE_0081",
       "ressource": "TUNNEL_LAVAGE_3",
-      "duree": 60
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "BATCH010_ETIQUETAGE_0080",
+      "avant": "BATCH010_RECEPTION_0080",
       "apres": "BATCH010_LAVAGE_0081"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH010_CONDITIONNEMENT_0082",
-      "ressource": "LIGNE_CONDITIONNEMENT_7",
-      "duree": 62
+      "tache": "BATCH010_ETIQUETAGE_0082",
+      "ressource": "ETIQUETEUSE_1",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "BATCH010_LAVAGE_0081",
-      "apres": "BATCH010_CONDITIONNEMENT_0082"
+      "apres": "BATCH010_ETIQUETAGE_0082"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_LAVAGE_0083",
-      "ressource": "TUNNEL_LAVAGE_1",
-      "duree": 33
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_PALETTISATION_0084",
-      "ressource": "ROBOT_PALETTISEUR_5",
-      "duree": 28
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_LAVAGE_0083",
-      "apres": "BATCH011_PALETTISATION_0084"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_CONTROLE_0085",
-      "ressource": "POSTE_CONTROLE_QUALITE_2",
-      "duree": 20
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_PALETTISATION_0084",
-      "apres": "BATCH011_CONTROLE_0085"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_RECEPTION_0086",
-      "ressource": "QUAI_RECEPTION_1",
-      "duree": 37
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_CONTROLE_0085",
-      "apres": "BATCH011_RECEPTION_0086"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_DECOUPE_0087",
-      "ressource": "ROBOT_DECOUPE_3",
-      "duree": 31
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_RECEPTION_0086",
-      "apres": "BATCH011_DECOUPE_0087"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_EPLUCHAGE_0088",
-      "ressource": "LIGNE_EPLUCHAGE_5",
-      "duree": 64
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_DECOUPE_0087",
-      "apres": "BATCH011_EPLUCHAGE_0088"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_REFROIDISSEMENT_0089",
-      "ressource": "TUNNEL_REFROIDISSEMENT_3",
-      "duree": 109
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_EPLUCHAGE_0088",
-      "apres": "BATCH011_REFROIDISSEMENT_0089"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_ETIQUETAGE_0090",
-      "ressource": "ETIQUETEUSE_2",
-      "duree": 35
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_REFROIDISSEMENT_0089",
-      "apres": "BATCH011_ETIQUETAGE_0090"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_CUISSON_0091",
-      "ressource": "AUTOCLAVE_1",
-      "duree": 163
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_ETIQUETAGE_0090",
-      "apres": "BATCH011_CUISSON_0091"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "BATCH011_CONDITIONNEMENT_0092",
-      "ressource": "LIGNE_CONDITIONNEMENT_6",
-      "duree": 61
-    },
-    {
-      "type": "precedence",
-      "avant": "BATCH011_CUISSON_0091",
-      "apres": "BATCH011_CONDITIONNEMENT_0092"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "SUPP_0093",
+      "tache": "BATCH010_REFROIDISSEMENT_0083",
       "ressource": "TUNNEL_REFROIDISSEMENT_2",
-      "duree": 66
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH010_ETIQUETAGE_0082",
+      "apres": "BATCH010_REFROIDISSEMENT_0083"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "SUPP_0094",
-      "ressource": "LIGNE_CONDITIONNEMENT_10",
-      "duree": 58
+      "tache": "BATCH010_DECOUPE_0084",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH010_REFROIDISSEMENT_0083",
+      "apres": "BATCH010_DECOUPE_0084"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "SUPP_0095",
-      "ressource": "LIGNE_EPLUCHAGE_3",
-      "duree": 71
+      "tache": "BATCH010_CUISSON_0085",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 4
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH010_DECOUPE_0084",
+      "apres": "BATCH010_CUISSON_0085"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "SUPP_0096",
-      "ressource": "TUNNEL_LAVAGE_1",
-      "duree": 36
+      "tache": "BATCH010_CONTROLE_0086",
+      "ressource": "POSTE_CONTROLE_QUALITE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH010_CUISSON_0085",
+      "apres": "BATCH010_CONTROLE_0086"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_LAVAGE_0087",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_REFROIDISSEMENT_0088",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_LAVAGE_0087",
+      "apres": "BATCH011_REFROIDISSEMENT_0088"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_ETIQUETAGE_0089",
+      "ressource": "ETIQUETEUSE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_REFROIDISSEMENT_0088",
+      "apres": "BATCH011_ETIQUETAGE_0089"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_CUISSON_0090",
+      "ressource": "AUTOCLAVE_8",
+      "duree": 4
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_ETIQUETAGE_0089",
+      "apres": "BATCH011_CUISSON_0090"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_PALETTISATION_0091",
+      "ressource": "ROBOT_PALETTISEUR_5",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_CUISSON_0090",
+      "apres": "BATCH011_PALETTISATION_0091"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_EPLUCHAGE_0092",
+      "ressource": "LIGNE_EPLUCHAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_PALETTISATION_0091",
+      "apres": "BATCH011_EPLUCHAGE_0092"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_DECOUPE_0093",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_EPLUCHAGE_0092",
+      "apres": "BATCH011_DECOUPE_0093"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_CONDITIONNEMENT_0094",
+      "ressource": "LIGNE_CONDITIONNEMENT_7",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_DECOUPE_0093",
+      "apres": "BATCH011_CONDITIONNEMENT_0094"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_RECEPTION_0095",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_CONDITIONNEMENT_0094",
+      "apres": "BATCH011_RECEPTION_0095"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "BATCH011_CONTROLE_0096",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "BATCH011_RECEPTION_0095",
+      "apres": "BATCH011_CONTROLE_0096"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "SUPP_0097",
-      "ressource": "TUNNEL_REFROIDISSEMENT_4",
-      "duree": 96
+      "ressource": "TUNNEL_REFROIDISSEMENT_2",
+      "duree": 3
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "SUPP_0098",
-      "ressource": "TUNNEL_LAVAGE_3",
-      "duree": 35
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "SUPP_0099",
-      "ressource": "TUNNEL_REFROIDISSEMENT_3",
-      "duree": 82
+      "ressource": "ETIQUETEUSE_4",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "SUPP_0100",
-      "ressource": "TUNNEL_LAVAGE_2",
-      "duree": 43
+      "ressource": "LIGNE_EPLUCHAGE_1",
+      "duree": 1
     }
   ],
   "objectifs": [
@@ -1813,7 +1992,7 @@
     {
       "type": "minimiser_makespan",
       "poids": 0.3,
-      "makespan_cible": 70
+      "makespan_cible": 2
     },
     {
       "type": "equilibrer_charge",

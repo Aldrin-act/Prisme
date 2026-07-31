@@ -26,10 +26,10 @@ def test_bout_en_bout_erp_vers_planning_et_audit(image_sandbox: str, registre_te
 
         payload_erp = PayloadERP(
             operations=[
-                OperationERP(code_operation="OP10", duree_minutes=20, poste_id="POSTE_A"),
+                OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A"),
                 OperationERP(
                     code_operation="OP20",
-                    duree_minutes=15,
+                    duree_jours=1,
                     poste_id="POSTE_B",
                     operation_precedente="OP10",
                 ),

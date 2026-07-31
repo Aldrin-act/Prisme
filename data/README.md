@@ -84,7 +84,7 @@ resultat = generer_et_tester_solveur(instance)
   "operations": [
     {
       "code_operation": "OP_001",
-      "duree_minutes": 45,
+      "duree_jours": 2,
       "poste_id": "MACHINE_A",
       "operation_precedente": null
     }

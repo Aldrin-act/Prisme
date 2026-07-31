@@ -2,49 +2,49 @@
   "operations": [
     {
       "code_operation": "DECOUP_001",
-      "duree_minutes": 45,
+      "duree_jours": 1,
       "poste_id": "DECOUPEUSE_LASER",
       "operation_precedente": null
     },
     {
       "code_operation": "PERCAGE_001",
-      "duree_minutes": 30,
+      "duree_jours": 1,
       "poste_id": "PERCEUSE_CNC",
       "operation_precedente": "DECOUP_001"
     },
     {
       "code_operation": "PLIAGE_001",
-      "duree_minutes": 25,
+      "duree_jours": 1,
       "poste_id": "PRESSE_PLIAGE",
       "operation_precedente": "PERCAGE_001"
     },
     {
       "code_operation": "SOUDURE_001",
-      "duree_minutes": 60,
+      "duree_jours": 2,
       "poste_id": "POSTE_SOUDURE_1",
       "operation_precedente": "PLIAGE_001"
     },
     {
       "code_operation": "SOUDURE_002",
-      "duree_minutes": 55,
+      "duree_jours": 2,
       "poste_id": "POSTE_SOUDURE_2",
       "operation_precedente": "PLIAGE_001"
     },
     {
       "code_operation": "PEINTURE_001",
-      "duree_minutes": 40,
+      "duree_jours": 1,
       "poste_id": "CABINE_PEINTURE",
       "operation_precedente": "SOUDURE_001"
     },
     {
       "code_operation": "ASSEMBLAGE_FINAL",
-      "duree_minutes": 35,
+      "duree_jours": 2,
       "poste_id": "POSTE_ASSEMBLAGE",
       "operation_precedente": "PEINTURE_001"
     },
     {
       "code_operation": "CONTROLE_QUALITE",
-      "duree_minutes": 20,
+      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE",
       "operation_precedente": "ASSEMBLAGE_FINAL"
     }

@@ -3,83 +3,99 @@
     {
       "id": "PRE_PRESSE",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "CALAGE_PRESSE",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "IMPRESSION_RECTO",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SECHAGE_RECTO",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "IMPRESSION_VERSO",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "SECHAGE_VERSO",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "VERNIS_SELECTIF",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "DECOUPE_PLIAGE",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "FINITION",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     }
   ],
   "ressources": [
     {
       "id": "STATION_PAO",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "PRESSE_OFFSET_1",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "PRESSE_OFFSET_2",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "TUNNEL_SECHAGE",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "MACHINE_VERNIS",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "PLIEUSE_COLLEUSE",
       "nom": null,
+      "type": null,
       "competences": []
     },
     {
       "id": "POSTE_FINITION",
       "nom": null,
+      "type": null,
       "competences": []
     }
   ],
@@ -88,13 +104,13 @@
       "type": "compatibilite_ressource_tache",
       "tache": "PRE_PRESSE",
       "ressource": "STATION_PAO",
-      "duree": 60
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "CALAGE_PRESSE",
       "ressource": "PRESSE_OFFSET_1",
-      "duree": 45
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -105,7 +121,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "IMPRESSION_RECTO",
       "ressource": "PRESSE_OFFSET_1",
-      "duree": 90
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -116,7 +132,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "SECHAGE_RECTO",
       "ressource": "TUNNEL_SECHAGE",
-      "duree": 30
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -127,7 +143,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "IMPRESSION_VERSO",
       "ressource": "PRESSE_OFFSET_2",
-      "duree": 85
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -138,7 +154,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "SECHAGE_VERSO",
       "ressource": "TUNNEL_SECHAGE",
-      "duree": 30
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -149,7 +165,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "VERNIS_SELECTIF",
       "ressource": "MACHINE_VERNIS",
-      "duree": 40
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -160,7 +176,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "DECOUPE_PLIAGE",
       "ressource": "PLIEUSE_COLLEUSE",
-      "duree": 55
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -171,7 +187,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "FINITION",
       "ressource": "POSTE_FINITION",
-      "duree": 35
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -181,7 +197,10 @@
   ],
   "objectifs": [
     {
-      "type": "minimiser_makespan"
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
     }
   ]
 }

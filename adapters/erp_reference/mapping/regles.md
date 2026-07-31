@@ -3,7 +3,7 @@
 | Format ERP (propriétaire)              | T-R-C-O (canonique)                                              |
 |-----------------------------------------|-------------------------------------------------------------------|
 | `OperationERP.code_operation`            | `Tache.id`                                                        |
-| `OperationERP.duree_minutes`             | `CompatibiliteRessourceTache.duree`                                 |
+| `OperationERP.duree_jours`                | `CompatibiliteRessourceTache.duree` (déjà en jours, aucune conversion)  |
 | `OperationERP.poste_id`                  | `CompatibiliteRessourceTache.ressource` (une seule, forcée)          |
 | `OperationERP.operation_precedente`      | `Precedence.avant` (si non nul) → `Precedence.apres = code_operation` |
 | `PosteERP.code_poste`                    | `Ressource.id`                                                    |

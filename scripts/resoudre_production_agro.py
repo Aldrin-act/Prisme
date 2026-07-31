@@ -86,7 +86,7 @@ def main() -> None:
     print("\n" + "=" * 80)
     print("PLANNING OBTENU")
     print("=" * 80)
-    print(f"\nMakespan total: {max_fin} minutes ({max_fin / 60:.2f} heures)")
+    print(f"\nMakespan total: {max_fin} jours")
     print(f"Nombre d'operations: {len(planning.operations)}")
 
     print("\nOrdre d'execution:")
@@ -123,7 +123,7 @@ def main() -> None:
         taux_utilisation = (stats['temps_total'] / max_fin) * 100 if max_fin > 0 else 0
         print(f"\n{ressource}:")
         print(f"  - Operations: {stats['nombre_ops']}")
-        print(f"  - Temps total: {stats['temps_total']} minutes")
+        print(f"  - Temps total: {stats['temps_total']} jours")
         print(f"  - Taux d'utilisation: {taux_utilisation:.1f}%")
 
     # Sauvegarder le planning en JSON

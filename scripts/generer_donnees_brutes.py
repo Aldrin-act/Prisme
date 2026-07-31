@@ -25,49 +25,49 @@ def creer_donnees_atelier_mecanique_json() -> dict:
         "operations": [
             {
                 "code_operation": "DECOUP_001",
-                "duree_minutes": 45,
+                "duree_jours": 1,
                 "poste_id": "DECOUPEUSE_LASER",
                 "operation_precedente": None,
             },
             {
                 "code_operation": "PERCAGE_001",
-                "duree_minutes": 30,
+                "duree_jours": 1,
                 "poste_id": "PERCEUSE_CNC",
                 "operation_precedente": "DECOUP_001",
             },
             {
                 "code_operation": "PLIAGE_001",
-                "duree_minutes": 25,
+                "duree_jours": 1,
                 "poste_id": "PRESSE_PLIAGE",
                 "operation_precedente": "PERCAGE_001",
             },
             {
                 "code_operation": "SOUDURE_001",
-                "duree_minutes": 60,
+                "duree_jours": 2,
                 "poste_id": "POSTE_SOUDURE_1",
                 "operation_precedente": "PLIAGE_001",
             },
             {
                 "code_operation": "SOUDURE_002",
-                "duree_minutes": 55,
+                "duree_jours": 2,
                 "poste_id": "POSTE_SOUDURE_2",
                 "operation_precedente": "PLIAGE_001",
             },
             {
                 "code_operation": "PEINTURE_001",
-                "duree_minutes": 40,
+                "duree_jours": 1,
                 "poste_id": "CABINE_PEINTURE",
                 "operation_precedente": "SOUDURE_001",
             },
             {
                 "code_operation": "ASSEMBLAGE_FINAL",
-                "duree_minutes": 35,
+                "duree_jours": 2,
                 "poste_id": "POSTE_ASSEMBLAGE",
                 "operation_precedente": "PEINTURE_001",
             },
             {
                 "code_operation": "CONTROLE_QUALITE",
-                "duree_minutes": 20,
+                "duree_jours": 1,
                 "poste_id": "POSTE_CONTROLE",
                 "operation_precedente": "ASSEMBLAGE_FINAL",
             },
@@ -91,61 +91,61 @@ def creer_donnees_electronique_json() -> dict:
         "operations": [
             {
                 "code_operation": "PREP_PCB",
-                "duree_minutes": 15,
+                "duree_jours": 1,
                 "poste_id": "STATION_PREP",
                 "operation_precedente": None,
             },
             {
                 "code_operation": "POSE_CMS_FACE_A",
-                "duree_minutes": 90,
+                "duree_jours": 2,
                 "poste_id": "MACHINE_PICK_PLACE_1",
                 "operation_precedente": "PREP_PCB",
             },
             {
                 "code_operation": "SOUDURE_REFUSION_A",
-                "duree_minutes": 25,
+                "duree_jours": 1,
                 "poste_id": "FOUR_REFUSION",
                 "operation_precedente": "POSE_CMS_FACE_A",
             },
             {
                 "code_operation": "INSPECTION_AOI_A",
-                "duree_minutes": 10,
+                "duree_jours": 1,
                 "poste_id": "AOI_AUTOMATIQUE",
                 "operation_precedente": "SOUDURE_REFUSION_A",
             },
             {
                 "code_operation": "POSE_CMS_FACE_B",
-                "duree_minutes": 75,
+                "duree_jours": 2,
                 "poste_id": "MACHINE_PICK_PLACE_2",
                 "operation_precedente": "INSPECTION_AOI_A",
             },
             {
                 "code_operation": "SOUDURE_REFUSION_B",
-                "duree_minutes": 25,
+                "duree_jours": 1,
                 "poste_id": "FOUR_REFUSION",
                 "operation_precedente": "POSE_CMS_FACE_B",
             },
             {
                 "code_operation": "SOUDURE_MANUELLE",
-                "duree_minutes": 45,
+                "duree_jours": 2,
                 "poste_id": "POSTE_SOUDURE_MANUEL",
                 "operation_precedente": "SOUDURE_REFUSION_B",
             },
             {
                 "code_operation": "TEST_FONCTIONNEL",
-                "duree_minutes": 30,
+                "duree_jours": 1,
                 "poste_id": "BANC_TEST",
                 "operation_precedente": "SOUDURE_MANUELLE",
             },
             {
                 "code_operation": "CONFORMAL_COATING",
-                "duree_minutes": 20,
+                "duree_jours": 1,
                 "poste_id": "ROBOT_COATING",
                 "operation_precedente": "TEST_FONCTIONNEL",
             },
             {
                 "code_operation": "CONTROLE_FINAL",
-                "duree_minutes": 15,
+                "duree_jours": 1,
                 "poste_id": "POSTE_CONTROLE_VISUEL",
                 "operation_precedente": "CONFORMAL_COATING",
             },
@@ -170,55 +170,55 @@ def creer_donnees_agroalimentaire_json() -> dict:
         "operations": [
             {
                 "code_operation": "RECEPTION_MP",
-                "duree_minutes": 30,
+                "duree_jours": 1,
                 "poste_id": "QUAI_RECEPTION",
                 "operation_precedente": None,
             },
             {
                 "code_operation": "LAVAGE_LEGUMES",
-                "duree_minutes": 45,
+                "duree_jours": 1,
                 "poste_id": "TUNNEL_LAVAGE",
                 "operation_precedente": "RECEPTION_MP",
             },
             {
                 "code_operation": "EPLUCHAGE",
-                "duree_minutes": 60,
+                "duree_jours": 1,
                 "poste_id": "LIGNE_EPLUCHAGE",
                 "operation_precedente": "LAVAGE_LEGUMES",
             },
             {
                 "code_operation": "DECOUPE",
-                "duree_minutes": 40,
+                "duree_jours": 1,
                 "poste_id": "ROBOT_DECOUPE",
                 "operation_precedente": "EPLUCHAGE",
             },
             {
                 "code_operation": "CUISSON",
-                "duree_minutes": 120,
+                "duree_jours": 3,
                 "poste_id": "AUTOCLAVE_1",
                 "operation_precedente": "DECOUPE",
             },
             {
                 "code_operation": "REFROIDISSEMENT",
-                "duree_minutes": 90,
+                "duree_jours": 2,
                 "poste_id": "TUNNEL_REFROIDISSEMENT",
                 "operation_precedente": "CUISSON",
             },
             {
                 "code_operation": "CONDITIONNEMENT",
-                "duree_minutes": 50,
+                "duree_jours": 1,
                 "poste_id": "LIGNE_CONDITIONNEMENT",
                 "operation_precedente": "REFROIDISSEMENT",
             },
             {
                 "code_operation": "ETIQUETAGE",
-                "duree_minutes": 25,
+                "duree_jours": 1,
                 "poste_id": "ETIQUETEUSE_AUTO",
                 "operation_precedente": "CONDITIONNEMENT",
             },
             {
                 "code_operation": "PALETTISATION",
-                "duree_minutes": 35,
+                "duree_jours": 1,
                 "poste_id": "ROBOT_PALETTISEUR",
                 "operation_precedente": "ETIQUETAGE",
             },
@@ -243,43 +243,43 @@ def creer_donnees_maintenance_json() -> dict:
         "operations": [
             {
                 "code_operation": "DIAG_PANNE_001",
-                "duree_minutes": 30,
+                "duree_jours": 1,
                 "poste_id": "EQUIPE_DIAG",
                 "operation_precedente": None,
             },
             {
                 "code_operation": "CMD_PIECES_001",
-                "duree_minutes": 15,
+                "duree_jours": 3,
                 "poste_id": "SERVICE_ACHATS",
                 "operation_precedente": "DIAG_PANNE_001",
             },
             {
                 "code_operation": "DEMONTAGE_001",
-                "duree_minutes": 90,
+                "duree_jours": 1,
                 "poste_id": "EQUIPE_MECA",
                 "operation_precedente": "CMD_PIECES_001",
             },
             {
                 "code_operation": "REPARATION_001",
-                "duree_minutes": 120,
+                "duree_jours": 2,
                 "poste_id": "ATELIER_REPARATION",
                 "operation_precedente": "DEMONTAGE_001",
             },
             {
                 "code_operation": "REMONTAGE_001",
-                "duree_minutes": 80,
+                "duree_jours": 1,
                 "poste_id": "EQUIPE_MECA",
                 "operation_precedente": "REPARATION_001",
             },
             {
                 "code_operation": "TEST_MARCHE_001",
-                "duree_minutes": 45,
+                "duree_jours": 1,
                 "poste_id": "EQUIPE_TEST",
                 "operation_precedente": "REMONTAGE_001",
             },
             {
                 "code_operation": "NETTOYAGE_FINAL",
-                "duree_minutes": 25,
+                "duree_jours": 1,
                 "poste_id": "EQUIPE_MECA",
                 "operation_precedente": "TEST_MARCHE_001",
             },
@@ -300,55 +300,55 @@ def creer_donnees_imprimerie_json() -> dict:
         "operations": [
             {
                 "code_operation": "PRE_PRESSE",
-                "duree_minutes": 60,
+                "duree_jours": 1,
                 "poste_id": "STATION_PAO",
                 "operation_precedente": None,
             },
             {
                 "code_operation": "CALAGE_PRESSE",
-                "duree_minutes": 45,
+                "duree_jours": 1,
                 "poste_id": "PRESSE_OFFSET_1",
                 "operation_precedente": "PRE_PRESSE",
             },
             {
                 "code_operation": "IMPRESSION_RECTO",
-                "duree_minutes": 90,
+                "duree_jours": 2,
                 "poste_id": "PRESSE_OFFSET_1",
                 "operation_precedente": "CALAGE_PRESSE",
             },
             {
                 "code_operation": "SECHAGE_RECTO",
-                "duree_minutes": 30,
+                "duree_jours": 1,
                 "poste_id": "TUNNEL_SECHAGE",
                 "operation_precedente": "IMPRESSION_RECTO",
             },
             {
                 "code_operation": "IMPRESSION_VERSO",
-                "duree_minutes": 85,
+                "duree_jours": 2,
                 "poste_id": "PRESSE_OFFSET_2",
                 "operation_precedente": "SECHAGE_RECTO",
             },
             {
                 "code_operation": "SECHAGE_VERSO",
-                "duree_minutes": 30,
+                "duree_jours": 1,
                 "poste_id": "TUNNEL_SECHAGE",
                 "operation_precedente": "IMPRESSION_VERSO",
             },
             {
                 "code_operation": "VERNIS_SELECTIF",
-                "duree_minutes": 40,
+                "duree_jours": 1,
                 "poste_id": "MACHINE_VERNIS",
                 "operation_precedente": "SECHAGE_VERSO",
             },
             {
                 "code_operation": "DECOUPE_PLIAGE",
-                "duree_minutes": 55,
+                "duree_jours": 1,
                 "poste_id": "PLIEUSE_COLLEUSE",
                 "operation_precedente": "VERNIS_SELECTIF",
             },
             {
                 "code_operation": "FINITION",
-                "duree_minutes": 35,
+                "duree_jours": 1,
                 "poste_id": "POSTE_FINITION",
                 "operation_precedente": "DECOUPE_PLIAGE",
             },
@@ -374,7 +374,7 @@ def creer_donnees_csv_simple(nom_fichier: str, operations: list[dict], postes: l
     operations_path = output_dir / f"{nom_fichier}_operations.csv"
     with open(operations_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
-            f, fieldnames=["code_operation", "duree_minutes", "poste_id", "operation_precedente"]
+            f, fieldnames=["code_operation", "duree_jours", "poste_id", "operation_precedente"]
         )
         writer.writeheader()
         writer.writerows(operations)
@@ -472,7 +472,7 @@ donnees_brutes/
 - **Secteur**: Transformation alimentaire
 - **Opérations**: 9 (réception, lavage, cuisson, conditionnement...)
 - **Postes**: 9 (tunnel lavage, autoclave, étiqueteuse...)
-- **Particularité**: Longues durées (cuisson 120min), séquence stricte
+- **Particularité**: Longues durées (cuisson 3 jours), séquence stricte
 
 ### 4. Maintenance Industrielle
 - **Secteur**: Gestion de pannes/réparations
@@ -495,7 +495,7 @@ donnees_brutes/
   "operations": [
     {
       "code_operation": "OP_001",
-      "duree_minutes": 45,
+      "duree_jours": 2,
       "poste_id": "POSTE_A",
       "operation_precedente": null  // ou "OP_000"
     }
@@ -510,9 +510,9 @@ donnees_brutes/
 
 **Fichier `*_operations.csv`**:
 ```csv
-code_operation,duree_minutes,poste_id,operation_precedente
-OP_001,45,POSTE_A,
-OP_002,30,POSTE_B,OP_001
+code_operation,duree_jours,poste_id,operation_precedente
+OP_001,2,POSTE_A,
+OP_002,1,POSTE_B,OP_001
 ```
 
 **Fichier `*_postes.csv`**:

@@ -31,10 +31,10 @@ def _payload_erp_simule() -> PayloadERP:
     qu'un ERP legacy le fournirait (voir `adapters/erp_reference/mapping/regles.md`)."""
     return PayloadERP(
         operations=[
-            OperationERP(code_operation="OP10", duree_minutes=30, poste_id="POSTE_A"),
+            OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A"),
             OperationERP(
                 code_operation="OP20",
-                duree_minutes=45,
+                duree_jours=2,
                 poste_id="POSTE_B",
                 operation_precedente="OP10",
             ),

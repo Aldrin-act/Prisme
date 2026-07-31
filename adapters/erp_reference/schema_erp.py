@@ -21,7 +21,7 @@ class OperationERP(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     code_operation: str
-    duree_minutes: int
+    duree_jours: int
     poste_id: str
     operation_precedente: str | None = None
 

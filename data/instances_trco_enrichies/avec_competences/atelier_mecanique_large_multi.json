@@ -1,635 +1,716 @@
 {
   "taches": [
     {
-      "id": "LOT001_PEINTURE_0001",
+      "id": "LOT001_FINITION_0001",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT001_USINAGE_0002",
+      "id": "LOT001_SOUDURE_0002",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT001_FINITION_0003",
+      "id": "LOT001_FORMAGE_0003",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT001_PREPARATION_0004",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT001_ASSEMBLAGE_0005",
+      "id": "LOT001_USINAGE_0005",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT001_SOUDURE_0006",
+      "id": "LOT001_ASSEMBLAGE_0006",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT001_CONTROLE_0007",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT001_FORMAGE_0008",
+      "id": "LOT001_PEINTURE_0008",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_PREPARATION_0009",
+      "id": "LOT002_FINITION_0009",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_ASSEMBLAGE_0010",
+      "id": "LOT002_PEINTURE_0010",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_USINAGE_0011",
+      "id": "LOT002_CONTROLE_0011",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_FINITION_0012",
+      "id": "LOT002_FORMAGE_0012",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_SOUDURE_0013",
+      "id": "LOT002_PREPARATION_0013",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_PEINTURE_0014",
+      "id": "LOT002_ASSEMBLAGE_0014",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_CONTROLE_0015",
+      "id": "LOT002_USINAGE_0015",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT002_FORMAGE_0016",
+      "id": "LOT002_SOUDURE_0016",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_CONTROLE_0017",
+      "id": "LOT003_ASSEMBLAGE_0017",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_SOUDURE_0018",
+      "id": "LOT003_PEINTURE_0018",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_FORMAGE_0019",
+      "id": "LOT003_FINITION_0019",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_PREPARATION_0020",
+      "id": "LOT003_SOUDURE_0020",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_USINAGE_0021",
+      "id": "LOT003_CONTROLE_0021",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_PEINTURE_0022",
+      "id": "LOT003_FORMAGE_0022",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_ASSEMBLAGE_0023",
+      "id": "LOT003_PREPARATION_0023",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT003_FINITION_0024",
+      "id": "LOT003_USINAGE_0024",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT004_FINITION_0025",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT004_SOUDURE_0026",
+      "id": "LOT004_FORMAGE_0026",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT004_CONTROLE_0027",
+      "id": "LOT004_PREPARATION_0027",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT004_PREPARATION_0028",
+      "id": "LOT004_USINAGE_0028",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT004_ASSEMBLAGE_0029",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT004_PEINTURE_0030",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT004_USINAGE_0031",
+      "id": "LOT004_SOUDURE_0031",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT004_FORMAGE_0032",
+      "id": "LOT004_CONTROLE_0032",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_PEINTURE_0033",
+      "id": "LOT005_USINAGE_0033",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_USINAGE_0034",
+      "id": "LOT005_ASSEMBLAGE_0034",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_SOUDURE_0035",
+      "id": "LOT005_CONTROLE_0035",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_PREPARATION_0036",
+      "id": "LOT005_FORMAGE_0036",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_FINITION_0037",
+      "id": "LOT005_PREPARATION_0037",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_ASSEMBLAGE_0038",
+      "id": "LOT005_FINITION_0038",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_FORMAGE_0039",
+      "id": "LOT005_PEINTURE_0039",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT005_CONTROLE_0040",
+      "id": "LOT005_SOUDURE_0040",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT006_PREPARATION_0041",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT006_ASSEMBLAGE_0042",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT006_CONTROLE_0043",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT006_USINAGE_0044",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT006_FINITION_0045",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT006_FORMAGE_0046",
+      "id": "LOT006_PEINTURE_0046",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT006_SOUDURE_0047",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT006_PEINTURE_0048",
+      "id": "LOT006_FORMAGE_0048",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT007_PREPARATION_0049",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT007_SOUDURE_0050",
+      "id": "LOT007_PEINTURE_0050",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT007_ASSEMBLAGE_0051",
+      "id": "LOT007_USINAGE_0051",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT007_FORMAGE_0052",
+      "id": "LOT007_ASSEMBLAGE_0052",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT007_USINAGE_0053",
+      "id": "LOT007_CONTROLE_0053",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT007_PEINTURE_0054",
+      "id": "LOT007_FINITION_0054",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT007_FINITION_0055",
+      "id": "LOT007_SOUDURE_0055",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT007_CONTROLE_0056",
+      "id": "LOT007_FORMAGE_0056",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_USINAGE_0057",
+      "id": "LOT008_PEINTURE_0057",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_PREPARATION_0058",
+      "id": "LOT008_FORMAGE_0058",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_FINITION_0059",
+      "id": "LOT008_USINAGE_0059",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_PEINTURE_0060",
+      "id": "LOT008_ASSEMBLAGE_0060",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_SOUDURE_0061",
+      "id": "LOT008_PREPARATION_0061",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_FORMAGE_0062",
+      "id": "LOT008_SOUDURE_0062",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_ASSEMBLAGE_0063",
+      "id": "LOT008_CONTROLE_0063",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT008_CONTROLE_0064",
+      "id": "LOT008_FINITION_0064",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_FINITION_0065",
+      "id": "LOT009_USINAGE_0065",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_FORMAGE_0066",
+      "id": "LOT009_PREPARATION_0066",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_ASSEMBLAGE_0067",
+      "id": "LOT009_FORMAGE_0067",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_USINAGE_0068",
+      "id": "LOT009_CONTROLE_0068",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_CONTROLE_0069",
+      "id": "LOT009_ASSEMBLAGE_0069",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_PREPARATION_0070",
+      "id": "LOT009_FINITION_0070",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_PEINTURE_0071",
+      "id": "LOT009_SOUDURE_0071",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT009_SOUDURE_0072",
+      "id": "LOT009_PEINTURE_0072",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT010_USINAGE_0073",
+      "id": "LOT010_PREPARATION_0073",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT010_CONTROLE_0074",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT010_FORMAGE_0075",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT010_PEINTURE_0076",
+      "id": "LOT010_ASSEMBLAGE_0076",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT010_ASSEMBLAGE_0077",
+      "id": "LOT010_USINAGE_0077",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT010_FINITION_0078",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "LOT010_SOUDURE_0079",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
-      "id": "LOT010_PREPARATION_0080",
+      "id": "LOT010_PEINTURE_0080",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0081",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0082",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0083",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0084",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0085",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0086",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0087",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0088",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0089",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0090",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0091",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0092",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0093",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0094",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0095",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0096",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0097",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0098",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0099",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     },
     {
       "id": "COMP_0100",
       "nom": null,
-      "priorite": null
+      "priorite": null,
+      "statut": null
     }
   ],
   "ressources": [
     {
       "id": "DECOUPEUSE_LASER_1",
       "nom": null,
+      "type": null,
       "competences": [
         "assemblage_electronique",
-        "programmation_cnc"
+        "controle_qualite"
       ]
     },
     {
       "id": "DECOUPEUSE_LASER_2",
       "nom": null,
-      "competences": [
-        "manutention_lourde",
-        "maintenance_niveau2",
-        "soudure_certifiee"
-      ]
-    },
-    {
-      "id": "DECOUPEUSE_LASER_3",
-      "nom": null,
-      "competences": [
-        "assemblage_electronique",
-        "controle_qualite"
-      ]
-    },
-    {
-      "id": "DECOUPEUSE_LASER_4",
-      "nom": null,
-      "competences": [
-        "peinture_industrielle"
-      ]
-    },
-    {
-      "id": "DECOUPEUSE_LASER_5",
-      "nom": null,
-      "competences": [
-        "manutention_lourde",
-        "usinage_precision"
-      ]
-    },
-    {
-      "id": "DECOUPEUSE_PLASMA_1",
-      "nom": null,
+      "type": null,
       "competences": [
         "programmation_cnc"
       ]
     },
     {
-      "id": "DECOUPEUSE_PLASMA_2",
+      "id": "DECOUPEUSE_LASER_3",
       "nom": null,
+      "type": null,
+      "competences": [
+        "peinture_industrielle"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_LASER_4",
+      "nom": null,
+      "type": null,
       "competences": [
         "assemblage_electronique",
+        "controle_qualite",
         "maintenance_niveau2"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_LASER_5",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "controle_qualite"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "usinage_precision",
+        "assemblage_electronique"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "assemblage_electronique"
       ]
     },
     {
       "id": "DECOUPEUSE_PLASMA_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "peinture_industrielle",
-        "controle_qualite"
+        "controle_qualite",
+        "manutention_lourde"
       ]
     },
     {
       "id": "PERCEUSE_CNC_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "controle_qualite",
-        "usinage_precision",
-        "soudure_certifiee"
+        "usinage_precision"
       ]
     },
     {
       "id": "PERCEUSE_CNC_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "peinture_industrielle",
-        "programmation_cnc",
-        "usinage_precision"
+        "controle_qualite",
+        "soudure_certifiee",
+        "programmation_cnc"
       ]
     },
     {
       "id": "PERCEUSE_CNC_3",
       "nom": null,
+      "type": null,
       "competences": [
         "peinture_industrielle",
-        "manutention_lourde",
-        "usinage_precision"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "PERCEUSE_CNC_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "manutention_lourde",
-        "usinage_precision"
+        "peinture_industrielle",
+        "controle_qualite"
       ]
     },
     {
       "id": "PERCEUSE_CNC_5",
       "nom": null,
-      "competences": [
-        "assemblage_electronique",
-        "maintenance_niveau2",
-        "controle_qualite"
-      ]
-    },
-    {
-      "id": "PERCEUSE_CNC_6",
-      "nom": null,
-      "competences": [
-        "usinage_precision",
-        "manutention_lourde",
-        "soudure_certifiee"
-      ]
-    },
-    {
-      "id": "PERCEUSE_CNC_7",
-      "nom": null,
-      "competences": [
-        "soudure_certifiee",
-        "maintenance_niveau2",
-        "controle_qualite"
-      ]
-    },
-    {
-      "id": "PERCEUSE_CNC_8",
-      "nom": null,
+      "type": null,
       "competences": [
         "maintenance_niveau2",
         "peinture_industrielle",
@@ -637,874 +718,966 @@
       ]
     },
     {
-      "id": "FRAISEUSE_CNC_1",
+      "id": "PERCEUSE_CNC_6",
       "nom": null,
+      "type": null,
+      "competences": [
+        "manutention_lourde"
+      ]
+    },
+    {
+      "id": "PERCEUSE_CNC_7",
+      "nom": null,
+      "type": null,
       "competences": [
         "maintenance_niveau2",
-        "controle_qualite",
+        "programmation_cnc",
+        "soudure_certifiee"
+      ]
+    },
+    {
+      "id": "PERCEUSE_CNC_8",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "manutention_lourde"
+      ]
+    },
+    {
+      "id": "FRAISEUSE_CNC_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "programmation_cnc",
         "usinage_precision"
       ]
     },
     {
       "id": "FRAISEUSE_CNC_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2"
+        "programmation_cnc"
       ]
     },
     {
       "id": "FRAISEUSE_CNC_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "soudure_certifiee",
+        "manutention_lourde",
         "controle_qualite"
       ]
     },
     {
       "id": "FRAISEUSE_CNC_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique"
+        "programmation_cnc",
+        "manutention_lourde",
+        "peinture_industrielle"
       ]
     },
     {
       "id": "FRAISEUSE_CNC_5",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2",
-        "programmation_cnc"
+        "programmation_cnc",
+        "maintenance_niveau2"
       ]
     },
     {
       "id": "FRAISEUSE_CNC_6",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision"
+        "soudure_certifiee"
       ]
     },
     {
       "id": "PRESSE_PLIAGE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "soudure_certifiee",
-        "maintenance_niveau2"
+        "assemblage_electronique",
+        "manutention_lourde"
       ]
     },
     {
       "id": "PRESSE_PLIAGE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique",
-        "soudure_certifiee",
-        "programmation_cnc"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "PRESSE_PLIAGE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2"
+        "maintenance_niveau2",
+        "assemblage_electronique"
       ]
     },
     {
       "id": "PRESSE_PLIAGE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
-        "soudure_certifiee"
-      ]
-    },
-    {
-      "id": "PRESSE_EMBOUTISSAGE_1",
-      "nom": null,
-      "competences": [
-        "peinture_industrielle",
-        "assemblage_electronique"
-      ]
-    },
-    {
-      "id": "PRESSE_EMBOUTISSAGE_2",
-      "nom": null,
-      "competences": [
-        "soudure_certifiee",
-        "peinture_industrielle",
-        "manutention_lourde"
-      ]
-    },
-    {
-      "id": "PRESSE_EMBOUTISSAGE_3",
-      "nom": null,
-      "competences": [
-        "soudure_certifiee",
-        "programmation_cnc"
-      ]
-    },
-    {
-      "id": "POSTE_SOUDURE_1",
-      "nom": null,
-      "competences": [
-        "controle_qualite"
-      ]
-    },
-    {
-      "id": "POSTE_SOUDURE_2",
-      "nom": null,
-      "competences": [
-        "peinture_industrielle"
-      ]
-    },
-    {
-      "id": "POSTE_SOUDURE_3",
-      "nom": null,
-      "competences": [
-        "maintenance_niveau2",
         "controle_qualite",
         "peinture_industrielle"
       ]
     },
     {
+      "id": "PRESSE_EMBOUTISSAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "controle_qualite"
+      ]
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "controle_qualite"
+      ]
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "assemblage_electronique",
+        "usinage_precision",
+        "controle_qualite"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "soudure_certifiee",
+        "peinture_industrielle"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "manutention_lourde",
+        "controle_qualite",
+        "programmation_cnc"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "usinage_precision",
+        "maintenance_niveau2"
+      ]
+    },
+    {
       "id": "POSTE_SOUDURE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2"
+        "peinture_industrielle"
       ]
     },
     {
       "id": "POSTE_SOUDURE_5",
       "nom": null,
+      "type": null,
       "competences": [
-        "peinture_industrielle",
-        "assemblage_electronique",
-        "manutention_lourde"
+        "soudure_certifiee",
+        "maintenance_niveau2",
+        "controle_qualite"
       ]
     },
     {
       "id": "POSTE_SOUDURE_6",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2"
+        "soudure_certifiee",
+        "controle_qualite"
       ]
     },
     {
       "id": "POSTE_SOUDURE_7",
       "nom": null,
+      "type": null,
       "competences": [
-        "controle_qualite"
+        "programmation_cnc"
       ]
     },
     {
       "id": "POSTE_SOUDURE_8",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision"
+        "peinture_industrielle"
       ]
     },
     {
       "id": "POSTE_SOUDURE_9",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2"
+        "programmation_cnc"
       ]
     },
     {
       "id": "POSTE_SOUDURE_10",
       "nom": null,
+      "type": null,
       "competences": [
-        "controle_qualite"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "ROBOT_SOUDURE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision",
+        "maintenance_niveau2",
         "soudure_certifiee",
-        "assemblage_electronique"
+        "controle_qualite"
       ]
     },
     {
       "id": "ROBOT_SOUDURE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
-        "usinage_precision",
-        "maintenance_niveau2"
+        "manutention_lourde"
       ]
     },
     {
       "id": "ROBOT_SOUDURE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "manutention_lourde",
-        "programmation_cnc"
+        "maintenance_niveau2"
       ]
     },
     {
       "id": "ROBOT_SOUDURE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision",
-        "manutention_lourde",
-        "programmation_cnc"
+        "soudure_certifiee",
+        "usinage_precision"
       ]
     },
     {
       "id": "CABINE_PEINTURE_1",
       "nom": null,
+      "type": null,
       "competences": [
         "usinage_precision",
+        "maintenance_niveau2",
         "assemblage_electronique"
       ]
     },
     {
       "id": "CABINE_PEINTURE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "peinture_industrielle"
+        "usinage_precision",
+        "programmation_cnc",
+        "assemblage_electronique"
       ]
     },
     {
       "id": "CABINE_PEINTURE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision",
-        "soudure_certifiee",
-        "controle_qualite"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "CABINE_PEINTURE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "peinture_industrielle",
-        "programmation_cnc"
+        "manutention_lourde",
+        "usinage_precision"
       ]
     },
     {
       "id": "CABINE_PEINTURE_5",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2"
+        "maintenance_niveau2",
+        "programmation_cnc"
       ]
     },
     {
       "id": "CABINE_PEINTURE_6",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique"
+        "programmation_cnc",
+        "usinage_precision"
       ]
     },
     {
       "id": "TUNNEL_PEINTURE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "peinture_industrielle",
-        "maintenance_niveau2"
+        "maintenance_niveau2",
+        "usinage_precision"
       ]
     },
     {
       "id": "TUNNEL_PEINTURE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "controle_qualite",
-        "assemblage_electronique"
+        "usinage_precision",
+        "assemblage_electronique",
+        "maintenance_niveau2"
       ]
     },
     {
       "id": "TUNNEL_PEINTURE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
-        "soudure_certifiee",
         "assemblage_electronique"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
-        "peinture_industrielle",
-        "maintenance_niveau2"
+        "usinage_precision"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique",
-        "soudure_certifiee"
+        "soudure_certifiee",
+        "usinage_precision",
+        "maintenance_niveau2"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "manutention_lourde"
+        "controle_qualite"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "controle_qualite",
-        "soudure_certifiee"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_5",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
-        "peinture_industrielle",
         "manutention_lourde"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_6",
       "nom": null,
+      "type": null,
       "competences": [
-        "soudure_certifiee"
+        "maintenance_niveau2",
+        "manutention_lourde",
+        "peinture_industrielle"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_7",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision",
         "soudure_certifiee",
-        "assemblage_electronique"
-      ]
-    },
-    {
-      "id": "POSTE_ASSEMBLAGE_8",
-      "nom": null,
-      "competences": [
-        "controle_qualite"
-      ]
-    },
-    {
-      "id": "POSTE_ASSEMBLAGE_9",
-      "nom": null,
-      "competences": [
-        "manutention_lourde",
-        "programmation_cnc",
-        "controle_qualite"
-      ]
-    },
-    {
-      "id": "POSTE_ASSEMBLAGE_10",
-      "nom": null,
-      "competences": [
         "maintenance_niveau2",
         "peinture_industrielle"
       ]
     },
     {
+      "id": "POSTE_ASSEMBLAGE_8",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "assemblage_electronique"
+      ]
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_9",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "usinage_precision",
+        "soudure_certifiee"
+      ]
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_10",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "usinage_precision"
+      ]
+    },
+    {
       "id": "POSTE_ASSEMBLAGE_11",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
         "maintenance_niveau2",
-        "assemblage_electronique"
+        "controle_qualite",
+        "soudure_certifiee"
       ]
     },
     {
       "id": "POSTE_ASSEMBLAGE_12",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique",
-        "manutention_lourde"
+        "peinture_industrielle"
       ]
     },
     {
       "id": "STATION_CONTROLE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique",
+        "peinture_industrielle",
         "manutention_lourde"
       ]
     },
     {
       "id": "STATION_CONTROLE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "soudure_certifiee",
-        "usinage_precision"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "STATION_CONTROLE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "manutention_lourde"
+        "soudure_certifiee"
       ]
     },
     {
       "id": "STATION_CONTROLE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "controle_qualite",
-        "assemblage_electronique"
+        "usinage_precision",
+        "soudure_certifiee",
+        "manutention_lourde"
       ]
     },
     {
       "id": "STATION_CONTROLE_5",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
-        "maintenance_niveau2"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "STATION_CONTROLE_6",
       "nom": null,
+      "type": null,
       "competences": [
-        "soudure_certifiee",
-        "peinture_industrielle",
-        "manutention_lourde"
+        "usinage_precision",
+        "maintenance_niveau2",
+        "soudure_certifiee"
       ]
     },
     {
       "id": "STATION_CONTROLE_7",
       "nom": null,
+      "type": null,
       "competences": [
+        "assemblage_electronique",
         "soudure_certifiee"
       ]
     },
     {
       "id": "STATION_CONTROLE_8",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique",
-        "programmation_cnc"
+        "programmation_cnc",
+        "manutention_lourde",
+        "assemblage_electronique"
       ]
     },
     {
       "id": "POSTE_EBAVURAGE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique",
-        "manutention_lourde"
+        "controle_qualite",
+        "usinage_precision"
       ]
     },
     {
       "id": "POSTE_EBAVURAGE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2"
+        "programmation_cnc",
+        "usinage_precision"
       ]
     },
     {
       "id": "POSTE_EBAVURAGE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique"
+        "peinture_industrielle",
+        "maintenance_niveau2",
+        "manutention_lourde"
       ]
     },
     {
       "id": "POSTE_EBAVURAGE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2",
-        "usinage_precision",
+        "controle_qualite",
+        "peinture_industrielle",
         "programmation_cnc"
       ]
     },
     {
       "id": "POSTE_EBAVURAGE_5",
       "nom": null,
+      "type": null,
       "competences": [
-        "programmation_cnc",
-        "assemblage_electronique",
-        "controle_qualite"
+        "assemblage_electronique"
       ]
     },
     {
       "id": "POSTE_EBAVURAGE_6",
       "nom": null,
+      "type": null,
       "competences": [
-        "maintenance_niveau2",
-        "manutention_lourde",
-        "usinage_precision"
+        "programmation_cnc"
       ]
     },
     {
       "id": "CENTRE_USINAGE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique",
-        "manutention_lourde"
+        "soudure_certifiee"
       ]
     },
     {
       "id": "CENTRE_USINAGE_2",
       "nom": null,
+      "type": null,
       "competences": [
-        "soudure_certifiee",
-        "peinture_industrielle",
+        "programmation_cnc",
         "controle_qualite"
       ]
     },
     {
       "id": "CENTRE_USINAGE_3",
       "nom": null,
+      "type": null,
       "competences": [
-        "soudure_certifiee",
-        "usinage_precision",
-        "peinture_industrielle"
+        "assemblage_electronique",
+        "controle_qualite",
+        "maintenance_niveau2"
       ]
     },
     {
       "id": "CENTRE_USINAGE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision"
+        "maintenance_niveau2",
+        "soudure_certifiee"
       ]
     },
     {
       "id": "CENTRE_USINAGE_5",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision",
-        "assemblage_electronique"
+        "assemblage_electronique",
+        "peinture_industrielle"
       ]
     },
     {
       "id": "POSTE_POLISSAGE_1",
       "nom": null,
+      "type": null,
       "competences": [
-        "assemblage_electronique"
+        "controle_qualite",
+        "maintenance_niveau2",
+        "programmation_cnc"
       ]
     },
     {
       "id": "POSTE_POLISSAGE_2",
       "nom": null,
-      "competences": [
-        "programmation_cnc"
-      ]
-    },
-    {
-      "id": "POSTE_POLISSAGE_3",
-      "nom": null,
+      "type": null,
       "competences": [
         "usinage_precision"
       ]
     },
     {
+      "id": "POSTE_POLISSAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "soudure_certifiee",
+        "programmation_cnc"
+      ]
+    },
+    {
       "id": "POSTE_POLISSAGE_4",
       "nom": null,
+      "type": null,
       "competences": [
-        "usinage_precision",
-        "programmation_cnc"
+        "peinture_industrielle"
       ]
     }
   ],
   "contraintes": [
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT001_PEINTURE_0001",
-      "ressource": "TUNNEL_PEINTURE_1",
-      "duree": 63
+      "tache": "LOT001_FINITION_0001",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT001_USINAGE_0002",
-      "ressource": "FRAISEUSE_CNC_4",
-      "duree": 34
+      "tache": "LOT001_SOUDURE_0002",
+      "ressource": "POSTE_SOUDURE_4",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT001_PEINTURE_0001",
-      "apres": "LOT001_USINAGE_0002"
+      "avant": "LOT001_FINITION_0001",
+      "apres": "LOT001_SOUDURE_0002"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT001_FINITION_0003",
-      "ressource": "POSTE_POLISSAGE_2",
-      "duree": 36
+      "tache": "LOT001_FORMAGE_0003",
+      "ressource": "PRESSE_PLIAGE_3",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT001_USINAGE_0002",
-      "apres": "LOT001_FINITION_0003"
+      "avant": "LOT001_SOUDURE_0002",
+      "apres": "LOT001_FORMAGE_0003"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT001_PREPARATION_0004",
-      "ressource": "DECOUPEUSE_LASER_2",
-      "duree": 23
+      "ressource": "PERCEUSE_CNC_1",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT001_FINITION_0003",
+      "avant": "LOT001_FORMAGE_0003",
       "apres": "LOT001_PREPARATION_0004"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT001_ASSEMBLAGE_0005",
-      "ressource": "POSTE_ASSEMBLAGE_2",
-      "duree": 34
+      "tache": "LOT001_USINAGE_0005",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "LOT001_PREPARATION_0004",
-      "apres": "LOT001_ASSEMBLAGE_0005"
+      "apres": "LOT001_USINAGE_0005"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT001_SOUDURE_0006",
-      "ressource": "ROBOT_SOUDURE_1",
-      "duree": 90
+      "tache": "LOT001_ASSEMBLAGE_0006",
+      "ressource": "POSTE_ASSEMBLAGE_7",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT001_ASSEMBLAGE_0005",
-      "apres": "LOT001_SOUDURE_0006"
+      "avant": "LOT001_USINAGE_0005",
+      "apres": "LOT001_ASSEMBLAGE_0006"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT001_CONTROLE_0007",
-      "ressource": "STATION_CONTROLE_1",
-      "duree": 28
+      "ressource": "STATION_CONTROLE_6",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT001_SOUDURE_0006",
+      "avant": "LOT001_ASSEMBLAGE_0006",
       "apres": "LOT001_CONTROLE_0007"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT001_FORMAGE_0008",
-      "ressource": "PRESSE_PLIAGE_4",
-      "duree": 36
+      "tache": "LOT001_PEINTURE_0008",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "LOT001_CONTROLE_0007",
-      "apres": "LOT001_FORMAGE_0008"
+      "apres": "LOT001_PEINTURE_0008"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_PREPARATION_0009",
-      "ressource": "DECOUPEUSE_PLASMA_1",
-      "duree": 42
+      "tache": "LOT002_FINITION_0009",
+      "ressource": "POSTE_EBAVURAGE_5",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_ASSEMBLAGE_0010",
-      "ressource": "POSTE_ASSEMBLAGE_3",
-      "duree": 35
+      "tache": "LOT002_PEINTURE_0010",
+      "ressource": "CABINE_PEINTURE_4",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT002_PREPARATION_0009",
-      "apres": "LOT002_ASSEMBLAGE_0010"
+      "avant": "LOT002_FINITION_0009",
+      "apres": "LOT002_PEINTURE_0010"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_USINAGE_0011",
-      "ressource": "POSTE_EBAVURAGE_3",
-      "duree": 30
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT002_ASSEMBLAGE_0010",
-      "apres": "LOT002_USINAGE_0011"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_FINITION_0012",
-      "ressource": "POSTE_EBAVURAGE_6",
-      "duree": 22
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT002_USINAGE_0011",
-      "apres": "LOT002_FINITION_0012"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_SOUDURE_0013",
-      "ressource": "POSTE_SOUDURE_5",
-      "duree": 102
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT002_FINITION_0012",
-      "apres": "LOT002_SOUDURE_0013"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_PEINTURE_0014",
-      "ressource": "TUNNEL_PEINTURE_1",
-      "duree": 60
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT002_SOUDURE_0013",
-      "apres": "LOT002_PEINTURE_0014"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_CONTROLE_0015",
+      "tache": "LOT002_CONTROLE_0011",
       "ressource": "STATION_CONTROLE_4",
-      "duree": 19
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT002_PEINTURE_0014",
-      "apres": "LOT002_CONTROLE_0015"
+      "avant": "LOT002_PEINTURE_0010",
+      "apres": "LOT002_CONTROLE_0011"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT002_FORMAGE_0016",
-      "ressource": "PRESSE_PLIAGE_1",
-      "duree": 25
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT002_CONTROLE_0015",
-      "apres": "LOT002_FORMAGE_0016"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_CONTROLE_0017",
-      "ressource": "STATION_CONTROLE_7",
-      "duree": 13
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_SOUDURE_0018",
-      "ressource": "ROBOT_SOUDURE_2",
-      "duree": 70
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT003_CONTROLE_0017",
-      "apres": "LOT003_SOUDURE_0018"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_FORMAGE_0019",
+      "tache": "LOT002_FORMAGE_0012",
       "ressource": "PRESSE_PLIAGE_3",
-      "duree": 32
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT003_SOUDURE_0018",
-      "apres": "LOT003_FORMAGE_0019"
+      "avant": "LOT002_CONTROLE_0011",
+      "apres": "LOT002_FORMAGE_0012"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_PREPARATION_0020",
-      "ressource": "PERCEUSE_CNC_5",
-      "duree": 30
+      "tache": "LOT002_PREPARATION_0013",
+      "ressource": "PERCEUSE_CNC_8",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT003_FORMAGE_0019",
-      "apres": "LOT003_PREPARATION_0020"
+      "avant": "LOT002_FORMAGE_0012",
+      "apres": "LOT002_PREPARATION_0013"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_USINAGE_0021",
-      "ressource": "POSTE_EBAVURAGE_4",
-      "duree": 15
+      "tache": "LOT002_ASSEMBLAGE_0014",
+      "ressource": "POSTE_ASSEMBLAGE_8",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT003_PREPARATION_0020",
-      "apres": "LOT003_USINAGE_0021"
+      "avant": "LOT002_PREPARATION_0013",
+      "apres": "LOT002_ASSEMBLAGE_0014"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_PEINTURE_0022",
-      "ressource": "TUNNEL_PEINTURE_2",
-      "duree": 41
+      "tache": "LOT002_USINAGE_0015",
+      "ressource": "CENTRE_USINAGE_5",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT003_USINAGE_0021",
-      "apres": "LOT003_PEINTURE_0022"
+      "avant": "LOT002_ASSEMBLAGE_0014",
+      "apres": "LOT002_USINAGE_0015"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_ASSEMBLAGE_0023",
-      "ressource": "POSTE_ASSEMBLAGE_1",
-      "duree": 40
+      "tache": "LOT002_SOUDURE_0016",
+      "ressource": "ROBOT_SOUDURE_1",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT003_PEINTURE_0022",
-      "apres": "LOT003_ASSEMBLAGE_0023"
+      "avant": "LOT002_USINAGE_0015",
+      "apres": "LOT002_SOUDURE_0016"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT003_FINITION_0024",
-      "ressource": "POSTE_POLISSAGE_2",
-      "duree": 47
+      "tache": "LOT003_ASSEMBLAGE_0017",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_PEINTURE_0018",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT003_ASSEMBLAGE_0023",
-      "apres": "LOT003_FINITION_0024"
+      "avant": "LOT003_ASSEMBLAGE_0017",
+      "apres": "LOT003_PEINTURE_0018"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_FINITION_0019",
+      "ressource": "POSTE_EBAVURAGE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_PEINTURE_0018",
+      "apres": "LOT003_FINITION_0019"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_SOUDURE_0020",
+      "ressource": "POSTE_SOUDURE_10",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_FINITION_0019",
+      "apres": "LOT003_SOUDURE_0020"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_CONTROLE_0021",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_SOUDURE_0020",
+      "apres": "LOT003_CONTROLE_0021"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_FORMAGE_0022",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_CONTROLE_0021",
+      "apres": "LOT003_FORMAGE_0022"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_PREPARATION_0023",
+      "ressource": "DECOUPEUSE_LASER_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_FORMAGE_0022",
+      "apres": "LOT003_PREPARATION_0023"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT003_USINAGE_0024",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT003_PREPARATION_0023",
+      "apres": "LOT003_USINAGE_0024"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT004_FINITION_0025",
-      "ressource": "POSTE_EBAVURAGE_5",
-      "duree": 35
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT004_SOUDURE_0026",
-      "ressource": "POSTE_SOUDURE_5",
-      "duree": 81
+      "tache": "LOT004_FORMAGE_0026",
+      "ressource": "PRESSE_EMBOUTISSAGE_2",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "LOT004_FINITION_0025",
-      "apres": "LOT004_SOUDURE_0026"
+      "apres": "LOT004_FORMAGE_0026"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT004_CONTROLE_0027",
-      "ressource": "STATION_CONTROLE_5",
-      "duree": 29
+      "tache": "LOT004_PREPARATION_0027",
+      "ressource": "DECOUPEUSE_PLASMA_3",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT004_SOUDURE_0026",
-      "apres": "LOT004_CONTROLE_0027"
+      "avant": "LOT004_FORMAGE_0026",
+      "apres": "LOT004_PREPARATION_0027"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT004_PREPARATION_0028",
-      "ressource": "DECOUPEUSE_LASER_1",
-      "duree": 29
+      "tache": "LOT004_USINAGE_0028",
+      "ressource": "FRAISEUSE_CNC_1",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT004_CONTROLE_0027",
-      "apres": "LOT004_PREPARATION_0028"
+      "avant": "LOT004_PREPARATION_0027",
+      "apres": "LOT004_USINAGE_0028"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT004_ASSEMBLAGE_0029",
-      "ressource": "POSTE_ASSEMBLAGE_11",
-      "duree": 55
+      "ressource": "POSTE_ASSEMBLAGE_10",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT004_PREPARATION_0028",
+      "avant": "LOT004_USINAGE_0028",
       "apres": "LOT004_ASSEMBLAGE_0029"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT004_PEINTURE_0030",
-      "ressource": "CABINE_PEINTURE_2",
-      "duree": 34
+      "ressource": "CABINE_PEINTURE_1",
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -1513,120 +1686,120 @@
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT004_USINAGE_0031",
-      "ressource": "CENTRE_USINAGE_3",
-      "duree": 105
+      "tache": "LOT004_SOUDURE_0031",
+      "ressource": "ROBOT_SOUDURE_3",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "LOT004_PEINTURE_0030",
-      "apres": "LOT004_USINAGE_0031"
+      "apres": "LOT004_SOUDURE_0031"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT004_FORMAGE_0032",
-      "ressource": "PRESSE_PLIAGE_1",
-      "duree": 35
+      "tache": "LOT004_CONTROLE_0032",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT004_USINAGE_0031",
-      "apres": "LOT004_FORMAGE_0032"
+      "avant": "LOT004_SOUDURE_0031",
+      "apres": "LOT004_CONTROLE_0032"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_PEINTURE_0033",
-      "ressource": "TUNNEL_PEINTURE_3",
-      "duree": 54
+      "tache": "LOT005_USINAGE_0033",
+      "ressource": "FRAISEUSE_CNC_5",
+      "duree": 3
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_USINAGE_0034",
-      "ressource": "POSTE_EBAVURAGE_2",
-      "duree": 32
+      "tache": "LOT005_ASSEMBLAGE_0034",
+      "ressource": "POSTE_ASSEMBLAGE_11",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT005_PEINTURE_0033",
-      "apres": "LOT005_USINAGE_0034"
+      "avant": "LOT005_USINAGE_0033",
+      "apres": "LOT005_ASSEMBLAGE_0034"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_SOUDURE_0035",
-      "ressource": "ROBOT_SOUDURE_3",
-      "duree": 75
+      "tache": "LOT005_CONTROLE_0035",
+      "ressource": "STATION_CONTROLE_5",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT005_USINAGE_0034",
-      "apres": "LOT005_SOUDURE_0035"
+      "avant": "LOT005_ASSEMBLAGE_0034",
+      "apres": "LOT005_CONTROLE_0035"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_PREPARATION_0036",
-      "ressource": "DECOUPEUSE_PLASMA_2",
-      "duree": 26
+      "tache": "LOT005_FORMAGE_0036",
+      "ressource": "PRESSE_PLIAGE_2",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT005_SOUDURE_0035",
-      "apres": "LOT005_PREPARATION_0036"
+      "avant": "LOT005_CONTROLE_0035",
+      "apres": "LOT005_FORMAGE_0036"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_FINITION_0037",
-      "ressource": "POSTE_EBAVURAGE_4",
-      "duree": 22
+      "tache": "LOT005_PREPARATION_0037",
+      "ressource": "PERCEUSE_CNC_5",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT005_PREPARATION_0036",
-      "apres": "LOT005_FINITION_0037"
+      "avant": "LOT005_FORMAGE_0036",
+      "apres": "LOT005_PREPARATION_0037"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_ASSEMBLAGE_0038",
-      "ressource": "POSTE_ASSEMBLAGE_6",
-      "duree": 51
+      "tache": "LOT005_FINITION_0038",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT005_FINITION_0037",
-      "apres": "LOT005_ASSEMBLAGE_0038"
+      "avant": "LOT005_PREPARATION_0037",
+      "apres": "LOT005_FINITION_0038"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_FORMAGE_0039",
-      "ressource": "PRESSE_EMBOUTISSAGE_3",
-      "duree": 27
+      "tache": "LOT005_PEINTURE_0039",
+      "ressource": "CABINE_PEINTURE_6",
+      "duree": 3
     },
     {
       "type": "precedence",
-      "avant": "LOT005_ASSEMBLAGE_0038",
-      "apres": "LOT005_FORMAGE_0039"
+      "avant": "LOT005_FINITION_0038",
+      "apres": "LOT005_PEINTURE_0039"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT005_CONTROLE_0040",
-      "ressource": "STATION_CONTROLE_1",
-      "duree": 10
+      "tache": "LOT005_SOUDURE_0040",
+      "ressource": "POSTE_SOUDURE_5",
+      "duree": 3
     },
     {
       "type": "precedence",
-      "avant": "LOT005_FORMAGE_0039",
-      "apres": "LOT005_CONTROLE_0040"
+      "avant": "LOT005_PEINTURE_0039",
+      "apres": "LOT005_SOUDURE_0040"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT006_PREPARATION_0041",
-      "ressource": "DECOUPEUSE_PLASMA_2",
-      "duree": 68
+      "ressource": "PERCEUSE_CNC_4",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT006_ASSEMBLAGE_0042",
-      "ressource": "POSTE_ASSEMBLAGE_2",
-      "duree": 29
+      "ressource": "POSTE_ASSEMBLAGE_6",
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -1636,8 +1809,8 @@
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT006_CONTROLE_0043",
-      "ressource": "STATION_CONTROLE_3",
-      "duree": 14
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -1647,8 +1820,8 @@
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT006_USINAGE_0044",
-      "ressource": "FRAISEUSE_CNC_6",
-      "duree": 87
+      "ressource": "CENTRE_USINAGE_4",
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -1659,7 +1832,7 @@
       "type": "compatibilite_ressource_tache",
       "tache": "LOT006_FINITION_0045",
       "ressource": "POSTE_POLISSAGE_3",
-      "duree": 28
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -1668,308 +1841,308 @@
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT006_FORMAGE_0046",
-      "ressource": "PRESSE_PLIAGE_2",
-      "duree": 21
+      "tache": "LOT006_PEINTURE_0046",
+      "ressource": "TUNNEL_PEINTURE_3",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "LOT006_FINITION_0045",
-      "apres": "LOT006_FORMAGE_0046"
+      "apres": "LOT006_PEINTURE_0046"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT006_SOUDURE_0047",
       "ressource": "ROBOT_SOUDURE_3",
-      "duree": 41
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT006_FORMAGE_0046",
+      "avant": "LOT006_PEINTURE_0046",
       "apres": "LOT006_SOUDURE_0047"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT006_PEINTURE_0048",
-      "ressource": "CABINE_PEINTURE_6",
-      "duree": 72
+      "tache": "LOT006_FORMAGE_0048",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 2
     },
     {
       "type": "precedence",
       "avant": "LOT006_SOUDURE_0047",
-      "apres": "LOT006_PEINTURE_0048"
+      "apres": "LOT006_FORMAGE_0048"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT007_PREPARATION_0049",
-      "ressource": "DECOUPEUSE_LASER_1",
-      "duree": 46
+      "ressource": "DECOUPEUSE_LASER_2",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT007_SOUDURE_0050",
-      "ressource": "POSTE_SOUDURE_7",
-      "duree": 116
+      "tache": "LOT007_PEINTURE_0050",
+      "ressource": "CABINE_PEINTURE_6",
+      "duree": 2
     },
     {
       "type": "precedence",
       "avant": "LOT007_PREPARATION_0049",
-      "apres": "LOT007_SOUDURE_0050"
+      "apres": "LOT007_PEINTURE_0050"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT007_ASSEMBLAGE_0051",
-      "ressource": "POSTE_ASSEMBLAGE_2",
-      "duree": 60
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT007_SOUDURE_0050",
-      "apres": "LOT007_ASSEMBLAGE_0051"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT007_FORMAGE_0052",
-      "ressource": "PRESSE_EMBOUTISSAGE_2",
-      "duree": 31
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT007_ASSEMBLAGE_0051",
-      "apres": "LOT007_FORMAGE_0052"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT007_USINAGE_0053",
-      "ressource": "FRAISEUSE_CNC_5",
-      "duree": 80
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT007_FORMAGE_0052",
-      "apres": "LOT007_USINAGE_0053"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT007_PEINTURE_0054",
-      "ressource": "TUNNEL_PEINTURE_1",
-      "duree": 37
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT007_USINAGE_0053",
-      "apres": "LOT007_PEINTURE_0054"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT007_FINITION_0055",
-      "ressource": "POSTE_POLISSAGE_4",
-      "duree": 43
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT007_PEINTURE_0054",
-      "apres": "LOT007_FINITION_0055"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT007_CONTROLE_0056",
-      "ressource": "STATION_CONTROLE_8",
-      "duree": 22
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT007_FINITION_0055",
-      "apres": "LOT007_CONTROLE_0056"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_USINAGE_0057",
-      "ressource": "CENTRE_USINAGE_2",
-      "duree": 63
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_PREPARATION_0058",
-      "ressource": "PERCEUSE_CNC_4",
-      "duree": 24
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT008_USINAGE_0057",
-      "apres": "LOT008_PREPARATION_0058"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_FINITION_0059",
-      "ressource": "POSTE_POLISSAGE_1",
-      "duree": 29
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT008_PREPARATION_0058",
-      "apres": "LOT008_FINITION_0059"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_PEINTURE_0060",
-      "ressource": "TUNNEL_PEINTURE_3",
-      "duree": 64
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT008_FINITION_0059",
-      "apres": "LOT008_PEINTURE_0060"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_SOUDURE_0061",
-      "ressource": "POSTE_SOUDURE_1",
-      "duree": 51
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT008_PEINTURE_0060",
-      "apres": "LOT008_SOUDURE_0061"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_FORMAGE_0062",
-      "ressource": "PRESSE_PLIAGE_4",
-      "duree": 46
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT008_SOUDURE_0061",
-      "apres": "LOT008_FORMAGE_0062"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_ASSEMBLAGE_0063",
-      "ressource": "POSTE_ASSEMBLAGE_1",
-      "duree": 41
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT008_FORMAGE_0062",
-      "apres": "LOT008_ASSEMBLAGE_0063"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT008_CONTROLE_0064",
-      "ressource": "STATION_CONTROLE_2",
-      "duree": 14
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT008_ASSEMBLAGE_0063",
-      "apres": "LOT008_CONTROLE_0064"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_FINITION_0065",
-      "ressource": "POSTE_EBAVURAGE_1",
-      "duree": 17
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_FORMAGE_0066",
-      "ressource": "PRESSE_EMBOUTISSAGE_3",
-      "duree": 54
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT009_FINITION_0065",
-      "apres": "LOT009_FORMAGE_0066"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_ASSEMBLAGE_0067",
-      "ressource": "POSTE_ASSEMBLAGE_12",
-      "duree": 32
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT009_FORMAGE_0066",
-      "apres": "LOT009_ASSEMBLAGE_0067"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_USINAGE_0068",
-      "ressource": "POSTE_EBAVURAGE_6",
-      "duree": 15
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT009_ASSEMBLAGE_0067",
-      "apres": "LOT009_USINAGE_0068"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_CONTROLE_0069",
-      "ressource": "STATION_CONTROLE_8",
-      "duree": 27
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT009_USINAGE_0068",
-      "apres": "LOT009_CONTROLE_0069"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_PREPARATION_0070",
-      "ressource": "PERCEUSE_CNC_6",
-      "duree": 36
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT009_CONTROLE_0069",
-      "apres": "LOT009_PREPARATION_0070"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_PEINTURE_0071",
-      "ressource": "TUNNEL_PEINTURE_2",
-      "duree": 43
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT009_PREPARATION_0070",
-      "apres": "LOT009_PEINTURE_0071"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT009_SOUDURE_0072",
-      "ressource": "POSTE_SOUDURE_3",
-      "duree": 89
-    },
-    {
-      "type": "precedence",
-      "avant": "LOT009_PEINTURE_0071",
-      "apres": "LOT009_SOUDURE_0072"
-    },
-    {
-      "type": "compatibilite_ressource_tache",
-      "tache": "LOT010_USINAGE_0073",
+      "tache": "LOT007_USINAGE_0051",
       "ressource": "POSTE_EBAVURAGE_5",
-      "duree": 20
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_PEINTURE_0050",
+      "apres": "LOT007_USINAGE_0051"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_ASSEMBLAGE_0052",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_USINAGE_0051",
+      "apres": "LOT007_ASSEMBLAGE_0052"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_CONTROLE_0053",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_ASSEMBLAGE_0052",
+      "apres": "LOT007_CONTROLE_0053"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_FINITION_0054",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_CONTROLE_0053",
+      "apres": "LOT007_FINITION_0054"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_SOUDURE_0055",
+      "ressource": "POSTE_SOUDURE_8",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_FINITION_0054",
+      "apres": "LOT007_SOUDURE_0055"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT007_FORMAGE_0056",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT007_SOUDURE_0055",
+      "apres": "LOT007_FORMAGE_0056"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_PEINTURE_0057",
+      "ressource": "CABINE_PEINTURE_5",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_FORMAGE_0058",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_PEINTURE_0057",
+      "apres": "LOT008_FORMAGE_0058"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_USINAGE_0059",
+      "ressource": "POSTE_EBAVURAGE_6",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_FORMAGE_0058",
+      "apres": "LOT008_USINAGE_0059"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_ASSEMBLAGE_0060",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_USINAGE_0059",
+      "apres": "LOT008_ASSEMBLAGE_0060"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_PREPARATION_0061",
+      "ressource": "DECOUPEUSE_PLASMA_1",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_ASSEMBLAGE_0060",
+      "apres": "LOT008_PREPARATION_0061"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_SOUDURE_0062",
+      "ressource": "ROBOT_SOUDURE_4",
+      "duree": 3
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_PREPARATION_0061",
+      "apres": "LOT008_SOUDURE_0062"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_CONTROLE_0063",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_SOUDURE_0062",
+      "apres": "LOT008_CONTROLE_0063"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT008_FINITION_0064",
+      "ressource": "POSTE_EBAVURAGE_5",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT008_CONTROLE_0063",
+      "apres": "LOT008_FINITION_0064"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_USINAGE_0065",
+      "ressource": "FRAISEUSE_CNC_4",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_PREPARATION_0066",
+      "ressource": "PERCEUSE_CNC_8",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_USINAGE_0065",
+      "apres": "LOT009_PREPARATION_0066"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_FORMAGE_0067",
+      "ressource": "PRESSE_EMBOUTISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_PREPARATION_0066",
+      "apres": "LOT009_FORMAGE_0067"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_CONTROLE_0068",
+      "ressource": "STATION_CONTROLE_8",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_FORMAGE_0067",
+      "apres": "LOT009_CONTROLE_0068"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_ASSEMBLAGE_0069",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_CONTROLE_0068",
+      "apres": "LOT009_ASSEMBLAGE_0069"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_FINITION_0070",
+      "ressource": "POSTE_POLISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_ASSEMBLAGE_0069",
+      "apres": "LOT009_FINITION_0070"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_SOUDURE_0071",
+      "ressource": "ROBOT_SOUDURE_1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_FINITION_0070",
+      "apres": "LOT009_SOUDURE_0071"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT009_PEINTURE_0072",
+      "ressource": "TUNNEL_PEINTURE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LOT009_SOUDURE_0071",
+      "apres": "LOT009_PEINTURE_0072"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LOT010_PREPARATION_0073",
+      "ressource": "PERCEUSE_CNC_8",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT010_CONTROLE_0074",
-      "ressource": "STATION_CONTROLE_8",
-      "duree": 20
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT010_USINAGE_0073",
+      "avant": "LOT010_PREPARATION_0073",
       "apres": "LOT010_CONTROLE_0074"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT010_FORMAGE_0075",
-      "ressource": "PRESSE_EMBOUTISSAGE_1",
-      "duree": 50
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 2
     },
     {
       "type": "precedence",
@@ -1978,42 +2151,42 @@
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT010_PEINTURE_0076",
-      "ressource": "CABINE_PEINTURE_2",
-      "duree": 68
+      "tache": "LOT010_ASSEMBLAGE_0076",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
     },
     {
       "type": "precedence",
       "avant": "LOT010_FORMAGE_0075",
-      "apres": "LOT010_PEINTURE_0076"
+      "apres": "LOT010_ASSEMBLAGE_0076"
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT010_ASSEMBLAGE_0077",
-      "ressource": "POSTE_ASSEMBLAGE_11",
-      "duree": 21
+      "tache": "LOT010_USINAGE_0077",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
     },
     {
       "type": "precedence",
-      "avant": "LOT010_PEINTURE_0076",
-      "apres": "LOT010_ASSEMBLAGE_0077"
+      "avant": "LOT010_ASSEMBLAGE_0076",
+      "apres": "LOT010_USINAGE_0077"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT010_FINITION_0078",
-      "ressource": "POSTE_EBAVURAGE_2",
-      "duree": 32
+      "ressource": "POSTE_POLISSAGE_4",
+      "duree": 2
     },
     {
       "type": "precedence",
-      "avant": "LOT010_ASSEMBLAGE_0077",
+      "avant": "LOT010_USINAGE_0077",
       "apres": "LOT010_FINITION_0078"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "LOT010_SOUDURE_0079",
-      "ressource": "ROBOT_SOUDURE_1",
-      "duree": 61
+      "ressource": "POSTE_SOUDURE_7",
+      "duree": 1
     },
     {
       "type": "precedence",
@@ -2022,631 +2195,566 @@
     },
     {
       "type": "compatibilite_ressource_tache",
-      "tache": "LOT010_PREPARATION_0080",
-      "ressource": "DECOUPEUSE_LASER_4",
-      "duree": 51
+      "tache": "LOT010_PEINTURE_0080",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 2
     },
     {
       "type": "precedence",
       "avant": "LOT010_SOUDURE_0079",
-      "apres": "LOT010_PREPARATION_0080"
+      "apres": "LOT010_PEINTURE_0080"
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0081",
-      "ressource": "POSTE_ASSEMBLAGE_10",
-      "duree": 39
+      "ressource": "CENTRE_USINAGE_3",
+      "duree": 3
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0082",
-      "ressource": "FRAISEUSE_CNC_1",
-      "duree": 70
+      "ressource": "DECOUPEUSE_PLASMA_3",
+      "duree": 2
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0083",
-      "ressource": "CABINE_PEINTURE_6",
-      "duree": 60
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0084",
-      "ressource": "ROBOT_SOUDURE_2",
-      "duree": 38
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0085",
-      "ressource": "POSTE_SOUDURE_8",
-      "duree": 52
+      "ressource": "PERCEUSE_CNC_6",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0086",
-      "ressource": "POSTE_EBAVURAGE_5",
-      "duree": 31
+      "ressource": "POSTE_POLISSAGE_3",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0087",
-      "ressource": "POSTE_ASSEMBLAGE_11",
-      "duree": 39
+      "ressource": "POSTE_POLISSAGE_2",
+      "duree": 2
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0088",
-      "ressource": "POSTE_EBAVURAGE_1",
-      "duree": 34
+      "ressource": "POSTE_SOUDURE_4",
+      "duree": 4
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0089",
-      "ressource": "POSTE_SOUDURE_8",
-      "duree": 85
+      "ressource": "POSTE_ASSEMBLAGE_11",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0090",
-      "ressource": "POSTE_EBAVURAGE_3",
-      "duree": 23
+      "ressource": "PRESSE_PLIAGE_2",
+      "duree": 2
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0091",
-      "ressource": "STATION_CONTROLE_8",
-      "duree": 12
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0092",
-      "ressource": "PRESSE_PLIAGE_4",
-      "duree": 50
+      "ressource": "POSTE_SOUDURE_6",
+      "duree": 4
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0093",
-      "ressource": "CABINE_PEINTURE_1",
-      "duree": 68
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 2
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0094",
-      "ressource": "PERCEUSE_CNC_3",
-      "duree": 25
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0095",
-      "ressource": "TUNNEL_PEINTURE_2",
-      "duree": 61
+      "ressource": "FRAISEUSE_CNC_5",
+      "duree": 2
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0096",
-      "ressource": "POSTE_POLISSAGE_1",
-      "duree": 35
+      "ressource": "POSTE_EBAVURAGE_5",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0097",
-      "ressource": "POSTE_EBAVURAGE_2",
-      "duree": 16
+      "ressource": "PERCEUSE_CNC_1",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0098",
-      "ressource": "POSTE_POLISSAGE_1",
-      "duree": 24
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0099",
-      "ressource": "FRAISEUSE_CNC_3",
-      "duree": 65
+      "ressource": "POSTE_EBAVURAGE_6",
+      "duree": 1
     },
     {
       "type": "compatibilite_ressource_tache",
       "tache": "COMP_0100",
-      "ressource": "PRESSE_PLIAGE_3",
-      "duree": 39
+      "ressource": "POSTE_ASSEMBLAGE_4",
+      "duree": 2
     },
     {
       "type": "echeance",
-      "tache": "LOT010_PREPARATION_0080",
-      "echeance": 37
+      "tache": "LOT005_PEINTURE_0039",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "COMP_0087",
-      "echeance": 37
+      "tache": "LOT010_FORMAGE_0075",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT001_FINITION_0003",
-      "echeance": 38
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT009_FINITION_0065",
-      "echeance": 39
-    },
-    {
-      "type": "echeance",
-      "tache": "COMP_0097",
-      "echeance": 39
-    },
-    {
-      "type": "echeance",
-      "tache": "COMP_0083",
-      "echeance": 40
+      "tache": "LOT006_PEINTURE_0046",
+      "echeance": 1
     },
     {
       "type": "echeance",
       "tache": "COMP_0085",
-      "echeance": 41
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT006_FORMAGE_0046",
-      "echeance": 42
+      "tache": "LOT006_SOUDURE_0047",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT004_PREPARATION_0028",
-      "echeance": 42
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT010_ASSEMBLAGE_0077",
-      "echeance": 43
-    },
-    {
-      "type": "echeance",
-      "tache": "COMP_0081",
-      "echeance": 44
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT003_FORMAGE_0019",
-      "echeance": 45
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT007_PEINTURE_0054",
-      "echeance": 45
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT005_SOUDURE_0035",
-      "echeance": 46
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT005_FINITION_0037",
-      "echeance": 47
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT002_ASSEMBLAGE_0010",
-      "echeance": 48
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT004_ASSEMBLAGE_0029",
-      "echeance": 48
-    },
-    {
-      "type": "echeance",
-      "tache": "COMP_0092",
-      "echeance": 49
-    },
-    {
-      "type": "echeance",
-      "tache": "COMP_0088",
-      "echeance": 50
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT002_FINITION_0012",
-      "echeance": 51
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT003_PREPARATION_0020",
-      "echeance": 51
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT006_PEINTURE_0048",
-      "echeance": 52
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT005_PEINTURE_0033",
-      "echeance": 53
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT007_FORMAGE_0052",
-      "echeance": 54
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT007_CONTROLE_0056",
-      "echeance": 54
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT002_PEINTURE_0014",
-      "echeance": 55
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT008_CONTROLE_0064",
-      "echeance": 56
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT007_USINAGE_0053",
-      "echeance": 56
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT001_FORMAGE_0008",
-      "echeance": 57
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT009_PEINTURE_0071",
-      "echeance": 58
-    },
-    {
-      "type": "echeance",
-      "tache": "LOT005_ASSEMBLAGE_0038",
-      "echeance": 59
+      "tache": "LOT007_ASSEMBLAGE_0052",
+      "echeance": 1
     },
     {
       "type": "echeance",
       "tache": "LOT006_CONTROLE_0043",
-      "echeance": 59
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT010_PEINTURE_0076",
-      "echeance": 60
+      "tache": "LOT002_SOUDURE_0016",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT005_PREPARATION_0036",
-      "echeance": 61
+      "tache": "LOT002_PEINTURE_0010",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT008_PREPARATION_0061",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT008_FORMAGE_0058",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_FORMAGE_0056",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT003_USINAGE_0024",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_FINITION_0001",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0092",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_USINAGE_0005",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT003_FINITION_0019",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0095",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT003_ASSEMBLAGE_0017",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT010_PEINTURE_0080",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_PEINTURE_0050",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT003_PREPARATION_0023",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0098",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_PEINTURE_0008",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT009_FINITION_0070",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT003_CONTROLE_0021",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "COMP_0089",
+      "echeance": 1
     },
     {
       "type": "echeance",
       "tache": "COMP_0084",
-      "echeance": 62
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT005_CONTROLE_0040",
-      "echeance": 62
+      "tache": "LOT008_CONTROLE_0063",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "COMP_0090",
-      "echeance": 63
+      "tache": "LOT006_ASSEMBLAGE_0042",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT008_SOUDURE_0061",
-      "echeance": 64
+      "tache": "LOT004_CONTROLE_0032",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "COMP_0094",
-      "echeance": 65
+      "tache": "LOT005_FINITION_0038",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT004_FORMAGE_0032",
-      "echeance": 65
+      "tache": "LOT008_USINAGE_0059",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT004_USINAGE_0031",
-      "echeance": 66
+      "tache": "LOT009_USINAGE_0065",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT009_FORMAGE_0066",
-      "echeance": 67
+      "tache": "LOT010_USINAGE_0077",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT002_CONTROLE_0015",
-      "echeance": 68
+      "tache": "COMP_0099",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT009_SOUDURE_0072",
-      "echeance": 68
+      "tache": "LOT007_PREPARATION_0049",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT003_CONTROLE_0017",
-      "echeance": 69
+      "tache": "COMP_0100",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT002_FORMAGE_0016",
-      "echeance": 70
+      "tache": "LOT002_CONTROLE_0011",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT006_PREPARATION_0041",
-      "echeance": 71
+      "tache": "LOT004_ASSEMBLAGE_0029",
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "COMP_0089",
-      "echeance": 71
+      "tache": "COMP_0083",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_CONTROLE_0053",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_PREPARATION_0004",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT010_FINITION_0078",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT007_USINAGE_0051",
+      "echeance": 1
     },
     {
       "type": "echeance",
       "tache": "LOT004_PEINTURE_0030",
-      "echeance": 72
+      "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "LOT001_PEINTURE_0001",
-      "echeance": 73
+      "tache": "LOT004_PREPARATION_0027",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT005_FORMAGE_0036",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT001_FORMAGE_0003",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LOT008_FINITION_0064",
+      "echeance": 1
     },
     {
       "type": "competence_requise",
-      "tache": "LOT010_PREPARATION_0080",
-      "competence": "programmation_cnc"
+      "tache": "LOT006_PEINTURE_0046",
+      "competence": "assemblage_electronique"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT004_PREPARATION_0028",
-      "competence": "soudure_certifiee"
+      "tache": "LOT009_CONTROLE_0068",
+      "competence": "manutention_lourde"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT005_ASSEMBLAGE_0038",
-      "competence": "programmation_cnc"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT005_ASSEMBLAGE_0038",
+      "tache": "LOT007_ASSEMBLAGE_0052",
       "competence": "maintenance_niveau2"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT005_SOUDURE_0035",
-      "competence": "peinture_industrielle"
+      "tache": "LOT007_ASSEMBLAGE_0052",
+      "competence": "usinage_precision"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT005_SOUDURE_0035",
-      "competence": "soudure_certifiee"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT008_SOUDURE_0061",
-      "competence": "controle_qualite"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT008_SOUDURE_0061",
-      "competence": "soudure_certifiee"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT007_CONTROLE_0056",
+      "tache": "COMP_0096",
       "competence": "assemblage_electronique"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT007_CONTROLE_0056",
-      "competence": "peinture_industrielle"
+      "tache": "COMP_0097",
+      "competence": "usinage_precision"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT006_SOUDURE_0047",
-      "competence": "controle_qualite"
+      "tache": "LOT009_PEINTURE_0072",
+      "competence": "assemblage_electronique"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT006_SOUDURE_0047",
+      "tache": "LOT004_PREPARATION_0027",
       "competence": "manutention_lourde"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT002_ASSEMBLAGE_0010",
-      "competence": "programmation_cnc"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT008_FINITION_0059",
-      "competence": "controle_qualite"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT010_FORMAGE_0075",
-      "competence": "soudure_certifiee"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT003_FINITION_0024",
-      "competence": "programmation_cnc"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT002_USINAGE_0011",
-      "competence": "manutention_lourde"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT002_USINAGE_0011",
+      "tache": "LOT001_ASSEMBLAGE_0006",
       "competence": "maintenance_niveau2"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_USINAGE_0021",
+      "tache": "LOT002_FINITION_0009",
       "competence": "assemblage_electronique"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_USINAGE_0021",
-      "competence": "soudure_certifiee"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT001_FINITION_0003",
-      "competence": "manutention_lourde"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT001_FINITION_0003",
-      "competence": "controle_qualite"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT002_PEINTURE_0014",
-      "competence": "manutention_lourde"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT002_PEINTURE_0014",
+      "tache": "LOT005_PREPARATION_0037",
       "competence": "maintenance_niveau2"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_FORMAGE_0019",
+      "tache": "LOT002_FORMAGE_0012",
+      "competence": "maintenance_niveau2"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT002_FORMAGE_0012",
+      "competence": "assemblage_electronique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT007_FINITION_0054",
+      "competence": "usinage_precision"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT007_FINITION_0054",
       "competence": "controle_qualite"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_FORMAGE_0019",
-      "competence": "assemblage_electronique"
+      "tache": "LOT010_ASSEMBLAGE_0076",
+      "competence": "controle_qualite"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT008_PREPARATION_0058",
-      "competence": "manutention_lourde"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT009_PREPARATION_0070",
-      "competence": "manutention_lourde"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "COMP_0091",
+      "tache": "LOT003_ASSEMBLAGE_0017",
       "competence": "soudure_certifiee"
     },
     {
       "type": "competence_requise",
-      "tache": "COMP_0091",
+      "tache": "LOT004_USINAGE_0028",
+      "competence": "usinage_precision"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT003_CONTROLE_0021",
+      "competence": "assemblage_electronique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT006_FORMAGE_0048",
+      "competence": "controle_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT006_USINAGE_0044",
+      "competence": "soudure_certifiee"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT006_USINAGE_0044",
+      "competence": "maintenance_niveau2"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT007_USINAGE_0051",
+      "competence": "assemblage_electronique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT004_ASSEMBLAGE_0029",
+      "competence": "usinage_precision"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LOT008_USINAGE_0059",
       "competence": "programmation_cnc"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_SOUDURE_0018",
+      "tache": "COMP_0088",
       "competence": "peinture_industrielle"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_SOUDURE_0018",
-      "competence": "manutention_lourde"
+      "tache": "LOT002_USINAGE_0015",
+      "competence": "peinture_industrielle"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_CONTROLE_0017",
-      "competence": "assemblage_electronique"
+      "tache": "LOT003_FORMAGE_0022",
+      "competence": "controle_qualite"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT003_CONTROLE_0017",
-      "competence": "soudure_certifiee"
+      "tache": "LOT009_ASSEMBLAGE_0069",
+      "competence": "controle_qualite"
     },
     {
       "type": "competence_requise",
       "tache": "LOT010_CONTROLE_0074",
-      "competence": "assemblage_electronique"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT009_CONTROLE_0069",
-      "competence": "assemblage_electronique"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT008_PEINTURE_0060",
       "competence": "usinage_precision"
     },
     {
       "type": "competence_requise",
-      "tache": "COMP_0089",
-      "competence": "maintenance_niveau2"
+      "tache": "LOT002_CONTROLE_0011",
+      "competence": "manutention_lourde"
     },
     {
       "type": "competence_requise",
-      "tache": "COMP_0083",
-      "competence": "maintenance_niveau2"
+      "tache": "LOT002_ASSEMBLAGE_0014",
+      "competence": "assemblage_electronique"
     },
     {
       "type": "competence_requise",
-      "tache": "COMP_0083",
-      "competence": "programmation_cnc"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "COMP_0097",
-      "competence": "programmation_cnc"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "COMP_0097",
-      "competence": "controle_qualite"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT008_USINAGE_0057",
-      "competence": "controle_qualite"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT008_USINAGE_0057",
+      "tache": "LOT005_SOUDURE_0040",
       "competence": "soudure_certifiee"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT009_FORMAGE_0066",
-      "competence": "controle_qualite"
+      "tache": "LOT005_SOUDURE_0040",
+      "competence": "maintenance_niveau2"
     },
     {
       "type": "competence_requise",
-      "tache": "LOT009_FORMAGE_0066",
-      "competence": "peinture_industrielle"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT005_PEINTURE_0033",
-      "competence": "usinage_precision"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "LOT005_PEINTURE_0033",
-      "competence": "controle_qualite"
+      "tache": "LOT003_PREPARATION_0023",
+      "competence": "programmation_cnc"
     }
   ],
   "objectifs": [
     {
       "type": "minimiser_makespan",
       "poids": 0.25,
-      "makespan_cible": 88
+      "makespan_cible": 3
     },
     {
       "type": "equilibrer_charge",

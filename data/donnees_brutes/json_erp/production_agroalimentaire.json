@@ -2,55 +2,55 @@
   "operations": [
     {
       "code_operation": "RECEPTION_MP",
-      "duree_minutes": 30,
+      "duree_jours": 1,
       "poste_id": "QUAI_RECEPTION",
       "operation_precedente": null
     },
     {
       "code_operation": "LAVAGE_LEGUMES",
-      "duree_minutes": 45,
+      "duree_jours": 1,
       "poste_id": "TUNNEL_LAVAGE",
       "operation_precedente": "RECEPTION_MP"
     },
     {
       "code_operation": "EPLUCHAGE",
-      "duree_minutes": 60,
+      "duree_jours": 1,
       "poste_id": "LIGNE_EPLUCHAGE",
       "operation_precedente": "LAVAGE_LEGUMES"
     },
     {
       "code_operation": "DECOUPE",
-      "duree_minutes": 40,
+      "duree_jours": 1,
       "poste_id": "ROBOT_DECOUPE",
       "operation_precedente": "EPLUCHAGE"
     },
     {
       "code_operation": "CUISSON",
-      "duree_minutes": 120,
+      "duree_jours": 3,
       "poste_id": "AUTOCLAVE_1",
       "operation_precedente": "DECOUPE"
     },
     {
       "code_operation": "REFROIDISSEMENT",
-      "duree_minutes": 90,
+      "duree_jours": 2,
       "poste_id": "TUNNEL_REFROIDISSEMENT",
       "operation_precedente": "CUISSON"
     },
     {
       "code_operation": "CONDITIONNEMENT",
-      "duree_minutes": 50,
+      "duree_jours": 1,
       "poste_id": "LIGNE_CONDITIONNEMENT",
       "operation_precedente": "REFROIDISSEMENT"
     },
     {
       "code_operation": "ETIQUETAGE",
-      "duree_minutes": 25,
+      "duree_jours": 1,
       "poste_id": "ETIQUETEUSE_AUTO",
       "operation_precedente": "CONDITIONNEMENT"
     },
     {
       "code_operation": "PALETTISATION",
-      "duree_minutes": 35,
+      "duree_jours": 1,
       "poste_id": "ROBOT_PALETTISEUR",
       "operation_precedente": "ETIQUETAGE"
     }
