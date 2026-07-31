@@ -6,12 +6,15 @@ un `StateGraph` LangGraph — seul pipeline de génération branché sur l'API
 helper `etape()`/`EvenementEtape`, auparavant dans `loop.py`, vivent ici.
 
 Workflow complet :
-1. Analyste (spécification)
-2. Benchmarker (choix de l'algorithme — toujours appelé, catalogue complet)
-3. Architecte (conception, pour l'algorithme choisi)
-4. Développeur (code initial)
-5. Testeur (tests pytest)
-6. ** BOUCLE DE RÉPARATION (max 10 tentatives, `MAX_TENTATIVES_REPARATION`) **
+1. Analyste (spécification) ‖ Benchmarker (choix de l'algorithme — toujours
+   appelé, catalogue complet) — en parallèle, aucune dépendance de données
+   entre les deux (l'Analyste ne lit que la mission statique, le Benchmarker
+   que `instance_exemple`, déjà présent avant le premier nœud)
+2. Architecte (conception, pour l'algorithme choisi) — point de jonction,
+   attend les deux résultats ci-dessus
+3. Développeur (code initial)
+4. Testeur (tests pytest)
+5. ** BOUCLE DE RÉPARATION (max 10 tentatives, `MAX_TENTATIVES_REPARATION`) **
    - Reviewer relit le code
    - Si rejeté : Debugger corrige avec les commentaires du Reviewer (la
      validation est sautée pour cette tentative), puis retour au Reviewer.
@@ -20,7 +23,7 @@ Workflow complet :
      avec le diagnostic de la validation, puis retour au Reviewer.
    - Le nombre de tentatives est vérifié **avant** d'appeler le Debugger sur
      la toute dernière tentative — jamais de correction au-delà de la borne.
-7. Documentation (meilleur-effort, après re-validation finale du code)
+6. Documentation (meilleur-effort, après re-validation finale du code)
 
 Pas d'Optimiseur : agent retiré du pipeline (réponse JSON trop fragile — il
 embarque un code Python multi-lignes complet comme valeur de chaîne JSON, un
@@ -493,8 +496,17 @@ def _construire_graphe() -> StateGraph:
     graphe.add_node("fin_boucle", _noeud_fin_boucle)
     graphe.add_node("documentation", _noeud_documentation)
 
+    # Analyste et Benchmarker n'ont aucune dépendance de données l'un envers
+    # l'autre — l'Analyste ne lit que la mission statique, le Benchmarker que
+    # `instance_exemple` (déjà dans `etat_initial` avant le premier nœud) —
+    # donc fan-out depuis START puis fan-in sur l'Architecte (le vrai point
+    # de jonction, qui a besoin des deux) plutôt qu'un enchaînement séquentiel.
+    # Clés d'état disjointes (`analyse` vs `algo`/`raison_algo`/`parametres_algo`)
+    # : pas de reducer nécessaire, LangGraph attend simplement que les deux
+    # branches soient terminées avant d'exécuter l'Architecte.
     graphe.add_edge(START, "analyste")
-    graphe.add_edge("analyste", "benchmarker")
+    graphe.add_edge(START, "benchmarker")
+    graphe.add_edge("analyste", "architecte")
     graphe.add_edge("benchmarker", "architecte")
     graphe.add_edge("architecte", "developpeur")
     graphe.add_edge("developpeur", "testeur")

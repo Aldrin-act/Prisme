@@ -80,14 +80,22 @@ async function apiAuthFetch<T>(
     });
 
     if (!response.ok) {
-      let errorData: ErreurAuth;
+      // FastAPI enveloppe toujours le detail d'une HTTPException sous
+      // `{"detail": ...}` — jamais au niveau racine de la réponse. Le lire
+      // directement comme un `ErreurAuth` (avant ce correctif) laissait
+      // `.code`/`.message` systématiquement `undefined`. `detail` est soit
+      // {code, message} (ex. TOKEN_EXPIRED, voir api/routes/auth.py), soit
+      // une simple chaîne (ex. "client_id inconnu" sur /register).
+      let errorData: ErreurAuth = { code: 'UNKNOWN', message: response.statusText };
       try {
-        errorData = await response.json();
+        const body: { detail?: string | ErreurAuth } = await response.json();
+        if (body.detail && typeof body.detail === 'object') {
+          errorData = body.detail;
+        } else if (typeof body.detail === 'string') {
+          errorData = { code: 'UNKNOWN', message: body.detail };
+        }
       } catch {
-        errorData = {
-          code: 'UNKNOWN',
-          message: response.statusText,
-        };
+        // garder le fallback statusText
       }
 
       throw new PrismeAPIError(

@@ -424,14 +424,22 @@ export interface ReponseAssociationInstance {
 // ============================================================================
 
 // FastAPI/Pydantic renvoie soit une chaîne (erreurs métier explicites, ex.
-// 503/502), soit le tableau standard de ValidationError.errors() sur 422.
+// 503/502), soit le tableau standard de ValidationError.errors() sur 422,
+// soit un objet {code, message} (toutes les erreurs d'authentification —
+// voir api/routes/auth.py — pour que le frontend puisse distinguer les cas
+// par code, ex. TOKEN_EXPIRED, sans parser le message humain).
 export interface ErreurValidationChamp {
   loc: (string | number)[];
   msg: string;
   type: string;
 }
 
+export interface ErreurDetailCodee {
+  code: string;
+  message: string;
+}
+
 export interface ErreurAPI {
-  detail: string | ErreurValidationChamp[];
+  detail: string | ErreurValidationChamp[] | ErreurDetailCodee;
   status?: number;
 }

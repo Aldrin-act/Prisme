@@ -4,10 +4,11 @@
 
 Tu n'écris aucun code à cette étape. À partir de la mission ci-dessus,
 produis une spécification technique concise qui servira à l'agent Architecte
-pour concevoir le modèle du solveur — l'algorithme (CP-SAT exact, ou une
-heuristique génétique/ACO/tabu/recuit simulé/dispatching pour les grandes
-instances) est choisi séparément par l'agent Benchmarker, indépendamment de
-ta réponse : reste générique, ne présuppose aucun algorithme particulier.
+pour concevoir le modèle. Reste générique, ne présuppose aucun algorithme
+particulier : l'algorithme (exact, ou une heuristique génétique/ACO/tabu/recuit
+simulé/dispatching pour les grandes instances) est choisi séparément par
+l'agent Benchmarker, qui s'exécute en parallèle de toi et ne dépend pas de ta
+réponse.
 
 Ne recopie pas les contraintes de sécurité (imports interdits, etc.) — ce
 n'est pas ton rôle, l'agent Développeur les respectera directement depuis la

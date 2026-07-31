@@ -14,7 +14,7 @@ export class PrismeAPIError extends Error {
   constructor(
     message: string,
     public status?: number,
-    public detail?: string | Types.ErreurValidationChamp[],
+    public detail?: string | Types.ErreurValidationChamp[] | Types.ErreurDetailCodee,
   ) {
     super(message);
     this.name = "PrismeAPIError";
@@ -24,6 +24,21 @@ export class PrismeAPIError extends Error {
   get champs(): Types.ErreurValidationChamp[] {
     return Array.isArray(this.detail) ? this.detail : [];
   }
+}
+
+// `detail` a 3 formes possibles selon la route (voir `Types.ErreurAPI`) — un
+// objet {code, message} (toutes les erreurs d'auth) affiché tel quel donnait
+// "Erreur API: [object Object]", le message humain n'était jamais extrait.
+function formaterDetailErreur(
+  detail: string | Types.ErreurValidationChamp[] | Types.ErreurDetailCodee | undefined,
+): string {
+  if (Array.isArray(detail)) {
+    return detail.map((e) => `${e.loc.join(".")} : ${e.msg}`).join(" ; ");
+  }
+  if (detail && typeof detail === "object") {
+    return detail.message;
+  }
+  return detail ?? "erreur inconnue";
 }
 
 // ============================================================================
@@ -60,17 +75,14 @@ async function apiFetch<T>(
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      let errorDetail: string | Types.ErreurValidationChamp[];
+      let errorDetail: string | Types.ErreurValidationChamp[] | Types.ErreurDetailCodee;
       try {
         const errorData: Types.ErreurAPI = await response.json();
         errorDetail = errorData.detail;
       } catch {
         errorDetail = response.statusText;
       }
-      const message = Array.isArray(errorDetail)
-        ? errorDetail.map((e) => `${e.loc.join(".")} : ${e.msg}`).join(" ; ")
-        : errorDetail;
-      throw new PrismeAPIError(`Erreur API: ${message}`, response.status, errorDetail);
+      throw new PrismeAPIError(`Erreur API: ${formaterDetailErreur(errorDetail)}`, response.status, errorDetail);
     }
 
     // 204 No Content (ex. DELETE) : pas de corps à parser.
@@ -327,17 +339,14 @@ async function* lireFluxSSE(url: string, options?: RequestInit): AsyncGenerator<
   });
 
   if (!response.ok || !response.body) {
-    let detail: string | Types.ErreurValidationChamp[] = response.statusText;
+    let detail: string | Types.ErreurValidationChamp[] | Types.ErreurDetailCodee = response.statusText;
     try {
       const erreur: Types.ErreurAPI = await response.json();
       detail = erreur.detail;
     } catch {
       // garder response.statusText
     }
-    const message = Array.isArray(detail)
-      ? detail.map((e) => `${e.loc.join(".")} : ${e.msg}`).join(" ; ")
-      : detail;
-    throw new PrismeAPIError(`Erreur API: ${message}`, response.status, detail);
+    throw new PrismeAPIError(`Erreur API: ${formaterDetailErreur(detail)}`, response.status, detail);
   }
 
   const lecteur = response.body.getReader();
