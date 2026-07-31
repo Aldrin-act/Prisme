@@ -147,22 +147,6 @@ class EtatPostgres:
                     table=self._table("executions")
                 )
             )
-            # Migration idempotente : une exécution appartient désormais
-            # directement à son instance — plus de propriétaire intermédiaire
-            # (Projet) susceptible de l'orpheliner. Nettoie d'abord les
-            # lignes déjà orphelines de l'ancien comportement (instance
-            # supprimée, `instance_id` mis à NULL) avant d'imposer NOT NULL —
-            # sous le nouveau modèle, `supprimer_instance` cascade-supprime
-            # ses exécutions plutôt que de les orpheliner, cette situation ne
-            # peut plus se reproduire.
-            connexion.execute(
-                sql.SQL("DELETE FROM {} WHERE instance_id IS NULL").format(self._table("executions"))
-            )
-            connexion.execute(
-                sql.SQL("ALTER TABLE {table} ALTER COLUMN instance_id SET NOT NULL").format(
-                    table=self._table("executions")
-                )
-            )
             connexion.execute(
                 sql.SQL(
                     "CREATE TABLE IF NOT EXISTS {table} ("
@@ -190,6 +174,48 @@ class EtatPostgres:
                     "horodatage TEXT NOT NULL, "
                     "commentaire TEXT)"
                 ).format(table=self._table("decisions_humaines"), executions=self._table("executions"))
+            )
+            # Migration idempotente : une exécution appartient désormais
+            # directement à son instance — plus de propriétaire intermédiaire
+            # (Projet) susceptible de l'orpheliner. Nettoie d'abord les
+            # lignes déjà orphelines de l'ancien comportement (instance
+            # supprimée, `instance_id` mis à NULL) avant d'imposer NOT NULL —
+            # sous le nouveau modèle, `supprimer_instance` cascade-supprime
+            # ses exécutions plutôt que de les orpheliner, cette situation ne
+            # peut plus se reproduire. Doit tourner après la création de
+            # `plannings`/`operations_planifiees`/`decisions_humaines`
+            # (ci-dessus) : leurs FK vers `executions` interdisent de
+            # supprimer une exécution encore référencée, même orpheline.
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {ops} WHERE planning_id IN ("
+                    "SELECT pl.id FROM {plannings} pl JOIN {execs} e ON e.id = pl.execution_id "
+                    "WHERE e.instance_id IS NULL)"
+                ).format(
+                    ops=self._table("operations_planifiees"),
+                    plannings=self._table("plannings"),
+                    execs=self._table("executions"),
+                )
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {decisions} WHERE execution_id IN "
+                    "(SELECT id FROM {execs} WHERE instance_id IS NULL)"
+                ).format(decisions=self._table("decisions_humaines"), execs=self._table("executions"))
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {plannings} WHERE execution_id IN "
+                    "(SELECT id FROM {execs} WHERE instance_id IS NULL)"
+                ).format(plannings=self._table("plannings"), execs=self._table("executions"))
+            )
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE instance_id IS NULL").format(self._table("executions"))
+            )
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ALTER COLUMN instance_id SET NOT NULL").format(
+                    table=self._table("executions")
+                )
             )
             # Historique durable du pipeline multi-agents (§6.6) — distinct du
             # job en mémoire process de `api/routes/generation.py` (source du
