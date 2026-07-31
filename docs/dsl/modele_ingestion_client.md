@@ -41,15 +41,15 @@ Quatre types possibles, chacun avec son propre champ `type` :
 ```
 
 **Compatibilité ressource-tâche** — la tâche `tache` peut s'exécuter sur la ressource `ressource`,
-en `duree` minutes (propre à ce couple tâche-ressource : deux ressources compatibles pour la même
+en `duree` jours (propre à ce couple tâche-ressource : deux ressources compatibles pour la même
 tâche peuvent avoir des durées différentes) :
 ```json
 {"type": "compatibilite_ressource_tache", "tache": "<id-tache>", "ressource": "<id-ressource>", "duree": <entier > 0>}
 ```
 
 **Échéance** (optionnel) — la tâche `tache` doit finir au plus tard à l'instant `echeance`, en
-minutes — même référentiel que `duree` ci-dessus, pas une date calendaire (convertir une vraie date
-en minutes reste à faire en amont, avant l'ingestion) :
+jours — même référentiel que `duree` ci-dessus, pas une date calendaire (convertir une vraie date
+en jours reste à faire en amont, avant l'ingestion) :
 ```json
 {"type": "echeance", "tache": "<id-tache>", "echeance": <entier >= 0>}
 ```

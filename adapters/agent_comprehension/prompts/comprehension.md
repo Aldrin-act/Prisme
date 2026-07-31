@@ -87,8 +87,11 @@ ci-dessus. Règles impératives :
   `avertissements`), jamais comme une compatibilité universelle. Fabriquer
   une compatibilité avec l'ensemble des ressources est au moins aussi
   grave que d'en inventer une seule.
-- Les durées (`CompatibiliteRessourceTache.duree`) sont toujours en minutes —
-  convertis si la donnée source est dans une autre unité (heures, jours...).
+- Les durées (`CompatibiliteRessourceTache.duree`) sont toujours en jours —
+  convertis si la donnée source est dans une autre unité (minutes, heures...).
+  Arrondis à l'entier le plus proche (jamais 0 pour une tâche dont la durée
+  source est non nulle, arrondis alors à 1) et signale l'arrondi dans
+  `avertissements`.
 - N'ajoute aucun champ hors de ceux décrits ci-dessus (schéma strict).
 - Pour toute autre information nécessaire absente ou ambiguë (hors
   compatibilité, couverte ci-dessus), fais ton meilleur effort mais note-le
@@ -126,8 +129,8 @@ texte, pas de bloc markdown autour) :
     "ressources": [{{"id": "...", "nom": "...", "competences": ["..."]}}],
     "contraintes": [
       {{"type": "precedence", "avant": "...", "apres": "..."}},
-      {{"type": "compatibilite_ressource_tache", "tache": "...", "ressource": "...", "duree": 30}},
-      {{"type": "echeance", "tache": "...", "echeance": 480}},
+      {{"type": "compatibilite_ressource_tache", "tache": "...", "ressource": "...", "duree": 2}},
+      {{"type": "echeance", "tache": "...", "echeance": 5}},
       {{"type": "competence_requise", "tache": "...", "competence": "..."}}
     ],
     "objectifs": [{{"type": "minimiser_makespan"}}]
@@ -135,7 +138,7 @@ texte, pas de bloc markdown autour) :
   "avertissements": ["ce qui a été ignoré, incertain, ou à vérifier — tableau vide si rien à signaler"],
   "justifications": [
     {{"contrainte": "precedence: T1 → T2", "raison": "champ \"operation_precedente\": \"T1\" sur l'opération T2"}},
-    {{"contrainte": "echeance: T2 (480 min)", "raison": "champ \"date_limite_minutes\": 480 sur l'opération T2"}}
+    {{"contrainte": "echeance: T2 (5 jours)", "raison": "champ \"date_limite_minutes\": 7200 sur l'opération T2, converti en jours"}}
   ]
 }}
 ```
