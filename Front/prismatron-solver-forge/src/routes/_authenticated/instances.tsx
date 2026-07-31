@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQueryClient, useQueries } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertCircle,
   Code2,
@@ -51,17 +51,15 @@ import {
 } from "@/components/ingestion/ingestion-dialog";
 import {
   prismeKeys,
-  prismeClient,
   useInstances,
   useInstance,
-  useProjets,
+  useLabelsInstances,
   useSupprimerInstance,
   useModifierObjectifs,
   useSolveurs,
   useCodeSourceSolveur,
   useJobsGeneration,
   PrismeAPIError,
-  type ProjetDetail,
   type Contrainte,
   type Objectif,
 } from "@/integrations/prisme";
@@ -76,7 +74,6 @@ function InstancesPage() {
   const [aSupprimer, setASupprimer] = useState<string | null>(null);
   const [aVoir, setAVoir] = useState<string | null>(null);
   const { data: instances, isLoading } = useInstances();
-  const { data: projets } = useProjets();
   const { data: jobsGeneration } = useJobsGeneration();
   const queryClient = useQueryClient();
   const supprimer = useSupprimerInstance();
@@ -85,32 +82,9 @@ function InstancesPage() {
     (jobsGeneration ?? []).filter((j) => !j.termine).map((j) => j.instance_id),
   );
 
-  // /supervision/instances ne relie pas les instances à leur projet — seul
-  // GET /projets/{id} donne ce lien (`instances: [{instance_id, ...}]`).
-  // On charge donc le détail de chaque projet pour reconstruire, côté
-  // client, l'association instance → (nom du projet, rang de génération).
-  const detailsProjets = useQueries({
-    queries: (projets ?? []).map((projet) => ({
-      queryKey: prismeKeys.projet(projet.projet_id),
-      queryFn: () => prismeClient.obtenirProjet(projet.projet_id),
-    })),
-  });
-
-  const infoParInstance = new Map<string, { nomProjet: string; label: string; projetId: string }>();
-  detailsProjets.forEach((requete) => {
-    const detail = requete.data as ProjetDetail | undefined;
-    if (!detail) return;
-    const nom = detail.nom ?? "Sans nom";
-    // Le backend renvoie les instances du plus récent au plus ancien —
-    // on inverse pour numéroter dans l'ordre de génération (1, 2, 3...).
-    [...detail.instances].reverse().forEach((instance, index) => {
-      infoParInstance.set(instance.instance_id, {
-        nomProjet: nom,
-        label: `${nom}-${index + 1}`,
-        projetId: detail.projet_id,
-      });
-    });
-  });
+  // /supervision/instances ne relie pas les instances à leur source — le
+  // label (nom de la source + rang de génération) vient de useLabelsInstances.
+  const labels = useLabelsInstances();
 
   const boutonNouvelleInstance = (
     <Button
@@ -132,7 +106,7 @@ function InstancesPage() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
         queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
-        queryClient.invalidateQueries({ queryKey: prismeKeys.projets() });
+        queryClient.invalidateQueries({ queryKey: prismeKeys.sources() });
         setASupprimer(null);
       },
     });
@@ -163,7 +137,7 @@ function InstancesPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Instance</TableHead>
-                <TableHead>Projet</TableHead>
+                <TableHead>Source</TableHead>
                 <TableHead>Client</TableHead>
                 <TableHead>Structure des contraintes</TableHead>
                 <TableHead>Statut</TableHead>
@@ -172,20 +146,20 @@ function InstancesPage() {
             </TableHeader>
             <TableBody>
               {instances.map((instance) => {
-                const info = infoParInstance.get(instance.instance_id);
+                const info = labels.get(instance.instance_id);
                 return (
                   <TableRow key={instance.instance_id}>
                     <TableCell className="font-mono text-xs" title={instance.instance_id}>
                       {info ? info.label : instance.instance_id}
                     </TableCell>
                     <TableCell>
-                      {info ? (
+                      {info?.sourceId ? (
                         <Link
                           to="/donnees"
-                          search={{ projet: info.projetId }}
+                          search={{ source: info.sourceId }}
                           className="text-primary underline-offset-2 hover:underline"
                         >
-                          {info.nomProjet}
+                          {info.nomSource}
                         </Link>
                       ) : (
                         <span className="text-muted-foreground">—</span>
@@ -244,11 +218,10 @@ function InstancesPage() {
             <AlertDialogTitle>Supprimer cette instance ?</AlertDialogTitle>
             <AlertDialogDescription>
               Cette action supprime définitivement l'instance{" "}
-              <span className="font-mono text-xs">{aSupprimer}</span>. Refusée si un projet la
-              réutilise encore comme instance courante — détachez-la d'abord depuis la page Données.
-              Les exécutions passées qui l'ont utilisée survivent (rattachées à leur projet), seule
-              leur référence à cette instance est coupée ; les solveurs enregistrés ne sont pas
-              affectés. Cette action est irréversible.
+              <span className="font-mono text-xs">{aSupprimer}</span>, ainsi que toutes les exécutions
+              et plannings associés. Les solveurs enregistrés ne sont pas affectés — seule la source de
+              données qui a éventuellement généré cette instance perd son lien de provenance vers elle.
+              Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
 

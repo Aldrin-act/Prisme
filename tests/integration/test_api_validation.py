@@ -29,14 +29,8 @@ def _executer_une_instance(client: TestClient) -> str:
     reponse_ingestion = client.post("/ingestion/client_test", json=instance.model_dump(mode="json"))
     instance_id = reponse_ingestion.json()["instance_id"]
 
-    # L'exécution se déclenche par projet (§annexe modèle Instance/Projet) —
-    # un projet réutilise l'instance ingérée comme instance courante.
-    projet_id = client.post("/projets", json={"donnees_brutes": "", "client_id": "client_test"}).json()[
-        "projet_id"
-    ]
-    client.post(f"/projets/{projet_id}/instance", json={"instance_id": instance_id})
-
-    reponse = client.post(f"/execution/{projet_id}", params={"client_id": "client_test"})
+    # L'exécution se déclenche directement par instance_id, sans intermédiaire.
+    reponse = client.post(f"/execution/{instance_id}")
     assert reponse.status_code == 200, reponse.json()
     return reponse.json()["execution_id"]
 

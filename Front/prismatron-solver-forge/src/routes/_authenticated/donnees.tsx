@@ -11,7 +11,6 @@ import {
   Download,
   FolderOpen,
   Lightbulb,
-  Link2,
   Loader2,
   Plus,
   Trash2,
@@ -25,13 +24,6 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -44,21 +36,18 @@ import {
 import { PageHeader, EmptyState } from "@/components/app-page";
 import {
   prismeKeys,
-  useCreerProjet,
-  useGenererInstanceDepuisProjet,
-  useProjet,
-  useProjets,
-  useInstances,
-  useSupprimerProjet,
-  useAssocierInstanceAuProjet,
+  useCreerSource,
+  useGenererInstanceDepuisSource,
+  useSource,
+  useSources,
+  useSupprimerSource,
   PrismeAPIError,
   type Justification,
-  type ProjetDetail,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
 
 const searchSchema = z.object({
-  projet: z.string().optional(),
+  source: z.string().optional(),
 });
 
 export const Route = createFileRoute("/_authenticated/donnees")({
@@ -68,14 +57,14 @@ export const Route = createFileRoute("/_authenticated/donnees")({
 });
 
 function DonneesPage() {
-  const { projet } = Route.useSearch();
+  const { source } = Route.useSearch();
   const [tab, setTab] = useState<"actif" | "historique">("actif");
-  // Pré-rempli depuis l'URL (?projet=<id>) — permet un lien direct depuis la
-  // page Instances vers le détail du projet qui a généré une instance donnée.
-  const [projetActifId, setProjetActifId] = useState<string | null>(projet ?? null);
+  // Pré-rempli depuis l'URL (?source=<id>) — permet un lien direct depuis la
+  // page Instances vers le détail de la source qui a généré une instance donnée.
+  const [sourceActiveId, setSourceActiveId] = useState<string | null>(source ?? null);
 
-  function ouvrirProjet(projetId: string) {
-    setProjetActifId(projetId);
+  function ouvrirSource(sourceId: string) {
+    setSourceActiveId(sourceId);
     setTab("actif");
   }
 
@@ -88,20 +77,20 @@ function DonneesPage() {
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
         <TabsList>
-          <TabsTrigger value="actif">Projet en cours</TabsTrigger>
+          <TabsTrigger value="actif">Source en cours</TabsTrigger>
           <TabsTrigger value="historique">Historique</TabsTrigger>
         </TabsList>
 
         <TabsContent value="actif" className="max-w-3xl">
-          {projetActifId ? (
-            <ProjetActifPanel projetId={projetActifId} onNouveau={() => setProjetActifId(null)} />
+          {sourceActiveId ? (
+            <SourceActivePanel sourceId={sourceActiveId} onNouveau={() => setSourceActiveId(null)} />
           ) : (
-            <FormulaireNouveauProjet onCree={setProjetActifId} />
+            <FormulaireNouvelleSource onCree={setSourceActiveId} />
           )}
         </TabsContent>
 
         <TabsContent value="historique">
-          <ListeProjets onOuvrir={ouvrirProjet} />
+          <ListeSources onOuvrir={ouvrirSource} />
         </TabsContent>
       </Tabs>
     </>
@@ -145,8 +134,8 @@ function feuillesExcelEnTexte(feuilles: Awaited<ReturnType<typeof readXlsxFile>>
     .join("\n\n");
 }
 
-function FormulaireNouveauProjet({ onCree }: { onCree: (projetId: string) => void }) {
-  const creer = useCreerProjet();
+function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => void }) {
+  const creer = useCreerSource();
   const inputFichierRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
@@ -198,7 +187,7 @@ function FormulaireNouveauProjet({ onCree }: { onCree: (projetId: string) => voi
   function enregistrer() {
     creer.mutate(
       { donneesBrutes, nom: nom.trim() || undefined, clientId: estAdmin ? clientId : undefined },
-      { onSuccess: (data) => onCree(data.projet_id) },
+      { onSuccess: (data) => onCree(data.source_id) },
     );
   }
 
@@ -218,9 +207,9 @@ function FormulaireNouveauProjet({ onCree }: { onCree: (projetId: string) => voi
           )}
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="nom_projet">Nom du projet (optionnel)</Label>
+          <Label htmlFor="nom_source">Nom de la source (optionnel)</Label>
           <Input
-            id="nom_projet"
+            id="nom_source"
             value={nom}
             onChange={(e) => setNom(e.target.value)}
             placeholder="ex : Export ERP atelier mécanique"
@@ -303,17 +292,17 @@ function FormulaireNouveauProjet({ onCree }: { onCree: (projetId: string) => voi
           className="bg-gradient-to-r from-primary to-accent"
         >
           <Plus className="mr-2 h-4 w-4" />
-          {creer.isPending ? "Enregistrement..." : "Enregistrer le projet"}
+          {creer.isPending ? "Enregistrement..." : "Enregistrer la source"}
         </Button>
       </div>
     </div>
   );
 }
 
-function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau: () => void }) {
+function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouveau: () => void }) {
   const queryClient = useQueryClient();
-  const { data: projet, isLoading } = useProjet(projetId);
-  const generer = useGenererInstanceDepuisProjet();
+  const { data: source, isLoading } = useSource(sourceId);
+  const generer = useGenererInstanceDepuisSource();
   const [dernier, setDernier] = useState<{
     instance_id: string;
     avertissements: string[];
@@ -324,22 +313,22 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
 
   function genererInstance() {
     setDernier(null);
-    generer.mutate(projetId, {
+    generer.mutate(sourceId, {
       onSuccess: (data) => {
         setDernier({
           instance_id: data.instance_id,
           avertissements: data.avertissements,
           justifications: data.justifications,
         });
-        queryClient.invalidateQueries({ queryKey: prismeKeys.projet(projetId) });
-        queryClient.invalidateQueries({ queryKey: prismeKeys.projets() });
+        queryClient.invalidateQueries({ queryKey: prismeKeys.source(sourceId) });
+        queryClient.invalidateQueries({ queryKey: prismeKeys.sources() });
         queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
       },
     });
   }
 
-  if (isLoading || !projet) {
-    return <div className="glass rounded-2xl p-6 text-sm text-muted-foreground">Chargement du projet...</div>;
+  if (isLoading || !source) {
+    return <div className="glass rounded-2xl p-6 text-sm text-muted-foreground">Chargement de la source...</div>;
   }
 
   return (
@@ -347,24 +336,24 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
       <div className="glass space-y-4 rounded-2xl p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Projet</div>
-            <h3 className="text-lg font-semibold">{projet.nom || "Sans nom"}</h3>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Source</div>
+            <h3 className="text-lg font-semibold">{source.nom || "Sans nom"}</h3>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <span>{projet.client_id}</span>
+              <span>{source.client_id}</span>
               <span>·</span>
-              <span>{new Date(projet.date_creation).toLocaleString()}</span>
+              <span>{new Date(source.date_creation).toLocaleString()}</span>
               <span>·</span>
-              <Badge variant="outline" className="font-mono">{projet.projet_id}</Badge>
+              <Badge variant="outline" className="font-mono">{source.source_id}</Badge>
             </div>
           </div>
           <Button variant="outline" onClick={onNouveau}>
-            <Plus className="mr-2 h-4 w-4" /> Nouveau projet
+            <Plus className="mr-2 h-4 w-4" /> Nouvelle source
           </Button>
         </div>
 
         <details className="rounded-lg border border-border/50 p-3 text-xs">
           <summary className="cursor-pointer font-medium text-muted-foreground">Voir les données brutes</summary>
-          <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap font-mono">{projet.donnees_brutes}</pre>
+          <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap font-mono">{source.donnees_brutes}</pre>
         </details>
 
         {erreur && (
@@ -412,7 +401,8 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
         <div className="flex items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
             Rejouable à volonté sur ces mêmes données brutes — chaque conversion ajoute une instance à
-            l'historique ci-dessous, aucune n'est remplacée.
+            l'historique ci-dessous, aucune n'est remplacée. Chaque instance générée s'exécute directement
+            depuis la page Solveurs générés, sans étape supplémentaire ici.
           </p>
           <Button onClick={genererInstance} disabled={generer.isPending} className="shrink-0">
             <ArrowRightLeft className="mr-2 h-4 w-4" />
@@ -422,15 +412,13 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
         {generer.isPending && <IndicateurGeneration />}
       </div>
 
-      <InstanceCourantePanel projet={projet} />
-
       <div className="glass rounded-2xl p-6">
-        <h4 className="mb-3 text-sm font-semibold">Instances générées ({projet.instances.length})</h4>
-        {projet.instances.length === 0 ? (
+        <h4 className="mb-3 text-sm font-semibold">Instances générées ({source.instances.length})</h4>
+        {source.instances.length === 0 ? (
           <p className="text-sm text-muted-foreground">Aucune instance générée pour l'instant.</p>
         ) : (
           <div className="space-y-2">
-            {projet.instances.map((i) => (
+            {source.instances.map((i) => (
               <div
                 key={i.instance_id}
                 className="flex flex-wrap items-center gap-2 rounded-lg border border-border/50 p-2 text-sm"
@@ -443,87 +431,6 @@ function ProjetActifPanel({ projetId, onNouveau }: { projetId: string; onNouveau
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-// Instance courante du projet (§annexe modèle Instance/Projet) : celle sur
-// laquelle une exécution se déclenche (POST /execution/{projet_id}) —
-// distincte de `projet.instances` ci-dessus, qui reste l'historique de
-// provenance (génération). Une instance déjà ingérée pour n'importe quel
-// projet du même client peut être réutilisée ici, sans redevoir la générer.
-function InstanceCourantePanel({ projet }: { projet: ProjetDetail }) {
-  const queryClient = useQueryClient();
-  const { data: instances } = useInstances();
-  const associer = useAssocierInstanceAuProjet();
-  const [choix, setChoix] = useState("");
-
-  const erreur = associer.error as PrismeAPIError | null;
-  const instancesDuClient = (instances ?? []).filter((i) => i.client_id === projet.client_id);
-
-  function associerInstance(instanceId: string) {
-    setChoix(instanceId);
-    associer.mutate(
-      { projetId: projet.projet_id, instanceId },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: prismeKeys.projet(projet.projet_id) });
-          queryClient.invalidateQueries({ queryKey: prismeKeys.projets() });
-          setChoix("");
-        },
-      },
-    );
-  }
-
-  return (
-    <div className="glass space-y-3 rounded-2xl p-6">
-      <h4 className="text-sm font-semibold">Instance courante</h4>
-      <p className="text-xs text-muted-foreground">
-        L'instance sur laquelle ce projet exécute ses solveurs — son propre planning attitré,
-        indépendant des autres projets qui réutiliseraient la même instance.
-      </p>
-
-      {projet.instance_id ? (
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="secondary" className="font-mono text-xs">
-            {projet.instance_id}
-          </Badge>
-          {projet.structure_contraintes && (
-            <Badge variant="outline" className="font-mono text-xs">
-              {projet.structure_contraintes}
-            </Badge>
-          )}
-        </div>
-      ) : (
-        <p className="text-sm text-muted-foreground">Aucune instance associée pour l'instant.</p>
-      )}
-
-      {erreur && (
-        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-          <div className="flex items-center gap-2 font-medium">
-            <AlertCircle className="h-4 w-4" /> Échec de l'association
-          </div>
-          <p className="mt-1">{erreur.message}</p>
-        </div>
-      )}
-
-      {instancesDuClient.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
-          <Select value={choix} onValueChange={associerInstance} disabled={associer.isPending}>
-            <SelectTrigger className="w-full sm:w-64">
-              <SelectValue placeholder="Utiliser une instance existante..." />
-            </SelectTrigger>
-            <SelectContent>
-              {instancesDuClient.map((i) => (
-                <SelectItem key={i.instance_id} value={i.instance_id}>
-                  {i.instance_id} · {i.structure_contraintes}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Link2 className="h-4 w-4 text-muted-foreground" />
-        </div>
-      )}
     </div>
   );
 }
@@ -573,35 +480,35 @@ function IndicateurGeneration() {
   );
 }
 
-function ListeProjets({ onOuvrir }: { onOuvrir: (projetId: string) => void }) {
-  const { data: projets, isLoading } = useProjets();
+function ListeSources({ onOuvrir }: { onOuvrir: (sourceId: string) => void }) {
+  const { data: sources, isLoading } = useSources();
   const queryClient = useQueryClient();
-  const supprimer = useSupprimerProjet();
+  const supprimer = useSupprimerSource();
   const [aSupprimer, setASupprimer] = useState<string | null>(null);
 
   const erreurSuppression = supprimer.error as PrismeAPIError | null;
 
-  function ouvrirConfirmation(projetId: string) {
+  function ouvrirConfirmation(sourceId: string) {
     supprimer.reset();
-    setASupprimer(projetId);
+    setASupprimer(sourceId);
   }
 
   function confirmerSuppression() {
     if (!aSupprimer) return;
     supprimer.mutate(aSupprimer, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: prismeKeys.projets() });
+        queryClient.invalidateQueries({ queryKey: prismeKeys.sources() });
         setASupprimer(null);
       },
     });
   }
 
-  if (!isLoading && projets && projets.length === 0) {
+  if (!isLoading && sources && sources.length === 0) {
     return (
       <EmptyState
         icon={FolderOpen}
-        title="Aucun projet enregistré"
-        desc="Enregistrez vos premières données brutes dans l'onglet « Projet en cours » pour les retrouver ici."
+        title="Aucune source enregistrée"
+        desc="Enregistrez vos premières données brutes dans l'onglet « Source en cours » pour les retrouver ici."
       />
     );
   }
@@ -612,37 +519,37 @@ function ListeProjets({ onOuvrir }: { onOuvrir: (projetId: string) => void }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Projet</TableHead>
+              <TableHead>Source</TableHead>
               <TableHead>Client</TableHead>
-              <TableHead>Créé le</TableHead>
+              <TableHead>Créée le</TableHead>
               <TableHead>Instances générées</TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {projets?.map((p) => (
-              <TableRow key={p.projet_id}>
+            {sources?.map((s) => (
+              <TableRow key={s.source_id}>
                 <TableCell>
-                  <div className="font-medium">{p.nom || "Sans nom"}</div>
-                  <div className="font-mono text-xs text-muted-foreground">{p.projet_id}</div>
+                  <div className="font-medium">{s.nom || "Sans nom"}</div>
+                  <div className="font-mono text-xs text-muted-foreground">{s.source_id}</div>
                 </TableCell>
-                <TableCell>{p.client_id}</TableCell>
+                <TableCell>{s.client_id}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">
-                  {new Date(p.date_creation).toLocaleString()}
+                  {new Date(s.date_creation).toLocaleString()}
                 </TableCell>
                 <TableCell>
-                  <Badge variant={p.nb_instances > 0 ? "secondary" : "outline"}>{p.nb_instances}</Badge>
+                  <Badge variant={s.nb_instances > 0 ? "secondary" : "outline"}>{s.nb_instances}</Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-end gap-2">
-                    <Button size="sm" variant="outline" onClick={() => onOuvrir(p.projet_id)}>
+                    <Button size="sm" variant="outline" onClick={() => onOuvrir(s.source_id)}>
                       <FolderOpen className="mr-2 h-3.5 w-3.5" /> Ouvrir
                     </Button>
                     <Button
                       size="icon"
                       variant="ghost"
-                      aria-label="Supprimer le projet"
-                      onClick={() => ouvrirConfirmation(p.projet_id)}
+                      aria-label="Supprimer la source"
+                      onClick={() => ouvrirConfirmation(s.source_id)}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
@@ -657,11 +564,10 @@ function ListeProjets({ onOuvrir }: { onOuvrir: (projetId: string) => void }) {
       <AlertDialog open={!!aSupprimer} onOpenChange={(open) => !open && setASupprimer(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer ce projet ?</AlertDialogTitle>
+            <AlertDialogTitle>Supprimer cette source ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action supprime définitivement les données brutes du projet ainsi que son propre
-              historique d'exécution (plannings, décisions humaines). Les instances déjà générées à partir
-              de lui restent intactes et réutilisables par d'autres projets — seul le lien de provenance
+              Cette action supprime définitivement les données brutes de cette source. Les instances déjà
+              générées à partir d'elle restent intactes et exécutables — seul le lien de provenance
               disparaît. Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>

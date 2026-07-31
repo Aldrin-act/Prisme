@@ -32,7 +32,7 @@ export const PRISME_CONFIG = {
     supervision: '/supervision',
     validation: '/validation',
     adapters: '/adapters',
-    projets: '/projets',
+    sources: '/sources',
     clients: '/clients',
     generation: '/generation',
   },

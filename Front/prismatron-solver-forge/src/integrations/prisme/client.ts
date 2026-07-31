@@ -144,14 +144,11 @@ export const prismeClient = {
       body: JSON.stringify({ objectifs }),
     }),
 
-  // EXÉCUTION — déclenchée par projet, pas par instance (§annexe modèle
-  // Instance/Projet) : chaque projet a son planning attitré, l'instance
-  // n'est qu'un gabarit réutilisable désigné par `Projet.instance_id`.
-  declencherExecution: (projetId: string, clientId: string) =>
-    apiFetch<Types.ReponseExecution>(
-      `${PRISME_CONFIG.routes.execution}/${projetId}?client_id=${clientId}`,
-      { method: "POST" },
-    ),
+  // EXÉCUTION — déclenchée directement par instance_id, sans intermédiaire.
+  declencherExecution: (instanceId: string) =>
+    apiFetch<Types.ReponseExecution>(`${PRISME_CONFIG.routes.execution}/${instanceId}`, {
+      method: "POST",
+    }),
 
   // PLANNING
   obtenirPlanning: (executionId: string) =>
@@ -250,12 +247,12 @@ export const prismeClient = {
       PRISME_CONFIG.timeoutComprehension,
     ),
 
-  // PROJETS — données brutes persistées, reconvertibles à volonté. Le
-  // client_id est dérivé du compte authentifié côté serveur ; `clientId`
-  // n'est envoyé (et n'a d'effet) que pour un compte admin ciblant un
-  // autre client (voir `api/routes/projets.py`).
-  creerProjet: (donneesBrutes: string, nom?: string, clientId?: string) =>
-    apiFetch<Types.ReponseCreationProjet>(PRISME_CONFIG.routes.projets, {
+  // SOURCES DE DONNÉES — données brutes persistées, reconvertibles à
+  // volonté. Le client_id est dérivé du compte authentifié côté serveur ;
+  // `clientId` n'est envoyé (et n'a d'effet) que pour un compte admin
+  // ciblant un autre client (voir `api/routes/sources.py`).
+  creerSource: (donneesBrutes: string, nom?: string, clientId?: string) =>
+    apiFetch<Types.ReponseCreationSource>(PRISME_CONFIG.routes.sources, {
       method: "POST",
       body: JSON.stringify({
         donnees_brutes: donneesBrutes,
@@ -264,38 +261,22 @@ export const prismeClient = {
       }),
     }),
 
-  // `instanceId` filtre sur les projets ayant cette instance comme instance
-  // courante (voir `api/routes/projets.py`, `EtatAPI.lister_projets`).
-  listerProjets: (instanceId?: string) =>
-    apiFetch<Types.Projet[]>(
-      instanceId
-        ? `${PRISME_CONFIG.routes.projets}?instance_id=${encodeURIComponent(instanceId)}`
-        : PRISME_CONFIG.routes.projets,
-    ),
+  listerSources: () => apiFetch<Types.SourceDonnees[]>(PRISME_CONFIG.routes.sources),
 
-  obtenirProjet: (projetId: string) =>
-    apiFetch<Types.ProjetDetail>(`${PRISME_CONFIG.routes.projets}/${projetId}`),
+  obtenirSource: (sourceId: string) =>
+    apiFetch<Types.SourceDetail>(`${PRISME_CONFIG.routes.sources}/${sourceId}`),
 
-  // Supprime les données brutes du projet — n'affecte jamais les instances
-  // déjà générées à partir de lui.
-  supprimerProjet: (projetId: string) =>
-    apiFetch<void>(`${PRISME_CONFIG.routes.projets}/${projetId}`, { method: "DELETE" }),
-
-  // Fait d'une instance existante (gabarit métier réutilisable) l'instance
-  // courante du projet — reste-t-il compatible seulement si même client_id
-  // (§7, POST /projets/{id}/instance).
-  associerInstanceAuProjet: (projetId: string, instanceId: string) =>
-    apiFetch<Types.ReponseAssociationInstance>(`${PRISME_CONFIG.routes.projets}/${projetId}/instance`, {
-      method: "POST",
-      body: JSON.stringify({ instance_id: instanceId }),
-    }),
+  // Supprime les données brutes de la source — n'affecte jamais les instances
+  // déjà générées à partir d'elle.
+  supprimerSource: (sourceId: string) =>
+    apiFetch<void>(`${PRISME_CONFIG.routes.sources}/${sourceId}`, { method: "DELETE" }),
 
   // Pas de timeout (null) : demande explicite — une conversion sur un gros
   // volume de données brutes peut prendre plusieurs minutes, on laisse
   // l'utilisateur attendre plutôt que d'abandonner arbitrairement.
-  genererInstanceDepuisProjet: (projetId: string) =>
+  genererInstanceDepuisSource: (sourceId: string) =>
     apiFetch<Types.ReponseComprehension>(
-      `${PRISME_CONFIG.routes.projets}/${projetId}/generer-instance`,
+      `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance`,
       { method: "POST" },
       null,
     ),
@@ -303,7 +284,7 @@ export const prismeClient = {
   // GÉNÉRATION DE SOLVEUR — génération LLM + exécution sandboxée + cascade
   // de validation complète + enregistrement si vert (POST /generation/{instance_id}).
   // Pas de timeout (null) : peut prendre plusieurs dizaines de secondes,
-  // même logique que genererInstanceDepuisProjet ci-dessus.
+  // même logique que genererInstanceDepuisSource ci-dessus.
   genererSolveur: (instanceId: string) =>
     apiFetch<Types.ReponseGenerationSolveur>(
       `${PRISME_CONFIG.routes.generation}/${instanceId}`,

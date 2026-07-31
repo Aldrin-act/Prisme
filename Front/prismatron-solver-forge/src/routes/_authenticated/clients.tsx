@@ -49,7 +49,7 @@ function ClientsPage() {
     <>
       <PageHeader
         title="Clients"
-        desc="Chaque client (tenant) cloisonne les données : projets, instances, solveurs générés. Un utilisateur appartient à un client et ne voit que les données de celui-ci, sauf rôle admin."
+        desc="Chaque client (tenant) cloisonne les données : sources, instances, solveurs générés. Un utilisateur appartient à un client et ne voit que les données de celui-ci, sauf rôle admin."
         action={boutonNouveauClient}
       />
 

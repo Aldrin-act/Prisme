@@ -176,7 +176,7 @@ function AnalyticsPage() {
                   ) : (
                     <XCircle className="h-4 w-4 shrink-0 text-destructive" />
                   )}
-                  <span>{labelParInstance.get(job.instance_id) ?? job.instance_id}</span>
+                  <span>{labelParInstance.get(job.instance_id)?.label ?? job.instance_id}</span>
                   <Badge variant="outline" className="text-xs">
                     {job.client_id}
                   </Badge>

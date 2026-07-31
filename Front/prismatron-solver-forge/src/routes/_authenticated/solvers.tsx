@@ -30,7 +30,8 @@ import { PageHeader, EmptyState } from "@/components/app-page";
 import { GanttChart } from "@/components/planning/gantt-chart";
 import {
   useSolveurs,
-  useProjets,
+  useInstances,
+  useLabelsInstances,
   useCodeSourceSolveur,
   useDeclencherExecution,
   usePlanning,
@@ -119,8 +120,9 @@ function DialogSolveur({
   solveur: SolveurInfo | null;
   onOpenChange: (open: boolean) => void;
 }) {
-  const { data: projets } = useProjets();
-  const [projetId, setProjetId] = useState("");
+  const { data: instances } = useInstances();
+  const labels = useLabelsInstances();
+  const [instanceId, setInstanceId] = useState("");
   const [executionId, setExecutionId] = useState<string | null>(null);
   const declencher = useDeclencherExecution();
   const {
@@ -130,45 +132,40 @@ function DialogSolveur({
   } = usePlanning(executionId);
   const { data: codeSource, isLoading: chargementCode } = useCodeSourceSolveur(solveur?.id ?? null);
 
-  // L'exécution se déclenche par projet, pas par instance (§annexe modèle
-  // Instance/Projet) : on choisit un projet dont l'instance courante
-  // correspond au client + à la structure de contraintes du solveur — les
-  // deux champs réels disponibles sur `Projet`, approximatif sans les
-  // objectifs comme ailleurs dans l'app ; /execution refait le matching
-  // exact côté serveur et renvoie une erreur 409 claire en cas de décalage.
-  const projetsCompatibles = (projets ?? []).filter(
-    (p) =>
+  // On choisit une instance dont le client + la structure de contraintes
+  // correspondent au solveur — approximatif sans les objectifs comme
+  // ailleurs dans l'app ; /execution refait le matching exact côté serveur
+  // et renvoie une erreur 409 claire en cas de décalage.
+  const instancesCompatibles = (instances ?? []).filter(
+    (i) =>
       solveur &&
-      p.client_id === solveur.client_id &&
-      p.structure_contraintes === solveur.structure_contraintes,
+      i.client_id === solveur.client_id &&
+      i.structure_contraintes === solveur.structure_contraintes,
   );
 
   function fermer(open: boolean) {
     if (!open) {
-      setProjetId("");
+      setInstanceId("");
       setExecutionId(null);
       declencher.reset();
     }
     onOpenChange(open);
   }
 
-  function changerProjet(id: string) {
-    setProjetId(id);
+  function changerInstance(id: string) {
+    setInstanceId(id);
     setExecutionId(null);
     declencher.reset();
   }
 
   function executer() {
-    if (!projetId || !solveur) return;
+    if (!instanceId) return;
     setExecutionId(null);
-    declencher.mutate(
-      { projetId, clientId: solveur.client_id },
-      {
-        onSuccess: (reponse) => {
-          if (reponse.reussi) setExecutionId(reponse.execution_id);
-        },
+    declencher.mutate(instanceId, {
+      onSuccess: (reponse) => {
+        if (reponse.reussi) setExecutionId(reponse.execution_id);
       },
-    );
+    });
   }
 
   const erreurRequete = declencher.error as PrismeAPIError | null;
@@ -201,31 +198,31 @@ function DialogSolveur({
                 </Badge>
               </div>
 
-              {projetsCompatibles.length === 0 ? (
+              {instancesCompatibles.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Aucun projet dont l'instance courante correspond à ce client et cette structure de
-                  contraintes. Associe une instance compatible à un projet depuis la page Données
-                  pour pouvoir exécuter ce solveur.
+                  Aucune instance ne correspond à ce client et cette structure de contraintes.
+                  Ingère ou génère une instance compatible depuis la page Données ou Instances pour
+                  pouvoir exécuter ce solveur.
                 </p>
               ) : (
                 <div className="space-y-3">
                   <div>
-                    <p className="mb-2 text-sm font-medium">Projet à exécuter</p>
-                    <Select value={projetId} onValueChange={changerProjet}>
+                    <p className="mb-2 text-sm font-medium">Instance à exécuter</p>
+                    <Select value={instanceId} onValueChange={changerInstance}>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choisir un projet compatible..." />
+                        <SelectValue placeholder="Choisir une instance compatible..." />
                       </SelectTrigger>
                       <SelectContent>
-                        {projetsCompatibles.map((p) => (
-                          <SelectItem key={p.projet_id} value={p.projet_id}>
-                            {p.nom ?? p.projet_id}
+                        {instancesCompatibles.map((i) => (
+                          <SelectItem key={i.instance_id} value={i.instance_id}>
+                            {labels.get(i.instance_id)?.label ?? i.instance_id}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <Button onClick={executer} disabled={!projetId || declencher.isPending}>
+                  <Button onClick={executer} disabled={!instanceId || declencher.isPending}>
                     <Play className="mr-2 h-4 w-4" />
                     {declencher.isPending ? "Exécution en cours..." : "Exécuter le solveur"}
                   </Button>

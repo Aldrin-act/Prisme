@@ -86,14 +86,8 @@ def test_cycle_ingestion_execution_visible_en_supervision(image_sandbox: str, re
         instance_supervisee = next(i for i in instances if i["instance_id"] == instance_id)
         assert instance_supervisee["executee"] is False
 
-        # L'exécution se déclenche par projet (§annexe modèle Instance/Projet) —
-        # un projet réutilise l'instance ingérée comme instance courante.
-        projet_id = client.post("/projets", json={"donnees_brutes": "", "client_id": "client_test"}).json()[
-            "projet_id"
-        ]
-        client.post(f"/projets/{projet_id}/instance", json={"instance_id": instance_id})
-
-        execution_id = client.post(f"/execution/{projet_id}?client_id=client_test").json()["execution_id"]
+        # L'exécution se déclenche directement par instance_id, sans intermédiaire.
+        execution_id = client.post(f"/execution/{instance_id}").json()["execution_id"]
 
         instances = client.get("/supervision/instances").json()
         instance_supervisee = next(i for i in instances if i["instance_id"] == instance_id)
@@ -101,7 +95,6 @@ def test_cycle_ingestion_execution_visible_en_supervision(image_sandbox: str, re
 
         executions = client.get("/supervision/executions").json()
         execution_supervisee = next(e for e in executions if e["execution_id"] == execution_id)
-        assert execution_supervisee["projet_id"] == projet_id
         assert execution_supervisee["instance_id"] == instance_id
         assert execution_supervisee["client_id"] == "client_test"
         assert execution_supervisee["reussi"] is True

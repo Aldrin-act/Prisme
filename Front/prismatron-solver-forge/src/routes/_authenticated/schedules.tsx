@@ -22,7 +22,7 @@ import { PageHeader, EmptyState } from "@/components/app-page";
 import { GanttChart } from "@/components/planning/gantt-chart";
 import {
   useExecutions,
-  useLabelsProjets,
+  useLabelsInstances,
   usePlanning,
   PrismeAPIError,
   type ExecutionInfo,
@@ -57,7 +57,7 @@ function BadgeDecision({ decision }: { decision: ExecutionInfo["decision"] }) {
 
 function SchedulesPage() {
   const { data: executions, isLoading } = useExecutions();
-  const labelParProjet = useLabelsProjets();
+  const labels = useLabelsInstances();
   const [aVoir, setAVoir] = useState<ExecutionInfo | null>(null);
 
   const executionsTriees = [...(executions ?? [])].sort((a, b) =>
@@ -84,7 +84,7 @@ function SchedulesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Projet</TableHead>
+                <TableHead>Instance</TableHead>
                 <TableHead>Client</TableHead>
                 <TableHead>Date d'exécution</TableHead>
                 <TableHead>Statut</TableHead>
@@ -95,7 +95,7 @@ function SchedulesPage() {
             <TableBody>
               {executionsTriees.map((e) => (
                 <TableRow key={e.execution_id}>
-                  <TableCell>{labelParProjet.get(e.projet_id) ?? e.projet_id}</TableCell>
+                  <TableCell>{labels.get(e.instance_id)?.label ?? e.instance_id}</TableCell>
                   <TableCell>{e.client_id}</TableCell>
                   <TableCell className="text-muted-foreground">
                     {e.date_execution ? new Date(e.date_execution).toLocaleString() : "—"}

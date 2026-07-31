@@ -9,7 +9,7 @@ instances/exécutions/décisions.
 Un aléa atelier (panne, commande urgente, retard...) ne passe pas par un
 type dédié ici : il se traduit directement dans les contraintes T-R-C-O de
 l'instance réingérée (ex. la ressource en panne disparaît des
-`CompatibiliteRessourceTache`), puis un nouvel appel à `/execution/{projet_id}`
+`CompatibiliteRessourceTache`), puis un nouvel appel à `/execution/{instance_id}`
 recalcule le planning — le processus exact varie d'un client à l'autre et
 n'est donc pas figé dans le noyau.
 """
@@ -17,7 +17,7 @@ n'est donc pas figé dans le noyau.
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal
 
@@ -28,20 +28,6 @@ if TYPE_CHECKING:
     from api.etat_postgres import EtatPostgres
 
 Decision = Literal["acceptee", "refusee"]
-
-
-class InstanceEnUsage(Exception):
-    """`supprimer_instance` : au moins un projet référence encore cette
-    instance comme instance courante (`Projet.instance_id`) — refuser la
-    suppression plutôt qu'orpheliner silencieusement l'exécution de ces
-    projets (chacun a désormais son propre historique d'exécution, §annexe
-    modèle Instance/Projet)."""
-
-
-class ClientIncompatible(Exception):
-    """`associer_instance_projet` : l'instance et le projet n'appartiennent
-    pas au même client — l'isolation client (§7) ne doit jamais pouvoir
-    être contournée par un simple lien instance↔projet."""
 
 
 def structure_contraintes(instance: InstanceTRCO) -> str:
@@ -89,7 +75,7 @@ class DecisionHumaine:
 class Client:
     """Un client (tenant métier) — l'unité de cloisonnement des données dans
     tout le système (§7) : matching des solveurs (`solver_store/registry.py`),
-    visibilité des instances/projets (`api/autorisation.py`). Créé
+    visibilité des instances/sources (`api/autorisation.py`). Créé
     explicitement (ce module) plutôt qu'implicitement au premier usage, pour
     porter un vrai nom et pouvoir être choisi à l'inscription d'un compte."""
 
@@ -98,29 +84,23 @@ class Client:
 
 
 @dataclass(frozen=True)
-class Projet:
-    """Regroupe des données brutes persistées (ex. export ERP collé/déposé
-    par un humain) et l'historique des instances T-R-C-O générées à partir
-    d'elles via l'agent de compréhension — une même donnée brute peut être
-    reconvertie plusieurs fois (nouvel essai après un rejet, DSL affiné...)
-    sans jamais devoir être re-saisie ; `lister_instances_pour_projet` reste
-    cet historique complet, inchangé.
+class SourceDonnees:
+    """Données brutes persistées (ex. export ERP collé/déposé par un
+    humain) — une même donnée brute peut être reconvertie plusieurs fois
+    (nouvel essai après un rejet, DSL affiné...) via l'agent de
+    compréhension sans jamais devoir être re-saisie ;
+    `lister_instances_pour_source` reste cet historique complet.
 
-    `instance_id` (nullable) est distinct : c'est l'instance *courante* de ce
-    projet — celle contre laquelle l'exécution se déclenche (`enregistrer_execution`)
-    et dont l'instance elle-même n'est plus la propriété exclusive de ce
-    projet (`associer_instance_projet` permet à plusieurs projets de
-    partager une même instance, réutilisée comme gabarit — voir `Instance`,
-    déjà porteuse des règles métier d'un secteur donné). Mise à jour par
-    `generer-instance` (pointe vers la dernière générée) ou explicitement via
-    `associer_instance_projet` (réutilise une instance existante)."""
+    Volontairement minimal : ne porte ni pointeur "instance courante" ni
+    historique d'exécution — chaque instance générée s'exécute directement
+    par son propre `instance_id` (`routes/execution.py`), indépendamment de
+    la source qui l'a produite."""
 
     id: str
     client_id: str
     nom: str | None
     donnees_brutes: str
     date_creation: str
-    instance_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -158,10 +138,15 @@ class JobGeneration:
     """Historique complet et durable d'une génération de solveur — distinct
     du `_JobGeneration` en mémoire process de `api/routes/generation.py`
     (qui reste la source du flux SSE en direct) : celui-ci est la copie
-    persistée, pour l'audit après coup, y compris après redémarrage."""
+    persistée, pour l'audit après coup, y compris après redémarrage.
+
+    `instance_id` nullable : `supprimer_instance` met ce champ à `None`
+    plutôt que de supprimer le job — l'audit de génération (spécification,
+    plan technique, code candidat) reste consultable même après suppression
+    de l'instance qui l'a déclenché."""
 
     id: str
-    instance_id: str
+    instance_id: str | None
     client_id: str
     cree_le: str
     termine: bool = False
@@ -185,12 +170,13 @@ class JobGeneration:
 @dataclass
 class EtatAPI:
     instances: dict[str, tuple[str, InstanceTRCO]] = field(default_factory=dict)
-    # (id_solveur, projet_id, instance_id, resultat) — instance_id nullable
-    # (coupé si l'instance sous-jacente a été supprimée, voir supprimer_instance).
-    executions: dict[str, tuple[str, str, str | None, ResultatExecution]] = field(default_factory=dict)
+    # (id_solveur, instance_id, resultat) — instance_id garanti exister :
+    # supprimer_instance cascade-supprime ses propres exécutions plutôt que
+    # de les orpheliner (voir supprimer_instance).
+    executions: dict[str, tuple[str, str, ResultatExecution]] = field(default_factory=dict)
     decisions: dict[str, DecisionHumaine] = field(default_factory=dict)
-    projets: dict[str, Projet] = field(default_factory=dict)
-    projet_par_instance: dict[str, str] = field(default_factory=dict)
+    sources: dict[str, SourceDonnees] = field(default_factory=dict)
+    source_par_instance: dict[str, str] = field(default_factory=dict)
     clients: dict[str, Client] = field(default_factory=dict)
     dates_execution: dict[str, str] = field(default_factory=dict)
     jobs_generation: dict[str, JobGeneration] = field(default_factory=dict)
@@ -211,111 +197,69 @@ class EtatAPI:
     def lister_clients(self) -> list[dict[str, object]]:
         return [{"client_id": c.id, "nom": c.nom} for c in self.clients.values()]
 
-    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, projet_id: str | None = None) -> str:
+    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, source_id: str | None = None) -> str:
         self.enregistrer_client(client_id)
         instance_id = str(uuid.uuid4())
         self.instances[instance_id] = (client_id, instance)
-        if projet_id is not None:
-            self.projet_par_instance[instance_id] = projet_id
+        if source_id is not None:
+            self.source_par_instance[instance_id] = source_id
         return instance_id
 
-    def enregistrer_projet(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
+    def enregistrer_source(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
         self.enregistrer_client(client_id)
-        projet_id = str(uuid.uuid4())
-        self.projets[projet_id] = Projet(
-            id=projet_id,
+        source_id = str(uuid.uuid4())
+        self.sources[source_id] = SourceDonnees(
+            id=source_id,
             client_id=client_id,
             nom=nom,
             donnees_brutes=donnees_brutes,
             date_creation=datetime.now(UTC).isoformat(),
         )
-        return projet_id
+        return source_id
 
-    def recuperer_projet(self, projet_id: str) -> Projet:
-        if projet_id not in self.projets:
-            raise KeyError(projet_id)
-        return self.projets[projet_id]
+    def recuperer_source(self, source_id: str) -> SourceDonnees:
+        if source_id not in self.sources:
+            raise KeyError(source_id)
+        return self.sources[source_id]
 
-    def lister_projets(
-        self, client_id: str | None = None, instance_id: str | None = None
-    ) -> list[dict[str, object]]:
-        """Vue de supervision (lecture seule) sur les projets connus, avec le
-        nombre d'instances déjà générées pour chacun (historique, distinct de
-        l'instance courante) et la structure de contraintes de l'instance
-        courante (résolue depuis `Projet.instance_id`, `None` si aucune).
-        `instance_id` filtre sur l'instance courante (relation inverse :
-        quels projets utilisent aujourd'hui cette instance). `client_id=None`
-        ne filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
+    def lister_sources(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Vue de supervision (lecture seule) sur les sources connues, avec le
+        nombre d'instances déjà générées pour chacune. `client_id=None` ne
+        filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
         compteurs: dict[str, int] = {}
-        for projet_id in self.projet_par_instance.values():
-            compteurs[projet_id] = compteurs.get(projet_id, 0) + 1
-        resultats = []
-        for p in self.projets.values():
-            if client_id is not None and p.client_id != client_id:
-                continue
-            if instance_id is not None and p.instance_id != instance_id:
-                continue
-            structure = None
-            if p.instance_id is not None and p.instance_id in self.instances:
-                structure = structure_contraintes(self.instances[p.instance_id][1])
-            resultats.append(
-                {
-                    "projet_id": p.id,
-                    "client_id": p.client_id,
-                    "nom": p.nom,
-                    "date_creation": p.date_creation,
-                    "nb_instances": compteurs.get(p.id, 0),
-                    "instance_id": p.instance_id,
-                    "structure_contraintes": structure,
-                }
-            )
-        return resultats
+        for source_id in self.source_par_instance.values():
+            compteurs[source_id] = compteurs.get(source_id, 0) + 1
+        return [
+            {
+                "source_id": s.id,
+                "client_id": s.client_id,
+                "nom": s.nom,
+                "date_creation": s.date_creation,
+                "nb_instances": compteurs.get(s.id, 0),
+            }
+            for s in self.sources.values()
+            if client_id is None or s.client_id == client_id
+        ]
 
-    def lister_instances_pour_projet(self, projet_id: str) -> list[dict[str, object]]:
+    def lister_instances_pour_source(self, source_id: str) -> list[dict[str, object]]:
         return [
             {
                 "instance_id": instance_id,
                 "structure_contraintes": structure_contraintes(self.instances[instance_id][1]),
             }
-            for instance_id, pid in self.projet_par_instance.items()
-            if pid == projet_id
+            for instance_id, sid in self.source_par_instance.items()
+            if sid == source_id
         ]
 
-    def associer_instance_projet(self, projet_id: str, instance_id: str) -> None:
-        """Fait de `instance_id` l'instance courante de `projet_id` — permet
-        de réutiliser une instance existante (gabarit sectoriel déjà validé)
-        comme celle d'un autre projet, sans repasser par l'agent de
-        compréhension. Appelée aussi par `generer-instance` (la dernière
-        instance générée devient l'instance courante)."""
-        if projet_id not in self.projets:
-            raise KeyError(projet_id)
-        if instance_id not in self.instances:
-            raise KeyError(instance_id)
-        client_id_instance, _ = self.instances[instance_id]
-        projet = self.projets[projet_id]
-        if client_id_instance != projet.client_id:
-            raise ClientIncompatible(
-                f"l'instance {instance_id!r} appartient à {client_id_instance!r}, "
-                f"pas à {projet.client_id!r} (client du projet {projet_id!r})"
-            )
-        self.projets[projet_id] = replace(projet, instance_id=instance_id)
-
-    def supprimer_projet(self, projet_id: str) -> None:
-        """Supprime le projet — cascade sa propre histoire d'exécution
-        (chaque projet a désormais son planning attitré, indépendant de
-        l'instance qu'il utilise) et coupe le lien de provenance vers les
-        instances qu'il a pu générer ; celles-ci restent, réutilisables par
-        d'autres projets (même logique qu'avant l'inversion, juste côté
-        exécution en plus)."""
-        if projet_id not in self.projets:
-            raise KeyError(projet_id)
-        del self.projets[projet_id]
-        for instance_id in [iid for iid, pid in self.projet_par_instance.items() if pid == projet_id]:
-            del self.projet_par_instance[instance_id]
-        for execution_id in [eid for eid, (_, pid, _, _) in self.executions.items() if pid == projet_id]:
-            del self.executions[execution_id]
-            self.decisions.pop(execution_id, None)
-            self.dates_execution.pop(execution_id, None)
+    def supprimer_source(self, source_id: str) -> None:
+        """Coupe uniquement le lien de provenance vers les instances générées
+        à partir d'elle (elles restent, exécutables indépendamment) — une
+        source ne porte aucun historique d'exécution à cascader."""
+        if source_id not in self.sources:
+            raise KeyError(source_id)
+        del self.sources[source_id]
+        for instance_id in [iid for iid, sid in self.source_par_instance.items() if sid == source_id]:
+            del self.source_par_instance[instance_id]
 
     def recuperer_instance(self, instance_id: str) -> tuple[str, InstanceTRCO]:
         if instance_id not in self.instances:
@@ -342,59 +286,51 @@ class EtatAPI:
         return nouvelle_instance
 
     def supprimer_instance(self, instance_id: str) -> None:
-        """Refuse tant qu'au moins un projet a `instance_id` comme instance
-        courante (`InstanceEnUsage`) — orpheliner ce lien silencieusement
-        casserait l'exécution de ces projets. Une fois hors d'usage : les
-        exécutions historiques qui ont tourné contre elle sont conservées
-        (elles appartiennent à leur projet, jamais à l'instance, §annexe
-        modèle Instance/Projet) — seule leur référence informative à
-        `instance_id` est coupée, jamais l'exécution/planning elle-même."""
+        """Cascade-supprime son propre historique d'exécution (exécutions,
+        décisions humaines associées) — une exécution n'existe jamais sans
+        l'instance qui l'a produite. Le lien de provenance vers sa source
+        éventuelle est coupé. Les jobs de génération qui la référencent
+        survivent, orphelins (`instance_id` devient `None`) — préserve
+        l'audit de génération même après suppression de l'instance."""
         if instance_id not in self.instances:
             raise KeyError(instance_id)
-        if any(p.instance_id == instance_id for p in self.projets.values()):
-            raise InstanceEnUsage(
-                f"l'instance {instance_id!r} est encore l'instance courante d'au moins un projet"
-            )
         del self.instances[instance_id]
-        self.projet_par_instance.pop(instance_id, None)
-        for execution_id, (id_solveur, projet_id, iid, resultat) in list(self.executions.items()):
-            if iid == instance_id:
-                self.executions[execution_id] = (id_solveur, projet_id, None, resultat)
+        self.source_par_instance.pop(instance_id, None)
+        for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
+            del self.executions[execution_id]
+            self.decisions.pop(execution_id, None)
+            self.dates_execution.pop(execution_id, None)
+        for job in self.jobs_generation.values():
+            if job.instance_id == instance_id:
+                job.instance_id = None
 
-    def enregistrer_execution(
-        self, id_solveur: str, projet_id: str, instance_id: str | None, resultat: ResultatExecution
-    ) -> str:
+    def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
         execution_id = str(uuid.uuid4())
-        self.executions[execution_id] = (id_solveur, projet_id, instance_id, resultat)
+        self.executions[execution_id] = (id_solveur, instance_id, resultat)
         self.dates_execution[execution_id] = datetime.now(UTC).isoformat()
         return execution_id
 
-    def recuperer_execution(self, execution_id: str) -> tuple[str, str, str | None, ResultatExecution]:
+    def recuperer_execution(self, execution_id: str) -> tuple[str, str, ResultatExecution]:
         if execution_id not in self.executions:
             raise KeyError(execution_id)
         return self.executions[execution_id]
 
     def lister_executions(self, client_id: str | None = None) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) sur les exécutions connues,
-        scopée par le client du *projet* (plus par celui de l'instance —
-        une instance peut désormais être partagée entre clients... non, en
-        pratique `associer_instance_projet` l'interdit, mais le projet reste
-        la source de vérité pour le cloisonnement, §7). `client_id=None` ne
+        scopée par le client de l'instance exécutée. `client_id=None` ne
         filtre rien (réservé à l'admin)."""
         resultats = []
-        for execution_id, (id_solveur, projet_id, instance_id, resultat) in self.executions.items():
-            projet = self.projets.get(projet_id)
-            client_id_projet = projet.client_id if projet is not None else None
-            if client_id is not None and client_id_projet != client_id:
+        for execution_id, (id_solveur, instance_id, resultat) in self.executions.items():
+            client_id_instance = self.instances[instance_id][0]
+            if client_id is not None and client_id_instance != client_id:
                 continue
             decision = self.decisions.get(execution_id)
             resultats.append(
                 {
                     "execution_id": execution_id,
                     "id_solveur": id_solveur,
-                    "projet_id": projet_id,
                     "instance_id": instance_id,
-                    "client_id": client_id_projet,
+                    "client_id": client_id_instance,
                     "date_execution": self.dates_execution.get(execution_id),
                     "reussi": resultat.reussi,
                     "erreur": resultat.erreur,
@@ -406,13 +342,8 @@ class EtatAPI:
     def lister_instances(self, client_id: str | None = None) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) sur les instances ingérées,
         avec un indicateur `executee` pour repérer celles jamais utilisées.
-        Affaibli depuis l'inversion Instance/Projet : signale qu'*une*
-        exécution a un jour tourné contre cette instance (via un projet
-        quelconque), pas que le(s) projet(s) qui l'utilisent aujourd'hui ont
-        chacun une exécution — ce niveau de détail vit désormais sur
-        `Projet`, pas sur `Instance`. `client_id=None` ne filtre rien
-        (réservé à l'admin)."""
-        instances_executees = {iid for (_, _, iid, _) in self.executions.values() if iid is not None}
+        `client_id=None` ne filtre rien (réservé à l'admin)."""
+        instances_executees = {iid for (_, iid, _) in self.executions.values()}
         return [
             {
                 "instance_id": instance_id,

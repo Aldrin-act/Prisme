@@ -20,8 +20,8 @@ export const prismeKeys = {
   codeSource: (executionId: string) => [...prismeKeys.all, "codeSource", executionId] as const,
   codeSourceSolveur: (idSolveur: string) =>
     [...prismeKeys.all, "codeSourceSolveur", idSolveur] as const,
-  projets: () => [...prismeKeys.all, "projets"] as const,
-  projet: (projetId: string) => [...prismeKeys.all, "projets", projetId] as const,
+  sources: () => [...prismeKeys.all, "sources"] as const,
+  source: (sourceId: string) => [...prismeKeys.all, "sources", sourceId] as const,
   clients: () => [...prismeKeys.all, "clients"] as const,
   instance: (instanceId: string) => [...prismeKeys.all, "instance", instanceId] as const,
   jobsGeneration: (instanceId?: string) =>
@@ -166,75 +166,71 @@ export function usePlanning(
 }
 
 /**
- * Liste les projets (données brutes persistées) d'un client
+ * Liste les sources de données (données brutes persistées) d'un client
  */
-export function useProjets(
-  options?: Omit<UseQueryOptions<Types.Projet[]>, "queryKey" | "queryFn">,
+export function useSources(
+  options?: Omit<UseQueryOptions<Types.SourceDonnees[]>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: prismeKeys.projets(),
-    queryFn: () => prismeClient.listerProjets(),
+    queryKey: prismeKeys.sources(),
+    queryFn: () => prismeClient.listerSources(),
     ...options,
   });
 }
 
 /**
- * Détail d'un projet : données brutes + instances déjà générées
+ * Détail d'une source : données brutes + instances déjà générées
  */
-export function useProjet(
-  projetId: string | null,
-  options?: Omit<UseQueryOptions<Types.ProjetDetail>, "queryKey" | "queryFn">,
+export function useSource(
+  sourceId: string | null,
+  options?: Omit<UseQueryOptions<Types.SourceDetail>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: prismeKeys.projet(projetId || ""),
-    queryFn: () => prismeClient.obtenirProjet(projetId!),
-    enabled: !!projetId,
+    queryKey: prismeKeys.source(sourceId || ""),
+    queryFn: () => prismeClient.obtenirSource(sourceId!),
+    enabled: !!sourceId,
     ...options,
   });
 }
 
-/**
- * "Nom du projet" pour chaque projet connu, par projet_id — pour tout
- * endroit affichant une exécution/un planning par son projet propriétaire
- * (`ExecutionInfo.projet_id`, §annexe modèle Instance/Projet) plutôt que
- * par l'instance historiquement exécutée. Contrairement à
- * `useLabelsInstances`, ne nécessite aucune reconstruction N+1 : le nom
- * est déjà sur `Projet` (`GET /projets`).
- */
-export function useLabelsProjets(): Map<string, string> {
-  const { data: projets } = useProjets();
-  const labelParProjet = new Map<string, string>();
-  (projets ?? []).forEach((projet) => {
-    labelParProjet.set(projet.projet_id, projet.nom ?? "Sans nom");
-  });
-  return labelParProjet;
+export interface LabelInstance {
+  label: string;
+  sourceId: string | null;
+  nomSource: string | null;
 }
 
 /**
- * Reconstruit "nom du projet + rang" pour chaque instance connue —
- * /supervision/instances ne relie pas les instances à leur projet, seul
- * GET /projets/{id} le fait (`instances: [{instance_id, ...}]`). Centralise
- * un calcul auparavant dupliqué dans plusieurs pages (Instances, Générateur
- * de solveurs, Solveurs générés) pour tout endroit affichant une instance
- * par un nom lisible plutôt que son UUID brut. Reflète la provenance
- * (génération), distincte de l'instance courante d'un projet
- * (`Projet.instance_id`) depuis l'inversion Instance/Projet.
+ * Reconstruit "nom de la source + rang" pour chaque instance connue —
+ * /supervision/instances ne relie pas les instances à leur source, seul
+ * GET /sources/{id} le fait (`instances: [{instance_id, ...}]`). Centralise
+ * un calcul autrement dupliqué dans plusieurs pages (Instances, Générateur
+ * de solveurs, Solveurs générés, Plannings, Centre d'exécution) pour tout
+ * endroit affichant une instance ou une exécution par un nom lisible plutôt
+ * que son UUID brut — une exécution n'a que `instance_id` (une source n'a
+ * jamais d'historique d'exécution propre), donc le label se retrouve
+ * toujours en passant par l'instance. `undefined` (via `.get()`) pour toute
+ * instance sans provenance connue (ingérée par un autre canal que l'agent
+ * de compréhension) — l'appelant se replie alors sur l'UUID brut.
  */
-export function useLabelsInstances(): Map<string, string> {
-  const { data: projets } = useProjets();
-  const detailsProjets = useQueries({
-    queries: (projets ?? []).map((projet) => ({
-      queryKey: prismeKeys.projet(projet.projet_id),
-      queryFn: () => prismeClient.obtenirProjet(projet.projet_id),
+export function useLabelsInstances(): Map<string, LabelInstance> {
+  const { data: sources } = useSources();
+  const detailsSources = useQueries({
+    queries: (sources ?? []).map((source) => ({
+      queryKey: prismeKeys.source(source.source_id),
+      queryFn: () => prismeClient.obtenirSource(source.source_id),
     })),
   });
-  const labelParInstance = new Map<string, string>();
-  detailsProjets.forEach((requete) => {
-    const detail = requete.data as Types.ProjetDetail | undefined;
+  const labelParInstance = new Map<string, LabelInstance>();
+  detailsSources.forEach((requete) => {
+    const detail = requete.data as Types.SourceDetail | undefined;
     if (!detail) return;
     const nom = detail.nom ?? "Sans nom";
     [...detail.instances].reverse().forEach((instance, index) => {
-      labelParInstance.set(instance.instance_id, `${nom}-${index + 1}`);
+      labelParInstance.set(instance.instance_id, {
+        label: `${nom}-${index + 1}`,
+        sourceId: detail.source_id,
+        nomSource: nom,
+      });
     });
   });
   return labelParInstance;
@@ -305,13 +301,11 @@ export function useModifierObjectifs() {
 }
 
 /**
- * Mutation pour déclencher une exécution — par projet, pas par instance
- * (§annexe modèle Instance/Projet) : chaque projet a son planning attitré.
+ * Mutation pour déclencher une exécution — directement par instance_id.
  */
 export function useDeclencherExecution() {
   return useMutation({
-    mutationFn: ({ projetId, clientId }: { projetId: string; clientId: string }) =>
-      prismeClient.declencherExecution(projetId, clientId),
+    mutationFn: (instanceId: string) => prismeClient.declencherExecution(instanceId),
   });
 }
 
@@ -417,9 +411,9 @@ export function useCreerClient() {
 }
 
 /**
- * Mutation pour créer un projet (persiste des données brutes sans les convertir).
+ * Mutation pour créer une source (persiste des données brutes sans les convertir).
  */
-export function useCreerProjet() {
+export function useCreerSource() {
   return useMutation({
     mutationFn: ({
       donneesBrutes,
@@ -429,17 +423,17 @@ export function useCreerProjet() {
       donneesBrutes: string;
       nom?: string;
       clientId?: string;
-    }) => prismeClient.creerProjet(donneesBrutes, nom, clientId),
+    }) => prismeClient.creerSource(donneesBrutes, nom, clientId),
   });
 }
 
 /**
- * Mutation pour générer une instance de plus à partir d'un projet existant —
+ * Mutation pour générer une instance de plus à partir d'une source existante —
  * rejouable à volonté, sans jamais re-saisir les données brutes.
  */
-export function useGenererInstanceDepuisProjet() {
+export function useGenererInstanceDepuisSource() {
   return useMutation({
-    mutationFn: (projetId: string) => prismeClient.genererInstanceDepuisProjet(projetId),
+    mutationFn: (sourceId: string) => prismeClient.genererInstanceDepuisSource(sourceId),
   });
 }
 
@@ -454,25 +448,12 @@ export function useGenererSolveur() {
 }
 
 /**
- * Mutation pour supprimer un projet (données brutes) — n'affecte jamais les
- * instances déjà générées à partir de lui, mais supprime en cascade son
- * propre historique d'exécution (plannings, décisions), désormais rattaché
- * au projet et non plus à l'instance (§annexe modèle Instance/Projet).
+ * Mutation pour supprimer une source (données brutes) — n'affecte jamais les
+ * instances déjà générées à partir d'elle ; une source ne porte aucun
+ * historique d'exécution à cascader (voir `SourceDonnees`, `api/etat.py`).
  */
-export function useSupprimerProjet() {
+export function useSupprimerSource() {
   return useMutation({
-    mutationFn: (projetId: string) => prismeClient.supprimerProjet(projetId),
-  });
-}
-
-/**
- * Mutation pour faire d'une instance existante (gabarit métier réutilisable)
- * l'instance courante d'un projet — §annexe modèle Instance/Projet. Refusée
- * (403) si l'instance et le projet n'appartiennent pas au même client.
- */
-export function useAssocierInstanceAuProjet() {
-  return useMutation({
-    mutationFn: ({ projetId, instanceId }: { projetId: string; instanceId: string }) =>
-      prismeClient.associerInstanceAuProjet(projetId, instanceId),
+    mutationFn: (sourceId: string) => prismeClient.supprimerSource(sourceId),
   });
 }

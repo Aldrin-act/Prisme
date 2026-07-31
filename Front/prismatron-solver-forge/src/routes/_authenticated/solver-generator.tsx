@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQueries } from "@tanstack/react-query";
 import {
   AlertCircle,
   CheckCircle2,
@@ -31,10 +30,8 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
 import {
-  prismeKeys,
-  prismeClient,
   useInstances,
-  useProjets,
+  useLabelsInstances,
   useSolveurs,
   useJobsGeneration,
   useHistoriqueJobGeneration,
@@ -43,7 +40,7 @@ import {
   PrismeAPIError,
   type EvenementGeneration,
   type ReponseGenerationSolveur,
-  type ProjetDetail,
+  type LabelInstance,
   type InstanceInfo,
 } from "@/integrations/prisme";
 
@@ -147,7 +144,6 @@ function fusionnerEvenement(
 
 function SolverGeneratorPage() {
   const { data: instances, isLoading } = useInstances();
-  const { data: projets } = useProjets();
   const { data: solveurs } = useSolveurs();
   const { data: jobsGeneration } = useJobsGeneration();
 
@@ -156,23 +152,9 @@ function SolverGeneratorPage() {
   );
   const [ongletActifId, setOngletActifId] = useState<string>(onglets[0].id);
 
-  // Même reconstruction "nom du projet + rang" que la page Instances, pour
-  // ne plus afficher que des UUID bruts illisibles.
-  const detailsProjets = useQueries({
-    queries: (projets ?? []).map((projet) => ({
-      queryKey: prismeKeys.projet(projet.projet_id),
-      queryFn: () => prismeClient.obtenirProjet(projet.projet_id),
-    })),
-  });
-  const labelParInstance = new Map<string, string>();
-  detailsProjets.forEach((requete) => {
-    const detail = requete.data as ProjetDetail | undefined;
-    if (!detail) return;
-    const nom = detail.nom ?? "Sans nom";
-    [...detail.instances].reverse().forEach((instance, index) => {
-      labelParInstance.set(instance.instance_id, `${nom}-${index + 1}`);
-    });
-  });
+  // "Nom de la source + rang" pour ne plus afficher que des UUID bruts
+  // illisibles — même hook que la page Instances.
+  const labelParInstance = useLabelsInstances();
 
   // Approximation (client_id + structure_contraintes seulement — les
   // objectifs ne sont pas dans /supervision/instances) : suffisant pour un
@@ -297,7 +279,7 @@ function SolverGeneratorPage() {
                 <IconeOnglet onglet={o} />
                 <span className="max-w-[9rem] truncate">
                   {o.instanceId
-                    ? (labelParInstance.get(o.instanceId) ?? o.instanceId)
+                    ? (labelParInstance.get(o.instanceId)?.label ?? o.instanceId)
                     : "Nouvel onglet"}
                 </span>
                 <span
@@ -324,7 +306,7 @@ function SolverGeneratorPage() {
             </SelectTrigger>
             <SelectContent>
               {instancesTriees.map((i) => {
-                const label = labelParInstance.get(i.instance_id);
+                const label = labelParInstance.get(i.instance_id)?.label;
                 const aDejaUnSolveur = clesAvecSolveur.has(
                   `${i.client_id}::${i.structure_contraintes}`,
                 );
@@ -384,7 +366,7 @@ function ContenuOnglet({
   onglet: OngletGeneration;
   instances: InstanceInfo[] | undefined;
   instancesLoading: boolean;
-  labelParInstance: Map<string, string>;
+  labelParInstance: Map<string, LabelInstance>;
   clesAvecSolveur: Set<string>;
   instancesEnGeneration: Set<string>;
   onChangerInstance: (instanceId: string) => void;
@@ -415,7 +397,7 @@ function ContenuOnglet({
               </SelectTrigger>
               <SelectContent>
                 {(instances ?? []).map((i) => {
-                  const label = labelParInstance.get(i.instance_id);
+                  const label = labelParInstance.get(i.instance_id)?.label;
                   const aDejaUnSolveur = clesAvecSolveur.has(
                     `${i.client_id}::${i.structure_contraintes}`,
                   );

@@ -5,30 +5,27 @@ c'est le remplacement que `EtatAPI` annonce lui-même dans son docstring
 (« un déploiement réel remplacerait ceci par ... une base de données »).
 
 Dix tables, une par entité du modèle conceptuel :
-`clients`, `projets`, `instances_trco`, `executions`, `plannings`, `operations_planifiees`,
+`clients`, `sources_donnees`, `instances_trco`, `executions`, `plannings`, `operations_planifiees`,
 `decisions_humaines`, `jobs_generation`, `evenements_generation`, `tentatives_generation`
 (historique durable du pipeline multi-agents, §6.6 — voir plus bas).
 
-Une `Instance` (T-R-C-O) est un gabarit réutilisable (règles métier d'un
-secteur donné) ; un `Projet` en réutilise une comme *instance courante*
-(`projets.instance_id`, nullable) et porte son propre historique d'exécution
-(`executions.projet_id`) — chaque projet a son planning attitré, indépendant
-des autres projets utilisant la même instance. `instances_trco.projet_id`
-(nullable, relation distincte) reste la *provenance* : quel projet a généré
-cette instance via l'agent de compréhension, le cas échéant — une instance
-ingérée par un autre canal (T-R-C-O, Excel, ERP) n'a pas de provenance, et
-une instance peut avoir une provenance sans être l'instance courante de ce
-même projet (ex. si le projet a depuis régénéré ou pointé vers une autre
-instance). `executions.instance_id` (nullable) enregistre l'instance
-réellement exécutée à l'instant T — jamais réévalué depuis `projets.instance_id`
-après coup (qui peut changer), pour ne jamais lire un planning avec les
-mauvaises durées/contraintes. `instances_trco.payload` reste un blob JSONB
-(pas une table par sous-type de `Contrainte`) : l'instance est déjà validée
-et typée par Pydantic à l'ingestion (§6.7), la redécomposer en lignes SQL
-dupliquerait une garantie déjà là, pour un bénéfice nul tant qu'aucune
-requête ne filtre sur le détail d'une contrainte — même logique que pour le
-code figé dans `solver_store/registry.py` (fichier sur disque, jamais
-éclaté en base).
+Une `Instance` (T-R-C-O) porte directement son propre historique d'exécution
+(`executions.instance_id`, `NOT NULL` — une exécution n'existe jamais sans
+l'instance qui l'a produite) : l'exécuter (`enregistrer_execution`) et la
+supprimer (`supprimer_instance`, qui cascade-supprime cet historique) se font
+toutes deux directement par son `instance_id`, sans intermédiaire.
+`sources_donnees` est volontairement indépendante de tout ça : une source
+persiste juste des données brutes rejouables via l'agent de compréhension
+(`generer-instance`) — `instances_trco.source_id` (nullable, `ON DELETE SET
+NULL`) n'enregistre que la *provenance* (quelle source a généré cette
+instance, le cas échéant ; une instance ingérée par un autre canal — T-R-C-O,
+Excel, ERP — n'en a pas), jamais une relation d'usage ou de propriété.
+`instances_trco.payload` reste un blob JSONB (pas une table par sous-type de
+`Contrainte`) : l'instance est déjà validée et typée par Pydantic à
+l'ingestion (§6.7), la redécomposer en lignes SQL dupliquerait une garantie
+déjà là, pour un bénéfice nul tant qu'aucune requête ne filtre sur le détail
+d'une contrainte — même logique que pour le code figé dans
+`solver_store/registry.py` (fichier sur disque, jamais éclaté en base).
 
 Volontairement indépendant de `solver_store.registry.Registre` : aucune
 clé étrangère de `executions.solveur_id` vers la table `solveurs` (schémas
@@ -53,13 +50,11 @@ from psycopg import sql
 
 from api.etat import (
     Client,
-    ClientIncompatible,
     Decision,
     DecisionHumaine,
     EvenementGeneration,
-    InstanceEnUsage,
     JobGeneration,
-    Projet,
+    SourceDonnees,
     TentativeGeneration,
     structure_contraintes,
 )
@@ -98,8 +93,16 @@ class EtatPostgres:
                     "nom TEXT, "
                     "donnees_brutes TEXT NOT NULL, "
                     "date_creation TEXT NOT NULL)"
-                ).format(table=self._table("projets"), clients=self._table("clients"))
+                ).format(table=self._table("sources_donnees"), clients=self._table("clients"))
             )
+            # Ancienne table Projet (portait un pointeur "instance courante" +
+            # son propre historique d'exécution) — retirée, remplacée par
+            # `sources_donnees` (ci-dessus, ne porte que des données brutes
+            # rejouables) + exécution directement par `instance_id`. CASCADE
+            # retire aussi les FK pendantes vers cette table depuis
+            # `instances_trco.projet_id`/`executions.projet_id` ci-dessous.
+            connexion.execute(sql.SQL("DROP TABLE IF EXISTS {} CASCADE").format(self._table("projets")))
+
             connexion.execute(
                 sql.SQL(
                     "CREATE TABLE IF NOT EXISTS {table} ("
@@ -110,25 +113,22 @@ class EtatPostgres:
                     "date_ingestion TEXT NOT NULL)"
                 ).format(table=self._table("instances_trco"), clients=self._table("clients"))
             )
-            # Migration idempotente : lien de provenance optionnel vers le
-            # projet dont l'instance a été générée (agent de compréhension)
-            # — NULL pour toute instance ingérée par un autre canal
-            # (T-R-C-O, Excel, ERP). Distinct de `projets.instance_id`
-            # ci-dessous (l'instance *courante* d'un projet) — voir docstring
-            # du module.
             connexion.execute(
-                sql.SQL(
-                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS projet_id TEXT REFERENCES {projets}(id)"
-                ).format(table=self._table("instances_trco"), projets=self._table("projets"))
+                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS projet_id").format(
+                    table=self._table("instances_trco")
+                )
             )
-            # Migration idempotente : instance courante d'un projet — permet
-            # à plusieurs projets de partager une même instance (gabarit
-            # sectoriel réutilisable), chacun avec son propre historique
-            # d'exécution (`executions.projet_id`).
+            # Migration idempotente : lien de provenance optionnel vers la
+            # source dont l'instance a été générée (agent de compréhension)
+            # — NULL pour toute instance ingérée par un autre canal
+            # (T-R-C-O, Excel, ERP), ou si la source a depuis été supprimée
+            # (`ON DELETE SET NULL` — purement informatif, jamais un
+            # verrou de suppression).
             connexion.execute(
                 sql.SQL(
-                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS instance_id TEXT REFERENCES {instances}(id)"
-                ).format(table=self._table("projets"), instances=self._table("instances_trco"))
+                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS source_id TEXT "
+                    "REFERENCES {sources}(id) ON DELETE SET NULL"
+                ).format(table=self._table("instances_trco"), sources=self._table("sources_donnees"))
             )
             connexion.execute(
                 sql.SQL(
@@ -142,30 +142,26 @@ class EtatPostgres:
                     "violations_faisabilite JSONB)"
                 ).format(table=self._table("executions"), instances=self._table("instances_trco"))
             )
-            # Migrations idempotentes : `instance_id` devient informatif
-            # (l'instance réellement exécutée, coupée si elle est supprimée
-            # depuis — voir `supprimer_instance`) et `projet_id` devient la
-            # clé de groupement/propriété réelle (chaque projet a son propre
-            # historique d'exécution). Rétro-remplissage best-effort depuis
-            # la provenance pour les lignes déjà en base (les exécutions plus
-            # anciennes qu'une provenance, ex. ingérées hors d'un projet,
-            # restent orphelines de `projet_id` — acceptable pour ce PoC).
             connexion.execute(
-                sql.SQL("ALTER TABLE {table} ALTER COLUMN instance_id DROP NOT NULL").format(
+                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS projet_id").format(
                     table=self._table("executions")
                 )
             )
+            # Migration idempotente : une exécution appartient désormais
+            # directement à son instance — plus de propriétaire intermédiaire
+            # (Projet) susceptible de l'orpheliner. Nettoie d'abord les
+            # lignes déjà orphelines de l'ancien comportement (instance
+            # supprimée, `instance_id` mis à NULL) avant d'imposer NOT NULL —
+            # sous le nouveau modèle, `supprimer_instance` cascade-supprime
+            # ses exécutions plutôt que de les orpheliner, cette situation ne
+            # peut plus se reproduire.
             connexion.execute(
-                sql.SQL(
-                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS projet_id TEXT REFERENCES {projets}(id)"
-                ).format(table=self._table("executions"), projets=self._table("projets"))
+                sql.SQL("DELETE FROM {} WHERE instance_id IS NULL").format(self._table("executions"))
             )
             connexion.execute(
-                sql.SQL(
-                    "UPDATE {executions} e SET projet_id = i.projet_id "
-                    "FROM {instances} i "
-                    "WHERE e.instance_id = i.id AND e.projet_id IS NULL AND i.projet_id IS NOT NULL"
-                ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
+                sql.SQL("ALTER TABLE {table} ALTER COLUMN instance_id SET NOT NULL").format(
+                    table=self._table("executions")
+                )
             )
             connexion.execute(
                 sql.SQL(
@@ -203,7 +199,7 @@ class EtatPostgres:
                 sql.SQL(
                     "CREATE TABLE IF NOT EXISTS {table} ("
                     "id TEXT PRIMARY KEY, "
-                    "instance_id TEXT NOT NULL REFERENCES {instances}(id), "
+                    "instance_id TEXT REFERENCES {instances}(id), "
                     "client_id TEXT NOT NULL REFERENCES {clients}(id), "
                     "cree_le TEXT NOT NULL, "
                     "termine BOOLEAN NOT NULL DEFAULT FALSE, "
@@ -241,6 +237,28 @@ class EtatPostgres:
                 sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS algorithme_parametres JSONB").format(
                     table=self._table("jobs_generation")
                 )
+            )
+            # Migration idempotente : `instance_id` devient nullable —
+            # `supprimer_instance` oprheline désormais les jobs de génération
+            # qui la référencent (`ON DELETE SET NULL`) plutôt que de les
+            # supprimer, pour préserver l'audit de génération (spécification,
+            # plan technique, code candidat) même après suppression de
+            # l'instance source.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ALTER COLUMN instance_id DROP NOT NULL").format(
+                    table=self._table("jobs_generation")
+                )
+            )
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} DROP CONSTRAINT IF EXISTS jobs_generation_instance_id_fkey").format(
+                    table=self._table("jobs_generation")
+                )
+            )
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} ADD CONSTRAINT jobs_generation_instance_id_fkey "
+                    "FOREIGN KEY (instance_id) REFERENCES {instances}(id) ON DELETE SET NULL"
+                ).format(table=self._table("jobs_generation"), instances=self._table("instances_trco"))
             )
             connexion.execute(
                 sql.SQL(
@@ -310,10 +328,10 @@ class EtatPostgres:
             ).fetchall()
         return [{"client_id": id_, "nom": nom} for id_, nom in lignes]
 
-    # --- Projets ---------------------------------------------------------
+    # --- Sources de données ------------------------------------------------
 
-    def enregistrer_projet(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
-        projet_id = str(uuid.uuid4())
+    def enregistrer_source(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
+        source_id = str(uuid.uuid4())
         with closing(self._connexion()) as connexion:
             connexion.execute(
                 sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(
@@ -325,170 +343,85 @@ class EtatPostgres:
                 sql.SQL(
                     "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation) "
                     "VALUES (%s, %s, %s, %s, %s)"
-                ).format(self._table("projets")),
-                (projet_id, client_id, nom, donnees_brutes, datetime.now(UTC).isoformat()),
+                ).format(self._table("sources_donnees")),
+                (source_id, client_id, nom, donnees_brutes, datetime.now(UTC).isoformat()),
             )
             connexion.commit()
-        return projet_id
+        return source_id
 
-    def recuperer_projet(self, projet_id: str) -> Projet:
+    def recuperer_source(self, source_id: str) -> SourceDonnees:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
-                sql.SQL(
-                    "SELECT id, client_id, nom, donnees_brutes, date_creation, instance_id FROM {} WHERE id = %s"
-                ).format(self._table("projets")),
-                (projet_id,),
+                sql.SQL("SELECT id, client_id, nom, donnees_brutes, date_creation FROM {} WHERE id = %s").format(
+                    self._table("sources_donnees")
+                ),
+                (source_id,),
             ).fetchone()
         if ligne is None:
-            raise KeyError(projet_id)
-        id_, client_id, nom, donnees_brutes, date_creation, instance_id = ligne
-        return Projet(
-            id=id_,
-            client_id=client_id,
-            nom=nom,
-            donnees_brutes=donnees_brutes,
-            date_creation=date_creation,
-            instance_id=instance_id,
+            raise KeyError(source_id)
+        id_, client_id, nom, donnees_brutes, date_creation = ligne
+        return SourceDonnees(
+            id=id_, client_id=client_id, nom=nom, donnees_brutes=donnees_brutes, date_creation=date_creation
         )
 
-    def lister_projets(
-        self, client_id: str | None = None, instance_id: str | None = None
-    ) -> list[dict[str, object]]:
-        """`instance_id` filtre sur l'instance *courante* (relation inverse :
-        quels projets utilisent aujourd'hui cette instance). `client_id=None`
-        ne filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
+    def lister_sources(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """`client_id=None` ne filtre rien (réservé à l'admin — voir
+        `api/autorisation.py`)."""
         requete = sql.SQL(
-            "SELECT p.id, p.client_id, p.nom, p.date_creation, p.instance_id, i.structure_contraintes, "
-            "(SELECT COUNT(*) FROM {instances} ip WHERE ip.projet_id = p.id) AS nb_instances "
-            "FROM {projets} p LEFT JOIN {instances} i ON i.id = p.instance_id WHERE 1 = 1"
-        ).format(projets=self._table("projets"), instances=self._table("instances_trco"))
+            "SELECT s.id, s.client_id, s.nom, s.date_creation, "
+            "(SELECT COUNT(*) FROM {instances} i WHERE i.source_id = s.id) AS nb_instances "
+            "FROM {sources} s WHERE 1 = 1"
+        ).format(sources=self._table("sources_donnees"), instances=self._table("instances_trco"))
         parametres: list[str] = []
         if client_id is not None:
-            requete += sql.SQL(" AND p.client_id = %s")
+            requete += sql.SQL(" AND s.client_id = %s")
             parametres.append(client_id)
-        if instance_id is not None:
-            requete += sql.SQL(" AND p.instance_id = %s")
-            parametres.append(instance_id)
-        requete += sql.SQL(" ORDER BY p.date_creation DESC")
+        requete += sql.SQL(" ORDER BY s.date_creation DESC")
 
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(requete, parametres).fetchall()
         return [
             {
-                "projet_id": id_,
+                "source_id": id_,
                 "client_id": client_id,
                 "nom": nom,
                 "date_creation": date_creation,
-                "instance_id": instance_id,
-                "structure_contraintes": structure,
                 "nb_instances": nb,
             }
-            for id_, client_id, nom, date_creation, instance_id, structure, nb in lignes
+            for id_, client_id, nom, date_creation, nb in lignes
         ]
 
-    def lister_instances_pour_projet(self, projet_id: str) -> list[dict[str, object]]:
+    def lister_instances_pour_source(self, source_id: str) -> list[dict[str, object]]:
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(
                 sql.SQL(
-                    "SELECT id, structure_contraintes FROM {} WHERE projet_id = %s ORDER BY date_ingestion DESC"
+                    "SELECT id, structure_contraintes FROM {} WHERE source_id = %s ORDER BY date_ingestion DESC"
                 ).format(self._table("instances_trco")),
-                (projet_id,),
+                (source_id,),
             ).fetchall()
         return [{"instance_id": id_, "structure_contraintes": structure} for id_, structure in lignes]
 
-    def associer_instance_projet(self, projet_id: str, instance_id: str) -> None:
-        """Fait de `instance_id` l'instance courante de `projet_id` — permet
-        de réutiliser une instance existante (gabarit sectoriel déjà validé)
-        comme celle d'un autre projet, sans repasser par l'agent de
-        compréhension. Appelée aussi par `generer-instance` (la dernière
-        instance générée devient l'instance courante)."""
-        with closing(self._connexion()) as connexion:
-            ligne_projet = connexion.execute(
-                sql.SQL("SELECT client_id FROM {} WHERE id = %s").format(self._table("projets")),
-                (projet_id,),
-            ).fetchone()
-            if ligne_projet is None:
-                raise KeyError(projet_id)
-            (client_id_projet,) = ligne_projet
-
-            ligne_instance = connexion.execute(
-                sql.SQL("SELECT client_id FROM {} WHERE id = %s").format(self._table("instances_trco")),
-                (instance_id,),
-            ).fetchone()
-            if ligne_instance is None:
-                raise KeyError(instance_id)
-            (client_id_instance,) = ligne_instance
-
-            if client_id_instance != client_id_projet:
-                raise ClientIncompatible(
-                    f"l'instance {instance_id!r} appartient à {client_id_instance!r}, "
-                    f"pas à {client_id_projet!r} (client du projet {projet_id!r})"
-                )
-
-            connexion.execute(
-                sql.SQL("UPDATE {} SET instance_id = %s WHERE id = %s").format(self._table("projets")),
-                (instance_id, projet_id),
-            )
-            connexion.commit()
-
-    def supprimer_projet(self, projet_id: str) -> None:
-        """Supprime le projet — cascade sa propre histoire d'exécution
-        (chaque projet a désormais son planning attitré, indépendant de
-        l'instance qu'il utilise) et coupe le lien de provenance vers les
-        instances qu'il a pu générer ; celles-ci restent, réutilisables par
-        d'autres projets (même logique qu'avant l'inversion, juste côté
-        exécution en plus)."""
+    def supprimer_source(self, source_id: str) -> None:
+        """Coupe uniquement le lien de provenance vers les instances générées
+        à partir d'elle (`instances_trco.source_id ON DELETE SET NULL`, géré
+        par Postgres lui-même) — elles restent, exécutables indépendamment.
+        Une source ne porte aucun historique d'exécution à cascader."""
         with closing(self._connexion()) as connexion:
             existe = connexion.execute(
-                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("projets")),
-                (projet_id,),
+                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("sources_donnees")),
+                (source_id,),
             ).fetchone()
             if existe is None:
-                raise KeyError(projet_id)
-
+                raise KeyError(source_id)
             connexion.execute(
-                sql.SQL(
-                    "DELETE FROM {ops} WHERE planning_id IN ("
-                    "SELECT pl.id FROM {plannings} pl JOIN {execs} e ON e.id = pl.execution_id "
-                    "WHERE e.projet_id = %s)"
-                ).format(
-                    ops=self._table("operations_planifiees"),
-                    plannings=self._table("plannings"),
-                    execs=self._table("executions"),
-                ),
-                (projet_id,),
-            )
-            connexion.execute(
-                sql.SQL(
-                    "DELETE FROM {decisions} WHERE execution_id IN (SELECT id FROM {execs} WHERE projet_id = %s)"
-                ).format(decisions=self._table("decisions_humaines"), execs=self._table("executions")),
-                (projet_id,),
-            )
-            connexion.execute(
-                sql.SQL(
-                    "DELETE FROM {plannings} WHERE execution_id IN (SELECT id FROM {execs} WHERE projet_id = %s)"
-                ).format(plannings=self._table("plannings"), execs=self._table("executions")),
-                (projet_id,),
-            )
-            connexion.execute(
-                sql.SQL("DELETE FROM {} WHERE projet_id = %s").format(self._table("executions")),
-                (projet_id,),
-            )
-            connexion.execute(
-                sql.SQL("UPDATE {} SET projet_id = NULL WHERE projet_id = %s").format(
-                    self._table("instances_trco")
-                ),
-                (projet_id,),
-            )
-            connexion.execute(
-                sql.SQL("DELETE FROM {} WHERE id = %s").format(self._table("projets")),
-                (projet_id,),
+                sql.SQL("DELETE FROM {} WHERE id = %s").format(self._table("sources_donnees")),
+                (source_id,),
             )
             connexion.commit()
 
     # --- Instances -----------------------------------------------------
 
-    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, projet_id: str | None = None) -> str:
+    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, source_id: str | None = None) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
         with closing(self._connexion()) as connexion:
@@ -500,7 +433,7 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, payload, structure_contraintes, date_ingestion, projet_id) "
+                    "INSERT INTO {} (id, client_id, payload, structure_contraintes, date_ingestion, source_id) "
                     "VALUES (%s, %s, %s::jsonb, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
@@ -509,7 +442,7 @@ class EtatPostgres:
                     instance.model_dump_json(),
                     structure,
                     datetime.now(UTC).isoformat(),
-                    projet_id,
+                    source_id,
                 ),
             )
             connexion.commit()
@@ -558,13 +491,13 @@ class EtatPostgres:
         return nouvelle_instance
 
     def supprimer_instance(self, instance_id: str) -> None:
-        """Refuse (`InstanceEnUsage`) tant qu'au moins un projet a
-        `instance_id` comme instance courante — orpheliner ce lien
-        silencieusement casserait l'exécution de ces projets. Une fois hors
-        d'usage : les exécutions historiques qui ont tourné contre elle sont
-        conservées (elles appartiennent à leur projet, jamais à l'instance)
-        — seule leur référence informative `instance_id` est coupée, jamais
-        l'exécution/planning elle-même."""
+        """Cascade-supprime son propre historique d'exécution (exécutions,
+        plannings, opérations planifiées, décisions humaines associées) —
+        une exécution n'existe jamais sans l'instance qui l'a produite. Le
+        lien de provenance depuis `sources_donnees` (`ON DELETE SET NULL`)
+        et depuis `jobs_generation` (même comportement, préserve l'audit de
+        génération) sont gérés par Postgres lui-même via les contraintes de
+        clé étrangère, rien à faire ici pour eux."""
         with closing(self._connexion()) as connexion:
             existe = connexion.execute(
                 sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("instances_trco")),
@@ -573,19 +506,32 @@ class EtatPostgres:
             if existe is None:
                 raise KeyError(instance_id)
 
-            en_usage = connexion.execute(
-                sql.SQL("SELECT 1 FROM {} WHERE instance_id = %s").format(self._table("projets")),
-                (instance_id,),
-            ).fetchone()
-            if en_usage is not None:
-                raise InstanceEnUsage(
-                    f"l'instance {instance_id!r} est encore l'instance courante d'au moins un projet"
-                )
-
             connexion.execute(
-                sql.SQL("UPDATE {} SET instance_id = NULL WHERE instance_id = %s").format(
-                    self._table("executions")
+                sql.SQL(
+                    "DELETE FROM {ops} WHERE planning_id IN ("
+                    "SELECT pl.id FROM {plannings} pl JOIN {execs} e ON e.id = pl.execution_id "
+                    "WHERE e.instance_id = %s)"
+                ).format(
+                    ops=self._table("operations_planifiees"),
+                    plannings=self._table("plannings"),
+                    execs=self._table("executions"),
                 ),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {decisions} WHERE execution_id IN (SELECT id FROM {execs} WHERE instance_id = %s)"
+                ).format(decisions=self._table("decisions_humaines"), execs=self._table("executions")),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {plannings} WHERE execution_id IN (SELECT id FROM {execs} WHERE instance_id = %s)"
+                ).format(plannings=self._table("plannings"), execs=self._table("executions")),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE instance_id = %s").format(self._table("executions")),
                 (instance_id,),
             )
             connexion.execute(
@@ -597,13 +543,8 @@ class EtatPostgres:
     def lister_instances(self, client_id: str | None = None) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) — équivalent SQL du repli
         Python de `EtatAPI.lister_instances` (jointure d'existence sur
-        `executions` pour l'indicateur `executee`). Affaibli depuis
-        l'inversion Instance/Projet : signale qu'*une* exécution a un jour
-        tourné contre cette instance (via un projet quelconque), pas que
-        le(s) projet(s) qui l'utilisent aujourd'hui ont chacun une exécution
-        — ce niveau de détail vit désormais sur `Projet`, pas sur `Instance`.
-        `client_id=None` ne filtre rien (réservé à l'admin — voir
-        `api/autorisation.py`)."""
+        `executions` pour l'indicateur `executee`). `client_id=None` ne
+        filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
         requete = sql.SQL(
             "SELECT i.id, i.client_id, i.structure_contraintes, "
             "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee "
@@ -628,9 +569,7 @@ class EtatPostgres:
 
     # --- Exécutions ------------------------------------------------------
 
-    def enregistrer_execution(
-        self, id_solveur: str, projet_id: str, instance_id: str | None, resultat: ResultatExecution
-    ) -> str:
+    def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
         execution_id = str(uuid.uuid4())
         statut = "reussi" if resultat.reussi else "echec"
 
@@ -644,7 +583,7 @@ class EtatPostgres:
             )
 
         makespan: int | None = None
-        if resultat.planning is not None and instance_id is not None:
+        if resultat.planning is not None:
             _, instance = self.recuperer_instance(instance_id)
             makespan = calculer_makespan(instance, resultat.planning)
 
@@ -652,14 +591,12 @@ class EtatPostgres:
             connexion.execute(
                 sql.SQL(
                     "INSERT INTO {} "
-                    "(id, instance_id, projet_id, solveur_id, date_execution, statut, erreur, "
-                    "violations_faisabilite) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s::jsonb)"
+                    "(id, instance_id, solveur_id, date_execution, statut, erreur, violations_faisabilite) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb)"
                 ).format(self._table("executions")),
                 (
                     execution_id,
                     instance_id,
-                    projet_id,
                     id_solveur,
                     datetime.now(UTC).isoformat(),
                     statut,
@@ -687,18 +624,17 @@ class EtatPostgres:
             connexion.commit()
         return execution_id
 
-    def recuperer_execution(self, execution_id: str) -> tuple[str, str, str | None, ResultatExecution]:
+    def recuperer_execution(self, execution_id: str) -> tuple[str, str, ResultatExecution]:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT instance_id, projet_id, solveur_id, erreur, violations_faisabilite "
-                    "FROM {} WHERE id = %s"
+                    "SELECT instance_id, solveur_id, erreur, violations_faisabilite FROM {} WHERE id = %s"
                 ).format(self._table("executions")),
                 (execution_id,),
             ).fetchone()
             if ligne is None:
                 raise KeyError(execution_id)
-            instance_id, projet_id, solveur_id, erreur, violations_json = ligne
+            instance_id, solveur_id, erreur, violations_json = ligne
 
             ligne_planning = connexion.execute(
                 sql.SQL("SELECT id FROM {} WHERE execution_id = %s").format(self._table("plannings")),
@@ -736,27 +672,28 @@ class EtatPostgres:
             )
 
         resultat = ResultatExecution(planning=planning, verdict_faisabilite=verdict_faisabilite, erreur=erreur)
-        return solveur_id, projet_id, instance_id, resultat
+        return solveur_id, instance_id, resultat
 
     def lister_executions(self, client_id: str | None = None) -> list[dict[str, object]]:
-        """Scopée par le client du *projet* (source de vérité pour le
-        cloisonnement, §7) — plus par celui de l'instance, qui peut être
-        `NULL` si supprimée depuis. `client_id=None` ne filtre rien
-        (réservé à l'admin)."""
+        """Scopée par le client de l'instance exécutée (`JOIN`, pas
+        `LEFT JOIN` : une exécution garantit désormais une instance vivante,
+        `supprimer_instance` cascade-supprime ses propres exécutions plutôt
+        que de les orpheliner). `client_id=None` ne filtre rien (réservé à
+        l'admin)."""
         requete = sql.SQL(
-            "SELECT e.id, e.solveur_id, e.projet_id, e.instance_id, p.client_id, e.date_execution, e.statut, "
+            "SELECT e.id, e.solveur_id, e.instance_id, i.client_id, e.date_execution, e.statut, "
             "e.erreur, d.decision "
             "FROM {executions} e "
-            "JOIN {projets} p ON p.id = e.projet_id "
+            "JOIN {instances} i ON i.id = e.instance_id "
             "LEFT JOIN {decisions} d ON d.execution_id = e.id WHERE 1 = 1"
         ).format(
             executions=self._table("executions"),
-            projets=self._table("projets"),
+            instances=self._table("instances_trco"),
             decisions=self._table("decisions_humaines"),
         )
         parametres: list[str] = []
         if client_id is not None:
-            requete += sql.SQL(" AND p.client_id = %s")
+            requete += sql.SQL(" AND i.client_id = %s")
             parametres.append(client_id)
         requete += sql.SQL(" ORDER BY e.date_execution DESC")
 
@@ -766,7 +703,6 @@ class EtatPostgres:
             {
                 "execution_id": execution_id,
                 "id_solveur": id_solveur,
-                "projet_id": projet_id,
                 "instance_id": instance_id,
                 "client_id": client_id,
                 "date_execution": date_execution,
@@ -777,7 +713,6 @@ class EtatPostgres:
             for (
                 execution_id,
                 id_solveur,
-                projet_id,
                 instance_id,
                 client_id,
                 date_execution,

@@ -206,15 +206,10 @@ export interface InstanceInfo {
 export interface ExecutionInfo {
   execution_id: string;
   id_solveur: string;
-  // Clé de groupement/propriété réelle depuis l'inversion Instance/Projet :
-  // chaque projet a son planning attitré, indépendant des autres projets
-  // réutilisant la même instance (voir `Projet.instance_id`).
-  projet_id: string;
-  // Informatif seulement désormais : l'instance réellement exécutée à
-  // l'instant T, `null` si elle a été supprimée depuis (voir
-  // `EtatAPI.supprimer_instance`) — ne jamais l'utiliser pour retrouver le
-  // projet propriétaire, utiliser `projet_id`.
-  instance_id: string | null;
+  // Toujours présent : une exécution appartient directement à son instance,
+  // supprimer_instance cascade-supprime ses propres exécutions plutôt que de
+  // les orpheliner (voir EtatAPI.supprimer_instance).
+  instance_id: string;
   client_id: string;
   date_execution: string | null;
   reussi: boolean;
@@ -383,40 +378,32 @@ export interface HistoriqueJobGeneration {
   tentatives: TentativeGenerationHistorisee[];
 }
 
-// Projets : données brutes persistées + historique des instances générées
-// à partir d'elles (une même donnée brute peut être reconvertie plusieurs
-// fois, sans jamais devoir être re-saisie). Depuis l'inversion Instance/Projet
-// (§annexe modèle Instance/Projet), une instance est un gabarit métier
-// réutilisable et chaque projet a son planning attitré : `instance_id` est
-// l'instance courante du projet (peut être réassignée), distincte de
-// `instances` ci-dessous qui reste l'historique de provenance (génération).
-export interface Projet {
-  projet_id: string;
+// Sources de données : données brutes persistées + historique des instances
+// générées à partir d'elles (une même donnée brute peut être reconvertie
+// plusieurs fois, sans jamais devoir être re-saisie). Volontairement
+// minimal : ni pointeur "instance courante" ni historique d'exécution —
+// chaque instance générée s'exécute directement par son propre instance_id,
+// indépendamment de la source qui l'a produite.
+export interface SourceDonnees {
+  source_id: string;
   client_id: string;
   nom: string | null;
   date_creation: string;
   nb_instances: number;
-  instance_id: string | null;
-  structure_contraintes: string | null;
 }
 
-export interface InstanceDeProjet {
+export interface InstanceDeSource {
   instance_id: string;
   structure_contraintes: string;
 }
 
-export interface ProjetDetail extends Projet {
+export interface SourceDetail extends SourceDonnees {
   donnees_brutes: string;
-  instances: InstanceDeProjet[];
+  instances: InstanceDeSource[];
 }
 
-export interface ReponseCreationProjet {
-  projet_id: string;
-}
-
-export interface ReponseAssociationInstance {
-  projet_id: string;
-  instance_id: string;
+export interface ReponseCreationSource {
+  source_id: string;
 }
 
 // ============================================================================

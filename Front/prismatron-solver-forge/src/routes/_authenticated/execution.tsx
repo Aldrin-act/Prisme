@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, Play, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader, EmptyState } from "@/components/app-page";
-import { useExecutions, useSante, useLabelsProjets } from "@/integrations/prisme";
+import { useExecutions, useSante, useLabelsInstances } from "@/integrations/prisme";
 
 export const Route = createFileRoute("/_authenticated/execution")({
   head: () => ({ meta: [{ title: "Centre d'exécution — PRISME" }] }),
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/execution")({
 function CentreExecutionPage() {
   const { data: executions, isLoading } = useExecutions();
   const { data: sante } = useSante();
-  const labelsProjets = useLabelsProjets();
+  const labels = useLabelsInstances();
 
   const aujourdHui = new Date().toDateString();
   const executionsAujourdhui =
@@ -81,7 +81,7 @@ function CentreExecutionPage() {
                   )}
                   <span className="font-mono text-xs">{e.execution_id}</span>
                   <span className="text-muted-foreground">
-                    {labelsProjets.get(e.projet_id) ?? e.projet_id}
+                    {labels.get(e.instance_id)?.label ?? e.instance_id}
                   </span>
                   <Badge variant="outline" className="text-xs">
                     {e.client_id}

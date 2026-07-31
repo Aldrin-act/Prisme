@@ -124,7 +124,7 @@ Quatre chemins vers le même contrat T-R-C-O — aucun n'est privilégié en int
 - **Adaptateur ERP dédié** — traduction déterministe écrite à la main (GreenSIG).
 - **Agent de compréhension** — pour un ERP sans adaptateur, un LLM propose une traduction, jamais une vérité : le même garde-fou déterministe tranche derrière.
 
-**Projets réutilisables :** les données brutes se persistent une fois et se reconvertissent à volonté — un nouvel essai après un rejet ne demande jamais de tout recoller.
+**Sources réutilisables :** les données brutes se persistent une fois et se reconvertissent à volonté — un nouvel essai après un rejet ne demande jamais de tout recoller.
 
 ---
 
@@ -134,7 +134,7 @@ Ingestion, génération, exécution, audit — une seule interface opérateur.
 
 | Page | Rôle |
 |---|---|
-| Données | Projets & ingestion |
+| Données | Sources & ingestion |
 | Instances | Détail T-R-C-O, suppression |
 | Concepteur DSL | Édition assistée |
 | Générateur de solveurs | Suivi live, agent par agent |

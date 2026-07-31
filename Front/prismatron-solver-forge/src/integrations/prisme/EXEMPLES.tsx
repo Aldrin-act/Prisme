@@ -199,7 +199,7 @@ export function IngestionForm() {
 // EXEMPLE 3 : Exécution avec polling
 // ============================================================================
 
-export function ExecutionPanel({ projetId }: { projetId: string }) {
+export function ExecutionPanel({ instanceId }: { instanceId: string }) {
   const [executionId, setExecutionId] = useState<string | null>(null);
   const mutation = useDeclencherExecution();
   const queryClient = useQueryClient();
@@ -216,15 +216,12 @@ export function ExecutionPanel({ projetId }: { projetId: string }) {
   });
 
   const handleExecute = () => {
-    mutation.mutate(
-      { projetId, clientId: "client-001" },
-      {
-        onSuccess: (data) => {
-          setExecutionId(data.execution_id);
-          queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
-        },
+    mutation.mutate(instanceId, {
+      onSuccess: (data) => {
+        setExecutionId(data.execution_id);
+        queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
       },
-    );
+    });
   };
 
   return (

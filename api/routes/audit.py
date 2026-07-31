@@ -19,7 +19,7 @@ def obtenir_code_source(
     registre: Registre = Depends(obtenir_registre),
 ) -> dict[str, str]:
     try:
-        id_solveur, _, _, _ = etat.recuperer_execution(execution_id)
+        id_solveur, _, _ = etat.recuperer_execution(execution_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="exécution inconnue") from None
 
