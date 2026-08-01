@@ -459,9 +459,20 @@ export function IngestionDialog({
                   onChange={(e) => setFichier(e.target.files?.[0] ?? null)}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Utilisez le gabarit fourni (onglets Tâches, Ressources, Précédences, Compatibilités) —
-                  téléchargez-le via <code className="font-mono">docs/dsl/gabarit_ingestion_trco.xlsx</code>, remplissez-le,
-                  puis déposez-le ici tel quel.
+                  Utilisez le gabarit fourni (onglets Tâches, Ressources, Précédences, Compétences requises,
+                  Compatibilités), remplissez-le, puis déposez-le ici tel quel. Comme pour le CSV, une tâche peut
+                  être rendue compatible avec une ressource soit directement (onglet Compatibilités), soit via une
+                  compétence requise couverte par cette ressource (onglet Compétences requises).
+                </p>
+                <p className="text-xs">
+                  Gabarit d'exemple :{" "}
+                  <a
+                    href="/gabarits/gabarit_ingestion_trco.xlsx"
+                    download
+                    className="text-primary underline-offset-2 hover:underline"
+                  >
+                    gabarit_ingestion_trco.xlsx
+                  </a>
                 </p>
               </div>
 

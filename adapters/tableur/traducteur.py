@@ -1,9 +1,19 @@
 """tableur — Adaptateur pour le gabarit xlsx d'ingestion T-R-C-O (§5.4), pour
 une personne qui n'a pas à écrire de JSON à la main. Lit exactement les
 onglets structurés produits par `scripts/generer_gabarit_ingestion.py`
-("Tâches", "Ressources", "Précédences", "Compatibilités") — le 5e onglet du
-gabarit ("Besoins additionnels") est du texte libre pour examen humain,
-jamais traduit automatiquement.
+("Tâches", "Ressources", "Précédences", "Compétences requises",
+"Compatibilités") — le 6e onglet du gabarit ("Besoins additionnels") est du
+texte libre pour examen humain, jamais traduit automatiquement.
+
+Compatibilité dérivée par compétence : même mécanisme partagé que
+`adapters/csv_import/` (`adapters/competence_derivation.py`) — une ressource
+qui possède, dans l'onglet Ressources, toutes les compétences exigées par une
+tâche dans l'onglet "Compétences requises" devient automatiquement compatible
+avec elle, avec la durée estimée de la tâche (onglet Tâches, colonne
+`duree_estimee_jours`) appliquée telle quelle. Les deux mécanismes
+(compatibilité explicite dans l'onglet Compatibilités, et compatibilité
+dérivée par compétence) peuvent coexister pour une même tâche : leurs
+résultats s'additionnent, rien n'oblige à choisir l'un ou l'autre.
 """
 
 from __future__ import annotations
@@ -15,8 +25,10 @@ from typing import Any
 from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
+from adapters.competence_derivation import CompetenceSansDureeEstimee, deriver_compatibilites_par_competence
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    CompetenceRequise,
     Contrainte,
     InstanceTRCO,
     MinimiserMakespan,
@@ -27,6 +39,12 @@ from dsl.schema import (
 
 FEUILLES_REQUISES = ("Tâches", "Ressources", "Compatibilités")
 FEUILLE_PRECEDENCES = "Précédences"
+FEUILLE_COMPETENCES_REQUISES = "Compétences requises"
+
+# Séparateur des compétences dans une même cellule (onglet Ressources) — même
+# convention que `adapters/csv_import/traducteur.py` (la virgule est déjà le
+# délimiteur naturel d'un tableur, illisible pour une liste dans une cellule).
+SEPARATEUR_COMPETENCES = ";"
 
 
 class ErreurFichierInvalide(Exception):
@@ -46,16 +64,49 @@ def _lignes(feuille: Worksheet, n_colonnes: int) -> Iterator[tuple[str, ...]]:
         yield tuple("" if v is None else str(v).strip() for v in ligne)
 
 
-def _lire_taches(feuille: Worksheet) -> list[Tache]:
-    return [Tache(id=id_, **({"nom": nom} if nom else {})) for id_, nom in _lignes(feuille, 2)]
+def _lire_taches(feuille: Worksheet) -> tuple[list[Tache], dict[str, int | None]]:
+    """Renvoie les tâches ainsi que, par id, leur durée estimée (colonne
+    `duree_estimee_jours`, 3e colonne) — `None` si absente, seulement
+    nécessaire pour les tâches dont la compatibilité est dérivée par
+    compétence. Même contrat que `adapters/csv_import/traducteur.py::_lire_taches`."""
+    durees_estimees: dict[str, int | None] = {}
+    taches: list[Tache] = []
+    for id_, nom, duree in _lignes(feuille, 3):
+        taches.append(Tache(id=id_, **({"nom": nom} if nom else {})))
+        if not duree:
+            durees_estimees[id_] = None
+            continue
+        try:
+            durees_estimees[id_] = int(float(duree))
+        except ValueError as erreur:
+            raise ErreurFichierInvalide(
+                f"onglet Tâches : durée estimée invalide « {duree} » pour {id_}"
+            ) from erreur
+    return taches, durees_estimees
 
 
 def _lire_ressources(feuille: Worksheet) -> list[Ressource]:
-    return [Ressource(id=id_, **({"nom": nom} if nom else {})) for id_, nom in _lignes(feuille, 2)]
+    """`competences` (3e colonne, séparées par `;`) va directement sur
+    `Ressource` — utilisé tel quel par la dérivation partagée
+    (`adapters/competence_derivation.py`)."""
+    ressources: list[Ressource] = []
+    for id_, nom, competences in _lignes(feuille, 3):
+        ressources.append(
+            Ressource(
+                id=id_,
+                **({"nom": nom} if nom else {}),
+                competences=sorted({c.strip() for c in competences.split(SEPARATEUR_COMPETENCES) if c.strip()}),
+            )
+        )
+    return ressources
 
 
 def _lire_precedences(feuille: Worksheet) -> list[Contrainte]:
     return [Precedence(avant=avant, apres=apres) for avant, apres in _lignes(feuille, 2)]
+
+
+def _lire_competences_requises(feuille: Worksheet) -> list[Contrainte]:
+    return [CompetenceRequise(tache=tache, competence=competence) for tache, competence in _lignes(feuille, 2)]
 
 
 def _lire_compatibilites(feuille: Worksheet) -> list[Contrainte]:
@@ -75,13 +126,17 @@ def _lire_compatibilites(feuille: Worksheet) -> list[Contrainte]:
 def traduire(contenu: bytes) -> InstanceTRCO:
     """Traduit un classeur xlsx (format du gabarit `docs/dsl/gabarit_ingestion_trco.xlsx`)
     en instance T-R-C-O. Lève `ErreurFichierInvalide` si le fichier n'est pas
-    un xlsx lisible ou qu'un onglet requis manque ; `pydantic.ValidationError`
-    si les données une fois lues ne forment pas une instance valide (id
-    dupliqué, référence inconnue, tâche sans compatibilité...)."""
+    un xlsx lisible, qu'un onglet requis manque, ou qu'une compétence exigée
+    n'a pas de durée estimée pour en dériver la compatibilité ;
+    `pydantic.ValidationError` si les données une fois lues ne forment pas une
+    instance valide (id dupliqué, référence inconnue, tâche sans
+    compatibilité...)."""
     try:
         classeur: Any = load_workbook(BytesIO(contenu), data_only=True, read_only=True)
     except Exception as erreur:
-        raise ErreurFichierInvalide("fichier illisible : ce n'est pas un classeur Excel (.xlsx) valide") from erreur
+        raise ErreurFichierInvalide(
+            "fichier illisible : ce n'est pas un classeur Excel (.xlsx) valide"
+        ) from erreur
 
     manquants = [f for f in FEUILLES_REQUISES if f not in classeur.sheetnames]
     if manquants:
@@ -90,14 +145,30 @@ def traduire(contenu: bytes) -> InstanceTRCO:
             "(docs/dsl/gabarit_ingestion_trco.xlsx)."
         )
 
-    taches = _lire_taches(classeur["Tâches"])
+    taches, durees_estimees = _lire_taches(classeur["Tâches"])
     ressources = _lire_ressources(classeur["Ressources"])
-    precedences = _lire_precedences(classeur[FEUILLE_PRECEDENCES]) if FEUILLE_PRECEDENCES in classeur.sheetnames else []
+    precedences = (
+        _lire_precedences(classeur[FEUILLE_PRECEDENCES]) if FEUILLE_PRECEDENCES in classeur.sheetnames else []
+    )
+    competences_requises = (
+        _lire_competences_requises(classeur[FEUILLE_COMPETENCES_REQUISES])
+        if FEUILLE_COMPETENCES_REQUISES in classeur.sheetnames
+        else []
+    )
     compatibilites = _lire_compatibilites(classeur["Compatibilités"])
+
+    contraintes: list[Contrainte] = [*precedences, *competences_requises, *compatibilites]
+    durees_estimees_connues = {t: d for t, d in durees_estimees.items() if d is not None}
+    try:
+        compatibilites_derivees = deriver_compatibilites_par_competence(
+            contraintes, ressources, durees_estimees_connues
+        )
+    except CompetenceSansDureeEstimee as erreur:
+        raise ErreurFichierInvalide(f"onglet Tâches : {erreur} (colonne duree_estimee_jours)") from erreur
 
     return InstanceTRCO(
         taches=taches,
         ressources=ressources,
-        contraintes=[*precedences, *compatibilites],
+        contraintes=[*contraintes, *compatibilites_derivees],
         objectifs=[MinimiserMakespan()],
     )

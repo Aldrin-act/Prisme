@@ -2,7 +2,10 @@
 de `docs/dsl/modele_ingestion_client.md`, à remettre à une personne qui n'a
 pas à écrire de JSON à la main : elle remplit les onglets, puis le fichier
 est ingéré tel quel via `POST /adapters/tableur/{client_id}`
-(`adapters/tableur/`), qui lit exactement les onglets produits ici.
+(`adapters/tableur/`), qui lit exactement les onglets produits ici —
+y compris la compatibilité dérivée par compétence (onglets Ressources/
+Compétences requises), même mécanisme partagé que `adapters/csv_import/`
+(`adapters/competence_derivation.py`).
 
 À relancer si les règles du DSL (`dsl/schema/`) changent — et si les noms/
 colonnes d'onglets changent, mettre à jour `adapters/tableur/traducteur.py`
@@ -93,13 +96,25 @@ def construire(chemin_sortie: Path) -> None:
         ("Gabarit de données — planification (ordonnancement d'ateliers)", FONT_TITRE),
         ("À remplir puis à renvoyer tel quel — la conversion vers le système est automatique.", FONT_SOUS_TITRE),
         ("", None),
-        ("5 onglets à remplir, dans cet ordre :", Font(bold=True)),
+        ("6 onglets à remplir, dans cet ordre :", Font(bold=True)),
         ("  1. Tâches — la liste des travaux à planifier.", None),
         ("  2. Ressources — la liste des ressource/équipes qui peuvent réaliser ces travaux.", None),
         ("  3. Précédences (optionnel) — quelles tâches doivent être finies avant que d'autres démarrent.", None),
-        ("  4. Compatibilités — quelle tâche peut être faite par quelle ressource, et en combien de temps.", None),
         (
-            "  5. Besoins additionnels (optionnel) — tout ce qui ne rentre pas dans les 4 onglets ci-dessus,",
+            "  4. Compétences requises (optionnel) — quelle tâche exige quelle compétence, pour laisser le",
+            None,
+        ),
+        (
+            "     système déterminer lui-même quelles ressources conviennent (voir plus bas).",
+            None,
+        ),
+        (
+            "  5. Compatibilités — quelle tâche peut être faite par quelle ressource, et en combien de temps,",
+            None,
+        ),
+        ("     quand vous voulez le préciser vous-même plutôt que par compétence.", None),
+        (
+            "  6. Besoins additionnels (optionnel) — tout ce qui ne rentre pas dans les 5 onglets ci-dessus,",
             None,
         ),
         ("     en langage libre (voir plus bas).", None),
@@ -112,10 +127,22 @@ def construire(chemin_sortie: Path) -> None:
         ("    ni accent.", None),
         ("  • Un identifiant ne doit jamais être réutilisé deux fois dans le même onglet.", None),
         (
-            '  • Chaque tâche doit apparaître au moins une fois dans l\'onglet "Compatibilités" — sinon sa',
+            "  • Chaque tâche doit avoir au moins une ressource compatible, de deux façons possibles :",
             None,
         ),
-        ("    durée est inconnue et elle ne peut pas être planifiée.", None),
+        (
+            '    soit une ligne dans l\'onglet "Compatibilités", soit une compétence requise (onglet',
+            None,
+        ),
+        (
+            '    "Compétences requises") couverte par au moins une ressource — avec alors une durée',
+            None,
+        ),
+        (
+            '    estimée renseignée pour cette tâche (onglet Tâches, colonne "duree_estimee_jours").',
+            None,
+        ),
+        ("    Les deux mécanismes peuvent coexister pour une même tâche.", None),
         ("  • L'onglet \"Précédences\" peut rester vide si l'ordre des tâches n'a pas d'importance.", None),
         ("  • Ne pas ajouter/supprimer de colonnes, ne pas renommer les onglets, ne pas fusionner de", None),
         ("    cellules.", None),
@@ -151,10 +178,23 @@ def construire(chemin_sortie: Path) -> None:
         [
             ("id *", 22, "Identifiant unique de la tâche. Lettres/chiffres/_/- uniquement, ex. T1, decoupe-01."),
             ("nom", 34, "Libre, pour la lisibilité humaine seulement (facultatif)."),
+            (
+                "duree_estimee_jours",
+                20,
+                "Durée en jours, nécessaire seulement si cette tâche utilise l'onglet "
+                '"Compétences requises" (compatibilité dérivée par compétence). Inutile si toutes '
+                'ses ressources compatibles sont déclarées directement dans "Compatibilités".',
+            ),
         ],
     )
-    _ligne_exemple(ws, ["T1", "Découpe"], note="← exemple, à remplacer")
-    _bordures_vides(ws, 2)
+    _ligne_exemple(ws, ["T1", "Découpe", 3], note="← exemple, à remplacer")
+    _bordures_vides(ws, 3)
+    dv_t_duree = DataValidation(
+        type="whole", operator="greaterThan", formula1="0", allow_blank=True, showErrorMessage=True
+    )
+    dv_t_duree.error = "La durée estimée doit être un nombre entier positif (en jours)."
+    ws.add_data_validation(dv_t_duree)
+    dv_t_duree.add(f"C3:C{N_LIGNES_VALIDATION}")
 
     # ---------------------------------------------------------------- Ressources
     ws = wb.create_sheet("Ressources")
@@ -163,10 +203,17 @@ def construire(chemin_sortie: Path) -> None:
         [
             ("id *", 22, "Identifiant unique de la ressource (ressource, équipe...). Même règle que les tâches."),
             ("nom", 34, "Libre, pour la lisibilité humaine seulement (facultatif)."),
+            (
+                "competences",
+                30,
+                "Compétences possédées, séparées par des points-virgules, ex. decoupe;affutage. "
+                'Sert à déduire automatiquement les compatibilités via "Compétences requises" '
+                "(facultatif).",
+            ),
         ],
     )
-    _ligne_exemple(ws, ["R1", "Découpeuse"], note="← exemple, à remplacer")
-    _bordures_vides(ws, 2)
+    _ligne_exemple(ws, ["R1", "Découpeuse", "decoupe"], note="← exemple, à remplacer")
+    _bordures_vides(ws, 3)
 
     # ---------------------------------------------------------------- Précédences
     ws = wb.create_sheet("Précédences")
@@ -191,6 +238,36 @@ def construire(chemin_sortie: Path) -> None:
     dv_taches_b.error = "Doit être un id déclaré dans l'onglet Tâches."
     ws.add_data_validation(dv_taches_b)
     dv_taches_b.add(f"B3:B{N_LIGNES_VALIDATION}")
+
+    # ---------------------------------------------------------------- Compétences requises
+    # Chemin alternatif à "Compatibilités" ci-dessous : plutôt que de lister
+    # à la main chaque ressource compatible avec une tâche, on déclare ici
+    # qu'elle exige une compétence — toute ressource qui la possède (onglet
+    # Ressources, colonne "competences") devient automatiquement compatible,
+    # avec la durée estimée de la tâche (onglet Tâches). Les deux mécanismes
+    # peuvent coexister pour une même tâche (adapters/competence_derivation.py).
+    ws = wb.create_sheet("Compétences requises")
+    _entete(
+        ws,
+        [
+            ("tache *", 22, "Doit être un id déclaré dans l'onglet Tâches."),
+            (
+                "competence *",
+                30,
+                'Doit correspondre exactement à une valeur de la colonne "competences" de '
+                "l'onglet Ressources (une tâche à plusieurs compétences requises : une ligne par "
+                "compétence, même tache répétée).",
+            ),
+        ],
+    )
+    _ligne_exemple(ws, ["T1", "decoupe"], note="← exemple : T1 exige la compétence decoupe")
+    _bordures_vides(ws, 2)
+    dv_cr_tache = DataValidation(
+        type="list", formula1=f"='Tâches'!$A$2:$A${N_LIGNES_VALIDATION}", allow_blank=True, showErrorMessage=True
+    )
+    dv_cr_tache.error = "Doit être un id déclaré dans l'onglet Tâches."
+    ws.add_data_validation(dv_cr_tache)
+    dv_cr_tache.add(f"A3:A{N_LIGNES_VALIDATION}")
 
     # ---------------------------------------------------------------- Compatibilités
     ws = wb.create_sheet("Compatibilités")
