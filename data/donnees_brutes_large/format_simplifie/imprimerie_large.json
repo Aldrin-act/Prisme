@@ -1,0 +1,2414 @@
+{
+  "taches": [
+    {
+      "id": "T0001",
+      "nom": "Cmd001_IMPRESSION_3C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0002",
+      "nom": "Cmd001_IMPRESSION_2C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0003",
+      "nom": "Cmd001_IMPRESSION_4C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0004",
+      "nom": "Cmd001_PLIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0005",
+      "nom": "Cmd001_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0006",
+      "nom": "Cmd001_SECHAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0007",
+      "nom": "Cmd001_RELIURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0008",
+      "nom": "Cmd001_PREPRESSE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0009",
+      "nom": "Cmd001_CALAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0010",
+      "nom": "Cmd001_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0011",
+      "nom": "Cmd002_CALAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0012",
+      "nom": "Cmd002_RELIURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0013",
+      "nom": "Cmd002_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0014",
+      "nom": "Cmd002_GRAVURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0015",
+      "nom": "Cmd002_IMPRESSION_4C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0016",
+      "nom": "Cmd002_IMPRESSION_2C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0017",
+      "nom": "Cmd002_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0018",
+      "nom": "Cmd002_PREPRESSE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0019",
+      "nom": "Cmd002_IMPRESSION_3C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0020",
+      "nom": "Cmd002_PLIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0021",
+      "nom": "Cmd003_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0022",
+      "nom": "Cmd003_PLIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0023",
+      "nom": "Cmd003_CALAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0024",
+      "nom": "Cmd003_SECHAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0025",
+      "nom": "Cmd003_PREPRESSE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0026",
+      "nom": "Cmd003_IMPRESSION_1C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0027",
+      "nom": "Cmd003_RELIURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0028",
+      "nom": "Cmd003_GRAVURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0029",
+      "nom": "Cmd003_IMPRESSION_4C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0030",
+      "nom": "Cmd004_CALAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0031",
+      "nom": "Cmd004_IMPRESSION_2C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0032",
+      "nom": "Cmd004_PREPRESSE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0033",
+      "nom": "Cmd004_SECHAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0034",
+      "nom": "Cmd004_IMPRESSION_3C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0035",
+      "nom": "Cmd004_RELIURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0036",
+      "nom": "Cmd004_PLIAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0037",
+      "nom": "Cmd004_IMPRESSION_4C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0038",
+      "nom": "Cmd004_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0039",
+      "nom": "Cmd004_GRAVURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0040",
+      "nom": "Cmd004_IMPRESSION_1C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0041",
+      "nom": "Cmd004_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0042",
+      "nom": "Cmd005_CALAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0043",
+      "nom": "Cmd005_PREPRESSE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0044",
+      "nom": "Cmd005_IMPRESSION_2C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0045",
+      "nom": "Cmd005_SECHAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0046",
+      "nom": "Cmd005_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0047",
+      "nom": "Cmd005_IMPRESSION_4C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0048",
+      "nom": "Cmd005_IMPRESSION_3C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0049",
+      "nom": "Cmd005_IMPRESSION_1C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0050",
+      "nom": "Cmd005_PLIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0051",
+      "nom": "Cmd006_GRAVURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0052",
+      "nom": "Cmd006_SECHAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0053",
+      "nom": "Cmd006_PLIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0054",
+      "nom": "Cmd006_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0055",
+      "nom": "Cmd006_PREPRESSE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0056",
+      "nom": "Cmd006_IMPRESSION_3C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0057",
+      "nom": "Cmd006_IMPRESSION_2C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0058",
+      "nom": "Cmd006_IMPRESSION_4C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0059",
+      "nom": "Cmd007_RELIURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0060",
+      "nom": "Cmd007_IMPRESSION_4C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0061",
+      "nom": "Cmd007_IMPRESSION_3C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0062",
+      "nom": "Cmd007_IMPRESSION_2C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0063",
+      "nom": "Cmd007_PREPRESSE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0064",
+      "nom": "Cmd007_CALAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0065",
+      "nom": "Cmd007_SECHAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0066",
+      "nom": "Cmd007_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0067",
+      "nom": "Cmd008_GRAVURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0068",
+      "nom": "Cmd008_SECHAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0069",
+      "nom": "Cmd008_PREPRESSE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0070",
+      "nom": "Cmd008_IMPRESSION_2C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0071",
+      "nom": "Cmd008_IMPRESSION_1C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0072",
+      "nom": "Cmd008_PLIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0073",
+      "nom": "Cmd008_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0074",
+      "nom": "Cmd008_IMPRESSION_4C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0075",
+      "nom": "Cmd008_CALAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0076",
+      "nom": "Cmd009_IMPRESSION_3C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0077",
+      "nom": "Cmd009_CALAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0078",
+      "nom": "Cmd009_SECHAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0079",
+      "nom": "Cmd009_PLIAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0080",
+      "nom": "Cmd009_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0081",
+      "nom": "Cmd009_IMPRESSION_4C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0082",
+      "nom": "Cmd009_IMPRESSION_2C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0083",
+      "nom": "Cmd009_RELIURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0084",
+      "nom": "Cmd009_PREPRESSE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0085",
+      "nom": "Cmd009_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0086",
+      "nom": "Cmd009_GRAVURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0087",
+      "nom": "Cmd010_IMPRESSION_4C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0088",
+      "nom": "Cmd010_IMPRESSION_2C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0089",
+      "nom": "Cmd010_PREPRESSE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0090",
+      "nom": "Cmd010_GRAVURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0091",
+      "nom": "Cmd010_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0092",
+      "nom": "Cmd010_CALAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0093",
+      "nom": "Cmd010_RELIURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0094",
+      "nom": "Cmd010_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0095",
+      "nom": "Cmd010_PLIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0096",
+      "nom": "Cmd010_IMPRESSION_1C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0097",
+      "nom": "Cmd010_IMPRESSION_3C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0098",
+      "nom": "Cmd010_SECHAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0099",
+      "nom": "Cmd011_GRAVURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0100",
+      "nom": "Cmd011_PREPRESSE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0101",
+      "nom": "Cmd011_CALAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0102",
+      "nom": "Cmd011_SECHAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0103",
+      "nom": "Cmd011_IMPRESSION_4C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0104",
+      "nom": "Cmd011_IMPRESSION_2C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0105",
+      "nom": "Cmd011_RELIURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0106",
+      "nom": "Cmd011_PLIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0107",
+      "nom": "Cmd011_DECOUPE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0108",
+      "nom": "Cmd012_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0109",
+      "nom": "Cmd012_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0110",
+      "nom": "Cmd012_IMPRESSION_2C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0111",
+      "nom": "Cmd012_PLIAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0112",
+      "nom": "Cmd012_CALAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0113",
+      "nom": "Cmd012_IMPRESSION_3C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0114",
+      "nom": "Cmd012_IMPRESSION_4C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0115",
+      "nom": "Cmd012_GRAVURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0116",
+      "nom": "Cmd013_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0117",
+      "nom": "Cmd013_SECHAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0118",
+      "nom": "Cmd013_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0119",
+      "nom": "Cmd013_IMPRESSION_4C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0120",
+      "nom": "Cmd013_PLIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0121",
+      "nom": "Cmd013_RELIURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0122",
+      "nom": "Cmd013_IMPRESSION_2C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0123",
+      "nom": "Cmd013_PREPRESSE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0124",
+      "nom": "Cmd013_GRAVURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0125",
+      "nom": "Cmd013_IMPRESSION_1C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0126",
+      "nom": "Cmd013_IMPRESSION_3C",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0127",
+      "nom": "Cmd014_RELIURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0128",
+      "nom": "Cmd014_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0129",
+      "nom": "Cmd014_IMPRESSION_2C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0130",
+      "nom": "Cmd014_CALAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0131",
+      "nom": "Cmd014_PLIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0132",
+      "nom": "Cmd014_SECHAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0133",
+      "nom": "Cmd014_IMPRESSION_4C",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0134",
+      "nom": "Cmd014_PREPRESSE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0135",
+      "nom": "Cmd014_GRAVURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0136",
+      "nom": "Cmd015_SECHAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0137",
+      "nom": "Cmd015_IMPRESSION_1C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0138",
+      "nom": "Cmd015_IMPRESSION_4C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0139",
+      "nom": "Cmd015_IMPRESSION_2C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0140",
+      "nom": "Cmd015_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0141",
+      "nom": "Cmd015_PREPRESSE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0142",
+      "nom": "Cmd015_IMPRESSION_3C",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0143",
+      "nom": "Cmd015_PLIAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0144",
+      "nom": "Cmd015_GRAVURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0145",
+      "nom": "Cmd015_RELIURE",
+      "duree_estimee_jours": 2
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R0001",
+      "nom": "Pao #1",
+      "competences": [
+        "pao"
+      ]
+    },
+    {
+      "id": "R0002",
+      "nom": "Pao #2",
+      "competences": [
+        "pao"
+      ]
+    },
+    {
+      "id": "R0003",
+      "nom": "Montage #1",
+      "competences": [
+        "montage"
+      ]
+    },
+    {
+      "id": "R0004",
+      "nom": "Montage #2",
+      "competences": [
+        "montage"
+      ]
+    },
+    {
+      "id": "R0005",
+      "nom": "Gravure Ctp #1",
+      "competences": [
+        "gravure_ctp"
+      ]
+    },
+    {
+      "id": "R0006",
+      "nom": "Calage Presse #1",
+      "competences": [
+        "calage_presse"
+      ]
+    },
+    {
+      "id": "R0007",
+      "nom": "Impression Offset #1",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0008",
+      "nom": "Impression Offset #2",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0009",
+      "nom": "Impression Offset #3",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0010",
+      "nom": "Impression Offset #1",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0011",
+      "nom": "Impression Offset #2",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0012",
+      "nom": "Impression Offset #3",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0013",
+      "nom": "Impression Offset #4",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0014",
+      "nom": "Impression Offset #1",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0015",
+      "nom": "Impression Offset #2",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0016",
+      "nom": "Impression Offset #3",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0017",
+      "nom": "Impression Offset #4",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0018",
+      "nom": "Impression Offset #1",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0019",
+      "nom": "Impression Offset #2",
+      "competences": [
+        "impression_offset"
+      ]
+    },
+    {
+      "id": "R0020",
+      "nom": "Sechage Uv #1",
+      "competences": [
+        "sechage_uv"
+      ]
+    },
+    {
+      "id": "R0021",
+      "nom": "Sechage Uv #2",
+      "competences": [
+        "sechage_uv"
+      ]
+    },
+    {
+      "id": "R0022",
+      "nom": "Sechage Air #1",
+      "competences": [
+        "sechage_air"
+      ]
+    },
+    {
+      "id": "R0023",
+      "nom": "Sechage Air #2",
+      "competences": [
+        "sechage_air"
+      ]
+    },
+    {
+      "id": "R0024",
+      "nom": "Sechage Air #3",
+      "competences": [
+        "sechage_air"
+      ]
+    },
+    {
+      "id": "R0025",
+      "nom": "Decoupe Massicot #1",
+      "competences": [
+        "decoupe_massicot"
+      ]
+    },
+    {
+      "id": "R0026",
+      "nom": "Decoupe Massicot #2",
+      "competences": [
+        "decoupe_massicot"
+      ]
+    },
+    {
+      "id": "R0027",
+      "nom": "Decoupe Massicot #3",
+      "competences": [
+        "decoupe_massicot"
+      ]
+    },
+    {
+      "id": "R0028",
+      "nom": "Pliage Automatique #1",
+      "competences": [
+        "pliage_automatique"
+      ]
+    },
+    {
+      "id": "R0029",
+      "nom": "Pliage Automatique #2",
+      "competences": [
+        "pliage_automatique"
+      ]
+    },
+    {
+      "id": "R0030",
+      "nom": "Reliure Piqure #1",
+      "competences": [
+        "reliure_piqure"
+      ]
+    },
+    {
+      "id": "R0031",
+      "nom": "Reliure Piqure #2",
+      "competences": [
+        "reliure_piqure"
+      ]
+    },
+    {
+      "id": "R0032",
+      "nom": "Reliure Colle #1",
+      "competences": [
+        "reliure_colle"
+      ]
+    },
+    {
+      "id": "R0033",
+      "nom": "Reliure Colle #2",
+      "competences": [
+        "reliure_colle"
+      ]
+    },
+    {
+      "id": "R0034",
+      "nom": "Reliure Colle #3",
+      "competences": [
+        "reliure_colle"
+      ]
+    },
+    {
+      "id": "R0035",
+      "nom": "Reliure Colle #4",
+      "competences": [
+        "reliure_colle"
+      ]
+    },
+    {
+      "id": "R0036",
+      "nom": "Pelliculage #1",
+      "competences": [
+        "pelliculage"
+      ]
+    },
+    {
+      "id": "R0037",
+      "nom": "Pelliculage #2",
+      "competences": [
+        "pelliculage"
+      ]
+    },
+    {
+      "id": "R0038",
+      "nom": "Pelliculage #3",
+      "competences": [
+        "pelliculage"
+      ]
+    },
+    {
+      "id": "R0039",
+      "nom": "Pelliculage #4",
+      "competences": [
+        "pelliculage"
+      ]
+    },
+    {
+      "id": "R0040",
+      "nom": "Vernis #1",
+      "competences": [
+        "vernis"
+      ]
+    },
+    {
+      "id": "R0041",
+      "nom": "Vernis #2",
+      "competences": [
+        "vernis"
+      ]
+    },
+    {
+      "id": "R0042",
+      "nom": "Vernis #3",
+      "competences": [
+        "vernis"
+      ]
+    },
+    {
+      "id": "R0043",
+      "nom": "Vernis #4",
+      "competences": [
+        "vernis"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "T0001",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0002",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0003",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0004",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0005",
+      "competence": "pelliculage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0006",
+      "competence": "sechage_uv"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0007",
+      "competence": "reliure_colle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0008",
+      "competence": "montage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0009",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0010",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0001",
+      "apres": "T0002"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0002",
+      "apres": "T0003"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0003",
+      "apres": "T0004"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0004",
+      "apres": "T0005"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0005",
+      "apres": "T0006"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0006",
+      "apres": "T0007"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0007",
+      "apres": "T0008"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0008",
+      "apres": "T0009"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0009",
+      "apres": "T0010"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0011",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0012",
+      "competence": "reliure_colle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0013",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0014",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0015",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0016",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0017",
+      "competence": "vernis"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0018",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0019",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0020",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0011",
+      "apres": "T0012"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0012",
+      "apres": "T0013"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0013",
+      "apres": "T0014"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0014",
+      "apres": "T0015"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0015",
+      "apres": "T0016"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0016",
+      "apres": "T0017"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0017",
+      "apres": "T0018"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0018",
+      "apres": "T0019"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0019",
+      "apres": "T0020"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0021",
+      "competence": "vernis"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0022",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0023",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0024",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0025",
+      "competence": "montage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0026",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0027",
+      "competence": "reliure_colle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0028",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0029",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0021",
+      "apres": "T0022"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0022",
+      "apres": "T0023"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0023",
+      "apres": "T0024"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0024",
+      "apres": "T0025"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0025",
+      "apres": "T0026"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0026",
+      "apres": "T0027"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0027",
+      "apres": "T0028"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0028",
+      "apres": "T0029"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0030",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0031",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0032",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0033",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0034",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0035",
+      "competence": "reliure_piqure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0036",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0037",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0038",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0039",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0040",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0041",
+      "competence": "vernis"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0030",
+      "apres": "T0031"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0031",
+      "apres": "T0032"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0032",
+      "apres": "T0033"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0033",
+      "apres": "T0034"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0034",
+      "apres": "T0035"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0035",
+      "apres": "T0036"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0036",
+      "apres": "T0037"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0037",
+      "apres": "T0038"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0038",
+      "apres": "T0039"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0039",
+      "apres": "T0040"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0040",
+      "apres": "T0041"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0042",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0043",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0044",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0045",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0046",
+      "competence": "vernis"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0047",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0048",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0049",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0050",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0042",
+      "apres": "T0043"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0043",
+      "apres": "T0044"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0044",
+      "apres": "T0045"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0045",
+      "apres": "T0046"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0046",
+      "apres": "T0047"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0047",
+      "apres": "T0048"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0048",
+      "apres": "T0049"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0049",
+      "apres": "T0050"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0051",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0052",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0053",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0054",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0055",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0056",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0057",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0058",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0051",
+      "apres": "T0052"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0052",
+      "apres": "T0053"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0053",
+      "apres": "T0054"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0054",
+      "apres": "T0055"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0055",
+      "apres": "T0056"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0056",
+      "apres": "T0057"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0057",
+      "apres": "T0058"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0059",
+      "competence": "reliure_piqure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0060",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0061",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0062",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0063",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0064",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0065",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0066",
+      "competence": "pelliculage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0059",
+      "apres": "T0060"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0060",
+      "apres": "T0061"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0061",
+      "apres": "T0062"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0062",
+      "apres": "T0063"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0063",
+      "apres": "T0064"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0064",
+      "apres": "T0065"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0065",
+      "apres": "T0066"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0067",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0068",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0069",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0070",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0071",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0072",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0073",
+      "competence": "pelliculage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0074",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0075",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0067",
+      "apres": "T0068"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0068",
+      "apres": "T0069"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0069",
+      "apres": "T0070"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0070",
+      "apres": "T0071"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0071",
+      "apres": "T0072"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0072",
+      "apres": "T0073"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0073",
+      "apres": "T0074"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0074",
+      "apres": "T0075"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0076",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0077",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0078",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0079",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0080",
+      "competence": "vernis"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0081",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0082",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0083",
+      "competence": "reliure_colle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0084",
+      "competence": "montage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0085",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0086",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0076",
+      "apres": "T0077"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0077",
+      "apres": "T0078"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0078",
+      "apres": "T0079"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0079",
+      "apres": "T0080"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0080",
+      "apres": "T0081"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0081",
+      "apres": "T0082"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0082",
+      "apres": "T0083"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0083",
+      "apres": "T0084"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0084",
+      "apres": "T0085"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0085",
+      "apres": "T0086"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0087",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0088",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0089",
+      "competence": "montage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0090",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0091",
+      "competence": "pelliculage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0092",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0093",
+      "competence": "reliure_colle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0094",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0095",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0096",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0097",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0098",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0087",
+      "apres": "T0088"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0088",
+      "apres": "T0089"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0089",
+      "apres": "T0090"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0090",
+      "apres": "T0091"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0091",
+      "apres": "T0092"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0092",
+      "apres": "T0093"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0093",
+      "apres": "T0094"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0094",
+      "apres": "T0095"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0095",
+      "apres": "T0096"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0096",
+      "apres": "T0097"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0097",
+      "apres": "T0098"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0099",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0100",
+      "competence": "montage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0101",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0102",
+      "competence": "sechage_uv"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0103",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0104",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0105",
+      "competence": "reliure_colle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0106",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0107",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0099",
+      "apres": "T0100"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0100",
+      "apres": "T0101"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0101",
+      "apres": "T0102"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0102",
+      "apres": "T0103"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0103",
+      "apres": "T0104"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0104",
+      "apres": "T0105"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0105",
+      "apres": "T0106"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0106",
+      "apres": "T0107"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0108",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0109",
+      "competence": "pelliculage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0110",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0111",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0112",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0113",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0114",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0115",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0108",
+      "apres": "T0109"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0109",
+      "apres": "T0110"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0110",
+      "apres": "T0111"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0111",
+      "apres": "T0112"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0112",
+      "apres": "T0113"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0113",
+      "apres": "T0114"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0114",
+      "apres": "T0115"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0116",
+      "competence": "vernis"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0117",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0118",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0119",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0120",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0121",
+      "competence": "reliure_piqure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0122",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0123",
+      "competence": "montage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0124",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0125",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0126",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0116",
+      "apres": "T0117"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0117",
+      "apres": "T0118"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0118",
+      "apres": "T0119"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0119",
+      "apres": "T0120"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0120",
+      "apres": "T0121"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0121",
+      "apres": "T0122"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0122",
+      "apres": "T0123"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0123",
+      "apres": "T0124"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0124",
+      "apres": "T0125"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0125",
+      "apres": "T0126"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0127",
+      "competence": "reliure_piqure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0128",
+      "competence": "decoupe_massicot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0129",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0130",
+      "competence": "calage_presse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0131",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0132",
+      "competence": "sechage_uv"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0133",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0134",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0135",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0127",
+      "apres": "T0128"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0128",
+      "apres": "T0129"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0129",
+      "apres": "T0130"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0130",
+      "apres": "T0131"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0131",
+      "apres": "T0132"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0132",
+      "apres": "T0133"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0133",
+      "apres": "T0134"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0134",
+      "apres": "T0135"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0136",
+      "competence": "sechage_air"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0137",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0138",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0139",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0140",
+      "competence": "vernis"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0141",
+      "competence": "pao"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0142",
+      "competence": "impression_offset"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0143",
+      "competence": "pliage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0144",
+      "competence": "gravure_ctp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0145",
+      "competence": "reliure_colle"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0136",
+      "apres": "T0137"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0137",
+      "apres": "T0138"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0138",
+      "apres": "T0139"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0139",
+      "apres": "T0140"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0140",
+      "apres": "T0141"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0141",
+      "apres": "T0142"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0142",
+      "apres": "T0143"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0143",
+      "apres": "T0144"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0144",
+      "apres": "T0145"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

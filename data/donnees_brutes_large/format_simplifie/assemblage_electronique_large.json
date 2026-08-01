@@ -1,0 +1,5662 @@
+{
+  "taches": [
+    {
+      "id": "T0001",
+      "nom": "PCB001_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0002",
+      "nom": "PCB001_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0003",
+      "nom": "PCB001_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0004",
+      "nom": "PCB001_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0005",
+      "nom": "PCB001_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0006",
+      "nom": "PCB001_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0007",
+      "nom": "PCB001_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0008",
+      "nom": "PCB001_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0009",
+      "nom": "PCB001_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0010",
+      "nom": "PCB001_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0011",
+      "nom": "PCB001_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0012",
+      "nom": "PCB001_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0013",
+      "nom": "PCB002_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0014",
+      "nom": "PCB002_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0015",
+      "nom": "PCB002_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0016",
+      "nom": "PCB002_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0017",
+      "nom": "PCB002_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0018",
+      "nom": "PCB002_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0019",
+      "nom": "PCB002_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0020",
+      "nom": "PCB002_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0021",
+      "nom": "PCB002_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0022",
+      "nom": "PCB002_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0023",
+      "nom": "PCB002_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0024",
+      "nom": "PCB002_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0025",
+      "nom": "PCB003_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0026",
+      "nom": "PCB003_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0027",
+      "nom": "PCB003_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0028",
+      "nom": "PCB003_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0029",
+      "nom": "PCB003_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0030",
+      "nom": "PCB003_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0031",
+      "nom": "PCB003_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0032",
+      "nom": "PCB003_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0033",
+      "nom": "PCB003_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0034",
+      "nom": "PCB003_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0035",
+      "nom": "PCB003_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0036",
+      "nom": "PCB003_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0037",
+      "nom": "PCB004_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0038",
+      "nom": "PCB004_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0039",
+      "nom": "PCB004_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0040",
+      "nom": "PCB004_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0041",
+      "nom": "PCB004_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0042",
+      "nom": "PCB004_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0043",
+      "nom": "PCB004_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0044",
+      "nom": "PCB004_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0045",
+      "nom": "PCB004_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0046",
+      "nom": "PCB004_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0047",
+      "nom": "PCB004_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0048",
+      "nom": "PCB004_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0049",
+      "nom": "PCB005_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0050",
+      "nom": "PCB005_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0051",
+      "nom": "PCB005_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0052",
+      "nom": "PCB005_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0053",
+      "nom": "PCB005_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0054",
+      "nom": "PCB005_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0055",
+      "nom": "PCB005_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0056",
+      "nom": "PCB005_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0057",
+      "nom": "PCB005_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0058",
+      "nom": "PCB005_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0059",
+      "nom": "PCB005_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0060",
+      "nom": "PCB005_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0061",
+      "nom": "PCB006_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0062",
+      "nom": "PCB006_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0063",
+      "nom": "PCB006_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0064",
+      "nom": "PCB006_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0065",
+      "nom": "PCB006_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0066",
+      "nom": "PCB006_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0067",
+      "nom": "PCB006_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0068",
+      "nom": "PCB006_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0069",
+      "nom": "PCB006_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0070",
+      "nom": "PCB006_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0071",
+      "nom": "PCB006_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0072",
+      "nom": "PCB006_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0073",
+      "nom": "PCB007_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0074",
+      "nom": "PCB007_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0075",
+      "nom": "PCB007_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0076",
+      "nom": "PCB007_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0077",
+      "nom": "PCB007_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0078",
+      "nom": "PCB007_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0079",
+      "nom": "PCB007_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0080",
+      "nom": "PCB007_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0081",
+      "nom": "PCB007_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0082",
+      "nom": "PCB007_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0083",
+      "nom": "PCB007_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0084",
+      "nom": "PCB007_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0085",
+      "nom": "PCB008_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0086",
+      "nom": "PCB008_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0087",
+      "nom": "PCB008_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0088",
+      "nom": "PCB008_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0089",
+      "nom": "PCB008_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0090",
+      "nom": "PCB008_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0091",
+      "nom": "PCB008_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0092",
+      "nom": "PCB008_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0093",
+      "nom": "PCB008_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0094",
+      "nom": "PCB008_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0095",
+      "nom": "PCB008_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0096",
+      "nom": "PCB008_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0097",
+      "nom": "PCB009_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0098",
+      "nom": "PCB009_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0099",
+      "nom": "PCB009_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0100",
+      "nom": "PCB009_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0101",
+      "nom": "PCB009_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0102",
+      "nom": "PCB009_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0103",
+      "nom": "PCB009_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0104",
+      "nom": "PCB009_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0105",
+      "nom": "PCB009_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0106",
+      "nom": "PCB009_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0107",
+      "nom": "PCB009_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0108",
+      "nom": "PCB009_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0109",
+      "nom": "PCB010_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0110",
+      "nom": "PCB010_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0111",
+      "nom": "PCB010_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0112",
+      "nom": "PCB010_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0113",
+      "nom": "PCB010_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0114",
+      "nom": "PCB010_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0115",
+      "nom": "PCB010_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0116",
+      "nom": "PCB010_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0117",
+      "nom": "PCB010_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0118",
+      "nom": "PCB010_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0119",
+      "nom": "PCB010_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0120",
+      "nom": "PCB010_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0121",
+      "nom": "PCB011_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0122",
+      "nom": "PCB011_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0123",
+      "nom": "PCB011_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0124",
+      "nom": "PCB011_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0125",
+      "nom": "PCB011_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0126",
+      "nom": "PCB011_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0127",
+      "nom": "PCB011_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0128",
+      "nom": "PCB011_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0129",
+      "nom": "PCB011_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0130",
+      "nom": "PCB011_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0131",
+      "nom": "PCB011_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0132",
+      "nom": "PCB011_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0133",
+      "nom": "PCB012_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0134",
+      "nom": "PCB012_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0135",
+      "nom": "PCB012_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0136",
+      "nom": "PCB012_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0137",
+      "nom": "PCB012_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0138",
+      "nom": "PCB012_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0139",
+      "nom": "PCB012_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0140",
+      "nom": "PCB012_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0141",
+      "nom": "PCB012_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0142",
+      "nom": "PCB012_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0143",
+      "nom": "PCB012_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0144",
+      "nom": "PCB012_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0145",
+      "nom": "PCB013_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0146",
+      "nom": "PCB013_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0147",
+      "nom": "PCB013_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0148",
+      "nom": "PCB013_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0149",
+      "nom": "PCB013_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0150",
+      "nom": "PCB013_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0151",
+      "nom": "PCB013_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0152",
+      "nom": "PCB013_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0153",
+      "nom": "PCB013_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0154",
+      "nom": "PCB013_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0155",
+      "nom": "PCB013_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0156",
+      "nom": "PCB013_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0157",
+      "nom": "PCB014_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0158",
+      "nom": "PCB014_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0159",
+      "nom": "PCB014_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0160",
+      "nom": "PCB014_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0161",
+      "nom": "PCB014_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0162",
+      "nom": "PCB014_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0163",
+      "nom": "PCB014_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0164",
+      "nom": "PCB014_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0165",
+      "nom": "PCB014_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0166",
+      "nom": "PCB014_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0167",
+      "nom": "PCB014_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0168",
+      "nom": "PCB014_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0169",
+      "nom": "PCB015_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0170",
+      "nom": "PCB015_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0171",
+      "nom": "PCB015_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0172",
+      "nom": "PCB015_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0173",
+      "nom": "PCB015_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0174",
+      "nom": "PCB015_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0175",
+      "nom": "PCB015_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0176",
+      "nom": "PCB015_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0177",
+      "nom": "PCB015_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0178",
+      "nom": "PCB015_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0179",
+      "nom": "PCB015_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0180",
+      "nom": "PCB015_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0181",
+      "nom": "PCB016_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0182",
+      "nom": "PCB016_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0183",
+      "nom": "PCB016_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0184",
+      "nom": "PCB016_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0185",
+      "nom": "PCB016_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0186",
+      "nom": "PCB016_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0187",
+      "nom": "PCB016_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0188",
+      "nom": "PCB016_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0189",
+      "nom": "PCB016_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0190",
+      "nom": "PCB016_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0191",
+      "nom": "PCB016_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0192",
+      "nom": "PCB016_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0193",
+      "nom": "PCB017_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0194",
+      "nom": "PCB017_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0195",
+      "nom": "PCB017_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0196",
+      "nom": "PCB017_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0197",
+      "nom": "PCB017_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0198",
+      "nom": "PCB017_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0199",
+      "nom": "PCB017_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0200",
+      "nom": "PCB017_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0201",
+      "nom": "PCB017_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0202",
+      "nom": "PCB017_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0203",
+      "nom": "PCB017_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0204",
+      "nom": "PCB017_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0205",
+      "nom": "PCB018_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0206",
+      "nom": "PCB018_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0207",
+      "nom": "PCB018_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0208",
+      "nom": "PCB018_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0209",
+      "nom": "PCB018_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0210",
+      "nom": "PCB018_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0211",
+      "nom": "PCB018_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0212",
+      "nom": "PCB018_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0213",
+      "nom": "PCB018_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0214",
+      "nom": "PCB018_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0215",
+      "nom": "PCB018_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0216",
+      "nom": "PCB018_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0217",
+      "nom": "PCB019_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0218",
+      "nom": "PCB019_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0219",
+      "nom": "PCB019_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0220",
+      "nom": "PCB019_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0221",
+      "nom": "PCB019_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0222",
+      "nom": "PCB019_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0223",
+      "nom": "PCB019_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0224",
+      "nom": "PCB019_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0225",
+      "nom": "PCB019_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0226",
+      "nom": "PCB019_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0227",
+      "nom": "PCB019_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0228",
+      "nom": "PCB019_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0229",
+      "nom": "PCB020_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0230",
+      "nom": "PCB020_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0231",
+      "nom": "PCB020_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0232",
+      "nom": "PCB020_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0233",
+      "nom": "PCB020_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0234",
+      "nom": "PCB020_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0235",
+      "nom": "PCB020_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0236",
+      "nom": "PCB020_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0237",
+      "nom": "PCB020_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0238",
+      "nom": "PCB020_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0239",
+      "nom": "PCB020_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0240",
+      "nom": "PCB020_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0241",
+      "nom": "PCB021_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0242",
+      "nom": "PCB021_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0243",
+      "nom": "PCB021_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0244",
+      "nom": "PCB021_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0245",
+      "nom": "PCB021_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0246",
+      "nom": "PCB021_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0247",
+      "nom": "PCB021_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0248",
+      "nom": "PCB021_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0249",
+      "nom": "PCB021_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0250",
+      "nom": "PCB021_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0251",
+      "nom": "PCB021_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0252",
+      "nom": "PCB021_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0253",
+      "nom": "PCB022_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0254",
+      "nom": "PCB022_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0255",
+      "nom": "PCB022_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0256",
+      "nom": "PCB022_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0257",
+      "nom": "PCB022_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0258",
+      "nom": "PCB022_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0259",
+      "nom": "PCB022_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0260",
+      "nom": "PCB022_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0261",
+      "nom": "PCB022_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0262",
+      "nom": "PCB022_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0263",
+      "nom": "PCB022_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0264",
+      "nom": "PCB022_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0265",
+      "nom": "PCB023_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0266",
+      "nom": "PCB023_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0267",
+      "nom": "PCB023_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0268",
+      "nom": "PCB023_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0269",
+      "nom": "PCB023_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0270",
+      "nom": "PCB023_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0271",
+      "nom": "PCB023_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0272",
+      "nom": "PCB023_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0273",
+      "nom": "PCB023_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0274",
+      "nom": "PCB023_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0275",
+      "nom": "PCB023_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0276",
+      "nom": "PCB023_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0277",
+      "nom": "PCB024_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0278",
+      "nom": "PCB024_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0279",
+      "nom": "PCB024_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0280",
+      "nom": "PCB024_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0281",
+      "nom": "PCB024_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0282",
+      "nom": "PCB024_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0283",
+      "nom": "PCB024_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0284",
+      "nom": "PCB024_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0285",
+      "nom": "PCB024_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0286",
+      "nom": "PCB024_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0287",
+      "nom": "PCB024_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0288",
+      "nom": "PCB024_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0289",
+      "nom": "PCB025_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0290",
+      "nom": "PCB025_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0291",
+      "nom": "PCB025_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0292",
+      "nom": "PCB025_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0293",
+      "nom": "PCB025_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0294",
+      "nom": "PCB025_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0295",
+      "nom": "PCB025_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0296",
+      "nom": "PCB025_TEST_ICT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0297",
+      "nom": "PCB025_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0298",
+      "nom": "PCB025_COATING",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0299",
+      "nom": "PCB025_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0300",
+      "nom": "PCB025_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0301",
+      "nom": "PCB026_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0302",
+      "nom": "PCB026_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0303",
+      "nom": "PCB026_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0304",
+      "nom": "PCB026_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0305",
+      "nom": "PCB026_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0306",
+      "nom": "PCB026_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0307",
+      "nom": "PCB026_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0308",
+      "nom": "PCB026_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0309",
+      "nom": "PCB026_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0310",
+      "nom": "PCB026_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0311",
+      "nom": "PCB026_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0312",
+      "nom": "PCB026_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0313",
+      "nom": "PCB027_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0314",
+      "nom": "PCB027_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0315",
+      "nom": "PCB027_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0316",
+      "nom": "PCB027_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0317",
+      "nom": "PCB027_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0318",
+      "nom": "PCB027_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0319",
+      "nom": "PCB027_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0320",
+      "nom": "PCB027_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0321",
+      "nom": "PCB027_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0322",
+      "nom": "PCB027_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0323",
+      "nom": "PCB027_DEPANEL",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0324",
+      "nom": "PCB027_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0325",
+      "nom": "PCB028_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0326",
+      "nom": "PCB028_POSE_CMS_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0327",
+      "nom": "PCB028_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0328",
+      "nom": "PCB028_AOI_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0329",
+      "nom": "PCB028_POSE_CMS_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0330",
+      "nom": "PCB028_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0331",
+      "nom": "PCB028_SOUDURE_THT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0332",
+      "nom": "PCB028_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0333",
+      "nom": "PCB028_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0334",
+      "nom": "PCB028_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0335",
+      "nom": "PCB028_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0336",
+      "nom": "PCB028_PACKAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0337",
+      "nom": "PCB029_PREP",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0338",
+      "nom": "PCB029_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0339",
+      "nom": "PCB029_REFUSION_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0340",
+      "nom": "PCB029_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0341",
+      "nom": "PCB029_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0342",
+      "nom": "PCB029_REFUSION_B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0343",
+      "nom": "PCB029_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0344",
+      "nom": "PCB029_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0345",
+      "nom": "PCB029_TEST_FONC",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0346",
+      "nom": "PCB029_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0347",
+      "nom": "PCB029_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0348",
+      "nom": "PCB029_PACKAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0349",
+      "nom": "PCB030_PREP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0350",
+      "nom": "PCB030_POSE_CMS_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0351",
+      "nom": "PCB030_REFUSION_A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0352",
+      "nom": "PCB030_AOI_A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0353",
+      "nom": "PCB030_POSE_CMS_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0354",
+      "nom": "PCB030_REFUSION_B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0355",
+      "nom": "PCB030_SOUDURE_THT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0356",
+      "nom": "PCB030_TEST_ICT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0357",
+      "nom": "PCB030_TEST_FONC",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0358",
+      "nom": "PCB030_COATING",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0359",
+      "nom": "PCB030_DEPANEL",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0360",
+      "nom": "PCB030_PACKAGE",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R0001",
+      "nom": "Preparation Pcb #1",
+      "competences": [
+        "preparation_pcb"
+      ]
+    },
+    {
+      "id": "R0002",
+      "nom": "Preparation Pcb #2",
+      "competences": [
+        "preparation_pcb"
+      ]
+    },
+    {
+      "id": "R0003",
+      "nom": "Preparation Pcb #3",
+      "competences": [
+        "preparation_pcb"
+      ]
+    },
+    {
+      "id": "R0004",
+      "nom": "Pick Place #1",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "R0005",
+      "nom": "Pick Place #2",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "R0006",
+      "nom": "Pick Place #3",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "R0007",
+      "nom": "Pick Place #4",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "R0008",
+      "nom": "Pick Place #5",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "R0009",
+      "nom": "Pick Place #6",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "R0010",
+      "nom": "Refusion #1",
+      "competences": [
+        "refusion"
+      ]
+    },
+    {
+      "id": "R0011",
+      "nom": "Refusion #2",
+      "competences": [
+        "refusion"
+      ]
+    },
+    {
+      "id": "R0012",
+      "nom": "Refusion #3",
+      "competences": [
+        "refusion"
+      ]
+    },
+    {
+      "id": "R0013",
+      "nom": "Refusion #4",
+      "competences": [
+        "refusion"
+      ]
+    },
+    {
+      "id": "R0014",
+      "nom": "Inspection Aoi #1",
+      "competences": [
+        "inspection_aoi"
+      ]
+    },
+    {
+      "id": "R0015",
+      "nom": "Inspection Aoi #2",
+      "competences": [
+        "inspection_aoi"
+      ]
+    },
+    {
+      "id": "R0016",
+      "nom": "Inspection Aoi #3",
+      "competences": [
+        "inspection_aoi"
+      ]
+    },
+    {
+      "id": "R0017",
+      "nom": "Inspection Aoi #4",
+      "competences": [
+        "inspection_aoi"
+      ]
+    },
+    {
+      "id": "R0018",
+      "nom": "Inspection Aoi #5",
+      "competences": [
+        "inspection_aoi"
+      ]
+    },
+    {
+      "id": "R0019",
+      "nom": "Soudure Manuelle #1",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0020",
+      "nom": "Soudure Manuelle #2",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0021",
+      "nom": "Soudure Manuelle #3",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0022",
+      "nom": "Soudure Manuelle #4",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0023",
+      "nom": "Soudure Manuelle #5",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0024",
+      "nom": "Soudure Manuelle #6",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0025",
+      "nom": "Soudure Manuelle #7",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0026",
+      "nom": "Soudure Manuelle #8",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0027",
+      "nom": "Soudure Manuelle #9",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0028",
+      "nom": "Soudure Manuelle #10",
+      "competences": [
+        "soudure_manuelle"
+      ]
+    },
+    {
+      "id": "R0029",
+      "nom": "Test Ict #1",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0030",
+      "nom": "Test Ict #2",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0031",
+      "nom": "Test Ict #3",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0032",
+      "nom": "Test Ict #4",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0033",
+      "nom": "Test Ict #5",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0034",
+      "nom": "Test Ict #6",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0035",
+      "nom": "Test Ict #7",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0036",
+      "nom": "Test Ict #8",
+      "competences": [
+        "test_ict"
+      ]
+    },
+    {
+      "id": "R0037",
+      "nom": "Test Fonctionnel #1",
+      "competences": [
+        "test_fonctionnel"
+      ]
+    },
+    {
+      "id": "R0038",
+      "nom": "Test Fonctionnel #2",
+      "competences": [
+        "test_fonctionnel"
+      ]
+    },
+    {
+      "id": "R0039",
+      "nom": "Test Fonctionnel #3",
+      "competences": [
+        "test_fonctionnel"
+      ]
+    },
+    {
+      "id": "R0040",
+      "nom": "Test Fonctionnel #4",
+      "competences": [
+        "test_fonctionnel"
+      ]
+    },
+    {
+      "id": "R0041",
+      "nom": "Test Fonctionnel #5",
+      "competences": [
+        "test_fonctionnel"
+      ]
+    },
+    {
+      "id": "R0042",
+      "nom": "Test Fonctionnel #6",
+      "competences": [
+        "test_fonctionnel"
+      ]
+    },
+    {
+      "id": "R0043",
+      "nom": "Coating #1",
+      "competences": [
+        "coating"
+      ]
+    },
+    {
+      "id": "R0044",
+      "nom": "Coating #2",
+      "competences": [
+        "coating"
+      ]
+    },
+    {
+      "id": "R0045",
+      "nom": "Coating #3",
+      "competences": [
+        "coating"
+      ]
+    },
+    {
+      "id": "R0046",
+      "nom": "Depanelisation #1",
+      "competences": [
+        "depanelisation"
+      ]
+    },
+    {
+      "id": "R0047",
+      "nom": "Depanelisation #2",
+      "competences": [
+        "depanelisation"
+      ]
+    },
+    {
+      "id": "R0048",
+      "nom": "Depanelisation #3",
+      "competences": [
+        "depanelisation"
+      ]
+    },
+    {
+      "id": "R0049",
+      "nom": "Depanelisation #4",
+      "competences": [
+        "depanelisation"
+      ]
+    },
+    {
+      "id": "R0050",
+      "nom": "Packaging #1",
+      "competences": [
+        "packaging"
+      ]
+    },
+    {
+      "id": "R0051",
+      "nom": "Packaging #2",
+      "competences": [
+        "packaging"
+      ]
+    },
+    {
+      "id": "R0052",
+      "nom": "Packaging #3",
+      "competences": [
+        "packaging"
+      ]
+    },
+    {
+      "id": "R0053",
+      "nom": "Packaging #4",
+      "competences": [
+        "packaging"
+      ]
+    },
+    {
+      "id": "R0054",
+      "nom": "Packaging #5",
+      "competences": [
+        "packaging"
+      ]
+    },
+    {
+      "id": "R0055",
+      "nom": "Packaging #6",
+      "competences": [
+        "packaging"
+      ]
+    },
+    {
+      "id": "R0056",
+      "nom": "Packaging #7",
+      "competences": [
+        "packaging"
+      ]
+    },
+    {
+      "id": "R0057",
+      "nom": "Packaging #8",
+      "competences": [
+        "packaging"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "T0001",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0002",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0003",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0004",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0005",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0006",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0007",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0008",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0009",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0010",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0011",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0012",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0001",
+      "apres": "T0002"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0002",
+      "apres": "T0003"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0003",
+      "apres": "T0004"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0004",
+      "apres": "T0005"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0005",
+      "apres": "T0006"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0006",
+      "apres": "T0007"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0007",
+      "apres": "T0008"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0008",
+      "apres": "T0009"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0009",
+      "apres": "T0010"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0010",
+      "apres": "T0011"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0011",
+      "apres": "T0012"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0013",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0014",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0015",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0016",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0017",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0018",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0019",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0020",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0021",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0022",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0023",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0024",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0013",
+      "apres": "T0014"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0014",
+      "apres": "T0015"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0015",
+      "apres": "T0016"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0016",
+      "apres": "T0017"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0017",
+      "apres": "T0018"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0018",
+      "apres": "T0019"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0019",
+      "apres": "T0020"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0020",
+      "apres": "T0021"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0021",
+      "apres": "T0022"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0022",
+      "apres": "T0023"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0023",
+      "apres": "T0024"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0025",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0026",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0027",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0028",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0029",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0030",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0031",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0032",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0033",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0034",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0035",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0036",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0025",
+      "apres": "T0026"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0026",
+      "apres": "T0027"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0027",
+      "apres": "T0028"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0028",
+      "apres": "T0029"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0029",
+      "apres": "T0030"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0030",
+      "apres": "T0031"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0031",
+      "apres": "T0032"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0032",
+      "apres": "T0033"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0033",
+      "apres": "T0034"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0034",
+      "apres": "T0035"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0035",
+      "apres": "T0036"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0037",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0038",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0039",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0040",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0041",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0042",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0043",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0044",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0045",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0046",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0047",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0048",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0037",
+      "apres": "T0038"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0038",
+      "apres": "T0039"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0039",
+      "apres": "T0040"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0040",
+      "apres": "T0041"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0041",
+      "apres": "T0042"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0042",
+      "apres": "T0043"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0043",
+      "apres": "T0044"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0044",
+      "apres": "T0045"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0045",
+      "apres": "T0046"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0046",
+      "apres": "T0047"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0047",
+      "apres": "T0048"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0049",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0050",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0051",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0052",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0053",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0054",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0055",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0056",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0057",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0058",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0059",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0060",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0049",
+      "apres": "T0050"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0050",
+      "apres": "T0051"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0051",
+      "apres": "T0052"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0052",
+      "apres": "T0053"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0053",
+      "apres": "T0054"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0054",
+      "apres": "T0055"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0055",
+      "apres": "T0056"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0056",
+      "apres": "T0057"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0057",
+      "apres": "T0058"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0058",
+      "apres": "T0059"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0059",
+      "apres": "T0060"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0061",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0062",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0063",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0064",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0065",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0066",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0067",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0068",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0069",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0070",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0071",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0072",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0061",
+      "apres": "T0062"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0062",
+      "apres": "T0063"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0063",
+      "apres": "T0064"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0064",
+      "apres": "T0065"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0065",
+      "apres": "T0066"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0066",
+      "apres": "T0067"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0067",
+      "apres": "T0068"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0068",
+      "apres": "T0069"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0069",
+      "apres": "T0070"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0070",
+      "apres": "T0071"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0071",
+      "apres": "T0072"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0073",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0074",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0075",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0076",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0077",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0078",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0079",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0080",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0081",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0082",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0083",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0084",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0073",
+      "apres": "T0074"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0074",
+      "apres": "T0075"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0075",
+      "apres": "T0076"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0076",
+      "apres": "T0077"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0077",
+      "apres": "T0078"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0078",
+      "apres": "T0079"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0079",
+      "apres": "T0080"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0080",
+      "apres": "T0081"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0081",
+      "apres": "T0082"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0082",
+      "apres": "T0083"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0083",
+      "apres": "T0084"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0085",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0086",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0087",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0088",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0089",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0090",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0091",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0092",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0093",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0094",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0095",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0096",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0085",
+      "apres": "T0086"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0086",
+      "apres": "T0087"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0087",
+      "apres": "T0088"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0088",
+      "apres": "T0089"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0089",
+      "apres": "T0090"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0090",
+      "apres": "T0091"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0091",
+      "apres": "T0092"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0092",
+      "apres": "T0093"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0093",
+      "apres": "T0094"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0094",
+      "apres": "T0095"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0095",
+      "apres": "T0096"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0097",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0098",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0099",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0100",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0101",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0102",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0103",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0104",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0105",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0106",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0107",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0108",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0097",
+      "apres": "T0098"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0098",
+      "apres": "T0099"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0099",
+      "apres": "T0100"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0100",
+      "apres": "T0101"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0101",
+      "apres": "T0102"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0102",
+      "apres": "T0103"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0103",
+      "apres": "T0104"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0104",
+      "apres": "T0105"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0105",
+      "apres": "T0106"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0106",
+      "apres": "T0107"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0107",
+      "apres": "T0108"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0109",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0110",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0111",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0112",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0113",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0114",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0115",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0116",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0117",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0118",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0119",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0120",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0109",
+      "apres": "T0110"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0110",
+      "apres": "T0111"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0111",
+      "apres": "T0112"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0112",
+      "apres": "T0113"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0113",
+      "apres": "T0114"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0114",
+      "apres": "T0115"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0115",
+      "apres": "T0116"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0116",
+      "apres": "T0117"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0117",
+      "apres": "T0118"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0118",
+      "apres": "T0119"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0119",
+      "apres": "T0120"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0121",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0122",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0123",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0124",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0125",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0126",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0127",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0128",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0129",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0130",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0131",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0132",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0121",
+      "apres": "T0122"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0122",
+      "apres": "T0123"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0123",
+      "apres": "T0124"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0124",
+      "apres": "T0125"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0125",
+      "apres": "T0126"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0126",
+      "apres": "T0127"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0127",
+      "apres": "T0128"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0128",
+      "apres": "T0129"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0129",
+      "apres": "T0130"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0130",
+      "apres": "T0131"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0131",
+      "apres": "T0132"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0133",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0134",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0135",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0136",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0137",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0138",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0139",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0140",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0141",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0142",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0143",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0144",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0133",
+      "apres": "T0134"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0134",
+      "apres": "T0135"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0135",
+      "apres": "T0136"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0136",
+      "apres": "T0137"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0137",
+      "apres": "T0138"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0138",
+      "apres": "T0139"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0139",
+      "apres": "T0140"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0140",
+      "apres": "T0141"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0141",
+      "apres": "T0142"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0142",
+      "apres": "T0143"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0143",
+      "apres": "T0144"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0145",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0146",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0147",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0148",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0149",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0150",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0151",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0152",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0153",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0154",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0155",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0156",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0145",
+      "apres": "T0146"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0146",
+      "apres": "T0147"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0147",
+      "apres": "T0148"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0148",
+      "apres": "T0149"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0149",
+      "apres": "T0150"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0150",
+      "apres": "T0151"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0151",
+      "apres": "T0152"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0152",
+      "apres": "T0153"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0153",
+      "apres": "T0154"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0154",
+      "apres": "T0155"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0155",
+      "apres": "T0156"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0157",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0158",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0159",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0160",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0161",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0162",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0163",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0164",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0165",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0166",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0167",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0168",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0157",
+      "apres": "T0158"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0158",
+      "apres": "T0159"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0159",
+      "apres": "T0160"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0160",
+      "apres": "T0161"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0161",
+      "apres": "T0162"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0162",
+      "apres": "T0163"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0163",
+      "apres": "T0164"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0164",
+      "apres": "T0165"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0165",
+      "apres": "T0166"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0166",
+      "apres": "T0167"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0167",
+      "apres": "T0168"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0169",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0170",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0171",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0172",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0173",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0174",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0175",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0176",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0177",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0178",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0179",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0180",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0169",
+      "apres": "T0170"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0170",
+      "apres": "T0171"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0171",
+      "apres": "T0172"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0172",
+      "apres": "T0173"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0173",
+      "apres": "T0174"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0174",
+      "apres": "T0175"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0175",
+      "apres": "T0176"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0176",
+      "apres": "T0177"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0177",
+      "apres": "T0178"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0178",
+      "apres": "T0179"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0179",
+      "apres": "T0180"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0181",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0182",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0183",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0184",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0185",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0186",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0187",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0188",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0189",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0190",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0191",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0192",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0181",
+      "apres": "T0182"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0182",
+      "apres": "T0183"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0183",
+      "apres": "T0184"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0184",
+      "apres": "T0185"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0185",
+      "apres": "T0186"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0186",
+      "apres": "T0187"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0187",
+      "apres": "T0188"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0188",
+      "apres": "T0189"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0189",
+      "apres": "T0190"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0190",
+      "apres": "T0191"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0191",
+      "apres": "T0192"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0193",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0194",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0195",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0196",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0197",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0198",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0199",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0200",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0201",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0202",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0203",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0204",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0193",
+      "apres": "T0194"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0194",
+      "apres": "T0195"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0195",
+      "apres": "T0196"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0196",
+      "apres": "T0197"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0197",
+      "apres": "T0198"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0198",
+      "apres": "T0199"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0199",
+      "apres": "T0200"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0200",
+      "apres": "T0201"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0201",
+      "apres": "T0202"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0202",
+      "apres": "T0203"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0203",
+      "apres": "T0204"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0205",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0206",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0207",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0208",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0209",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0210",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0211",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0212",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0213",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0214",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0215",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0216",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0205",
+      "apres": "T0206"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0206",
+      "apres": "T0207"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0207",
+      "apres": "T0208"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0208",
+      "apres": "T0209"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0209",
+      "apres": "T0210"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0210",
+      "apres": "T0211"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0211",
+      "apres": "T0212"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0212",
+      "apres": "T0213"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0213",
+      "apres": "T0214"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0214",
+      "apres": "T0215"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0215",
+      "apres": "T0216"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0217",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0218",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0219",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0220",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0221",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0222",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0223",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0224",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0225",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0226",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0227",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0228",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0217",
+      "apres": "T0218"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0218",
+      "apres": "T0219"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0219",
+      "apres": "T0220"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0220",
+      "apres": "T0221"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0221",
+      "apres": "T0222"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0222",
+      "apres": "T0223"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0223",
+      "apres": "T0224"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0224",
+      "apres": "T0225"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0225",
+      "apres": "T0226"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0226",
+      "apres": "T0227"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0227",
+      "apres": "T0228"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0229",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0230",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0231",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0232",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0233",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0234",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0235",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0236",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0237",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0238",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0239",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0240",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0229",
+      "apres": "T0230"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0230",
+      "apres": "T0231"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0231",
+      "apres": "T0232"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0232",
+      "apres": "T0233"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0233",
+      "apres": "T0234"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0234",
+      "apres": "T0235"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0235",
+      "apres": "T0236"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0236",
+      "apres": "T0237"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0237",
+      "apres": "T0238"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0238",
+      "apres": "T0239"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0239",
+      "apres": "T0240"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0241",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0242",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0243",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0244",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0245",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0246",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0247",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0248",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0249",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0250",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0251",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0252",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0241",
+      "apres": "T0242"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0242",
+      "apres": "T0243"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0243",
+      "apres": "T0244"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0244",
+      "apres": "T0245"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0245",
+      "apres": "T0246"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0246",
+      "apres": "T0247"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0247",
+      "apres": "T0248"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0248",
+      "apres": "T0249"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0249",
+      "apres": "T0250"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0250",
+      "apres": "T0251"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0251",
+      "apres": "T0252"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0253",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0254",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0255",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0256",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0257",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0258",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0259",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0260",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0261",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0262",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0263",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0264",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0253",
+      "apres": "T0254"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0254",
+      "apres": "T0255"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0255",
+      "apres": "T0256"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0256",
+      "apres": "T0257"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0257",
+      "apres": "T0258"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0258",
+      "apres": "T0259"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0259",
+      "apres": "T0260"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0260",
+      "apres": "T0261"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0261",
+      "apres": "T0262"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0262",
+      "apres": "T0263"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0263",
+      "apres": "T0264"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0265",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0266",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0267",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0268",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0269",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0270",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0271",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0272",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0273",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0274",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0275",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0276",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0265",
+      "apres": "T0266"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0266",
+      "apres": "T0267"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0267",
+      "apres": "T0268"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0268",
+      "apres": "T0269"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0269",
+      "apres": "T0270"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0270",
+      "apres": "T0271"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0271",
+      "apres": "T0272"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0272",
+      "apres": "T0273"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0273",
+      "apres": "T0274"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0274",
+      "apres": "T0275"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0275",
+      "apres": "T0276"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0277",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0278",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0279",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0280",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0281",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0282",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0283",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0284",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0285",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0286",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0287",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0288",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0277",
+      "apres": "T0278"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0278",
+      "apres": "T0279"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0279",
+      "apres": "T0280"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0280",
+      "apres": "T0281"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0281",
+      "apres": "T0282"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0282",
+      "apres": "T0283"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0283",
+      "apres": "T0284"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0284",
+      "apres": "T0285"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0285",
+      "apres": "T0286"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0286",
+      "apres": "T0287"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0287",
+      "apres": "T0288"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0289",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0290",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0291",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0292",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0293",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0294",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0295",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0296",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0297",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0298",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0299",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0300",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0289",
+      "apres": "T0290"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0290",
+      "apres": "T0291"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0291",
+      "apres": "T0292"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0292",
+      "apres": "T0293"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0293",
+      "apres": "T0294"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0294",
+      "apres": "T0295"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0295",
+      "apres": "T0296"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0296",
+      "apres": "T0297"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0297",
+      "apres": "T0298"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0298",
+      "apres": "T0299"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0299",
+      "apres": "T0300"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0301",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0302",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0303",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0304",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0305",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0306",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0307",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0308",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0309",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0310",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0311",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0312",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0301",
+      "apres": "T0302"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0302",
+      "apres": "T0303"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0303",
+      "apres": "T0304"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0304",
+      "apres": "T0305"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0305",
+      "apres": "T0306"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0306",
+      "apres": "T0307"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0307",
+      "apres": "T0308"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0308",
+      "apres": "T0309"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0309",
+      "apres": "T0310"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0310",
+      "apres": "T0311"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0311",
+      "apres": "T0312"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0313",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0314",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0315",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0316",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0317",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0318",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0319",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0320",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0321",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0322",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0323",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0324",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0313",
+      "apres": "T0314"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0314",
+      "apres": "T0315"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0315",
+      "apres": "T0316"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0316",
+      "apres": "T0317"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0317",
+      "apres": "T0318"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0318",
+      "apres": "T0319"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0319",
+      "apres": "T0320"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0320",
+      "apres": "T0321"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0321",
+      "apres": "T0322"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0322",
+      "apres": "T0323"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0323",
+      "apres": "T0324"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0325",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0326",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0327",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0328",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0329",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0330",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0331",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0332",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0333",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0334",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0335",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0336",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0325",
+      "apres": "T0326"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0326",
+      "apres": "T0327"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0327",
+      "apres": "T0328"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0328",
+      "apres": "T0329"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0329",
+      "apres": "T0330"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0330",
+      "apres": "T0331"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0331",
+      "apres": "T0332"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0332",
+      "apres": "T0333"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0333",
+      "apres": "T0334"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0334",
+      "apres": "T0335"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0335",
+      "apres": "T0336"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0337",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0338",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0339",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0340",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0341",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0342",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0343",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0344",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0345",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0346",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0347",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0348",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0337",
+      "apres": "T0338"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0338",
+      "apres": "T0339"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0339",
+      "apres": "T0340"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0340",
+      "apres": "T0341"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0341",
+      "apres": "T0342"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0342",
+      "apres": "T0343"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0343",
+      "apres": "T0344"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0344",
+      "apres": "T0345"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0345",
+      "apres": "T0346"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0346",
+      "apres": "T0347"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0347",
+      "apres": "T0348"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0349",
+      "competence": "preparation_pcb"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0350",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0351",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0352",
+      "competence": "inspection_aoi"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0353",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0354",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0355",
+      "competence": "soudure_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0356",
+      "competence": "test_ict"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0357",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0358",
+      "competence": "coating"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0359",
+      "competence": "depanelisation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0360",
+      "competence": "packaging"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0349",
+      "apres": "T0350"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0350",
+      "apres": "T0351"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0351",
+      "apres": "T0352"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0352",
+      "apres": "T0353"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0353",
+      "apres": "T0354"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0354",
+      "apres": "T0355"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0355",
+      "apres": "T0356"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0356",
+      "apres": "T0357"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0357",
+      "apres": "T0358"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0358",
+      "apres": "T0359"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0359",
+      "apres": "T0360"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

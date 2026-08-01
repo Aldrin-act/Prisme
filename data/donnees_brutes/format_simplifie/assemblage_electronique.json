@@ -1,0 +1,118 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Préparation",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T2",
+      "nom": "Pose CMS",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T3",
+      "nom": "Réfusion",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Inspection",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T5",
+      "nom": "Test",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Station préparation",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Pick&Place",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Four réfusion",
+      "competences": [
+        "refusion"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "AOI",
+      "competences": [
+        "inspection"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Banc test",
+      "competences": [
+        "test"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "preparation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "pick_place"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "inspection"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "test"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

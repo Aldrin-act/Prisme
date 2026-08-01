@@ -1,0 +1,142 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Découpe pièce A",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T2",
+      "nom": "Découpe pièce B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T3",
+      "nom": "Usinage pièce A",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T4",
+      "nom": "Usinage pièce B",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T5",
+      "nom": "Assemblage",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T6",
+      "nom": "Finition",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Découpeuse laser",
+      "competences": [
+        "decoupe"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Découpeuse plasma",
+      "competences": [
+        "decoupe"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Fraiseuse CNC 1",
+      "competences": [
+        "usinage",
+        "precision"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Fraiseuse CNC 2",
+      "competences": [
+        "usinage"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Poste assemblage",
+      "competences": [
+        "assemblage"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Poste finition",
+      "competences": [
+        "finition",
+        "polissage"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "decoupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "decoupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "usinage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "usinage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "assemblage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "finition"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

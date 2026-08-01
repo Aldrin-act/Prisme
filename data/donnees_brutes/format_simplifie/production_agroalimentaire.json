@@ -1,0 +1,118 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Réception",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T2",
+      "nom": "Lavage",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T3",
+      "nom": "Découpe",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T4",
+      "nom": "Cuisson",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T5",
+      "nom": "Conditionnement",
+      "duree_estimee_jours": 2
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Quai réception",
+      "competences": [
+        "reception"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Station lavage",
+      "competences": [
+        "lavage"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Machine découpe",
+      "competences": [
+        "decoupe"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Four",
+      "competences": [
+        "cuisson"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Ligne conditionnement",
+      "competences": [
+        "conditionnement"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "reception"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "lavage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "decoupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "cuisson"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "conditionnement"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

@@ -1,0 +1,189 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Prépresse (PAO)",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T2",
+      "nom": "Gravure plaques",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T3",
+      "nom": "Calage presse",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Impression recto",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T5",
+      "nom": "Séchage recto",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T6",
+      "nom": "Impression verso",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T7",
+      "nom": "Séchage verso",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T8",
+      "nom": "Découpe et façonnage",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T9",
+      "nom": "Reliure et finition",
+      "duree_estimee_jours": 2
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Station PAO",
+      "competences": [
+        "prepresse",
+        "pao"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "CTP (Computer To Plate)",
+      "competences": [
+        "gravure"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Presse offset 4 couleurs",
+      "competences": [
+        "calage",
+        "impression"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Séchoir UV",
+      "competences": [
+        "sechage"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Massicot",
+      "competences": [
+        "decoupe",
+        "faconnage"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Plieuse-piqueuse",
+      "competences": [
+        "reliure",
+        "finition"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "prepresse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "gravure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "calage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "impression"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "sechage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "impression"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "sechage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "decoupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "reliure"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

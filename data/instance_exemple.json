@@ -1,0 +1,17 @@
+{
+  "taches": [
+    { "id": "T1", "nom": "Decoupe", "duree_estimee_jours": 3 },
+    { "id": "T2", "nom": "Assemblage", "duree_estimee_jours": 2 }
+  ],
+  "ressources": [
+    { "id": "R1", "nom": "Decoupeuse", "competences": ["decoupe", "assemblage"] }
+  ],
+  "contraintes": [
+    { "type": "precedence", "avant": "T1", "apres": "T2" },
+    { "type": "competence_requise", "tache": "T1", "competence": "decoupe" },
+    { "type": "competence_requise", "tache": "T2", "competence": "assemblage" }
+  ],
+  "objectifs": [
+    { "type": "minimiser_makespan" }
+  ]
+}

@@ -1,0 +1,2845 @@
+{
+  "taches": [
+    {
+      "id": "T0001",
+      "nom": "Lot001_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0002",
+      "nom": "Lot001_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0003",
+      "nom": "Lot001_PEINTURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0004",
+      "nom": "Lot001_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0005",
+      "nom": "Lot001_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0006",
+      "nom": "Lot001_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0007",
+      "nom": "Lot001_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0008",
+      "nom": "Lot001_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0009",
+      "nom": "Lot002_ASSEMBLAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0010",
+      "nom": "Lot002_USINAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0011",
+      "nom": "Lot002_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0012",
+      "nom": "Lot002_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0013",
+      "nom": "Lot002_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0014",
+      "nom": "Lot002_PREPARATION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0015",
+      "nom": "Lot002_PEINTURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0016",
+      "nom": "Lot002_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0017",
+      "nom": "Lot003_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0018",
+      "nom": "Lot003_SOUDURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0019",
+      "nom": "Lot003_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0020",
+      "nom": "Lot003_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0021",
+      "nom": "Lot003_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0022",
+      "nom": "Lot003_ASSEMBLAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0023",
+      "nom": "Lot003_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0024",
+      "nom": "Lot003_PEINTURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0025",
+      "nom": "Lot004_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0026",
+      "nom": "Lot004_PEINTURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0027",
+      "nom": "Lot004_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0028",
+      "nom": "Lot004_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0029",
+      "nom": "Lot004_USINAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0030",
+      "nom": "Lot004_ASSEMBLAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0031",
+      "nom": "Lot004_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0032",
+      "nom": "Lot004_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0033",
+      "nom": "Lot005_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0034",
+      "nom": "Lot005_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0035",
+      "nom": "Lot005_PEINTURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0036",
+      "nom": "Lot005_ASSEMBLAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0037",
+      "nom": "Lot005_USINAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0038",
+      "nom": "Lot005_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0039",
+      "nom": "Lot005_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0040",
+      "nom": "Lot005_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0041",
+      "nom": "Lot006_ASSEMBLAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0042",
+      "nom": "Lot006_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0043",
+      "nom": "Lot006_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0044",
+      "nom": "Lot006_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0045",
+      "nom": "Lot006_CONTROLE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0046",
+      "nom": "Lot006_FORMAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0047",
+      "nom": "Lot006_USINAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0048",
+      "nom": "Lot006_PEINTURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0049",
+      "nom": "Lot007_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0050",
+      "nom": "Lot007_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0051",
+      "nom": "Lot007_PREPARATION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0052",
+      "nom": "Lot007_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0053",
+      "nom": "Lot007_USINAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0054",
+      "nom": "Lot007_PEINTURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0055",
+      "nom": "Lot007_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0056",
+      "nom": "Lot007_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0057",
+      "nom": "Lot008_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0058",
+      "nom": "Lot008_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0059",
+      "nom": "Lot008_PEINTURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0060",
+      "nom": "Lot008_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0061",
+      "nom": "Lot008_ASSEMBLAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0062",
+      "nom": "Lot008_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0063",
+      "nom": "Lot008_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0064",
+      "nom": "Lot008_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0065",
+      "nom": "Lot009_SOUDURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0066",
+      "nom": "Lot009_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0067",
+      "nom": "Lot009_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0068",
+      "nom": "Lot009_PREPARATION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0069",
+      "nom": "Lot009_ASSEMBLAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0070",
+      "nom": "Lot009_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0071",
+      "nom": "Lot009_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0072",
+      "nom": "Lot009_PEINTURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0073",
+      "nom": "Lot010_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0074",
+      "nom": "Lot010_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0075",
+      "nom": "Lot010_ASSEMBLAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0076",
+      "nom": "Lot010_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0077",
+      "nom": "Lot010_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0078",
+      "nom": "Lot010_USINAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0079",
+      "nom": "Lot010_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0080",
+      "nom": "Lot010_PEINTURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0081",
+      "nom": "Lot011_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0082",
+      "nom": "Lot011_USINAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0083",
+      "nom": "Lot011_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0084",
+      "nom": "Lot011_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0085",
+      "nom": "Lot011_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0086",
+      "nom": "Lot011_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0087",
+      "nom": "Lot011_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0088",
+      "nom": "Lot011_PEINTURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0089",
+      "nom": "Lot012_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0090",
+      "nom": "Lot012_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0091",
+      "nom": "Lot012_PEINTURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0092",
+      "nom": "Lot012_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0093",
+      "nom": "Lot012_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0094",
+      "nom": "Lot012_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0095",
+      "nom": "Lot012_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0096",
+      "nom": "Lot012_USINAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0097",
+      "nom": "Lot013_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0098",
+      "nom": "Lot013_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0099",
+      "nom": "Lot013_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0100",
+      "nom": "Lot013_ASSEMBLAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0101",
+      "nom": "Lot013_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0102",
+      "nom": "Lot013_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0103",
+      "nom": "Lot013_PEINTURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0104",
+      "nom": "Lot013_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0105",
+      "nom": "Lot014_PEINTURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0106",
+      "nom": "Lot014_ASSEMBLAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0107",
+      "nom": "Lot014_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0108",
+      "nom": "Lot014_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0109",
+      "nom": "Lot014_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0110",
+      "nom": "Lot014_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0111",
+      "nom": "Lot014_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0112",
+      "nom": "Lot014_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0113",
+      "nom": "Lot015_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0114",
+      "nom": "Lot015_PEINTURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0115",
+      "nom": "Lot015_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0116",
+      "nom": "Lot015_FORMAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0117",
+      "nom": "Lot015_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0118",
+      "nom": "Lot015_SOUDURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0119",
+      "nom": "Lot015_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0120",
+      "nom": "Lot015_ASSEMBLAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0121",
+      "nom": "Lot016_PREPARATION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0122",
+      "nom": "Lot016_CONTROLE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0123",
+      "nom": "Lot016_PEINTURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0124",
+      "nom": "Lot016_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0125",
+      "nom": "Lot016_FORMAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0126",
+      "nom": "Lot016_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0127",
+      "nom": "Lot016_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0128",
+      "nom": "Lot016_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0129",
+      "nom": "Lot017_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0130",
+      "nom": "Lot017_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0131",
+      "nom": "Lot017_USINAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0132",
+      "nom": "Lot017_PREPARATION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0133",
+      "nom": "Lot017_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0134",
+      "nom": "Lot017_PEINTURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0135",
+      "nom": "Lot017_FINITION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0136",
+      "nom": "Lot017_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0137",
+      "nom": "Lot018_PEINTURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0138",
+      "nom": "Lot018_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0139",
+      "nom": "Lot018_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0140",
+      "nom": "Lot018_USINAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0141",
+      "nom": "Lot018_FORMAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0142",
+      "nom": "Lot018_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0143",
+      "nom": "Lot018_CONTROLE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0144",
+      "nom": "Lot018_FINITION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0145",
+      "nom": "Lot019_PEINTURE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0146",
+      "nom": "Lot019_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0147",
+      "nom": "Lot019_FINITION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0148",
+      "nom": "Lot019_SOUDURE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0149",
+      "nom": "Lot019_FORMAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0150",
+      "nom": "Lot019_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0151",
+      "nom": "Lot019_ASSEMBLAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0152",
+      "nom": "Lot019_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0153",
+      "nom": "Lot020_PREPARATION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0154",
+      "nom": "Lot020_PEINTURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0155",
+      "nom": "Lot020_SOUDURE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0156",
+      "nom": "Lot020_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0157",
+      "nom": "Lot020_USINAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0158",
+      "nom": "Lot020_ASSEMBLAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0159",
+      "nom": "Lot020_FORMAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0160",
+      "nom": "Lot020_FINITION",
+      "duree_estimee_jours": 3
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R0001",
+      "nom": "Decoupe Laser #1",
+      "competences": [
+        "decoupe_laser"
+      ]
+    },
+    {
+      "id": "R0002",
+      "nom": "Decoupe Laser #2",
+      "competences": [
+        "decoupe_laser"
+      ]
+    },
+    {
+      "id": "R0003",
+      "nom": "Decoupe Laser #3",
+      "competences": [
+        "decoupe_laser"
+      ]
+    },
+    {
+      "id": "R0004",
+      "nom": "Decoupe Plasma #1",
+      "competences": [
+        "decoupe_plasma"
+      ]
+    },
+    {
+      "id": "R0005",
+      "nom": "Decoupe Plasma #2",
+      "competences": [
+        "decoupe_plasma"
+      ]
+    },
+    {
+      "id": "R0006",
+      "nom": "Decoupe Plasma #3",
+      "competences": [
+        "decoupe_plasma"
+      ]
+    },
+    {
+      "id": "R0007",
+      "nom": "Percage #1",
+      "competences": [
+        "percage"
+      ]
+    },
+    {
+      "id": "R0008",
+      "nom": "Percage #2",
+      "competences": [
+        "percage"
+      ]
+    },
+    {
+      "id": "R0009",
+      "nom": "Percage #3",
+      "competences": [
+        "percage"
+      ]
+    },
+    {
+      "id": "R0010",
+      "nom": "Percage #4",
+      "competences": [
+        "percage"
+      ]
+    },
+    {
+      "id": "R0011",
+      "nom": "Percage #5",
+      "competences": [
+        "percage"
+      ]
+    },
+    {
+      "id": "R0012",
+      "nom": "Fraisage #1",
+      "competences": [
+        "fraisage"
+      ]
+    },
+    {
+      "id": "R0013",
+      "nom": "Fraisage #2",
+      "competences": [
+        "fraisage"
+      ]
+    },
+    {
+      "id": "R0014",
+      "nom": "Fraisage #3",
+      "competences": [
+        "fraisage"
+      ]
+    },
+    {
+      "id": "R0015",
+      "nom": "Fraisage #4",
+      "competences": [
+        "fraisage"
+      ]
+    },
+    {
+      "id": "R0016",
+      "nom": "Fraisage #5",
+      "competences": [
+        "fraisage"
+      ]
+    },
+    {
+      "id": "R0017",
+      "nom": "Tournage #1",
+      "competences": [
+        "tournage"
+      ]
+    },
+    {
+      "id": "R0018",
+      "nom": "Tournage #2",
+      "competences": [
+        "tournage"
+      ]
+    },
+    {
+      "id": "R0019",
+      "nom": "Tournage #3",
+      "competences": [
+        "tournage"
+      ]
+    },
+    {
+      "id": "R0020",
+      "nom": "Ebavurage #1",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0021",
+      "nom": "Ebavurage #2",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0022",
+      "nom": "Ebavurage #3",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0023",
+      "nom": "Ebavurage #4",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0024",
+      "nom": "Pliage #1",
+      "competences": [
+        "pliage"
+      ]
+    },
+    {
+      "id": "R0025",
+      "nom": "Pliage #2",
+      "competences": [
+        "pliage"
+      ]
+    },
+    {
+      "id": "R0026",
+      "nom": "Pliage #3",
+      "competences": [
+        "pliage"
+      ]
+    },
+    {
+      "id": "R0027",
+      "nom": "Pliage #4",
+      "competences": [
+        "pliage"
+      ]
+    },
+    {
+      "id": "R0028",
+      "nom": "Pliage #5",
+      "competences": [
+        "pliage"
+      ]
+    },
+    {
+      "id": "R0029",
+      "nom": "Emboutissage #1",
+      "competences": [
+        "emboutissage"
+      ]
+    },
+    {
+      "id": "R0030",
+      "nom": "Emboutissage #2",
+      "competences": [
+        "emboutissage"
+      ]
+    },
+    {
+      "id": "R0031",
+      "nom": "Soudure Mig #1",
+      "competences": [
+        "soudure_mig"
+      ]
+    },
+    {
+      "id": "R0032",
+      "nom": "Soudure Mig #2",
+      "competences": [
+        "soudure_mig"
+      ]
+    },
+    {
+      "id": "R0033",
+      "nom": "Soudure Mig #3",
+      "competences": [
+        "soudure_mig"
+      ]
+    },
+    {
+      "id": "R0034",
+      "nom": "Soudure Mig #4",
+      "competences": [
+        "soudure_mig"
+      ]
+    },
+    {
+      "id": "R0035",
+      "nom": "Soudure Tig #1",
+      "competences": [
+        "soudure_tig"
+      ]
+    },
+    {
+      "id": "R0036",
+      "nom": "Soudure Tig #2",
+      "competences": [
+        "soudure_tig"
+      ]
+    },
+    {
+      "id": "R0037",
+      "nom": "Soudure Tig #3",
+      "competences": [
+        "soudure_tig"
+      ]
+    },
+    {
+      "id": "R0038",
+      "nom": "Soudure Tig #4",
+      "competences": [
+        "soudure_tig"
+      ]
+    },
+    {
+      "id": "R0039",
+      "nom": "Soudure Robot #1",
+      "competences": [
+        "soudure_robot"
+      ]
+    },
+    {
+      "id": "R0040",
+      "nom": "Soudure Robot #2",
+      "competences": [
+        "soudure_robot"
+      ]
+    },
+    {
+      "id": "R0041",
+      "nom": "Soudure Robot #3",
+      "competences": [
+        "soudure_robot"
+      ]
+    },
+    {
+      "id": "R0042",
+      "nom": "Polissage #1",
+      "competences": [
+        "polissage"
+      ]
+    },
+    {
+      "id": "R0043",
+      "nom": "Polissage #2",
+      "competences": [
+        "polissage"
+      ]
+    },
+    {
+      "id": "R0044",
+      "nom": "Polissage #3",
+      "competences": [
+        "polissage"
+      ]
+    },
+    {
+      "id": "R0045",
+      "nom": "Polissage #4",
+      "competences": [
+        "polissage"
+      ]
+    },
+    {
+      "id": "R0046",
+      "nom": "Polissage #5",
+      "competences": [
+        "polissage"
+      ]
+    },
+    {
+      "id": "R0047",
+      "nom": "Ebavurage #1",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0048",
+      "nom": "Ebavurage #2",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0049",
+      "nom": "Ebavurage #3",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0050",
+      "nom": "Ebavurage #4",
+      "competences": [
+        "ebavurage"
+      ]
+    },
+    {
+      "id": "R0051",
+      "nom": "Peinture Cabine #1",
+      "competences": [
+        "peinture_cabine"
+      ]
+    },
+    {
+      "id": "R0052",
+      "nom": "Peinture Cabine #2",
+      "competences": [
+        "peinture_cabine"
+      ]
+    },
+    {
+      "id": "R0053",
+      "nom": "Peinture Cabine #3",
+      "competences": [
+        "peinture_cabine"
+      ]
+    },
+    {
+      "id": "R0054",
+      "nom": "Peinture Cabine #4",
+      "competences": [
+        "peinture_cabine"
+      ]
+    },
+    {
+      "id": "R0055",
+      "nom": "Peinture Cabine #5",
+      "competences": [
+        "peinture_cabine"
+      ]
+    },
+    {
+      "id": "R0056",
+      "nom": "Peinture Tunnel #1",
+      "competences": [
+        "peinture_tunnel"
+      ]
+    },
+    {
+      "id": "R0057",
+      "nom": "Peinture Tunnel #2",
+      "competences": [
+        "peinture_tunnel"
+      ]
+    },
+    {
+      "id": "R0058",
+      "nom": "Peinture Tunnel #3",
+      "competences": [
+        "peinture_tunnel"
+      ]
+    },
+    {
+      "id": "R0059",
+      "nom": "Peinture Tunnel #4",
+      "competences": [
+        "peinture_tunnel"
+      ]
+    },
+    {
+      "id": "R0060",
+      "nom": "Peinture Tunnel #5",
+      "competences": [
+        "peinture_tunnel"
+      ]
+    },
+    {
+      "id": "R0061",
+      "nom": "Assemblage Manuel #1",
+      "competences": [
+        "assemblage_manuel"
+      ]
+    },
+    {
+      "id": "R0062",
+      "nom": "Assemblage Manuel #2",
+      "competences": [
+        "assemblage_manuel"
+      ]
+    },
+    {
+      "id": "R0063",
+      "nom": "Assemblage Manuel #3",
+      "competences": [
+        "assemblage_manuel"
+      ]
+    },
+    {
+      "id": "R0064",
+      "nom": "Assemblage Manuel #4",
+      "competences": [
+        "assemblage_manuel"
+      ]
+    },
+    {
+      "id": "R0065",
+      "nom": "Assemblage Manuel #5",
+      "competences": [
+        "assemblage_manuel"
+      ]
+    },
+    {
+      "id": "R0066",
+      "nom": "Assemblage Robot #1",
+      "competences": [
+        "assemblage_robot"
+      ]
+    },
+    {
+      "id": "R0067",
+      "nom": "Assemblage Robot #2",
+      "competences": [
+        "assemblage_robot"
+      ]
+    },
+    {
+      "id": "R0068",
+      "nom": "Assemblage Robot #3",
+      "competences": [
+        "assemblage_robot"
+      ]
+    },
+    {
+      "id": "R0069",
+      "nom": "Controle Visuel #1",
+      "competences": [
+        "controle_visuel"
+      ]
+    },
+    {
+      "id": "R0070",
+      "nom": "Controle Visuel #2",
+      "competences": [
+        "controle_visuel"
+      ]
+    },
+    {
+      "id": "R0071",
+      "nom": "Controle Visuel #3",
+      "competences": [
+        "controle_visuel"
+      ]
+    },
+    {
+      "id": "R0072",
+      "nom": "Controle Visuel #4",
+      "competences": [
+        "controle_visuel"
+      ]
+    },
+    {
+      "id": "R0073",
+      "nom": "Controle Visuel #5",
+      "competences": [
+        "controle_visuel"
+      ]
+    },
+    {
+      "id": "R0074",
+      "nom": "Controle Dimensionnel #1",
+      "competences": [
+        "controle_dimensionnel"
+      ]
+    },
+    {
+      "id": "R0075",
+      "nom": "Controle Dimensionnel #2",
+      "competences": [
+        "controle_dimensionnel"
+      ]
+    },
+    {
+      "id": "R0076",
+      "nom": "Controle Dimensionnel #3",
+      "competences": [
+        "controle_dimensionnel"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "T0001",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0002",
+      "competence": "decoupe_laser"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0003",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0004",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0005",
+      "competence": "controle_visuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0006",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0007",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0008",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0001",
+      "apres": "T0002"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0002",
+      "apres": "T0003"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0003",
+      "apres": "T0004"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0004",
+      "apres": "T0005"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0005",
+      "apres": "T0006"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0006",
+      "apres": "T0007"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0007",
+      "apres": "T0008"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0009",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0010",
+      "competence": "fraisage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0011",
+      "competence": "soudure_mig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0012",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0013",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0014",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0015",
+      "competence": "peinture_cabine"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0016",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0009",
+      "apres": "T0010"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0010",
+      "apres": "T0011"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0011",
+      "apres": "T0012"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0012",
+      "apres": "T0013"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0013",
+      "apres": "T0014"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0014",
+      "apres": "T0015"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0015",
+      "apres": "T0016"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0017",
+      "competence": "fraisage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0018",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0019",
+      "competence": "decoupe_plasma"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0020",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0021",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0022",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0023",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0024",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0017",
+      "apres": "T0018"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0018",
+      "apres": "T0019"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0019",
+      "apres": "T0020"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0020",
+      "apres": "T0021"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0021",
+      "apres": "T0022"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0022",
+      "apres": "T0023"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0023",
+      "apres": "T0024"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0025",
+      "competence": "soudure_tig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0026",
+      "competence": "peinture_cabine"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0027",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0028",
+      "competence": "decoupe_laser"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0029",
+      "competence": "tournage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0030",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0031",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0032",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0025",
+      "apres": "T0026"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0026",
+      "apres": "T0027"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0027",
+      "apres": "T0028"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0028",
+      "apres": "T0029"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0029",
+      "apres": "T0030"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0030",
+      "apres": "T0031"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0031",
+      "apres": "T0032"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0033",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0034",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0035",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0036",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0037",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0038",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0039",
+      "competence": "decoupe_laser"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0040",
+      "competence": "pliage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0033",
+      "apres": "T0034"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0034",
+      "apres": "T0035"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0035",
+      "apres": "T0036"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0036",
+      "apres": "T0037"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0037",
+      "apres": "T0038"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0038",
+      "apres": "T0039"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0039",
+      "apres": "T0040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0041",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0042",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0043",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0044",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0045",
+      "competence": "controle_visuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0046",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0047",
+      "competence": "tournage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0048",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0041",
+      "apres": "T0042"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0042",
+      "apres": "T0043"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0043",
+      "apres": "T0044"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0044",
+      "apres": "T0045"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0045",
+      "apres": "T0046"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0046",
+      "apres": "T0047"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0047",
+      "apres": "T0048"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0049",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0050",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0051",
+      "competence": "decoupe_laser"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0052",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0053",
+      "competence": "fraisage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0054",
+      "competence": "peinture_cabine"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0055",
+      "competence": "soudure_mig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0056",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0049",
+      "apres": "T0050"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0050",
+      "apres": "T0051"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0051",
+      "apres": "T0052"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0052",
+      "apres": "T0053"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0053",
+      "apres": "T0054"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0054",
+      "apres": "T0055"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0055",
+      "apres": "T0056"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0057",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0058",
+      "competence": "tournage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0059",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0060",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0061",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0062",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0063",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0064",
+      "competence": "percage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0057",
+      "apres": "T0058"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0058",
+      "apres": "T0059"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0059",
+      "apres": "T0060"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0060",
+      "apres": "T0061"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0061",
+      "apres": "T0062"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0062",
+      "apres": "T0063"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0063",
+      "apres": "T0064"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0065",
+      "competence": "soudure_mig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0066",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0067",
+      "competence": "fraisage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0068",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0069",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0070",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0071",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0072",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0065",
+      "apres": "T0066"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0066",
+      "apres": "T0067"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0067",
+      "apres": "T0068"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0068",
+      "apres": "T0069"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0069",
+      "apres": "T0070"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0070",
+      "apres": "T0071"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0071",
+      "apres": "T0072"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0073",
+      "competence": "soudure_mig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0074",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0075",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0076",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0077",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0078",
+      "competence": "fraisage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0079",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0080",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0073",
+      "apres": "T0074"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0074",
+      "apres": "T0075"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0075",
+      "apres": "T0076"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0076",
+      "apres": "T0077"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0077",
+      "apres": "T0078"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0078",
+      "apres": "T0079"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0079",
+      "apres": "T0080"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0081",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0082",
+      "competence": "fraisage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0083",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0084",
+      "competence": "soudure_tig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0085",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0086",
+      "competence": "decoupe_laser"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0087",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0088",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0081",
+      "apres": "T0082"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0082",
+      "apres": "T0083"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0083",
+      "apres": "T0084"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0084",
+      "apres": "T0085"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0085",
+      "apres": "T0086"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0086",
+      "apres": "T0087"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0087",
+      "apres": "T0088"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0089",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0090",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0091",
+      "competence": "peinture_cabine"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0092",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0093",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0094",
+      "competence": "decoupe_plasma"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0095",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0096",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0089",
+      "apres": "T0090"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0090",
+      "apres": "T0091"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0091",
+      "apres": "T0092"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0092",
+      "apres": "T0093"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0093",
+      "apres": "T0094"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0094",
+      "apres": "T0095"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0095",
+      "apres": "T0096"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0097",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0098",
+      "competence": "decoupe_laser"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0099",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0100",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0101",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0102",
+      "competence": "soudure_mig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0103",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0104",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0097",
+      "apres": "T0098"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0098",
+      "apres": "T0099"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0099",
+      "apres": "T0100"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0100",
+      "apres": "T0101"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0101",
+      "apres": "T0102"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0102",
+      "apres": "T0103"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0103",
+      "apres": "T0104"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0105",
+      "competence": "peinture_cabine"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0106",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0107",
+      "competence": "decoupe_plasma"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0108",
+      "competence": "controle_visuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0109",
+      "competence": "soudure_tig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0110",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0111",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0112",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0105",
+      "apres": "T0106"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0106",
+      "apres": "T0107"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0107",
+      "apres": "T0108"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0108",
+      "apres": "T0109"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0109",
+      "apres": "T0110"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0110",
+      "apres": "T0111"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0111",
+      "apres": "T0112"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0113",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0114",
+      "competence": "peinture_cabine"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0115",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0116",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0117",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0118",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0119",
+      "competence": "tournage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0120",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0113",
+      "apres": "T0114"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0114",
+      "apres": "T0115"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0115",
+      "apres": "T0116"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0116",
+      "apres": "T0117"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0117",
+      "apres": "T0118"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0118",
+      "apres": "T0119"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0119",
+      "apres": "T0120"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0121",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0122",
+      "competence": "controle_visuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0123",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0124",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0125",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0126",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0127",
+      "competence": "polissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0128",
+      "competence": "fraisage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0121",
+      "apres": "T0122"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0122",
+      "apres": "T0123"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0123",
+      "apres": "T0124"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0124",
+      "apres": "T0125"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0125",
+      "apres": "T0126"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0126",
+      "apres": "T0127"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0127",
+      "apres": "T0128"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0129",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0130",
+      "competence": "soudure_mig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0131",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0132",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0133",
+      "competence": "controle_visuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0134",
+      "competence": "peinture_cabine"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0135",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0136",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0129",
+      "apres": "T0130"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0130",
+      "apres": "T0131"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0131",
+      "apres": "T0132"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0132",
+      "apres": "T0133"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0133",
+      "apres": "T0134"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0134",
+      "apres": "T0135"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0135",
+      "apres": "T0136"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0137",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0138",
+      "competence": "assemblage_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0139",
+      "competence": "soudure_tig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0140",
+      "competence": "fraisage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0141",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0142",
+      "competence": "decoupe_laser"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0143",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0144",
+      "competence": "polissage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0137",
+      "apres": "T0138"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0138",
+      "apres": "T0139"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0139",
+      "apres": "T0140"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0140",
+      "apres": "T0141"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0141",
+      "apres": "T0142"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0142",
+      "apres": "T0143"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0143",
+      "apres": "T0144"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0145",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0146",
+      "competence": "controle_visuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0147",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0148",
+      "competence": "soudure_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0149",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0150",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0151",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0152",
+      "competence": "fraisage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0145",
+      "apres": "T0146"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0146",
+      "apres": "T0147"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0147",
+      "apres": "T0148"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0148",
+      "apres": "T0149"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0149",
+      "apres": "T0150"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0150",
+      "apres": "T0151"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0151",
+      "apres": "T0152"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0153",
+      "competence": "decoupe_plasma"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0154",
+      "competence": "peinture_tunnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0155",
+      "competence": "soudure_mig"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0156",
+      "competence": "controle_dimensionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0157",
+      "competence": "tournage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0158",
+      "competence": "assemblage_robot"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0159",
+      "competence": "emboutissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0160",
+      "competence": "ebavurage"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0153",
+      "apres": "T0154"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0154",
+      "apres": "T0155"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0155",
+      "apres": "T0156"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0156",
+      "apres": "T0157"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0157",
+      "apres": "T0158"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0158",
+      "apres": "T0159"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0159",
+      "apres": "T0160"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

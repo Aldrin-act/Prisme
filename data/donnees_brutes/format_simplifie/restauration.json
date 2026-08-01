@@ -1,0 +1,96 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Préparation ingrédients",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T2",
+      "nom": "Cuisson",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T3",
+      "nom": "Dressage",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Service",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Zone préparation",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Cuisines",
+      "competences": [
+        "cuisson"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Zone dressage",
+      "competences": [
+        "dressage"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Salle service",
+      "competences": [
+        "service"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "preparation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "cuisson"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "dressage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "service"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

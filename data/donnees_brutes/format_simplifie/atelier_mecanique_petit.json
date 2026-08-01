@@ -1,0 +1,96 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Découpe",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T2",
+      "nom": "Perçage",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T3",
+      "nom": "Soudure",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T4",
+      "nom": "Contrôle",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Découpeuse",
+      "competences": [
+        "decoupe"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Perceuse",
+      "competences": [
+        "percage"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Poste soudure",
+      "competences": [
+        "soudure"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Station contrôle",
+      "competences": [
+        "controle"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "decoupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "percage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "soudure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "controle"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

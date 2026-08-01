@@ -309,10 +309,14 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
     justifications: Justification[];
   } | null>(null);
 
+  // État local pour maintenir l'indicateur visible même si le composant re-render
+  const [generationEnCours, setGenerationEnCours] = useState(false);
+
   const erreur = generer.error as PrismeAPIError | null;
 
   function genererInstance() {
     setDernier(null);
+    setGenerationEnCours(true);
     generer.mutate(sourceId, {
       onSuccess: (data) => {
         setDernier({
@@ -320,9 +324,13 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
           avertissements: data.avertissements,
           justifications: data.justifications,
         });
+        setGenerationEnCours(false);
         queryClient.invalidateQueries({ queryKey: prismeKeys.source(sourceId) });
         queryClient.invalidateQueries({ queryKey: prismeKeys.sources() });
         queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+      },
+      onError: () => {
+        setGenerationEnCours(false);
       },
     });
   }
@@ -404,12 +412,12 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
             l'historique ci-dessous, aucune n'est remplacée. Chaque instance générée s'exécute directement
             depuis la page Solveurs générés, sans étape supplémentaire ici.
           </p>
-          <Button onClick={genererInstance} disabled={generer.isPending} className="shrink-0">
+          <Button onClick={genererInstance} disabled={generationEnCours || generer.isPending} className="shrink-0">
             <ArrowRightLeft className="mr-2 h-4 w-4" />
-            {generer.isPending ? "Conversion en cours..." : "Générer une instance"}
+            {(generationEnCours || generer.isPending) ? "Conversion en cours..." : "Générer une instance"}
           </Button>
         </div>
-        {generer.isPending && <IndicateurGeneration />}
+        {(generationEnCours || generer.isPending) && <IndicateurGeneration />}
       </div>
 
       <div className="glass rounded-2xl p-6">

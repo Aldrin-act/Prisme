@@ -1,0 +1,96 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Picking",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T2",
+      "nom": "Emballage",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T3",
+      "nom": "Étiquetage",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Chargement",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Zone picking",
+      "competences": [
+        "picking"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Poste emballage",
+      "competences": [
+        "emballage"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Station étiquetage",
+      "competences": [
+        "etiquetage"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Quai expédition",
+      "competences": [
+        "chargement"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "picking"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "emballage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "etiquetage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "chargement"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

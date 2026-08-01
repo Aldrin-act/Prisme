@@ -1,0 +1,165 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Réception matières premières",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T2",
+      "nom": "Lavage et préparation",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T3",
+      "nom": "Découpe et transformation",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T4",
+      "nom": "Cuisson/Traitement thermique",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T5",
+      "nom": "Refroidissement",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T6",
+      "nom": "Conditionnement",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T7",
+      "nom": "Contrôle qualité",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Quai de réception",
+      "competences": [
+        "reception"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Station de lavage",
+      "competences": [
+        "lavage",
+        "preparation"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Machine de découpe",
+      "competences": [
+        "decoupe",
+        "transformation"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Four industriel",
+      "competences": [
+        "cuisson",
+        "traitement"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Tunnel de refroidissement",
+      "competences": [
+        "refroidissement"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Ligne de conditionnement",
+      "competences": [
+        "conditionnement"
+      ]
+    },
+    {
+      "id": "R7",
+      "nom": "Laboratoire contrôle",
+      "competences": [
+        "controle_qualite"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "reception"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "lavage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "decoupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "cuisson"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "refroidissement"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "conditionnement"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "controle_qualite"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

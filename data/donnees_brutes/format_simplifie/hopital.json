@@ -1,0 +1,74 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Préparation patient",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T2",
+      "nom": "Intervention",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T3",
+      "nom": "Surveillance",
+      "duree_estimee_jours": 2
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Salle préparation",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Bloc opératoire",
+      "competences": [
+        "intervention"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Salle réveil",
+      "competences": [
+        "surveillance"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "preparation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "intervention"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "surveillance"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

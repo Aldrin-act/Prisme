@@ -1,0 +1,4044 @@
+{
+  "taches": [
+    {
+      "id": "T0001",
+      "nom": "Lot001_RECEPTION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0002",
+      "nom": "Lot001_LAVAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0003",
+      "nom": "Lot001_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0004",
+      "nom": "Lot001_DECOUPE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0005",
+      "nom": "Lot001_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0006",
+      "nom": "Lot001_CUISSON",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0007",
+      "nom": "Lot001_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0008",
+      "nom": "Lot001_CONDITIONNEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0009",
+      "nom": "Lot001_ETIQUETAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0010",
+      "nom": "Lot001_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0011",
+      "nom": "Lot002_RECEPTION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0012",
+      "nom": "Lot002_LAVAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0013",
+      "nom": "Lot002_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0014",
+      "nom": "Lot002_DECOUPE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0015",
+      "nom": "Lot002_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0016",
+      "nom": "Lot002_CUISSON",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0017",
+      "nom": "Lot002_REFROIDISSEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0018",
+      "nom": "Lot002_CONDITIONNEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0019",
+      "nom": "Lot002_ETIQUETAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0020",
+      "nom": "Lot002_CONTROLE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0021",
+      "nom": "Lot003_RECEPTION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0022",
+      "nom": "Lot003_LAVAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0023",
+      "nom": "Lot003_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0024",
+      "nom": "Lot003_DECOUPE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0025",
+      "nom": "Lot003_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0026",
+      "nom": "Lot003_CUISSON",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0027",
+      "nom": "Lot003_REFROIDISSEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0028",
+      "nom": "Lot003_CONDITIONNEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0029",
+      "nom": "Lot003_ETIQUETAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0030",
+      "nom": "Lot003_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0031",
+      "nom": "Lot004_RECEPTION",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0032",
+      "nom": "Lot004_LAVAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0033",
+      "nom": "Lot004_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0034",
+      "nom": "Lot004_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0035",
+      "nom": "Lot004_TRAITEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0036",
+      "nom": "Lot004_CUISSON",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0037",
+      "nom": "Lot004_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0038",
+      "nom": "Lot004_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0039",
+      "nom": "Lot004_ETIQUETAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0040",
+      "nom": "Lot004_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0041",
+      "nom": "Lot005_RECEPTION",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0042",
+      "nom": "Lot005_LAVAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0043",
+      "nom": "Lot005_TRIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0044",
+      "nom": "Lot005_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0045",
+      "nom": "Lot005_TRAITEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0046",
+      "nom": "Lot005_CUISSON",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0047",
+      "nom": "Lot005_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0048",
+      "nom": "Lot005_CONDITIONNEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0049",
+      "nom": "Lot005_ETIQUETAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0050",
+      "nom": "Lot005_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0051",
+      "nom": "Lot006_RECEPTION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0052",
+      "nom": "Lot006_LAVAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0053",
+      "nom": "Lot006_TRIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0054",
+      "nom": "Lot006_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0055",
+      "nom": "Lot006_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0056",
+      "nom": "Lot006_CUISSON",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0057",
+      "nom": "Lot006_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0058",
+      "nom": "Lot006_CONDITIONNEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0059",
+      "nom": "Lot006_ETIQUETAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0060",
+      "nom": "Lot006_CONTROLE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0061",
+      "nom": "Lot007_RECEPTION",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0062",
+      "nom": "Lot007_LAVAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0063",
+      "nom": "Lot007_TRIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0064",
+      "nom": "Lot007_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0065",
+      "nom": "Lot007_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0066",
+      "nom": "Lot007_CUISSON",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0067",
+      "nom": "Lot007_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0068",
+      "nom": "Lot007_CONDITIONNEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0069",
+      "nom": "Lot007_ETIQUETAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0070",
+      "nom": "Lot007_CONTROLE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0071",
+      "nom": "Lot008_RECEPTION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0072",
+      "nom": "Lot008_LAVAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0073",
+      "nom": "Lot008_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0074",
+      "nom": "Lot008_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0075",
+      "nom": "Lot008_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0076",
+      "nom": "Lot008_CUISSON",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0077",
+      "nom": "Lot008_REFROIDISSEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0078",
+      "nom": "Lot008_CONDITIONNEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0079",
+      "nom": "Lot008_ETIQUETAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0080",
+      "nom": "Lot008_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0081",
+      "nom": "Lot009_RECEPTION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0082",
+      "nom": "Lot009_LAVAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0083",
+      "nom": "Lot009_TRIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0084",
+      "nom": "Lot009_DECOUPE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0085",
+      "nom": "Lot009_TRAITEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0086",
+      "nom": "Lot009_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0087",
+      "nom": "Lot009_REFROIDISSEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0088",
+      "nom": "Lot009_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0089",
+      "nom": "Lot009_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0090",
+      "nom": "Lot009_CONTROLE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0091",
+      "nom": "Lot010_RECEPTION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0092",
+      "nom": "Lot010_LAVAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0093",
+      "nom": "Lot010_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0094",
+      "nom": "Lot010_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0095",
+      "nom": "Lot010_TRAITEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0096",
+      "nom": "Lot010_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0097",
+      "nom": "Lot010_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0098",
+      "nom": "Lot010_CONDITIONNEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0099",
+      "nom": "Lot010_ETIQUETAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0100",
+      "nom": "Lot010_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0101",
+      "nom": "Lot011_RECEPTION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0102",
+      "nom": "Lot011_LAVAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0103",
+      "nom": "Lot011_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0104",
+      "nom": "Lot011_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0105",
+      "nom": "Lot011_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0106",
+      "nom": "Lot011_CUISSON",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0107",
+      "nom": "Lot011_REFROIDISSEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0108",
+      "nom": "Lot011_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0109",
+      "nom": "Lot011_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0110",
+      "nom": "Lot011_CONTROLE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0111",
+      "nom": "Lot012_RECEPTION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0112",
+      "nom": "Lot012_LAVAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0113",
+      "nom": "Lot012_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0114",
+      "nom": "Lot012_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0115",
+      "nom": "Lot012_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0116",
+      "nom": "Lot012_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0117",
+      "nom": "Lot012_REFROIDISSEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0118",
+      "nom": "Lot012_CONDITIONNEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0119",
+      "nom": "Lot012_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0120",
+      "nom": "Lot012_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0121",
+      "nom": "Lot013_RECEPTION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0122",
+      "nom": "Lot013_LAVAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0123",
+      "nom": "Lot013_TRIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0124",
+      "nom": "Lot013_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0125",
+      "nom": "Lot013_TRAITEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0126",
+      "nom": "Lot013_CUISSON",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0127",
+      "nom": "Lot013_REFROIDISSEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0128",
+      "nom": "Lot013_CONDITIONNEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0129",
+      "nom": "Lot013_ETIQUETAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0130",
+      "nom": "Lot013_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0131",
+      "nom": "Lot014_RECEPTION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0132",
+      "nom": "Lot014_LAVAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0133",
+      "nom": "Lot014_TRIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0134",
+      "nom": "Lot014_DECOUPE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0135",
+      "nom": "Lot014_TRAITEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0136",
+      "nom": "Lot014_CUISSON",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0137",
+      "nom": "Lot014_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0138",
+      "nom": "Lot014_CONDITIONNEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0139",
+      "nom": "Lot014_ETIQUETAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0140",
+      "nom": "Lot014_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0141",
+      "nom": "Lot015_RECEPTION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0142",
+      "nom": "Lot015_LAVAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0143",
+      "nom": "Lot015_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0144",
+      "nom": "Lot015_DECOUPE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0145",
+      "nom": "Lot015_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0146",
+      "nom": "Lot015_CUISSON",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0147",
+      "nom": "Lot015_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0148",
+      "nom": "Lot015_CONDITIONNEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0149",
+      "nom": "Lot015_ETIQUETAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0150",
+      "nom": "Lot015_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0151",
+      "nom": "Lot016_RECEPTION",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0152",
+      "nom": "Lot016_LAVAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0153",
+      "nom": "Lot016_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0154",
+      "nom": "Lot016_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0155",
+      "nom": "Lot016_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0156",
+      "nom": "Lot016_CUISSON",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0157",
+      "nom": "Lot016_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0158",
+      "nom": "Lot016_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0159",
+      "nom": "Lot016_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0160",
+      "nom": "Lot016_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0161",
+      "nom": "Lot017_RECEPTION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0162",
+      "nom": "Lot017_LAVAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0163",
+      "nom": "Lot017_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0164",
+      "nom": "Lot017_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0165",
+      "nom": "Lot017_TRAITEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0166",
+      "nom": "Lot017_CUISSON",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0167",
+      "nom": "Lot017_REFROIDISSEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0168",
+      "nom": "Lot017_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0169",
+      "nom": "Lot017_ETIQUETAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0170",
+      "nom": "Lot017_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0171",
+      "nom": "Lot018_RECEPTION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0172",
+      "nom": "Lot018_LAVAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0173",
+      "nom": "Lot018_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0174",
+      "nom": "Lot018_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0175",
+      "nom": "Lot018_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0176",
+      "nom": "Lot018_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0177",
+      "nom": "Lot018_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0178",
+      "nom": "Lot018_CONDITIONNEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0179",
+      "nom": "Lot018_ETIQUETAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0180",
+      "nom": "Lot018_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0181",
+      "nom": "Lot019_RECEPTION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0182",
+      "nom": "Lot019_LAVAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0183",
+      "nom": "Lot019_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0184",
+      "nom": "Lot019_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0185",
+      "nom": "Lot019_TRAITEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0186",
+      "nom": "Lot019_CUISSON",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0187",
+      "nom": "Lot019_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0188",
+      "nom": "Lot019_CONDITIONNEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0189",
+      "nom": "Lot019_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0190",
+      "nom": "Lot019_CONTROLE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0191",
+      "nom": "Lot020_RECEPTION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0192",
+      "nom": "Lot020_LAVAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0193",
+      "nom": "Lot020_TRIAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0194",
+      "nom": "Lot020_DECOUPE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0195",
+      "nom": "Lot020_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0196",
+      "nom": "Lot020_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0197",
+      "nom": "Lot020_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0198",
+      "nom": "Lot020_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0199",
+      "nom": "Lot020_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0200",
+      "nom": "Lot020_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0201",
+      "nom": "Lot021_RECEPTION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0202",
+      "nom": "Lot021_LAVAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0203",
+      "nom": "Lot021_TRIAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0204",
+      "nom": "Lot021_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0205",
+      "nom": "Lot021_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0206",
+      "nom": "Lot021_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0207",
+      "nom": "Lot021_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0208",
+      "nom": "Lot021_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0209",
+      "nom": "Lot021_ETIQUETAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0210",
+      "nom": "Lot021_CONTROLE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0211",
+      "nom": "Lot022_RECEPTION",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0212",
+      "nom": "Lot022_LAVAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0213",
+      "nom": "Lot022_TRIAGE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0214",
+      "nom": "Lot022_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0215",
+      "nom": "Lot022_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0216",
+      "nom": "Lot022_CUISSON",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0217",
+      "nom": "Lot022_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0218",
+      "nom": "Lot022_CONDITIONNEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0219",
+      "nom": "Lot022_ETIQUETAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0220",
+      "nom": "Lot022_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0221",
+      "nom": "Lot023_RECEPTION",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0222",
+      "nom": "Lot023_LAVAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0223",
+      "nom": "Lot023_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0224",
+      "nom": "Lot023_DECOUPE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0225",
+      "nom": "Lot023_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0226",
+      "nom": "Lot023_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0227",
+      "nom": "Lot023_REFROIDISSEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0228",
+      "nom": "Lot023_CONDITIONNEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0229",
+      "nom": "Lot023_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0230",
+      "nom": "Lot023_CONTROLE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0231",
+      "nom": "Lot024_RECEPTION",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0232",
+      "nom": "Lot024_LAVAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0233",
+      "nom": "Lot024_TRIAGE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0234",
+      "nom": "Lot024_DECOUPE",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0235",
+      "nom": "Lot024_TRAITEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0236",
+      "nom": "Lot024_CUISSON",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0237",
+      "nom": "Lot024_REFROIDISSEMENT",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T0238",
+      "nom": "Lot024_CONDITIONNEMENT",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0239",
+      "nom": "Lot024_ETIQUETAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0240",
+      "nom": "Lot024_CONTROLE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0241",
+      "nom": "Lot025_RECEPTION",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0242",
+      "nom": "Lot025_LAVAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0243",
+      "nom": "Lot025_TRIAGE",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0244",
+      "nom": "Lot025_DECOUPE",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0245",
+      "nom": "Lot025_TRAITEMENT",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0246",
+      "nom": "Lot025_CUISSON",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T0247",
+      "nom": "Lot025_REFROIDISSEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0248",
+      "nom": "Lot025_CONDITIONNEMENT",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T0249",
+      "nom": "Lot025_ETIQUETAGE",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T0250",
+      "nom": "Lot025_CONTROLE",
+      "duree_estimee_jours": 2
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R0001",
+      "nom": "Reception Matieres #1",
+      "competences": [
+        "reception_matieres"
+      ]
+    },
+    {
+      "id": "R0002",
+      "nom": "Reception Matieres #2",
+      "competences": [
+        "reception_matieres"
+      ]
+    },
+    {
+      "id": "R0003",
+      "nom": "Reception Matieres #3",
+      "competences": [
+        "reception_matieres"
+      ]
+    },
+    {
+      "id": "R0004",
+      "nom": "Reception Matieres #4",
+      "competences": [
+        "reception_matieres"
+      ]
+    },
+    {
+      "id": "R0005",
+      "nom": "Reception Matieres #5",
+      "competences": [
+        "reception_matieres"
+      ]
+    },
+    {
+      "id": "R0006",
+      "nom": "Lavage Industriel #1",
+      "competences": [
+        "lavage_industriel"
+      ]
+    },
+    {
+      "id": "R0007",
+      "nom": "Lavage Industriel #2",
+      "competences": [
+        "lavage_industriel"
+      ]
+    },
+    {
+      "id": "R0008",
+      "nom": "Triage Qualite #1",
+      "competences": [
+        "triage_qualite"
+      ]
+    },
+    {
+      "id": "R0009",
+      "nom": "Triage Qualite #2",
+      "competences": [
+        "triage_qualite"
+      ]
+    },
+    {
+      "id": "R0010",
+      "nom": "Triage Qualite #3",
+      "competences": [
+        "triage_qualite"
+      ]
+    },
+    {
+      "id": "R0011",
+      "nom": "Triage Qualite #4",
+      "competences": [
+        "triage_qualite"
+      ]
+    },
+    {
+      "id": "R0012",
+      "nom": "Decoupe Automatique #1",
+      "competences": [
+        "decoupe_automatique"
+      ]
+    },
+    {
+      "id": "R0013",
+      "nom": "Decoupe Automatique #2",
+      "competences": [
+        "decoupe_automatique"
+      ]
+    },
+    {
+      "id": "R0014",
+      "nom": "Decoupe Manuelle #1",
+      "competences": [
+        "decoupe_manuelle"
+      ]
+    },
+    {
+      "id": "R0015",
+      "nom": "Decoupe Manuelle #2",
+      "competences": [
+        "decoupe_manuelle"
+      ]
+    },
+    {
+      "id": "R0016",
+      "nom": "Decoupe Manuelle #3",
+      "competences": [
+        "decoupe_manuelle"
+      ]
+    },
+    {
+      "id": "R0017",
+      "nom": "Decoupe Manuelle #4",
+      "competences": [
+        "decoupe_manuelle"
+      ]
+    },
+    {
+      "id": "R0018",
+      "nom": "Decoupe Manuelle #5",
+      "competences": [
+        "decoupe_manuelle"
+      ]
+    },
+    {
+      "id": "R0019",
+      "nom": "Decoupe Manuelle #6",
+      "competences": [
+        "decoupe_manuelle"
+      ]
+    },
+    {
+      "id": "R0020",
+      "nom": "Traitement Thermique #1",
+      "competences": [
+        "traitement_thermique"
+      ]
+    },
+    {
+      "id": "R0021",
+      "nom": "Traitement Thermique #2",
+      "competences": [
+        "traitement_thermique"
+      ]
+    },
+    {
+      "id": "R0022",
+      "nom": "Traitement Thermique #3",
+      "competences": [
+        "traitement_thermique"
+      ]
+    },
+    {
+      "id": "R0023",
+      "nom": "Traitement Chimique #1",
+      "competences": [
+        "traitement_chimique"
+      ]
+    },
+    {
+      "id": "R0024",
+      "nom": "Traitement Chimique #2",
+      "competences": [
+        "traitement_chimique"
+      ]
+    },
+    {
+      "id": "R0025",
+      "nom": "Cuisson Four #1",
+      "competences": [
+        "cuisson_four"
+      ]
+    },
+    {
+      "id": "R0026",
+      "nom": "Cuisson Four #2",
+      "competences": [
+        "cuisson_four"
+      ]
+    },
+    {
+      "id": "R0027",
+      "nom": "Cuisson Four #3",
+      "competences": [
+        "cuisson_four"
+      ]
+    },
+    {
+      "id": "R0028",
+      "nom": "Cuisson Vapeur #1",
+      "competences": [
+        "cuisson_vapeur"
+      ]
+    },
+    {
+      "id": "R0029",
+      "nom": "Cuisson Vapeur #2",
+      "competences": [
+        "cuisson_vapeur"
+      ]
+    },
+    {
+      "id": "R0030",
+      "nom": "Cuisson Vapeur #3",
+      "competences": [
+        "cuisson_vapeur"
+      ]
+    },
+    {
+      "id": "R0031",
+      "nom": "Cuisson Vapeur #4",
+      "competences": [
+        "cuisson_vapeur"
+      ]
+    },
+    {
+      "id": "R0032",
+      "nom": "Cuisson Vapeur #5",
+      "competences": [
+        "cuisson_vapeur"
+      ]
+    },
+    {
+      "id": "R0033",
+      "nom": "Refroidissement Rapide #1",
+      "competences": [
+        "refroidissement_rapide"
+      ]
+    },
+    {
+      "id": "R0034",
+      "nom": "Refroidissement Rapide #2",
+      "competences": [
+        "refroidissement_rapide"
+      ]
+    },
+    {
+      "id": "R0035",
+      "nom": "Refroidissement Rapide #3",
+      "competences": [
+        "refroidissement_rapide"
+      ]
+    },
+    {
+      "id": "R0036",
+      "nom": "Refroidissement Rapide #4",
+      "competences": [
+        "refroidissement_rapide"
+      ]
+    },
+    {
+      "id": "R0037",
+      "nom": "Refroidissement Rapide #5",
+      "competences": [
+        "refroidissement_rapide"
+      ]
+    },
+    {
+      "id": "R0038",
+      "nom": "Conditionnement Automatique #1",
+      "competences": [
+        "conditionnement_automatique"
+      ]
+    },
+    {
+      "id": "R0039",
+      "nom": "Conditionnement Automatique #2",
+      "competences": [
+        "conditionnement_automatique"
+      ]
+    },
+    {
+      "id": "R0040",
+      "nom": "Conditionnement Automatique #3",
+      "competences": [
+        "conditionnement_automatique"
+      ]
+    },
+    {
+      "id": "R0041",
+      "nom": "Conditionnement Automatique #4",
+      "competences": [
+        "conditionnement_automatique"
+      ]
+    },
+    {
+      "id": "R0042",
+      "nom": "Conditionnement Automatique #5",
+      "competences": [
+        "conditionnement_automatique"
+      ]
+    },
+    {
+      "id": "R0043",
+      "nom": "Conditionnement Automatique #6",
+      "competences": [
+        "conditionnement_automatique"
+      ]
+    },
+    {
+      "id": "R0044",
+      "nom": "Conditionnement Manuel #1",
+      "competences": [
+        "conditionnement_manuel"
+      ]
+    },
+    {
+      "id": "R0045",
+      "nom": "Conditionnement Manuel #2",
+      "competences": [
+        "conditionnement_manuel"
+      ]
+    },
+    {
+      "id": "R0046",
+      "nom": "Conditionnement Manuel #3",
+      "competences": [
+        "conditionnement_manuel"
+      ]
+    },
+    {
+      "id": "R0047",
+      "nom": "Conditionnement Manuel #4",
+      "competences": [
+        "conditionnement_manuel"
+      ]
+    },
+    {
+      "id": "R0048",
+      "nom": "Conditionnement Manuel #5",
+      "competences": [
+        "conditionnement_manuel"
+      ]
+    },
+    {
+      "id": "R0049",
+      "nom": "Conditionnement Manuel #6",
+      "competences": [
+        "conditionnement_manuel"
+      ]
+    },
+    {
+      "id": "R0050",
+      "nom": "Etiquetage Automatique #1",
+      "competences": [
+        "etiquetage_automatique"
+      ]
+    },
+    {
+      "id": "R0051",
+      "nom": "Etiquetage Automatique #2",
+      "competences": [
+        "etiquetage_automatique"
+      ]
+    },
+    {
+      "id": "R0052",
+      "nom": "Etiquetage Automatique #3",
+      "competences": [
+        "etiquetage_automatique"
+      ]
+    },
+    {
+      "id": "R0053",
+      "nom": "Etiquetage Automatique #4",
+      "competences": [
+        "etiquetage_automatique"
+      ]
+    },
+    {
+      "id": "R0054",
+      "nom": "Etiquetage Automatique #5",
+      "competences": [
+        "etiquetage_automatique"
+      ]
+    },
+    {
+      "id": "R0055",
+      "nom": "Etiquetage Automatique #6",
+      "competences": [
+        "etiquetage_automatique"
+      ]
+    },
+    {
+      "id": "R0056",
+      "nom": "Controle Qualite Alimentaire #1",
+      "competences": [
+        "controle_qualite_alimentaire"
+      ]
+    },
+    {
+      "id": "R0057",
+      "nom": "Controle Qualite Alimentaire #2",
+      "competences": [
+        "controle_qualite_alimentaire"
+      ]
+    },
+    {
+      "id": "R0058",
+      "nom": "Controle Qualite Alimentaire #3",
+      "competences": [
+        "controle_qualite_alimentaire"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "T0001",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0002",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0003",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0004",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0005",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0006",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0007",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0008",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0009",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0010",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0001",
+      "apres": "T0002"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0002",
+      "apres": "T0003"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0003",
+      "apres": "T0004"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0004",
+      "apres": "T0005"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0005",
+      "apres": "T0006"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0006",
+      "apres": "T0007"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0007",
+      "apres": "T0008"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0008",
+      "apres": "T0009"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0009",
+      "apres": "T0010"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0011",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0012",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0013",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0014",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0015",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0016",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0017",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0018",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0019",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0020",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0011",
+      "apres": "T0012"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0012",
+      "apres": "T0013"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0013",
+      "apres": "T0014"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0014",
+      "apres": "T0015"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0015",
+      "apres": "T0016"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0016",
+      "apres": "T0017"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0017",
+      "apres": "T0018"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0018",
+      "apres": "T0019"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0019",
+      "apres": "T0020"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0021",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0022",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0023",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0024",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0025",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0026",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0027",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0028",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0029",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0030",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0021",
+      "apres": "T0022"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0022",
+      "apres": "T0023"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0023",
+      "apres": "T0024"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0024",
+      "apres": "T0025"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0025",
+      "apres": "T0026"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0026",
+      "apres": "T0027"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0027",
+      "apres": "T0028"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0028",
+      "apres": "T0029"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0029",
+      "apres": "T0030"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0031",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0032",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0033",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0034",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0035",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0036",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0037",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0038",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0039",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0040",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0031",
+      "apres": "T0032"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0032",
+      "apres": "T0033"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0033",
+      "apres": "T0034"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0034",
+      "apres": "T0035"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0035",
+      "apres": "T0036"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0036",
+      "apres": "T0037"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0037",
+      "apres": "T0038"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0038",
+      "apres": "T0039"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0039",
+      "apres": "T0040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0041",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0042",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0043",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0044",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0045",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0046",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0047",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0048",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0049",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0050",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0041",
+      "apres": "T0042"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0042",
+      "apres": "T0043"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0043",
+      "apres": "T0044"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0044",
+      "apres": "T0045"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0045",
+      "apres": "T0046"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0046",
+      "apres": "T0047"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0047",
+      "apres": "T0048"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0048",
+      "apres": "T0049"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0049",
+      "apres": "T0050"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0051",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0052",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0053",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0054",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0055",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0056",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0057",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0058",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0059",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0060",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0051",
+      "apres": "T0052"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0052",
+      "apres": "T0053"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0053",
+      "apres": "T0054"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0054",
+      "apres": "T0055"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0055",
+      "apres": "T0056"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0056",
+      "apres": "T0057"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0057",
+      "apres": "T0058"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0058",
+      "apres": "T0059"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0059",
+      "apres": "T0060"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0061",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0062",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0063",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0064",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0065",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0066",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0067",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0068",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0069",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0070",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0061",
+      "apres": "T0062"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0062",
+      "apres": "T0063"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0063",
+      "apres": "T0064"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0064",
+      "apres": "T0065"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0065",
+      "apres": "T0066"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0066",
+      "apres": "T0067"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0067",
+      "apres": "T0068"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0068",
+      "apres": "T0069"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0069",
+      "apres": "T0070"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0071",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0072",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0073",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0074",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0075",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0076",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0077",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0078",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0079",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0080",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0071",
+      "apres": "T0072"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0072",
+      "apres": "T0073"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0073",
+      "apres": "T0074"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0074",
+      "apres": "T0075"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0075",
+      "apres": "T0076"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0076",
+      "apres": "T0077"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0077",
+      "apres": "T0078"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0078",
+      "apres": "T0079"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0079",
+      "apres": "T0080"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0081",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0082",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0083",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0084",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0085",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0086",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0087",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0088",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0089",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0090",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0081",
+      "apres": "T0082"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0082",
+      "apres": "T0083"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0083",
+      "apres": "T0084"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0084",
+      "apres": "T0085"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0085",
+      "apres": "T0086"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0086",
+      "apres": "T0087"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0087",
+      "apres": "T0088"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0088",
+      "apres": "T0089"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0089",
+      "apres": "T0090"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0091",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0092",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0093",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0094",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0095",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0096",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0097",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0098",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0099",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0100",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0091",
+      "apres": "T0092"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0092",
+      "apres": "T0093"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0093",
+      "apres": "T0094"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0094",
+      "apres": "T0095"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0095",
+      "apres": "T0096"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0096",
+      "apres": "T0097"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0097",
+      "apres": "T0098"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0098",
+      "apres": "T0099"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0099",
+      "apres": "T0100"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0101",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0102",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0103",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0104",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0105",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0106",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0107",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0108",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0109",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0110",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0101",
+      "apres": "T0102"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0102",
+      "apres": "T0103"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0103",
+      "apres": "T0104"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0104",
+      "apres": "T0105"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0105",
+      "apres": "T0106"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0106",
+      "apres": "T0107"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0107",
+      "apres": "T0108"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0108",
+      "apres": "T0109"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0109",
+      "apres": "T0110"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0111",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0112",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0113",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0114",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0115",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0116",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0117",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0118",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0119",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0120",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0111",
+      "apres": "T0112"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0112",
+      "apres": "T0113"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0113",
+      "apres": "T0114"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0114",
+      "apres": "T0115"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0115",
+      "apres": "T0116"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0116",
+      "apres": "T0117"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0117",
+      "apres": "T0118"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0118",
+      "apres": "T0119"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0119",
+      "apres": "T0120"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0121",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0122",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0123",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0124",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0125",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0126",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0127",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0128",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0129",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0130",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0121",
+      "apres": "T0122"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0122",
+      "apres": "T0123"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0123",
+      "apres": "T0124"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0124",
+      "apres": "T0125"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0125",
+      "apres": "T0126"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0126",
+      "apres": "T0127"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0127",
+      "apres": "T0128"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0128",
+      "apres": "T0129"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0129",
+      "apres": "T0130"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0131",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0132",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0133",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0134",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0135",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0136",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0137",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0138",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0139",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0140",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0131",
+      "apres": "T0132"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0132",
+      "apres": "T0133"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0133",
+      "apres": "T0134"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0134",
+      "apres": "T0135"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0135",
+      "apres": "T0136"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0136",
+      "apres": "T0137"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0137",
+      "apres": "T0138"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0138",
+      "apres": "T0139"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0139",
+      "apres": "T0140"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0141",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0142",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0143",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0144",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0145",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0146",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0147",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0148",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0149",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0150",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0141",
+      "apres": "T0142"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0142",
+      "apres": "T0143"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0143",
+      "apres": "T0144"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0144",
+      "apres": "T0145"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0145",
+      "apres": "T0146"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0146",
+      "apres": "T0147"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0147",
+      "apres": "T0148"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0148",
+      "apres": "T0149"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0149",
+      "apres": "T0150"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0151",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0152",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0153",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0154",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0155",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0156",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0157",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0158",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0159",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0160",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0151",
+      "apres": "T0152"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0152",
+      "apres": "T0153"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0153",
+      "apres": "T0154"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0154",
+      "apres": "T0155"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0155",
+      "apres": "T0156"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0156",
+      "apres": "T0157"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0157",
+      "apres": "T0158"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0158",
+      "apres": "T0159"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0159",
+      "apres": "T0160"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0161",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0162",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0163",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0164",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0165",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0166",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0167",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0168",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0169",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0170",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0161",
+      "apres": "T0162"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0162",
+      "apres": "T0163"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0163",
+      "apres": "T0164"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0164",
+      "apres": "T0165"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0165",
+      "apres": "T0166"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0166",
+      "apres": "T0167"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0167",
+      "apres": "T0168"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0168",
+      "apres": "T0169"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0169",
+      "apres": "T0170"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0171",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0172",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0173",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0174",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0175",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0176",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0177",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0178",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0179",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0180",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0171",
+      "apres": "T0172"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0172",
+      "apres": "T0173"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0173",
+      "apres": "T0174"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0174",
+      "apres": "T0175"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0175",
+      "apres": "T0176"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0176",
+      "apres": "T0177"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0177",
+      "apres": "T0178"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0178",
+      "apres": "T0179"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0179",
+      "apres": "T0180"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0181",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0182",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0183",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0184",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0185",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0186",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0187",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0188",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0189",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0190",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0181",
+      "apres": "T0182"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0182",
+      "apres": "T0183"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0183",
+      "apres": "T0184"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0184",
+      "apres": "T0185"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0185",
+      "apres": "T0186"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0186",
+      "apres": "T0187"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0187",
+      "apres": "T0188"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0188",
+      "apres": "T0189"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0189",
+      "apres": "T0190"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0191",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0192",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0193",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0194",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0195",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0196",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0197",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0198",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0199",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0200",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0191",
+      "apres": "T0192"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0192",
+      "apres": "T0193"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0193",
+      "apres": "T0194"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0194",
+      "apres": "T0195"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0195",
+      "apres": "T0196"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0196",
+      "apres": "T0197"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0197",
+      "apres": "T0198"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0198",
+      "apres": "T0199"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0199",
+      "apres": "T0200"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0201",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0202",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0203",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0204",
+      "competence": "decoupe_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0205",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0206",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0207",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0208",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0209",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0210",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0201",
+      "apres": "T0202"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0202",
+      "apres": "T0203"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0203",
+      "apres": "T0204"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0204",
+      "apres": "T0205"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0205",
+      "apres": "T0206"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0206",
+      "apres": "T0207"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0207",
+      "apres": "T0208"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0208",
+      "apres": "T0209"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0209",
+      "apres": "T0210"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0211",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0212",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0213",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0214",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0215",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0216",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0217",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0218",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0219",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0220",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0211",
+      "apres": "T0212"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0212",
+      "apres": "T0213"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0213",
+      "apres": "T0214"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0214",
+      "apres": "T0215"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0215",
+      "apres": "T0216"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0216",
+      "apres": "T0217"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0217",
+      "apres": "T0218"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0218",
+      "apres": "T0219"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0219",
+      "apres": "T0220"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0221",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0222",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0223",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0224",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0225",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0226",
+      "competence": "cuisson_four"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0227",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0228",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0229",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0230",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0221",
+      "apres": "T0222"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0222",
+      "apres": "T0223"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0223",
+      "apres": "T0224"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0224",
+      "apres": "T0225"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0225",
+      "apres": "T0226"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0226",
+      "apres": "T0227"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0227",
+      "apres": "T0228"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0228",
+      "apres": "T0229"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0229",
+      "apres": "T0230"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0231",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0232",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0233",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0234",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0235",
+      "competence": "traitement_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0236",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0237",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0238",
+      "competence": "conditionnement_manuel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0239",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0240",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0231",
+      "apres": "T0232"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0232",
+      "apres": "T0233"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0233",
+      "apres": "T0234"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0234",
+      "apres": "T0235"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0235",
+      "apres": "T0236"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0236",
+      "apres": "T0237"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0237",
+      "apres": "T0238"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0238",
+      "apres": "T0239"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0239",
+      "apres": "T0240"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0241",
+      "competence": "reception_matieres"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0242",
+      "competence": "lavage_industriel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0243",
+      "competence": "triage_qualite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0244",
+      "competence": "decoupe_manuelle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0245",
+      "competence": "traitement_thermique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0246",
+      "competence": "cuisson_vapeur"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0247",
+      "competence": "refroidissement_rapide"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0248",
+      "competence": "conditionnement_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0249",
+      "competence": "etiquetage_automatique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T0250",
+      "competence": "controle_qualite_alimentaire"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0241",
+      "apres": "T0242"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0242",
+      "apres": "T0243"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0243",
+      "apres": "T0244"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0244",
+      "apres": "T0245"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0245",
+      "apres": "T0246"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0246",
+      "apres": "T0247"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0247",
+      "apres": "T0248"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0248",
+      "apres": "T0249"
+    },
+    {
+      "type": "precedence",
+      "avant": "T0249",
+      "apres": "T0250"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}
