@@ -54,6 +54,7 @@ def obtenir_instance(
         "instance_id": instance_id,
         "client_id": client_id,
         "structure_contraintes": structure_contraintes(instance),
+        "description_metier": etat.recuperer_description_metier(instance_id),
         **instance.model_dump(mode="json"),
     }
 

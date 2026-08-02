@@ -49,6 +49,7 @@ def test_ingestion_via_comprehension_accepte_une_traduction_valide() -> None:
             ],
             "objectifs": [{"type": "minimiser_makespan"}],
         },
+        description_metier="Une tâche T1 exécutée sur la ressource R1.",
         avertissements=["durée estimée, absente des données source"],
     )
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
@@ -66,8 +67,13 @@ def test_ingestion_via_comprehension_accepte_une_traduction_valide() -> None:
         assert reponse.status_code == 200, reponse.json()
         corps = reponse.json()
         assert corps["structure_contraintes"] == "compatibilite_ressource_tache"
+        assert corps["description_metier"] == "Une tâche T1 exécutée sur la ressource R1."
         assert corps["avertissements"] == ["durée estimée, absente des données source"]
         assert corps["instance_id"] in etat_test.instances
+        assert (
+            etat_test.recuperer_description_metier(corps["instance_id"])
+            == "Une tâche T1 exécutée sur la ressource R1."
+        )
     finally:
         app.dependency_overrides.clear()
 
@@ -83,7 +89,8 @@ def test_ingestion_via_comprehension_relaie_le_rejet_du_garde_fou() -> None:
             "ressources": [{"id": "R1"}],
             "contraintes": [],
             "objectifs": [{"type": "minimiser_makespan"}],
-        }
+        },
+        description_metier="Une tâche T1, sans ressource compatible identifiée.",
     )
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(

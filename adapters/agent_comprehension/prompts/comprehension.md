@@ -99,6 +99,15 @@ ci-dessus. Règles impératives :
   validé automatiquement (identifiants uniques, chaque tâche a bien une
   compatibilité...), mais cette validation ne peut pas détecter une erreur
   d'interprétation sémantique, seulement une incohérence structurelle.
+- Rédige `description_metier` : une description du processus métier (sa
+  nature, ses grandes étapes, les acteurs impliqués) fondée **uniquement**
+  sur ce que les données brutes fournies permettent d'observer — jamais un
+  contexte, un secteur ou une finalité que tu supposerais sans qu'un champ
+  des données ne le porte explicitement. Si une partie du processus reste
+  ambiguë ou incomplète dans les données, dis-le dans cette description ou
+  signale-le dans `avertissements`, plutôt que de combler le vide par une
+  supposition plausible — même règle que pour toute autre partie de cette
+  mission.
 - Pour chaque contrainte `precedence`, `echeance` et `competence_requise` que
   tu produis (pas `compatibilite_ressource_tache`, trop nombreuses pour être
   toutes justifiées individuellement), ajoute une entrée dans
@@ -135,6 +144,7 @@ texte, pas de bloc markdown autour) :
     ],
     "objectifs": [{{"type": "minimiser_makespan"}}]
   }},
+  "description_metier": "Description du processus tel qu'il ressort des données brutes ci-dessus.",
   "avertissements": ["ce qui a été ignoré, incertain, ou à vérifier — tableau vide si rien à signaler"],
   "justifications": [
     {{"contrainte": "precedence: T1 → T2", "raison": "champ \"operation_precedente\": \"T1\" sur l'opération T2"}},

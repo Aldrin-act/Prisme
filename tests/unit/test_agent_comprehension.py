@@ -24,6 +24,7 @@ def test_comprehension_parse_une_reponse_valide() -> None:
             ],
             "objectifs": [{"type": "minimiser_makespan"}],
         },
+        description_metier="Une tâche T1 exécutée sur la ressource R1.",
         avertissements=["durée estimée, absente des données source"],
     )
     modele = ModeleFactice(raw_content="{}", parsed=schema)
@@ -31,6 +32,7 @@ def test_comprehension_parse_une_reponse_valide() -> None:
     resultat = comprendre_donnees_erp(modele, "T1;M1;10min")
 
     assert resultat.instance_brute["taches"] == [{"id": "T1"}]
+    assert resultat.description_metier == "Une tâche T1 exécutée sur la ressource R1."
     assert resultat.avertissements == ("durée estimée, absente des données source",)
 
 
@@ -43,7 +45,8 @@ def test_comprehension_tolere_labsence_davertissements() -> None:
                 {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}
             ],
             "objectifs": [{"type": "minimiser_makespan"}],
-        }
+        },
+        description_metier="Une tâche T1 exécutée sur la ressource R1.",
     )
     modele = ModeleFactice(raw_content="{}", parsed=schema)
 

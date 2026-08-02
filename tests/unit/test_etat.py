@@ -29,6 +29,34 @@ def _instance_exemple() -> InstanceTRCO:
     )
 
 
+def test_description_metier_round_trip() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), description_metier="Découpe puis assemblage de la pièce."
+    )
+
+    assert etat.recuperer_description_metier(instance_id) == "Découpe puis assemblage de la pièce."
+
+
+def test_description_metier_absente_pour_une_ingestion_sans_agent() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat.recuperer_description_metier(instance_id) is None
+
+
+def test_supprimer_instance_purge_sa_description_metier() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), description_metier="Découpe puis assemblage de la pièce."
+    )
+
+    etat.supprimer_instance(instance_id)
+
+    with pytest.raises(KeyError):
+        etat.recuperer_description_metier(instance_id)
+
+
 def test_enregistrer_instance_depuis_source_trace_la_provenance() -> None:
     etat = EtatAPI()
     source_id = etat.enregistrer_source("client-test", donnees_brutes="brut")

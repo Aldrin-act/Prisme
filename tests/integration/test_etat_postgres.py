@@ -38,6 +38,20 @@ def test_instance_round_trip(etat_postgres_test: EtatPostgres) -> None:
     assert len(instance_relue.contraintes) == 3
 
 
+def test_description_metier_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), description_metier="Découpe puis assemblage de la pièce."
+    )
+
+    assert etat_postgres_test.recuperer_description_metier(instance_id) == "Découpe puis assemblage de la pièce."
+
+
+def test_description_metier_absente_pour_une_ingestion_sans_agent(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat_postgres_test.recuperer_description_metier(instance_id) is None
+
+
 def test_recuperer_instance_inconnue_leve_key_error(etat_postgres_test: EtatPostgres) -> None:
     try:
         etat_postgres_test.recuperer_instance("id-inexistant")

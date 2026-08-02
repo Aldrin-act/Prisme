@@ -130,6 +130,16 @@ class EtatPostgres:
                     "REFERENCES {sources}(id) ON DELETE SET NULL"
                 ).format(table=self._table("instances_trco"), sources=self._table("sources_donnees"))
             )
+            # Migration idempotente : description métier proposée par l'agent
+            # de compréhension (§5.4 bis) — NULL pour toute instance ingérée
+            # par un autre canal (T-R-C-O direct, Excel, ERP). Hors
+            # `InstanceTRCO` elle-même (`extra="forbid"`) : une colonne
+            # dédiée sur l'entité Instance côté API, pas un champ du DSL.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS description_metier TEXT").format(
+                    table=self._table("instances_trco")
+                )
+            )
             connexion.execute(
                 sql.SQL(
                     "CREATE TABLE IF NOT EXISTS {table} ("
@@ -447,7 +457,13 @@ class EtatPostgres:
 
     # --- Instances -----------------------------------------------------
 
-    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, source_id: str | None = None) -> str:
+    def enregistrer_instance(
+        self,
+        client_id: str,
+        instance: InstanceTRCO,
+        source_id: str | None = None,
+        description_metier: str | None = None,
+    ) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
         with closing(self._connexion()) as connexion:
@@ -459,8 +475,10 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, payload, structure_contraintes, date_ingestion, source_id) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s)"
+                    "INSERT INTO {} "
+                    "(id, client_id, payload, structure_contraintes, date_ingestion, source_id, "
+                    "description_metier) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
@@ -469,6 +487,7 @@ class EtatPostgres:
                     structure,
                     datetime.now(UTC).isoformat(),
                     source_id,
+                    description_metier,
                 ),
             )
             connexion.commit()
@@ -484,6 +503,16 @@ class EtatPostgres:
             raise KeyError(instance_id)
         client_id, payload = ligne
         return client_id, InstanceTRCO.model_validate(payload)
+
+    def recuperer_description_metier(self, instance_id: str) -> str | None:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT description_metier FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(instance_id)
+        return ligne[0]
 
     def modifier_objectifs(self, instance_id: str, objectifs: list[Objectif]) -> InstanceTRCO:
         """Remplace les objectifs d'une instance déjà ingérée — voir

@@ -143,10 +143,13 @@ def ingerer_via_comprehension(
 
     instance = valider_payload_trco(resultat.instance_brute)  # lève déjà un 422 si invalide
 
-    instance_id = etat.enregistrer_instance(requete.client_id, instance)
+    instance_id = etat.enregistrer_instance(
+        requete.client_id, instance, description_metier=resultat.description_metier
+    )
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(instance),
+        "description_metier": resultat.description_metier,
         "avertissements": list(resultat.avertissements),
         "justifications": [{"contrainte": j.contrainte, "raison": j.raison} for j in resultat.justifications],
     }

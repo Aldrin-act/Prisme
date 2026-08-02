@@ -63,6 +63,27 @@ def test_ingestion_rejette_un_payload_invalide(client_isole: tuple[TestClient, E
     assert reponse.status_code == 422
 
 
+def test_obtenir_instance_sans_description_metier_pour_une_ingestion_directe(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    """Une instance ingérée par payload T-R-C-O direct (pas via l'agent de
+    compréhension) n'a pas de description métier proposée — `None`, pas une
+    absence de champ."""
+    client, _ = client_isole
+    payload = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1"}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+    instance_id = client.post("/ingestion/client_a", json=payload).json()["instance_id"]
+
+    reponse = client.get(f"/ingestion/{instance_id}")
+
+    assert reponse.status_code == 200
+    assert reponse.json()["description_metier"] is None
+
+
 def test_ingestion_calcule_la_structure_de_contraintes(client_isole: tuple[TestClient, EtatAPI]) -> None:
     client, _ = client_isole
     payload = {

@@ -50,6 +50,10 @@ class _SchemaComprehension(BaseModel):
     # (§6.7, `api.input_validation.valider_payload_trco`), jamais une contrainte
     # imposée au LLM au moment de la génération.
     instance: dict[str, Any] = Field(description="Instance T-R-C-O candidate, format canonique.")
+    description_metier: str = Field(
+        description="Description du processus métier tel qu'il ressort des données brutes fournies "
+        "(nature du processus, étapes, acteurs) — jamais de contexte non mentionné dans les données."
+    )
     avertissements: list[str] = Field(
         default_factory=list, description="Incertitudes à faire vérifier par un humain."
     )
@@ -66,6 +70,7 @@ class Justification:
 class ResultatComprehension:
     reponse_brute: str
     instance_brute: dict[str, Any]
+    description_metier: str
     avertissements: tuple[str, ...]
     # Une entrée par contrainte precedence/echeance/competence_requise produite
     # (pas compatibilite_ressource_tache, trop nombreuses) — citant le champ
@@ -93,6 +98,7 @@ def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> Result
     return ResultatComprehension(
         reponse_brute=reponse_brute,
         instance_brute=donnees.instance,
+        description_metier=donnees.description_metier,
         avertissements=tuple(donnees.avertissements),
         justifications=tuple(
             Justification(contrainte=j.contrainte, raison=j.raison) for j in donnees.justifications

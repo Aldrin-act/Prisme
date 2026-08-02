@@ -177,6 +177,13 @@ class EtatAPI:
     decisions: dict[str, DecisionHumaine] = field(default_factory=dict)
     sources: dict[str, SourceDonnees] = field(default_factory=dict)
     source_par_instance: dict[str, str] = field(default_factory=dict)
+    # Description métier proposée par l'agent de compréhension (§5.4 bis) —
+    # absente (None) pour toute instance ingérée hors de ce chemin (payload
+    # T-R-C-O direct, adaptateur écrit à la main...). Hors `InstanceTRCO`
+    # elle-même (`extra="forbid"`, vocabulaire fini du DSL) : c'est une
+    # métadonnée de l'entité Instance côté API, pas un champ du problème
+    # d'ordonnancement.
+    descriptions_metier: dict[str, str | None] = field(default_factory=dict)
     clients: dict[str, Client] = field(default_factory=dict)
     dates_execution: dict[str, str] = field(default_factory=dict)
     jobs_generation: dict[str, JobGeneration] = field(default_factory=dict)
@@ -197,12 +204,19 @@ class EtatAPI:
     def lister_clients(self) -> list[dict[str, object]]:
         return [{"client_id": c.id, "nom": c.nom} for c in self.clients.values()]
 
-    def enregistrer_instance(self, client_id: str, instance: InstanceTRCO, source_id: str | None = None) -> str:
+    def enregistrer_instance(
+        self,
+        client_id: str,
+        instance: InstanceTRCO,
+        source_id: str | None = None,
+        description_metier: str | None = None,
+    ) -> str:
         self.enregistrer_client(client_id)
         instance_id = str(uuid.uuid4())
         self.instances[instance_id] = (client_id, instance)
         if source_id is not None:
             self.source_par_instance[instance_id] = source_id
+        self.descriptions_metier[instance_id] = description_metier
         return instance_id
 
     def enregistrer_source(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
@@ -266,6 +280,15 @@ class EtatAPI:
             raise KeyError(instance_id)
         return self.instances[instance_id]
 
+    def recuperer_description_metier(self, instance_id: str) -> str | None:
+        """`None` pour toute instance ingérée hors du chemin agent de
+        compréhension (payload T-R-C-O direct, adaptateur écrit à la main...),
+        pas seulement pour une instance inconnue — lève quand même `KeyError`
+        dans ce dernier cas pour rester cohérent avec `recuperer_instance`."""
+        if instance_id not in self.instances:
+            raise KeyError(instance_id)
+        return self.descriptions_metier.get(instance_id)
+
     def modifier_objectifs(self, instance_id: str, objectifs: list[Objectif]) -> InstanceTRCO:
         """Remplace les objectifs d'une instance déjà ingérée, seul champ pour
         lequel une modification en place a du sens (taches/ressources/
@@ -296,6 +319,7 @@ class EtatAPI:
             raise KeyError(instance_id)
         del self.instances[instance_id]
         self.source_par_instance.pop(instance_id, None)
+        self.descriptions_metier.pop(instance_id, None)
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
             del self.executions[execution_id]
             self.decisions.pop(execution_id, None)
