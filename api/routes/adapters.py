@@ -153,3 +153,98 @@ def ingerer_via_comprehension(
         "avertissements": list(resultat.avertissements),
         "justifications": [{"contrainte": j.contrainte, "raison": j.raison} for j in resultat.justifications],
     }
+
+
+class RequeteCsvLocal(BaseModel):
+    """Requête pour ingérer depuis un dossier CSV local sur le serveur."""
+
+    chemin_dossier: str
+    client_id: str
+
+
+@router.post("/csv-local/ingerer")
+def ingerer_depuis_csv_local(
+    requete: RequeteCsvLocal,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, Any]:
+    """Ingestion depuis un dossier local contenant trois fichiers CSV
+    (taches.csv, ressources.csv, contraintes.csv).
+
+    Utile pour :
+    - Imports en masse depuis le serveur
+    - Tests et développement
+    - Scripts automatisés d'ingestion
+
+    Args:
+        requete: Contient le chemin du dossier et le client_id
+
+    Returns:
+        Instance ID, structure des contraintes et statistiques
+
+    Raises:
+        404: Dossier ou fichiers CSV introuvables
+        422: Fichiers CSV invalides ou instance non valide
+    """
+    from pathlib import Path
+
+    verifier_acces_client(utilisateur, requete.client_id)
+
+    # Vérifier que le dossier existe
+    dossier = Path(requete.chemin_dossier)
+    if not dossier.exists():
+        raise HTTPException(status_code=404, detail=f"Dossier introuvable : {requete.chemin_dossier}")
+
+    if not dossier.is_dir():
+        raise HTTPException(status_code=404, detail=f"Le chemin n'est pas un dossier : {requete.chemin_dossier}")
+
+    # Vérifier que les trois fichiers existent
+    fichier_taches = dossier / "taches.csv"
+    fichier_ressources = dossier / "ressources.csv"
+    fichier_contraintes = dossier / "contraintes.csv"
+
+    fichiers_manquants = []
+    if not fichier_taches.exists():
+        fichiers_manquants.append("taches.csv")
+    if not fichier_ressources.exists():
+        fichiers_manquants.append("ressources.csv")
+    if not fichier_contraintes.exists():
+        fichiers_manquants.append("contraintes.csv")
+
+    if fichiers_manquants:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Fichier(s) manquant(s) dans {requete.chemin_dossier}: {', '.join(fichiers_manquants)}",
+        )
+
+    # Lire les fichiers
+    try:
+        taches_octets = fichier_taches.read_bytes()
+        ressources_octets = fichier_ressources.read_bytes()
+        contraintes_octets = fichier_contraintes.read_bytes()
+    except Exception as erreur:
+        raise HTTPException(status_code=500, detail=f"Erreur lors de la lecture des fichiers : {erreur}") from erreur
+
+    # Traduire en instance TRCO
+    try:
+        instance = traduire_csv(taches_octets, ressources_octets, contraintes_octets)
+    except ErreurFichierCsvInvalide as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    # Enregistrer l'instance
+    instance_id = etat.enregistrer_instance(requete.client_id, instance)
+
+    # Préparer la réponse avec statistiques
+    return {
+        "instance_id": instance_id,
+        "structure_contraintes": structure_contraintes(instance),
+        "statistiques": {
+            "taches": len(instance.taches),
+            "ressources": len(instance.ressources),
+            "contraintes": len(instance.contraintes),
+            "objectifs": len(instance.objectifs),
+        },
+        "chemin_source": requete.chemin_dossier,
+    }

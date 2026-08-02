@@ -23,19 +23,128 @@ client explicitement) — voir `api/autorisation.py`.
 
 from __future__ import annotations
 
+import json
+import re
+
 from fastapi import APIRouter, Depends, HTTPException
 from langchain_core.language_models.chat_models import BaseChatModel
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import comprendre_donnees_erp
+from adapters.csv_import import ErreurFichierInvalide as ErreurFichierCsvInvalide
+from adapters.csv_import import traduire as traduire_csv
+from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
+from adapters.json_import import traduire as traduire_json
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
-from api.input_validation import valider_payload_trco
+from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
+from dsl.schema import InstanceTRCO
 from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.client_llm import construire_modele_comprehension
 
 router = APIRouter(prefix="/sources", tags=["sources"])
+
+
+class ErreurStructureNonReconnue(Exception):
+    """Le texte brut d'une source ne peut être scindé ni en JSON canonique, ni
+    en blocs CSV Tâches/Ressources/Contraintes identifiables — reste éligible
+    à l'agent de compréhension (`generer_instance`), qui interprète n'importe
+    quel texte libre, structuré ou non."""
+
+
+# Un export multi-fichiers concaténé par le formulaire (Front/prismatron-solver-forge/
+# src/routes/_authenticated/donnees.tsx, `FormulaireNouvelleSource`) marque chaque
+# fichier par son nom d'origine — c'est le signal le plus fiable pour reconstituer
+# les trois fichiers attendus par `adapters.csv_import.traduire`, avant de retomber
+# sur une détection par en-tête de colonnes (voir `_type_par_entete`).
+_MARQUEUR_BLOC = re.compile(r"^--- (.+?) ---$", re.MULTILINE)
+
+_MOTS_CLES_PAR_TABLE = {"taches": "tache", "ressources": "ressource", "contraintes": "contrainte"}
+
+
+def _decouper_blocs_csv(texte: str) -> list[tuple[str, str]]:
+    """Scinde un texte multi-fichiers en `(nom_original, contenu)` — un texte
+    sans marqueur `--- nom ---` est traité comme un unique bloc anonyme
+    (`nom_original` vide)."""
+    positions = list(_MARQUEUR_BLOC.finditer(texte))
+    if not positions:
+        return [("", texte.strip())]
+    blocs = []
+    for i, marqueur in enumerate(positions):
+        fin = positions[i + 1].start() if i + 1 < len(positions) else len(texte)
+        blocs.append((marqueur.group(1), texte[marqueur.end() : fin].strip()))
+    return blocs
+
+
+def _type_par_nom_fichier(nom: str) -> str | None:
+    nom = nom.lower()
+    return next((table for table, mot_cle in _MOTS_CLES_PAR_TABLE.items() if mot_cle in nom), None)
+
+
+def _type_par_entete(bloc: str) -> str | None:
+    """Détection de repli quand le nom de fichier n'est pas parlant — d'après
+    les colonnes qui n'existent que dans un seul des trois fichiers attendus
+    (voir `adapters/csv_import/traducteur.py`, colonnes requises/optionnelles)."""
+    premiere_ligne = bloc.split("\n", 1)[0] if bloc else ""
+    colonnes = {c.strip().lower() for c in premiere_ligne.split(",")}
+    if "type" in colonnes:
+        return "contraintes"
+    if "competences" in colonnes:
+        return "ressources"
+    if "duree_estimee_jours" in colonnes:
+        return "taches"
+    return None
+
+
+def _reconstruire_fichiers_csv(texte: str) -> tuple[bytes, bytes, bytes]:
+    blocs = _decouper_blocs_csv(texte)
+    assignation: dict[str, str] = {}
+    non_assignes: list[str] = []
+    for nom, contenu in blocs:
+        table = _type_par_nom_fichier(nom) or _type_par_entete(contenu)
+        if table and table not in assignation:
+            assignation[table] = contenu
+        else:
+            non_assignes.append(contenu)
+
+    # Dernier repli : un bloc restant sans type reconnu comble une case encore
+    # vide, dans l'ordre — mieux qu'un rejet si deux des trois fichiers ont été
+    # identifiés sans ambiguïté et qu'il n'en reste qu'un.
+    for table in ("taches", "ressources", "contraintes"):
+        if table not in assignation and non_assignes:
+            assignation[table] = non_assignes.pop(0)
+
+    manquantes = [t for t in ("taches", "ressources", "contraintes") if t not in assignation]
+    if manquantes:
+        raise ErreurStructureNonReconnue(
+            f"fichier(s) non identifié(s) : {', '.join(manquantes)} "
+            "(attendu : un bloc Tâches, un Ressources, un Contraintes — par nom de fichier ou en-tête de colonnes)"
+        )
+    return (
+        assignation["taches"].encode("utf-8"),
+        assignation["ressources"].encode("utf-8"),
+        assignation["contraintes"].encode("utf-8"),
+    )
+
+
+def _traduire_deterministe(donnees_brutes: str) -> InstanceTRCO:
+    """JSON canonique (`adapters.json_import`) si le texte entier en est un ;
+    sinon CSV Tâches/Ressources/Contraintes (`adapters.csv_import`), reconstitués
+    depuis le texte brut. Lève `ErreurStructureNonReconnue` si ni l'un ni
+    l'autre n'est identifiable ; laisse passer telles quelles
+    `ErreurFichierCsvInvalide`/`ErreurPayloadJsonInvalide`/`ValidationError`
+    quand la structure est identifiée mais son contenu invalide."""
+    texte = donnees_brutes.strip()
+    try:
+        payload = json.loads(texte)
+    except (json.JSONDecodeError, ValueError):
+        payload = None
+    if isinstance(payload, dict):
+        return traduire_json(payload)
+
+    taches_csv, ressources_csv, contraintes_csv = _reconstruire_fichiers_csv(texte)
+    return traduire_csv(taches_csv, ressources_csv, contraintes_csv)
 
 
 class RequeteCreationSource(BaseModel):
@@ -147,4 +256,42 @@ def generer_instance(
         "description_metier": resultat.description_metier,
         "avertissements": list(resultat.avertissements),
         "justifications": [{"contrainte": j.contrainte, "raison": j.raison} for j in resultat.justifications],
+    }
+
+
+@router.post("/{source_id}/generer-instance-deterministe")
+def generer_instance_deterministe(
+    source_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Alternative à `generer_instance` sans appel LLM : traduit le texte brut
+    déjà enregistré via les adaptateurs déterministes (`adapters.json_import`/
+    `adapters.csv_import`) s'il est déjà structuré — gratuit, instantané, mais
+    n'aboutit que si ce texte est un JSON canonique ou un export CSV
+    Tâches/Ressources/Contraintes reconstituable ; sinon 422, direction
+    `generer_instance` (l'agent), qui interprète n'importe quel texte libre."""
+    try:
+        source = etat.recuperer_source(source_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="source inconnue") from None
+
+    verifier_acces_client(utilisateur, source.client_id)
+
+    try:
+        instance = _traduire_deterministe(source.donnees_brutes)
+    except ErreurStructureNonReconnue as erreur:
+        raise HTTPException(
+            status_code=422,
+            detail=f"conversion déterministe impossible : {erreur} — utilisez « Générer une instance » (agent).",
+        ) from erreur
+    except (ErreurFichierCsvInvalide, ErreurPayloadJsonInvalide) as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    instance_id = etat.enregistrer_instance(source.client_id, instance, source_id=source_id)
+    return {
+        "instance_id": instance_id,
+        "structure_contraintes": structure_contraintes(instance),
     }

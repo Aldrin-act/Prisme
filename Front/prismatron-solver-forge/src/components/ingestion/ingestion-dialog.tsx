@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Upload, FileJson, FileSpreadsheet, Files, Braces, CheckCircle2, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Upload, FileJson, FileSpreadsheet, Files, Braces, CheckCircle2, AlertCircle, FolderOpen } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,7 @@ import {
   useImporterFichierTableur,
   useImporterFichiersCsv,
   useImporterJsonAvecCompetences,
+  useImporterCsvLocal,
   PrismeAPIError,
   type Contrainte,
   type InstanceTRCO,
@@ -241,6 +242,7 @@ export function IngestionDialog({
   const importerFichier = useImporterFichierTableur();
   const importerCsv = useImporterFichiersCsv();
   const importerJson = useImporterJsonAvecCompetences();
+  const importerCsvLocal = useImporterCsvLocal();
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
@@ -261,6 +263,7 @@ export function IngestionDialog({
   const inputTachesCsvRef = useRef<HTMLInputElement>(null);
   const inputRessourcesCsvRef = useRef<HTMLInputElement>(null);
   const inputContraintesCsvRef = useRef<HTMLInputElement>(null);
+  const [cheminDossierCsvLocal, setCheminDossierCsvLocal] = useState("");
   const [succes, setSucces] = useState<{ instance_id: string; structure_contraintes: string } | null>(null);
 
   function reinitialiser() {
@@ -280,12 +283,14 @@ export function IngestionDialog({
     if (inputTachesCsvRef.current) inputTachesCsvRef.current.value = "";
     if (inputRessourcesCsvRef.current) inputRessourcesCsvRef.current.value = "";
     if (inputContraintesCsvRef.current) inputContraintesCsvRef.current.value = "";
+    setCheminDossierCsvLocal("");
     setSucces(null);
     ingerer.reset();
     importer.reset();
     importerFichier.reset();
     importerCsv.reset();
     importerJson.reset();
+    importerCsvLocal.reset();
   }
 
   function fermer(open: boolean) {
@@ -340,11 +345,16 @@ export function IngestionDialog({
     importerJson.mutate({ clientId, payload }, { onSuccess: onIngestionReussie });
   }
 
-  const erreur = (ingerer.error ?? importer.error ?? importerFichier.error ?? importerCsv.error ?? importerJson.error) as
+  function soumettreCsvLocal() {
+    if (!cheminDossierCsvLocal.trim()) return;
+    importerCsvLocal.mutate({ clientId, cheminDossier: cheminDossierCsvLocal }, { onSuccess: onIngestionReussie });
+  }
+
+  const erreur = (ingerer.error ?? importer.error ?? importerFichier.error ?? importerCsv.error ?? importerJson.error ?? importerCsvLocal.error) as
     | PrismeAPIError
     | null;
   const enCours =
-    ingerer.isPending || importer.isPending || importerFichier.isPending || importerCsv.isPending || importerJson.isPending;
+    ingerer.isPending || importer.isPending || importerFichier.isPending || importerCsv.isPending || importerJson.isPending || importerCsvLocal.isPending;
 
   return (
     <Dialog open={open} onOpenChange={fermer}>
@@ -384,6 +394,7 @@ export function IngestionDialog({
               <TabsTrigger value="import">Import ERP</TabsTrigger>
               <TabsTrigger value="fichier">Fichier Excel</TabsTrigger>
               <TabsTrigger value="csv">Fichiers CSV</TabsTrigger>
+              <TabsTrigger value="csvlocal">CSV Local</TabsTrigger>
               <TabsTrigger value="json">Fichier JSON</TabsTrigger>
             </TabsList>
 
@@ -571,6 +582,47 @@ export function IngestionDialog({
                 >
                   <Files className="mr-2 h-4 w-4" />
                   {importerCsv.isPending ? "Import..." : "Importer les fichiers"}
+                </Button>
+              </DialogFooter>
+            </TabsContent>
+
+            <TabsContent value="csvlocal" className="space-y-4">
+              <ChampClient clientId={clientId} setClientId={setClientId} estAdmin={estAdmin} idChamp="client_id_csvlocal" />
+
+              <div className="space-y-1.5">
+                <Label htmlFor="chemin_dossier_csv">Chemin du dossier CSV (côté serveur)</Label>
+                <Input
+                  id="chemin_dossier_csv"
+                  value={cheminDossierCsvLocal}
+                  onChange={(e) => setCheminDossierCsvLocal(e.target.value)}
+                  placeholder="data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique"
+                  className="font-mono text-sm"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Spécifiez le chemin d'un dossier présent sur le serveur contenant les trois fichiers CSV requis
+                  (taches.csv, ressources.csv, contraintes.csv). Utile pour imports en masse, tests avec données
+                  de référence, ou intégrations automatisées.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Exemples de dossiers disponibles :
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-0.5">
+                  <li className="font-mono ml-4">data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique</li>
+                  <li className="font-mono ml-4">data/donnees_brutes/csv/industrie_manufacturiere/atelier_mecanique</li>
+                  <li className="font-mono ml-4">data/donnees_brutes/csv/services/centre_appels</li>
+                </ul>
+              </div>
+
+              {erreur && importerCsvLocal.error && <ErreursAPI erreur={erreur} />}
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => fermer(false)}>Annuler</Button>
+                <Button
+                  onClick={soumettreCsvLocal}
+                  disabled={enCours || !cheminDossierCsvLocal.trim()}
+                >
+                  <FolderOpen className="mr-2 h-4 w-4" />
+                  {importerCsvLocal.isPending ? "Import..." : "Importer depuis le serveur"}
                 </Button>
               </DialogFooter>
             </TabsContent>

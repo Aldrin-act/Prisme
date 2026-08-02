@@ -234,6 +234,14 @@ export const prismeClient = {
       body: JSON.stringify(payload),
     }),
 
+  // Import CSV local : convertit des fichiers CSV présents sur le serveur en instance TRCO
+  // (POST /adapters/csv-local/ingerer) — utile pour imports en masse, tests, ou scripts automatisés.
+  importerCsvLocal: (clientId: string, cheminDossier: string) =>
+    apiFetch<Types.ReponseImportCsvLocal>(`${PRISME_CONFIG.routes.adapters}/csv-local/ingerer`, {
+      method: "POST",
+      body: JSON.stringify({ client_id: clientId, chemin_dossier: cheminDossier }),
+    }),
+
   // Agent de compréhension : convertit des données brutes (texte libre, ERP
   // sans adaptateur dédié) en instance T-R-C-O via un LLM, sous le même
   // garde-fou de validation que les autres canaux d'ingestion.
@@ -279,6 +287,16 @@ export const prismeClient = {
       `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance`,
       { method: "POST" },
       null,
+    ),
+
+  // Alternative sans agent LLM — déterministe et instantanée, mais n'aboutit
+  // que si le texte brut est déjà structuré (JSON canonique ou CSV
+  // Tâches/Ressources/Contraintes) ; timeout par défaut, contrairement à
+  // genererInstanceDepuisSource ci-dessus, aucun appel LLM à attendre.
+  genererInstanceDeterministeDepuisSource: (sourceId: string) =>
+    apiFetch<Types.ReponseConversionDeterministe>(
+      `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance-deterministe`,
+      { method: "POST" },
     ),
 
   // GÉNÉRATION DE SOLVEUR — génération LLM + exécution sandboxée + cascade

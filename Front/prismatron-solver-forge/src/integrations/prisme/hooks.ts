@@ -398,6 +398,17 @@ export function useImporterJsonAvecCompetences() {
 }
 
 /**
+ * Mutation pour importer une instance depuis des fichiers CSV locaux (côté serveur) —
+ * pratique pour imports en masse, tests avec données de référence, ou scripts automatisés.
+ */
+export function useImporterCsvLocal() {
+  return useMutation({
+    mutationFn: ({ clientId, cheminDossier }: { clientId: string; cheminDossier: string }) =>
+      prismeClient.importerCsvLocal(clientId, cheminDossier),
+  });
+}
+
+/**
  * Mutation pour convertir des données brutes (ERP sans adaptateur dédié)
  * en instance T-R-C-O via l'agent de compréhension (LLM).
  */
@@ -442,6 +453,18 @@ export function useCreerSource() {
 export function useGenererInstanceDepuisSource() {
   return useMutation({
     mutationFn: (sourceId: string) => prismeClient.genererInstanceDepuisSource(sourceId),
+  });
+}
+
+/**
+ * Mutation pour convertir une source existante sans agent LLM — déterministe,
+ * n'aboutit que si le texte brut est déjà structuré (JSON canonique ou CSV
+ * Tâches/Ressources/Contraintes) ; sinon 422, direction useGenererInstanceDepuisSource
+ * (l'agent, qui interprète n'importe quel texte libre).
+ */
+export function useGenererInstanceDeterministeDepuisSource() {
+  return useMutation({
+    mutationFn: (sourceId: string) => prismeClient.genererInstanceDeterministeDepuisSource(sourceId),
   });
 }
 

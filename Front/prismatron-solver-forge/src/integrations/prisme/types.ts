@@ -259,6 +259,18 @@ export interface ReponseValidation {
 // à l'identique de POST /ingestion/{client_id}.
 export type ReponseImportAdaptateur = ReponseIngestion;
 
+export interface ReponseImportCsvLocal {
+  instance_id: string;
+  structure_contraintes: string;
+  statistiques: {
+    taches: number;
+    ressources: number;
+    contraintes: number;
+    objectifs: number;
+  };
+  chemin_source: string;
+}
+
 // Agent de compréhension (LLM) : propose une traduction de données brutes
 // (ERP sans adaptateur dédié) vers T-R-C-O, jamais une vérité — le même
 // garde-fou déterministe que les autres canaux d'ingestion tranche derrière.
@@ -275,6 +287,16 @@ export interface ReponseComprehension {
   // citant le champ des données brutes qui l'a justifiée (jamais pour
   // compatibilite_ressource_tache, trop nombreuses).
   justifications: Justification[];
+}
+
+// Conversion déterministe (sans agent LLM) d'une source déjà enregistrée —
+// n'aboutit que si son texte brut est un JSON canonique ou un CSV
+// Tâches/Ressources/Contraintes reconstituable (voir
+// `POST /sources/{id}/generer-instance-deterministe`) ; pas d'avertissements
+// ni de justifications, rien n'est interprété.
+export interface ReponseConversionDeterministe {
+  instance_id: string;
+  structure_contraintes: string;
 }
 
 // ============================================================================

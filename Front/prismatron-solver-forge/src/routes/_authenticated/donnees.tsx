@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import readXlsxFile from "read-excel-file/browser";
 import { z } from "zod";
 import {
   ArrowRightLeft,
@@ -14,6 +13,7 @@ import {
   Loader2,
   Plus,
   Trash2,
+  Zap,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -38,9 +38,11 @@ import {
   prismeKeys,
   useCreerSource,
   useGenererInstanceDepuisSource,
+  useGenererInstanceDeterministeDepuisSource,
   useSource,
   useSources,
   useSupprimerSource,
+  useImporterCsvLocal,
   PrismeAPIError,
   type Justification,
 } from "@/integrations/prisme";
@@ -97,18 +99,19 @@ function DonneesPage() {
   );
 }
 
-type FormatFichierBrut = "csv" | "json" | "excel";
+type FormatFichierBrut = "csv" | "json" | "csvlocal";
 
 const ACCEPT_PAR_FORMAT: Record<FormatFichierBrut, string> = {
   csv: ".csv,text/csv",
   json: ".json,application/json",
-  excel: ".xlsx",
+  csvlocal: "",
 };
 
-// CSV/Excel : un export ERP tient rarement en un seul fichier (tâches,
-// ressources, contraintes sont souvent des tables séparées) — JSON reste à
-// un seul fichier, une instance déjà structurée n'a pas besoin d'être scindée.
-const NB_FICHIERS_PAR_FORMAT: Record<FormatFichierBrut, number> = { csv: 3, json: 1, excel: 3 };
+// CSV : un export ERP tient rarement en un seul fichier (tâches, ressources,
+// contraintes sont souvent des tables séparées) — JSON reste à un seul
+// fichier, une instance déjà structurée n'a pas besoin d'être scindée.
+// CSV Local : pas de fichier à uploader, juste un chemin serveur.
+const NB_FICHIERS_PAR_FORMAT: Record<FormatFichierBrut, number> = { csv: 3, json: 1, csvlocal: 0 };
 
 // Gabarits d'exemple téléchargeables (Front/prismatron-solver-forge/public/gabarits/,
 // voir scripts/generer_gabarit_csv.py et scripts/generer_gabarit_ingestion.py pour
@@ -120,7 +123,7 @@ const GABARITS_PAR_FORMAT: Record<FormatFichierBrut, { nom: string; href: string
     { nom: "contraintes.csv", href: "/gabarits/contraintes.csv" },
   ],
   json: [{ nom: "instance_exemple.json", href: "/gabarits/instance_exemple.json" }],
-  excel: [{ nom: "gabarit_ingestion_trco.xlsx", href: "/gabarits/gabarit_ingestion_trco.xlsx" }],
+  csvlocal: [],
 };
 
 // Étiquette par emplacement de fichier — affichée tant qu'aucun fichier n'est
@@ -131,7 +134,7 @@ const GABARITS_PAR_FORMAT: Record<FormatFichierBrut, { nom: string; href: string
 const LABELS_FICHIER_PAR_FORMAT: Record<FormatFichierBrut, string[]> = {
   csv: ["Tâches", "Ressources", "Contraintes"],
   json: ["Instance"],
-  excel: ["Tâches", "Ressources", "Contraintes"],
+  csvlocal: [],
 };
 
 // Signatures de colonnes des gabarits CSV (voir scripts/generer_gabarit_csv.py /
@@ -154,19 +157,9 @@ function detecterTypeCsv(contenu: string): string | null {
   return signature?.type ?? null;
 }
 
-// Convertit chaque feuille en un bloc texte lisible (comma-séparé) — l'agent
-// de compréhension attend du texte brut, jamais un classeur binaire tel quel.
-function feuillesExcelEnTexte(feuilles: Awaited<ReturnType<typeof readXlsxFile>>): string {
-  return feuilles
-    .map(
-      ({ sheet, data }) =>
-        `# ${sheet}\n` + data.map((ligne) => ligne.map((cellule) => cellule ?? "").join(",")).join("\n"),
-    )
-    .join("\n\n");
-}
-
 function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => void }) {
   const creer = useCreerSource();
+  const importerCsvLocal = useImporterCsvLocal();
   const inputFichierRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
@@ -179,8 +172,15 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   const [detectionsFichiers, setDetectionsFichiers] = useState<(string | null)[]>([null, null, null]);
   const [chargementFichier, setChargementFichier] = useState(false);
   const [erreurFichier, setErreurFichier] = useState<string | null>(null);
+  const [cheminDossierCsvLocal, setCheminDossierCsvLocal] = useState("");
+  const [importCsvLocalReussi, setImportCsvLocalReussi] = useState<{
+    instance_id: string;
+    structure_contraintes: string;
+    statistiques: { taches: number; ressources: number; contraintes: number; objectifs: number };
+    chemin_source: string;
+  } | null>(null);
 
-  const erreur = creer.error as PrismeAPIError | null;
+  const erreur = (creer.error || importerCsvLocal.error) as PrismeAPIError | null;
 
   function changerFormat(format: FormatFichierBrut) {
     setFormatFichier(format);
@@ -190,11 +190,6 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
     inputFichierRefs.forEach((ref) => {
       if (ref.current) ref.current.value = "";
     });
-  }
-
-  async function lireFichier(fichier: File): Promise<string> {
-    if (formatFichier === "excel") return feuillesExcelEnTexte(await readXlsxFile(fichier));
-    return fichier.text();
   }
 
   async function definirFichier(index: number, fichier: File | null) {
@@ -207,7 +202,7 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
       // concaténation ci-dessous et la détection de type (colonnes CSV),
       // aligné sur l'index d'origine (null pour un emplacement vide).
       const contenusParIndex = await Promise.all(
-        nouveauxFichiers.map((f) => (f ? lireFichier(f) : Promise.resolve(null))),
+        nouveauxFichiers.map((f) => (f ? f.text() : Promise.resolve(null))),
       );
       const blocs = nouveauxFichiers
         .map((f, i) => (f && contenusParIndex[i] !== null ? { nom: f.name, contenu: contenusParIndex[i]! } : null))
@@ -228,10 +223,27 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   }
 
   function enregistrer() {
-    creer.mutate(
-      { donneesBrutes, nom: nom.trim() || undefined, clientId: estAdmin ? clientId : undefined },
-      { onSuccess: (data) => onCree(data.source_id) },
-    );
+    if (formatFichier === "csvlocal") {
+      // Import CSV local : conversion directe en instance, sans passer par SourceDonnees
+      setImportCsvLocalReussi(null);
+      importerCsvLocal.mutate(
+        { clientId: estAdmin ? clientId : (utilisateur?.client_id ?? ""), cheminDossier: cheminDossierCsvLocal },
+        {
+          onSuccess: (data) => {
+            // Afficher les informations de l'instance créée
+            setImportCsvLocalReussi(data);
+            // Réinitialiser le formulaire après succès
+            setCheminDossierCsvLocal("");
+          },
+        },
+      );
+    } else {
+      // Création normale d'une source de données brutes
+      creer.mutate(
+        { donneesBrutes, nom: nom.trim() || undefined, clientId: estAdmin ? clientId : undefined },
+        { onSuccess: (data) => onCree(data.source_id) },
+      );
+    }
   }
 
   return (
@@ -266,76 +278,111 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
           <TabsList className="h-8">
             <TabsTrigger value="csv" className="text-xs">CSV</TabsTrigger>
             <TabsTrigger value="json" className="text-xs">JSON</TabsTrigger>
-            <TabsTrigger value="excel" className="text-xs">Excel</TabsTrigger>
+            <TabsTrigger value="csvlocal" className="text-xs">CSV Local</TabsTrigger>
           </TabsList>
         </Tabs>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <span className="text-muted-foreground">Gabarit d'exemple :</span>
-          {GABARITS_PAR_FORMAT[formatFichier].map((gabarit) => (
-            <a
-              key={gabarit.href}
-              href={gabarit.href}
-              download
-              className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
-            >
-              <Download className="h-3 w-3" /> {gabarit.nom}
-            </a>
-          ))}
-        </div>
-        <div className="space-y-3">
-          {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => {
-            const idChamp = index === 0 ? "fichier_brut" : `fichier_brut_${index}`;
-            const fichier = fichiers[index];
-            const typeDetecte = detectionsFichiers[index];
-            const libelle =
-              formatFichier === "csv" && fichier
-                ? (typeDetecte ?? "Format non reconnu")
-                : LABELS_FICHIER_PAR_FORMAT[formatFichier][index];
-            return (
-              <div key={index} className="space-y-1">
-                <Label htmlFor={idChamp} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <span className={typeDetecte ? "font-medium text-primary" : undefined}>{libelle}</span>
-                  {fichier && (
-                    <span className="inline-flex items-center gap-1 text-primary">
-                      <CheckCircle2 className="h-3 w-3" /> {fichier.name}
-                    </span>
-                  )}
-                </Label>
-                <Input
-                  id={idChamp}
-                  ref={inputFichierRefs[index]}
-                  type="file"
-                  accept={ACCEPT_PAR_FORMAT[formatFichier]}
-                  onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
-                />
+        {formatFichier === "csvlocal" ? (
+          // CSV Local : saisie du chemin serveur
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="chemin_csv_local">Chemin du dossier CSV (côté serveur)</Label>
+              <Input
+                id="chemin_csv_local"
+                value={cheminDossierCsvLocal}
+                onChange={(e) => setCheminDossierCsvLocal(e.target.value)}
+                placeholder="data/donnees_brutes/csv/services/centre_appels"
+              />
+            </div>
+            <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
+              <p className="text-xs font-medium text-muted-foreground mb-2">Exemples de dossiers disponibles :</p>
+              <div className="space-y-1 text-xs font-mono">
+                <div>data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique</div>
+                <div>data/donnees_brutes/csv/industrie_manufacturiere/atelier_mecanique</div>
+                <div>data/donnees_brutes/csv/services/centre_appels</div>
+                <div>data/donnees_brutes/csv/industrie_manufacturiere/imprimerie</div>
+                <div>data/donnees_brutes/csv/industrie_manufacturiere/production_agroalimentaire</div>
+                <div>data/donnees_brutes/csv/services/maintenance_industrielle</div>
               </div>
-            );
-          })}
-        </div>
-        {chargementFichier && <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>}
-        {erreurFichier && (
-          <p className="flex items-center gap-1.5 text-xs text-destructive">
-            <AlertCircle className="h-3.5 w-3.5" /> {erreurFichier}
-          </p>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Le dossier doit contenir trois fichiers CSV : taches.csv, ressources.csv et contraintes.csv.
+              L'instance sera créée directement, sans passer par les données brutes.
+            </p>
+          </div>
+        ) : (
+          // CSV/JSON : upload de fichiers
+          <>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+              <span className="text-muted-foreground">Gabarit d'exemple :</span>
+              {GABARITS_PAR_FORMAT[formatFichier].map((gabarit) => (
+                <a
+                  key={gabarit.href}
+                  href={gabarit.href}
+                  download
+                  className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
+                >
+                  <Download className="h-3 w-3" /> {gabarit.nom}
+                </a>
+              ))}
+            </div>
+            <div className="space-y-3">
+              {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => {
+                const idChamp = index === 0 ? "fichier_brut" : `fichier_brut_${index}`;
+                const fichier = fichiers[index];
+                const typeDetecte = detectionsFichiers[index];
+                const libelle =
+                  formatFichier === "csv" && fichier
+                    ? (typeDetecte ?? "Format non reconnu")
+                    : LABELS_FICHIER_PAR_FORMAT[formatFichier][index];
+                return (
+                  <div key={index} className="space-y-1">
+                    <Label htmlFor={idChamp} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <span className={typeDetecte ? "font-medium text-primary" : undefined}>{libelle}</span>
+                      {fichier && (
+                        <span className="inline-flex items-center gap-1 text-primary">
+                          <CheckCircle2 className="h-3 w-3" /> {fichier.name}
+                        </span>
+                      )}
+                    </Label>
+                    <Input
+                      id={idChamp}
+                      ref={inputFichierRefs[index]}
+                      type="file"
+                      accept={ACCEPT_PAR_FORMAT[formatFichier]}
+                      onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            {chargementFichier && <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>}
+            {erreurFichier && (
+              <p className="flex items-center gap-1.5 text-xs text-destructive">
+                <AlertCircle className="h-3.5 w-3.5" /> {erreurFichier}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {NB_FICHIERS_PAR_FORMAT[formatFichier] > 1
+                ? "Jusqu'à 3 fichiers — un par table si votre export en a plusieurs (tâches, ressources, contraintes...), leur contenu est concaténé ci-dessous."
+                : "Charge le contenu du fichier dans le champ ci-dessous."}{" "}
+              Vous pouvez aussi coller le texte directement (export CSV, JSON, tableau collé...).
+            </p>
+          </>
         )}
-        <p className="text-xs text-muted-foreground">
-          {NB_FICHIERS_PAR_FORMAT[formatFichier] > 1
-            ? "Jusqu'à 3 fichiers — un par table si votre export en a plusieurs (tâches, ressources, contraintes...), leur contenu est concaténé ci-dessous."
-            : "Charge le contenu du fichier dans le champ ci-dessous."}{" "}
-          Vous pouvez aussi coller le texte directement (export CSV, JSON, tableau collé...).
-        </p>
       </div>
 
-      <div className="space-y-1.5">
-        <Label htmlFor="donnees_brutes">Données brutes</Label>
-        <Textarea
-          id="donnees_brutes"
-          value={donneesBrutes}
-          onChange={(e) => setDonneesBrutes(e.target.value)}
-          placeholder="Collez ici l'export brut de votre ERP (n'importe quel format texte)..."
-          className="min-h-64 font-mono text-xs"
-        />
-      </div>
+      {formatFichier !== "csvlocal" && (
+        <div className="space-y-1.5">
+          <Label htmlFor="donnees_brutes">Données brutes</Label>
+          <Textarea
+            id="donnees_brutes"
+            value={donneesBrutes}
+            onChange={(e) => setDonneesBrutes(e.target.value)}
+            placeholder="Collez ici l'export brut de votre ERP (n'importe quel format texte)..."
+            className="min-h-64 font-mono text-xs"
+          />
+        </div>
+      )}
 
       {erreur && (
         <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
@@ -346,14 +393,51 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
         </div>
       )}
 
+      {importCsvLocalReussi && (
+        <div className="rounded-lg border border-primary/40 bg-primary/10 p-3 text-sm">
+          <div className="flex items-center gap-2 font-medium text-primary">
+            <CheckCircle2 className="h-4 w-4" /> Instance créée avec succès
+          </div>
+          <div className="mt-2 space-y-1 text-muted-foreground">
+            <p className="flex items-center gap-2">
+              <span className="font-medium">ID :</span>
+              <Badge variant="secondary" className="font-mono text-xs">{importCsvLocalReussi.instance_id}</Badge>
+            </p>
+            <p className="flex items-center gap-2">
+              <span className="font-medium">Structure :</span>
+              <Badge variant="outline" className="font-mono text-xs">{importCsvLocalReussi.structure_contraintes}</Badge>
+            </p>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <span className="font-medium">Statistiques :</span>
+              <span>{importCsvLocalReussi.statistiques.taches} tâches</span>
+              <span>·</span>
+              <span>{importCsvLocalReussi.statistiques.ressources} ressources</span>
+              <span>·</span>
+              <span>{importCsvLocalReussi.statistiques.contraintes} contraintes</span>
+              <span>·</span>
+              <span>{importCsvLocalReussi.statistiques.objectifs} objectifs</span>
+            </div>
+            <p className="text-xs">
+              <span className="font-medium">Source :</span> {importCsvLocalReussi.chemin_source}
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-end">
         <Button
           onClick={enregistrer}
-          disabled={creer.isPending || (estAdmin && !clientId.trim()) || !donneesBrutes.trim()}
+          disabled={
+            (formatFichier === "csvlocal"
+              ? importerCsvLocal.isPending || (estAdmin && !clientId.trim()) || !cheminDossierCsvLocal.trim()
+              : creer.isPending || (estAdmin && !clientId.trim()) || !donneesBrutes.trim())
+          }
           className="bg-gradient-to-r from-primary to-accent"
         >
           <Plus className="mr-2 h-4 w-4" />
-          {creer.isPending ? "Enregistrement..." : "Enregistrer la source"}
+          {formatFichier === "csvlocal"
+            ? (importerCsvLocal.isPending ? "Import en cours..." : "Importer depuis le serveur")
+            : (creer.isPending ? "Enregistrement..." : "Enregistrer la source")}
         </Button>
       </div>
     </div>
@@ -364,6 +448,7 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
   const queryClient = useQueryClient();
   const { data: source, isLoading } = useSource(sourceId);
   const generer = useGenererInstanceDepuisSource();
+  const genererDeterministe = useGenererInstanceDeterministeDepuisSource();
   const [dernier, setDernier] = useState<{
     instance_id: string;
     avertissements: string[];
@@ -374,8 +459,16 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
   const [generationEnCours, setGenerationEnCours] = useState(false);
 
   const erreur = generer.error as PrismeAPIError | null;
+  const erreurDeterministe = genererDeterministe.error as PrismeAPIError | null;
+
+  function invaliderApresConversion() {
+    queryClient.invalidateQueries({ queryKey: prismeKeys.source(sourceId) });
+    queryClient.invalidateQueries({ queryKey: prismeKeys.sources() });
+    queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+  }
 
   function genererInstance() {
+    genererDeterministe.reset();
     setDernier(null);
     setGenerationEnCours(true);
     generer.mutate(sourceId, {
@@ -386,12 +479,21 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
           justifications: data.justifications,
         });
         setGenerationEnCours(false);
-        queryClient.invalidateQueries({ queryKey: prismeKeys.source(sourceId) });
-        queryClient.invalidateQueries({ queryKey: prismeKeys.sources() });
-        queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+        invaliderApresConversion();
       },
       onError: () => {
         setGenerationEnCours(false);
+      },
+    });
+  }
+
+  function genererInstanceDeterministe() {
+    generer.reset();
+    setDernier(null);
+    genererDeterministe.mutate(sourceId, {
+      onSuccess: (data) => {
+        setDernier({ instance_id: data.instance_id, avertissements: [], justifications: [] });
+        invaliderApresConversion();
       },
     });
   }
@@ -434,6 +536,15 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
           </div>
         )}
 
+        {erreurDeterministe && (
+          <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="flex items-center gap-2 font-medium">
+              <AlertCircle className="h-4 w-4" /> Échec de la conversion déterministe
+            </div>
+            <p className="mt-1">{erreurDeterministe.message}</p>
+          </div>
+        )}
+
         {dernier && dernier.avertissements.length > 0 && (
           <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
             <div className="flex items-center gap-2 font-medium text-amber-600 dark:text-amber-400">
@@ -473,10 +584,23 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
             l'historique ci-dessous, aucune n'est remplacée. Chaque instance générée s'exécute directement
             depuis la page Solveurs générés, sans étape supplémentaire ici.
           </p>
-          <Button onClick={genererInstance} disabled={generationEnCours || generer.isPending} className="shrink-0">
-            <ArrowRightLeft className="mr-2 h-4 w-4" />
-            {(generationEnCours || generer.isPending) ? "Conversion en cours..." : "Générer une instance"}
-          </Button>
+          <div className="flex shrink-0 gap-2">
+            <Button
+              variant="outline"
+              onClick={genererInstanceDeterministe}
+              disabled={generationEnCours || generer.isPending || genererDeterministe.isPending}
+            >
+              <Zap className="mr-2 h-4 w-4" />
+              {genererDeterministe.isPending ? "Conversion..." : "Convertir sans IA"}
+            </Button>
+            <Button
+              onClick={genererInstance}
+              disabled={generationEnCours || generer.isPending || genererDeterministe.isPending}
+            >
+              <ArrowRightLeft className="mr-2 h-4 w-4" />
+              {(generationEnCours || generer.isPending) ? "Conversion en cours..." : "Générer une instance"}
+            </Button>
+          </div>
         </div>
         {(generationEnCours || generer.isPending) && <IndicateurGeneration />}
       </div>

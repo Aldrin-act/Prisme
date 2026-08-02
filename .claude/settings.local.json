@@ -13,7 +13,13 @@
       "Bash(docker ps:*)",
       "Bash(cat:*)",
       "Bash(tree:*)",
-      "Bash(uv lock:*)"
+      "Bash(uv lock:*)",
+      "Bash(uv run:*)",
+      "Bash($env:PRISME_AUTH_DESACTIVEE=\"1\")",
+      "Bash(set PRISME_AUTH_DESACTIVEE=1)",
+      "Bash(npm run dev:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": [],
