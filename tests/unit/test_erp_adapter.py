@@ -5,7 +5,7 @@ Docker)."""
 from __future__ import annotations
 
 from adapters.erp_reference import OperationERP, PayloadERP, PosteERP, traduire
-from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Precedence
+from dsl.schema import CompatibiliteRessourceTache, CompetenceRequise, InstanceTRCO, Precedence
 
 
 def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
@@ -78,6 +78,51 @@ def test_traduction_sans_operation_precedente_ne_produit_aucune_precedence() -> 
     instance = traduire(payload)
 
     assert not [c for c in instance.contraintes if isinstance(c, Precedence)]
+
+
+def test_traduction_derive_une_competence_requise_si_declaree() -> None:
+    payload = PayloadERP(
+        operations=[
+            OperationERP(
+                code_operation="OP10",
+                duree_jours=1,
+                poste_id="POSTE_A",
+                competence_requise="soudure",
+            ),
+            OperationERP(code_operation="OP20", duree_jours=1, poste_id="POSTE_A"),
+        ],
+        postes=[PosteERP(code_poste="POSTE_A", competences=["soudure"])],
+    )
+
+    instance = traduire(payload)
+
+    competences_requises = [c for c in instance.contraintes if isinstance(c, CompetenceRequise)]
+    assert len(competences_requises) == 1
+    assert competences_requises[0].tache == "OP10"
+    assert competences_requises[0].competence == "soudure"
+
+
+def test_traduction_sans_competence_requise_ne_produit_aucune_contrainte() -> None:
+    payload = PayloadERP(
+        operations=[OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A")],
+        postes=[PosteERP(code_poste="POSTE_A")],
+    )
+
+    instance = traduire(payload)
+
+    assert not [c for c in instance.contraintes if isinstance(c, CompetenceRequise)]
+    assert instance.ressources[0].competences == []
+
+
+def test_traduction_reporte_les_competences_du_poste_sur_la_ressource() -> None:
+    payload = PayloadERP(
+        operations=[OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A")],
+        postes=[PosteERP(code_poste="POSTE_A", competences=["soudure", "controle_qualite"])],
+    )
+
+    instance = traduire(payload)
+
+    assert instance.ressources[0].competences == ["soudure", "controle_qualite"]
 
 
 def test_instance_produite_est_valide_par_construction() -> None:

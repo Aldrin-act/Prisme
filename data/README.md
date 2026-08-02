@@ -13,10 +13,11 @@ data/
 │   │   ├── assemblage_electronique.json
 │   │   ├── production_agroalimentaire.json
 │   │   ├── maintenance_industrielle.json
-│   │   └── imprimerie.json
+│   │   ├── imprimerie.json
+│   │   └── centre_appels.json
 │   ├── csv/                 # Format CSV simple
-│   │   ├── *_operations.csv (5 fichiers)
-│   │   └── *_postes.csv (5 fichiers)
+│   │   ├── *_operations.csv (6 fichiers)
+│   │   └── *_postes.csv (6 fichiers)
 │   └── README.md
 │
 ├── instances_trco/           # INSTANCES TRCO (format canonique)
@@ -24,7 +25,8 @@ data/
 │   ├── assemblage_electronique.json
 │   ├── production_agroalimentaire.json
 │   ├── maintenance_industrielle.json
-│   └── imprimerie.json
+│   ├── imprimerie.json
+│   └── centre_appels.json
 │
 ├── README.md                 # Ce fichier
 └── GUIDE_DONNEES.md          # Guide complet du workflow
@@ -35,11 +37,11 @@ data/
 ### 1. Générer les Données Brutes
 
 ```bash
-# Génère 5 jeux de données en formats JSON + CSV
+# Génère 6 jeux de données en formats JSON + CSV
 python -m scripts.generer_donnees_brutes
 ```
 
-**Résultat**: 5 fichiers JSON + 10 fichiers CSV dans `donnees_brutes/`
+**Résultat**: 6 fichiers JSON + 12 fichiers CSV dans `donnees_brutes/`
 
 ### 2. Transformer en Instances TRCO
 
@@ -48,7 +50,7 @@ python -m scripts.generer_donnees_brutes
 python -m scripts.transformer_donnees_brutes
 ```
 
-**Résultat**: 5 fichiers JSON TRCO dans `instances_trco/`
+**Résultat**: 6 fichiers JSON TRCO dans `instances_trco/`
 
 ### 3. Utiliser dans la Pipeline
 
@@ -72,6 +74,7 @@ resultat = generer_et_tester_solveur(instance)
 | `production_agroalimentaire` | Transformation alim. | 9 | 9 | Moyenne |
 | `maintenance_industrielle` | Gestion de pannes | 7 | 5 | Simple |
 | `imprimerie` | Impression offset | 9 | 7 | Moyenne |
+| `centre_appels` | Support client / helpdesk | 8 | 4 | Moyenne (compétences) |
 
 ## Formats de Données
 
@@ -237,13 +240,13 @@ with open("data/instances_trco/atelier_mecanique_avec_echeances.json", "w") as f
 
 | Métrique | Total |
 |----------|-------|
-| Jeux de données bruts | 5 |
-| Fichiers JSON ERP | 5 |
-| Fichiers CSV | 10 (5 paires) |
-| Instances TRCO | 5 |
-| Tâches totales (toutes instances) | 43 |
-| Ressources totales | 38 |
-| Secteurs industriels couverts | 5 |
+| Jeux de données bruts | 6 |
+| Fichiers JSON ERP | 6 |
+| Fichiers CSV | 12 (6 paires) |
+| Instances TRCO | 6 |
+| Tâches totales (toutes instances) | 51 |
+| Ressources totales | 42 |
+| Secteurs industriels couverts | 6 |
 
 ## Prochaines Étapes
 

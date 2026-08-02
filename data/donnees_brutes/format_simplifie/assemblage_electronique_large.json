@@ -1,0 +1,325 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Préparation substrat",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T2",
+      "nom": "Application pâte à souder",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T3",
+      "nom": "Placement composants CMS face A",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Soudure refusion face A",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T5",
+      "nom": "Inspection AOI face A",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T6",
+      "nom": "Retournement PCB",
+      "duree_estimee_jours": 0.1
+    },
+    {
+      "id": "T7",
+      "nom": "Application pâte face B",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T8",
+      "nom": "Placement composants CMS face B",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T9",
+      "nom": "Soudure refusion face B",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T10",
+      "nom": "Inspection AOI face B",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T11",
+      "nom": "Soudure composants traversants",
+      "duree_estimee_jours": 0.8
+    },
+    {
+      "id": "T12",
+      "nom": "Nettoyage PCB",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T13",
+      "nom": "Test fonctionnel",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T14",
+      "nom": "Test vieillissement",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T15",
+      "nom": "Conformal coating",
+      "duree_estimee_jours": 0.4
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Opérateur préparation",
+      "competences": [
+        "preparation",
+        "retournement"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Sérigraphe pâte A",
+      "competences": [
+        "application_pate"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Sérigraphe pâte B",
+      "competences": [
+        "application_pate"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Pick&Place 1",
+      "competences": [
+        "placement_cms"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Pick&Place 2",
+      "competences": [
+        "placement_cms"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Four refusion 1",
+      "competences": [
+        "refusion"
+      ]
+    },
+    {
+      "id": "R7",
+      "nom": "Four refusion 2",
+      "competences": [
+        "refusion"
+      ]
+    },
+    {
+      "id": "R8",
+      "nom": "AOI automatique",
+      "competences": [
+        "inspection"
+      ]
+    },
+    {
+      "id": "R9",
+      "nom": "Station soudure manuelle",
+      "competences": [
+        "soudure_traversant"
+      ]
+    },
+    {
+      "id": "R10",
+      "nom": "Machine nettoyage",
+      "competences": [
+        "nettoyage"
+      ]
+    },
+    {
+      "id": "R11",
+      "nom": "Banc test fonctionnel",
+      "competences": [
+        "test_fonctionnel"
+      ]
+    },
+    {
+      "id": "R12",
+      "nom": "Chambre vieillissement",
+      "competences": [
+        "test_vieillissement"
+      ]
+    },
+    {
+      "id": "R13",
+      "nom": "Cabine coating",
+      "competences": [
+        "coating"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "precedence",
+      "avant": "T9",
+      "apres": "T10"
+    },
+    {
+      "type": "precedence",
+      "avant": "T10",
+      "apres": "T11"
+    },
+    {
+      "type": "precedence",
+      "avant": "T11",
+      "apres": "T12"
+    },
+    {
+      "type": "precedence",
+      "avant": "T12",
+      "apres": "T13"
+    },
+    {
+      "type": "precedence",
+      "avant": "T13",
+      "apres": "T14"
+    },
+    {
+      "type": "precedence",
+      "avant": "T14",
+      "apres": "T15"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "preparation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "application_pate"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "placement_cms"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "inspection"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "retournement"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "application_pate"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "placement_cms"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "refusion"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T10",
+      "competence": "inspection"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T11",
+      "competence": "soudure_traversant"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T12",
+      "competence": "nettoyage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T13",
+      "competence": "test_fonctionnel"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T14",
+      "competence": "test_vieillissement"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T15",
+      "competence": "coating"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

@@ -123,6 +123,37 @@ const GABARITS_PAR_FORMAT: Record<FormatFichierBrut, { nom: string; href: string
   excel: [{ nom: "gabarit_ingestion_trco.xlsx", href: "/gabarits/gabarit_ingestion_trco.xlsx" }],
 };
 
+// Étiquette par emplacement de fichier — affichée tant qu'aucun fichier n'est
+// choisi (indication de ce qui est généralement attendu), remplacée par le
+// type réellement détecté une fois un fichier CSV présent (voir
+// `detecterTypeCsv` ci-dessous) — les 3 emplacements ne sont pas un ordre
+// imposé, juste jusqu'à 3 fichiers, dans n'importe quel ordre.
+const LABELS_FICHIER_PAR_FORMAT: Record<FormatFichierBrut, string[]> = {
+  csv: ["Tâches", "Ressources", "Contraintes"],
+  json: ["Instance"],
+  excel: ["Tâches", "Ressources", "Contraintes"],
+};
+
+// Signatures de colonnes des gabarits CSV (voir scripts/generer_gabarit_csv.py /
+// public/gabarits/{taches,ressources,contraintes}.csv) — détecte quel type de
+// table un fichier CSV contient d'après l'en-tête, sans dépendre de l'ordre
+// dans lequel les fichiers ont été déposés. Un fichier CSV d'un autre format
+// (ex. export ERP propriétaire) ne correspondra à aucune signature — reste
+// accepté tel quel, juste sans type détecté (l'agent de compréhension
+// interprète n'importe quel texte brut, la détection n'est qu'un confort visuel).
+const SIGNATURES_CSV: { type: string; colonnesCles: string[] }[] = [
+  { type: "Tâches", colonnesCles: ["duree_estimee_jours"] },
+  { type: "Ressources", colonnesCles: ["competences"] },
+  { type: "Contraintes", colonnesCles: ["tache_avant", "tache_apres"] },
+];
+
+function detecterTypeCsv(contenu: string): string | null {
+  const premiereLigne = (contenu.split(/\r?\n/, 1)[0] ?? "").toLowerCase();
+  const colonnes = premiereLigne.split(",").map((c) => c.trim());
+  const signature = SIGNATURES_CSV.find(({ colonnesCles }) => colonnesCles.every((c) => colonnes.includes(c)));
+  return signature?.type ?? null;
+}
+
 // Convertit chaque feuille en un bloc texte lisible (comma-séparé) — l'agent
 // de compréhension attend du texte brut, jamais un classeur binaire tel quel.
 function feuillesExcelEnTexte(feuilles: Awaited<ReturnType<typeof readXlsxFile>>): string {
@@ -145,6 +176,7 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   const [donneesBrutes, setDonneesBrutes] = useState("");
   const [formatFichier, setFormatFichier] = useState<FormatFichierBrut>("csv");
   const [fichiers, setFichiers] = useState<(File | null)[]>([null, null, null]);
+  const [detectionsFichiers, setDetectionsFichiers] = useState<(string | null)[]>([null, null, null]);
   const [chargementFichier, setChargementFichier] = useState(false);
   const [erreurFichier, setErreurFichier] = useState<string | null>(null);
 
@@ -153,6 +185,7 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   function changerFormat(format: FormatFichierBrut) {
     setFormatFichier(format);
     setFichiers([null, null, null]);
+    setDetectionsFichiers([null, null, null]);
     setErreurFichier(null);
     inputFichierRefs.forEach((ref) => {
       if (ref.current) ref.current.value = "";
@@ -170,12 +203,22 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
     setErreurFichier(null);
     setChargementFichier(true);
     try {
-      const presents = nouveauxFichiers.filter((f): f is File => f !== null);
-      const contenus = await Promise.all(presents.map((f) => lireFichier(f)));
+      // Un seul passage de lecture par fichier — réutilisé à la fois pour la
+      // concaténation ci-dessous et la détection de type (colonnes CSV),
+      // aligné sur l'index d'origine (null pour un emplacement vide).
+      const contenusParIndex = await Promise.all(
+        nouveauxFichiers.map((f) => (f ? lireFichier(f) : Promise.resolve(null))),
+      );
+      const blocs = nouveauxFichiers
+        .map((f, i) => (f && contenusParIndex[i] !== null ? { nom: f.name, contenu: contenusParIndex[i]! } : null))
+        .filter((b): b is { nom: string; contenu: string } => b !== null);
       setDonneesBrutes(
-        presents.length > 1
-          ? contenus.map((c, i) => `--- ${presents[i].name} ---\n${c}`).join("\n\n")
-          : (contenus[0] ?? ""),
+        blocs.length > 1 ? blocs.map((b) => `--- ${b.nom} ---\n${b.contenu}`).join("\n\n") : (blocs[0]?.contenu ?? ""),
+      );
+      setDetectionsFichiers(
+        formatFichier === "csv"
+          ? contenusParIndex.map((c) => (c !== null ? detecterTypeCsv(c) : null))
+          : [null, null, null],
       );
     } catch {
       setErreurFichier("Fichier illisible — vérifiez qu'il correspond bien au format sélectionné ci-dessus.");
@@ -239,17 +282,35 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
             </a>
           ))}
         </div>
-        <div className="space-y-2">
-          {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => (
-            <Input
-              key={index}
-              id={index === 0 ? "fichier_brut" : undefined}
-              ref={inputFichierRefs[index]}
-              type="file"
-              accept={ACCEPT_PAR_FORMAT[formatFichier]}
-              onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
-            />
-          ))}
+        <div className="space-y-3">
+          {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => {
+            const idChamp = index === 0 ? "fichier_brut" : `fichier_brut_${index}`;
+            const fichier = fichiers[index];
+            const typeDetecte = detectionsFichiers[index];
+            const libelle =
+              formatFichier === "csv" && fichier
+                ? (typeDetecte ?? "Format non reconnu")
+                : LABELS_FICHIER_PAR_FORMAT[formatFichier][index];
+            return (
+              <div key={index} className="space-y-1">
+                <Label htmlFor={idChamp} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span className={typeDetecte ? "font-medium text-primary" : undefined}>{libelle}</span>
+                  {fichier && (
+                    <span className="inline-flex items-center gap-1 text-primary">
+                      <CheckCircle2 className="h-3 w-3" /> {fichier.name}
+                    </span>
+                  )}
+                </Label>
+                <Input
+                  id={idChamp}
+                  ref={inputFichierRefs[index]}
+                  type="file"
+                  accept={ACCEPT_PAR_FORMAT[formatFichier]}
+                  onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
+                />
+              </div>
+            );
+          })}
         </div>
         {chargementFichier && <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>}
         {erreurFichier && (

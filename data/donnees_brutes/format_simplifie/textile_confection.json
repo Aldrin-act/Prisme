@@ -1,0 +1,177 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Coupe tissu",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T2",
+      "nom": "Surfilage",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T3",
+      "nom": "Assemblage pièces",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Montage fermeture",
+      "duree_estimee_jours": 0.4
+    },
+    {
+      "id": "T5",
+      "nom": "Pose boutons",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T6",
+      "nom": "Repassage",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T7",
+      "nom": "Contrôle qualité",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T8",
+      "nom": "Emballage",
+      "duree_estimee_jours": 0.1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Machine découpe automatique",
+      "competences": [
+        "coupe"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Surjeteuse",
+      "competences": [
+        "surfilage"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Piqueuse plate",
+      "competences": [
+        "assemblage",
+        "montage_fermeture"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Boutonneuse",
+      "competences": [
+        "pose_boutons"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Table repassage",
+      "competences": [
+        "repassage"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Contrôleur qualité",
+      "competences": [
+        "controle",
+        "emballage"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "coupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "surfilage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "assemblage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "montage_fermeture"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "pose_boutons"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "repassage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "controle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "emballage"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

@@ -208,22 +208,22 @@
     },
     {
       "type": "echeance",
+      "tache": "EPLUCHAGE",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "RECEPTION_MP",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LAVAGE_LEGUMES",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
       "tache": "ETIQUETAGE",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "CUISSON",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "REFROIDISSEMENT",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "CONDITIONNEMENT",
       "echeance": 1
     }
   ],

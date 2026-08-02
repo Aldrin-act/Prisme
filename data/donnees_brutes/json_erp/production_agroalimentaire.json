@@ -4,120 +4,84 @@
       "code_operation": "RECEPTION_MP",
       "duree_jours": 1,
       "poste_id": "QUAI_RECEPTION",
-      "operation_precedente": null,
-      "competence_requise": "reception"
+      "operation_precedente": null
     },
     {
       "code_operation": "LAVAGE_LEGUMES",
       "duree_jours": 1,
       "poste_id": "TUNNEL_LAVAGE",
-      "operation_precedente": "RECEPTION_MP",
-      "competence_requise": "lavage"
+      "operation_precedente": "RECEPTION_MP"
     },
     {
       "code_operation": "EPLUCHAGE",
       "duree_jours": 1,
       "poste_id": "LIGNE_EPLUCHAGE",
-      "operation_precedente": "LAVAGE_LEGUMES",
-      "competence_requise": "epluchage"
+      "operation_precedente": "LAVAGE_LEGUMES"
     },
     {
       "code_operation": "DECOUPE",
       "duree_jours": 1,
       "poste_id": "ROBOT_DECOUPE",
-      "operation_precedente": "EPLUCHAGE",
-      "competence_requise": "decoupe"
+      "operation_precedente": "EPLUCHAGE"
     },
     {
       "code_operation": "CUISSON",
       "duree_jours": 3,
       "poste_id": "AUTOCLAVE_1",
-      "operation_precedente": "DECOUPE",
-      "competence_requise": "autoclave"
+      "operation_precedente": "DECOUPE"
     },
     {
       "code_operation": "REFROIDISSEMENT",
       "duree_jours": 2,
       "poste_id": "TUNNEL_REFROIDISSEMENT",
-      "operation_precedente": "CUISSON",
-      "competence_requise": "refroidissement"
+      "operation_precedente": "CUISSON"
     },
     {
       "code_operation": "CONDITIONNEMENT",
       "duree_jours": 1,
       "poste_id": "LIGNE_CONDITIONNEMENT",
-      "operation_precedente": "REFROIDISSEMENT",
-      "competence_requise": "conditionnement"
+      "operation_precedente": "REFROIDISSEMENT"
     },
     {
       "code_operation": "ETIQUETAGE",
       "duree_jours": 1,
       "poste_id": "ETIQUETEUSE_AUTO",
-      "operation_precedente": "CONDITIONNEMENT",
-      "competence_requise": "etiqueteuse_auto"
+      "operation_precedente": "CONDITIONNEMENT"
     },
     {
       "code_operation": "PALETTISATION",
       "duree_jours": 1,
       "poste_id": "ROBOT_PALETTISEUR",
-      "operation_precedente": "ETIQUETAGE",
-      "competence_requise": "palettiseur"
+      "operation_precedente": "ETIQUETAGE"
     }
   ],
   "postes": [
     {
-      "code_poste": "QUAI_RECEPTION",
-      "competences": [
-        "reception"
-      ]
+      "code_poste": "QUAI_RECEPTION"
     },
     {
-      "code_poste": "TUNNEL_LAVAGE",
-      "competences": [
-        "lavage"
-      ]
+      "code_poste": "TUNNEL_LAVAGE"
     },
     {
-      "code_poste": "LIGNE_EPLUCHAGE",
-      "competences": [
-        "epluchage"
-      ]
+      "code_poste": "LIGNE_EPLUCHAGE"
     },
     {
-      "code_poste": "ROBOT_DECOUPE",
-      "competences": [
-        "decoupe"
-      ]
+      "code_poste": "ROBOT_DECOUPE"
     },
     {
-      "code_poste": "AUTOCLAVE_1",
-      "competences": [
-        "autoclave"
-      ]
+      "code_poste": "AUTOCLAVE_1"
     },
     {
-      "code_poste": "TUNNEL_REFROIDISSEMENT",
-      "competences": [
-        "refroidissement"
-      ]
+      "code_poste": "TUNNEL_REFROIDISSEMENT"
     },
     {
-      "code_poste": "LIGNE_CONDITIONNEMENT",
-      "competences": [
-        "conditionnement"
-      ]
+      "code_poste": "LIGNE_CONDITIONNEMENT"
     },
     {
-      "code_poste": "ETIQUETEUSE_AUTO",
-      "competences": [
-        "etiqueteuse_auto"
-      ]
+      "code_poste": "ETIQUETEUSE_AUTO"
     },
     {
-      "code_poste": "ROBOT_PALETTISEUR",
-      "competences": [
-        "palettiseur"
-      ]
+      "code_poste": "ROBOT_PALETTISEUR"
     }
   ]
 }

@@ -120,7 +120,7 @@ PERCEUSE_CNC
 ### Génération de Données Brutes
 
 ```bash
-# Générer les 5 jeux de données brutes (JSON + CSV)
+# Générer les 6 jeux de données brutes (JSON + CSV)
 python -m scripts.generer_donnees_brutes
 ```
 
@@ -130,6 +130,7 @@ python -m scripts.generer_donnees_brutes
 3. `production_agroalimentaire` - Transformation alimentaire (9 operations)
 4. `maintenance_industrielle` - Gestion de pannes (7 operations)
 5. `imprimerie` - Impression offset (9 operations)
+6. `centre_appels` - Support client / helpdesk (8 operations, seul secteur avec compétences)
 
 ## Étape 2 : Transformation en Instances TRCO
 

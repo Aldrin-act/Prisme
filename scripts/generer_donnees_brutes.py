@@ -365,8 +365,91 @@ def creer_donnees_imprimerie_json() -> dict:
     }
 
 
+def creer_donnees_centre_appels_json() -> dict:
+    """Centre d'appels / support client - format ERP JSON.
+
+    Seul secteur à exercer `competence_requise`/`competences` (OperationERP/
+    PosteERP) — les 5 autres n'en ont pas besoin pour rester représentatifs
+    d'un ERP legacy pauvre (§5.4). Un poste par compétence ici (pas plusieurs
+    opérateurs par poste) : suffisant pour que la traduction produise une
+    `CompetenceRequise` par opération qualifiée, sans complexifier le reste.
+    """
+    return {
+        "operations": [
+            {
+                "code_operation": "RECEPTION_APPEL",
+                "duree_jours": 1,
+                "poste_id": "POSTE_TELEPHONIQUE_N1",
+                "operation_precedente": None,
+                "competence_requise": "telephonique_n1",
+            },
+            {
+                "code_operation": "QUALIFICATION_DEMANDE",
+                "duree_jours": 1,
+                "poste_id": "POSTE_TELEPHONIQUE_N1",
+                "operation_precedente": "RECEPTION_APPEL",
+                "competence_requise": "telephonique_n1",
+            },
+            {
+                "code_operation": "CREATION_TICKET",
+                "duree_jours": 1,
+                "poste_id": "SYSTEME_CRM",
+                "operation_precedente": "QUALIFICATION_DEMANDE",
+                "competence_requise": "systeme_crm",
+            },
+            {
+                "code_operation": "ESCALADE_N2",
+                "duree_jours": 1,
+                "poste_id": "POSTE_TELEPHONIQUE_N2",
+                "operation_precedente": "CREATION_TICKET",
+                "competence_requise": "telephonique_n2",
+            },
+            {
+                "code_operation": "INVESTIGATION_TECHNIQUE",
+                "duree_jours": 2,
+                "poste_id": "POSTE_SUPPORT_TECHNIQUE",
+                "operation_precedente": "ESCALADE_N2",
+                "competence_requise": "support_technique",
+            },
+            {
+                "code_operation": "RESOLUTION",
+                "duree_jours": 1,
+                "poste_id": "POSTE_SUPPORT_TECHNIQUE",
+                "operation_precedente": "INVESTIGATION_TECHNIQUE",
+                "competence_requise": "support_technique",
+            },
+            {
+                "code_operation": "RAPPEL_CLIENT",
+                "duree_jours": 1,
+                "poste_id": "POSTE_TELEPHONIQUE_N2",
+                "operation_precedente": "RESOLUTION",
+                "competence_requise": "telephonique_n2",
+            },
+            {
+                "code_operation": "CLOTURE_TICKET",
+                "duree_jours": 1,
+                "poste_id": "SYSTEME_CRM",
+                "operation_precedente": "RAPPEL_CLIENT",
+                "competence_requise": "systeme_crm",
+            },
+        ],
+        "postes": [
+            {"code_poste": "POSTE_TELEPHONIQUE_N1", "competences": ["telephonique_n1"]},
+            {"code_poste": "POSTE_TELEPHONIQUE_N2", "competences": ["telephonique_n2"]},
+            {"code_poste": "SYSTEME_CRM", "competences": ["systeme_crm"]},
+            {"code_poste": "POSTE_SUPPORT_TECHNIQUE", "competences": ["support_technique"]},
+        ],
+    }
+
+
 def creer_donnees_csv_simple(nom_fichier: str, operations: list[dict], postes: list[dict]) -> None:
-    """Crée des fichiers CSV simples pour operations et postes."""
+    """Crée des fichiers CSV simples pour operations et postes.
+
+    `extrasaction="ignore"` : `competence_requise`/`competences` (secteur
+    centre_appels) n'ont pas de colonne CSV dédiée — cette voie d'export
+    reste volontairement au format historique à 4/1 colonnes, le JSON ERP
+    est le format de référence pour ce secteur (voir `mapping/regles.md`).
+    """
     output_dir = Path(__file__).parent.parent / "data" / "donnees_brutes" / "csv"
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -374,7 +457,9 @@ def creer_donnees_csv_simple(nom_fichier: str, operations: list[dict], postes: l
     operations_path = output_dir / f"{nom_fichier}_operations.csv"
     with open(operations_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
-            f, fieldnames=["code_operation", "duree_jours", "poste_id", "operation_precedente"]
+            f,
+            fieldnames=["code_operation", "duree_jours", "poste_id", "operation_precedente"],
+            extrasaction="ignore",
         )
         writer.writeheader()
         writer.writerows(operations)
@@ -382,7 +467,7 @@ def creer_donnees_csv_simple(nom_fichier: str, operations: list[dict], postes: l
     # Fichier postes
     postes_path = output_dir / f"{nom_fichier}_postes.csv"
     with open(postes_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["code_poste"])
+        writer = csv.DictWriter(f, fieldnames=["code_poste"], extrasaction="ignore")
         writer.writeheader()
         writer.writerows(postes)
 
@@ -407,6 +492,7 @@ def generer_toutes_les_donnees() -> None:
         "production_agroalimentaire": creer_donnees_agroalimentaire_json(),
         "maintenance_industrielle": creer_donnees_maintenance_json(),
         "imprimerie": creer_donnees_imprimerie_json(),
+        "centre_appels": creer_donnees_centre_appels_json(),
     }
 
     print(f"Generation de {len(datasets)} jeux de donnees brutes...\n")
@@ -446,7 +532,8 @@ donnees_brutes/
 │   ├── assemblage_electronique.json
 │   ├── production_agroalimentaire.json
 │   ├── maintenance_industrielle.json
-│   └── imprimerie.json
+│   ├── imprimerie.json
+│   └── centre_appels.json
 ├── csv/               # Format CSV simple
 │   ├── atelier_mecanique_operations.csv
 │   ├── atelier_mecanique_postes.csv
@@ -485,6 +572,13 @@ donnees_brutes/
 - **Opérations**: 9 (pré-presse, impression, vernissage...)
 - **Postes**: 7 (presses offset, tunnel séchage, plieuse...)
 - **Particularité**: Impression recto/verso, ressource partagée (tunnel séchage)
+
+### 6. Centre d'Appels
+- **Secteur**: Support client / helpdesk
+- **Opérations**: 8 (réception d'appel, qualification, escalade N2, résolution...)
+- **Postes**: 4 (téléphonique N1/N2, système CRM, support technique)
+- **Particularité**: Seul secteur avec `competence_requise`/`competences` — chaque
+  opération exige une compétence précise, un seul poste par compétence
 
 ## Formats
 

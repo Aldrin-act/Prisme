@@ -1,0 +1,186 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Réception échantillon",
+      "duree_estimee_jours": 0.1
+    },
+    {
+      "id": "T2",
+      "nom": "Préparation échantillon",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T3",
+      "nom": "Analyse chimique",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Analyse microbiologique",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T5",
+      "nom": "Analyse physique",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T6",
+      "nom": "Compilation résultats",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T7",
+      "nom": "Validation responsable",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T8",
+      "nom": "Rédaction rapport",
+      "duree_estimee_jours": 0.5
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Technicien accueil",
+      "competences": [
+        "reception",
+        "preparation"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Chimiste",
+      "competences": [
+        "analyse_chimique",
+        "preparation"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Microbiologiste",
+      "competences": [
+        "analyse_microbiologique",
+        "preparation"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Physicien",
+      "competences": [
+        "analyse_physique"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Analyste données",
+      "competences": [
+        "compilation",
+        "redaction"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Responsable qualité",
+      "competences": [
+        "validation",
+        "compilation",
+        "redaction"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "reception"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "preparation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "analyse_chimique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "analyse_microbiologique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "analyse_physique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "compilation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "validation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "redaction"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

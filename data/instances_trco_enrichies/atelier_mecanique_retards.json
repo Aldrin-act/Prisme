@@ -190,12 +190,12 @@
     },
     {
       "type": "echeance",
-      "tache": "PLIAGE_001",
+      "tache": "CONTROLE_QUALITE",
       "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "ASSEMBLAGE_FINAL",
+      "tache": "PLIAGE_001",
       "echeance": 1
     },
     {

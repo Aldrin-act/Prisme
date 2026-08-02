@@ -208,12 +208,7 @@
     },
     {
       "type": "echeance",
-      "tache": "PALETTISATION",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "ETIQUETAGE",
+      "tache": "LAVAGE_LEGUMES",
       "echeance": 1
     },
     {
@@ -224,6 +219,11 @@
     {
       "type": "echeance",
       "tache": "RECEPTION_MP",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "ETIQUETAGE",
       "echeance": 1
     }
   ],

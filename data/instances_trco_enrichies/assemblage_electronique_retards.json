@@ -225,27 +225,27 @@
     },
     {
       "type": "echeance",
+      "tache": "POSE_CMS_FACE_A",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "SOUDURE_REFUSION_B",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "TEST_FONCTIONNEL",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
       "tache": "POSE_CMS_FACE_B",
       "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "SOUDURE_REFUSION_A",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
       "tache": "PREP_PCB",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "SOUDURE_MANUELLE",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "CONFORMAL_COATING",
       "echeance": 1
     }
   ],

@@ -1,0 +1,205 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Fondations",
+      "duree_estimee_jours": 7
+    },
+    {
+      "id": "T2",
+      "nom": "Montage structure",
+      "duree_estimee_jours": 10
+    },
+    {
+      "id": "T3",
+      "nom": "Toiture",
+      "duree_estimee_jours": 5
+    },
+    {
+      "id": "T4",
+      "nom": "Électricité",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T5",
+      "nom": "Plomberie",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T6",
+      "nom": "Isolation",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T7",
+      "nom": "Plâtrerie",
+      "duree_estimee_jours": 5
+    },
+    {
+      "id": "T8",
+      "nom": "Peinture",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T9",
+      "nom": "Finitions",
+      "duree_estimee_jours": 2
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Équipe maçonnerie",
+      "competences": [
+        "fondations",
+        "structure"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Charpentiers",
+      "competences": [
+        "structure",
+        "toiture"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Électriciens",
+      "competences": [
+        "electricite"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Plombiers",
+      "competences": [
+        "plomberie"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Isolateurs",
+      "competences": [
+        "isolation"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Plâtriers",
+      "competences": [
+        "platrerie"
+      ]
+    },
+    {
+      "id": "R7",
+      "nom": "Peintres",
+      "competences": [
+        "peinture",
+        "finitions"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "fondations"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "structure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "toiture"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "electricite"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "plomberie"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "isolation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "platrerie"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "peinture"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "finitions"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

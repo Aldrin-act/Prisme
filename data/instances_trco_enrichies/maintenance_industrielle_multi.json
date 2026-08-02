@@ -150,17 +150,17 @@
     },
     {
       "type": "echeance",
-      "tache": "REPARATION_001",
+      "tache": "NETTOYAGE_FINAL",
       "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "TEST_MARCHE_001",
+      "tache": "CMD_PIECES_001",
       "echeance": 2
     },
     {
       "type": "echeance",
-      "tache": "DEMONTAGE_001",
+      "tache": "REMONTAGE_001",
       "echeance": 2
     }
   ],

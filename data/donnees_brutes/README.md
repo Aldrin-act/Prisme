@@ -12,7 +12,8 @@ donnees_brutes/
 │   ├── assemblage_electronique.json
 │   ├── production_agroalimentaire.json
 │   ├── maintenance_industrielle.json
-│   └── imprimerie.json
+│   ├── imprimerie.json
+│   └── centre_appels.json
 ├── csv/               # Format CSV simple
 │   ├── atelier_mecanique_operations.csv
 │   ├── atelier_mecanique_postes.csv
@@ -51,6 +52,13 @@ donnees_brutes/
 - **Opérations**: 9 (pré-presse, impression, vernissage...)
 - **Postes**: 7 (presses offset, tunnel séchage, plieuse...)
 - **Particularité**: Impression recto/verso, ressource partagée (tunnel séchage)
+
+### 6. Centre d'Appels
+- **Secteur**: Support client / helpdesk
+- **Opérations**: 8 (réception d'appel, qualification, escalade N2, résolution...)
+- **Postes**: 4 (téléphonique N1/N2, système CRM, support technique)
+- **Particularité**: Seul secteur avec `competence_requise`/`competences` — chaque
+  opération exige une compétence précise, un seul poste par compétence
 
 ## Formats
 

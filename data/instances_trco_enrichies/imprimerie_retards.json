@@ -196,22 +196,22 @@
     },
     {
       "type": "echeance",
-      "tache": "DECOUPE_PLIAGE",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "PRE_PRESSE",
-      "echeance": 1
-    },
-    {
-      "type": "echeance",
-      "tache": "CALAGE_PRESSE",
+      "tache": "SECHAGE_RECTO",
       "echeance": 1
     },
     {
       "type": "echeance",
       "tache": "IMPRESSION_RECTO",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "FINITION",
+      "echeance": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "VERNIS_SELECTIF",
       "echeance": 1
     }
   ],

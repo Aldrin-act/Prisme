@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    CompetenceRequise,
     Contrainte,
     InstanceTRCO,
     MinimiserMakespan,
@@ -23,7 +24,7 @@ from .schema_erp import PayloadERP
 def traduire(payload: PayloadERP) -> InstanceTRCO:
     """Traduit un payload de l'ERP de référence en instance T-R-C-O canonique."""
     taches = [Tache(id=operation.code_operation) for operation in payload.operations]
-    ressources = [Ressource(id=poste.code_poste) for poste in payload.postes]
+    ressources = [Ressource(id=poste.code_poste, competences=poste.competences) for poste in payload.postes]
 
     contraintes: list[Contrainte] = []
     for operation in payload.operations:
@@ -34,6 +35,10 @@ def traduire(payload: PayloadERP) -> InstanceTRCO:
         )
         if operation.operation_precedente is not None:
             contraintes.append(Precedence(avant=operation.operation_precedente, apres=operation.code_operation))
+        if operation.competence_requise is not None:
+            contraintes.append(
+                CompetenceRequise(tache=operation.code_operation, competence=operation.competence_requise)
+            )
 
     return InstanceTRCO(
         taches=taches,

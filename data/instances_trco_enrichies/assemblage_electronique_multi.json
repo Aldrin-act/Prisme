@@ -225,12 +225,12 @@
     },
     {
       "type": "echeance",
-      "tache": "SOUDURE_REFUSION_A",
+      "tache": "CONFORMAL_COATING",
       "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "TEST_FONCTIONNEL",
+      "tache": "INSPECTION_AOI_A",
       "echeance": 1
     },
     {
@@ -240,12 +240,12 @@
     },
     {
       "type": "echeance",
-      "tache": "CONFORMAL_COATING",
+      "tache": "SOUDURE_REFUSION_B",
       "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "POSE_CMS_FACE_B",
+      "tache": "POSE_CMS_FACE_A",
       "echeance": 1
     }
   ],

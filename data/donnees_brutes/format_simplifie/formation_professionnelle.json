@@ -1,0 +1,167 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Évaluation initiale",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T2",
+      "nom": "Module théorique 1",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T3",
+      "nom": "Travaux pratiques 1",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T4",
+      "nom": "Module théorique 2",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T5",
+      "nom": "Travaux pratiques 2",
+      "duree_estimee_jours": 1.5
+    },
+    {
+      "id": "T6",
+      "nom": "Projet fil rouge",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T7",
+      "nom": "Examen final",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T8",
+      "nom": "Certification",
+      "duree_estimee_jours": 0.3
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Évaluateur",
+      "competences": [
+        "evaluation",
+        "certification"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Formateur théorie",
+      "competences": [
+        "enseignement_theorique",
+        "evaluation"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Instructeur pratique",
+      "competences": [
+        "enseignement_pratique",
+        "encadrement_projet"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Salle informatique",
+      "competences": [
+        "enseignement_pratique"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Salle cours",
+      "competences": [
+        "enseignement_theorique",
+        "examen"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "evaluation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "enseignement_theorique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "enseignement_pratique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "enseignement_theorique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "enseignement_pratique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "encadrement_projet"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "examen"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "certification"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

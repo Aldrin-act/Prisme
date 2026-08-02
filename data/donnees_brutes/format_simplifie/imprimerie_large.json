@@ -1,0 +1,328 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Réception commande",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T2",
+      "nom": "Conception graphique",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T3",
+      "nom": "Validation client",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T4",
+      "nom": "Préparation plaques offset",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T5",
+      "nom": "Calage presse",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T6",
+      "nom": "Impression recto",
+      "duree_estimee_jours": 0.8
+    },
+    {
+      "id": "T7",
+      "nom": "Séchage recto",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T8",
+      "nom": "Impression verso",
+      "duree_estimee_jours": 0.8
+    },
+    {
+      "id": "T9",
+      "nom": "Séchage verso",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T10",
+      "nom": "Vernissage",
+      "duree_estimee_jours": 0.4
+    },
+    {
+      "id": "T11",
+      "nom": "Séchage vernis",
+      "duree_estimee_jours": 0.6
+    },
+    {
+      "id": "T12",
+      "nom": "Découpe",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T13",
+      "nom": "Pliage",
+      "duree_estimee_jours": 0.4
+    },
+    {
+      "id": "T14",
+      "nom": "Assemblage",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T15",
+      "nom": "Contrôle qualité",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T16",
+      "nom": "Conditionnement",
+      "duree_estimee_jours": 0.3
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Chargé clientèle",
+      "competences": [
+        "reception",
+        "validation"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Graphiste",
+      "competences": [
+        "conception"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Pré-presse",
+      "competences": [
+        "preparation_plaques",
+        "calage"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Presse offset 1",
+      "competences": [
+        "impression"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Presse offset 2",
+      "competences": [
+        "impression"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Tunnel séchage UV",
+      "competences": [
+        "sechage"
+      ]
+    },
+    {
+      "id": "R7",
+      "nom": "Vernis ligne",
+      "competences": [
+        "vernissage"
+      ]
+    },
+    {
+      "id": "R8",
+      "nom": "Massicot",
+      "competences": [
+        "decoupe"
+      ]
+    },
+    {
+      "id": "R9",
+      "nom": "Plieuse automatique",
+      "competences": [
+        "pliage"
+      ]
+    },
+    {
+      "id": "R10",
+      "nom": "Poste assemblage",
+      "competences": [
+        "assemblage"
+      ]
+    },
+    {
+      "id": "R11",
+      "nom": "Contrôleur",
+      "competences": [
+        "controle",
+        "conditionnement"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "precedence",
+      "avant": "T9",
+      "apres": "T10"
+    },
+    {
+      "type": "precedence",
+      "avant": "T10",
+      "apres": "T11"
+    },
+    {
+      "type": "precedence",
+      "avant": "T11",
+      "apres": "T12"
+    },
+    {
+      "type": "precedence",
+      "avant": "T12",
+      "apres": "T13"
+    },
+    {
+      "type": "precedence",
+      "avant": "T13",
+      "apres": "T14"
+    },
+    {
+      "type": "precedence",
+      "avant": "T14",
+      "apres": "T15"
+    },
+    {
+      "type": "precedence",
+      "avant": "T15",
+      "apres": "T16"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "reception"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "conception"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "validation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "preparation_plaques"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "calage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "impression"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "sechage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "impression"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "sechage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T10",
+      "competence": "vernissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T11",
+      "competence": "sechage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T12",
+      "competence": "decoupe"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T13",
+      "competence": "pliage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T14",
+      "competence": "assemblage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T15",
+      "competence": "controle"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T16",
+      "competence": "conditionnement"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

@@ -11,7 +11,7 @@ typique ne modélise pas le FJSP). `translator.py` fait le pont vers
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class OperationERP(BaseModel):
@@ -24,12 +24,20 @@ class OperationERP(BaseModel):
     duree_jours: int
     poste_id: str
     operation_precedente: str | None = None
+    competence_requise: str | None = Field(
+        default=None,
+        description="Compétence exigée pour cette opération, si l'ERP en trace une — "
+        "traduite en CompetenceRequise, jamais en compatibilité (qui reste poste_id, seul lien fort).",
+    )
 
 
 class PosteERP(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     code_poste: str
+    competences: list[str] = Field(
+        default_factory=list, description="Compétences détenues par ce poste, si l'ERP en trace."
+    )
 
 
 class PayloadERP(BaseModel):

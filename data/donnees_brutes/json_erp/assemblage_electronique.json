@@ -4,127 +4,90 @@
       "code_operation": "PREP_PCB",
       "duree_jours": 1,
       "poste_id": "STATION_PREP",
-      "operation_precedente": null,
-      "competence_requise": "prep"
+      "operation_precedente": null
     },
     {
       "code_operation": "POSE_CMS_FACE_A",
       "duree_jours": 2,
       "poste_id": "MACHINE_PICK_PLACE_1",
-      "operation_precedente": "PREP_PCB",
-      "competence_requise": "pick_place"
+      "operation_precedente": "PREP_PCB"
     },
     {
       "code_operation": "SOUDURE_REFUSION_A",
       "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
-      "operation_precedente": "POSE_CMS_FACE_A",
-      "competence_requise": "refusion"
+      "operation_precedente": "POSE_CMS_FACE_A"
     },
     {
       "code_operation": "INSPECTION_AOI_A",
       "duree_jours": 1,
       "poste_id": "AOI_AUTOMATIQUE",
-      "operation_precedente": "SOUDURE_REFUSION_A",
-      "competence_requise": "aoi_automatique"
+      "operation_precedente": "SOUDURE_REFUSION_A"
     },
     {
       "code_operation": "POSE_CMS_FACE_B",
       "duree_jours": 2,
       "poste_id": "MACHINE_PICK_PLACE_2",
-      "operation_precedente": "INSPECTION_AOI_A",
-      "competence_requise": "pick_place"
+      "operation_precedente": "INSPECTION_AOI_A"
     },
     {
       "code_operation": "SOUDURE_REFUSION_B",
       "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
-      "operation_precedente": "POSE_CMS_FACE_B",
-      "competence_requise": "refusion"
+      "operation_precedente": "POSE_CMS_FACE_B"
     },
     {
       "code_operation": "SOUDURE_MANUELLE",
       "duree_jours": 2,
       "poste_id": "POSTE_SOUDURE_MANUEL",
-      "operation_precedente": "SOUDURE_REFUSION_B",
-      "competence_requise": "soudure_manuel"
+      "operation_precedente": "SOUDURE_REFUSION_B"
     },
     {
       "code_operation": "TEST_FONCTIONNEL",
       "duree_jours": 1,
       "poste_id": "BANC_TEST",
-      "operation_precedente": "SOUDURE_MANUELLE",
-      "competence_requise": "test"
+      "operation_precedente": "SOUDURE_MANUELLE"
     },
     {
       "code_operation": "CONFORMAL_COATING",
       "duree_jours": 1,
       "poste_id": "ROBOT_COATING",
-      "operation_precedente": "TEST_FONCTIONNEL",
-      "competence_requise": "coating"
+      "operation_precedente": "TEST_FONCTIONNEL"
     },
     {
       "code_operation": "CONTROLE_FINAL",
       "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_VISUEL",
-      "operation_precedente": "CONFORMAL_COATING",
-      "competence_requise": "controle_visuel"
+      "operation_precedente": "CONFORMAL_COATING"
     }
   ],
   "postes": [
     {
-      "code_poste": "STATION_PREP",
-      "competences": [
-        "prep"
-      ]
+      "code_poste": "STATION_PREP"
     },
     {
-      "code_poste": "MACHINE_PICK_PLACE_1",
-      "competences": [
-        "pick_place"
-      ]
+      "code_poste": "MACHINE_PICK_PLACE_1"
     },
     {
-      "code_poste": "MACHINE_PICK_PLACE_2",
-      "competences": [
-        "pick_place"
-      ]
+      "code_poste": "MACHINE_PICK_PLACE_2"
     },
     {
-      "code_poste": "FOUR_REFUSION",
-      "competences": [
-        "refusion"
-      ]
+      "code_poste": "FOUR_REFUSION"
     },
     {
-      "code_poste": "AOI_AUTOMATIQUE",
-      "competences": [
-        "aoi_automatique"
-      ]
+      "code_poste": "AOI_AUTOMATIQUE"
     },
     {
-      "code_poste": "POSTE_SOUDURE_MANUEL",
-      "competences": [
-        "soudure_manuel"
-      ]
+      "code_poste": "POSTE_SOUDURE_MANUEL"
     },
     {
-      "code_poste": "BANC_TEST",
-      "competences": [
-        "test"
-      ]
+      "code_poste": "BANC_TEST"
     },
     {
-      "code_poste": "ROBOT_COATING",
-      "competences": [
-        "coating"
-      ]
+      "code_poste": "ROBOT_COATING"
     },
     {
-      "code_poste": "POSTE_CONTROLE_VISUEL",
-      "competences": [
-        "controle_visuel"
-      ]
+      "code_poste": "POSTE_CONTROLE_VISUEL"
     }
   ]
 }

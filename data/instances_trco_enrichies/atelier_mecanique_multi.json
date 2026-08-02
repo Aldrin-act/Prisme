@@ -185,12 +185,12 @@
     },
     {
       "type": "echeance",
-      "tache": "PERCAGE_001",
+      "tache": "ASSEMBLAGE_FINAL",
       "echeance": 1
     },
     {
       "type": "echeance",
-      "tache": "CONTROLE_QUALITE",
+      "tache": "PERCAGE_001",
       "echeance": 1
     },
     {
@@ -200,7 +200,7 @@
     },
     {
       "type": "echeance",
-      "tache": "DECOUP_001",
+      "tache": "PEINTURE_001",
       "echeance": 1
     }
   ],

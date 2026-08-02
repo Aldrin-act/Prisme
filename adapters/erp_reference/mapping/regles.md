@@ -6,7 +6,9 @@
 | `OperationERP.duree_jours`                | `CompatibiliteRessourceTache.duree` (déjà en jours, aucune conversion)  |
 | `OperationERP.poste_id`                  | `CompatibiliteRessourceTache.ressource` (une seule, forcée)          |
 | `OperationERP.operation_precedente`      | `Precedence.avant` (si non nul) → `Precedence.apres = code_operation` |
+| `OperationERP.competence_requise`         | `CompetenceRequise.competence` (si non nul, une contrainte par opération) |
 | `PosteERP.code_poste`                    | `Ressource.id`                                                    |
+| `PosteERP.competences`                    | `Ressource.competences` (liste vide si non renseigné)              |
 | *(aucun champ ERP)*                      | `Objectif` → toujours `MinimiserMakespan()` (l'ERP n'a pas la notion) |
 
 Perte d'expressivité assumée dans un sens (ERP → T-R-C-O) : l'ERP ne connaît

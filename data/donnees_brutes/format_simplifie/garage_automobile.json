@@ -1,0 +1,188 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Diagnostic initial",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T2",
+      "nom": "Devis",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T3",
+      "nom": "Commande pièces",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T4",
+      "nom": "Démontage",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T5",
+      "nom": "Réparation mécanique",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T6",
+      "nom": "Réparation électrique",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T7",
+      "nom": "Remontage",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T8",
+      "nom": "Tests fonctionnels",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T9",
+      "nom": "Nettoyage véhicule",
+      "duree_estimee_jours": 0.2
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Technicien diagnostic",
+      "competences": [
+        "diagnostic",
+        "tests"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Réceptionnaire",
+      "competences": [
+        "devis",
+        "commande"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Mécanicien",
+      "competences": [
+        "demontage",
+        "reparation_mecanique",
+        "remontage"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Électricien auto",
+      "competences": [
+        "reparation_electrique",
+        "diagnostic"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Agent préparation",
+      "competences": [
+        "nettoyage"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "diagnostic"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "devis"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "commande"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "demontage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "reparation_mecanique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "reparation_electrique"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "remontage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "tests"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "nettoyage"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

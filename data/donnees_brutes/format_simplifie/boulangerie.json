@@ -1,0 +1,172 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Pesée ingrédients",
+      "duree_estimee_jours": 0.1
+    },
+    {
+      "id": "T2",
+      "nom": "Pétrissage",
+      "duree_estimee_jours": 0.15
+    },
+    {
+      "id": "T3",
+      "nom": "Première pousse",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T4",
+      "nom": "Façonnage",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T5",
+      "nom": "Deuxième pousse",
+      "duree_estimee_jours": 0.4
+    },
+    {
+      "id": "T6",
+      "nom": "Scarification",
+      "duree_estimee_jours": 0.05
+    },
+    {
+      "id": "T7",
+      "nom": "Cuisson",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T8",
+      "nom": "Refroidissement",
+      "duree_estimee_jours": 0.1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Balance professionnelle",
+      "competences": [
+        "pesee"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Pétrin mécanique",
+      "competences": [
+        "petrissage"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Chambre fermentation",
+      "competences": [
+        "pousse"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Boulanger",
+      "competences": [
+        "faconnage",
+        "scarification",
+        "pesee"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Four professionnel",
+      "competences": [
+        "cuisson"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Grille refroidissement",
+      "competences": [
+        "refroidissement"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "pesee"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "petrissage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "pousse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "faconnage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "pousse"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "scarification"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "cuisson"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "refroidissement"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

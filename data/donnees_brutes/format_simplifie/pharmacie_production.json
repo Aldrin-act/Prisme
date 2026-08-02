@@ -1,0 +1,238 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Réception matières premières",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T2",
+      "nom": "Contrôle qualité MP",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T3",
+      "nom": "Pesée",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T4",
+      "nom": "Mélange",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T5",
+      "nom": "Granulation",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T6",
+      "nom": "Séchage",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T7",
+      "nom": "Compression",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T8",
+      "nom": "Enrobage",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T9",
+      "nom": "Contrôle final",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T10",
+      "nom": "Conditionnement primaire",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T11",
+      "nom": "Conditionnement secondaire",
+      "duree_estimee_jours": 0.3
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Magasinier",
+      "competences": [
+        "reception"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Laboratoire contrôle",
+      "competences": [
+        "controle_mp",
+        "controle_final"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Salle de pesée",
+      "competences": [
+        "pesee"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Mélangeur haute performance",
+      "competences": [
+        "melange"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Granulateur",
+      "competences": [
+        "granulation"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Sécheur lit fluide",
+      "competences": [
+        "sechage"
+      ]
+    },
+    {
+      "id": "R7",
+      "nom": "Presse à comprimés",
+      "competences": [
+        "compression"
+      ]
+    },
+    {
+      "id": "R8",
+      "nom": "Machine enrobage",
+      "competences": [
+        "enrobage"
+      ]
+    },
+    {
+      "id": "R9",
+      "nom": "Ligne conditionnement",
+      "competences": [
+        "conditionnement_primaire",
+        "conditionnement_secondaire"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "precedence",
+      "avant": "T9",
+      "apres": "T10"
+    },
+    {
+      "type": "precedence",
+      "avant": "T10",
+      "apres": "T11"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "reception"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "controle_mp"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "pesee"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "melange"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "granulation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "sechage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "compression"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "enrobage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "controle_final"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T10",
+      "competence": "conditionnement_primaire"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T11",
+      "competence": "conditionnement_secondaire"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

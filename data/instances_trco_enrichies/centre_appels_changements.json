@@ -1,0 +1,227 @@
+{
+  "taches": [
+    {
+      "id": "RECEPTION_APPEL",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    },
+    {
+      "id": "QUALIFICATION_DEMANDE",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    },
+    {
+      "id": "CREATION_TICKET",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    },
+    {
+      "id": "ESCALADE_N2",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    },
+    {
+      "id": "INVESTIGATION_TECHNIQUE",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    },
+    {
+      "id": "RESOLUTION",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    },
+    {
+      "id": "RAPPEL_CLIENT",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    },
+    {
+      "id": "CLOTURE_TICKET",
+      "nom": null,
+      "priorite": null,
+      "statut": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "POSTE_TELEPHONIQUE_N1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "telephonique_n1"
+      ]
+    },
+    {
+      "id": "POSTE_TELEPHONIQUE_N2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "telephonique_n2"
+      ]
+    },
+    {
+      "id": "SYSTEME_CRM",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "systeme_crm"
+      ]
+    },
+    {
+      "id": "POSTE_SUPPORT_TECHNIQUE",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "support_technique"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_APPEL",
+      "ressource": "POSTE_TELEPHONIQUE_N1",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_APPEL",
+      "competence": "telephonique_n1"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "QUALIFICATION_DEMANDE",
+      "ressource": "POSTE_TELEPHONIQUE_N1",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_APPEL",
+      "apres": "QUALIFICATION_DEMANDE"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "QUALIFICATION_DEMANDE",
+      "competence": "telephonique_n1"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CREATION_TICKET",
+      "ressource": "SYSTEME_CRM",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "QUALIFICATION_DEMANDE",
+      "apres": "CREATION_TICKET"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CREATION_TICKET",
+      "competence": "systeme_crm"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ESCALADE_N2",
+      "ressource": "POSTE_TELEPHONIQUE_N2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CREATION_TICKET",
+      "apres": "ESCALADE_N2"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ESCALADE_N2",
+      "competence": "telephonique_n2"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INVESTIGATION_TECHNIQUE",
+      "ressource": "POSTE_SUPPORT_TECHNIQUE",
+      "duree": 2
+    },
+    {
+      "type": "precedence",
+      "avant": "ESCALADE_N2",
+      "apres": "INVESTIGATION_TECHNIQUE"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "INVESTIGATION_TECHNIQUE",
+      "competence": "support_technique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RESOLUTION",
+      "ressource": "POSTE_SUPPORT_TECHNIQUE",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "INVESTIGATION_TECHNIQUE",
+      "apres": "RESOLUTION"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RESOLUTION",
+      "competence": "support_technique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RAPPEL_CLIENT",
+      "ressource": "POSTE_TELEPHONIQUE_N2",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RESOLUTION",
+      "apres": "RAPPEL_CLIENT"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RAPPEL_CLIENT",
+      "competence": "telephonique_n2"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CLOTURE_TICKET",
+      "ressource": "SYSTEME_CRM",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RAPPEL_CLIENT",
+      "apres": "CLOTURE_TICKET"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CLOTURE_TICKET",
+      "competence": "systeme_crm"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_changements",
+      "poids": 0.5
+    },
+    {
+      "type": "minimiser_makespan",
+      "poids": 0.3,
+      "makespan_cible": 2
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 0.2,
+      "methode": "variance"
+    }
+  ]
+}

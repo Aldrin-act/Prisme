@@ -1,0 +1,260 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Lecture manuscrit",
+      "duree_estimee_jours": 5
+    },
+    {
+      "id": "T2",
+      "nom": "Évaluation comité",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T3",
+      "nom": "Négociation contrat",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T4",
+      "nom": "Édition texte",
+      "duree_estimee_jours": 10
+    },
+    {
+      "id": "T5",
+      "nom": "Corrections auteur",
+      "duree_estimee_jours": 7
+    },
+    {
+      "id": "T6",
+      "nom": "Relecture finale",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T7",
+      "nom": "Conception couverture",
+      "duree_estimee_jours": 5
+    },
+    {
+      "id": "T8",
+      "nom": "Mise en page",
+      "duree_estimee_jours": 4
+    },
+    {
+      "id": "T9",
+      "nom": "BAT auteur",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T10",
+      "nom": "Impression",
+      "duree_estimee_jours": 3
+    },
+    {
+      "id": "T11",
+      "nom": "Reliure",
+      "duree_estimee_jours": 2
+    },
+    {
+      "id": "T12",
+      "nom": "Distribution",
+      "duree_estimee_jours": 1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Éditeur",
+      "competences": [
+        "lecture",
+        "negociation",
+        "edition"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Comité lecture",
+      "competences": [
+        "evaluation"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Correcteur",
+      "competences": [
+        "edition",
+        "relecture"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Auteur",
+      "competences": [
+        "corrections",
+        "validation_bat"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Designer",
+      "competences": [
+        "conception_couverture"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Maquettiste",
+      "competences": [
+        "mise_en_page"
+      ]
+    },
+    {
+      "id": "R7",
+      "nom": "Imprimeur",
+      "competences": [
+        "impression"
+      ]
+    },
+    {
+      "id": "R8",
+      "nom": "Atelier reliure",
+      "competences": [
+        "reliure"
+      ]
+    },
+    {
+      "id": "R9",
+      "nom": "Service distribution",
+      "competences": [
+        "distribution"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "precedence",
+      "avant": "T9",
+      "apres": "T10"
+    },
+    {
+      "type": "precedence",
+      "avant": "T10",
+      "apres": "T11"
+    },
+    {
+      "type": "precedence",
+      "avant": "T11",
+      "apres": "T12"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "lecture"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "evaluation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "negociation"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "edition"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "corrections"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "relecture"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "conception_couverture"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "mise_en_page"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "validation_bat"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T10",
+      "competence": "impression"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T11",
+      "competence": "reliure"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T12",
+      "competence": "distribution"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}

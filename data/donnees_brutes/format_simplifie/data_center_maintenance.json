@@ -1,0 +1,242 @@
+{
+  "taches": [
+    {
+      "id": "T1",
+      "nom": "Alerte système",
+      "duree_estimee_jours": 0.01
+    },
+    {
+      "id": "T2",
+      "nom": "Diagnostic initial",
+      "duree_estimee_jours": 0.1
+    },
+    {
+      "id": "T3",
+      "nom": "Basculement redondance",
+      "duree_estimee_jours": 0.05
+    },
+    {
+      "id": "T4",
+      "nom": "Arrêt serveur",
+      "duree_estimee_jours": 0.02
+    },
+    {
+      "id": "T5",
+      "nom": "Démontage composant",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T6",
+      "nom": "Commande pièce urgente",
+      "duree_estimee_jours": 1
+    },
+    {
+      "id": "T7",
+      "nom": "Remplacement composant",
+      "duree_estimee_jours": 0.3
+    },
+    {
+      "id": "T8",
+      "nom": "Mise sous tension",
+      "duree_estimee_jours": 0.1
+    },
+    {
+      "id": "T9",
+      "nom": "Tests POST",
+      "duree_estimee_jours": 0.1
+    },
+    {
+      "id": "T10",
+      "nom": "Tests charge",
+      "duree_estimee_jours": 0.5
+    },
+    {
+      "id": "T11",
+      "nom": "Réintégration cluster",
+      "duree_estimee_jours": 0.2
+    },
+    {
+      "id": "T12",
+      "nom": "Vérification monitoring",
+      "duree_estimee_jours": 0.1
+    }
+  ],
+  "ressources": [
+    {
+      "id": "R1",
+      "nom": "Système monitoring",
+      "competences": [
+        "alerte",
+        "verification_monitoring"
+      ]
+    },
+    {
+      "id": "R2",
+      "nom": "Technicien N1",
+      "competences": [
+        "diagnostic",
+        "basculement"
+      ]
+    },
+    {
+      "id": "R3",
+      "nom": "Ingénieur système",
+      "competences": [
+        "diagnostic",
+        "arret",
+        "demarrage",
+        "reintegration"
+      ]
+    },
+    {
+      "id": "R4",
+      "nom": "Technicien hardware",
+      "competences": [
+        "demontage",
+        "remplacement"
+      ]
+    },
+    {
+      "id": "R5",
+      "nom": "Gestionnaire stock",
+      "competences": [
+        "commande"
+      ]
+    },
+    {
+      "id": "R6",
+      "nom": "Banc test hardware",
+      "competences": [
+        "tests_post",
+        "tests_charge"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "precedence",
+      "avant": "T1",
+      "apres": "T2"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T3"
+    },
+    {
+      "type": "precedence",
+      "avant": "T3",
+      "apres": "T4"
+    },
+    {
+      "type": "precedence",
+      "avant": "T4",
+      "apres": "T5"
+    },
+    {
+      "type": "precedence",
+      "avant": "T2",
+      "apres": "T6"
+    },
+    {
+      "type": "precedence",
+      "avant": "T5",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T6",
+      "apres": "T7"
+    },
+    {
+      "type": "precedence",
+      "avant": "T7",
+      "apres": "T8"
+    },
+    {
+      "type": "precedence",
+      "avant": "T8",
+      "apres": "T9"
+    },
+    {
+      "type": "precedence",
+      "avant": "T9",
+      "apres": "T10"
+    },
+    {
+      "type": "precedence",
+      "avant": "T10",
+      "apres": "T11"
+    },
+    {
+      "type": "precedence",
+      "avant": "T11",
+      "apres": "T12"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T1",
+      "competence": "alerte"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T2",
+      "competence": "diagnostic"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T3",
+      "competence": "basculement"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T4",
+      "competence": "arret"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T5",
+      "competence": "demontage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T6",
+      "competence": "commande"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T7",
+      "competence": "remplacement"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T8",
+      "competence": "demarrage"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T9",
+      "competence": "tests_post"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T10",
+      "competence": "tests_charge"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T11",
+      "competence": "reintegration"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "T12",
+      "competence": "verification_monitoring"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan"
+    }
+  ]
+}
