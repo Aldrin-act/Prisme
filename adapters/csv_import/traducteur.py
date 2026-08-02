@@ -1,9 +1,7 @@
 """csv_import — Adaptateur pour l'ingestion T-R-C-O via trois fichiers CSV
-séparés (§5.4) : Tâches, Ressources, Contraintes — la version CSV de
-`adapters/tableur/` (xlsx) pour qui préfère exporter depuis un tableur ou un
-ERP en CSV plutôt que remplir le gabarit Excel. Mêmes colonnes que les
-onglets du gabarit xlsx (`scripts/generer_gabarit_ingestion.py`), pour qu'un
-utilisateur des deux formats retrouve les mêmes noms de champs.
+séparés (§5.4) : Tâches, Ressources, Contraintes. Format standard pour
+l'import de données tabulaires depuis un tableur (LibreOffice, Google Sheets,
+etc.) ou un export ERP en CSV.
 
 Le fichier Contraintes couvre les natures de contrainte supportées ici
 (precedence, compatibilite_ressource_tache, competence_requise) via une
@@ -78,14 +76,13 @@ def _lire_lignes(
     colonnes_optionnelles: tuple[str, ...] = (),
 ) -> list[dict[str, str]]:
     """Décode et parse un CSV en liste de lignes (dict par en-tête de colonne).
-    `utf-8-sig` tolère le BOM ajouté par Excel à l'export, sans rien changer
-    pour un CSV déjà en UTF-8 simple. Ignore les lignes où la première colonne
-    requise est vide (ligne d'exemple laissée telle quelle, ligne vide en fin
-    de fichier...), même tolérance que `adapters/tableur/traducteur.py`.
-    Les colonnes optionnelles absentes du fichier valent simplement "" partout
-    plutôt que de faire échouer la lecture — ex. `competences`/
-    `duree_estimee_jours`, inutiles tant qu'aucune compatibilité n'est
-    dérivée par compétence."""
+    `utf-8-sig` tolère le BOM ajouté par certains tableurs à l'export, sans rien
+    changer pour un CSV déjà en UTF-8 simple. Ignore les lignes où la première
+    colonne requise est vide (ligne d'exemple laissée telle quelle, ligne vide
+    en fin de fichier...). Les colonnes optionnelles absentes du fichier valent
+    simplement "" partout plutôt que de faire échouer la lecture — ex.
+    `competences`/`duree_estimee_jours`, inutiles tant qu'aucune compatibilité
+    n'est dérivée par compétence."""
     try:
         texte = contenu.decode("utf-8-sig")
     except UnicodeDecodeError as erreur:
@@ -114,7 +111,8 @@ def _lire_lignes(
 def _lire_taches(contenu: bytes) -> tuple[list[Tache], dict[str, int | None]]:
     """Renvoie les tâches ainsi que, par id, leur durée estimée (colonne
     `duree_estimee_jours`) — `None` si absente, seulement nécessaire pour
-    les tâches dont la compatibilité est dérivée par compétence."""
+    les tâches dont la compatibilité est dérivée par compétence. Même
+    structure que dans les autres adaptateurs pour cohérence."""
     lignes = _lire_lignes(contenu, "taches.csv", COLONNES_TACHES_REQUISES, COLONNES_TACHES_OPTIONNELLES)
     taches = [Tache(id=ligne["id"], **({"nom": ligne["nom"]} if ligne["nom"] else {})) for ligne in lignes]
     durees_estimees: dict[str, int | None] = {}

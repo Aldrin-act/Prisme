@@ -1,0 +1,9 @@
+id,nom,duree_estimee_jours
+DECOUP_001,Découpe laser,1
+PERCAGE_001,Perçage CNC,1
+PLIAGE_001,Pliage,1
+SOUDURE_001,Soudure poste 1,2
+SOUDURE_002,Soudure poste 2,2
+PEINTURE_001,Peinture,1
+ASSEMBLAGE_FINAL,Assemblage final,2
+CONTROLE_QUALITE,Contrôle qualité,1

@@ -1,0 +1,10 @@
+id,nom,competences
+STATION_PREP,Station Prep,station
+MACHINE_PICK_PLACE_1,Machine Pick Place 1,machine
+MACHINE_PICK_PLACE_2,Machine Pick Place 2,machine
+FOUR_REFUSION,Four Refusion,four
+AOI_AUTOMATIQUE,Aoi Automatique,aoi
+POSTE_SOUDURE_MANUEL,Poste Soudure Manuel,poste
+BANC_TEST,Banc Test,banc
+ROBOT_COATING,Robot Coating,robot
+POSTE_CONTROLE_VISUEL,Poste Controle Visuel,poste

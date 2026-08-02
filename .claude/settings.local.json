@@ -12,7 +12,8 @@
       "Bash(test:*)",
       "Bash(docker ps:*)",
       "Bash(cat:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(uv lock:*)"
     ],
     "deny": [],
     "ask": [],

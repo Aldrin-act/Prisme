@@ -1,0 +1,11 @@
+id,nom,duree_estimee_jours
+PREP_PCB,Prep Pcb,1
+POSE_CMS_FACE_A,Pose Cms Face A,2
+SOUDURE_REFUSION_A,Soudure Refusion A,1
+INSPECTION_AOI_A,Inspection Aoi A,1
+POSE_CMS_FACE_B,Pose Cms Face B,2
+SOUDURE_REFUSION_B,Soudure Refusion B,1
+SOUDURE_MANUELLE,Soudure Manuelle,2
+TEST_FONCTIONNEL,Test Fonctionnel,1
+CONFORMAL_COATING,Conformal Coating,1
+CONTROLE_FINAL,Controle Final,1

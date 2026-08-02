@@ -8,146 +8,207 @@ Ce répertoire contient des données brutes au format CSV, organisées par secte
 csv/
 ├── industrie_manufacturiere/
 │   ├── atelier_mecanique/
-│   │   ├── atelier_mecanique_operations.csv
-│   │   └── atelier_mecanique_postes.csv
+│   │   ├── taches.csv
+│   │   ├── ressources.csv
+│   │   └── contraintes.csv
 │   ├── assemblage_electronique/
-│   │   ├── assemblage_electronique_operations.csv
-│   │   └── assemblage_electronique_postes.csv
+│   │   ├── taches.csv
+│   │   ├── ressources.csv
+│   │   └── contraintes.csv
 │   ├── imprimerie/
-│   │   ├── imprimerie_operations.csv
-│   │   └── imprimerie_postes.csv
+│   │   ├── taches.csv
+│   │   ├── ressources.csv
+│   │   └── contraintes.csv
 │   └── production_agroalimentaire/
-│       ├── production_agroalimentaire_operations.csv
-│       └── production_agroalimentaire_postes.csv
+│       ├── taches.csv
+│       ├── ressources.csv
+│       └── contraintes.csv
 ├── services/
 │   ├── centre_appels/
-│   │   ├── centre_appels_operations.csv
-│   │   └── centre_appels_postes.csv
+│   │   ├── taches.csv
+│   │   ├── ressources.csv
+│   │   └── contraintes.csv
 │   └── maintenance_industrielle/
-│       ├── maintenance_industrielle_operations.csv
-│       └── maintenance_industrielle_postes.csv
+│       ├── taches.csv
+│       ├── ressources.csv
+│       └── contraintes.csv
 ├── informatique/
 │   └── informatique_jira_export.csv
 └── README.md (ce fichier)
 ```
 
-## Secteurs disponibles
-
-### 🏭 Industrie Manufacturière (4 jeux)
-- **Atelier Mécanique** - Fabrication métallique (8 opérations, 8 postes)
-- **Assemblage Électronique** - Production PCB (10 opérations, 9 postes)
-- **Imprimerie** - Impression offset (9 opérations, 7 postes)
-- **Production Agroalimentaire** - Transformation alimentaire (9 opérations, 9 postes)
-
-### 🛠️ Services (2 jeux)
-- **Centre d'Appels** - Support client N1/N2 (8 opérations, 4 postes)
-- **Maintenance Industrielle** - Gestion pannes (7 opérations, 5 postes)
-
-### 💻 Informatique (1 jeu)
-- **Informatique (JIRA Export)** - Export de tickets JIRA (format spécifique)
-
 ## Format des fichiers
 
-### Format standard (paires operations + postes)
+### Format standard (3 fichiers CSV par secteur)
 
-Chaque secteur contient **deux fichiers CSV**:
+Chaque secteur contient **3 fichiers CSV séparés**, suivant le format standard de l'adaptateur CSV :
 
-**Fichier `*_operations.csv`**:
+#### 1. **taches.csv**
+
 ```csv
-code_operation,duree_jours,poste_id,operation_precedente
-OP_001,2,POSTE_A,
-OP_002,1,POSTE_B,OP_001
-OP_003,3,POSTE_C,OP_002
+id,nom,duree_estimee_jours
+T001,Découpe,1
+T002,Assemblage,2
 ```
 
-**Fichier `*_postes.csv`**:
+| Colonne | Requis | Description | Exemple |
+|---------|--------|-------------|---------|
+| `id` | ✅ Oui | Identifiant unique de la tâche | T001 |
+| `nom` | Non | Nom descriptif | Découpe laser |
+| `duree_estimee_jours` | Non* | Durée estimée (si dérivation par compétence) | 2 |
+
+*Requis uniquement pour les tâches dont la compatibilité est dérivée par compétence (voir ci-dessous).
+
+#### 2. **ressources.csv**
+
 ```csv
-code_poste
-POSTE_A
-POSTE_B
-POSTE_C
+id,nom,competences
+R001,Découpeuse,decoupe;usinage
+R002,Assembleuse,assemblage
 ```
 
-### Format spécifique (informatique)
+| Colonne | Requis | Description | Exemple |
+|---------|--------|-------------|---------|
+| `id` | ✅ Oui | Identifiant unique de la ressource | R001 |
+| `nom` | Non | Nom descriptif | Découpeuse laser |
+| `competences` | Non | Compétences (séparées par `;`) | decoupe;usinage |
 
-Le fichier `informatique_jira_export.csv` simule un export JIRA avec des champs supplémentaires (assigné, priorité, statut, etc.).
+#### 3. **contraintes.csv**
+
+```csv
+type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
+precedence,T001,T002,,,,
+compatibilite_ressource_tache,,,T001,R001,1,
+competence_requise,,,T001,,,decoupe
+```
+
+| Colonne | Description | Utilisée pour |
+|---------|-------------|---------------|
+| `type` | ✅ **Requis** : `precedence`, `compatibilite_ressource_tache`, ou `competence_requise` | Tous |
+| `tache_avant` | Tâche précédente | `precedence` |
+| `tache_apres` | Tâche suivante | `precedence` |
+| `tache` | ID de la tâche | `compatibilite_ressource_tache`, `competence_requise` |
+| `ressource` | ID de la ressource | `compatibilite_ressource_tache` |
+| `duree_jours` | Durée en jours | `compatibilite_ressource_tache` |
+| `competence` | Nom de la compétence | `competence_requise` |
+
+**Types de contraintes supportés** :
+- `precedence` : Tâche A doit précéder tâche B
+- `compatibilite_ressource_tache` : Une ressource peut exécuter une tâche en N jours
+- `competence_requise` : Une tâche nécessite une compétence spécifique
+
+### Dérivation automatique des compatibilités par compétence
+
+Au lieu de saisir manuellement chaque couple `(tache, ressource, duree)` dans `contraintes.csv`, vous pouvez :
+
+1. Déclarer les **compétences** d'une ressource dans `ressources.csv` (colonne `competences`)
+2. Déclarer qu'une tâche **exige** une compétence dans `contraintes.csv` (ligne `competence_requise`)
+3. Spécifier la **durée estimée** de la tâche dans `taches.csv` (colonne `duree_estimee_jours`)
+
+L'adaptateur crée alors automatiquement une `compatibilite_ressource_tache` pour chaque ressource possédant la compétence requise, avec la durée estimée de la tâche.
+
+**Exemple** :
+
+```csv
+# taches.csv
+id,nom,duree_estimee_jours
+T001,Soudure,2
+
+# ressources.csv
+id,nom,competences
+R001,Poste MIG,soudure
+R002,Poste TIG,soudure
+
+# contraintes.csv
+type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
+competence_requise,,,T001,,,soudure
+```
+
+→ Génère automatiquement :
+- `CompatibiliteRessourceTache(tache=T001, ressource=R001, duree=2)`
+- `CompatibiliteRessourceTache(tache=T001, ressource=R002, duree=2)`
 
 ## Utilisation
 
-### Import direct via l'API
+### Import via l'API
 
 ```python
-from adapters.csv_import.adapter import AdapterCSV
+from adapters.csv_import.traducteur import traduire
 
-# Charger les opérations et postes
-adapter = AdapterCSV()
-instance_trco = adapter.adapter_depuis_fichiers(
-    "csv/industrie_manufacturiere/atelier_mecanique/atelier_mecanique_operations.csv",
-    "csv/industrie_manufacturiere/atelier_mecanique/atelier_mecanique_postes.csv"
-)
+# Charger les 3 fichiers CSV
+with open("taches.csv", "rb") as f_t, \
+     open("ressources.csv", "rb") as f_r, \
+     open("contraintes.csv", "rb") as f_c:
+    instance_trco = traduire(f_t.read(), f_r.read(), f_c.read())
 ```
 
-### Conversion vers format TRCO
+### Conversion automatique
 
-Les fichiers CSV sont automatiquement convertis en instances TRCO lors de l'ingestion:
-- `code_operation` → `Tache.id`
-- `duree_jours` → durée dans `CompatibiliteRessourceTache`
-- `poste_id` → `Ressource.id`
-- `operation_precedente` → `ContraintePrecedence`
+Les 3 fichiers CSV sont automatiquement convertis en instance TRCO lors de l'ingestion :
+- Validation du schéma (colonnes requises)
+- Validation des types (durées numériques)
+- Dérivation des compatibilités par compétence (si applicable)
+- Validation DSL complète (références, unicité...)
 
-## Navigation rapide
+## Secteurs disponibles
 
-| Secteur | Dossier | Fichiers |
-|---------|---------|----------|
-| Atelier Mécanique | `industrie_manufacturiere/atelier_mecanique/` | 2 CSV |
-| Assemblage Électronique | `industrie_manufacturiere/assemblage_electronique/` | 2 CSV |
-| Imprimerie | `industrie_manufacturiere/imprimerie/` | 2 CSV |
-| Production Agroalimentaire | `industrie_manufacturiere/production_agroalimentaire/` | 2 CSV |
-| Centre d'Appels | `services/centre_appels/` | 2 CSV |
-| Maintenance Industrielle | `services/maintenance_industrielle/` | 2 CSV |
-| Informatique | `informatique/` | 1 CSV (JIRA) |
+### 🏭 Industrie Manufacturière (4 jeux)
+- **Atelier Mécanique** - 8 tâches, 8 ressources
+- **Assemblage Électronique** - 10 tâches, 9 ressources
+- **Imprimerie** - 9 tâches, 7 ressources
+- **Production Agroalimentaire** - 9 tâches, 9 ressources
 
-## Caractéristiques techniques
+### 🛠️ Services (2 jeux)
+- **Centre d'Appels** - 8 tâches, 4 ressources (durées fractionnaires)
+- **Maintenance Industrielle** - 7 tâches, 5 ressources
 
-- **Encodage**: UTF-8
-- **Séparateur**: virgule (`,`)
-- **En-têtes**: Présents sur la première ligne
-- **Valeurs vides**: Représentées par une chaîne vide
-- **Format dates**: Jours (entier ou décimal)
+### 💻 Informatique (1 jeu)
+- **JIRA Export** - Format spécial (1 seul fichier CSV enrichi)
 
 ## Avantages du format CSV
 
-✅ **Simplicité**: Éditable dans Excel/LibreOffice/Google Sheets
-✅ **Interopérabilité**: Standard universel, facile à importer/exporter
-✅ **Légèreté**: Fichiers texte compacts
-✅ **Versionnable**: Compatible avec Git
-✅ **Familier**: Format connu des utilisateurs métier
+✅ **Simplicité** - Format texte lisible, éditable dans tout tableur
+✅ **Compatibilité** - Standard universel (LibreOffice, Google Sheets, etc.)
+✅ **Versionnable** - Compatible avec Git (diffs clairs)
+✅ **Familier** - Format connu des utilisateurs métier
+✅ **Flexible** - Compatibilités explicites OU dérivées par compétence
+
+## Caractéristiques techniques
+
+- **Encodage** : UTF-8 (avec BOM toléré pour exports Excel)
+- **Séparateur** : Virgule (`,`)
+- **Séparateur compétences** : Point-virgule (`;`)
+- **En-têtes** : Présents sur la première ligne
+- **Valeurs vides** : Chaînes vides
+- **Format durées** : Jours (entier ou décimal)
 
 ## Limitations
 
-⚠️ **Pas de validation native**: Le schéma n'est pas enforced (contrairement au JSON)
-⚠️ **Types implicites**: Les types sont déduits lors de l'import
-⚠️ **Contraintes simples**: Seulement précédence + compatibilité ressource-tâche
-⚠️ **Pas de compétences**: Pour les compétences, utiliser `format_simplifie/` ou XLSX
+⚠️ **Contraintes simples** - Seulement précédence, compatibilité, compétence
+⚠️ **Pas d'échéances** - Pour dates limites, utiliser format TRCO complet
+⚠️ **Pas de capacités** - Pour ressources multi-tâches, utiliser format TRCO
+⚠️ **Pas d'incompatibilités** - Pour exclusions, utiliser format TRCO
+
+## Différences avec autres formats
+
+| Aspect | CSV (3 fichiers) | Format Simplifié (JSON) |
+|--------|------------------|-------------------------|
+| **Édition** | ✅ Tableur standard | ⚠️ Éditeur texte |
+| **Structure** | ✅ 3 fichiers séparés | ✅ 1 fichier structuré |
+| **Validation** | ⚠️ À l'import | ⚠️ À l'import |
+| **Compétences** | ✅ Supportées | ✅ Supportées |
+| **Dérivation auto** | ✅ Oui | ❌ Non |
+| **Familiarité** | ✅ Très familier | ⚠️ Dev/tech |
 
 ## Pour aller plus loin
 
-- **Format simplifié (JSON)**: `../format_simplifie/` - Structure taches/ressources/contraintes avec compétences
-- **Format ERP (JSON)**: `../json_erp/` - Format propriétaire avec translator
-- **Format XLSX**: Via `adapters/tableur/` - Gabarit Excel avec compétences
-- **Format TRCO complet**: `../../instances_trco/` - Format canonique avec toutes les contraintes
-
-## Ajout d'un nouveau secteur
-
-1. Créer un sous-dossier dans le secteur approprié (industrie_manufacturiere, services, etc.)
-2. Créer les fichiers `<nom>_operations.csv` et `<nom>_postes.csv`
-3. Respecter le format standard (colonnes requises)
-4. Ajouter un README dans le sous-dossier (optionnel)
-5. Mettre à jour ce README principal
+- **Format Simplifié (JSON)** : Structure JSON avec compétences → `../format_simplifie/`
+- **Format TRCO complet** : Format canonique avec toutes contraintes → `../../instances_trco/`
+- **Format ERP (JSON)** : Format propriétaire avec traducteur → `../json_erp/`
 
 ## Notes
 
-- Les fichiers CSV sont des **exports simulés** pour prototypage et tests
-- Pour une utilisation production, privilégier le format XLSX avec validation ou le format TRCO directement
-- Les durées sont exprimées en jours (fraction possible pour les heures)
-- Chaque opération ne peut être assignée qu'à un seul poste (pas de flexibilité FJSP)
+- Les fichiers CSV sont des **données de test et démonstration**
+- Le séparateur de compétences (`;`) évite la confusion avec le délimiteur CSV (`,`)
+- Les durées fractionnaires sont supportées (ex: `0.5` = demi-journée)
+- Les lignes vides et lignes d'exemple sont ignorées automatiquement

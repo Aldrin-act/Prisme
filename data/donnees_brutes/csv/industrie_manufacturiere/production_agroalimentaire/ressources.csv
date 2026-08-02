@@ -1,0 +1,10 @@
+id,nom,competences
+QUAI_RECEPTION,Quai Reception,quai
+TUNNEL_LAVAGE,Tunnel Lavage,tunnel
+LIGNE_EPLUCHAGE,Ligne Epluchage,ligne
+ROBOT_DECOUPE,Robot Decoupe,robot
+AUTOCLAVE_1,Autoclave 1,autoclave
+TUNNEL_REFROIDISSEMENT,Tunnel Refroidissement,tunnel
+LIGNE_CONDITIONNEMENT,Ligne Conditionnement,ligne
+ETIQUETEUSE_AUTO,Etiqueteuse Auto,etiqueteuse
+ROBOT_PALETTISEUR,Robot Palettiseur,robot

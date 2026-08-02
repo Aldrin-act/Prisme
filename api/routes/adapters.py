@@ -33,8 +33,6 @@ from adapters.csv_import import traduire as traduire_csv
 from adapters.greensig import extraire_payload, traduire
 from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
 from adapters.json_import import traduire as traduire_json
-from adapters.tableur import ErreurFichierInvalide
-from adapters.tableur import traduire as traduire_tableur
 from api.autorisation import verifier_acces_client
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
@@ -66,31 +64,6 @@ def ingerer_depuis_greensig(
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 
-@router.post("/tableur/{client_id}")
-async def ingerer_depuis_tableur(
-    client_id: str,
-    fichier: UploadFile = File(...),
-    etat: EtatAPI = Depends(obtenir_etat),
-    utilisateur: dict = Depends(obtenir_utilisateur_courant),
-) -> dict[str, str]:
-    """Ingestion depuis le gabarit xlsx (§5.4, `docs/dsl/gabarit_ingestion_trco.xlsx`) —
-    la voie « je remplis un tableur » plutôt que « j'écris du JSON »."""
-    verifier_acces_client(utilisateur, client_id)
-    if not (fichier.filename or "").lower().endswith(".xlsx"):
-        raise HTTPException(status_code=422, detail="le fichier doit être un classeur Excel (.xlsx)")
-
-    contenu = await fichier.read()
-    try:
-        instance = traduire_tableur(contenu)
-    except ErreurFichierInvalide as erreur:
-        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
-    except ValidationError as erreur:
-        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
-
-    instance_id = etat.enregistrer_instance(client_id, instance)
-    return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
-
-
 @router.post("/csv/{client_id}")
 async def ingerer_depuis_csv(
     client_id: str,
@@ -101,9 +74,8 @@ async def ingerer_depuis_csv(
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     """Ingestion depuis trois fichiers CSV séparés (§5.4) — Tâches, Ressources
-    et Contraintes, mêmes colonnes que les onglets du gabarit xlsx
-    (`adapters/csv_import/`), pour qui préfère exporter en CSV plutôt que
-    remplir un classeur Excel."""
+    et Contraintes (`adapters/csv_import/`), format standard pour l'import
+    de données tabulaires."""
     verifier_acces_client(utilisateur, client_id)
     for fichier in (taches, ressources, contraintes):
         if not (fichier.filename or "").lower().endswith(".csv"):

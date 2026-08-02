@@ -1,0 +1,9 @@
+id,nom,competences
+DECOUPEUSE_LASER,Découpeuse laser,decoupe
+PERCEUSE_CNC,Perceuse CNC,percage
+PRESSE_PLIAGE,Presse plieuse,pliage
+POSTE_SOUDURE_1,Poste soudure MIG,soudure
+POSTE_SOUDURE_2,Poste soudure TIG,soudure
+CABINE_PEINTURE,Cabine peinture,peinture
+POSTE_ASSEMBLAGE,Poste assemblage,assemblage
+POSTE_CONTROLE,Station contrôle,controle
