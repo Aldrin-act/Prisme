@@ -4,75 +4,107 @@
       "code_operation": "DECOUP_001",
       "duree_jours": 1,
       "poste_id": "DECOUPEUSE_LASER",
-      "operation_precedente": null
+      "operation_precedente": null,
+      "competence_requise": "decoupeuse_laser"
     },
     {
       "code_operation": "PERCAGE_001",
       "duree_jours": 1,
       "poste_id": "PERCEUSE_CNC",
-      "operation_precedente": "DECOUP_001"
+      "operation_precedente": "DECOUP_001",
+      "competence_requise": "perceuse_cnc"
     },
     {
       "code_operation": "PLIAGE_001",
       "duree_jours": 1,
       "poste_id": "PRESSE_PLIAGE",
-      "operation_precedente": "PERCAGE_001"
+      "operation_precedente": "PERCAGE_001",
+      "competence_requise": "presse_pliage"
     },
     {
       "code_operation": "SOUDURE_001",
       "duree_jours": 2,
       "poste_id": "POSTE_SOUDURE_1",
-      "operation_precedente": "PLIAGE_001"
+      "operation_precedente": "PLIAGE_001",
+      "competence_requise": "soudure"
     },
     {
       "code_operation": "SOUDURE_002",
       "duree_jours": 2,
       "poste_id": "POSTE_SOUDURE_2",
-      "operation_precedente": "PLIAGE_001"
+      "operation_precedente": "PLIAGE_001",
+      "competence_requise": "soudure"
     },
     {
       "code_operation": "PEINTURE_001",
       "duree_jours": 1,
       "poste_id": "CABINE_PEINTURE",
-      "operation_precedente": "SOUDURE_001"
+      "operation_precedente": "SOUDURE_001",
+      "competence_requise": "peinture"
     },
     {
       "code_operation": "ASSEMBLAGE_FINAL",
       "duree_jours": 2,
       "poste_id": "POSTE_ASSEMBLAGE",
-      "operation_precedente": "PEINTURE_001"
+      "operation_precedente": "PEINTURE_001",
+      "competence_requise": "assemblage"
     },
     {
       "code_operation": "CONTROLE_QUALITE",
       "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE",
-      "operation_precedente": "ASSEMBLAGE_FINAL"
+      "operation_precedente": "ASSEMBLAGE_FINAL",
+      "competence_requise": "controle"
     }
   ],
   "postes": [
     {
-      "code_poste": "DECOUPEUSE_LASER"
+      "code_poste": "DECOUPEUSE_LASER",
+      "competences": [
+        "decoupeuse_laser"
+      ]
     },
     {
-      "code_poste": "PERCEUSE_CNC"
+      "code_poste": "PERCEUSE_CNC",
+      "competences": [
+        "perceuse_cnc"
+      ]
     },
     {
-      "code_poste": "PRESSE_PLIAGE"
+      "code_poste": "PRESSE_PLIAGE",
+      "competences": [
+        "presse_pliage"
+      ]
     },
     {
-      "code_poste": "POSTE_SOUDURE_1"
+      "code_poste": "POSTE_SOUDURE_1",
+      "competences": [
+        "soudure"
+      ]
     },
     {
-      "code_poste": "POSTE_SOUDURE_2"
+      "code_poste": "POSTE_SOUDURE_2",
+      "competences": [
+        "soudure"
+      ]
     },
     {
-      "code_poste": "CABINE_PEINTURE"
+      "code_poste": "CABINE_PEINTURE",
+      "competences": [
+        "peinture"
+      ]
     },
     {
-      "code_poste": "POSTE_ASSEMBLAGE"
+      "code_poste": "POSTE_ASSEMBLAGE",
+      "competences": [
+        "assemblage"
+      ]
     },
     {
-      "code_poste": "POSTE_CONTROLE"
+      "code_poste": "POSTE_CONTROLE",
+      "competences": [
+        "controle"
+      ]
     }
   ]
 }

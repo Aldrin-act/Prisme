@@ -6,7 +6,7 @@
       "poste_id": "STATION_PREP",
       "operations_precedentes": [],
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_station_prep"
+      "competence_requise": "prep"
     },
     {
       "code_operation": "POSE_CMS_FACE_A",
@@ -14,7 +14,7 @@
       "poste_id": "MACHINE_PICK_PLACE_1",
       "operations_precedentes": "PREP_PCB",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_machine_pick_place_1"
+      "competence_requise": "pick_place"
     },
     {
       "code_operation": "SOUDURE_REFUSION_A",
@@ -22,7 +22,7 @@
       "poste_id": "FOUR_REFUSION",
       "operations_precedentes": "POSE_CMS_FACE_A",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_four_refusion"
+      "competence_requise": "refusion"
     },
     {
       "code_operation": "INSPECTION_AOI_A",
@@ -30,7 +30,7 @@
       "poste_id": "AOI_AUTOMATIQUE",
       "operations_precedentes": "SOUDURE_REFUSION_A",
       "date_limite_minutes": 168,
-      "competence_requise": "habilitation_aoi_automatique"
+      "competence_requise": "aoi_automatique"
     },
     {
       "code_operation": "POSE_CMS_FACE_B",
@@ -38,7 +38,7 @@
       "poste_id": "MACHINE_PICK_PLACE_2",
       "operations_precedentes": "PREP_PCB",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_machine_pick_place_2"
+      "competence_requise": "pick_place"
     },
     {
       "code_operation": "SOUDURE_REFUSION_B",
@@ -46,7 +46,7 @@
       "poste_id": "FOUR_REFUSION",
       "operations_precedentes": "POSE_CMS_FACE_B",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_four_refusion"
+      "competence_requise": "refusion"
     },
     {
       "code_operation": "SOUDURE_MANUELLE",
@@ -57,7 +57,7 @@
         "SOUDURE_REFUSION_B"
       ],
       "date_limite_minutes": 222,
-      "competence_requise": "habilitation_poste_soudure_manuel"
+      "competence_requise": "soudure_manuel"
     },
     {
       "code_operation": "TEST_FONCTIONNEL",
@@ -65,7 +65,7 @@
       "poste_id": "BANC_TEST",
       "operations_precedentes": "SOUDURE_MANUELLE",
       "date_limite_minutes": 258,
-      "competence_requise": "habilitation_banc_test"
+      "competence_requise": "test"
     },
     {
       "code_operation": "CONFORMAL_COATING",
@@ -73,7 +73,7 @@
       "poste_id": "ROBOT_COATING",
       "operations_precedentes": "TEST_FONCTIONNEL",
       "date_limite_minutes": 282,
-      "competence_requise": "habilitation_robot_coating"
+      "competence_requise": "coating"
     },
     {
       "code_operation": "CONTROLE_FINAL",
@@ -81,62 +81,62 @@
       "poste_id": "POSTE_CONTROLE_VISUEL",
       "operations_precedentes": "CONFORMAL_COATING",
       "date_limite_minutes": 300,
-      "competence_requise": "habilitation_poste_controle_visuel"
+      "competence_requise": "controle_visuel"
     }
   ],
   "postes": [
     {
       "code_poste": "STATION_PREP",
       "competences": [
-        "habilitation_station_prep"
+        "prep"
       ]
     },
     {
       "code_poste": "MACHINE_PICK_PLACE_1",
       "competences": [
-        "habilitation_machine_pick_place_1"
+        "pick_place"
       ]
     },
     {
       "code_poste": "MACHINE_PICK_PLACE_2",
       "competences": [
-        "habilitation_machine_pick_place_2"
+        "pick_place"
       ]
     },
     {
       "code_poste": "FOUR_REFUSION",
       "competences": [
-        "habilitation_four_refusion"
+        "refusion"
       ]
     },
     {
       "code_poste": "AOI_AUTOMATIQUE",
       "competences": [
-        "habilitation_aoi_automatique"
+        "aoi_automatique"
       ]
     },
     {
       "code_poste": "POSTE_SOUDURE_MANUEL",
       "competences": [
-        "habilitation_poste_soudure_manuel"
+        "soudure_manuel"
       ]
     },
     {
       "code_poste": "BANC_TEST",
       "competences": [
-        "habilitation_banc_test"
+        "test"
       ]
     },
     {
       "code_poste": "ROBOT_COATING",
       "competences": [
-        "habilitation_robot_coating"
+        "coating"
       ]
     },
     {
       "code_poste": "POSTE_CONTROLE_VISUEL",
       "competences": [
-        "habilitation_poste_controle_visuel"
+        "controle_visuel"
       ]
     }
   ]

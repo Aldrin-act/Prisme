@@ -6,7 +6,7 @@
       "poste_id": "ANALYSTE_METIER",
       "operations_precedentes": [],
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_analyste_metier"
+      "competence_requise": "analyste_metier"
     },
     {
       "code_operation": "CONCEPTION",
@@ -14,7 +14,7 @@
       "poste_id": "ARCHITECTE",
       "operations_precedentes": "ANALYSE_BESOINS",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_architecte"
+      "competence_requise": "architecte"
     },
     {
       "code_operation": "DEV_BACKEND",
@@ -22,7 +22,7 @@
       "poste_id": "EQUIPE_DEV_BACKEND",
       "operations_precedentes": "CONCEPTION",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_equipe_dev_backend"
+      "competence_requise": "dev_backend"
     },
     {
       "code_operation": "DEV_FRONTEND",
@@ -30,7 +30,7 @@
       "poste_id": "EQUIPE_DEV_FRONTEND",
       "operations_precedentes": "CONCEPTION",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_equipe_dev_frontend"
+      "competence_requise": "dev_frontend"
     },
     {
       "code_operation": "REVUE_CODE",
@@ -41,7 +41,7 @@
         "DEV_FRONTEND"
       ],
       "date_limite_minutes": 594,
-      "competence_requise": "habilitation_relecteur_code"
+      "competence_requise": "relecteur_code"
     },
     {
       "code_operation": "TESTS_UNITAIRES",
@@ -49,7 +49,7 @@
       "poste_id": "QA_AUTOMATISATION",
       "operations_precedentes": "REVUE_CODE",
       "date_limite_minutes": 666,
-      "competence_requise": "habilitation_qa_automatisation"
+      "competence_requise": "qa_automatisation"
     },
     {
       "code_operation": "TESTS_INTEGRATION",
@@ -57,7 +57,7 @@
       "poste_id": "QA_AUTOMATISATION",
       "operations_precedentes": "TESTS_UNITAIRES",
       "date_limite_minutes": 774,
-      "competence_requise": "habilitation_qa_automatisation"
+      "competence_requise": "qa_automatisation"
     },
     {
       "code_operation": "DEPLOIEMENT_STAGING",
@@ -65,7 +65,7 @@
       "poste_id": "INGENIEUR_DEVOPS",
       "operations_precedentes": "TESTS_INTEGRATION",
       "date_limite_minutes": 810,
-      "competence_requise": "habilitation_ingenieur_devops"
+      "competence_requise": "ingenieur_devops"
     },
     {
       "code_operation": "TESTS_RECETTE",
@@ -73,7 +73,7 @@
       "poste_id": "EQUIPE_RECETTE",
       "operations_precedentes": "DEPLOIEMENT_STAGING",
       "date_limite_minutes": 954,
-      "competence_requise": "habilitation_equipe_recette"
+      "competence_requise": "recette"
     },
     {
       "code_operation": "DEPLOIEMENT_PRODUCTION",
@@ -81,7 +81,7 @@
       "poste_id": "INGENIEUR_DEVOPS",
       "operations_precedentes": "TESTS_RECETTE",
       "date_limite_minutes": 990,
-      "competence_requise": "habilitation_ingenieur_devops"
+      "competence_requise": "ingenieur_devops"
     },
     {
       "code_operation": "DOCUMENTATION",
@@ -89,62 +89,62 @@
       "poste_id": "REDACTEUR_TECHNIQUE",
       "operations_precedentes": "CONCEPTION",
       "date_limite_minutes": 360,
-      "competence_requise": "habilitation_redacteur_technique"
+      "competence_requise": "redacteur_technique"
     }
   ],
   "postes": [
     {
       "code_poste": "ANALYSTE_METIER",
       "competences": [
-        "habilitation_analyste_metier"
+        "analyste_metier"
       ]
     },
     {
       "code_poste": "ARCHITECTE",
       "competences": [
-        "habilitation_architecte"
+        "architecte"
       ]
     },
     {
       "code_poste": "EQUIPE_DEV_BACKEND",
       "competences": [
-        "habilitation_equipe_dev_backend"
+        "dev_backend"
       ]
     },
     {
       "code_poste": "EQUIPE_DEV_FRONTEND",
       "competences": [
-        "habilitation_equipe_dev_frontend"
+        "dev_frontend"
       ]
     },
     {
       "code_poste": "EQUIPE_RECETTE",
       "competences": [
-        "habilitation_equipe_recette"
+        "recette"
       ]
     },
     {
       "code_poste": "INGENIEUR_DEVOPS",
       "competences": [
-        "habilitation_ingenieur_devops"
+        "ingenieur_devops"
       ]
     },
     {
       "code_poste": "QA_AUTOMATISATION",
       "competences": [
-        "habilitation_qa_automatisation"
+        "qa_automatisation"
       ]
     },
     {
       "code_poste": "REDACTEUR_TECHNIQUE",
       "competences": [
-        "habilitation_redacteur_technique"
+        "redacteur_technique"
       ]
     },
     {
       "code_poste": "RELECTEUR_CODE",
       "competences": [
-        "habilitation_relecteur_code"
+        "relecteur_code"
       ]
     }
   ]

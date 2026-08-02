@@ -125,6 +125,13 @@ export function useJobsGeneration(
  * Distinct de `useJobsGeneration` (mémoire process, source du direct SSE) :
  * celui-ci survit à un redémarrage du serveur. Désactivé tant que `jobId`
  * est nul (ex. onglet de génération jamais encore lancé).
+ *
+ * Interrogé toutes les 4s tant que le job n'est pas terminé — sans ça, ouvrir
+ * cette modale pendant qu'un agent tourne encore fige la vue sur l'instant de
+ * l'ouverture : les sections (spécification, plan technique, code...) des
+ * agents qui terminent ensuite n'apparaissent jamais tant que la modale reste
+ * ouverte, même de longues minutes plus tard (même motif que `useJobsGeneration`
+ * ci-dessus).
  */
 export function useHistoriqueJobGeneration(
   jobId: string | null,
@@ -134,6 +141,7 @@ export function useHistoriqueJobGeneration(
     queryKey: prismeKeys.historiqueJobGeneration(jobId || ""),
     queryFn: () => obtenirHistoriqueJobGeneration(jobId!),
     enabled: !!jobId,
+    refetchInterval: (query) => (query.state.data && !query.state.data.termine ? 4000 : false),
     ...options,
   });
 }

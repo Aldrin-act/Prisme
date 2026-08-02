@@ -4,78 +4,108 @@
       "code_operation": "PRE_PRESSE",
       "duree_jours": 1,
       "poste_id": "STATION_PAO",
-      "operation_precedente": null
+      "operation_precedente": null,
+      "competence_requise": "pao"
     },
     {
       "code_operation": "CALAGE_PRESSE",
       "duree_jours": 1,
       "poste_id": "PRESSE_OFFSET_1",
-      "operation_precedente": "PRE_PRESSE"
+      "operation_precedente": "PRE_PRESSE",
+      "competence_requise": "presse_offset"
     },
     {
       "code_operation": "IMPRESSION_RECTO",
       "duree_jours": 2,
       "poste_id": "PRESSE_OFFSET_1",
-      "operation_precedente": "CALAGE_PRESSE"
+      "operation_precedente": "CALAGE_PRESSE",
+      "competence_requise": "presse_offset"
     },
     {
       "code_operation": "SECHAGE_RECTO",
       "duree_jours": 1,
       "poste_id": "TUNNEL_SECHAGE",
-      "operation_precedente": "IMPRESSION_RECTO"
+      "operation_precedente": "IMPRESSION_RECTO",
+      "competence_requise": "sechage"
     },
     {
       "code_operation": "IMPRESSION_VERSO",
       "duree_jours": 2,
       "poste_id": "PRESSE_OFFSET_2",
-      "operation_precedente": "SECHAGE_RECTO"
+      "operation_precedente": "SECHAGE_RECTO",
+      "competence_requise": "presse_offset"
     },
     {
       "code_operation": "SECHAGE_VERSO",
       "duree_jours": 1,
       "poste_id": "TUNNEL_SECHAGE",
-      "operation_precedente": "IMPRESSION_VERSO"
+      "operation_precedente": "IMPRESSION_VERSO",
+      "competence_requise": "sechage"
     },
     {
       "code_operation": "VERNIS_SELECTIF",
       "duree_jours": 1,
       "poste_id": "MACHINE_VERNIS",
-      "operation_precedente": "SECHAGE_VERSO"
+      "operation_precedente": "SECHAGE_VERSO",
+      "competence_requise": "vernis"
     },
     {
       "code_operation": "DECOUPE_PLIAGE",
       "duree_jours": 1,
       "poste_id": "PLIEUSE_COLLEUSE",
-      "operation_precedente": "VERNIS_SELECTIF"
+      "operation_precedente": "VERNIS_SELECTIF",
+      "competence_requise": "plieuse_colleuse"
     },
     {
       "code_operation": "FINITION",
       "duree_jours": 1,
       "poste_id": "POSTE_FINITION",
-      "operation_precedente": "DECOUPE_PLIAGE"
+      "operation_precedente": "DECOUPE_PLIAGE",
+      "competence_requise": "finition"
     }
   ],
   "postes": [
     {
-      "code_poste": "STATION_PAO"
+      "code_poste": "STATION_PAO",
+      "competences": [
+        "pao"
+      ]
     },
     {
-      "code_poste": "PRESSE_OFFSET_1"
+      "code_poste": "PRESSE_OFFSET_1",
+      "competences": [
+        "presse_offset"
+      ]
     },
     {
-      "code_poste": "PRESSE_OFFSET_2"
+      "code_poste": "PRESSE_OFFSET_2",
+      "competences": [
+        "presse_offset"
+      ]
     },
     {
-      "code_poste": "TUNNEL_SECHAGE"
+      "code_poste": "TUNNEL_SECHAGE",
+      "competences": [
+        "sechage"
+      ]
     },
     {
-      "code_poste": "MACHINE_VERNIS"
+      "code_poste": "MACHINE_VERNIS",
+      "competences": [
+        "vernis"
+      ]
     },
     {
-      "code_poste": "PLIEUSE_COLLEUSE"
+      "code_poste": "PLIEUSE_COLLEUSE",
+      "competences": [
+        "plieuse_colleuse"
+      ]
     },
     {
-      "code_poste": "POSTE_FINITION"
+      "code_poste": "POSTE_FINITION",
+      "competences": [
+        "finition"
+      ]
     }
   ]
 }

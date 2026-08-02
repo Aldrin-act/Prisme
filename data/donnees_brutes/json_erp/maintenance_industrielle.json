@@ -4,60 +4,82 @@
       "code_operation": "DIAG_PANNE_001",
       "duree_jours": 1,
       "poste_id": "EQUIPE_DIAG",
-      "operation_precedente": null
+      "operation_precedente": null,
+      "competence_requise": "diag"
     },
     {
       "code_operation": "CMD_PIECES_001",
       "duree_jours": 3,
       "poste_id": "SERVICE_ACHATS",
-      "operation_precedente": "DIAG_PANNE_001"
+      "operation_precedente": "DIAG_PANNE_001",
+      "competence_requise": "service_achats"
     },
     {
       "code_operation": "DEMONTAGE_001",
       "duree_jours": 1,
       "poste_id": "EQUIPE_MECA",
-      "operation_precedente": "CMD_PIECES_001"
+      "operation_precedente": "CMD_PIECES_001",
+      "competence_requise": "meca"
     },
     {
       "code_operation": "REPARATION_001",
       "duree_jours": 2,
       "poste_id": "ATELIER_REPARATION",
-      "operation_precedente": "DEMONTAGE_001"
+      "operation_precedente": "DEMONTAGE_001",
+      "competence_requise": "reparation"
     },
     {
       "code_operation": "REMONTAGE_001",
       "duree_jours": 1,
       "poste_id": "EQUIPE_MECA",
-      "operation_precedente": "REPARATION_001"
+      "operation_precedente": "REPARATION_001",
+      "competence_requise": "meca"
     },
     {
       "code_operation": "TEST_MARCHE_001",
       "duree_jours": 1,
       "poste_id": "EQUIPE_TEST",
-      "operation_precedente": "REMONTAGE_001"
+      "operation_precedente": "REMONTAGE_001",
+      "competence_requise": "test"
     },
     {
       "code_operation": "NETTOYAGE_FINAL",
       "duree_jours": 1,
       "poste_id": "EQUIPE_MECA",
-      "operation_precedente": "TEST_MARCHE_001"
+      "operation_precedente": "TEST_MARCHE_001",
+      "competence_requise": "meca"
     }
   ],
   "postes": [
     {
-      "code_poste": "EQUIPE_DIAG"
+      "code_poste": "EQUIPE_DIAG",
+      "competences": [
+        "diag"
+      ]
     },
     {
-      "code_poste": "SERVICE_ACHATS"
+      "code_poste": "SERVICE_ACHATS",
+      "competences": [
+        "service_achats"
+      ]
     },
     {
-      "code_poste": "EQUIPE_MECA"
+      "code_poste": "EQUIPE_MECA",
+      "competences": [
+        "meca"
+      ]
     },
     {
-      "code_poste": "ATELIER_REPARATION"
+      "code_poste": "ATELIER_REPARATION",
+      "competences": [
+        "reparation"
+      ]
     },
     {
-      "code_poste": "EQUIPE_TEST"
+      "code_poste": "EQUIPE_TEST",
+      "competences": [
+        "test"
+      ]
     }
   ]
 }

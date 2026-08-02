@@ -6,7 +6,7 @@
       "poste_id": "DECOUPEUSE_LASER",
       "operation_precedente": null,
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_decoupeuse_laser"
+      "competence_requise": "decoupeuse_laser"
     },
     {
       "code_operation": "PERCAGE_001",
@@ -14,7 +14,7 @@
       "poste_id": "PERCEUSE_CNC",
       "operation_precedente": "DECOUP_001",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_perceuse_cnc"
+      "competence_requise": "perceuse_cnc"
     },
     {
       "code_operation": "PLIAGE_001",
@@ -22,7 +22,7 @@
       "poste_id": "PRESSE_PLIAGE",
       "operation_precedente": "PERCAGE_001",
       "date_limite_minutes": 120,
-      "competence_requise": "habilitation_presse_pliage"
+      "competence_requise": "presse_pliage"
     },
     {
       "code_operation": "SOUDURE_001",
@@ -30,7 +30,7 @@
       "poste_id": "POSTE_SOUDURE_1",
       "operation_precedente": "PLIAGE_001",
       "date_limite_minutes": 192,
-      "competence_requise": "habilitation_poste_soudure_1"
+      "competence_requise": "soudure"
     },
     {
       "code_operation": "SOUDURE_002",
@@ -38,7 +38,7 @@
       "poste_id": "POSTE_SOUDURE_2",
       "operation_precedente": "PLIAGE_001",
       "date_limite_minutes": 186,
-      "competence_requise": "habilitation_poste_soudure_2"
+      "competence_requise": "soudure"
     },
     {
       "code_operation": "PEINTURE_001",
@@ -46,7 +46,7 @@
       "poste_id": "CABINE_PEINTURE",
       "operation_precedente": "SOUDURE_001",
       "date_limite_minutes": 240,
-      "competence_requise": "habilitation_cabine_peinture"
+      "competence_requise": "peinture"
     },
     {
       "code_operation": "ASSEMBLAGE_FINAL",
@@ -54,7 +54,7 @@
       "poste_id": "POSTE_ASSEMBLAGE",
       "operation_precedente": "PEINTURE_001",
       "date_limite_minutes": 282,
-      "competence_requise": "habilitation_poste_assemblage"
+      "competence_requise": "assemblage"
     },
     {
       "code_operation": "CONTROLE_QUALITE",
@@ -62,56 +62,56 @@
       "poste_id": "POSTE_CONTROLE",
       "operation_precedente": "ASSEMBLAGE_FINAL",
       "date_limite_minutes": 306,
-      "competence_requise": "habilitation_poste_controle"
+      "competence_requise": "controle"
     }
   ],
   "postes": [
     {
       "code_poste": "DECOUPEUSE_LASER",
       "competences": [
-        "habilitation_decoupeuse_laser"
+        "decoupeuse_laser"
       ]
     },
     {
       "code_poste": "PERCEUSE_CNC",
       "competences": [
-        "habilitation_perceuse_cnc"
+        "perceuse_cnc"
       ]
     },
     {
       "code_poste": "PRESSE_PLIAGE",
       "competences": [
-        "habilitation_presse_pliage"
+        "presse_pliage"
       ]
     },
     {
       "code_poste": "POSTE_SOUDURE_1",
       "competences": [
-        "habilitation_poste_soudure_1"
+        "soudure"
       ]
     },
     {
       "code_poste": "POSTE_SOUDURE_2",
       "competences": [
-        "habilitation_poste_soudure_2"
+        "soudure"
       ]
     },
     {
       "code_poste": "CABINE_PEINTURE",
       "competences": [
-        "habilitation_cabine_peinture"
+        "peinture"
       ]
     },
     {
       "code_poste": "POSTE_ASSEMBLAGE",
       "competences": [
-        "habilitation_poste_assemblage"
+        "assemblage"
       ]
     },
     {
       "code_poste": "POSTE_CONTROLE",
       "competences": [
-        "habilitation_poste_controle"
+        "controle"
       ]
     }
   ]

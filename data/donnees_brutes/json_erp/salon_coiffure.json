@@ -1,0 +1,92 @@
+{
+  "operations": [
+    {
+      "code_operation": "ACCUEIL_CLIENT",
+      "duree_jours": 1,
+      "poste_id": "RECEPTION_SALON",
+      "operation_precedente": null,
+      "competence_requise": "reception_salon"
+    },
+    {
+      "code_operation": "SHAMPOOING",
+      "duree_jours": 1,
+      "poste_id": "BAC_LAVAGE",
+      "operation_precedente": "ACCUEIL_CLIENT",
+      "competence_requise": "bac_lavage"
+    },
+    {
+      "code_operation": "COUPE",
+      "duree_jours": 1,
+      "poste_id": "FAUTEUIL_COIFFURE_1",
+      "operation_precedente": "SHAMPOOING",
+      "competence_requise": "fauteuil_coiffure"
+    },
+    {
+      "code_operation": "COLORATION",
+      "duree_jours": 1,
+      "poste_id": "ZONE_COLORATION",
+      "operation_precedente": "COUPE",
+      "competence_requise": "coloration"
+    },
+    {
+      "code_operation": "SECHAGE",
+      "duree_jours": 1,
+      "poste_id": "FAUTEUIL_COIFFURE_1",
+      "operation_precedente": "COLORATION",
+      "competence_requise": "fauteuil_coiffure"
+    },
+    {
+      "code_operation": "COIFFAGE",
+      "duree_jours": 1,
+      "poste_id": "FAUTEUIL_COIFFURE_1",
+      "operation_precedente": "SECHAGE",
+      "competence_requise": "fauteuil_coiffure"
+    },
+    {
+      "code_operation": "FINITION",
+      "duree_jours": 1,
+      "poste_id": "FAUTEUIL_COIFFURE_1",
+      "operation_precedente": "COIFFAGE",
+      "competence_requise": "fauteuil_coiffure"
+    },
+    {
+      "code_operation": "ENCAISSEMENT",
+      "duree_jours": 1,
+      "poste_id": "CAISSE",
+      "operation_precedente": "FINITION",
+      "competence_requise": "caisse"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "RECEPTION_SALON",
+      "competences": [
+        "reception_salon"
+      ]
+    },
+    {
+      "code_poste": "BAC_LAVAGE",
+      "competences": [
+        "bac_lavage"
+      ]
+    },
+    {
+      "code_poste": "FAUTEUIL_COIFFURE_1",
+      "competences": [
+        "fauteuil_coiffure"
+      ]
+    },
+    {
+      "code_poste": "ZONE_COLORATION",
+      "competences": [
+        "coloration"
+      ]
+    },
+    {
+      "code_poste": "CAISSE",
+      "competences": [
+        "caisse"
+      ]
+    }
+  ]
+}

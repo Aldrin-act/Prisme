@@ -1,0 +1,1701 @@
+{
+  "operations": [
+    {
+      "code_operation": "PATIENT_MOREAU_ADMISSION_0001",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_7",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_REVEIL_0002",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_8",
+      "operation_precedente": "PATIENT_MOREAU_ADMISSION_0001",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_CONTROLE_POSTOP_0003",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_4",
+      "operation_precedente": "PATIENT_MOREAU_REVEIL_0002",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_INTERVENTION_0004",
+      "duree_jours": 8,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": "PATIENT_MOREAU_CONTROLE_POSTOP_0003",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_PREPARATION_PATIENT_0005",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_MOREAU_INTERVENTION_0004",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_SOINS_POSTOP_0006",
+      "duree_jours": 5,
+      "poste_id": "UNITE_SOINS_INTENSIFS_1",
+      "operation_precedente": "PATIENT_MOREAU_PREPARATION_PATIENT_0005",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_EXAMENS_PREOP_0007",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_3",
+      "operation_precedente": "PATIENT_MOREAU_SOINS_POSTOP_0006",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_REVEIL_0008",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_7",
+      "operation_precedente": null,
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_INTERVENTION_0009",
+      "duree_jours": 4,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": "PATIENT_DUPONT_REVEIL_0008",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_PREPARATION_PATIENT_0010",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_7",
+      "operation_precedente": "PATIENT_DUPONT_INTERVENTION_0009",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_EXAMENS_PREOP_0011",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_ANALYSES_4",
+      "operation_precedente": "PATIENT_DUPONT_PREPARATION_PATIENT_0010",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_SOINS_POSTOP_0012",
+      "duree_jours": 14,
+      "poste_id": "UNITE_SOINS_INTENSIFS_3",
+      "operation_precedente": "PATIENT_DUPONT_EXAMENS_PREOP_0011",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_ADMISSION_0013",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_DUPONT_SOINS_POSTOP_0012",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_CONTROLE_POSTOP_0014",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_4",
+      "operation_precedente": "PATIENT_DUPONT_ADMISSION_0013",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_SOINS_POSTOP_0015",
+      "duree_jours": 15,
+      "poste_id": "UNITE_SOINS_INTENSIFS_6",
+      "operation_precedente": null,
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_INTERVENTION_0016",
+      "duree_jours": 4,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": "PATIENT_FOURNIER_SOINS_POSTOP_0015",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_ADMISSION_0017",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_FOURNIER_INTERVENTION_0016",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_REVEIL_0018",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_5",
+      "operation_precedente": "PATIENT_FOURNIER_ADMISSION_0017",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_CONTROLE_POSTOP_0019",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_FOURNIER_REVEIL_0018",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_EXAMENS_PREOP_0020",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_3",
+      "operation_precedente": "PATIENT_FOURNIER_CONTROLE_POSTOP_0019",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_EXAMENS_PREOP_0021",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_5",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_ADMISSION_0022",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_8",
+      "operation_precedente": "PATIENT_DUPONT_EXAMENS_PREOP_0021",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_CONTROLE_POSTOP_0023",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_DUPONT_ADMISSION_0022",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_INTERVENTION_0024",
+      "duree_jours": 4,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_8",
+      "operation_precedente": "PATIENT_DUPONT_CONTROLE_POSTOP_0023",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_EXAMENS_PREOP_0025",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_3",
+      "operation_precedente": null,
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_CONTROLE_POSTOP_0026",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_6",
+      "operation_precedente": "PATIENT_LEFEBVRE_EXAMENS_PREOP_0025",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_ADMISSION_0027",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_LEFEBVRE_CONTROLE_POSTOP_0026",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_PREPARATION_PATIENT_0028",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_2",
+      "operation_precedente": "PATIENT_LEFEBVRE_ADMISSION_0027",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_INTERVENTION_0029",
+      "duree_jours": 5,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "operation_precedente": "PATIENT_LEFEBVRE_PREPARATION_PATIENT_0028",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_REVEIL_0030",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_12",
+      "operation_precedente": "PATIENT_LEFEBVRE_INTERVENTION_0029",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_SOINS_POSTOP_0031",
+      "duree_jours": 2,
+      "poste_id": "UNITE_SOINS_INTENSIFS_5",
+      "operation_precedente": "PATIENT_LEFEBVRE_REVEIL_0030",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_PREPARATION_PATIENT_0032",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_3",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_EXAMENS_PREOP_0033",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_ANALYSES_2",
+      "operation_precedente": "PATIENT_MOREL_PREPARATION_PATIENT_0032",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_REVEIL_0034",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_12",
+      "operation_precedente": "PATIENT_MOREL_EXAMENS_PREOP_0033",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_INTERVENTION_0035",
+      "duree_jours": 5,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "operation_precedente": "PATIENT_MOREL_REVEIL_0034",
+      "competence_requise": "chirurgie_orthopedique"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_CONTROLE_POSTOP_0036",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_1",
+      "operation_precedente": "PATIENT_MOREL_INTERVENTION_0035",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_SOINS_POSTOP_0037",
+      "duree_jours": 17,
+      "poste_id": "UNITE_SOINS_INTENSIFS_4",
+      "operation_precedente": null,
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_REVEIL_0038",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_6",
+      "operation_precedente": "PATIENT_ROUX_SOINS_POSTOP_0037",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_EXAMENS_PREOP_0039",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_2",
+      "operation_precedente": "PATIENT_ROUX_REVEIL_0038",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_ADMISSION_0040",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_ROUX_EXAMENS_PREOP_0039",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_PREPARATION_PATIENT_0041",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_2",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_CONTROLE_POSTOP_0042",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_1",
+      "operation_precedente": "PATIENT_FOURNIER_PREPARATION_PATIENT_0041",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_REVEIL_0043",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_3",
+      "operation_precedente": "PATIENT_FOURNIER_CONTROLE_POSTOP_0042",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_ADMISSION_0044",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_FOURNIER_REVEIL_0043",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_CONTROLE_POSTOP_0045",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_5",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_REVEIL_0046",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_8",
+      "operation_precedente": "PATIENT_BERTRAND_CONTROLE_POSTOP_0045",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_SOINS_POSTOP_0047",
+      "duree_jours": 6,
+      "poste_id": "UNITE_SOINS_INTENSIFS_5",
+      "operation_precedente": "PATIENT_BERTRAND_REVEIL_0046",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_ADMISSION_0048",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_8",
+      "operation_precedente": "PATIENT_BERTRAND_SOINS_POSTOP_0047",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_INTERVENTION_0049",
+      "duree_jours": 1,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_6",
+      "operation_precedente": "PATIENT_BERTRAND_ADMISSION_0048",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_PREPARATION_PATIENT_0050",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_2",
+      "operation_precedente": "PATIENT_BERTRAND_INTERVENTION_0049",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_EXAMENS_PREOP_0051",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_4",
+      "operation_precedente": "PATIENT_BERTRAND_PREPARATION_PATIENT_0050",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_INTERVENTION_0052",
+      "duree_jours": 6,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": null,
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_EXAMENS_PREOP_0053",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_GARCIA_INTERVENTION_0052",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_REVEIL_0054",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_11",
+      "operation_precedente": "PATIENT_GARCIA_EXAMENS_PREOP_0053",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_ADMISSION_0055",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_GARCIA_REVEIL_0054",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_CONTROLE_POSTOP_0056",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_4",
+      "operation_precedente": "PATIENT_GARCIA_ADMISSION_0055",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_EXAMENS_PREOP_0057",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_5",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_CONTROLE_POSTOP_0058",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_DUBOIS_EXAMENS_PREOP_0057",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_PREPARATION_PATIENT_0059",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_2",
+      "operation_precedente": "PATIENT_DUBOIS_CONTROLE_POSTOP_0058",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_ADMISSION_0060",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_DUBOIS_PREPARATION_PATIENT_0059",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_ADMISSION_0061",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_3",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_INTERVENTION_0062",
+      "duree_jours": 6,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_6",
+      "operation_precedente": "PATIENT_LEFEBVRE_ADMISSION_0061",
+      "competence_requise": "chirurgie_orthopedique"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_EXAMENS_PREOP_0063",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_5",
+      "operation_precedente": "PATIENT_LEFEBVRE_INTERVENTION_0062",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_REVEIL_0064",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_4",
+      "operation_precedente": "PATIENT_LEFEBVRE_EXAMENS_PREOP_0063",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_SOINS_POSTOP_0065",
+      "duree_jours": 17,
+      "poste_id": "UNITE_SOINS_INTENSIFS_6",
+      "operation_precedente": "PATIENT_LEFEBVRE_REVEIL_0064",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_PREPARATION_PATIENT_0066",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_LEFEBVRE_SOINS_POSTOP_0065",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LEFEBVRE_CONTROLE_POSTOP_0067",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_3",
+      "operation_precedente": "PATIENT_LEFEBVRE_PREPARATION_PATIENT_0066",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_MARTIN_CONTROLE_POSTOP_0068",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_4",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_MARTIN_INTERVENTION_0069",
+      "duree_jours": 1,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_3",
+      "operation_precedente": "PATIENT_MARTIN_CONTROLE_POSTOP_0068",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_MARTIN_ADMISSION_0070",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_7",
+      "operation_precedente": "PATIENT_MARTIN_INTERVENTION_0069",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MARTIN_EXAMENS_PREOP_0071",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_2",
+      "operation_precedente": "PATIENT_MARTIN_ADMISSION_0070",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_THOMAS_EXAMENS_PREOP_0072",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_1",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_THOMAS_PREPARATION_PATIENT_0073",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_THOMAS_EXAMENS_PREOP_0072",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_THOMAS_SOINS_POSTOP_0074",
+      "duree_jours": 2,
+      "poste_id": "UNITE_SOINS_INTENSIFS_1",
+      "operation_precedente": "PATIENT_THOMAS_PREPARATION_PATIENT_0073",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_THOMAS_CONTROLE_POSTOP_0075",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_THOMAS_SOINS_POSTOP_0074",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_THOMAS_ADMISSION_0076",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_8",
+      "operation_precedente": "PATIENT_THOMAS_CONTROLE_POSTOP_0075",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_THOMAS_INTERVENTION_0077",
+      "duree_jours": 4,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+      "operation_precedente": "PATIENT_THOMAS_ADMISSION_0076",
+      "competence_requise": "chirurgie_orthopedique"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_ADMISSION_0078",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_INTERVENTION_0079",
+      "duree_jours": 2,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_6",
+      "operation_precedente": "PATIENT_GARCIA_ADMISSION_0078",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_EXAMENS_PREOP_0080",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_GARCIA_INTERVENTION_0079",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_REVEIL_0081",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_12",
+      "operation_precedente": "PATIENT_GARCIA_EXAMENS_PREOP_0080",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_GARCIA_SOINS_POSTOP_0082",
+      "duree_jours": 23,
+      "poste_id": "UNITE_SOINS_INTENSIFS_6",
+      "operation_precedente": "PATIENT_GARCIA_REVEIL_0081",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_EXAMENS_PREOP_0083",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_3",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_CONTROLE_POSTOP_0084",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_LAURENT_EXAMENS_PREOP_0083",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_INTERVENTION_0085",
+      "duree_jours": 6,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "operation_precedente": "PATIENT_LAURENT_CONTROLE_POSTOP_0084",
+      "competence_requise": "chirurgie_orthopedique"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_PREPARATION_PATIENT_0086",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_2",
+      "operation_precedente": "PATIENT_LAURENT_INTERVENTION_0085",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_ADMISSION_0087",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_CONTROLE_POSTOP_0088",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_DUBOIS_ADMISSION_0087",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_INTERVENTION_0089",
+      "duree_jours": 4,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_1",
+      "operation_precedente": "PATIENT_DUBOIS_CONTROLE_POSTOP_0088",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_REVEIL_0090",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_6",
+      "operation_precedente": "PATIENT_DUBOIS_INTERVENTION_0089",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_DUBOIS_PREPARATION_PATIENT_0091",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_3",
+      "operation_precedente": "PATIENT_DUBOIS_REVEIL_0090",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_INTERVENTION_0092",
+      "duree_jours": 6,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_4",
+      "operation_precedente": null,
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_EXAMENS_PREOP_0093",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_3",
+      "operation_precedente": "PATIENT_ROUX_INTERVENTION_0092",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_SOINS_POSTOP_0094",
+      "duree_jours": 20,
+      "poste_id": "UNITE_SOINS_INTENSIFS_1",
+      "operation_precedente": "PATIENT_ROUX_EXAMENS_PREOP_0093",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_ROUX_REVEIL_0095",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_7",
+      "operation_precedente": "PATIENT_ROUX_SOINS_POSTOP_0094",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_INTERVENTION_0096",
+      "duree_jours": 5,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": null,
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_PREPARATION_PATIENT_0097",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_8",
+      "operation_precedente": "PATIENT_FOURNIER_INTERVENTION_0096",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_REVEIL_0098",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_8",
+      "operation_precedente": "PATIENT_FOURNIER_PREPARATION_PATIENT_0097",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_EXAMENS_PREOP_0099",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_5",
+      "operation_precedente": "PATIENT_FOURNIER_REVEIL_0098",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_SOINS_POSTOP_0100",
+      "duree_jours": 20,
+      "poste_id": "UNITE_SOINS_INTENSIFS_5",
+      "operation_precedente": "PATIENT_FOURNIER_EXAMENS_PREOP_0099",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_FOURNIER_CONTROLE_POSTOP_0101",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_6",
+      "operation_precedente": "PATIENT_FOURNIER_SOINS_POSTOP_0100",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_SOINS_POSTOP_0102",
+      "duree_jours": 20,
+      "poste_id": "UNITE_SOINS_INTENSIFS_2",
+      "operation_precedente": null,
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_EXAMENS_PREOP_0103",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_BERTRAND_SOINS_POSTOP_0102",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_INTERVENTION_0104",
+      "duree_jours": 4,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "operation_precedente": "PATIENT_BERTRAND_EXAMENS_PREOP_0103",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_PREPARATION_PATIENT_0105",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_10",
+      "operation_precedente": "PATIENT_BERTRAND_INTERVENTION_0104",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_REVEIL_0106",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_1",
+      "operation_precedente": "PATIENT_BERTRAND_PREPARATION_PATIENT_0105",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_ADMISSION_0107",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_10",
+      "operation_precedente": "PATIENT_BERTRAND_REVEIL_0106",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_CONTROLE_POSTOP_0108",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_1",
+      "operation_precedente": "PATIENT_BERTRAND_ADMISSION_0107",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_CONTROLE_POSTOP_0109",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_REVEIL_0110",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_12",
+      "operation_precedente": "PATIENT_DUPONT_CONTROLE_POSTOP_0109",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_ADMISSION_0111",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_7",
+      "operation_precedente": "PATIENT_DUPONT_REVEIL_0110",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DUPONT_SOINS_POSTOP_0112",
+      "duree_jours": 9,
+      "poste_id": "UNITE_SOINS_INTENSIFS_7",
+      "operation_precedente": "PATIENT_DUPONT_ADMISSION_0111",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_ADMISSION_0113",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_1",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_SOINS_POSTOP_0114",
+      "duree_jours": 13,
+      "poste_id": "UNITE_SOINS_INTENSIFS_5",
+      "operation_precedente": "PATIENT_MOREAU_ADMISSION_0113",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_REVEIL_0115",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_2",
+      "operation_precedente": "PATIENT_MOREAU_SOINS_POSTOP_0114",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_EXAMENS_PREOP_0116",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_5",
+      "operation_precedente": "PATIENT_MOREAU_REVEIL_0115",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_CONTROLE_POSTOP_0117",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_1",
+      "operation_precedente": "PATIENT_MOREAU_EXAMENS_PREOP_0116",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_PREPARATION_PATIENT_0118",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_MOREAU_CONTROLE_POSTOP_0117",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREAU_INTERVENTION_0119",
+      "duree_jours": 2,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_5",
+      "operation_precedente": "PATIENT_MOREAU_PREPARATION_PATIENT_0118",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_RICHARD_SOINS_POSTOP_0120",
+      "duree_jours": 3,
+      "poste_id": "UNITE_SOINS_INTENSIFS_2",
+      "operation_precedente": null,
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_RICHARD_REVEIL_0121",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_9",
+      "operation_precedente": "PATIENT_RICHARD_SOINS_POSTOP_0120",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_RICHARD_INTERVENTION_0122",
+      "duree_jours": 2,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+      "operation_precedente": "PATIENT_RICHARD_REVEIL_0121",
+      "competence_requise": "chirurgie_orthopedique"
+    },
+    {
+      "code_operation": "PATIENT_RICHARD_CONTROLE_POSTOP_0123",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_5",
+      "operation_precedente": "PATIENT_RICHARD_INTERVENTION_0122",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_RICHARD_PREPARATION_PATIENT_0124",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_3",
+      "operation_precedente": "PATIENT_RICHARD_CONTROLE_POSTOP_0123",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_RICHARD_ADMISSION_0125",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_4",
+      "operation_precedente": "PATIENT_RICHARD_PREPARATION_PATIENT_0124",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_REVEIL_0126",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_9",
+      "operation_precedente": null,
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_EXAMENS_PREOP_0127",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_ANALYSES_3",
+      "operation_precedente": "PATIENT_BERTRAND_REVEIL_0126",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_ADMISSION_0128",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_10",
+      "operation_precedente": "PATIENT_BERTRAND_EXAMENS_PREOP_0127",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_PREPARATION_PATIENT_0129",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_9",
+      "operation_precedente": "PATIENT_BERTRAND_ADMISSION_0128",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_SOINS_POSTOP_0130",
+      "duree_jours": 24,
+      "poste_id": "UNITE_SOINS_INTENSIFS_8",
+      "operation_precedente": "PATIENT_BERTRAND_PREPARATION_PATIENT_0129",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_BERTRAND_INTERVENTION_0131",
+      "duree_jours": 5,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_5",
+      "operation_precedente": "PATIENT_BERTRAND_SOINS_POSTOP_0130",
+      "competence_requise": "chirurgie_orthopedique"
+    },
+    {
+      "code_operation": "PATIENT_DAVID_PREPARATION_PATIENT_0132",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DAVID_EXAMENS_PREOP_0133",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_5",
+      "operation_precedente": "PATIENT_DAVID_PREPARATION_PATIENT_0132",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_DAVID_ADMISSION_0134",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_4",
+      "operation_precedente": "PATIENT_DAVID_EXAMENS_PREOP_0133",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_DAVID_SOINS_POSTOP_0135",
+      "duree_jours": 6,
+      "poste_id": "UNITE_SOINS_INTENSIFS_3",
+      "operation_precedente": "PATIENT_DAVID_ADMISSION_0134",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_REVEIL_0136",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_12",
+      "operation_precedente": null,
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_INTERVENTION_0137",
+      "duree_jours": 8,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": "PATIENT_MOREL_REVEIL_0136",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_SOINS_POSTOP_0138",
+      "duree_jours": 12,
+      "poste_id": "UNITE_SOINS_INTENSIFS_7",
+      "operation_precedente": "PATIENT_MOREL_INTERVENTION_0137",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_ADMISSION_0139",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_MOREL_SOINS_POSTOP_0138",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_EXAMENS_PREOP_0140",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_3",
+      "operation_precedente": "PATIENT_MOREL_ADMISSION_0139",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_BERNARD_CONTROLE_POSTOP_0141",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_1",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_BERNARD_INTERVENTION_0142",
+      "duree_jours": 3,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "operation_precedente": "PATIENT_BERNARD_CONTROLE_POSTOP_0141",
+      "competence_requise": "chirurgie_orthopedique"
+    },
+    {
+      "code_operation": "PATIENT_BERNARD_ADMISSION_0143",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_BERNARD_INTERVENTION_0142",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERNARD_EXAMENS_PREOP_0144",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_5",
+      "operation_precedente": "PATIENT_BERNARD_ADMISSION_0143",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_BERNARD_PREPARATION_PATIENT_0145",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_9",
+      "operation_precedente": "PATIENT_BERNARD_EXAMENS_PREOP_0144",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_BERNARD_REVEIL_0146",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_6",
+      "operation_precedente": "PATIENT_BERNARD_PREPARATION_PATIENT_0145",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_ADMISSION_0147",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_10",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_EXAMENS_PREOP_0148",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_6",
+      "operation_precedente": "PATIENT_MICHEL_ADMISSION_0147",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_SOINS_POSTOP_0149",
+      "duree_jours": 17,
+      "poste_id": "UNITE_SOINS_INTENSIFS_3",
+      "operation_precedente": "PATIENT_MICHEL_EXAMENS_PREOP_0148",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_PREPARATION_PATIENT_0150",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_4",
+      "operation_precedente": "PATIENT_MICHEL_SOINS_POSTOP_0149",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_REVEIL_0151",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_4",
+      "operation_precedente": "PATIENT_MICHEL_PREPARATION_PATIENT_0150",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_ADMISSION_0152",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_2",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_REVEIL_0153",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_9",
+      "operation_precedente": "PATIENT_MICHEL_ADMISSION_0152",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_EXAMENS_PREOP_0154",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_4",
+      "operation_precedente": "PATIENT_MICHEL_REVEIL_0153",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_PREPARATION_PATIENT_0155",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_MICHEL_EXAMENS_PREOP_0154",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_SOINS_POSTOP_0156",
+      "duree_jours": 5,
+      "poste_id": "UNITE_SOINS_INTENSIFS_4",
+      "operation_precedente": "PATIENT_MICHEL_PREPARATION_PATIENT_0155",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_INTERVENTION_0157",
+      "duree_jours": 6,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": "PATIENT_MICHEL_SOINS_POSTOP_0156",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_MICHEL_CONTROLE_POSTOP_0158",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_2",
+      "operation_precedente": "PATIENT_MICHEL_INTERVENTION_0157",
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_LEFEVRE_CONTROLE_POSTOP_0159",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_1",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_LEFEVRE_INTERVENTION_0160",
+      "duree_jours": 4,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_8",
+      "operation_precedente": "PATIENT_LEFEVRE_CONTROLE_POSTOP_0159",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_LEFEVRE_ADMISSION_0161",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_2",
+      "operation_precedente": "PATIENT_LEFEVRE_INTERVENTION_0160",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LEFEVRE_REVEIL_0162",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_9",
+      "operation_precedente": "PATIENT_LEFEVRE_ADMISSION_0161",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_LEFEVRE_PREPARATION_PATIENT_0163",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_10",
+      "operation_precedente": "PATIENT_LEFEVRE_REVEIL_0162",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LEFEVRE_EXAMENS_PREOP_0164",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_ANALYSES_5",
+      "operation_precedente": "PATIENT_LEFEVRE_PREPARATION_PATIENT_0163",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_LEFEVRE_SOINS_POSTOP_0165",
+      "duree_jours": 24,
+      "poste_id": "UNITE_SOINS_INTENSIFS_3",
+      "operation_precedente": "PATIENT_LEFEVRE_EXAMENS_PREOP_0164",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_CONTROLE_POSTOP_0166",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE_6",
+      "operation_precedente": null,
+      "competence_requise": "radiologie"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_ADMISSION_0167",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_3",
+      "operation_precedente": "PATIENT_MOREL_CONTROLE_POSTOP_0166",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_REVEIL_0168",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_11",
+      "operation_precedente": "PATIENT_MOREL_ADMISSION_0167",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_INTERVENTION_0169",
+      "duree_jours": 2,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE_1",
+      "operation_precedente": "PATIENT_MOREL_REVEIL_0168",
+      "competence_requise": "chirurgie_generale"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_PREPARATION_PATIENT_0170",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_6",
+      "operation_precedente": "PATIENT_MOREL_INTERVENTION_0169",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_EXAMENS_PREOP_0171",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_ANALYSES_3",
+      "operation_precedente": "PATIENT_MOREL_PREPARATION_PATIENT_0170",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_MOREL_SOINS_POSTOP_0172",
+      "duree_jours": 15,
+      "poste_id": "UNITE_SOINS_INTENSIFS_5",
+      "operation_precedente": "PATIENT_MOREL_EXAMENS_PREOP_0171",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_ROBERT_PREPARATION_PATIENT_0173",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_10",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_ROBERT_SOINS_POSTOP_0174",
+      "duree_jours": 8,
+      "poste_id": "UNITE_SOINS_INTENSIFS_7",
+      "operation_precedente": "PATIENT_ROBERT_PREPARATION_PATIENT_0173",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_ROBERT_REVEIL_0175",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL_7",
+      "operation_precedente": "PATIENT_ROBERT_SOINS_POSTOP_0174",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_ROBERT_INTERVENTION_0176",
+      "duree_jours": 5,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "operation_precedente": "PATIENT_ROBERT_REVEIL_0175",
+      "competence_requise": "chirurgie_cardiaque"
+    },
+    {
+      "code_operation": "PATIENT_ROBERT_EXAMENS_PREOP_0177",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_ANALYSES_3",
+      "operation_precedente": "PATIENT_ROBERT_INTERVENTION_0176",
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_EXAMENS_PREOP_0178",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_ANALYSES_4",
+      "operation_precedente": null,
+      "competence_requise": "analyses"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_ADMISSION_0179",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_4",
+      "operation_precedente": "PATIENT_LAURENT_EXAMENS_PREOP_0178",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_REVEIL_0180",
+      "duree_jours": 2,
+      "poste_id": "SALLE_REVEIL_7",
+      "operation_precedente": "PATIENT_LAURENT_ADMISSION_0179",
+      "competence_requise": "reveil"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_SOINS_POSTOP_0181",
+      "duree_jours": 23,
+      "poste_id": "UNITE_SOINS_INTENSIFS_6",
+      "operation_precedente": "PATIENT_LAURENT_REVEIL_0180",
+      "competence_requise": "soins_intensifs"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_PREPARATION_PATIENT_0182",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION_5",
+      "operation_precedente": "PATIENT_LAURENT_SOINS_POSTOP_0181",
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "PATIENT_LAURENT_INTERVENTION_0183",
+      "duree_jours": 5,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "operation_precedente": "PATIENT_LAURENT_PREPARATION_PATIENT_0182",
+      "competence_requise": "chirurgie_cardiaque"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_1",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_2",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_3",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_4",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_5",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_6",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_7",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_8",
+      "competences": [
+        "chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+      "competences": [
+        "chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+      "competences": [
+        "chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+      "competences": [
+        "chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "competences": [
+        "chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_5",
+      "competences": [
+        "chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_6",
+      "competences": [
+        "chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "competences": [
+        "chirurgie_cardiaque"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_2",
+      "competences": [
+        "chirurgie_cardiaque"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "competences": [
+        "chirurgie_cardiaque"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_4",
+      "competences": [
+        "chirurgie_cardiaque"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_1",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_2",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_3",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_4",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_5",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_6",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_7",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_8",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_9",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_10",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_11",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_12",
+      "competences": [
+        "reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_1",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_2",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_3",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_4",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_5",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_6",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_7",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_8",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_9",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_10",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_1",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_2",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_3",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_4",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_5",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_6",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_7",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_8",
+      "competences": [
+        "soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_1",
+      "competences": [
+        "radiologie"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_2",
+      "competences": [
+        "radiologie"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_3",
+      "competences": [
+        "radiologie"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_4",
+      "competences": [
+        "radiologie"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_5",
+      "competences": [
+        "radiologie"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_6",
+      "competences": [
+        "radiologie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_1",
+      "competences": [
+        "analyses"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_2",
+      "competences": [
+        "analyses"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_3",
+      "competences": [
+        "analyses"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_4",
+      "competences": [
+        "analyses"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_5",
+      "competences": [
+        "analyses"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_1",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_2",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_3",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_4",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_5",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_6",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_7",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_8",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_9",
+      "competences": [
+        "urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_10",
+      "competences": [
+        "urgences"
+      ]
+    }
+  ]
+}

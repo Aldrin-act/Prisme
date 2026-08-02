@@ -1,0 +1,117 @@
+{
+  "operations": [
+    {
+      "code_operation": "RECEPTION_MANUSCRIT",
+      "duree_jours": 1,
+      "poste_id": "BUREAU_EDITEUR",
+      "operation_precedente": null,
+      "competence_requise": "bureau_editeur"
+    },
+    {
+      "code_operation": "LECTURE_COMITE",
+      "duree_jours": 10,
+      "poste_id": "SALLE_REUNION",
+      "operation_precedente": "RECEPTION_MANUSCRIT",
+      "competence_requise": "reunion"
+    },
+    {
+      "code_operation": "CORRECTION_EDITORIALE",
+      "duree_jours": 15,
+      "poste_id": "BUREAU_CORRECTEUR",
+      "operation_precedente": "LECTURE_COMITE",
+      "competence_requise": "bureau_correcteur"
+    },
+    {
+      "code_operation": "MISE_EN_PAGE",
+      "duree_jours": 5,
+      "poste_id": "POSTE_PAO",
+      "operation_precedente": "CORRECTION_EDITORIALE",
+      "competence_requise": "pao"
+    },
+    {
+      "code_operation": "CREATION_COUVERTURE",
+      "duree_jours": 3,
+      "poste_id": "STUDIO_GRAPHISME",
+      "operation_precedente": "MISE_EN_PAGE",
+      "competence_requise": "studio_graphisme"
+    },
+    {
+      "code_operation": "VALIDATION_AUTEUR",
+      "duree_jours": 5,
+      "poste_id": "BUREAU_EDITEUR",
+      "operation_precedente": "CREATION_COUVERTURE",
+      "competence_requise": "bureau_editeur"
+    },
+    {
+      "code_operation": "IMPRESSION",
+      "duree_jours": 7,
+      "poste_id": "IMPRIMERIE",
+      "operation_precedente": "VALIDATION_AUTEUR",
+      "competence_requise": "imprimerie"
+    },
+    {
+      "code_operation": "RELIURE",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_RELIURE",
+      "operation_precedente": "IMPRESSION",
+      "competence_requise": "reliure"
+    },
+    {
+      "code_operation": "DISTRIBUTION",
+      "duree_jours": 2,
+      "poste_id": "ENTREPOT_LOGISTIQUE",
+      "operation_precedente": "RELIURE",
+      "competence_requise": "entrepot_logistique"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "BUREAU_EDITEUR",
+      "competences": [
+        "bureau_editeur"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REUNION",
+      "competences": [
+        "reunion"
+      ]
+    },
+    {
+      "code_poste": "BUREAU_CORRECTEUR",
+      "competences": [
+        "bureau_correcteur"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PAO",
+      "competences": [
+        "pao"
+      ]
+    },
+    {
+      "code_poste": "STUDIO_GRAPHISME",
+      "competences": [
+        "studio_graphisme"
+      ]
+    },
+    {
+      "code_poste": "IMPRIMERIE",
+      "competences": [
+        "imprimerie"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_RELIURE",
+      "competences": [
+        "reliure"
+      ]
+    },
+    {
+      "code_poste": "ENTREPOT_LOGISTIQUE",
+      "competences": [
+        "entrepot_logistique"
+      ]
+    }
+  ]
+}

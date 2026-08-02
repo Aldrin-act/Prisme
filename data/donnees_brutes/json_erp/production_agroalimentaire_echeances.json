@@ -6,7 +6,7 @@
       "poste_id": "QUAI_RECEPTION",
       "operation_precedente": null,
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_quai_reception"
+      "competence_requise": "reception"
     },
     {
       "code_operation": "LAVAGE_LEGUMES",
@@ -14,7 +14,7 @@
       "poste_id": "TUNNEL_LAVAGE",
       "operation_precedente": "RECEPTION_MP",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_tunnel_lavage"
+      "competence_requise": "lavage"
     },
     {
       "code_operation": "EPLUCHAGE",
@@ -22,7 +22,7 @@
       "poste_id": "LIGNE_EPLUCHAGE",
       "operation_precedente": "LAVAGE_LEGUMES",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_ligne_epluchage"
+      "competence_requise": "epluchage"
     },
     {
       "code_operation": "DECOUPE",
@@ -30,7 +30,7 @@
       "poste_id": "ROBOT_DECOUPE",
       "operation_precedente": "EPLUCHAGE",
       "date_limite_minutes": 210,
-      "competence_requise": "habilitation_robot_decoupe"
+      "competence_requise": "decoupe"
     },
     {
       "code_operation": "CUISSON",
@@ -38,7 +38,7 @@
       "poste_id": "AUTOCLAVE_1",
       "operation_precedente": "DECOUPE",
       "date_limite_minutes": 354,
-      "competence_requise": "habilitation_autoclave_1"
+      "competence_requise": "autoclave"
     },
     {
       "code_operation": "REFROIDISSEMENT",
@@ -46,7 +46,7 @@
       "poste_id": "TUNNEL_REFROIDISSEMENT",
       "operation_precedente": "CUISSON",
       "date_limite_minutes": 462,
-      "competence_requise": "habilitation_tunnel_refroidissement"
+      "competence_requise": "refroidissement"
     },
     {
       "code_operation": "CONDITIONNEMENT",
@@ -54,7 +54,7 @@
       "poste_id": "LIGNE_CONDITIONNEMENT",
       "operation_precedente": "REFROIDISSEMENT",
       "date_limite_minutes": 522,
-      "competence_requise": "habilitation_ligne_conditionnement"
+      "competence_requise": "conditionnement"
     },
     {
       "code_operation": "ETIQUETAGE",
@@ -62,7 +62,7 @@
       "poste_id": "ETIQUETEUSE_AUTO",
       "operation_precedente": "CONDITIONNEMENT",
       "date_limite_minutes": 552,
-      "competence_requise": "habilitation_etiqueteuse_auto"
+      "competence_requise": "etiqueteuse_auto"
     },
     {
       "code_operation": "PALETTISATION",
@@ -70,62 +70,62 @@
       "poste_id": "ROBOT_PALETTISEUR",
       "operation_precedente": "ETIQUETAGE",
       "date_limite_minutes": 594,
-      "competence_requise": "habilitation_robot_palettiseur"
+      "competence_requise": "palettiseur"
     }
   ],
   "postes": [
     {
       "code_poste": "QUAI_RECEPTION",
       "competences": [
-        "habilitation_quai_reception"
+        "reception"
       ]
     },
     {
       "code_poste": "TUNNEL_LAVAGE",
       "competences": [
-        "habilitation_tunnel_lavage"
+        "lavage"
       ]
     },
     {
       "code_poste": "LIGNE_EPLUCHAGE",
       "competences": [
-        "habilitation_ligne_epluchage"
+        "epluchage"
       ]
     },
     {
       "code_poste": "ROBOT_DECOUPE",
       "competences": [
-        "habilitation_robot_decoupe"
+        "decoupe"
       ]
     },
     {
       "code_poste": "AUTOCLAVE_1",
       "competences": [
-        "habilitation_autoclave_1"
+        "autoclave"
       ]
     },
     {
       "code_poste": "TUNNEL_REFROIDISSEMENT",
       "competences": [
-        "habilitation_tunnel_refroidissement"
+        "refroidissement"
       ]
     },
     {
       "code_poste": "LIGNE_CONDITIONNEMENT",
       "competences": [
-        "habilitation_ligne_conditionnement"
+        "conditionnement"
       ]
     },
     {
       "code_poste": "ETIQUETEUSE_AUTO",
       "competences": [
-        "habilitation_etiqueteuse_auto"
+        "etiqueteuse_auto"
       ]
     },
     {
       "code_poste": "ROBOT_PALETTISEUR",
       "competences": [
-        "habilitation_robot_palettiseur"
+        "palettiseur"
       ]
     }
   ]

@@ -6,7 +6,7 @@
       "poste_id": "EQUIPE_DIAG",
       "operations_precedentes": [],
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_equipe_diag"
+      "competence_requise": "diag"
     },
     {
       "code_operation": "CMD_PIECES_001",
@@ -14,7 +14,7 @@
       "poste_id": "SERVICE_ACHATS",
       "operations_precedentes": "DIAG_PANNE_001",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_service_achats"
+      "competence_requise": "service_achats"
     },
     {
       "code_operation": "DEMONTAGE_001",
@@ -22,7 +22,7 @@
       "poste_id": "EQUIPE_MECA",
       "operations_precedentes": "DIAG_PANNE_001",
       "date_limite_minutes": null,
-      "competence_requise": "habilitation_equipe_meca"
+      "competence_requise": "meca"
     },
     {
       "code_operation": "REPARATION_001",
@@ -33,7 +33,7 @@
         "DEMONTAGE_001"
       ],
       "date_limite_minutes": 288,
-      "competence_requise": "habilitation_atelier_reparation"
+      "competence_requise": "reparation"
     },
     {
       "code_operation": "REMONTAGE_001",
@@ -41,7 +41,7 @@
       "poste_id": "EQUIPE_MECA",
       "operations_precedentes": "REPARATION_001",
       "date_limite_minutes": 384,
-      "competence_requise": "habilitation_equipe_meca"
+      "competence_requise": "meca"
     },
     {
       "code_operation": "TEST_MARCHE_001",
@@ -49,7 +49,7 @@
       "poste_id": "EQUIPE_TEST",
       "operations_precedentes": "REMONTAGE_001",
       "date_limite_minutes": 438,
-      "competence_requise": "habilitation_equipe_test"
+      "competence_requise": "test"
     },
     {
       "code_operation": "NETTOYAGE_FINAL",
@@ -57,38 +57,38 @@
       "poste_id": "EQUIPE_MECA",
       "operations_precedentes": "TEST_MARCHE_001",
       "date_limite_minutes": 468,
-      "competence_requise": "habilitation_equipe_meca"
+      "competence_requise": "meca"
     }
   ],
   "postes": [
     {
       "code_poste": "EQUIPE_DIAG",
       "competences": [
-        "habilitation_equipe_diag"
+        "diag"
       ]
     },
     {
       "code_poste": "SERVICE_ACHATS",
       "competences": [
-        "habilitation_service_achats"
+        "service_achats"
       ]
     },
     {
       "code_poste": "EQUIPE_MECA",
       "competences": [
-        "habilitation_equipe_meca"
+        "meca"
       ]
     },
     {
       "code_poste": "ATELIER_REPARATION",
       "competences": [
-        "habilitation_atelier_reparation"
+        "reparation"
       ]
     },
     {
       "code_poste": "EQUIPE_TEST",
       "competences": [
-        "habilitation_equipe_test"
+        "test"
       ]
     }
   ]

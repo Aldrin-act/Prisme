@@ -1,0 +1,86 @@
+{
+  "operations": [
+    {
+      "code_operation": "DEPART_CLIENT",
+      "duree_jours": 1,
+      "poste_id": "RECEPTION",
+      "operation_precedente": null,
+      "competence_requise": "reception"
+    },
+    {
+      "code_operation": "INSPECTION_CHAMBRE",
+      "duree_jours": 1,
+      "poste_id": "GOUVERNANTE",
+      "operation_precedente": "DEPART_CLIENT",
+      "competence_requise": "gouvernante"
+    },
+    {
+      "code_operation": "NETTOYAGE_SALLE_BAIN",
+      "duree_jours": 1,
+      "poste_id": "FEMME_CHAMBRE",
+      "operation_precedente": "INSPECTION_CHAMBRE",
+      "competence_requise": "femme_chambre"
+    },
+    {
+      "code_operation": "NETTOYAGE_CHAMBRE",
+      "duree_jours": 1,
+      "poste_id": "FEMME_CHAMBRE",
+      "operation_precedente": "NETTOYAGE_SALLE_BAIN",
+      "competence_requise": "femme_chambre"
+    },
+    {
+      "code_operation": "CHANGEMENT_LINGE",
+      "duree_jours": 1,
+      "poste_id": "LINGERIE",
+      "operation_precedente": "NETTOYAGE_CHAMBRE",
+      "competence_requise": "lingerie"
+    },
+    {
+      "code_operation": "REAPPROVISIONNEMENT",
+      "duree_jours": 1,
+      "poste_id": "FEMME_CHAMBRE",
+      "operation_precedente": "CHANGEMENT_LINGE",
+      "competence_requise": "femme_chambre"
+    },
+    {
+      "code_operation": "CONTROLE_QUALITE",
+      "duree_jours": 1,
+      "poste_id": "GOUVERNANTE",
+      "operation_precedente": "REAPPROVISIONNEMENT",
+      "competence_requise": "gouvernante"
+    },
+    {
+      "code_operation": "VALIDATION_CHAMBRE",
+      "duree_jours": 1,
+      "poste_id": "RECEPTION",
+      "operation_precedente": "CONTROLE_QUALITE",
+      "competence_requise": "reception"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "RECEPTION",
+      "competences": [
+        "reception"
+      ]
+    },
+    {
+      "code_poste": "GOUVERNANTE",
+      "competences": [
+        "gouvernante"
+      ]
+    },
+    {
+      "code_poste": "FEMME_CHAMBRE",
+      "competences": [
+        "femme_chambre"
+      ]
+    },
+    {
+      "code_poste": "LINGERIE",
+      "competences": [
+        "lingerie"
+      ]
+    }
+  ]
+}

@@ -376,6 +376,10 @@ function ContenuOnglet({
   // d'instance en cours de route n'a pas de sens, on ouvre un autre onglet.
   const verrouille = onglet.enCours || !!onglet.jobId || !!onglet.resultat;
   const [historiqueOuvert, setHistoriqueOuvert] = useState(false);
+  // Certaines erreurs (ex. réponse d'agent non conforme au schéma) embarquent
+  // le JSON brut reçu du LLM — bien trop long pour le bandeau d'erreur en ligne.
+  const [erreurDetailOuverte, setErreurDetailOuverte] = useState(false);
+  const erreurLongue = (onglet.erreur?.message.length ?? 0) > 200;
 
   return (
     <div className="space-y-4">
@@ -455,7 +459,7 @@ function ContenuOnglet({
       {onglet.evenements.length > 0 && (
         <div className="glass rounded-2xl p-6">
           <div className="mb-3 flex items-center justify-between gap-2">
-            <h4 className="text-sm font-semibold">Progression</h4>
+            <h4 className="text-sm font-semibold">Progression en temps réel</h4>
             {onglet.jobId && (
               <Button
                 variant="outline"
@@ -463,10 +467,14 @@ function ContenuOnglet({
                 className="gap-1.5"
                 onClick={() => setHistoriqueOuvert(true)}
               >
-                <History className="h-3.5 w-3.5" /> Historique complet
+                <History className="h-3.5 w-3.5" /> Voir le raisonnement complet
               </Button>
             )}
           </div>
+          <p className="mb-3 text-xs text-muted-foreground">
+            Cliquez sur "Voir le raisonnement complet" pour consulter les détails de chaque agent
+            (spécification de l'Analyste, choix du Benchmarker, plan de l'Architecte, code généré, etc.)
+          </p>
           <ul className="space-y-2">
             {onglet.evenements.map((e, i) => (
               <li
@@ -474,9 +482,9 @@ function ContenuOnglet({
                 className="flex items-start gap-3 rounded-lg border border-border/50 p-3 text-sm"
               >
                 <IconeStatut statut={e.statut} />
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="font-medium capitalize">{e.agent}</div>
-                  <div className="truncate text-xs text-muted-foreground">{e.resume}</div>
+                  <div className="mt-0.5 text-xs text-muted-foreground">{e.resume}</div>
                 </div>
               </li>
             ))}
@@ -489,7 +497,17 @@ function ContenuOnglet({
           <div className="flex items-center gap-2 font-medium">
             <AlertCircle className="h-4 w-4" /> Échec de la requête
           </div>
-          <p className="mt-1">{onglet.erreur.message}</p>
+          <p className={erreurLongue ? "mt-1 line-clamp-3" : "mt-1"}>{onglet.erreur.message}</p>
+          {erreurLongue && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-2 gap-1.5"
+              onClick={() => setErreurDetailOuverte(true)}
+            >
+              Voir plus
+            </Button>
+          )}
         </div>
       )}
 
@@ -590,6 +608,19 @@ function ContenuOnglet({
           onOpenChange={setHistoriqueOuvert}
         />
       )}
+
+      {onglet.erreur && (
+        <Dialog open={erreurDetailOuverte} onOpenChange={setErreurDetailOuverte}>
+          <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Détail de l'erreur</DialogTitle>
+            </DialogHeader>
+            <pre className="whitespace-pre-wrap wrap-break-word rounded-lg bg-muted/50 p-3 font-mono text-xs text-foreground">
+              {onglet.erreur.message}
+            </pre>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
@@ -628,15 +659,79 @@ function DialogHistoriqueGeneration({
 
         {historique && (
           <div className="space-y-6">
+            {historique.specification && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">📋 Spécification (Analyste)</h4>
+                <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
+                  <pre className="max-h-64 overflow-auto whitespace-pre-wrap text-xs">
+                    {historique.specification}
+                  </pre>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Analyse du problème par l'agent Analyste
+                </p>
+              </div>
+            )}
+
             {historique.algorithme && (
               <div>
-                <h4 className="mb-2 text-sm font-semibold">Algorithme recommandé</h4>
+                <h4 className="mb-2 text-sm font-semibold">🎯 Algorithme recommandé (Benchmarker)</h4>
                 <Badge variant="outline" className="font-mono text-xs">
                   {historique.algorithme}
                 </Badge>
                 {historique.algorithme_raison && (
-                  <p className="mt-1 text-xs text-muted-foreground">{historique.algorithme_raison}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{historique.algorithme_raison}</p>
                 )}
+                {historique.algorithme_parametres && Object.keys(historique.algorithme_parametres).length > 0 && (
+                  <div className="mt-2">
+                    <p className="text-xs font-medium text-muted-foreground">Paramètres :</p>
+                    <pre className="mt-1 rounded-md bg-muted/50 p-2 text-xs">
+                      {JSON.stringify(historique.algorithme_parametres, null, 2)}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {historique.plan_technique && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">🏗️ Plan technique (Architecte)</h4>
+                <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
+                  <pre className="max-h-64 overflow-auto whitespace-pre-wrap text-xs">
+                    {historique.plan_technique}
+                  </pre>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Architecture proposée par l'agent Architecte
+                </p>
+              </div>
+            )}
+
+            {historique.code_genere && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">💻 Code initial (Développeur)</h4>
+                <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
+                  <pre className="max-h-80 overflow-auto text-xs">
+                    <code>{historique.code_genere}</code>
+                  </pre>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Première implémentation avant la boucle de réparation
+                </p>
+              </div>
+            )}
+
+            {historique.tests_generes && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">🧪 Tests générés (Testeur)</h4>
+                <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
+                  <pre className="max-h-64 overflow-auto text-xs">
+                    <code>{historique.tests_generes}</code>
+                  </pre>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Suite de tests proposée par l'agent Testeur
+                </p>
               </div>
             )}
 

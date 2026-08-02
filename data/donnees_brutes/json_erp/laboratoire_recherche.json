@@ -1,0 +1,123 @@
+{
+  "operations": [
+    {
+      "code_operation": "PREPARATION_ECHANTILLONS",
+      "duree_jours": 2,
+      "poste_id": "POSTE_PREPARATION",
+      "operation_precedente": null,
+      "competence_requise": "preparation"
+    },
+    {
+      "code_operation": "STERILISATION",
+      "duree_jours": 1,
+      "poste_id": "AUTOCLAVE",
+      "operation_precedente": "PREPARATION_ECHANTILLONS",
+      "competence_requise": "autoclave"
+    },
+    {
+      "code_operation": "CULTURE_CELLULAIRE",
+      "duree_jours": 5,
+      "poste_id": "INCUBATEUR",
+      "operation_precedente": "STERILISATION",
+      "competence_requise": "incubateur"
+    },
+    {
+      "code_operation": "EXTRACTION_ADN",
+      "duree_jours": 2,
+      "poste_id": "POSTE_BIOLOGIE_MOLECULAIRE",
+      "operation_precedente": "CULTURE_CELLULAIRE",
+      "competence_requise": "biologie_moleculaire"
+    },
+    {
+      "code_operation": "AMPLIFICATION_PCR",
+      "duree_jours": 1,
+      "poste_id": "THERMOCYCLEUR",
+      "operation_precedente": "EXTRACTION_ADN",
+      "competence_requise": "thermocycleur"
+    },
+    {
+      "code_operation": "ELECTROPHORESE",
+      "duree_jours": 1,
+      "poste_id": "BANC_ELECTROPHORESE",
+      "operation_precedente": "AMPLIFICATION_PCR",
+      "competence_requise": "electrophorese"
+    },
+    {
+      "code_operation": "SEQUENCAGE",
+      "duree_jours": 3,
+      "poste_id": "SEQUENCEUR",
+      "operation_precedente": "ELECTROPHORESE",
+      "competence_requise": "sequenceur"
+    },
+    {
+      "code_operation": "ANALYSE_BIOINFORMATIQUE",
+      "duree_jours": 2,
+      "poste_id": "STATION_INFORMATIQUE",
+      "operation_precedente": "SEQUENCAGE",
+      "competence_requise": "informatique"
+    },
+    {
+      "code_operation": "REDACTION_RAPPORT",
+      "duree_jours": 2,
+      "poste_id": "BUREAU_CHERCHEUR",
+      "operation_precedente": "ANALYSE_BIOINFORMATIQUE",
+      "competence_requise": "bureau_chercheur"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "POSTE_PREPARATION",
+      "competences": [
+        "preparation"
+      ]
+    },
+    {
+      "code_poste": "AUTOCLAVE",
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "code_poste": "INCUBATEUR",
+      "competences": [
+        "incubateur"
+      ]
+    },
+    {
+      "code_poste": "POSTE_BIOLOGIE_MOLECULAIRE",
+      "competences": [
+        "biologie_moleculaire"
+      ]
+    },
+    {
+      "code_poste": "THERMOCYCLEUR",
+      "competences": [
+        "thermocycleur"
+      ]
+    },
+    {
+      "code_poste": "BANC_ELECTROPHORESE",
+      "competences": [
+        "electrophorese"
+      ]
+    },
+    {
+      "code_poste": "SEQUENCEUR",
+      "competences": [
+        "sequenceur"
+      ]
+    },
+    {
+      "code_poste": "STATION_INFORMATIQUE",
+      "competences": [
+        "informatique"
+      ]
+    },
+    {
+      "code_poste": "BUREAU_CHERCHEUR",
+      "competences": [
+        "bureau_chercheur"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1635 @@
+{
+  "operations": [
+    {
+      "code_operation": "COMPILATEURS_RECHERCHE_0001",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_7",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_PHYSIQUE_0002",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_PHYSIQUE_3",
+      "operation_precedente": "COMPILATEURS_RECHERCHE_0001",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_CHIMIE_0003",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_CHIMIE_3",
+      "operation_precedente": "COMPILATEURS_TP_PHYSIQUE_0002",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "COMPILATEURS_COURS_MAGISTRAL_0004",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_11",
+      "operation_precedente": "COMPILATEURS_TP_CHIMIE_0003",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "DEVOPS_RECHERCHE_0005",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_7",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "DEVOPS_COURS_MAGISTRAL_0006",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_12",
+      "operation_precedente": "DEVOPS_RECHERCHE_0005",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "DEVOPS_TP_PHYSIQUE_0007",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_PHYSIQUE_3",
+      "operation_precedente": "DEVOPS_COURS_MAGISTRAL_0006",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "DEVOPS_TP_INFORMATIQUE_0008",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_2",
+      "operation_precedente": "DEVOPS_TP_PHYSIQUE_0007",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "DEVOPS_TP_CHIMIE_0009",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_CHIMIE_1",
+      "operation_precedente": "DEVOPS_TP_INFORMATIQUE_0008",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "ANALYSE_NUMERIQUE_TP_CHIMIE_0010",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_1",
+      "operation_precedente": null,
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "ANALYSE_NUMERIQUE_COURS_MAGISTRAL_0011",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_5",
+      "operation_precedente": "ANALYSE_NUMERIQUE_TP_CHIMIE_0010",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "ANALYSE_NUMERIQUE_TP_PHYSIQUE_0012",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_PHYSIQUE_1",
+      "operation_precedente": "ANALYSE_NUMERIQUE_COURS_MAGISTRAL_0011",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "ANALYSE_NUMERIQUE_ATELIER_0013",
+      "duree_jours": 5,
+      "poste_id": "ATELIER_PRATIQUE_1",
+      "operation_precedente": "ANALYSE_NUMERIQUE_TP_PHYSIQUE_0012",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_TP_CHIMIE_0014",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_CHIMIE_1",
+      "operation_precedente": null,
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_ATELIER_0015",
+      "duree_jours": 5,
+      "poste_id": "ATELIER_PRATIQUE_6",
+      "operation_precedente": "AUTOMATIQUE_TP_CHIMIE_0014",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_TP_INFORMATIQUE_0016",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_3",
+      "operation_precedente": "AUTOMATIQUE_ATELIER_0015",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_COURS_MAGISTRAL_0017",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_10",
+      "operation_precedente": "AUTOMATIQUE_TP_INFORMATIQUE_0016",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_RECHERCHE_0018",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_6",
+      "operation_precedente": "AUTOMATIQUE_COURS_MAGISTRAL_0017",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_TP_PHYSIQUE_0019",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_3",
+      "operation_precedente": "AUTOMATIQUE_RECHERCHE_0018",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_TP_PHYSIQUE_0020",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_PHYSIQUE_1",
+      "operation_precedente": null,
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_ATELIER_0021",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_PRATIQUE_5",
+      "operation_precedente": "SYSTEMES_EMBARQUES_TP_PHYSIQUE_0020",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_TP_INFORMATIQUE_0022",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_9",
+      "operation_precedente": "SYSTEMES_EMBARQUES_ATELIER_0021",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_TP_CHIMIE_0023",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_5",
+      "operation_precedente": "SYSTEMES_EMBARQUES_TP_INFORMATIQUE_0022",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_RECHERCHE_0024",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_1",
+      "operation_precedente": "SYSTEMES_EMBARQUES_TP_CHIMIE_0023",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "BASE_DONNEES_ATELIER_0025",
+      "duree_jours": 2,
+      "poste_id": "ATELIER_PRATIQUE_6",
+      "operation_precedente": null,
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "BASE_DONNEES_COURS_MAGISTRAL_0026",
+      "duree_jours": 2,
+      "poste_id": "SALLE_COURS_STANDARD_11",
+      "operation_precedente": "BASE_DONNEES_ATELIER_0025",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "BASE_DONNEES_TP_CHIMIE_0027",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_2",
+      "operation_precedente": "BASE_DONNEES_COURS_MAGISTRAL_0026",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "BASE_DONNEES_TP_INFORMATIQUE_0028",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_6",
+      "operation_precedente": "BASE_DONNEES_TP_CHIMIE_0027",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "BASE_DONNEES_TP_PHYSIQUE_0029",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_6",
+      "operation_precedente": "BASE_DONNEES_TP_INFORMATIQUE_0028",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "BASE_DONNEES_RECHERCHE_0030",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_12",
+      "operation_precedente": "BASE_DONNEES_TP_PHYSIQUE_0029",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_RECHERCHE_0031",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_3",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_TP_PHYSIQUE_0032",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_5",
+      "operation_precedente": "CRYPTO_SECURITE_RECHERCHE_0031",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_COURS_MAGISTRAL_0033",
+      "duree_jours": 1,
+      "poste_id": "SALLE_CONFERENCE_3",
+      "operation_precedente": "CRYPTO_SECURITE_TP_PHYSIQUE_0032",
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_TP_INFORMATIQUE_0034",
+      "duree_jours": 2,
+      "poste_id": "SALLE_TP_INFORMATIQUE_9",
+      "operation_precedente": "CRYPTO_SECURITE_COURS_MAGISTRAL_0033",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_ATELIER_0035",
+      "duree_jours": 5,
+      "poste_id": "ATELIER_PRATIQUE_4",
+      "operation_precedente": "CRYPTO_SECURITE_TP_INFORMATIQUE_0034",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "COURS_MATHS_TP_INFORMATIQUE_0036",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_9",
+      "operation_precedente": null,
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "COURS_MATHS_ATELIER_0037",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_2",
+      "operation_precedente": "COURS_MATHS_TP_INFORMATIQUE_0036",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "COURS_MATHS_TP_CHIMIE_0038",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_CHIMIE_4",
+      "operation_precedente": "COURS_MATHS_ATELIER_0037",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "COURS_MATHS_COURS_MAGISTRAL_0039",
+      "duree_jours": 3,
+      "poste_id": "SALLE_CONFERENCE_2",
+      "operation_precedente": "COURS_MATHS_TP_CHIMIE_0038",
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "COURS_MATHS_TP_PHYSIQUE_0040",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_PHYSIQUE_2",
+      "operation_precedente": "COURS_MATHS_COURS_MAGISTRAL_0039",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "CHIMIE_ORGANIQUE_TP_INFORMATIQUE_0041",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_10",
+      "operation_precedente": null,
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "CHIMIE_ORGANIQUE_COURS_MAGISTRAL_0042",
+      "duree_jours": 2,
+      "poste_id": "SALLE_CONFERENCE_3",
+      "operation_precedente": "CHIMIE_ORGANIQUE_TP_INFORMATIQUE_0041",
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "CHIMIE_ORGANIQUE_TP_CHIMIE_0043",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_CHIMIE_3",
+      "operation_precedente": "CHIMIE_ORGANIQUE_COURS_MAGISTRAL_0042",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "CHIMIE_ORGANIQUE_RECHERCHE_0044",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_5",
+      "operation_precedente": "CHIMIE_ORGANIQUE_TP_CHIMIE_0043",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "COMPILATEURS_COURS_MAGISTRAL_0045",
+      "duree_jours": 1,
+      "poste_id": "SALLE_CONFERENCE_2",
+      "operation_precedente": null,
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "COMPILATEURS_RECHERCHE_0046",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_12",
+      "operation_precedente": "COMPILATEURS_COURS_MAGISTRAL_0045",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_PHYSIQUE_0047",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_2",
+      "operation_precedente": "COMPILATEURS_RECHERCHE_0046",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_INFORMATIQUE_0048",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_5",
+      "operation_precedente": "COMPILATEURS_TP_PHYSIQUE_0047",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_CHIMIE_0049",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_2",
+      "operation_precedente": "COMPILATEURS_TP_INFORMATIQUE_0048",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "COMPILATEURS_ATELIER_0050",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_4",
+      "operation_precedente": "COMPILATEURS_TP_CHIMIE_0049",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_TP_PHYSIQUE_0051",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_4",
+      "operation_precedente": null,
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_RECHERCHE_0052",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_5",
+      "operation_precedente": "RESISTANCE_MATERIAUX_TP_PHYSIQUE_0051",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_ATELIER_0053",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_6",
+      "operation_precedente": "RESISTANCE_MATERIAUX_RECHERCHE_0052",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "COMPILATEURS_COURS_MAGISTRAL_0054",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_1",
+      "operation_precedente": null,
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_CHIMIE_0055",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_CHIMIE_5",
+      "operation_precedente": "COMPILATEURS_COURS_MAGISTRAL_0054",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "COMPILATEURS_RECHERCHE_0056",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_6",
+      "operation_precedente": "COMPILATEURS_TP_CHIMIE_0055",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_COURS_MAGISTRAL_0057",
+      "duree_jours": 3,
+      "poste_id": "SALLE_CONFERENCE_3",
+      "operation_precedente": null,
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_CHIMIE_0058",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_CHIMIE_1",
+      "operation_precedente": "MECANIQUE_FLUIDES_COURS_MAGISTRAL_0057",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_ATELIER_0059",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_PRATIQUE_3",
+      "operation_precedente": "MECANIQUE_FLUIDES_TP_CHIMIE_0058",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_PHYSIQUE_0060",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_2",
+      "operation_precedente": "MECANIQUE_FLUIDES_ATELIER_0059",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_RECHERCHE_0061",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_1",
+      "operation_precedente": "MECANIQUE_FLUIDES_TP_PHYSIQUE_0060",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_TP_INFORMATIQUE_0062",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_6",
+      "operation_precedente": null,
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_TP_CHIMIE_0063",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_5",
+      "operation_precedente": "RESISTANCE_MATERIAUX_TP_INFORMATIQUE_0062",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_RECHERCHE_0064",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_9",
+      "operation_precedente": "RESISTANCE_MATERIAUX_TP_CHIMIE_0063",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_ATELIER_0065",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_4",
+      "operation_precedente": "RESISTANCE_MATERIAUX_RECHERCHE_0064",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "RESISTANCE_MATERIAUX_TP_PHYSIQUE_0066",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_PHYSIQUE_5",
+      "operation_precedente": "RESISTANCE_MATERIAUX_ATELIER_0065",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_RECHERCHE_0067",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_9",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_TP_PHYSIQUE_0068",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_PHYSIQUE_4",
+      "operation_precedente": "TRAITEMENT_SIGNAL_RECHERCHE_0067",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_COURS_MAGISTRAL_0069",
+      "duree_jours": 2,
+      "poste_id": "SALLE_COURS_STANDARD_7",
+      "operation_precedente": "TRAITEMENT_SIGNAL_TP_PHYSIQUE_0068",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_TP_INFORMATIQUE_0070",
+      "duree_jours": 2,
+      "poste_id": "SALLE_TP_INFORMATIQUE_10",
+      "operation_precedente": "TRAITEMENT_SIGNAL_COURS_MAGISTRAL_0069",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_ATELIER_0071",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_PRATIQUE_4",
+      "operation_precedente": "TRAITEMENT_SIGNAL_TP_INFORMATIQUE_0070",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "COURS_MATHS_TP_PHYSIQUE_0072",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_PHYSIQUE_3",
+      "operation_precedente": null,
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "COURS_MATHS_TP_INFORMATIQUE_0073",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_4",
+      "operation_precedente": "COURS_MATHS_TP_PHYSIQUE_0072",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "COURS_MATHS_RECHERCHE_0074",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_12",
+      "operation_precedente": "COURS_MATHS_TP_INFORMATIQUE_0073",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "COURS_MATHS_ATELIER_0075",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_PRATIQUE_8",
+      "operation_precedente": "COURS_MATHS_RECHERCHE_0074",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "GENIE_LOGICIEL_RECHERCHE_0076",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_2",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "GENIE_LOGICIEL_ATELIER_0077",
+      "duree_jours": 2,
+      "poste_id": "ATELIER_PRATIQUE_3",
+      "operation_precedente": "GENIE_LOGICIEL_RECHERCHE_0076",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "GENIE_LOGICIEL_TP_CHIMIE_0078",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_CHIMIE_2",
+      "operation_precedente": "GENIE_LOGICIEL_ATELIER_0077",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "SYSTEMES_EXPLOITATION_TP_PHYSIQUE_0079",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_PHYSIQUE_5",
+      "operation_precedente": null,
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "SYSTEMES_EXPLOITATION_RECHERCHE_0080",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_8",
+      "operation_precedente": "SYSTEMES_EXPLOITATION_TP_PHYSIQUE_0079",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "SYSTEMES_EXPLOITATION_TP_INFORMATIQUE_0081",
+      "duree_jours": 2,
+      "poste_id": "SALLE_TP_INFORMATIQUE_4",
+      "operation_precedente": "SYSTEMES_EXPLOITATION_RECHERCHE_0080",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_COURS_MAGISTRAL_0082",
+      "duree_jours": 2,
+      "poste_id": "SALLE_COURS_STANDARD_7",
+      "operation_precedente": null,
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_TP_CHIMIE_0083",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_CHIMIE_5",
+      "operation_precedente": "PHYSIQUE_QUANTIQUE_COURS_MAGISTRAL_0082",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_TP_PHYSIQUE_0084",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_PHYSIQUE_3",
+      "operation_precedente": "PHYSIQUE_QUANTIQUE_TP_CHIMIE_0083",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_RECHERCHE_0085",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_3",
+      "operation_precedente": "PHYSIQUE_QUANTIQUE_TP_PHYSIQUE_0084",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_TP_INFORMATIQUE_0086",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_5",
+      "operation_precedente": "PHYSIQUE_QUANTIQUE_RECHERCHE_0085",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_COURS_MAGISTRAL_0087",
+      "duree_jours": 2,
+      "poste_id": "SALLE_COURS_STANDARD_21",
+      "operation_precedente": null,
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_ATELIER_0088",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_2",
+      "operation_precedente": "CRYPTO_SECURITE_COURS_MAGISTRAL_0087",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_TP_PHYSIQUE_0089",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_3",
+      "operation_precedente": "CRYPTO_SECURITE_ATELIER_0088",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_RECHERCHE_0090",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_1",
+      "operation_precedente": "CRYPTO_SECURITE_TP_PHYSIQUE_0089",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_TP_CHIMIE_0091",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_6",
+      "operation_precedente": null,
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_RECHERCHE_0092",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_10",
+      "operation_precedente": "CLOUD_COMPUTING_TP_CHIMIE_0091",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_TP_PHYSIQUE_0093",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_PHYSIQUE_3",
+      "operation_precedente": "CLOUD_COMPUTING_RECHERCHE_0092",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_COURS_MAGISTRAL_0094",
+      "duree_jours": 3,
+      "poste_id": "SALLE_CONFERENCE_4",
+      "operation_precedente": "CLOUD_COMPUTING_TP_PHYSIQUE_0093",
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_TP_INFORMATIQUE_0095",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_4",
+      "operation_precedente": "CLOUD_COMPUTING_COURS_MAGISTRAL_0094",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_TP_INFORMATIQUE_0096",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_2",
+      "operation_precedente": null,
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_ATELIER_0097",
+      "duree_jours": 5,
+      "poste_id": "ATELIER_PRATIQUE_5",
+      "operation_precedente": "TRAITEMENT_SIGNAL_TP_INFORMATIQUE_0096",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_RECHERCHE_0098",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_9",
+      "operation_precedente": "TRAITEMENT_SIGNAL_ATELIER_0097",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "TRAITEMENT_SIGNAL_TP_CHIMIE_0099",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_CHIMIE_5",
+      "operation_precedente": "TRAITEMENT_SIGNAL_RECHERCHE_0098",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_TP_PHYSIQUE_0100",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_PHYSIQUE_2",
+      "operation_precedente": null,
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_RECHERCHE_0101",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_5",
+      "operation_precedente": "CRYPTO_SECURITE_TP_PHYSIQUE_0100",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "CRYPTO_SECURITE_TP_CHIMIE_0102",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_CHIMIE_2",
+      "operation_precedente": "CRYPTO_SECURITE_RECHERCHE_0101",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_TP_CHIMIE_0103",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_2",
+      "operation_precedente": null,
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_ATELIER_0104",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_4",
+      "operation_precedente": "PHYSIQUE_QUANTIQUE_TP_CHIMIE_0103",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "PHYSIQUE_QUANTIQUE_TP_INFORMATIQUE_0105",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_10",
+      "operation_precedente": "PHYSIQUE_QUANTIQUE_ATELIER_0104",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "INTELLIGENCE_ARTIFICIELLE_RECHERCHE_0106",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_5",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "INTELLIGENCE_ARTIFICIELLE_ATELIER_0107",
+      "duree_jours": 5,
+      "poste_id": "ATELIER_PRATIQUE_1",
+      "operation_precedente": "INTELLIGENCE_ARTIFICIELLE_RECHERCHE_0106",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "INTELLIGENCE_ARTIFICIELLE_TP_PHYSIQUE_0108",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_5",
+      "operation_precedente": "INTELLIGENCE_ARTIFICIELLE_ATELIER_0107",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "COMPILATEURS_COURS_MAGISTRAL_0109",
+      "duree_jours": 2,
+      "poste_id": "SALLE_CONFERENCE_2",
+      "operation_precedente": null,
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_INFORMATIQUE_0110",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_9",
+      "operation_precedente": "COMPILATEURS_COURS_MAGISTRAL_0109",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "COMPILATEURS_ATELIER_0111",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_7",
+      "operation_precedente": "COMPILATEURS_TP_INFORMATIQUE_0110",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_CHIMIE_0112",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_6",
+      "operation_precedente": "COMPILATEURS_ATELIER_0111",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "COMPILATEURS_RECHERCHE_0113",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_5",
+      "operation_precedente": "COMPILATEURS_TP_CHIMIE_0112",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_PHYSIQUE_0114",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_PHYSIQUE_5",
+      "operation_precedente": "COMPILATEURS_RECHERCHE_0113",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "DEVOPS_ATELIER_0115",
+      "duree_jours": 1,
+      "poste_id": "ATELIER_PRATIQUE_6",
+      "operation_precedente": null,
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "DEVOPS_TP_INFORMATIQUE_0116",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_7",
+      "operation_precedente": "DEVOPS_ATELIER_0115",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "DEVOPS_TP_CHIMIE_0117",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_CHIMIE_4",
+      "operation_precedente": "DEVOPS_TP_INFORMATIQUE_0116",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "DEVOPS_COURS_MAGISTRAL_0118",
+      "duree_jours": 2,
+      "poste_id": "SALLE_CONFERENCE_1",
+      "operation_precedente": "DEVOPS_TP_CHIMIE_0117",
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_ATELIER_0119",
+      "duree_jours": 2,
+      "poste_id": "ATELIER_PRATIQUE_6",
+      "operation_precedente": null,
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_RECHERCHE_0120",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_5",
+      "operation_precedente": "MECANIQUE_FLUIDES_ATELIER_0119",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_CHIMIE_0121",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_3",
+      "operation_precedente": "MECANIQUE_FLUIDES_RECHERCHE_0120",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_COURS_MAGISTRAL_0122",
+      "duree_jours": 2,
+      "poste_id": "SALLE_COURS_STANDARD_10",
+      "operation_precedente": "MECANIQUE_FLUIDES_TP_CHIMIE_0121",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_PHYSIQUE_0123",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_1",
+      "operation_precedente": "MECANIQUE_FLUIDES_COURS_MAGISTRAL_0122",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_INFORMATIQUE_0124",
+      "duree_jours": 2,
+      "poste_id": "SALLE_TP_INFORMATIQUE_9",
+      "operation_precedente": "MECANIQUE_FLUIDES_TP_PHYSIQUE_0123",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_RECHERCHE_0125",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_11",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_ATELIER_0126",
+      "duree_jours": 1,
+      "poste_id": "ATELIER_PRATIQUE_3",
+      "operation_precedente": "SYSTEMES_EMBARQUES_RECHERCHE_0125",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_COURS_MAGISTRAL_0127",
+      "duree_jours": 2,
+      "poste_id": "SALLE_COURS_STANDARD_24",
+      "operation_precedente": "SYSTEMES_EMBARQUES_ATELIER_0126",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_ATELIER_0128",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_PRATIQUE_1",
+      "operation_precedente": null,
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_RECHERCHE_0129",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_8",
+      "operation_precedente": "CLOUD_COMPUTING_ATELIER_0128",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_TP_CHIMIE_0130",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_4",
+      "operation_precedente": "CLOUD_COMPUTING_RECHERCHE_0129",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_TP_PHYSIQUE_0131",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_4",
+      "operation_precedente": "CLOUD_COMPUTING_TP_CHIMIE_0130",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "CLOUD_COMPUTING_COURS_MAGISTRAL_0132",
+      "duree_jours": 1,
+      "poste_id": "SALLE_CONFERENCE_3",
+      "operation_precedente": "CLOUD_COMPUTING_TP_PHYSIQUE_0131",
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "CHIMIE_ORGANIQUE_RECHERCHE_0133",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_12",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "CHIMIE_ORGANIQUE_TP_CHIMIE_0134",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_CHIMIE_3",
+      "operation_precedente": "CHIMIE_ORGANIQUE_RECHERCHE_0133",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "CHIMIE_ORGANIQUE_TP_INFORMATIQUE_0135",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_4",
+      "operation_precedente": "CHIMIE_ORGANIQUE_TP_CHIMIE_0134",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "DEVOPS_COURS_MAGISTRAL_0136",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_22",
+      "operation_precedente": null,
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "DEVOPS_ATELIER_0137",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_PRATIQUE_3",
+      "operation_precedente": "DEVOPS_COURS_MAGISTRAL_0136",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "DEVOPS_TP_CHIMIE_0138",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_CHIMIE_1",
+      "operation_precedente": "DEVOPS_ATELIER_0137",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "DEVOPS_TP_INFORMATIQUE_0139",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE_3",
+      "operation_precedente": "DEVOPS_TP_CHIMIE_0138",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "DEVOPS_TP_PHYSIQUE_0140",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_PHYSIQUE_1",
+      "operation_precedente": "DEVOPS_TP_INFORMATIQUE_0139",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "DEVOPS_RECHERCHE_0141",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_6",
+      "operation_precedente": "DEVOPS_TP_PHYSIQUE_0140",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_INFORMATIQUE_0142",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_8",
+      "operation_precedente": null,
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_ATELIER_0143",
+      "duree_jours": 1,
+      "poste_id": "ATELIER_PRATIQUE_8",
+      "operation_precedente": "MECANIQUE_FLUIDES_TP_INFORMATIQUE_0142",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_RECHERCHE_0144",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_1",
+      "operation_precedente": "MECANIQUE_FLUIDES_ATELIER_0143",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_CHIMIE_0145",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_CHIMIE_2",
+      "operation_precedente": "MECANIQUE_FLUIDES_RECHERCHE_0144",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_COURS_MAGISTRAL_0146",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_14",
+      "operation_precedente": "MECANIQUE_FLUIDES_TP_CHIMIE_0145",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_PHYSIQUE_0147",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_PHYSIQUE_6",
+      "operation_precedente": "MECANIQUE_FLUIDES_COURS_MAGISTRAL_0146",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "SYSTEMES_EXPLOITATION_TP_PHYSIQUE_0148",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_PHYSIQUE_2",
+      "operation_precedente": null,
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "SYSTEMES_EXPLOITATION_RECHERCHE_0149",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_4",
+      "operation_precedente": "SYSTEMES_EXPLOITATION_TP_PHYSIQUE_0148",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "SYSTEMES_EXPLOITATION_COURS_MAGISTRAL_0150",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_5",
+      "operation_precedente": "SYSTEMES_EXPLOITATION_RECHERCHE_0149",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_RECHERCHE_0151",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_9",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_TP_INFORMATIQUE_0152",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_10",
+      "operation_precedente": "AUTOMATIQUE_RECHERCHE_0151",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_TP_CHIMIE_0153",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_CHIMIE_1",
+      "operation_precedente": "AUTOMATIQUE_TP_INFORMATIQUE_0152",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "AUTOMATIQUE_TP_PHYSIQUE_0154",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_PHYSIQUE_5",
+      "operation_precedente": "AUTOMATIQUE_TP_CHIMIE_0153",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "COMPILATEURS_ATELIER_0155",
+      "duree_jours": 3,
+      "poste_id": "ATELIER_PRATIQUE_8",
+      "operation_precedente": null,
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "COMPILATEURS_COURS_MAGISTRAL_0156",
+      "duree_jours": 1,
+      "poste_id": "SALLE_CONFERENCE_2",
+      "operation_precedente": "COMPILATEURS_ATELIER_0155",
+      "competence_requise": "conference"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_PHYSIQUE_0157",
+      "duree_jours": 4,
+      "poste_id": "LABORATOIRE_PHYSIQUE_1",
+      "operation_precedente": "COMPILATEURS_COURS_MAGISTRAL_0156",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_INFORMATIQUE_0158",
+      "duree_jours": 3,
+      "poste_id": "SALLE_TP_INFORMATIQUE_3",
+      "operation_precedente": "COMPILATEURS_TP_PHYSIQUE_0157",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "COMPILATEURS_TP_CHIMIE_0159",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_CHIMIE_1",
+      "operation_precedente": "COMPILATEURS_TP_INFORMATIQUE_0158",
+      "competence_requise": "chimie"
+    },
+    {
+      "code_operation": "DEVOPS_RECHERCHE_0160",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_6",
+      "operation_precedente": null,
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "DEVOPS_TP_INFORMATIQUE_0161",
+      "duree_jours": 2,
+      "poste_id": "SALLE_TP_INFORMATIQUE_8",
+      "operation_precedente": "DEVOPS_RECHERCHE_0160",
+      "competence_requise": "tp_informatique"
+    },
+    {
+      "code_operation": "DEVOPS_ATELIER_0162",
+      "duree_jours": 2,
+      "poste_id": "ATELIER_PRATIQUE_4",
+      "operation_precedente": "DEVOPS_TP_INFORMATIQUE_0161",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_ATELIER_0163",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_1",
+      "operation_precedente": null,
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_TP_PHYSIQUE_0164",
+      "duree_jours": 3,
+      "poste_id": "LABORATOIRE_PHYSIQUE_1",
+      "operation_precedente": "MECANIQUE_FLUIDES_ATELIER_0163",
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "MECANIQUE_FLUIDES_COURS_MAGISTRAL_0165",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD_18",
+      "operation_precedente": "MECANIQUE_FLUIDES_TP_PHYSIQUE_0164",
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_COURS_MAGISTRAL_0166",
+      "duree_jours": 2,
+      "poste_id": "SALLE_COURS_STANDARD_7",
+      "operation_precedente": null,
+      "competence_requise": "cours_standard"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_RECHERCHE_0167",
+      "duree_jours": 2,
+      "poste_id": "BIBLIOTHEQUE_6",
+      "operation_precedente": "SYSTEMES_EMBARQUES_COURS_MAGISTRAL_0166",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "SYSTEMES_EMBARQUES_ATELIER_0168",
+      "duree_jours": 1,
+      "poste_id": "ATELIER_PRATIQUE_2",
+      "operation_precedente": "SYSTEMES_EMBARQUES_RECHERCHE_0167",
+      "competence_requise": "pratique"
+    },
+    {
+      "code_operation": "PROG_PYTHON_TP_PHYSIQUE_0169",
+      "duree_jours": 2,
+      "poste_id": "LABORATOIRE_PHYSIQUE_2",
+      "operation_precedente": null,
+      "competence_requise": "physique"
+    },
+    {
+      "code_operation": "PROG_PYTHON_RECHERCHE_0170",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE_2",
+      "operation_precedente": "PROG_PYTHON_TP_PHYSIQUE_0169",
+      "competence_requise": "bibliotheque"
+    },
+    {
+      "code_operation": "PROG_PYTHON_ATELIER_0171",
+      "duree_jours": 4,
+      "poste_id": "ATELIER_PRATIQUE_5",
+      "operation_precedente": "PROG_PYTHON_RECHERCHE_0170",
+      "competence_requise": "pratique"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "SALLE_COURS_STANDARD_1",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_2",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_3",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_4",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_5",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_6",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_7",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_8",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_9",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_10",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_11",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_12",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_13",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_14",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_15",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_16",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_17",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_18",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_19",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_20",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_21",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_22",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_23",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_24",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_25",
+      "competences": [
+        "cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_1",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_2",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_3",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_4",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_5",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_6",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_7",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_8",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_9",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_10",
+      "competences": [
+        "tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_CHIMIE_1",
+      "competences": [
+        "chimie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_CHIMIE_2",
+      "competences": [
+        "chimie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_CHIMIE_3",
+      "competences": [
+        "chimie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_CHIMIE_4",
+      "competences": [
+        "chimie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_CHIMIE_5",
+      "competences": [
+        "chimie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_CHIMIE_6",
+      "competences": [
+        "chimie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_PHYSIQUE_1",
+      "competences": [
+        "physique"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_PHYSIQUE_2",
+      "competences": [
+        "physique"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_PHYSIQUE_3",
+      "competences": [
+        "physique"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_PHYSIQUE_4",
+      "competences": [
+        "physique"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_PHYSIQUE_5",
+      "competences": [
+        "physique"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_PHYSIQUE_6",
+      "competences": [
+        "physique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_1",
+      "competences": [
+        "conference"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_2",
+      "competences": [
+        "conference"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_3",
+      "competences": [
+        "conference"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_4",
+      "competences": [
+        "conference"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_5",
+      "competences": [
+        "conference"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_1",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_2",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_3",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_4",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_5",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_6",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_7",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "ATELIER_PRATIQUE_8",
+      "competences": [
+        "pratique"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_1",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_2",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_3",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_4",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_5",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_6",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_7",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_8",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_9",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_10",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_11",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_12",
+      "competences": [
+        "bibliotheque"
+      ]
+    }
+  ]
+}
