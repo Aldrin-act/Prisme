@@ -181,6 +181,31 @@ class EtatPostgres:
                     table=self._table("instances_trco")
                 )
             )
+            # Migration idempotente : étiquette libre choisie par
+            # l'utilisateur pour retrouver/regrouper des instances liées
+            # entre elles (réingestions successives d'un même atelier après
+            # un aléa) — pure métadonnée de confort, jamais consultée par la
+            # sélection de solveur ni la détection de signaux de
+            # supervision. Héritée automatiquement le long de
+            # `instance_parente_id` par `enregistrer_instance` si absente.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS nom_projet TEXT").format(
+                    table=self._table("instances_trco")
+                )
+            )
+            # Migration idempotente : racine de lignée (§ "modifier une
+            # instance") — NULL pour toute instance qui n'est pas une
+            # dérivée d'une autre. Toujours l'instance d'origine, jamais le
+            # parent immédiat (résolu par l'appelant, `api/routes/ingestion.py`).
+            # Auto-référence, `ON DELETE SET NULL` : supprimer la racine
+            # orpheline ses dérivées plutôt que de les cascade-supprimer ou
+            # de bloquer la suppression — même discipline que `source_id`.
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS instance_parente_id TEXT "
+                    "REFERENCES {table}(id) ON DELETE SET NULL"
+                ).format(table=self._table("instances_trco"))
+            )
             connexion.execute(
                 sql.SQL(
                     "CREATE TABLE IF NOT EXISTS {table} ("
@@ -506,11 +531,15 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(
                 sql.SQL(
-                    "SELECT id, structure_contraintes FROM {} WHERE source_id = %s ORDER BY date_ingestion DESC"
+                    "SELECT id, structure_contraintes, nom_projet FROM {} "
+                    "WHERE source_id = %s ORDER BY date_ingestion DESC"
                 ).format(self._table("instances_trco")),
                 (source_id,),
             ).fetchall()
-        return [{"instance_id": id_, "structure_contraintes": structure} for id_, structure in lignes]
+        return [
+            {"instance_id": id_, "structure_contraintes": structure, "nom_projet": nom_projet}
+            for id_, structure, nom_projet in lignes
+        ]
 
     def supprimer_source(self, source_id: str) -> None:
         """Coupe uniquement le lien de provenance vers les instances générées
@@ -538,6 +567,8 @@ class EtatPostgres:
         instance: InstanceTRCO,
         source_id: str | None = None,
         description_metier: str | None = None,
+        instance_parente_id: str | None = None,
+        nom_projet: str | None = None,
     ) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
@@ -548,12 +579,18 @@ class EtatPostgres:
                 ),
                 (client_id,),
             )
+            if nom_projet is None and instance_parente_id is not None:
+                ligne_parente = connexion.execute(
+                    sql.SQL("SELECT nom_projet FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                    (instance_parente_id,),
+                ).fetchone()
+                nom_projet = ligne_parente[0] if ligne_parente is not None else None
             connexion.execute(
                 sql.SQL(
                     "INSERT INTO {} "
                     "(id, client_id, payload, structure_contraintes, date_ingestion, source_id, "
-                    "description_metier) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s)"
+                    "description_metier, instance_parente_id, nom_projet) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
@@ -563,6 +600,8 @@ class EtatPostgres:
                     datetime.now(UTC).isoformat(),
                     source_id,
                     description_metier,
+                    instance_parente_id,
+                    nom_projet,
                 ),
             )
             connexion.commit()
@@ -588,6 +627,44 @@ class EtatPostgres:
         if ligne is None:
             raise KeyError(instance_id)
         return ligne[0]
+
+    def recuperer_instance_parente(self, instance_id: str) -> str | None:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT instance_parente_id FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(instance_id)
+        return ligne[0]
+
+    def recuperer_nom_projet(self, instance_id: str) -> str | None:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT nom_projet FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(instance_id)
+        return ligne[0]
+
+    def lister_noms_projet(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Noms de projet distincts déjà utilisés (avec leur nombre
+        d'instances), pour peupler une auto-complétion côté client — voir
+        `EtatAPI.lister_noms_projet`. `client_id=None` ne filtre rien
+        (réservé à l'admin)."""
+        requete = sql.SQL("SELECT nom_projet, COUNT(*) FROM {} WHERE nom_projet IS NOT NULL").format(
+            self._table("instances_trco")
+        )
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND client_id = %s")
+            parametres.append(client_id)
+        requete += sql.SQL(" GROUP BY nom_projet ORDER BY COUNT(*) DESC, nom_projet ASC")
+
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(requete, parametres).fetchall()
+        return [{"nom_projet": nom, "nb_instances": n} for nom, n in lignes]
 
     def modifier_objectifs(self, instance_id: str, objectifs: list[Objectif]) -> InstanceTRCO:
         """Remplace les objectifs d'une instance déjà ingérée — voir
@@ -670,20 +747,27 @@ class EtatPostgres:
             )
             connexion.commit()
 
-    def lister_instances(self, client_id: str | None = None) -> list[dict[str, object]]:
+    def lister_instances(
+        self, client_id: str | None = None, nom_projet: str | None = None
+    ) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) — équivalent SQL du repli
         Python de `EtatAPI.lister_instances` (jointure d'existence sur
         `executions` pour l'indicateur `executee`). `client_id=None` ne
-        filtre rien (réservé à l'admin — voir `api/autorisation.py`)."""
+        filtre rien (réservé à l'admin — voir `api/autorisation.py`).
+        `nom_projet` filtre en plus sur le regroupement libre."""
         requete = sql.SQL(
             "SELECT i.id, i.client_id, i.structure_contraintes, "
-            "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee "
+            "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee, "
+            "i.instance_parente_id, i.nom_projet "
             "FROM {instances} i WHERE 1 = 1"
         ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
         parametres: list[str] = []
         if client_id is not None:
             requete += sql.SQL(" AND i.client_id = %s")
             parametres.append(client_id)
+        if nom_projet is not None:
+            requete += sql.SQL(" AND i.nom_projet = %s")
+            parametres.append(nom_projet)
 
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(requete, parametres).fetchall()
@@ -693,8 +777,10 @@ class EtatPostgres:
                 "client_id": client_id,
                 "structure_contraintes": structure,
                 "executee": executee,
+                "instance_parente_id": instance_parente_id,
+                "nom_projet": nom_projet_valeur,
             }
-            for instance_id, client_id, structure, executee in lignes
+            for instance_id, client_id, structure, executee, instance_parente_id, nom_projet_valeur in lignes
         ]
 
     # --- Exécutions ------------------------------------------------------

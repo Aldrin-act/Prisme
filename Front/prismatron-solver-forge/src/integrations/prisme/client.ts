@@ -121,12 +121,28 @@ export const prismeClient = {
       body: JSON.stringify({ client_id: clientId, nom: nom ?? null }),
     }),
 
-  // INGESTION
-  ingererInstance: (clientId: string, instance: Types.InstanceTRCO) =>
-    apiFetch<Types.ReponseIngestion>(`${PRISME_CONFIG.routes.ingestion}/${clientId}`, {
-      method: "POST",
-      body: JSON.stringify(instance),
-    }),
+  // INGESTION — `instanceSourceId` (optionnel) trace la lignée quand ce
+  // payload est une version modifiée d'une instance déjà ingérée (page
+  // Instances, bouton "Modifier"). `nomProjet` (optionnel) étiquette
+  // librement l'instance ; hérité du parent si omis et qu'une lignée existe.
+  ingererInstance: (
+    clientId: string,
+    instance: Types.InstanceTRCO,
+    instanceSourceId?: string,
+    nomProjet?: string,
+  ) => {
+    const params = new URLSearchParams();
+    if (instanceSourceId) params.set("instance_source_id", instanceSourceId);
+    if (nomProjet) params.set("nom_projet", nomProjet);
+    const requete = params.toString();
+    return apiFetch<Types.ReponseIngestion>(
+      `${PRISME_CONFIG.routes.ingestion}/${clientId}${requete ? `?${requete}` : ""}`,
+      {
+        method: "POST",
+        body: JSON.stringify(instance),
+      },
+    );
+  },
 
   // Supprime une instance et son historique d'exécution (n'affecte jamais
   // les solveurs enregistrés, indépendants).
@@ -179,6 +195,11 @@ export const prismeClient = {
   listerInstances: () =>
     apiFetch<Types.InstanceInfo[]>(`${PRISME_CONFIG.routes.supervision}/instances`),
 
+  // Noms de projet distincts déjà utilisés par ce client — alimente
+  // l'auto-complétion du champ nom_projet à l'ingestion.
+  listerNomsProjet: () =>
+    apiFetch<Types.NomProjetInfo[]>(`${PRISME_CONFIG.routes.supervision}/noms-projet`),
+
   listerExecutions: () =>
     apiFetch<Types.ExecutionInfo[]>(`${PRISME_CONFIG.routes.supervision}/executions`),
 
@@ -221,9 +242,11 @@ export const prismeClient = {
 
   // ADAPTATEURS ERP — chaque adaptateur déterministe expose POST /adapters/{nom}/ingerer,
   // sans body : il lit sa source de données côté backend (ex. GreenSIG lit sa propre DB).
-  importerViaAdaptateur: (nomAdaptateur: string) =>
+  importerViaAdaptateur: (nomAdaptateur: string, nomProjet?: string) =>
     apiFetch<Types.ReponseImportAdaptateur>(
-      `${PRISME_CONFIG.routes.adapters}/${nomAdaptateur}/ingerer`,
+      `${PRISME_CONFIG.routes.adapters}/${nomAdaptateur}/ingerer${
+        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
+      }`,
       { method: "POST" },
     ),
 
@@ -242,13 +265,16 @@ export const prismeClient = {
   importerFichiersCsv: (
     clientId: string,
     fichiers: { taches: File; ressources: File; contraintes: File },
+    nomProjet?: string,
   ) => {
     const corps = new FormData();
     corps.append("taches", fichiers.taches);
     corps.append("ressources", fichiers.ressources);
     corps.append("contraintes", fichiers.contraintes);
     return apiFetch<Types.ReponseImportAdaptateur>(
-      `${PRISME_CONFIG.routes.adapters}/csv/${clientId}`,
+      `${PRISME_CONFIG.routes.adapters}/csv/${clientId}${
+        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
+      }`,
       { method: "POST", body: corps },
     );
   },
@@ -257,18 +283,28 @@ export const prismeClient = {
   // voir adapters/json_import/) — sur-ensemble du format T-R-C-O canonique :
   // une tâche peut porter une durée estimée, permettant de dériver sa
   // compatibilité depuis des compétences plutôt que de la déclarer à la main.
-  importerJsonAvecCompetences: (clientId: string, payload: Record<string, unknown>) =>
-    apiFetch<Types.ReponseImportAdaptateur>(`${PRISME_CONFIG.routes.adapters}/json/${clientId}`, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
+  importerJsonAvecCompetences: (
+    clientId: string,
+    payload: Record<string, unknown>,
+    nomProjet?: string,
+  ) =>
+    apiFetch<Types.ReponseImportAdaptateur>(
+      `${PRISME_CONFIG.routes.adapters}/json/${clientId}${
+        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
+      }`,
+      { method: "POST", body: JSON.stringify(payload) },
+    ),
 
   // Import CSV local : convertit des fichiers CSV présents sur le serveur en instance TRCO
   // (POST /adapters/csv-local/ingerer) — utile pour imports en masse, tests, ou scripts automatisés.
-  importerCsvLocal: (clientId: string, cheminDossier: string) =>
+  importerCsvLocal: (clientId: string, cheminDossier: string, nomProjet?: string) =>
     apiFetch<Types.ReponseImportCsvLocal>(`${PRISME_CONFIG.routes.adapters}/csv-local/ingerer`, {
       method: "POST",
-      body: JSON.stringify({ client_id: clientId, chemin_dossier: cheminDossier }),
+      body: JSON.stringify({
+        client_id: clientId,
+        chemin_dossier: cheminDossier,
+        nom_projet: nomProjet ?? null,
+      }),
     }),
 
   // Agent de compréhension : convertit des données brutes (texte libre, ERP
@@ -311,9 +347,13 @@ export const prismeClient = {
   // Pas de timeout (null) : demande explicite — une conversion sur un gros
   // volume de données brutes peut prendre plusieurs minutes, on laisse
   // l'utilisateur attendre plutôt que d'abandonner arbitrairement.
-  genererInstanceDepuisSource: (sourceId: string) =>
+  // `nomProjet` (optionnel) étiquette l'instance produite ; à défaut, le
+  // serveur reprend le nom de la source elle-même.
+  genererInstanceDepuisSource: (sourceId: string, nomProjet?: string) =>
     apiFetch<Types.ReponseComprehension>(
-      `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance`,
+      `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance${
+        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
+      }`,
       { method: "POST" },
       null,
     ),
@@ -322,9 +362,11 @@ export const prismeClient = {
   // que si le texte brut est déjà structuré (JSON canonique ou CSV
   // Tâches/Ressources/Contraintes) ; timeout par défaut, contrairement à
   // genererInstanceDepuisSource ci-dessus, aucun appel LLM à attendre.
-  genererInstanceDeterministeDepuisSource: (sourceId: string) =>
+  genererInstanceDeterministeDepuisSource: (sourceId: string, nomProjet?: string) =>
     apiFetch<Types.ReponseConversionDeterministe>(
-      `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance-deterministe`,
+      `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance-deterministe${
+        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
+      }`,
       { method: "POST" },
     ),
 

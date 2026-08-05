@@ -20,17 +20,46 @@ class RequeteModificationObjectifs(BaseModel):
     objectifs: list[Objectif] = Field(min_length=1)
 
 
+def _resoudre_instance_parente(etat: EtatAPI, client_id: str, instance_source_id: str | None) -> str | None:
+    """Racine de lignée (§ "modifier une instance") : si `instance_source_id`
+    est déjà une dérivée, reprend sa propre racine plutôt que de chaîner les
+    parents — toute dérivée pointe directement sur l'instance d'origine.
+    Purement une annotation de confort : toute source introuvable ou d'un
+    autre client est silencieusement ignorée, jamais un motif de rejet de
+    l'ingestion elle-même."""
+    if instance_source_id is None:
+        return None
+    try:
+        client_id_source, _ = etat.recuperer_instance(instance_source_id)
+    except KeyError:
+        return None
+    if client_id_source != client_id:
+        return None
+    return etat.recuperer_instance_parente(instance_source_id) or instance_source_id
+
+
 @router.post("/{client_id}")
 def ingerer_instance(
     client_id: str,
     payload: dict[str, Any],
+    instance_source_id: str | None = None,
+    nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
-    """Valide le payload (garde-fou amont, §6.7) et le met en attente d'exécution."""
+    """Valide le payload (garde-fou amont, §6.7) et le met en attente
+    d'exécution. `instance_source_id` (query, optionnel) trace la lignée
+    quand ce payload est une version modifiée d'une instance déjà ingérée
+    (page Instances, bouton "Modifier") — voir `_resoudre_instance_parente`.
+    `nom_projet` (query, optionnel) étiquette librement l'instance ; si
+    absent et qu'une lignée existe, `enregistrer_instance` hérite du nom du
+    parent plutôt que de le laisser vide."""
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
-    instance_id = etat.enregistrer_instance(client_id, instance)
+    instance_parente_id = _resoudre_instance_parente(etat, client_id, instance_source_id)
+    instance_id = etat.enregistrer_instance(
+        client_id, instance, instance_parente_id=instance_parente_id, nom_projet=nom_projet
+    )
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 
@@ -55,6 +84,8 @@ def obtenir_instance(
         "client_id": client_id,
         "structure_contraintes": structure_contraintes(instance),
         "description_metier": etat.recuperer_description_metier(instance_id),
+        "instance_parente_id": etat.recuperer_instance_parente(instance_id),
+        "nom_projet": etat.recuperer_nom_projet(instance_id),
         **instance.model_dump(mode="json"),
     }
 

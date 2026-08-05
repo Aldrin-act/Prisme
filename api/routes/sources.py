@@ -225,6 +225,7 @@ def supprimer_source(
 @router.post("/{source_id}/generer-instance")
 def generer_instance(
     source_id: str,
+    nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     modele: BaseChatModel = Depends(construire_modele_comprehension),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
@@ -232,7 +233,9 @@ def generer_instance(
     """Rejouable à volonté sur la même source : chaque appel ajoute une
     instance à son historique de provenance, il ne remplace jamais les
     précédentes. L'instance produite s'exécute directement par son propre
-    `instance_id` — aucune association supplémentaire n'est nécessaire."""
+    `instance_id` — aucune association supplémentaire n'est nécessaire.
+    `nom_projet` (query, optionnel) étiquette librement l'instance produite ;
+    à défaut, reprend le nom de la source elle-même (`source.nom`)."""
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -248,7 +251,11 @@ def generer_instance(
     instance = valider_payload_trco(resultat.instance_brute)  # lève déjà un 422 si invalide
 
     instance_id = etat.enregistrer_instance(
-        source.client_id, instance, source_id=source_id, description_metier=resultat.description_metier
+        source.client_id,
+        instance,
+        source_id=source_id,
+        description_metier=resultat.description_metier,
+        nom_projet=nom_projet if nom_projet is not None else source.nom,
     )
     return {
         "instance_id": instance_id,
@@ -262,6 +269,7 @@ def generer_instance(
 @router.post("/{source_id}/generer-instance-deterministe")
 def generer_instance_deterministe(
     source_id: str,
+    nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -270,7 +278,9 @@ def generer_instance_deterministe(
     `adapters.csv_import`) s'il est déjà structuré — gratuit, instantané, mais
     n'aboutit que si ce texte est un JSON canonique ou un export CSV
     Tâches/Ressources/Contraintes reconstituable ; sinon 422, direction
-    `generer_instance` (l'agent), qui interprète n'importe quel texte libre."""
+    `generer_instance` (l'agent), qui interprète n'importe quel texte libre.
+    `nom_projet` (query, optionnel) suit la même convention que
+    `generer_instance` (défaut : `source.nom`)."""
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -290,7 +300,12 @@ def generer_instance_deterministe(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_id = etat.enregistrer_instance(source.client_id, instance, source_id=source_id)
+    instance_id = etat.enregistrer_instance(
+        source.client_id,
+        instance,
+        source_id=source_id,
+        nom_projet=nom_projet if nom_projet is not None else source.nom,
+    )
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(instance),

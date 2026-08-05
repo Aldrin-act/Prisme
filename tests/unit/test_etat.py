@@ -128,3 +128,67 @@ def test_lister_executions_filtre_par_client_de_linstance() -> None:
 
     executions_a = etat.lister_executions(client_id="client-a")
     assert [e["instance_id"] for e in executions_a] == [instance_a]
+
+
+def test_nom_projet_round_trip() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
+
+    assert etat.recuperer_nom_projet(instance_id) == "Atelier mécanique"
+
+
+def test_nom_projet_absent_par_defaut() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat.recuperer_nom_projet(instance_id) is None
+
+
+def test_nom_projet_herite_de_linstance_parente() -> None:
+    etat = EtatAPI()
+    racine_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
+    derivee_id = etat.enregistrer_instance("client-test", _instance_exemple(), instance_parente_id=racine_id)
+
+    assert etat.recuperer_nom_projet(derivee_id) == "Atelier mécanique"
+
+
+def test_nom_projet_explicite_prime_sur_lheritage() -> None:
+    etat = EtatAPI()
+    racine_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
+    derivee_id = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), instance_parente_id=racine_id, nom_projet="Ligne B"
+    )
+
+    assert etat.recuperer_nom_projet(derivee_id) == "Ligne B"
+
+
+def test_supprimer_instance_purge_son_nom_projet() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
+
+    etat.supprimer_instance(instance_id)
+
+    with pytest.raises(KeyError):
+        etat.recuperer_nom_projet(instance_id)
+
+
+def test_lister_noms_projet_compte_et_isole_par_client() -> None:
+    etat = EtatAPI()
+    etat.enregistrer_instance("client-a", _instance_exemple(), nom_projet="Atelier mécanique")
+    etat.enregistrer_instance("client-a", _instance_exemple(), nom_projet="Atelier mécanique")
+    etat.enregistrer_instance("client-a", _instance_exemple())  # sans nom, exclue
+    etat.enregistrer_instance("client-b", _instance_exemple(), nom_projet="Atelier mécanique")
+
+    noms = etat.lister_noms_projet(client_id="client-a")
+
+    assert noms == [{"nom_projet": "Atelier mécanique", "nb_instances": 2}]
+
+
+def test_lister_instances_filtre_par_nom_projet() -> None:
+    etat = EtatAPI()
+    instance_ciblee = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
+    etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Ligne B")
+
+    instances = etat.lister_instances(client_id="client-test", nom_projet="Atelier mécanique")
+
+    assert [i["instance_id"] for i in instances] == [instance_ciblee]

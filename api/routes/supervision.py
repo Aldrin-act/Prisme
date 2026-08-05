@@ -40,10 +40,23 @@ router = APIRouter(prefix="/supervision", tags=["supervision"])
 
 @router.get("/instances")
 def lister_instances(
+    nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> list[dict[str, Any]]:
-    return etat.lister_instances(client_id=client_id_pour_filtre(utilisateur))
+    return etat.lister_instances(client_id=client_id_pour_filtre(utilisateur), nom_projet=nom_projet)
+
+
+@router.get("/noms-projet")
+def lister_noms_projet(
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> list[dict[str, Any]]:
+    """Noms de projet distincts déjà utilisés par ce client (avec leur
+    nombre d'instances) — alimente l'auto-complétion du champ `nom_projet` à
+    l'ingestion, pour éviter qu'une faute de frappe fragmente silencieusement
+    un regroupement."""
+    return etat.lister_noms_projet(client_id=client_id_pour_filtre(utilisateur))
 
 
 @router.get("/executions")

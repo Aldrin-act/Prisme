@@ -30,6 +30,7 @@ export const prismeKeys = {
     [...prismeKeys.all, "historiqueJobGeneration", jobId] as const,
   propositionsSupervision: (enAttente?: boolean) =>
     [...prismeKeys.all, "propositionsSupervision", enAttente ?? false] as const,
+  nomsProjet: () => [...prismeKeys.all, "nomsProjet"] as const,
 } as const;
 
 // ============================================================================
@@ -73,6 +74,20 @@ export function useInstances(
   return useQuery({
     queryKey: prismeKeys.instances(),
     queryFn: () => prismeClient.listerInstances(),
+    ...options,
+  });
+}
+
+/**
+ * Noms de projet distincts déjà utilisés par ce client — alimente
+ * l'auto-complétion du champ nom_projet à l'ingestion.
+ */
+export function useNomsProjet(
+  options?: Omit<UseQueryOptions<Types.NomProjetInfo[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.nomsProjet(),
+    queryFn: () => prismeClient.listerNomsProjet(),
     ...options,
   });
 }
@@ -301,8 +316,17 @@ export function useCodeSourceSolveur(
  */
 export function useIngererInstance() {
   return useMutation({
-    mutationFn: ({ clientId, instance }: { clientId: string; instance: Types.InstanceTRCO }) =>
-      prismeClient.ingererInstance(clientId, instance),
+    mutationFn: ({
+      clientId,
+      instance,
+      instanceSourceId,
+      nomProjet,
+    }: {
+      clientId: string;
+      instance: Types.InstanceTRCO;
+      instanceSourceId?: string;
+      nomProjet?: string;
+    }) => prismeClient.ingererInstance(clientId, instance, instanceSourceId, nomProjet),
   });
 }
 
@@ -398,7 +422,8 @@ export function useDeciderPropositionSupervision() {
  */
 export function useImporterViaAdaptateur() {
   return useMutation({
-    mutationFn: (nomAdaptateur: string) => prismeClient.importerViaAdaptateur(nomAdaptateur),
+    mutationFn: ({ nomAdaptateur, nomProjet }: { nomAdaptateur: string; nomProjet?: string }) =>
+      prismeClient.importerViaAdaptateur(nomAdaptateur, nomProjet),
   });
 }
 
@@ -422,10 +447,12 @@ export function useImporterFichiersCsv() {
     mutationFn: ({
       clientId,
       fichiers,
+      nomProjet,
     }: {
       clientId: string;
       fichiers: { taches: File; ressources: File; contraintes: File };
-    }) => prismeClient.importerFichiersCsv(clientId, fichiers),
+      nomProjet?: string;
+    }) => prismeClient.importerFichiersCsv(clientId, fichiers, nomProjet),
   });
 }
 
@@ -437,8 +464,15 @@ export function useImporterFichiersCsv() {
  */
 export function useImporterJsonAvecCompetences() {
   return useMutation({
-    mutationFn: ({ clientId, payload }: { clientId: string; payload: Record<string, unknown> }) =>
-      prismeClient.importerJsonAvecCompetences(clientId, payload),
+    mutationFn: ({
+      clientId,
+      payload,
+      nomProjet,
+    }: {
+      clientId: string;
+      payload: Record<string, unknown>;
+      nomProjet?: string;
+    }) => prismeClient.importerJsonAvecCompetences(clientId, payload, nomProjet),
   });
 }
 
@@ -448,8 +482,15 @@ export function useImporterJsonAvecCompetences() {
  */
 export function useImporterCsvLocal() {
   return useMutation({
-    mutationFn: ({ clientId, cheminDossier }: { clientId: string; cheminDossier: string }) =>
-      prismeClient.importerCsvLocal(clientId, cheminDossier),
+    mutationFn: ({
+      clientId,
+      cheminDossier,
+      nomProjet,
+    }: {
+      clientId: string;
+      cheminDossier: string;
+      nomProjet?: string;
+    }) => prismeClient.importerCsvLocal(clientId, cheminDossier, nomProjet),
   });
 }
 
@@ -497,7 +538,8 @@ export function useCreerSource() {
  */
 export function useGenererInstanceDepuisSource() {
   return useMutation({
-    mutationFn: (sourceId: string) => prismeClient.genererInstanceDepuisSource(sourceId),
+    mutationFn: ({ sourceId, nomProjet }: { sourceId: string; nomProjet?: string }) =>
+      prismeClient.genererInstanceDepuisSource(sourceId, nomProjet),
   });
 }
 
@@ -509,8 +551,8 @@ export function useGenererInstanceDepuisSource() {
  */
 export function useGenererInstanceDeterministeDepuisSource() {
   return useMutation({
-    mutationFn: (sourceId: string) =>
-      prismeClient.genererInstanceDeterministeDepuisSource(sourceId),
+    mutationFn: ({ sourceId, nomProjet }: { sourceId: string; nomProjet?: string }) =>
+      prismeClient.genererInstanceDeterministeDepuisSource(sourceId, nomProjet),
   });
 }
 

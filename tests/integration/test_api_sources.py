@@ -12,8 +12,10 @@ from api.app import app
 from api.etat import EtatAPI, obtenir_etat
 
 
-def _creer_source(client: TestClient, donnees_brutes: str) -> str:
-    reponse = client.post("/sources", json={"donnees_brutes": donnees_brutes, "client_id": "client_test"})
+def _creer_source(client: TestClient, donnees_brutes: str, nom: str | None = None) -> str:
+    reponse = client.post(
+        "/sources", json={"donnees_brutes": donnees_brutes, "client_id": "client_test", "nom": nom}
+    )
     assert reponse.status_code == 200, reponse.json()
     return reponse.json()["source_id"]
 
@@ -105,5 +107,68 @@ def test_generer_instance_deterministe_source_inconnue() -> None:
         client = TestClient(app)
         reponse = client.post("/sources/id-inexistant/generer-instance-deterministe")
         assert reponse.status_code == 404
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_generer_instance_deterministe_nom_projet_reprend_le_nom_de_la_source() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        donnees = (
+            '{"taches": [{"id": "T1"}], "ressources": [{"id": "R1"}], '
+            '"contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", '
+            '"ressource": "R1", "duree": 10}]}'
+        )
+        source_id = _creer_source(client, donnees, nom="Atelier mécanique")
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe")
+
+        assert reponse.status_code == 200, reponse.json()
+        instance_id = reponse.json()["instance_id"]
+        assert etat_test.recuperer_nom_projet(instance_id) == "Atelier mécanique"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_generer_instance_deterministe_nom_projet_explicite_prime_sur_la_source() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        donnees = (
+            '{"taches": [{"id": "T1"}], "ressources": [{"id": "R1"}], '
+            '"contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", '
+            '"ressource": "R1", "duree": 10}]}'
+        )
+        source_id = _creer_source(client, donnees, nom="Atelier mécanique")
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe?nom_projet=Ligne+B")
+
+        assert reponse.status_code == 200, reponse.json()
+        instance_id = reponse.json()["instance_id"]
+        assert etat_test.recuperer_nom_projet(instance_id) == "Ligne B"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_generer_instance_deterministe_sans_nom_de_source_reste_sans_nom_projet() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        donnees = (
+            '{"taches": [{"id": "T1"}], "ressources": [{"id": "R1"}], '
+            '"contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", '
+            '"ressource": "R1", "duree": 10}]}'
+        )
+        source_id = _creer_source(client, donnees)
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe")
+
+        assert reponse.status_code == 200, reponse.json()
+        instance_id = reponse.json()["instance_id"]
+        assert etat_test.recuperer_nom_projet(instance_id) is None
     finally:
         app.dependency_overrides.clear()

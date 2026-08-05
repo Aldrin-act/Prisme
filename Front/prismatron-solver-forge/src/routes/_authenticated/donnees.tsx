@@ -22,7 +22,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,6 +49,7 @@ import {
   useSource,
   useSources,
   useSupprimerSource,
+  useDeclencherExecution,
   PrismeAPIError,
   type Justification,
 } from "@/integrations/prisme";
@@ -84,7 +92,10 @@ function DonneesPage() {
 
         <TabsContent value="actif" className="max-w-3xl">
           {sourceActiveId ? (
-            <SourceActivePanel sourceId={sourceActiveId} onNouveau={() => setSourceActiveId(null)} />
+            <SourceActivePanel
+              sourceId={sourceActiveId}
+              onNouveau={() => setSourceActiveId(null)}
+            />
           ) : (
             <FormulaireNouvelleSource onCree={setSourceActiveId} />
           )}
@@ -148,13 +159,19 @@ const SIGNATURES_CSV: { type: string; colonnesCles: string[] }[] = [
 function detecterTypeCsv(contenu: string): string | null {
   const premiereLigne = (contenu.split(/\r?\n/, 1)[0] ?? "").toLowerCase();
   const colonnes = premiereLigne.split(",").map((c) => c.trim());
-  const signature = SIGNATURES_CSV.find(({ colonnesCles }) => colonnesCles.every((c) => colonnes.includes(c)));
+  const signature = SIGNATURES_CSV.find(({ colonnesCles }) =>
+    colonnesCles.every((c) => colonnes.includes(c)),
+  );
   return signature?.type ?? null;
 }
 
 function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => void }) {
   const creer = useCreerSource();
-  const inputFichierRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
+  const inputFichierRefs = [
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+  ];
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
@@ -163,7 +180,11 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   const [donneesBrutes, setDonneesBrutes] = useState("");
   const [formatFichier, setFormatFichier] = useState<FormatFichierBrut>("csv");
   const [fichiers, setFichiers] = useState<(File | null)[]>([null, null, null]);
-  const [detectionsFichiers, setDetectionsFichiers] = useState<(string | null)[]>([null, null, null]);
+  const [detectionsFichiers, setDetectionsFichiers] = useState<(string | null)[]>([
+    null,
+    null,
+    null,
+  ]);
   const [chargementFichier, setChargementFichier] = useState(false);
   const [erreurFichier, setErreurFichier] = useState<string | null>(null);
 
@@ -192,10 +213,14 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
         nouveauxFichiers.map((f) => (f ? f.text() : Promise.resolve(null))),
       );
       const blocs = nouveauxFichiers
-        .map((f, i) => (f && contenusParIndex[i] !== null ? { nom: f.name, contenu: contenusParIndex[i]! } : null))
+        .map((f, i) =>
+          f && contenusParIndex[i] !== null ? { nom: f.name, contenu: contenusParIndex[i]! } : null,
+        )
         .filter((b): b is { nom: string; contenu: string } => b !== null);
       setDonneesBrutes(
-        blocs.length > 1 ? blocs.map((b) => `--- ${b.nom} ---\n${b.contenu}`).join("\n\n") : (blocs[0]?.contenu ?? ""),
+        blocs.length > 1
+          ? blocs.map((b) => `--- ${b.nom} ---\n${b.contenu}`).join("\n\n")
+          : (blocs[0]?.contenu ?? ""),
       );
       setDetectionsFichiers(
         formatFichier === "csv"
@@ -203,7 +228,9 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
           : [null, null, null],
       );
     } catch {
-      setErreurFichier("Fichier illisible — vérifiez qu'il correspond bien au format sélectionné ci-dessus.");
+      setErreurFichier(
+        "Fichier illisible — vérifiez qu'il correspond bien au format sélectionné ci-dessus.",
+      );
     } finally {
       setChargementFichier(false);
     }
@@ -252,8 +279,12 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
         <Label htmlFor="fichier_brut">Fichier de données brutes (optionnel)</Label>
         <Tabs value={formatFichier} onValueChange={(v) => changerFormat(v as FormatFichierBrut)}>
           <TabsList className="h-8">
-            <TabsTrigger value="csv" className="text-xs">CSV</TabsTrigger>
-            <TabsTrigger value="json" className="text-xs">JSON</TabsTrigger>
+            <TabsTrigger value="csv" className="text-xs">
+              CSV
+            </TabsTrigger>
+            <TabsTrigger value="json" className="text-xs">
+              JSON
+            </TabsTrigger>
           </TabsList>
         </Tabs>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
@@ -281,7 +312,9 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
             return (
               <div key={index} className="space-y-1">
                 <Label htmlFor={idChamp} className="text-xs text-muted-foreground">
-                  <span className={typeDetecte ? "font-medium text-primary" : undefined}>{libelle}</span>
+                  <span className={typeDetecte ? "font-medium text-primary" : undefined}>
+                    {libelle}
+                  </span>
                 </Label>
                 <input
                   id={idChamp}
@@ -319,7 +352,9 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
             );
           })}
         </div>
-        {chargementFichier && <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>}
+        {chargementFichier && (
+          <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>
+        )}
         {erreurFichier && (
           <p className="flex items-center gap-1.5 text-xs text-destructive">
             <AlertCircle className="h-3.5 w-3.5" /> {erreurFichier}
@@ -372,6 +407,7 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
   const { data: source, isLoading } = useSource(sourceId);
   const generer = useGenererInstanceDepuisSource();
   const genererDeterministe = useGenererInstanceDeterministeDepuisSource();
+  const executer = useDeclencherExecution();
   const [dernier, setDernier] = useState<{
     instance_id: string;
     avertissements: string[];
@@ -390,39 +426,63 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
     queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
   }
 
+  // Réexécute automatiquement dès qu'une conversion produit une instance —
+  // le principe fondateur "generate once" reste respecté : /execution
+  // échoue proprement (409) si aucun solveur validé n'existe encore pour
+  // cette structure, sans jamais en générer un à la volée.
+  function executerAutomatiquement(instanceId: string) {
+    executer.mutate(instanceId, {
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: prismeKeys.executions() }),
+    });
+  }
+
   function genererInstance() {
     genererDeterministe.reset();
+    executer.reset();
     setDernier(null);
     setGenerationEnCours(true);
-    generer.mutate(sourceId, {
-      onSuccess: (data) => {
-        setDernier({
-          instance_id: data.instance_id,
-          avertissements: data.avertissements,
-          justifications: data.justifications,
-        });
-        setGenerationEnCours(false);
-        invaliderApresConversion();
+    generer.mutate(
+      { sourceId },
+      {
+        onSuccess: (data) => {
+          setDernier({
+            instance_id: data.instance_id,
+            avertissements: data.avertissements,
+            justifications: data.justifications,
+          });
+          setGenerationEnCours(false);
+          invaliderApresConversion();
+          executerAutomatiquement(data.instance_id);
+        },
+        onError: () => {
+          setGenerationEnCours(false);
+        },
       },
-      onError: () => {
-        setGenerationEnCours(false);
-      },
-    });
+    );
   }
 
   function genererInstanceDeterministe() {
     generer.reset();
+    executer.reset();
     setDernier(null);
-    genererDeterministe.mutate(sourceId, {
-      onSuccess: (data) => {
-        setDernier({ instance_id: data.instance_id, avertissements: [], justifications: [] });
-        invaliderApresConversion();
+    genererDeterministe.mutate(
+      { sourceId },
+      {
+        onSuccess: (data) => {
+          setDernier({ instance_id: data.instance_id, avertissements: [], justifications: [] });
+          invaliderApresConversion();
+          executerAutomatiquement(data.instance_id);
+        },
       },
-    });
+    );
   }
 
   if (isLoading || !source) {
-    return <div className="glass rounded-2xl p-6 text-sm text-muted-foreground">Chargement de la source...</div>;
+    return (
+      <div className="glass rounded-2xl p-6 text-sm text-muted-foreground">
+        Chargement de la source...
+      </div>
+    );
   }
 
   return (
@@ -437,7 +497,9 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
               <span>·</span>
               <span>{new Date(source.date_creation).toLocaleString()}</span>
               <span>·</span>
-              <Badge variant="outline" className="font-mono">{source.source_id}</Badge>
+              <Badge variant="outline" className="font-mono">
+                {source.source_id}
+              </Badge>
             </div>
           </div>
           <Button variant="outline" onClick={onNouveau}>
@@ -446,8 +508,12 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
         </div>
 
         <details className="rounded-lg border border-border/50 p-3 text-xs">
-          <summary className="cursor-pointer font-medium text-muted-foreground">Voir les données brutes</summary>
-          <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap font-mono">{source.donnees_brutes}</pre>
+          <summary className="cursor-pointer font-medium text-muted-foreground">
+            Voir les données brutes
+          </summary>
+          <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap font-mono">
+            {source.donnees_brutes}
+          </pre>
         </details>
 
         {erreur && (
@@ -501,11 +567,46 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
           </div>
         )}
 
+        {executer.isPending && (
+          <p className="text-sm text-muted-foreground">Exécution automatique en cours...</p>
+        )}
+        {executer.isSuccess && (
+          <div
+            className={`rounded-lg border p-3 text-sm ${
+              executer.data.reussi
+                ? "border-primary/40 bg-primary/10 text-primary"
+                : "border-destructive/40 bg-destructive/10 text-destructive"
+            }`}
+          >
+            <div className="flex items-center gap-2 font-medium">
+              {executer.data.reussi ? (
+                <CheckCircle2 className="h-4 w-4" />
+              ) : (
+                <AlertCircle className="h-4 w-4" />
+              )}
+              {executer.data.reussi ? "Planning généré automatiquement" : "Exécution en échec"}
+            </div>
+            {!executer.data.reussi && executer.data.erreur && (
+              <p className="mt-1 text-muted-foreground">{executer.data.erreur}</p>
+            )}
+          </div>
+        )}
+        {executer.isError && (
+          <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
+            <div className="flex items-center gap-2 font-medium text-amber-600 dark:text-amber-400">
+              <AlertCircle className="h-4 w-4" /> Instance générée, mais pas encore exécutée
+            </div>
+            <p className="mt-1 text-muted-foreground">
+              {(executer.error as PrismeAPIError).message}
+            </p>
+          </div>
+        )}
+
         <div className="flex items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
-            Rejouable à volonté sur ces mêmes données brutes — chaque conversion ajoute une instance à
-            l'historique ci-dessous, aucune n'est remplacée. Chaque instance générée s'exécute directement
-            depuis la page Solveurs générés, sans étape supplémentaire ici.
+            Rejouable à volonté sur ces mêmes données brutes — chaque conversion ajoute une instance
+            à l'historique ci-dessous, aucune n'est remplacée. Chaque instance générée est exécutée
+            automatiquement si un solveur validé existe déjà pour sa structure.
           </p>
           <div className="flex shrink-0 gap-2">
             <Button
@@ -521,7 +622,9 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
               disabled={generationEnCours || generer.isPending || genererDeterministe.isPending}
             >
               <ArrowRightLeft className="mr-2 h-4 w-4" />
-              {(generationEnCours || generer.isPending) ? "Conversion en cours..." : "Générer une instance"}
+              {generationEnCours || generer.isPending
+                ? "Conversion en cours..."
+                : "Générer une instance"}
             </Button>
           </div>
         </div>
@@ -529,7 +632,9 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
       </div>
 
       <div className="glass rounded-2xl p-6">
-        <h4 className="mb-3 text-sm font-semibold">Instances générées ({source.instances.length})</h4>
+        <h4 className="mb-3 text-sm font-semibold">
+          Instances générées ({source.instances.length})
+        </h4>
         {source.instances.length === 0 ? (
           <p className="text-sm text-muted-foreground">Aucune instance générée pour l'instant.</p>
         ) : (
@@ -540,8 +645,17 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
                 className="flex flex-wrap items-center gap-2 rounded-lg border border-border/50 p-2 text-sm"
               >
                 <CheckCircle2 className="h-4 w-4 text-primary" />
-                <Badge variant="secondary" className="font-mono text-xs">{i.instance_id}</Badge>
-                <Badge variant="outline" className="font-mono text-xs">{i.structure_contraintes}</Badge>
+                <Badge variant="secondary" className="font-mono text-xs">
+                  {i.instance_id}
+                </Badge>
+                <Badge variant="outline" className="font-mono text-xs">
+                  {i.structure_contraintes}
+                </Badge>
+                {i.nom_projet && (
+                  <Badge variant="outline" className="text-xs">
+                    {i.nom_projet}
+                  </Badge>
+                )}
               </div>
             ))}
           </div>
@@ -569,7 +683,10 @@ function IndicateurGeneration() {
 
   useEffect(() => {
     const debut = Date.now();
-    const timerSecondes = setInterval(() => setSecondes(Math.floor((Date.now() - debut) / 1000)), 1000);
+    const timerSecondes = setInterval(
+      () => setSecondes(Math.floor((Date.now() - debut) / 1000)),
+      1000,
+    );
     const timerMessage = setInterval(
       () => setMessageIndex((i) => (i + 1) % MESSAGES_GENERATION.length),
       4000,
@@ -590,7 +707,9 @@ function IndicateurGeneration() {
         <div className="text-sm font-medium">
           Conversion en cours — {minutes}:{reste}
         </div>
-        <div className="truncate text-xs text-muted-foreground">{MESSAGES_GENERATION[messageIndex]}</div>
+        <div className="truncate text-xs text-muted-foreground">
+          {MESSAGES_GENERATION[messageIndex]}
+        </div>
       </div>
     </div>
   );
@@ -654,7 +773,9 @@ function ListeSources({ onOuvrir }: { onOuvrir: (sourceId: string) => void }) {
                   {new Date(s.date_creation).toLocaleString()}
                 </TableCell>
                 <TableCell>
-                  <Badge variant={s.nb_instances > 0 ? "secondary" : "outline"}>{s.nb_instances}</Badge>
+                  <Badge variant={s.nb_instances > 0 ? "secondary" : "outline"}>
+                    {s.nb_instances}
+                  </Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-end gap-2">
@@ -682,9 +803,9 @@ function ListeSources({ onOuvrir }: { onOuvrir: (sourceId: string) => void }) {
           <AlertDialogHeader>
             <AlertDialogTitle>Supprimer cette source ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action supprime définitivement les données brutes de cette source. Les instances déjà
-              générées à partir d'elle restent intactes et exécutables — seul le lien de provenance
-              disparaît. Cette action est irréversible.
+              Cette action supprime définitivement les données brutes de cette source. Les instances
+              déjà générées à partir d'elle restent intactes et exécutables — seul le lien de
+              provenance disparaît. Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
