@@ -28,6 +28,8 @@ export const prismeKeys = {
     [...prismeKeys.all, "jobsGeneration", instanceId ?? "tous"] as const,
   historiqueJobGeneration: (jobId: string) =>
     [...prismeKeys.all, "historiqueJobGeneration", jobId] as const,
+  propositionsSupervision: (enAttente?: boolean) =>
+    [...prismeKeys.all, "propositionsSupervision", enAttente ?? false] as const,
 } as const;
 
 // ============================================================================
@@ -154,6 +156,21 @@ export function useSante(options?: Omit<UseQueryOptions<Types.Sante>, "queryKey"
     queryKey: prismeKeys.sante(),
     queryFn: () => prismeClient.verifierSante(),
     refetchInterval: 30000, // Refresh toutes les 30s par défaut
+    ...options,
+  });
+}
+
+/**
+ * Liste les propositions de l'agent de supervision (MT7) — scopées par le
+ * client du compte authentifié côté backend (voir api/routes/supervision.py).
+ */
+export function usePropositionsSupervision(
+  enAttente?: boolean,
+  options?: Omit<UseQueryOptions<Types.PropositionSupervision[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.propositionsSupervision(enAttente),
+    queryFn: () => prismeClient.listerPropositionsSupervision(enAttente),
     ...options,
   });
 }
@@ -348,6 +365,34 @@ export function useSoumettreDecision() {
 }
 
 /**
+ * Mutation pour déclencher une passe d'analyse de l'agent de supervision
+ * (MT7) — un ou plusieurs appels LLM selon le nombre de clients analysés.
+ */
+export function useDeclencherAnalyseSupervision() {
+  return useMutation({
+    mutationFn: (requete: Types.RequeteAnalyseSupervision) =>
+      prismeClient.declencherAnalyseSupervision(requete),
+  });
+}
+
+/**
+ * Mutation pour accepter/refuser une proposition de l'agent de supervision —
+ * sur acceptation, déclenche automatiquement l'action correspondante
+ * (régénération, exécution ou diagnostic) côté serveur.
+ */
+export function useDeciderPropositionSupervision() {
+  return useMutation({
+    mutationFn: ({
+      propositionId,
+      requete,
+    }: {
+      propositionId: string;
+      requete: Types.RequeteDecisionProposition;
+    }) => prismeClient.deciderPropositionSupervision(propositionId, requete),
+  });
+}
+
+/**
  * Mutation pour importer une instance via un adaptateur ERP déterministe
  * (ex. "greensig") — POST /adapters/{nom}/ingerer, sans body.
  */
@@ -464,7 +509,8 @@ export function useGenererInstanceDepuisSource() {
  */
 export function useGenererInstanceDeterministeDepuisSource() {
   return useMutation({
-    mutationFn: (sourceId: string) => prismeClient.genererInstanceDeterministeDepuisSource(sourceId),
+    mutationFn: (sourceId: string) =>
+      prismeClient.genererInstanceDeterministeDepuisSource(sourceId),
   });
 }
 

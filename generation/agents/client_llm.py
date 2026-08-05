@@ -268,3 +268,11 @@ def construire_modele_comprehension() -> BaseChatModel:
     comme n'importe quel agent du pipeline via `config_fournisseurs.py`
     (clé `"comprehension"`), pas un client LLM à part."""
     return construire_modele_pour_agent("comprehension")
+
+
+def construire_modele_supervision() -> BaseChatModel:
+    """Dépendance FastAPI zero-arg (`Depends(...)`) pour l'agent de
+    supervision (`supervision/agent.py`, §2, MT7) — même raison d'être que
+    `construire_modele_comprehension` : `Depends()` n'accepte pas
+    `construire_modele_pour_agent` directement (paramètre `nom_agent` requis)."""
+    return construire_modele_pour_agent("supervision")

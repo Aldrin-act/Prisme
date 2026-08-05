@@ -30,6 +30,7 @@ import { Route as AuthenticatedSchedulesRouteImport } from './routes/_authentica
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSolverGeneratorRouteImport } from './routes/_authenticated/solver-generator'
 import { Route as AuthenticatedSolversRouteImport } from './routes/_authenticated/solvers'
+import { Route as AuthenticatedSupervisionRouteImport } from './routes/_authenticated/supervision'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -136,6 +137,12 @@ const AuthenticatedSolversRoute = AuthenticatedSolversRouteImport.update({
   path: '/solvers',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSupervisionRoute =
+  AuthenticatedSupervisionRouteImport.update({
+    id: '/supervision',
+    path: '/supervision',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/solver-generator': typeof AuthenticatedSolverGeneratorRoute
   '/solvers': typeof AuthenticatedSolversRoute
+  '/supervision': typeof AuthenticatedSupervisionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -180,6 +188,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/solver-generator': typeof AuthenticatedSolverGeneratorRoute
   '/solvers': typeof AuthenticatedSolversRoute
+  '/supervision': typeof AuthenticatedSupervisionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -204,6 +213,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/solver-generator': typeof AuthenticatedSolverGeneratorRoute
   '/_authenticated/solvers': typeof AuthenticatedSolversRoute
+  '/_authenticated/supervision': typeof AuthenticatedSupervisionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/solver-generator'
     | '/solvers'
+    | '/supervision'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/solver-generator'
     | '/solvers'
+    | '/supervision'
   id:
     | '__root__'
     | '/'
@@ -273,6 +285,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/solver-generator'
     | '/_authenticated/solvers'
+    | '/_authenticated/supervision'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -437,6 +450,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSolversRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/supervision': {
+      id: '/_authenticated/supervision'
+      path: '/supervision'
+      fullPath: '/supervision'
+      preLoaderRoute: typeof AuthenticatedSupervisionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -452,6 +472,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSolverGeneratorRoute: typeof AuthenticatedSolverGeneratorRoute
   AuthenticatedSolversRoute: typeof AuthenticatedSolversRoute
+  AuthenticatedSupervisionRoute: typeof AuthenticatedSupervisionRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -466,6 +487,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSolverGeneratorRoute: AuthenticatedSolverGeneratorRoute,
   AuthenticatedSolversRoute: AuthenticatedSolversRoute,
+  AuthenticatedSupervisionRoute: AuthenticatedSupervisionRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

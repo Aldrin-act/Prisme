@@ -82,7 +82,11 @@ async function apiFetch<T>(
       } catch {
         errorDetail = response.statusText;
       }
-      throw new PrismeAPIError(`Erreur API: ${formaterDetailErreur(errorDetail)}`, response.status, errorDetail);
+      throw new PrismeAPIError(
+        `Erreur API: ${formaterDetailErreur(errorDetail)}`,
+        response.status,
+        errorDetail,
+      );
     }
 
     // 204 No Content (ex. DELETE) : pas de corps à parser.
@@ -182,6 +186,31 @@ export const prismeClient = {
     apiFetch<Types.SolveurInfo[]>(`${PRISME_CONFIG.routes.supervision}/solveurs`),
 
   verifierSante: () => apiFetch<Types.Sante>(`${PRISME_CONFIG.routes.supervision}/sante`),
+
+  // Agent de supervision (MT7) — détecte des signaux et propose une action,
+  // jamais ne l'applique elle-même (voir api/routes/supervision.py).
+  listerPropositionsSupervision: (enAttente?: boolean) =>
+    apiFetch<Types.PropositionSupervision[]>(
+      `${PRISME_CONFIG.routes.supervision}/propositions${enAttente ? "?en_attente=true" : ""}`,
+    ),
+
+  // Un ou plusieurs appels LLM (un par client analysé) : même budget de
+  // temps que l'agent de compréhension.
+  declencherAnalyseSupervision: (requete: Types.RequeteAnalyseSupervision) =>
+    apiFetch<Types.PropositionSupervision[]>(
+      `${PRISME_CONFIG.routes.supervision}/analyser`,
+      { method: "POST", body: JSON.stringify(requete) },
+      PRISME_CONFIG.timeoutComprehension,
+    ),
+
+  deciderPropositionSupervision: (
+    propositionId: string,
+    requete: Types.RequeteDecisionProposition,
+  ) =>
+    apiFetch<Types.ReponseDecisionPropositionSupervision>(
+      `${PRISME_CONFIG.routes.supervision}/propositions/${propositionId}/decision`,
+      { method: "POST", body: JSON.stringify(requete) },
+    ),
 
   // VALIDATION
   soumettreDecision: (executionId: string, decision: Types.DecisionValidation) =>
@@ -338,14 +367,19 @@ async function* lireFluxSSE(url: string, options?: RequestInit): AsyncGenerator<
   });
 
   if (!response.ok || !response.body) {
-    let detail: string | Types.ErreurValidationChamp[] | Types.ErreurDetailCodee = response.statusText;
+    let detail: string | Types.ErreurValidationChamp[] | Types.ErreurDetailCodee =
+      response.statusText;
     try {
       const erreur: Types.ErreurAPI = await response.json();
       detail = erreur.detail;
     } catch {
       // garder response.statusText
     }
-    throw new PrismeAPIError(`Erreur API: ${formaterDetailErreur(detail)}`, response.status, detail);
+    throw new PrismeAPIError(
+      `Erreur API: ${formaterDetailErreur(detail)}`,
+      response.status,
+      detail,
+    );
   }
 
   const lecteur = response.body.getReader();
@@ -407,7 +441,9 @@ export function listerJobsGeneration(instanceId?: string): Promise<Types.JobGene
  * contrairement au flux SSE (mémoire process), survit à un redémarrage du serveur
  * et inclut le code candidat de chaque tentative de la boucle de réparation.
  */
-export function obtenirHistoriqueJobGeneration(jobId: string): Promise<Types.HistoriqueJobGeneration> {
+export function obtenirHistoriqueJobGeneration(
+  jobId: string,
+): Promise<Types.HistoriqueJobGeneration> {
   return apiFetch<Types.HistoriqueJobGeneration>(
     `${PRISME_CONFIG.routes.generation}/jobs/${jobId}/historique`,
   );

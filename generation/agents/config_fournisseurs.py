@@ -41,6 +41,8 @@ FOURNISSEURS_PAR_AGENT: dict[str, str] = {
     # Agent ERP — DeepSeek
     "comprehension": "deepseek",  # 16K tokens pour grandes données ERP
     "erp": "deepseek",  # Alias de comprehension
+    # Agent de supervision (MT7) — Mistral
+    "supervision": "mistral",  # Synthèse JSON courte, pas de génération de code
 }
 
 

@@ -234,6 +234,59 @@ export interface Sante {
   sandbox_docker: boolean;
 }
 
+// --- Agent de supervision (MT7) --------------------------------------------
+// Signaux détectés par du Python déterministe (supervision/detecteurs.py),
+// habillés d'un résumé/priorité par un agent LLM (supervision/agent.py) —
+// jamais appliqués automatiquement : `decision` reste null tant qu'un humain
+// n'a pas accepté ou refusé via POST /supervision/propositions/{id}/decision.
+
+export type TypeSignalSupervision =
+  "signature_orpheline" | "echecs_repetes" | "instance_a_replanifier";
+export type ActionSuggereeSupervision = "regenerer_solveur" | "executer" | "diagnostiquer";
+export type PrioriteSupervision = "haute" | "moyenne" | "basse";
+
+export interface PropositionSupervision {
+  proposition_id: string;
+  client_id: string;
+  type_signal: TypeSignalSupervision;
+  action_suggeree: ActionSuggereeSupervision;
+  resume: string;
+  priorite: PrioriteSupervision;
+  details: string[];
+  date_creation: string;
+  instance_id: string | null;
+  execution_ids: string[];
+  structure_contraintes: string | null;
+  signature_objectifs: string | null;
+  decision: "acceptee" | "refusee" | null;
+  horodatage_decision: string | null;
+  commentaire: string | null;
+}
+
+export interface RequeteAnalyseSupervision {
+  client_id?: string;
+}
+
+export interface RequeteDecisionProposition {
+  decision: "acceptee" | "refusee";
+  commentaire?: string;
+}
+
+// Exactement une des trois clés est présente, selon `action_suggeree` de la
+// proposition acceptée (voir api/routes/supervision.py::_dispatcher_action).
+export interface ReponseDecisionPropositionSupervision {
+  proposition_id: string;
+  decision: "acceptee" | "refusee";
+  resultat?: {
+    action: ActionSuggereeSupervision;
+    job_id?: string;
+    execution_id?: string;
+    reussi?: boolean;
+    cause?: string;
+    proposition?: string;
+  };
+}
+
 // ============================================================================
 // VALIDATION
 // ============================================================================

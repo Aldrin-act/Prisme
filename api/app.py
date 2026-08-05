@@ -7,6 +7,9 @@ Documentation OpenAPI générée automatiquement par FastAPI, disponible sur
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,6 +28,20 @@ from api.routes import (
     supervision,
     validation,
 )
+from supervision.planificateur import demarrer_planificateur
+
+
+@asynccontextmanager
+async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Démarre/arrête la boucle périodique de l'agent de supervision (§2,
+    MT7, `supervision/planificateur.py`) — no-op tant que
+    `PRISME_SUPERVISION_ACTIVE` n'est pas positionné. Premier hook
+    `lifespan` de ce module ; jusqu'ici aucun besoin de code au
+    démarrage/arrêt du serveur."""
+    arret = demarrer_planificateur()
+    yield
+    arret.set()
+
 
 app = FastAPI(
     title="PRISME",
@@ -33,6 +50,7 @@ app = FastAPI(
         "(Flexible Job-Shop Scheduling, OR-Tools CP-SAT)."
     ),
     version="0.1.0",
+    lifespan=_lifespan,
 )
 
 # Dev uniquement : le dashboard (Vite, port variable selon disponibilité) et l'API (uvicorn,

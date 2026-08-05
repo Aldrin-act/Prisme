@@ -49,13 +49,17 @@ import psycopg
 from psycopg import sql
 
 from api.etat import (
+    ActionSuggeree,
     Client,
     Decision,
     DecisionHumaine,
     EvenementGeneration,
     JobGeneration,
+    Priorite,
+    PropositionSupervision,
     SourceDonnees,
     TentativeGeneration,
+    TypeSignal,
     structure_contraintes,
 )
 from dsl.schema import InstanceTRCO, Objectif, OperationPlanifiee, Planning
@@ -67,6 +71,43 @@ from validation_engine.makespan import calculer_makespan
 
 def _table(schema: str, nom: str) -> sql.Composed:
     return sql.Identifier(schema, nom)
+
+
+def _proposition_depuis_ligne(ligne: tuple) -> PropositionSupervision:
+    (
+        id_,
+        client_id,
+        type_signal,
+        action_suggeree,
+        resume,
+        priorite,
+        details,
+        date_creation,
+        instance_id,
+        execution_ids,
+        structure_contraintes,
+        signature_objectifs,
+        decision,
+        horodatage_decision,
+        commentaire,
+    ) = ligne
+    return PropositionSupervision(
+        id=id_,
+        client_id=client_id,
+        type_signal=type_signal,
+        action_suggeree=action_suggeree,
+        resume=resume,
+        priorite=priorite,
+        details=tuple(details or []),
+        date_creation=date_creation,
+        instance_id=instance_id,
+        execution_ids=tuple(execution_ids or []),
+        structure_contraintes=structure_contraintes,
+        signature_objectifs=signature_objectifs,
+        decision=decision,
+        horodatage_decision=horodatage_decision,
+        commentaire=commentaire,
+    )
 
 
 class EtatPostgres:
@@ -322,6 +363,40 @@ class EtatPostgres:
                     "validation_statique_valide BOOLEAN, "
                     "validation_statique_violations JSONB)"
                 ).format(table=self._table("tentatives_generation"), jobs=self._table("jobs_generation"))
+            )
+            # Propositions de l'agent de supervision (MT7) — table neuve, pas de
+            # migration à faire : `execution_ids`/`details` en JSONB (mêmes
+            # conventions que `revue_problemes` ci-dessus), `instance_id`
+            # nullable avec `ON DELETE SET NULL` posé directement (même
+            # comportement que `jobs_generation`, la proposition survit à la
+            # suppression de l'instance qu'elle référençait). Pas de FK vers
+            # `solver_store.registry.Registre` ni vers `executions` pour
+            # `execution_ids` (tableau, une seule colonne ne peut pas porter
+            # plusieurs clés étrangères) — même niveau de rigueur que le reste
+            # du module vis-à-vis du registre des solveurs (voir docstring).
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "client_id TEXT NOT NULL REFERENCES {clients}(id), "
+                    "type_signal TEXT NOT NULL, "
+                    "action_suggeree TEXT NOT NULL, "
+                    "resume TEXT NOT NULL, "
+                    "priorite TEXT NOT NULL, "
+                    "details JSONB NOT NULL, "
+                    "date_creation TEXT NOT NULL, "
+                    "instance_id TEXT REFERENCES {instances}(id) ON DELETE SET NULL, "
+                    "execution_ids JSONB NOT NULL, "
+                    "structure_contraintes TEXT, "
+                    "signature_objectifs TEXT, "
+                    "decision TEXT, "
+                    "horodatage_decision TEXT, "
+                    "commentaire TEXT)"
+                ).format(
+                    table=self._table("propositions_supervision"),
+                    clients=self._table("clients"),
+                    instances=self._table("instances_trco"),
+                )
             )
             connexion.commit()
 
@@ -807,6 +882,123 @@ class EtatPostgres:
         return DecisionHumaine(
             execution_id=execution_id_, decision=decision, horodatage=horodatage, commentaire=commentaire
         )
+
+    # --- Agent de supervision (MT7) ---------------------------------------
+
+    def enregistrer_proposition(
+        self,
+        client_id: str,
+        type_signal: TypeSignal,
+        action_suggeree: ActionSuggeree,
+        resume: str,
+        priorite: Priorite,
+        details: tuple[str, ...],
+        instance_id: str | None = None,
+        execution_ids: tuple[str, ...] = (),
+        structure_contraintes: str | None = None,
+        signature_objectifs: str | None = None,
+    ) -> str:
+        proposition_id = str(uuid.uuid4())
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(
+                    self._table("clients")
+                ),
+                (client_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "INSERT INTO {} "
+                    "(id, client_id, type_signal, action_suggeree, resume, priorite, details, date_creation, "
+                    "instance_id, execution_ids, structure_contraintes, signature_objectifs) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s, %s::jsonb, %s, %s)"
+                ).format(self._table("propositions_supervision")),
+                (
+                    proposition_id,
+                    client_id,
+                    type_signal,
+                    action_suggeree,
+                    resume,
+                    priorite,
+                    json.dumps(list(details)),
+                    datetime.now(UTC).isoformat(),
+                    instance_id,
+                    json.dumps(list(execution_ids)),
+                    structure_contraintes,
+                    signature_objectifs,
+                ),
+            )
+            connexion.commit()
+        return proposition_id
+
+    def recuperer_proposition(self, proposition_id: str) -> PropositionSupervision:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL(
+                    "SELECT id, client_id, type_signal, action_suggeree, resume, priorite, details, "
+                    "date_creation, instance_id, execution_ids, structure_contraintes, signature_objectifs, "
+                    "decision, horodatage_decision, commentaire FROM {} WHERE id = %s"
+                ).format(self._table("propositions_supervision")),
+                (proposition_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(proposition_id)
+        return _proposition_depuis_ligne(ligne)
+
+    def lister_propositions(
+        self, client_id: str | None = None, en_attente_seulement: bool = False
+    ) -> list[dict[str, object]]:
+        requete = sql.SQL(
+            "SELECT id, client_id, type_signal, action_suggeree, resume, priorite, details, "
+            "date_creation, instance_id, execution_ids, structure_contraintes, signature_objectifs, "
+            "decision, horodatage_decision, commentaire FROM {} WHERE 1 = 1"
+        ).format(self._table("propositions_supervision"))
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND client_id = %s")
+            parametres.append(client_id)
+        if en_attente_seulement:
+            requete += sql.SQL(" AND decision IS NULL")
+        requete += sql.SQL(" ORDER BY date_creation DESC")
+
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(requete, parametres).fetchall()
+        return [
+            {
+                "proposition_id": p.id,
+                "client_id": p.client_id,
+                "type_signal": p.type_signal,
+                "action_suggeree": p.action_suggeree,
+                "resume": p.resume,
+                "priorite": p.priorite,
+                "details": list(p.details),
+                "date_creation": p.date_creation,
+                "instance_id": p.instance_id,
+                "execution_ids": list(p.execution_ids),
+                "structure_contraintes": p.structure_contraintes,
+                "signature_objectifs": p.signature_objectifs,
+                "decision": p.decision,
+                "horodatage_decision": p.horodatage_decision,
+                "commentaire": p.commentaire,
+            }
+            for p in (_proposition_depuis_ligne(ligne) for ligne in lignes)
+        ]
+
+    def decider_proposition(self, proposition_id: str, decision: Decision, commentaire: str | None = None) -> None:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("propositions_supervision")),
+                (proposition_id,),
+            ).fetchone()
+            if ligne is None:
+                raise KeyError(proposition_id)
+            connexion.execute(
+                sql.SQL(
+                    "UPDATE {} SET decision = %s, horodatage_decision = %s, commentaire = %s WHERE id = %s"
+                ).format(self._table("propositions_supervision")),
+                (decision, datetime.now(UTC).isoformat(), commentaire, proposition_id),
+            )
+            connexion.commit()
 
     # --- Historique de génération (§6.6) -----------------------------------
 

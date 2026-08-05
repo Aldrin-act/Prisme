@@ -28,6 +28,9 @@ if TYPE_CHECKING:
     from api.etat_postgres import EtatPostgres
 
 Decision = Literal["acceptee", "refusee"]
+TypeSignal = Literal["signature_orpheline", "echecs_repetes", "instance_a_replanifier"]
+ActionSuggeree = Literal["regenerer_solveur", "executer", "diagnostiquer"]
+Priorite = Literal["haute", "moyenne", "basse"]
 
 
 def structure_contraintes(instance: InstanceTRCO) -> str:
@@ -68,6 +71,33 @@ class DecisionHumaine:
     execution_id: str
     decision: Decision
     horodatage: str
+    commentaire: str | None = None
+
+
+@dataclass
+class PropositionSupervision:
+    """Une proposition de l'agent de supervision (§2, MT7) — un signal détecté
+    (signature orpheline, échecs répétés, instance en attente de
+    replanification) habillé d'un résumé et d'une priorité par l'agent LLM,
+    jamais appliquée automatiquement : `decision` reste `None` jusqu'à ce
+    qu'un humain accepte ou refuse via `decider_proposition`. Mutable comme
+    `JobGeneration` (créée une fois, mise à jour une fois à la décision),
+    contrairement à `DecisionHumaine` qui n'est jamais partiellement modifiée."""
+
+    id: str
+    client_id: str
+    type_signal: TypeSignal
+    action_suggeree: ActionSuggeree
+    resume: str
+    priorite: Priorite
+    details: tuple[str, ...]
+    date_creation: str
+    instance_id: str | None = None
+    execution_ids: tuple[str, ...] = ()
+    structure_contraintes: str | None = None
+    signature_objectifs: str | None = None
+    decision: Decision | None = None
+    horodatage_decision: str | None = None
     commentaire: str | None = None
 
 
@@ -187,6 +217,7 @@ class EtatAPI:
     clients: dict[str, Client] = field(default_factory=dict)
     dates_execution: dict[str, str] = field(default_factory=dict)
     jobs_generation: dict[str, JobGeneration] = field(default_factory=dict)
+    propositions: dict[str, PropositionSupervision] = field(default_factory=dict)
 
     def enregistrer_client(self, client_id: str, nom: str | None = None) -> None:
         """Idempotent au sens applicatif : ré-enregistrer un `client_id`
@@ -327,6 +358,9 @@ class EtatAPI:
         for job in self.jobs_generation.values():
             if job.instance_id == instance_id:
                 job.instance_id = None
+        for proposition in self.propositions.values():
+            if proposition.instance_id == instance_id:
+                proposition.instance_id = None
 
     def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
         execution_id = str(uuid.uuid4())
@@ -389,6 +423,77 @@ class EtatAPI:
 
     def decision_pour(self, execution_id: str) -> DecisionHumaine | None:
         return self.decisions.get(execution_id)
+
+    # --- Agent de supervision (MT7) ---------------------------------------
+
+    def enregistrer_proposition(
+        self,
+        client_id: str,
+        type_signal: TypeSignal,
+        action_suggeree: ActionSuggeree,
+        resume: str,
+        priorite: Priorite,
+        details: tuple[str, ...],
+        instance_id: str | None = None,
+        execution_ids: tuple[str, ...] = (),
+        structure_contraintes: str | None = None,
+        signature_objectifs: str | None = None,
+    ) -> str:
+        self.enregistrer_client(client_id)
+        proposition_id = str(uuid.uuid4())
+        self.propositions[proposition_id] = PropositionSupervision(
+            id=proposition_id,
+            client_id=client_id,
+            type_signal=type_signal,
+            action_suggeree=action_suggeree,
+            resume=resume,
+            priorite=priorite,
+            details=details,
+            date_creation=datetime.now(UTC).isoformat(),
+            instance_id=instance_id,
+            execution_ids=execution_ids,
+            structure_contraintes=structure_contraintes,
+            signature_objectifs=signature_objectifs,
+        )
+        return proposition_id
+
+    def recuperer_proposition(self, proposition_id: str) -> PropositionSupervision:
+        if proposition_id not in self.propositions:
+            raise KeyError(proposition_id)
+        return self.propositions[proposition_id]
+
+    def lister_propositions(
+        self, client_id: str | None = None, en_attente_seulement: bool = False
+    ) -> list[dict[str, object]]:
+        return [
+            {
+                "proposition_id": p.id,
+                "client_id": p.client_id,
+                "type_signal": p.type_signal,
+                "action_suggeree": p.action_suggeree,
+                "resume": p.resume,
+                "priorite": p.priorite,
+                "details": list(p.details),
+                "date_creation": p.date_creation,
+                "instance_id": p.instance_id,
+                "execution_ids": list(p.execution_ids),
+                "structure_contraintes": p.structure_contraintes,
+                "signature_objectifs": p.signature_objectifs,
+                "decision": p.decision,
+                "horodatage_decision": p.horodatage_decision,
+                "commentaire": p.commentaire,
+            }
+            for p in self.propositions.values()
+            if (client_id is None or p.client_id == client_id) and (not en_attente_seulement or p.decision is None)
+        ]
+
+    def decider_proposition(self, proposition_id: str, decision: Decision, commentaire: str | None = None) -> None:
+        if proposition_id not in self.propositions:
+            raise KeyError(proposition_id)
+        proposition = self.propositions[proposition_id]
+        proposition.decision = decision
+        proposition.horodatage_decision = datetime.now(UTC).isoformat()
+        proposition.commentaire = commentaire
 
     # --- Historique de génération (§6.6) ----------------------------------
 

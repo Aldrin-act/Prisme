@@ -236,3 +236,96 @@ def test_supprimer_instance_orpheline_les_jobs_generation_sans_les_detruire(
 
     job = etat_postgres_test.recuperer_job_generation("job-1")  # survit, orphelin
     assert job.instance_id is None
+
+
+# --- Propositions de l'agent de supervision (MT7) ---------------------------
+
+
+def test_proposition_supervision_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+
+    proposition_id = etat_postgres_test.enregistrer_proposition(
+        client_id="client-test",
+        type_signal="signature_orpheline",
+        action_suggeree="regenerer_solveur",
+        resume="Aucun solveur ne correspond.",
+        priorite="haute",
+        details=("structure=compatibilite_ressource_tache",),
+        instance_id=instance_id,
+        structure_contraintes="compatibilite_ressource_tache",
+        signature_objectifs="minimiser_makespan",
+    )
+
+    proposition = etat_postgres_test.recuperer_proposition(proposition_id)
+    assert proposition.client_id == "client-test"
+    assert proposition.type_signal == "signature_orpheline"
+    assert proposition.action_suggeree == "regenerer_solveur"
+    assert proposition.instance_id == instance_id
+    assert proposition.details == ("structure=compatibilite_ressource_tache",)
+    assert proposition.decision is None
+
+
+def test_decider_proposition(etat_postgres_test: EtatPostgres) -> None:
+    proposition_id = etat_postgres_test.enregistrer_proposition(
+        client_id="client-test",
+        type_signal="echecs_repetes",
+        action_suggeree="diagnostiquer",
+        resume="3 échecs consécutifs.",
+        priorite="moyenne",
+        details=(),
+        execution_ids=("exec-1", "exec-2", "exec-3"),
+    )
+
+    etat_postgres_test.decider_proposition(proposition_id, "acceptee", commentaire="OK")
+    proposition = etat_postgres_test.recuperer_proposition(proposition_id)
+
+    assert proposition.decision == "acceptee"
+    assert proposition.commentaire == "OK"
+    assert proposition.horodatage_decision is not None
+    assert proposition.execution_ids == ("exec-1", "exec-2", "exec-3")
+
+
+def test_lister_propositions_filtre_en_attente(etat_postgres_test: EtatPostgres) -> None:
+    id_en_attente = etat_postgres_test.enregistrer_proposition(
+        client_id="client-test",
+        type_signal="instance_a_replanifier",
+        action_suggeree="executer",
+        resume="À exécuter.",
+        priorite="basse",
+        details=(),
+    )
+    id_decidee = etat_postgres_test.enregistrer_proposition(
+        client_id="client-test",
+        type_signal="instance_a_replanifier",
+        action_suggeree="executer",
+        resume="À exécuter aussi.",
+        priorite="basse",
+        details=(),
+    )
+    etat_postgres_test.decider_proposition(id_decidee, "refusee")
+
+    toutes = etat_postgres_test.lister_propositions(client_id="client-test")
+    en_attente = etat_postgres_test.lister_propositions(client_id="client-test", en_attente_seulement=True)
+
+    assert {p["proposition_id"] for p in toutes} == {id_en_attente, id_decidee}
+    assert {p["proposition_id"] for p in en_attente} == {id_en_attente}
+
+
+def test_supprimer_instance_orpheline_les_propositions_sans_les_detruire(
+    etat_postgres_test: EtatPostgres,
+) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    proposition_id = etat_postgres_test.enregistrer_proposition(
+        client_id="client-test",
+        type_signal="signature_orpheline",
+        action_suggeree="regenerer_solveur",
+        resume="Aucun solveur ne correspond.",
+        priorite="haute",
+        details=(),
+        instance_id=instance_id,
+    )
+
+    etat_postgres_test.supprimer_instance(instance_id)
+
+    proposition = etat_postgres_test.recuperer_proposition(proposition_id)  # survit, orpheline
+    assert proposition.instance_id is None
