@@ -36,6 +36,7 @@ import {
 import {
   prismeKeys,
   useIngererInstance,
+  useModifierInstance,
   useImporterViaAdaptateur,
   useImporterFichierTableur,
   useImporterFichiersCsv,
@@ -256,18 +257,20 @@ function ErreursAPI({ erreur }: { erreur: PrismeAPIError }) {
 export function IngestionDialog({
   open,
   onOpenChange,
-  instanceSource,
+  instanceAEditer,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  // Instance existante à partir de laquelle préremplir l'onglet "Saisie
-  // T-R-C-O" (bouton "Dupliquer et modifier", page Instances) — la
-  // soumission crée une nouvelle instance dérivée, l'originale reste
-  // intacte. Absent = formulaire vierge, comportement inchangé.
-  instanceSource?: InstanceDetail;
+  // Instance existante à éditer en place (bouton "Modifier", page
+  // Instances) — la soumission remplace son contenu T-R-C-O directement
+  // (même instance_id, historique d'exécutions intact), rien n'est dupliqué.
+  // Absent = formulaire vierge pour une nouvelle instance, comportement
+  // inchangé.
+  instanceAEditer?: InstanceDetail;
 }) {
   const queryClient = useQueryClient();
   const ingerer = useIngererInstance();
+  const modifier = useModifierInstance();
   const importer = useImporterViaAdaptateur();
   const importerFichier = useImporterFichierTableur();
   const importerCsv = useImporterFichiersCsv();
@@ -278,19 +281,19 @@ export function IngestionDialog({
   const estAdmin = utilisateur?.role === "admin";
 
   const [clientId, setClientId] = useState(
-    instanceSource?.client_id ?? utilisateur?.client_id ?? "",
+    instanceAEditer?.client_id ?? utilisateur?.client_id ?? "",
   );
   const [taches, setTaches] = useState<TacheLigne[]>(
-    instanceSource ? instanceSource.taches.map(tacheVersLigne) : [nouvelleTache()],
+    instanceAEditer ? instanceAEditer.taches.map(tacheVersLigne) : [nouvelleTache()],
   );
   const [ressources, setRessources] = useState<RessourceLigne[]>(
-    instanceSource ? instanceSource.ressources.map(ressourceVersLigne) : [nouvelleRessource()],
+    instanceAEditer ? instanceAEditer.ressources.map(ressourceVersLigne) : [nouvelleRessource()],
   );
   const [contraintes, setContraintes] = useState<ContrainteLigne[]>(
-    instanceSource ? instanceSource.contraintes.map(contrainteVersLigne) : [],
+    instanceAEditer ? instanceAEditer.contraintes.map(contrainteVersLigne) : [],
   );
   const [objectifs, setObjectifs] = useState<ObjectifLigne[]>(
-    instanceSource ? instanceSource.objectifs.map(objectifVersLigne) : [nouvelObjectif()],
+    instanceAEditer ? instanceAEditer.objectifs.map(objectifVersLigne) : [nouvelObjectif()],
   );
   const [source, setSource] = useState<string>(SOURCES_IMPORT[0].id);
   const [fichier, setFichier] = useState<File | null>(null);
@@ -310,7 +313,7 @@ export function IngestionDialog({
   // atelier après un aléa) — voir InstanceInfo.nom_projet. Un seul champ,
   // rendu une fois au-dessus des onglets, quel que soit celui utilisé pour
   // soumettre.
-  const [nomProjet, setNomProjet] = useState(instanceSource?.nom_projet ?? "");
+  const [nomProjet, setNomProjet] = useState(instanceAEditer?.nom_projet ?? "");
   const { data: nomsProjetConnus } = useNomsProjet();
   const [succes, setSucces] = useState<{
     instance_id: string;
@@ -338,6 +341,7 @@ export function IngestionDialog({
     setCheminDossierCsvLocal("");
     setSucces(null);
     ingerer.reset();
+    modifier.reset();
     importer.reset();
     importerFichier.reset();
     importerCsv.reset();
@@ -359,6 +363,7 @@ export function IngestionDialog({
   function onIngestionReussie(data: { instance_id: string; structure_contraintes: string }) {
     setSucces(data);
     queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+    queryClient.invalidateQueries({ queryKey: prismeKeys.instance(data.instance_id) });
     executer.mutate(data.instance_id, {
       onSuccess: () => queryClient.invalidateQueries({ queryKey: prismeKeys.executions() }),
     });
@@ -366,13 +371,16 @@ export function IngestionDialog({
 
   function soumettreTRCO() {
     const instance = construireInstance(taches, ressources, contraintes, objectifs);
+    const nomProjetSoumis = nomProjet.trim() || undefined;
+    if (instanceAEditer) {
+      modifier.mutate(
+        { instanceId: instanceAEditer.instance_id, instance, nomProjet: nomProjetSoumis },
+        { onSuccess: onIngestionReussie },
+      );
+      return;
+    }
     ingerer.mutate(
-      {
-        clientId,
-        instance,
-        instanceSourceId: instanceSource?.instance_id,
-        nomProjet: nomProjet.trim() || undefined,
-      },
+      { clientId, instance, nomProjet: nomProjetSoumis },
       { onSuccess: onIngestionReussie },
     );
   }
@@ -430,6 +438,7 @@ export function IngestionDialog({
   }
 
   const erreur = (ingerer.error ??
+    modifier.error ??
     importer.error ??
     importerFichier.error ??
     importerCsv.error ??
@@ -437,6 +446,7 @@ export function IngestionDialog({
     importerCsvLocal.error) as PrismeAPIError | null;
   const enCours =
     ingerer.isPending ||
+    modifier.isPending ||
     importer.isPending ||
     importerFichier.isPending ||
     importerCsv.isPending ||
@@ -447,16 +457,14 @@ export function IngestionDialog({
     <Dialog open={open} onOpenChange={fermer}>
       <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {instanceSource ? "Nouvelle version de l'instance" : "Nouvelle instance"}
-          </DialogTitle>
+          <DialogTitle>{instanceAEditer ? "Modifier l'instance" : "Nouvelle instance"}</DialogTitle>
           <DialogDescription>
-            {instanceSource ? (
+            {instanceAEditer ? (
               <>
                 Formulaire prérempli à partir de{" "}
-                <span className="font-mono text-xs">{instanceSource.instance_id}</span>. La
-                soumission crée une nouvelle instance dérivée — l'originale reste intacte dans
-                l'historique.
+                <span className="font-mono text-xs">{instanceAEditer.instance_id}</span>. Les
+                modifications sont appliquées directement à cette instance — son historique
+                d'exécutions reste attaché, rien n'est dupliqué.
               </>
             ) : (
               "Ingérez une instance T-R-C-O directement, importez-la depuis un ERP connecté, ou depuis " +
@@ -469,7 +477,8 @@ export function IngestionDialog({
           <div className="space-y-4">
             <div className="rounded-lg border border-primary/40 bg-primary/10 p-4 text-sm">
               <div className="flex items-center gap-2 font-medium text-primary">
-                <CheckCircle2 className="h-4 w-4" /> Instance ingérée
+                <CheckCircle2 className="h-4 w-4" />{" "}
+                {instanceAEditer ? "Instance modifiée" : "Instance ingérée"}
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <span className="text-muted-foreground">instance_id :</span>
@@ -522,7 +531,7 @@ export function IngestionDialog({
 
             <DialogFooter>
               <Button variant="outline" onClick={reinitialiser}>
-                Ingérer une autre instance
+                {instanceAEditer ? "Modifier une autre instance" : "Ingérer une autre instance"}
               </Button>
               <Button onClick={() => fermer(false)}>Fermer</Button>
             </DialogFooter>
@@ -550,23 +559,12 @@ export function IngestionDialog({
               </p>
             </div>
 
-            <Tabs defaultValue="trco">
-              <TabsList>
-                <TabsTrigger value="trco">Saisie T-R-C-O</TabsTrigger>
-                <TabsTrigger value="import">Import ERP</TabsTrigger>
-                <TabsTrigger value="fichier">Fichier Excel</TabsTrigger>
-                <TabsTrigger value="csv">Fichiers CSV</TabsTrigger>
-                <TabsTrigger value="csvlocal">CSV Local</TabsTrigger>
-                <TabsTrigger value="json">Fichier JSON</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="trco" className="space-y-5">
-                <ChampClient
-                  clientId={clientId}
-                  setClientId={setClientId}
-                  estAdmin={estAdmin}
-                  idChamp="client_id"
-                />
+            {instanceAEditer ? (
+              <div className="space-y-5">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-muted-foreground">Client :</span>
+                  <span className="font-medium">{clientId}</span>
+                </div>
 
                 <SectionTaches taches={taches} setTaches={setTaches} />
                 <SectionRessources ressources={ressources} setRessources={setRessources} />
@@ -579,7 +577,7 @@ export function IngestionDialog({
 
                 <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
 
-                {erreur && ingerer.error && <ErreursAPI erreur={erreur} />}
+                {erreur && modifier.error && <ErreursAPI erreur={erreur} />}
 
                 <DialogFooter>
                   <Button variant="outline" onClick={() => fermer(false)}>
@@ -587,313 +585,357 @@ export function IngestionDialog({
                   </Button>
                   <Button onClick={soumettreTRCO} disabled={enCours}>
                     <FileJson className="mr-2 h-4 w-4" />
-                    {ingerer.isPending ? "Ingestion..." : "Ingérer"}
+                    {modifier.isPending ? "Enregistrement..." : "Enregistrer les modifications"}
                   </Button>
                 </DialogFooter>
-              </TabsContent>
+              </div>
+            ) : (
+              <Tabs defaultValue="trco">
+                <TabsList>
+                  <TabsTrigger value="trco">Saisie T-R-C-O</TabsTrigger>
+                  <TabsTrigger value="import">Import ERP</TabsTrigger>
+                  <TabsTrigger value="fichier">Fichier Excel</TabsTrigger>
+                  <TabsTrigger value="csv">Fichiers CSV</TabsTrigger>
+                  <TabsTrigger value="csvlocal">CSV Local</TabsTrigger>
+                  <TabsTrigger value="json">Fichier JSON</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="import" className="space-y-4">
-                <div className="space-y-1.5">
-                  <Label>Source</Label>
-                  <Select value={source} onValueChange={setSource}>
-                    <SelectTrigger className="w-64">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SOURCES_IMPORT.map((s) => (
-                        <SelectItem key={s.id} value={s.id}>
-                          {s.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-muted-foreground">
-                    L'instance est lue directement depuis la source ERP côté serveur, sans saisie
-                    manuelle.
-                  </p>
-                </div>
-
-                {erreur && importer.error && <ErreursAPI erreur={erreur} />}
-
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => fermer(false)}>
-                    Annuler
-                  </Button>
-                  <Button onClick={soumettreImport} disabled={enCours}>
-                    <Upload className="mr-2 h-4 w-4" />
-                    {importer.isPending
-                      ? "Import..."
-                      : `Importer depuis ${SOURCES_IMPORT.find((s) => s.id === source)?.label}`}
-                  </Button>
-                </DialogFooter>
-              </TabsContent>
-
-              <TabsContent value="fichier" className="space-y-4">
-                <ChampClient
-                  clientId={clientId}
-                  setClientId={setClientId}
-                  estAdmin={estAdmin}
-                  idChamp="client_id_fichier"
-                />
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="fichier_xlsx">Fichier Excel (.xlsx)</Label>
-                  <Input
-                    id="fichier_xlsx"
-                    ref={inputFichierRef}
-                    type="file"
-                    accept=".xlsx"
-                    onChange={(e) => setFichier(e.target.files?.[0] ?? null)}
+                <TabsContent value="trco" className="space-y-5">
+                  <ChampClient
+                    clientId={clientId}
+                    setClientId={setClientId}
+                    estAdmin={estAdmin}
+                    idChamp="client_id"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Utilisez le gabarit fourni (onglets Tâches, Ressources, Précédences, Compétences
-                    requises, Compatibilités), remplissez-le, puis déposez-le ici tel quel. Comme
-                    pour le CSV, une tâche peut être rendue compatible avec une ressource soit
-                    directement (onglet Compatibilités), soit via une compétence requise couverte
-                    par cette ressource (onglet Compétences requises).
-                  </p>
-                  <p className="text-xs">
-                    Gabarit d'exemple :{" "}
-                    <a
-                      href="/gabarits/gabarit_ingestion_trco.xlsx"
-                      download
-                      className="text-primary underline-offset-2 hover:underline"
-                    >
-                      gabarit_ingestion_trco.xlsx
-                    </a>
-                  </p>
-                </div>
 
-                {erreur && importerFichier.error && <ErreursAPI erreur={erreur} />}
-
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => fermer(false)}>
-                    Annuler
-                  </Button>
-                  <Button onClick={soumettreFichier} disabled={enCours || !fichier}>
-                    <FileSpreadsheet className="mr-2 h-4 w-4" />
-                    {importerFichier.isPending ? "Import..." : "Importer le fichier"}
-                  </Button>
-                </DialogFooter>
-              </TabsContent>
-
-              <TabsContent value="csv" className="space-y-4">
-                <ChampClient
-                  clientId={clientId}
-                  setClientId={setClientId}
-                  estAdmin={estAdmin}
-                  idChamp="client_id_csv"
-                />
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="fichier_csv_taches">Tâches (.csv)</Label>
-                  <Input
-                    id="fichier_csv_taches"
-                    ref={inputTachesCsvRef}
-                    type="file"
-                    accept=".csv,text/csv"
-                    onChange={(e) => setFichierTachesCsv(e.target.files?.[0] ?? null)}
+                  <SectionTaches taches={taches} setTaches={setTaches} />
+                  <SectionRessources ressources={ressources} setRessources={setRessources} />
+                  <SectionContraintes
+                    contraintes={contraintes}
+                    setContraintes={setContraintes}
+                    taches={taches}
+                    ressources={ressources}
                   />
-                </div>
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="fichier_csv_ressources">Ressources (.csv)</Label>
-                  <Input
-                    id="fichier_csv_ressources"
-                    ref={inputRessourcesCsvRef}
-                    type="file"
-                    accept=".csv,text/csv"
-                    onChange={(e) => setFichierRessourcesCsv(e.target.files?.[0] ?? null)}
-                  />
-                </div>
+                  <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="fichier_csv_contraintes">Contraintes (.csv)</Label>
-                  <Input
-                    id="fichier_csv_contraintes"
-                    ref={inputContraintesCsvRef}
-                    type="file"
-                    accept=".csv,text/csv"
-                    onChange={(e) => setFichierContraintesCsv(e.target.files?.[0] ?? null)}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Trois fichiers séparés, un par axe — colonnes attendues :{" "}
-                    <code className="font-mono">id,nom,duree_estimee_jours</code> pour Tâches,{" "}
-                    <code className="font-mono">id,nom,competences</code> (séparées par{" "}
-                    <code className="font-mono">;</code>) pour Ressources,{" "}
-                    <code className="font-mono">
-                      type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
-                    </code>{" "}
-                    pour Contraintes (<code className="font-mono">type</code> vaut{" "}
-                    <code className="font-mono">precedence</code>,{" "}
-                    <code className="font-mono">compatibilite_ressource_tache</code> ou{" "}
-                    <code className="font-mono">competence_requise</code>).
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Plutôt que de saisir chaque compatibilité à la main, déclarez qu'une ressource
-                    possède une compétence et qu'une tâche l'exige (
-                    <code className="font-mono">competence_requise</code>) — la compatibilité et sa
-                    durée (<code className="font-mono">duree_estimee_jours</code> de la tâche) sont
-                    calculées automatiquement pour chaque ressource qualifiée.
-                  </p>
-                  <p className="text-xs">
-                    Gabarits d'exemple :{" "}
-                    {[
-                      { nom: "taches.csv", href: "/gabarits/taches.csv" },
-                      { nom: "ressources.csv", href: "/gabarits/ressources.csv" },
-                      { nom: "contraintes.csv", href: "/gabarits/contraintes.csv" },
-                    ].map((gabarit, i) => (
-                      <span key={gabarit.href}>
-                        {i > 0 && ", "}
-                        <a
-                          href={gabarit.href}
-                          download
-                          className="text-primary underline-offset-2 hover:underline"
-                        >
-                          {gabarit.nom}
-                        </a>
-                      </span>
-                    ))}
-                  </p>
-                </div>
+                  {erreur && ingerer.error && <ErreursAPI erreur={erreur} />}
 
-                {erreur && importerCsv.error && <ErreursAPI erreur={erreur} />}
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => fermer(false)}>
+                      Annuler
+                    </Button>
+                    <Button onClick={soumettreTRCO} disabled={enCours}>
+                      <FileJson className="mr-2 h-4 w-4" />
+                      {ingerer.isPending ? "Ingestion..." : "Ingérer"}
+                    </Button>
+                  </DialogFooter>
+                </TabsContent>
 
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => fermer(false)}>
-                    Annuler
-                  </Button>
-                  <Button
-                    onClick={soumettreCsv}
-                    disabled={
-                      enCours ||
-                      !fichierTachesCsv ||
-                      !fichierRessourcesCsv ||
-                      !fichierContraintesCsv
-                    }
-                  >
-                    <Files className="mr-2 h-4 w-4" />
-                    {importerCsv.isPending ? "Import..." : "Importer les fichiers"}
-                  </Button>
-                </DialogFooter>
-              </TabsContent>
-
-              <TabsContent value="csvlocal" className="space-y-4">
-                <ChampClient
-                  clientId={clientId}
-                  setClientId={setClientId}
-                  estAdmin={estAdmin}
-                  idChamp="client_id_csvlocal"
-                />
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="chemin_dossier_csv">Chemin du dossier CSV (côté serveur)</Label>
-                  <Input
-                    id="chemin_dossier_csv"
-                    value={cheminDossierCsvLocal}
-                    onChange={(e) => setCheminDossierCsvLocal(e.target.value)}
-                    placeholder="data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique"
-                    className="font-mono text-sm"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Spécifiez le chemin d'un dossier présent sur le serveur contenant les trois
-                    fichiers CSV requis (taches.csv, ressources.csv, contraintes.csv). Utile pour
-                    imports en masse, tests avec données de référence, ou intégrations automatisées.
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Exemples de dossiers disponibles :
-                  </p>
-                  <ul className="text-xs text-muted-foreground space-y-0.5">
-                    <li className="font-mono ml-4">
-                      data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique
-                    </li>
-                    <li className="font-mono ml-4">
-                      data/donnees_brutes/csv/industrie_manufacturiere/atelier_mecanique
-                    </li>
-                    <li className="font-mono ml-4">
-                      data/donnees_brutes/csv/services/centre_appels
-                    </li>
-                  </ul>
-                </div>
-
-                {erreur && importerCsvLocal.error && <ErreursAPI erreur={erreur} />}
-
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => fermer(false)}>
-                    Annuler
-                  </Button>
-                  <Button
-                    onClick={soumettreCsvLocal}
-                    disabled={enCours || !cheminDossierCsvLocal.trim()}
-                  >
-                    <FolderOpen className="mr-2 h-4 w-4" />
-                    {importerCsvLocal.isPending ? "Import..." : "Importer depuis le serveur"}
-                  </Button>
-                </DialogFooter>
-              </TabsContent>
-
-              <TabsContent value="json" className="space-y-4">
-                <ChampClient
-                  clientId={clientId}
-                  setClientId={setClientId}
-                  estAdmin={estAdmin}
-                  idChamp="client_id_json"
-                />
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="fichier_json">Fichier JSON (.json)</Label>
-                  <Input
-                    id="fichier_json"
-                    ref={inputJsonRef}
-                    type="file"
-                    accept=".json,application/json"
-                    onChange={(e) => {
-                      setFichierJson(e.target.files?.[0] ?? null);
-                      setErreurParseJson(null);
-                    }}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Déposez un fichier JSON au format T-R-C-O (mêmes champs que la saisie manuelle :
-                    taches, ressources, contraintes, objectifs) — ingéré tel quel si déjà complet.
-                    Plutôt que de déclarer chaque compatibilité à la main, une tâche peut aussi
-                    porter une durée estimée (<code className="font-mono">duree_estimee_jours</code>
-                    ) : sa compatibilité avec toute ressource dont les{" "}
-                    <code className="font-mono">competences</code> couvrent ses{" "}
-                    <code className="font-mono">competence_requise</code> est alors calculée
-                    automatiquement.
-                  </p>
-                  <p className="text-xs">
-                    Gabarit d'exemple :{" "}
-                    <a
-                      href="/gabarits/instance_exemple.json"
-                      download
-                      className="text-primary underline-offset-2 hover:underline"
-                    >
-                      instance_exemple.json
-                    </a>
-                  </p>
-                </div>
-
-                {erreurParseJson && (
-                  <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-                    <div className="flex items-center gap-2 font-medium">
-                      <AlertCircle className="h-4 w-4" /> {erreurParseJson}
-                    </div>
+                <TabsContent value="import" className="space-y-4">
+                  <div className="space-y-1.5">
+                    <Label>Source</Label>
+                    <Select value={source} onValueChange={setSource}>
+                      <SelectTrigger className="w-64">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {SOURCES_IMPORT.map((s) => (
+                          <SelectItem key={s.id} value={s.id}>
+                            {s.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">
+                      L'instance est lue directement depuis la source ERP côté serveur, sans saisie
+                      manuelle.
+                    </p>
                   </div>
-                )}
-                {erreur && importerJson.error && <ErreursAPI erreur={erreur} />}
 
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => fermer(false)}>
-                    Annuler
-                  </Button>
-                  <Button onClick={soumettreJson} disabled={enCours || !fichierJson}>
-                    <Braces className="mr-2 h-4 w-4" />
-                    {importerJson.isPending ? "Import..." : "Importer le fichier"}
-                  </Button>
-                </DialogFooter>
-              </TabsContent>
-            </Tabs>
+                  {erreur && importer.error && <ErreursAPI erreur={erreur} />}
+
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => fermer(false)}>
+                      Annuler
+                    </Button>
+                    <Button onClick={soumettreImport} disabled={enCours}>
+                      <Upload className="mr-2 h-4 w-4" />
+                      {importer.isPending
+                        ? "Import..."
+                        : `Importer depuis ${SOURCES_IMPORT.find((s) => s.id === source)?.label}`}
+                    </Button>
+                  </DialogFooter>
+                </TabsContent>
+
+                <TabsContent value="fichier" className="space-y-4">
+                  <ChampClient
+                    clientId={clientId}
+                    setClientId={setClientId}
+                    estAdmin={estAdmin}
+                    idChamp="client_id_fichier"
+                  />
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="fichier_xlsx">Fichier Excel (.xlsx)</Label>
+                    <Input
+                      id="fichier_xlsx"
+                      ref={inputFichierRef}
+                      type="file"
+                      accept=".xlsx"
+                      onChange={(e) => setFichier(e.target.files?.[0] ?? null)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Utilisez le gabarit fourni (onglets Tâches, Ressources, Précédences,
+                      Compétences requises, Compatibilités), remplissez-le, puis déposez-le ici tel
+                      quel. Comme pour le CSV, une tâche peut être rendue compatible avec une
+                      ressource soit directement (onglet Compatibilités), soit via une compétence
+                      requise couverte par cette ressource (onglet Compétences requises).
+                    </p>
+                    <p className="text-xs">
+                      Gabarit d'exemple :{" "}
+                      <a
+                        href="/gabarits/gabarit_ingestion_trco.xlsx"
+                        download
+                        className="text-primary underline-offset-2 hover:underline"
+                      >
+                        gabarit_ingestion_trco.xlsx
+                      </a>
+                    </p>
+                  </div>
+
+                  {erreur && importerFichier.error && <ErreursAPI erreur={erreur} />}
+
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => fermer(false)}>
+                      Annuler
+                    </Button>
+                    <Button onClick={soumettreFichier} disabled={enCours || !fichier}>
+                      <FileSpreadsheet className="mr-2 h-4 w-4" />
+                      {importerFichier.isPending ? "Import..." : "Importer le fichier"}
+                    </Button>
+                  </DialogFooter>
+                </TabsContent>
+
+                <TabsContent value="csv" className="space-y-4">
+                  <ChampClient
+                    clientId={clientId}
+                    setClientId={setClientId}
+                    estAdmin={estAdmin}
+                    idChamp="client_id_csv"
+                  />
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="fichier_csv_taches">Tâches (.csv)</Label>
+                    <Input
+                      id="fichier_csv_taches"
+                      ref={inputTachesCsvRef}
+                      type="file"
+                      accept=".csv,text/csv"
+                      onChange={(e) => setFichierTachesCsv(e.target.files?.[0] ?? null)}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="fichier_csv_ressources">Ressources (.csv)</Label>
+                    <Input
+                      id="fichier_csv_ressources"
+                      ref={inputRessourcesCsvRef}
+                      type="file"
+                      accept=".csv,text/csv"
+                      onChange={(e) => setFichierRessourcesCsv(e.target.files?.[0] ?? null)}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="fichier_csv_contraintes">Contraintes (.csv)</Label>
+                    <Input
+                      id="fichier_csv_contraintes"
+                      ref={inputContraintesCsvRef}
+                      type="file"
+                      accept=".csv,text/csv"
+                      onChange={(e) => setFichierContraintesCsv(e.target.files?.[0] ?? null)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Trois fichiers séparés, un par axe — colonnes attendues :{" "}
+                      <code className="font-mono">id,nom,duree_estimee_jours</code> pour Tâches,{" "}
+                      <code className="font-mono">id,nom,competences</code> (séparées par{" "}
+                      <code className="font-mono">;</code>) pour Ressources,{" "}
+                      <code className="font-mono">
+                        type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
+                      </code>{" "}
+                      pour Contraintes (<code className="font-mono">type</code> vaut{" "}
+                      <code className="font-mono">precedence</code>,{" "}
+                      <code className="font-mono">compatibilite_ressource_tache</code> ou{" "}
+                      <code className="font-mono">competence_requise</code>).
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Plutôt que de saisir chaque compatibilité à la main, déclarez qu'une ressource
+                      possède une compétence et qu'une tâche l'exige (
+                      <code className="font-mono">competence_requise</code>) — la compatibilité et
+                      sa durée (<code className="font-mono">duree_estimee_jours</code> de la tâche)
+                      sont calculées automatiquement pour chaque ressource qualifiée.
+                    </p>
+                    <p className="text-xs">
+                      Gabarits d'exemple :{" "}
+                      {[
+                        { nom: "taches.csv", href: "/gabarits/taches.csv" },
+                        { nom: "ressources.csv", href: "/gabarits/ressources.csv" },
+                        { nom: "contraintes.csv", href: "/gabarits/contraintes.csv" },
+                      ].map((gabarit, i) => (
+                        <span key={gabarit.href}>
+                          {i > 0 && ", "}
+                          <a
+                            href={gabarit.href}
+                            download
+                            className="text-primary underline-offset-2 hover:underline"
+                          >
+                            {gabarit.nom}
+                          </a>
+                        </span>
+                      ))}
+                    </p>
+                  </div>
+
+                  {erreur && importerCsv.error && <ErreursAPI erreur={erreur} />}
+
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => fermer(false)}>
+                      Annuler
+                    </Button>
+                    <Button
+                      onClick={soumettreCsv}
+                      disabled={
+                        enCours ||
+                        !fichierTachesCsv ||
+                        !fichierRessourcesCsv ||
+                        !fichierContraintesCsv
+                      }
+                    >
+                      <Files className="mr-2 h-4 w-4" />
+                      {importerCsv.isPending ? "Import..." : "Importer les fichiers"}
+                    </Button>
+                  </DialogFooter>
+                </TabsContent>
+
+                <TabsContent value="csvlocal" className="space-y-4">
+                  <ChampClient
+                    clientId={clientId}
+                    setClientId={setClientId}
+                    estAdmin={estAdmin}
+                    idChamp="client_id_csvlocal"
+                  />
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="chemin_dossier_csv">Chemin du dossier CSV (côté serveur)</Label>
+                    <Input
+                      id="chemin_dossier_csv"
+                      value={cheminDossierCsvLocal}
+                      onChange={(e) => setCheminDossierCsvLocal(e.target.value)}
+                      placeholder="data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique"
+                      className="font-mono text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Spécifiez le chemin d'un dossier présent sur le serveur contenant les trois
+                      fichiers CSV requis (taches.csv, ressources.csv, contraintes.csv). Utile pour
+                      imports en masse, tests avec données de référence, ou intégrations
+                      automatisées.
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Exemples de dossiers disponibles :
+                    </p>
+                    <ul className="text-xs text-muted-foreground space-y-0.5">
+                      <li className="font-mono ml-4">
+                        data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique
+                      </li>
+                      <li className="font-mono ml-4">
+                        data/donnees_brutes/csv/industrie_manufacturiere/atelier_mecanique
+                      </li>
+                      <li className="font-mono ml-4">
+                        data/donnees_brutes/csv/services/centre_appels
+                      </li>
+                    </ul>
+                  </div>
+
+                  {erreur && importerCsvLocal.error && <ErreursAPI erreur={erreur} />}
+
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => fermer(false)}>
+                      Annuler
+                    </Button>
+                    <Button
+                      onClick={soumettreCsvLocal}
+                      disabled={enCours || !cheminDossierCsvLocal.trim()}
+                    >
+                      <FolderOpen className="mr-2 h-4 w-4" />
+                      {importerCsvLocal.isPending ? "Import..." : "Importer depuis le serveur"}
+                    </Button>
+                  </DialogFooter>
+                </TabsContent>
+
+                <TabsContent value="json" className="space-y-4">
+                  <ChampClient
+                    clientId={clientId}
+                    setClientId={setClientId}
+                    estAdmin={estAdmin}
+                    idChamp="client_id_json"
+                  />
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="fichier_json">Fichier JSON (.json)</Label>
+                    <Input
+                      id="fichier_json"
+                      ref={inputJsonRef}
+                      type="file"
+                      accept=".json,application/json"
+                      onChange={(e) => {
+                        setFichierJson(e.target.files?.[0] ?? null);
+                        setErreurParseJson(null);
+                      }}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Déposez un fichier JSON au format T-R-C-O (mêmes champs que la saisie manuelle
+                      : taches, ressources, contraintes, objectifs) — ingéré tel quel si déjà
+                      complet. Plutôt que de déclarer chaque compatibilité à la main, une tâche peut
+                      aussi porter une durée estimée (
+                      <code className="font-mono">duree_estimee_jours</code>) : sa compatibilité
+                      avec toute ressource dont les <code className="font-mono">competences</code>{" "}
+                      couvrent ses <code className="font-mono">competence_requise</code> est alors
+                      calculée automatiquement.
+                    </p>
+                    <p className="text-xs">
+                      Gabarit d'exemple :{" "}
+                      <a
+                        href="/gabarits/instance_exemple.json"
+                        download
+                        className="text-primary underline-offset-2 hover:underline"
+                      >
+                        instance_exemple.json
+                      </a>
+                    </p>
+                  </div>
+
+                  {erreurParseJson && (
+                    <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+                      <div className="flex items-center gap-2 font-medium">
+                        <AlertCircle className="h-4 w-4" /> {erreurParseJson}
+                      </div>
+                    </div>
+                  )}
+                  {erreur && importerJson.error && <ErreursAPI erreur={erreur} />}
+
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => fermer(false)}>
+                      Annuler
+                    </Button>
+                    <Button onClick={soumettreJson} disabled={enCours || !fichierJson}>
+                      <Braces className="mr-2 h-4 w-4" />
+                      {importerJson.isPending ? "Import..." : "Importer le fichier"}
+                    </Button>
+                  </DialogFooter>
+                </TabsContent>
+              </Tabs>
+            )}
           </>
         )}
       </DialogContent>

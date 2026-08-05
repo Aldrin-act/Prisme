@@ -52,36 +52,6 @@ def test_description_metier_absente_pour_une_ingestion_sans_agent(etat_postgres_
     assert etat_postgres_test.recuperer_description_metier(instance_id) is None
 
 
-def test_instance_parente_id_absent_par_defaut(etat_postgres_test: EtatPostgres) -> None:
-    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
-
-    assert etat_postgres_test.recuperer_instance_parente(instance_id) is None
-
-
-def test_instance_parente_id_round_trip(etat_postgres_test: EtatPostgres) -> None:
-    racine_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
-    derivee_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), instance_parente_id=racine_id
-    )
-
-    assert etat_postgres_test.recuperer_instance_parente(derivee_id) == racine_id
-    instances = etat_postgres_test.lister_instances(client_id="client-test")
-    derivee = next(i for i in instances if i["instance_id"] == derivee_id)
-    assert derivee["instance_parente_id"] == racine_id
-
-
-def test_supprimer_instance_orpheline_les_derivees_sans_les_detruire(etat_postgres_test: EtatPostgres) -> None:
-    racine_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
-    derivee_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), instance_parente_id=racine_id
-    )
-
-    etat_postgres_test.supprimer_instance(racine_id)
-
-    etat_postgres_test.recuperer_instance(derivee_id)  # survit
-    assert etat_postgres_test.recuperer_instance_parente(derivee_id) is None
-
-
 def test_nom_projet_round_trip(etat_postgres_test: EtatPostgres) -> None:
     instance_id = etat_postgres_test.enregistrer_instance(
         "client-test", _instance_exemple(), nom_projet="Atelier mécanique"
@@ -94,44 +64,6 @@ def test_nom_projet_absent_par_defaut(etat_postgres_test: EtatPostgres) -> None:
     instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
 
     assert etat_postgres_test.recuperer_nom_projet(instance_id) is None
-
-
-def test_nom_projet_herite_de_linstance_parente(etat_postgres_test: EtatPostgres) -> None:
-    racine_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), nom_projet="Atelier mécanique"
-    )
-    derivee_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), instance_parente_id=racine_id
-    )
-
-    assert etat_postgres_test.recuperer_nom_projet(derivee_id) == "Atelier mécanique"
-
-
-def test_nom_projet_explicite_prime_sur_lheritage(etat_postgres_test: EtatPostgres) -> None:
-    racine_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), nom_projet="Atelier mécanique"
-    )
-    derivee_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), instance_parente_id=racine_id, nom_projet="Ligne B"
-    )
-
-    assert etat_postgres_test.recuperer_nom_projet(derivee_id) == "Ligne B"
-
-
-def test_nom_projet_herite_survit_a_la_suppression_de_la_racine(etat_postgres_test: EtatPostgres) -> None:
-    """`nom_projet` est recopié à l'insertion (pas une clé étrangère comme
-    `instance_parente_id`) — contrairement à celui-ci, il ne se vide pas
-    quand la racine est supprimée ensuite."""
-    racine_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), nom_projet="Atelier mécanique"
-    )
-    derivee_id = etat_postgres_test.enregistrer_instance(
-        "client-test", _instance_exemple(), instance_parente_id=racine_id
-    )
-
-    etat_postgres_test.supprimer_instance(racine_id)
-
-    assert etat_postgres_test.recuperer_nom_projet(derivee_id) == "Atelier mécanique"
 
 
 def test_lister_noms_projet_compte_et_isole_par_client(etat_postgres_test: EtatPostgres) -> None:
@@ -154,6 +86,50 @@ def test_lister_instances_filtre_par_nom_projet(etat_postgres_test: EtatPostgres
     instances = etat_postgres_test.lister_instances(client_id="client-test", nom_projet="Atelier mécanique")
 
     assert [i["instance_id"] for i in instances] == [instance_ciblee]
+
+
+def _instance_modifiee() -> InstanceTRCO:
+    return InstanceTRCO.model_validate(
+        {
+            "taches": [{"id": "T1"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [
+                {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 5},
+            ],
+            "objectifs": [{"type": "minimiser_makespan"}],
+        }
+    )
+
+
+def test_modifier_instance_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), nom_projet="Atelier mécanique"
+    )
+
+    etat_postgres_test.modifier_instance(instance_id, _instance_modifiee(), nom_projet="Ligne B")
+
+    client_id, instance_relue = etat_postgres_test.recuperer_instance(instance_id)
+    assert client_id == "client-test"
+    assert [t.id for t in instance_relue.taches] == ["T1"]
+    assert etat_postgres_test.recuperer_nom_projet(instance_id) == "Ligne B"
+
+
+def test_modifier_instance_preserve_lhistorique_dexecution(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur=None)
+    execution_id = etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, resultat)
+
+    etat_postgres_test.modifier_instance(instance_id, _instance_modifiee())
+
+    etat_postgres_test.recuperer_execution(execution_id)  # toujours présente, aucune cascade
+
+
+def test_modifier_instance_inconnue_leve_key_error(etat_postgres_test: EtatPostgres) -> None:
+    try:
+        etat_postgres_test.modifier_instance("id-inexistant", _instance_modifiee())
+    except KeyError:
+        return
+    raise AssertionError("KeyError attendu pour une instance inconnue")
 
 
 def test_recuperer_instance_inconnue_leve_key_error(etat_postgres_test: EtatPostgres) -> None:

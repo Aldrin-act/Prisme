@@ -144,24 +144,6 @@ def test_nom_projet_absent_par_defaut() -> None:
     assert etat.recuperer_nom_projet(instance_id) is None
 
 
-def test_nom_projet_herite_de_linstance_parente() -> None:
-    etat = EtatAPI()
-    racine_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
-    derivee_id = etat.enregistrer_instance("client-test", _instance_exemple(), instance_parente_id=racine_id)
-
-    assert etat.recuperer_nom_projet(derivee_id) == "Atelier mécanique"
-
-
-def test_nom_projet_explicite_prime_sur_lheritage() -> None:
-    etat = EtatAPI()
-    racine_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
-    derivee_id = etat.enregistrer_instance(
-        "client-test", _instance_exemple(), instance_parente_id=racine_id, nom_projet="Ligne B"
-    )
-
-    assert etat.recuperer_nom_projet(derivee_id) == "Ligne B"
-
-
 def test_supprimer_instance_purge_son_nom_projet() -> None:
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
@@ -192,3 +174,51 @@ def test_lister_instances_filtre_par_nom_projet() -> None:
     instances = etat.lister_instances(client_id="client-test", nom_projet="Atelier mécanique")
 
     assert [i["instance_id"] for i in instances] == [instance_ciblee]
+
+
+def _instance_modifiee() -> InstanceTRCO:
+    return InstanceTRCO.model_validate(
+        {
+            "taches": [{"id": "T1"}, {"id": "T2"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [
+                {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 5},
+                {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 5},
+            ],
+            "objectifs": [{"type": "minimiser_makespan"}],
+        }
+    )
+
+
+def test_modifier_instance_round_trip() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple(), nom_projet="Atelier mécanique")
+
+    nouvelle_instance = _instance_modifiee()
+    resultat = etat.modifier_instance(instance_id, nouvelle_instance, nom_projet="Ligne B")
+
+    assert resultat is nouvelle_instance
+    client_id, instance_relue = etat.recuperer_instance(instance_id)
+    assert client_id == "client-test"
+    assert [t.id for t in instance_relue.taches] == ["T1", "T2"]
+    assert etat.recuperer_nom_projet(instance_id) == "Ligne B"
+
+
+def test_modifier_instance_preserve_lhistorique_dexecution() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur=None)
+    execution_id = etat.enregistrer_execution("solveur-abc", instance_id, resultat)
+
+    etat.modifier_instance(instance_id, _instance_modifiee())
+
+    etat.recuperer_execution(execution_id)  # toujours présente, aucune cascade
+    executions = etat.lister_executions(client_id="client-test")
+    assert [e["execution_id"] for e in executions] == [execution_id]
+
+
+def test_modifier_instance_inconnue_leve_key_error() -> None:
+    etat = EtatAPI()
+
+    with pytest.raises(KeyError):
+        etat.modifier_instance("id-inexistant", _instance_modifiee())

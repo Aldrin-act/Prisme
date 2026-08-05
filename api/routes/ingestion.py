@@ -20,46 +20,22 @@ class RequeteModificationObjectifs(BaseModel):
     objectifs: list[Objectif] = Field(min_length=1)
 
 
-def _resoudre_instance_parente(etat: EtatAPI, client_id: str, instance_source_id: str | None) -> str | None:
-    """Racine de lignée (§ "modifier une instance") : si `instance_source_id`
-    est déjà une dérivée, reprend sa propre racine plutôt que de chaîner les
-    parents — toute dérivée pointe directement sur l'instance d'origine.
-    Purement une annotation de confort : toute source introuvable ou d'un
-    autre client est silencieusement ignorée, jamais un motif de rejet de
-    l'ingestion elle-même."""
-    if instance_source_id is None:
-        return None
-    try:
-        client_id_source, _ = etat.recuperer_instance(instance_source_id)
-    except KeyError:
-        return None
-    if client_id_source != client_id:
-        return None
-    return etat.recuperer_instance_parente(instance_source_id) or instance_source_id
-
-
 @router.post("/{client_id}")
 def ingerer_instance(
     client_id: str,
     payload: dict[str, Any],
-    instance_source_id: str | None = None,
     nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     """Valide le payload (garde-fou amont, §6.7) et le met en attente
-    d'exécution. `instance_source_id` (query, optionnel) trace la lignée
-    quand ce payload est une version modifiée d'une instance déjà ingérée
-    (page Instances, bouton "Modifier") — voir `_resoudre_instance_parente`.
-    `nom_projet` (query, optionnel) étiquette librement l'instance ; si
-    absent et qu'une lignée existe, `enregistrer_instance` hérite du nom du
-    parent plutôt que de le laisser vide."""
+    d'exécution. `nom_projet` (query, optionnel) étiquette librement
+    l'instance créée. Pour modifier une instance déjà ingérée, voir
+    `PUT /{instance_id}` ci-dessous — modification en place, jamais une
+    nouvelle instance."""
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
-    instance_parente_id = _resoudre_instance_parente(etat, client_id, instance_source_id)
-    instance_id = etat.enregistrer_instance(
-        client_id, instance, instance_parente_id=instance_parente_id, nom_projet=nom_projet
-    )
+    instance_id = etat.enregistrer_instance(client_id, instance, nom_projet=nom_projet)
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 
@@ -84,7 +60,6 @@ def obtenir_instance(
         "client_id": client_id,
         "structure_contraintes": structure_contraintes(instance),
         "description_metier": etat.recuperer_description_metier(instance_id),
-        "instance_parente_id": etat.recuperer_instance_parente(instance_id),
         "nom_projet": etat.recuperer_nom_projet(instance_id),
         **instance.model_dump(mode="json"),
     }
@@ -112,6 +87,35 @@ def modifier_objectifs_instance(
         instance = etat.modifier_objectifs(instance_id, requete.objectifs)
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    return {
+        "instance_id": instance_id,
+        "client_id": client_id,
+        "structure_contraintes": structure_contraintes(instance),
+        **instance.model_dump(mode="json"),
+    }
+
+
+@router.put("/{instance_id}")
+def modifier_instance(
+    instance_id: str,
+    payload: dict[str, Any],
+    nom_projet: str | None = None,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Remplace en place le contenu T-R-C-O complet (tâches/ressources/
+    contraintes/objectifs) d'une instance déjà ingérée — même instance_id,
+    historique d'exécution intact (rien n'est dupliqué). Repasse par le même
+    garde-fou amont (§6.7, `valider_payload_trco`) que la création."""
+    try:
+        client_id, _ = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+
+    verifier_acces_client(utilisateur, client_id)
+    instance = valider_payload_trco(payload)
+    instance = etat.modifier_instance(instance_id, instance, nom_projet=nom_projet)
 
     return {
         "instance_id": instance_id,

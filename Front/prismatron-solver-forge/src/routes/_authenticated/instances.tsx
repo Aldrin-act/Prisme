@@ -74,9 +74,9 @@ function InstancesPage() {
   const [dialogOuvert, setDialogOuvert] = useState(false);
   const [aSupprimer, setASupprimer] = useState<string | null>(null);
   const [aVoir, setAVoir] = useState<string | null>(null);
-  // Instance complète à partir de laquelle préremplir IngestionDialog
-  // (bouton "Dupliquer et modifier", ouvert depuis DialogDetailInstance qui
-  // l'a déjà chargée en entier — pas de fetch séparé).
+  // Instance complète à éditer en place dans IngestionDialog (bouton
+  // "Modifier", ouvert depuis DialogDetailInstance qui l'a déjà chargée en
+  // entier — pas de fetch séparé).
   const [instanceAModifier, setInstanceAModifier] = useState<InstanceDetail | null>(null);
   const { data: instances, isLoading } = useInstances();
   const { data: jobsGeneration } = useJobsGeneration();
@@ -170,15 +170,6 @@ function InstancesPage() {
                   <TableRow key={instance.instance_id}>
                     <TableCell className="font-mono text-xs" title={instance.instance_id}>
                       {info ? info.label : instance.instance_id}
-                      {instance.instance_parente_id && (
-                        <button
-                          type="button"
-                          onClick={() => setAVoir(instance.instance_parente_id)}
-                          className="mt-0.5 block text-muted-foreground underline-offset-2 hover:underline"
-                        >
-                          dérivée de {instance.instance_parente_id.slice(0, 8)}…
-                        </button>
-                      )}
                     </TableCell>
                     <TableCell>
                       {info?.sourceId ? (
@@ -242,7 +233,7 @@ function InstancesPage() {
         key={instanceAModifier?.instance_id ?? "nouvelle"}
         open={dialogOuvert}
         onOpenChange={fermerDialogIngestion}
-        instanceSource={instanceAModifier ?? undefined}
+        instanceAEditer={instanceAModifier ?? undefined}
       />
 
       <AlertDialog open={!!aSupprimer} onOpenChange={(open) => !open && setASupprimer(null)}>
@@ -283,7 +274,6 @@ function InstancesPage() {
       <DialogDetailInstance
         instanceId={aVoir}
         onOpenChange={(open) => !open && setAVoir(null)}
-        onOuvrirInstance={setAVoir}
         onModifier={ouvrirModification}
       />
     </>
@@ -415,25 +405,17 @@ function SectionSolveurs({
 function DialogDetailInstance({
   instanceId,
   onOpenChange,
-  onOuvrirInstance,
   onModifier,
 }: {
   instanceId: string | null;
   onOpenChange: (open: boolean) => void;
-  onOuvrirInstance: (instanceId: string) => void;
   onModifier: (instance: InstanceDetail) => void;
 }) {
   const { data: instance, isLoading } = useInstance(instanceId);
-  // Déjà chargé par la page pour le tableau — réutilisé ici pour lister les
-  // dérivées de cette instance, sans endpoint de lignée dédié (React Query
-  // dédoublonne l'appel, même clé de requête).
-  const { data: toutesLesInstances } = useInstances();
   const queryClient = useQueryClient();
   const modifier = useModifierObjectifs();
   const [enEdition, setEnEdition] = useState(false);
   const [objectifsEdition, setObjectifsEdition] = useState<ObjectifLigne[]>([]);
-
-  const derivees = (toutesLesInstances ?? []).filter((i) => i.instance_parente_id === instanceId);
 
   const erreurModification = modifier.error as PrismeAPIError | null;
 
@@ -492,44 +474,9 @@ function DialogDetailInstance({
                   </Badge>
                 </div>
                 <Button size="sm" variant="outline" onClick={() => onModifier(instance)}>
-                  <Pencil className="mr-1.5 h-3.5 w-3.5" /> Dupliquer et modifier
+                  <Pencil className="mr-1.5 h-3.5 w-3.5" /> Modifier
                 </Button>
               </div>
-
-              {(instance.instance_parente_id || derivees.length > 0) && (
-                <div className="space-y-1 rounded-lg border border-border/50 p-3 text-xs text-muted-foreground">
-                  {instance.instance_parente_id && (
-                    <p>
-                      Dérivée de{" "}
-                      <button
-                        type="button"
-                        onClick={() => onOuvrirInstance(instance.instance_parente_id!)}
-                        className="font-mono text-primary underline-offset-2 hover:underline"
-                      >
-                        {instance.instance_parente_id}
-                      </button>
-                    </p>
-                  )}
-                  {derivees.length > 0 && (
-                    <div>
-                      <span>Instances dérivées de celle-ci :</span>
-                      <div className="mt-1 flex flex-wrap gap-1.5">
-                        {derivees.map((d) => (
-                          <button
-                            key={d.instance_id}
-                            type="button"
-                            onClick={() => onOuvrirInstance(d.instance_id)}
-                          >
-                            <Badge variant="outline" className="font-mono text-xs hover:bg-muted">
-                              {d.instance_id.slice(0, 8)}…
-                            </Badge>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
 
               <div>
                 <h4 className="mb-2 text-sm font-semibold">Tâches ({instance.taches.length})</h4>

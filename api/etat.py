@@ -215,18 +215,11 @@ class EtatAPI:
     # métadonnée de l'entité Instance côté API, pas un champ du problème
     # d'ordonnancement.
     descriptions_metier: dict[str, str | None] = field(default_factory=dict)
-    # Racine de lignée (§ "modifier une instance") : `None` pour toute
-    # instance qui n'est pas une dérivée d'une autre. Toujours l'instance
-    # d'origine, jamais le parent immédiat — voir `enregistrer_instance`.
-    instances_parentes: dict[str, str | None] = field(default_factory=dict)
     # Étiquette libre choisie par l'utilisateur pour retrouver/regrouper des
     # instances liées entre elles (ex. réingestions successives d'un même
     # atelier après un aléa) — pure métadonnée de confort, jamais consultée
     # par la sélection de solveur (`structure_contraintes`/
     # `signature_objectifs`) ni par la détection de signaux de supervision.
-    # Héritée automatiquement le long de `instances_parentes` par
-    # `enregistrer_instance` si absente, pour ne pas devoir la retaper à
-    # chaque réingestion.
     noms_projet: dict[str, str | None] = field(default_factory=dict)
     clients: dict[str, Client] = field(default_factory=dict)
     dates_execution: dict[str, str] = field(default_factory=dict)
@@ -255,7 +248,6 @@ class EtatAPI:
         instance: InstanceTRCO,
         source_id: str | None = None,
         description_metier: str | None = None,
-        instance_parente_id: str | None = None,
         nom_projet: str | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
@@ -264,9 +256,6 @@ class EtatAPI:
         if source_id is not None:
             self.source_par_instance[instance_id] = source_id
         self.descriptions_metier[instance_id] = description_metier
-        self.instances_parentes[instance_id] = instance_parente_id
-        if nom_projet is None and instance_parente_id is not None:
-            nom_projet = self.noms_projet.get(instance_parente_id)
         self.noms_projet[instance_id] = nom_projet
         return instance_id
 
@@ -341,14 +330,6 @@ class EtatAPI:
             raise KeyError(instance_id)
         return self.descriptions_metier.get(instance_id)
 
-    def recuperer_instance_parente(self, instance_id: str) -> str | None:
-        """`None` pour toute instance qui n'est pas une dérivée — même
-        convention que `recuperer_description_metier` (lève `KeyError` pour
-        une instance inconnue, pas seulement pour une lignée absente)."""
-        if instance_id not in self.instances:
-            raise KeyError(instance_id)
-        return self.instances_parentes.get(instance_id)
-
     def recuperer_nom_projet(self, instance_id: str) -> str | None:
         """`None` pour toute instance jamais nommée — même convention que
         `recuperer_description_metier` (lève `KeyError` pour une instance
@@ -390,6 +371,21 @@ class EtatAPI:
         self.instances[instance_id] = (client_id, nouvelle_instance)
         return nouvelle_instance
 
+    def modifier_instance(
+        self, instance_id: str, instance: InstanceTRCO, nom_projet: str | None = None
+    ) -> InstanceTRCO:
+        """Remplace en place le contenu T-R-C-O complet (tâches/ressources/
+        contraintes/objectifs) d'une instance déjà ingérée — même
+        instance_id, historique d'exécution/décisions intact (aucune
+        cascade). L'appelant a déjà validé `instance` via
+        `valider_payload_trco` (même garde-fou §6.7 qu'à la création)."""
+        if instance_id not in self.instances:
+            raise KeyError(instance_id)
+        client_id, _ = self.instances[instance_id]
+        self.instances[instance_id] = (client_id, instance)
+        self.noms_projet[instance_id] = nom_projet
+        return instance
+
     def supprimer_instance(self, instance_id: str) -> None:
         """Cascade-supprime son propre historique d'exécution (exécutions,
         décisions humaines associées) — une exécution n'existe jamais sans
@@ -402,7 +398,6 @@ class EtatAPI:
         del self.instances[instance_id]
         self.source_par_instance.pop(instance_id, None)
         self.descriptions_metier.pop(instance_id, None)
-        self.instances_parentes.pop(instance_id, None)
         self.noms_projet.pop(instance_id, None)
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
             del self.executions[execution_id]
@@ -414,9 +409,6 @@ class EtatAPI:
         for proposition in self.propositions.values():
             if proposition.instance_id == instance_id:
                 proposition.instance_id = None
-        for autre_instance_id, parente_id in self.instances_parentes.items():
-            if parente_id == instance_id:
-                self.instances_parentes[autre_instance_id] = None
 
     def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
         execution_id = str(uuid.uuid4())
@@ -467,7 +459,6 @@ class EtatAPI:
                 "client_id": client_id_instance,
                 "structure_contraintes": structure_contraintes(instance),
                 "executee": instance_id in instances_executees,
-                "instance_parente_id": self.instances_parentes.get(instance_id),
                 "nom_projet": self.noms_projet.get(instance_id),
             }
             for instance_id, (client_id_instance, instance) in self.instances.items()

@@ -146,10 +146,8 @@ export interface InstanceDetail extends InstanceTRCO {
   instance_id: string;
   client_id: string;
   structure_contraintes: string;
-  instance_parente_id: string | null;
   // Étiquette libre pour retrouver/regrouper des instances liées (voir
-  // InstanceInfo.nom_projet) — héritée automatiquement le long de la
-  // lignée si non fournie explicitement à l'ingestion.
+  // InstanceInfo.nom_projet).
   nom_projet: string | null;
 }
 
@@ -206,14 +204,9 @@ export interface InstanceInfo {
   client_id: string;
   structure_contraintes: string;
   executee: boolean;
-  // Racine de lignée (§ "modifier une instance") — null si cette instance
-  // n'est pas une dérivée d'une autre. Toujours l'instance d'origine,
-  // jamais le parent immédiat (voir api/routes/ingestion.py).
-  instance_parente_id: string | null;
   // Étiquette libre choisie à l'ingestion pour retrouver/regrouper des
   // instances liées entre elles (réingestions successives d'un même
-  // atelier) — héritée automatiquement le long de instance_parente_id si
-  // non fournie explicitement.
+  // atelier), ou modifiée depuis lors via "Modifier".
   nom_projet: string | null;
 }
 

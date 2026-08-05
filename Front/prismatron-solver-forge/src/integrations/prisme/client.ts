@@ -121,18 +121,9 @@ export const prismeClient = {
       body: JSON.stringify({ client_id: clientId, nom: nom ?? null }),
     }),
 
-  // INGESTION — `instanceSourceId` (optionnel) trace la lignée quand ce
-  // payload est une version modifiée d'une instance déjà ingérée (page
-  // Instances, bouton "Modifier"). `nomProjet` (optionnel) étiquette
-  // librement l'instance ; hérité du parent si omis et qu'une lignée existe.
-  ingererInstance: (
-    clientId: string,
-    instance: Types.InstanceTRCO,
-    instanceSourceId?: string,
-    nomProjet?: string,
-  ) => {
+  // INGESTION — `nomProjet` (optionnel) étiquette librement l'instance créée.
+  ingererInstance: (clientId: string, instance: Types.InstanceTRCO, nomProjet?: string) => {
     const params = new URLSearchParams();
-    if (instanceSourceId) params.set("instance_source_id", instanceSourceId);
     if (nomProjet) params.set("nom_projet", nomProjet);
     const requete = params.toString();
     return apiFetch<Types.ReponseIngestion>(
@@ -163,6 +154,19 @@ export const prismeClient = {
       method: "PATCH",
       body: JSON.stringify({ objectifs }),
     }),
+
+  // Remplace en place le contenu T-R-C-O complet d'une instance déjà
+  // ingérée — même instance_id, historique d'exécution intact, rien n'est
+  // dupliqué.
+  modifierInstance: (instanceId: string, instance: Types.InstanceTRCO, nomProjet?: string) => {
+    const params = new URLSearchParams();
+    if (nomProjet) params.set("nom_projet", nomProjet);
+    const requete = params.toString();
+    return apiFetch<Types.InstanceDetail>(
+      `${PRISME_CONFIG.routes.ingestion}/${instanceId}${requete ? `?${requete}` : ""}`,
+      { method: "PUT", body: JSON.stringify(instance) },
+    );
+  },
 
   // EXÉCUTION — déclenchée directement par instance_id, sans intermédiaire.
   declencherExecution: (instanceId: string) =>

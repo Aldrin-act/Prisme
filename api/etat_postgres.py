@@ -186,25 +186,21 @@ class EtatPostgres:
             # entre elles (réingestions successives d'un même atelier après
             # un aléa) — pure métadonnée de confort, jamais consultée par la
             # sélection de solveur ni la détection de signaux de
-            # supervision. Héritée automatiquement le long de
-            # `instance_parente_id` par `enregistrer_instance` si absente.
+            # supervision.
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS nom_projet TEXT").format(
                     table=self._table("instances_trco")
                 )
             )
-            # Migration idempotente : racine de lignée (§ "modifier une
-            # instance") — NULL pour toute instance qui n'est pas une
-            # dérivée d'une autre. Toujours l'instance d'origine, jamais le
-            # parent immédiat (résolu par l'appelant, `api/routes/ingestion.py`).
-            # Auto-référence, `ON DELETE SET NULL` : supprimer la racine
-            # orpheline ses dérivées plutôt que de les cascade-supprimer ou
-            # de bloquer la suppression — même discipline que `source_id`.
+            # Ancienne racine de lignée ("dérivée de") — retirée : une
+            # instance se modifie désormais en place (`modifier_instance`,
+            # même instance_id) plutôt que de générer une dérivée. La FK
+            # auto-référencée part avec la colonne, pas de `DROP CONSTRAINT`
+            # séparé nécessaire — même discipline que `projet_id` ci-dessus.
             connexion.execute(
-                sql.SQL(
-                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS instance_parente_id TEXT "
-                    "REFERENCES {table}(id) ON DELETE SET NULL"
-                ).format(table=self._table("instances_trco"))
+                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS instance_parente_id").format(
+                    table=self._table("instances_trco")
+                )
             )
             connexion.execute(
                 sql.SQL(
@@ -567,7 +563,6 @@ class EtatPostgres:
         instance: InstanceTRCO,
         source_id: str | None = None,
         description_metier: str | None = None,
-        instance_parente_id: str | None = None,
         nom_projet: str | None = None,
     ) -> str:
         instance_id = str(uuid.uuid4())
@@ -579,18 +574,12 @@ class EtatPostgres:
                 ),
                 (client_id,),
             )
-            if nom_projet is None and instance_parente_id is not None:
-                ligne_parente = connexion.execute(
-                    sql.SQL("SELECT nom_projet FROM {} WHERE id = %s").format(self._table("instances_trco")),
-                    (instance_parente_id,),
-                ).fetchone()
-                nom_projet = ligne_parente[0] if ligne_parente is not None else None
             connexion.execute(
                 sql.SQL(
                     "INSERT INTO {} "
                     "(id, client_id, payload, structure_contraintes, date_ingestion, source_id, "
-                    "description_metier, instance_parente_id, nom_projet) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s)"
+                    "description_metier, nom_projet) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
@@ -600,7 +589,6 @@ class EtatPostgres:
                     datetime.now(UTC).isoformat(),
                     source_id,
                     description_metier,
-                    instance_parente_id,
                     nom_projet,
                 ),
             )
@@ -622,16 +610,6 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL("SELECT description_metier FROM {} WHERE id = %s").format(self._table("instances_trco")),
-                (instance_id,),
-            ).fetchone()
-        if ligne is None:
-            raise KeyError(instance_id)
-        return ligne[0]
-
-    def recuperer_instance_parente(self, instance_id: str) -> str | None:
-        with closing(self._connexion()) as connexion:
-            ligne = connexion.execute(
-                sql.SQL("SELECT instance_parente_id FROM {} WHERE id = %s").format(self._table("instances_trco")),
                 (instance_id,),
             ).fetchone()
         if ligne is None:
@@ -697,6 +675,25 @@ class EtatPostgres:
             connexion.commit()
         return nouvelle_instance
 
+    def modifier_instance(
+        self, instance_id: str, instance: InstanceTRCO, nom_projet: str | None = None
+    ) -> InstanceTRCO:
+        with closing(self._connexion()) as connexion:
+            existe = connexion.execute(
+                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+            if existe is None:
+                raise KeyError(instance_id)
+            connexion.execute(
+                sql.SQL(
+                    "UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s, nom_projet = %s WHERE id = %s"
+                ).format(self._table("instances_trco")),
+                (instance.model_dump_json(), structure_contraintes(instance), nom_projet, instance_id),
+            )
+            connexion.commit()
+        return instance
+
     def supprimer_instance(self, instance_id: str) -> None:
         """Cascade-supprime son propre historique d'exécution (exécutions,
         plannings, opérations planifiées, décisions humaines associées) —
@@ -758,7 +755,7 @@ class EtatPostgres:
         requete = sql.SQL(
             "SELECT i.id, i.client_id, i.structure_contraintes, "
             "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee, "
-            "i.instance_parente_id, i.nom_projet "
+            "i.nom_projet "
             "FROM {instances} i WHERE 1 = 1"
         ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -777,10 +774,9 @@ class EtatPostgres:
                 "client_id": client_id,
                 "structure_contraintes": structure,
                 "executee": executee,
-                "instance_parente_id": instance_parente_id,
                 "nom_projet": nom_projet_valeur,
             }
-            for instance_id, client_id, structure, executee, instance_parente_id, nom_projet_valeur in lignes
+            for instance_id, client_id, structure, executee, nom_projet_valeur in lignes
         ]
 
     # --- Exécutions ------------------------------------------------------

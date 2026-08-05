@@ -319,14 +319,12 @@ export function useIngererInstance() {
     mutationFn: ({
       clientId,
       instance,
-      instanceSourceId,
       nomProjet,
     }: {
       clientId: string;
       instance: Types.InstanceTRCO;
-      instanceSourceId?: string;
       nomProjet?: string;
-    }) => prismeClient.ingererInstance(clientId, instance, instanceSourceId, nomProjet),
+    }) => prismeClient.ingererInstance(clientId, instance, nomProjet),
   });
 }
 
@@ -346,6 +344,24 @@ export function useModifierObjectifs() {
   return useMutation({
     mutationFn: ({ instanceId, objectifs }: { instanceId: string; objectifs: Types.Objectif[] }) =>
       prismeClient.modifierObjectifs(instanceId, objectifs),
+  });
+}
+
+/**
+ * Mutation pour remplacer en place le contenu T-R-C-O complet d'une instance
+ * déjà ingérée — même instance_id, historique d'exécution intact.
+ */
+export function useModifierInstance() {
+  return useMutation({
+    mutationFn: ({
+      instanceId,
+      instance,
+      nomProjet,
+    }: {
+      instanceId: string;
+      instance: Types.InstanceTRCO;
+      nomProjet?: string;
+    }) => prismeClient.modifierInstance(instanceId, instance, nomProjet),
   });
 }
 
