@@ -1,0 +1,32 @@
+{
+  "taches": [
+    {"id": "T1_DECOUPE", "nom": "Decoupe"},
+    {"id": "T2_PERCAGE", "nom": "Percage"},
+    {"id": "T3_EBAVURAGE", "nom": "Ebavurage"},
+    {"id": "T4_ASSEMBLAGE", "nom": "Assemblage"},
+    {"id": "T5_CONTROLE", "nom": "Controle"}
+  ],
+  "ressources": [
+    {"id": "R1", "nom": "Decoupeuse"},
+    {"id": "R2", "nom": "Perceuse"},
+    {"id": "R3", "nom": "Poste ebavurage"},
+    {"id": "R4", "nom": "Poste assemblage"},
+    {"id": "R5", "nom": "Controle qualite"}
+  ],
+  "contraintes": [
+    {"type": "precedence", "avant": "T1_DECOUPE", "apres": "T2_PERCAGE"},
+    {"type": "precedence", "avant": "T1_DECOUPE", "apres": "T3_EBAVURAGE"},
+    {"type": "precedence", "avant": "T2_PERCAGE", "apres": "T4_ASSEMBLAGE"},
+    {"type": "precedence", "avant": "T3_EBAVURAGE", "apres": "T4_ASSEMBLAGE"},
+    {"type": "precedence", "avant": "T4_ASSEMBLAGE", "apres": "T5_CONTROLE"},
+
+    {"type": "compatibilite_ressource_tache", "tache": "T1_DECOUPE", "ressource": "R1", "duree": 1},
+    {"type": "compatibilite_ressource_tache", "tache": "T2_PERCAGE", "ressource": "R2", "duree": 1},
+    {"type": "compatibilite_ressource_tache", "tache": "T3_EBAVURAGE", "ressource": "R3", "duree": 1},
+    {"type": "compatibilite_ressource_tache", "tache": "T4_ASSEMBLAGE", "ressource": "R4", "duree": 1},
+    {"type": "compatibilite_ressource_tache", "tache": "T5_CONTROLE", "ressource": "R5", "duree": 1}
+  ],
+  "objectifs": [
+    {"type": "minimiser_makespan"}
+  ]
+}
