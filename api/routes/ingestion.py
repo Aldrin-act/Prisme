@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from api.autorisation import verifier_acces_client
-from api.etat import EtatAPI, SecteurActivite, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import Objectif
@@ -25,7 +25,7 @@ def ingerer_instance(
     client_id: str,
     payload: dict[str, Any],
     nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
+    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
@@ -105,7 +105,7 @@ def modifier_instance(
     instance_id: str,
     payload: dict[str, Any],
     nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
+    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:

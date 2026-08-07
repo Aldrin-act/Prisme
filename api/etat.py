@@ -160,7 +160,11 @@ class SourceDonnees:
     # Capturé une fois à la création de la source, réutilisé à chaque
     # reconversion (contrairement à nom_projet, connu seulement une fois
     # l'instance décidée) — oriente le prompt de l'agent de compréhension.
-    secteur_activite: SecteurActivite | None = None
+    # `str` libre (pas `SecteurActivite`) : un des 6 secteurs connus, ou un
+    # secteur personnalisé saisi via "Autre" côté frontend — la liste fermée
+    # `LABELS_SECTEUR_ACTIVITE` reste la source des suggestions/du menu,
+    # mais n'est jamais une contrainte de validation sur la valeur stockée.
+    secteur_activite: str | None = None
 
 
 @dataclass(frozen=True)
@@ -254,7 +258,7 @@ class EtatAPI:
     # `enregistrer_instance` quand elle en a une (voir enregistrer_instance),
     # ou fourni directement pour les canaux sans SourceDonnees (CSV/JSON/
     # GreenSIG/T-R-C-O manuel). Même statut de métadonnée pure que noms_projet.
-    secteurs_activite: dict[str, SecteurActivite | None] = field(default_factory=dict)
+    secteurs_activite: dict[str, str | None] = field(default_factory=dict)
     # Dernière modification du contenu T-R-C-O d'une instance (création,
     # `modifier_instance` ou `modifier_objectifs`) — comparée à la date de sa
     # dernière exécution par `supervision/detecteurs.py` pour détecter
@@ -289,7 +293,7 @@ class EtatAPI:
         source_id: str | None = None,
         description_metier: str | None = None,
         nom_projet: str | None = None,
-        secteur_activite: SecteurActivite | None = None,
+        secteur_activite: str | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
         instance_id = str(uuid.uuid4())
@@ -307,7 +311,7 @@ class EtatAPI:
         client_id: str,
         donnees_brutes: str,
         nom: str | None = None,
-        secteur_activite: SecteurActivite | None = None,
+        secteur_activite: str | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
         source_id = str(uuid.uuid4())
@@ -389,7 +393,7 @@ class EtatAPI:
             raise KeyError(instance_id)
         return self.noms_projet.get(instance_id)
 
-    def recuperer_secteur_activite(self, instance_id: str) -> SecteurActivite | None:
+    def recuperer_secteur_activite(self, instance_id: str) -> str | None:
         """`None` pour toute instance sans secteur déclaré — même convention
         que `recuperer_nom_projet` (lève `KeyError` pour une instance
         inconnue, pas seulement pour un secteur absent)."""
@@ -436,7 +440,7 @@ class EtatAPI:
         instance_id: str,
         instance: InstanceTRCO,
         nom_projet: str | None = None,
-        secteur_activite: SecteurActivite | None = None,
+        secteur_activite: str | None = None,
     ) -> InstanceTRCO:
         """Remplace en place le contenu T-R-C-O complet (tâches/ressources/
         contraintes/objectifs) d'une instance déjà ingérée — même
@@ -520,7 +524,7 @@ class EtatAPI:
         self,
         client_id: str | None = None,
         nom_projet: str | None = None,
-        secteur_activite: SecteurActivite | None = None,
+        secteur_activite: str | None = None,
     ) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) sur les instances ingérées,
         avec un indicateur `executee` pour repérer celles jamais utilisées.

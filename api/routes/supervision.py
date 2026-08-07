@@ -22,7 +22,7 @@ from pydantic import BaseModel
 
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.dependencies import obtenir_registre
-from api.etat import Decision, EtatAPI, PropositionSupervision, SecteurActivite, obtenir_etat
+from api.etat import Decision, EtatAPI, PropositionSupervision, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
 from api.routes.generation import demarrer_generation_solveur

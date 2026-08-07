@@ -34,7 +34,7 @@ from adapters.greensig import extraire_payload, traduire
 from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
 from adapters.json_import import traduire as traduire_json
 from api.autorisation import verifier_acces_client
-from api.etat import EtatAPI, SecteurActivite, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from generation.agents.base import ErreurReponseAgentInvalide
@@ -48,7 +48,7 @@ router = APIRouter(prefix="/adapters", tags=["adapters"])
 @router.post("/greensig/ingerer")
 def ingerer_depuis_greensig(
     nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
+    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
@@ -75,7 +75,7 @@ async def ingerer_depuis_csv(
     ressources: UploadFile = File(...),
     contraintes: UploadFile = File(...),
     nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
+    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
@@ -111,7 +111,7 @@ def ingerer_depuis_json_avec_competences(
     client_id: str,
     payload: dict[str, Any] = Body(...),
     nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
+    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
@@ -139,7 +139,7 @@ class RequeteComprehension(BaseModel):
     client_id: str
     donnees_brutes: str
     nom_projet: str | None = None
-    secteur_activite: SecteurActivite | None = None
+    secteur_activite: str | None = None
 
 
 @router.post("/comprehension/ingerer")
@@ -181,7 +181,7 @@ class RequeteCsvLocal(BaseModel):
     chemin_dossier: str
     client_id: str
     nom_projet: str | None = None
-    secteur_activite: SecteurActivite | None = None
+    secteur_activite: str | None = None
 
 
 @router.post("/csv-local/ingerer")
