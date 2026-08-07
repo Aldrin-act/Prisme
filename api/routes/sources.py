@@ -36,7 +36,7 @@ from adapters.csv_import import traduire as traduire_csv
 from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
 from adapters.json_import import traduire as traduire_json
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
-from api.etat import EtatAPI, SecteurActivite, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import InstanceTRCO
@@ -154,7 +154,7 @@ class RequeteCreationSource(BaseModel):
     # Capturé une fois ici, réutilisé à chaque reconversion (generer_instance/
     # generer_instance_deterministe) — oriente le prompt de l'agent de
     # compréhension sans devoir être re-saisi à chaque tentative.
-    secteur_activite: SecteurActivite | None = None
+    secteur_activite: str | None = None
 
 
 def _client_id_effectif(requete_client_id: str | None, utilisateur: dict) -> str:

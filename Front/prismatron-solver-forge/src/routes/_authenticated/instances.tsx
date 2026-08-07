@@ -267,7 +267,9 @@ function InstancesPage() {
                         <TableCell>
                           {instance.secteur_activite ? (
                             <Badge variant="outline">
-                              {LABELS_SECTEUR_ACTIVITE[instance.secteur_activite]}
+                              {LABELS_SECTEUR_ACTIVITE[
+                                instance.secteur_activite as SecteurActivite
+                              ] ?? instance.secteur_activite}
                             </Badge>
                           ) : (
                             <span className="text-muted-foreground">—</span>

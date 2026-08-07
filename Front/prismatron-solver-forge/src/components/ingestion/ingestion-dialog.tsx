@@ -331,12 +331,33 @@ export function IngestionDialog({
   // rendu une fois au-dessus des onglets, quel que soit celui utilisé pour
   // soumettre.
   const [nomProjet, setNomProjet] = useState(instanceAEditer?.nom_projet ?? "");
-  // Vocabulaire fermé (contrairement à nom_projet) : oriente le prompt de
-  // l'agent de compréhension, filtre Instances/Données, alimente des
-  // suggestions de ressources sur l'onglet T-R-C-O ci-dessous.
-  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "">(
+  // Vocabulaire fermé pour le menu/les suggestions (contrairement à
+  // nom_projet), mais avec échappatoire "_autre" (sentinel local, jamais
+  // envoyé tel quel) vers secteurActiviteAutre pour un secteur non listé —
+  // voir secteurActiviteEffectif.
+  const secteurConnuAEditer = (Object.keys(LABELS_SECTEUR_ACTIVITE) as string[]).includes(
     instanceAEditer?.secteur_activite ?? "",
   );
+  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "_autre" | "">(
+    instanceAEditer?.secteur_activite
+      ? secteurConnuAEditer
+        ? (instanceAEditer.secteur_activite as SecteurActivite)
+        : "_autre"
+      : "",
+  );
+  const [secteurActiviteAutre, setSecteurActiviteAutre] = useState(
+    instanceAEditer?.secteur_activite && !secteurConnuAEditer
+      ? instanceAEditer.secteur_activite
+      : "",
+  );
+  const secteurActiviteEffectif =
+    secteurActivite === "_autre"
+      ? secteurActiviteAutre.trim() || undefined
+      : secteurActivite || undefined;
+  // Un secteur personnalisé ("_autre") n'a pas de suggestions de ressources
+  // — seul un des 6 secteurs connus est transmis à SectionRessources.
+  const secteurActiviteConnu =
+    secteurActivite === "_autre" ? undefined : secteurActivite || undefined;
   const { data: nomsProjetConnus } = useNomsProjet();
   const [succes, setSucces] = useState<{
     instance_id: string;
@@ -351,6 +372,7 @@ export function IngestionDialog({
     setObjectifs([nouvelObjectif()]);
     setNomProjet("");
     setSecteurActivite("");
+    setSecteurActiviteAutre("");
     setFichier(null);
     if (inputFichierRef.current) inputFichierRef.current.value = "";
     setFichierJson(null);
@@ -402,21 +424,20 @@ export function IngestionDialog({
       contraintesNonEditables,
     );
     const nomProjetSoumis = nomProjet.trim() || undefined;
-    const secteurActiviteSoumis = secteurActivite || undefined;
     if (instanceAEditer) {
       modifier.mutate(
         {
           instanceId: instanceAEditer.instance_id,
           instance,
           nomProjet: nomProjetSoumis,
-          secteurActivite: secteurActiviteSoumis,
+          secteurActivite: secteurActiviteEffectif,
         },
         { onSuccess: onIngestionReussie },
       );
       return;
     }
     ingerer.mutate(
-      { clientId, instance, nomProjet: nomProjetSoumis, secteurActivite: secteurActiviteSoumis },
+      { clientId, instance, nomProjet: nomProjetSoumis, secteurActivite: secteurActiviteEffectif },
       { onSuccess: onIngestionReussie },
     );
   }
@@ -426,7 +447,7 @@ export function IngestionDialog({
       {
         nomAdaptateur: source,
         nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActivite || undefined,
+        secteurActivite: secteurActiviteEffectif,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -448,7 +469,7 @@ export function IngestionDialog({
           contraintes: fichierContraintesCsv,
         },
         nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActivite || undefined,
+        secteurActivite: secteurActiviteEffectif,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -469,7 +490,7 @@ export function IngestionDialog({
         clientId,
         payload,
         nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActivite || undefined,
+        secteurActivite: secteurActiviteEffectif,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -482,7 +503,7 @@ export function IngestionDialog({
         clientId,
         cheminDossier: cheminDossierCsvLocal,
         nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActivite || undefined,
+        secteurActivite: secteurActiviteEffectif,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -614,7 +635,7 @@ export function IngestionDialog({
               <Label htmlFor="secteur_activite">Secteur d'activité (optionnel)</Label>
               <Select
                 value={secteurActivite}
-                onValueChange={(v) => setSecteurActivite(v as SecteurActivite)}
+                onValueChange={(v) => setSecteurActivite(v as SecteurActivite | "_autre")}
               >
                 <SelectTrigger id="secteur_activite">
                   <SelectValue placeholder="Non renseigné" />
@@ -625,8 +646,17 @@ export function IngestionDialog({
                       {LABELS_SECTEUR_ACTIVITE[s]}
                     </SelectItem>
                   ))}
+                  <SelectItem value="_autre">Autre (préciser)</SelectItem>
                 </SelectContent>
               </Select>
+              {secteurActivite === "_autre" && (
+                <Input
+                  value={secteurActiviteAutre}
+                  onChange={(e) => setSecteurActiviteAutre(e.target.value)}
+                  placeholder="ex : Textile, Logistique..."
+                  className="mt-1.5"
+                />
+              )}
               <p className="text-xs text-muted-foreground">
                 Aide l'agent de compréhension à interpréter des données ambiguës et suggère des
                 ressources typiques sur l'onglet Saisie T-R-C-O.
@@ -652,7 +682,7 @@ export function IngestionDialog({
                 <SectionRessources
                   ressources={ressources}
                   setRessources={setRessources}
-                  secteurActivite={secteurActivite || undefined}
+                  secteurActivite={secteurActiviteConnu}
                 />
                 <SectionContraintes
                   contraintes={contraintes}
@@ -698,7 +728,7 @@ export function IngestionDialog({
                   <SectionRessources
                     ressources={ressources}
                     setRessources={setRessources}
-                    secteurActivite={secteurActivite || undefined}
+                    secteurActivite={secteurActiviteConnu}
                   />
                   <SectionContraintes
                     contraintes={contraintes}

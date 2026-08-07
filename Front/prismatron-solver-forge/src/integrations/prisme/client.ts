@@ -127,7 +127,7 @@ export const prismeClient = {
     clientId: string,
     instance: Types.InstanceTRCO,
     nomProjet?: string,
-    secteurActivite?: Types.SecteurActivite,
+    secteurActivite?: string,
   ) => {
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
@@ -169,7 +169,7 @@ export const prismeClient = {
     instanceId: string,
     instance: Types.InstanceTRCO,
     nomProjet?: string,
-    secteurActivite?: Types.SecteurActivite,
+    secteurActivite?: string,
   ) => {
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
@@ -259,11 +259,7 @@ export const prismeClient = {
 
   // ADAPTATEURS ERP — chaque adaptateur déterministe expose POST /adapters/{nom}/ingerer,
   // sans body : il lit sa source de données côté backend (ex. GreenSIG lit sa propre DB).
-  importerViaAdaptateur: (
-    nomAdaptateur: string,
-    nomProjet?: string,
-    secteurActivite?: Types.SecteurActivite,
-  ) => {
+  importerViaAdaptateur: (nomAdaptateur: string, nomProjet?: string, secteurActivite?: string) => {
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
     if (secteurActivite) params.set("secteur_activite", secteurActivite);
@@ -290,7 +286,7 @@ export const prismeClient = {
     clientId: string,
     fichiers: { taches: File; ressources: File; contraintes: File },
     nomProjet?: string,
-    secteurActivite?: Types.SecteurActivite,
+    secteurActivite?: string,
   ) => {
     const corps = new FormData();
     corps.append("taches", fichiers.taches);
@@ -314,7 +310,7 @@ export const prismeClient = {
     clientId: string,
     payload: Record<string, unknown>,
     nomProjet?: string,
-    secteurActivite?: Types.SecteurActivite,
+    secteurActivite?: string,
   ) => {
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
@@ -332,7 +328,7 @@ export const prismeClient = {
     clientId: string,
     cheminDossier: string,
     nomProjet?: string,
-    secteurActivite?: Types.SecteurActivite,
+    secteurActivite?: string,
   ) =>
     apiFetch<Types.ReponseImportCsvLocal>(`${PRISME_CONFIG.routes.adapters}/csv-local/ingerer`, {
       method: "POST",
@@ -361,12 +357,7 @@ export const prismeClient = {
   // volonté. Le client_id est dérivé du compte authentifié côté serveur ;
   // `clientId` n'est envoyé (et n'a d'effet) que pour un compte admin
   // ciblant un autre client (voir `api/routes/sources.py`).
-  creerSource: (
-    donneesBrutes: string,
-    nom?: string,
-    clientId?: string,
-    secteurActivite?: Types.SecteurActivite,
-  ) =>
+  creerSource: (donneesBrutes: string, nom?: string, clientId?: string, secteurActivite?: string) =>
     apiFetch<Types.ReponseCreationSource>(PRISME_CONFIG.routes.sources, {
       method: "POST",
       body: JSON.stringify({

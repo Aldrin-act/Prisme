@@ -325,7 +325,7 @@ export function useIngererInstance() {
       clientId: string;
       instance: Types.InstanceTRCO;
       nomProjet?: string;
-      secteurActivite?: Types.SecteurActivite;
+      secteurActivite?: string;
     }) => prismeClient.ingererInstance(clientId, instance, nomProjet, secteurActivite),
   });
 }
@@ -364,7 +364,7 @@ export function useModifierInstance() {
       instanceId: string;
       instance: Types.InstanceTRCO;
       nomProjet?: string;
-      secteurActivite?: Types.SecteurActivite;
+      secteurActivite?: string;
     }) => prismeClient.modifierInstance(instanceId, instance, nomProjet, secteurActivite),
   });
 }
@@ -449,7 +449,7 @@ export function useImporterViaAdaptateur() {
     }: {
       nomAdaptateur: string;
       nomProjet?: string;
-      secteurActivite?: Types.SecteurActivite;
+      secteurActivite?: string;
     }) => prismeClient.importerViaAdaptateur(nomAdaptateur, nomProjet, secteurActivite),
   });
 }
@@ -480,7 +480,7 @@ export function useImporterFichiersCsv() {
       clientId: string;
       fichiers: { taches: File; ressources: File; contraintes: File };
       nomProjet?: string;
-      secteurActivite?: Types.SecteurActivite;
+      secteurActivite?: string;
     }) => prismeClient.importerFichiersCsv(clientId, fichiers, nomProjet, secteurActivite),
   });
 }
@@ -502,7 +502,7 @@ export function useImporterJsonAvecCompetences() {
       clientId: string;
       payload: Record<string, unknown>;
       nomProjet?: string;
-      secteurActivite?: Types.SecteurActivite;
+      secteurActivite?: string;
     }) => prismeClient.importerJsonAvecCompetences(clientId, payload, nomProjet, secteurActivite),
   });
 }
@@ -522,7 +522,7 @@ export function useImporterCsvLocal() {
       clientId: string;
       cheminDossier: string;
       nomProjet?: string;
-      secteurActivite?: Types.SecteurActivite;
+      secteurActivite?: string;
     }) => prismeClient.importerCsvLocal(clientId, cheminDossier, nomProjet, secteurActivite),
   });
 }
@@ -562,7 +562,7 @@ export function useCreerSource() {
       donneesBrutes: string;
       nom?: string;
       clientId?: string;
-      secteurActivite?: Types.SecteurActivite;
+      secteurActivite?: string;
     }) => prismeClient.creerSource(donneesBrutes, nom, clientId, secteurActivite),
   });
 }

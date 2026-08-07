@@ -208,7 +208,14 @@ function FormulaireNouvelleSource({
   // t-elle, et dans quel secteur d'activité — ce dernier oriente le prompt
   // de l'agent de compréhension à la conversion, persisté sur la source.
   const [nomProjet, setNomProjet] = useState("");
-  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "">("");
+  // "_autre" est un sentinel local (jamais envoyé tel quel) qui révèle le
+  // champ texte libre secteurActiviteAutre — voir secteurActiviteEffectif.
+  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "_autre" | "">("");
+  const [secteurActiviteAutre, setSecteurActiviteAutre] = useState("");
+  const secteurActiviteEffectif =
+    secteurActivite === "_autre"
+      ? secteurActiviteAutre.trim() || undefined
+      : secteurActivite || undefined;
   const [donneesBrutes, setDonneesBrutes] = useState("");
   const [formatFichier, setFormatFichier] = useState<FormatFichierBrut>("csv");
   const [fichiers, setFichiers] = useState<(File | null)[]>([null, null, null]);
@@ -280,7 +287,7 @@ function FormulaireNouvelleSource({
         donneesBrutes,
         nom: nom.trim() || undefined,
         clientId: estAdmin ? clientId : undefined,
-        secteurActivite: secteurActivite || undefined,
+        secteurActivite: secteurActiviteEffectif,
       },
       { onSuccess: (data) => onCree(data.source_id, nomProjet.trim() || undefined) },
     );
@@ -335,7 +342,7 @@ function FormulaireNouvelleSource({
           <Label htmlFor="secteur_activite_donnees">Secteur d'activité (optionnel)</Label>
           <Select
             value={secteurActivite}
-            onValueChange={(v) => setSecteurActivite(v as SecteurActivite)}
+            onValueChange={(v) => setSecteurActivite(v as SecteurActivite | "_autre")}
           >
             <SelectTrigger id="secteur_activite_donnees">
               <SelectValue placeholder="Non renseigné" />
@@ -346,8 +353,17 @@ function FormulaireNouvelleSource({
                   {LABELS_SECTEUR_ACTIVITE[s]}
                 </SelectItem>
               ))}
+              <SelectItem value="_autre">Autre (préciser)</SelectItem>
             </SelectContent>
           </Select>
+          {secteurActivite === "_autre" && (
+            <Input
+              value={secteurActiviteAutre}
+              onChange={(e) => setSecteurActiviteAutre(e.target.value)}
+              placeholder="ex : Textile, Logistique..."
+              className="mt-1.5"
+            />
+          )}
           <p className="text-xs text-muted-foreground">
             Aide l'agent de compréhension à interpréter des données ambiguës.
           </p>
@@ -594,7 +610,8 @@ function SourceActivePanel({
               </Badge>
               {source.secteur_activite && (
                 <Badge variant="secondary">
-                  {LABELS_SECTEUR_ACTIVITE[source.secteur_activite]}
+                  {LABELS_SECTEUR_ACTIVITE[source.secteur_activite as SecteurActivite] ??
+                    source.secteur_activite}
                 </Badge>
               )}
             </div>
@@ -888,7 +905,10 @@ function ListeSources({ onOuvrir }: { onOuvrir: (sourceId: string) => void }) {
                 <TableCell>{s.client_id}</TableCell>
                 <TableCell>
                   {s.secteur_activite ? (
-                    <Badge variant="outline">{LABELS_SECTEUR_ACTIVITE[s.secteur_activite]}</Badge>
+                    <Badge variant="outline">
+                      {LABELS_SECTEUR_ACTIVITE[s.secteur_activite as SecteurActivite] ??
+                        s.secteur_activite}
+                    </Badge>
                   ) : (
                     <span className="text-muted-foreground">—</span>
                   )}

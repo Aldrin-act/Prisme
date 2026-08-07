@@ -41,7 +41,7 @@ router = APIRouter(prefix="/supervision", tags=["supervision"])
 @router.get("/instances")
 def lister_instances(
     nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
+    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> list[dict[str, Any]]:

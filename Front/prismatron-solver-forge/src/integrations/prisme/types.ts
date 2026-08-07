@@ -207,7 +207,9 @@ export interface InstanceDetail extends InstanceTRCO {
   // Étiquette libre pour retrouver/regrouper des instances liées (voir
   // InstanceInfo.nom_projet).
   nom_projet: string | null;
-  secteur_activite: SecteurActivite | null;
+  // Un des 6 secteurs de SecteurActivite, ou un secteur personnalisé saisi
+  // via "Autre" — jamais restreint au vocabulaire fermé côté stockage.
+  secteur_activite: string | null;
 }
 
 // ============================================================================
@@ -267,7 +269,7 @@ export interface InstanceInfo {
   // instances liées entre elles (réingestions successives d'un même
   // atelier), ou modifiée depuis lors via "Modifier".
   nom_projet: string | null;
-  secteur_activite: SecteurActivite | null;
+  secteur_activite: string | null;
 }
 
 export interface NomProjetInfo {
@@ -537,7 +539,7 @@ export interface SourceDonnees {
   nom: string | null;
   date_creation: string;
   nb_instances: number;
-  secteur_activite: SecteurActivite | null;
+  secteur_activite: string | null;
 }
 
 export interface InstanceDeSource {
