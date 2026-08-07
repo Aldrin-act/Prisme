@@ -33,6 +33,31 @@ TypeSignal = Literal["signature_orpheline", "echecs_repetes", "instance_a_replan
 ActionSuggeree = Literal["regenerer_solveur", "executer", "diagnostiquer"]
 Priorite = Literal["haute", "moyenne", "basse"]
 
+# Vocabulaire fermé du secteur d'activité — métadonnée opérationnelle comme
+# nom_projet (jamais lue par le solveur ni le vérificateur de faisabilité,
+# donc absente de dsl/schema/), mais avec trois effets réels ailleurs :
+# oriente le prompt de l'agent de compréhension (adapters/agent_comprehension/),
+# filtre les pages Instances/Données, alimente des suggestions de ressources
+# à l'ingestion (Front). Liste reprise de scripts/generer_donnees_brutes.py
+# (la plus établie du projet) — aucune autre liste de secteurs du repo n'est
+# canonique.
+SecteurActivite = Literal[
+    "atelier_mecanique",
+    "assemblage_electronique",
+    "production_agroalimentaire",
+    "maintenance_industrielle",
+    "imprimerie",
+    "centre_appels",
+]
+LABELS_SECTEUR_ACTIVITE: dict[SecteurActivite, str] = {
+    "atelier_mecanique": "Atelier mécanique",
+    "assemblage_electronique": "Assemblage électronique",
+    "production_agroalimentaire": "Production agroalimentaire",
+    "maintenance_industrielle": "Maintenance industrielle",
+    "imprimerie": "Imprimerie",
+    "centre_appels": "Centre d'appels",
+}
+
 
 def structure_contraintes(instance: InstanceTRCO) -> str:
     """Signature triée des types de contraintes présentes — la clé que le
@@ -132,6 +157,10 @@ class SourceDonnees:
     nom: str | None
     donnees_brutes: str
     date_creation: str
+    # Capturé une fois à la création de la source, réutilisé à chaque
+    # reconversion (contrairement à nom_projet, connu seulement une fois
+    # l'instance décidée) — oriente le prompt de l'agent de compréhension.
+    secteur_activite: SecteurActivite | None = None
 
 
 @dataclass(frozen=True)
@@ -221,6 +250,11 @@ class EtatAPI:
     # par la sélection de solveur (`structure_contraintes`/
     # `signature_objectifs`) ni par la détection de signaux de supervision.
     noms_projet: dict[str, str | None] = field(default_factory=dict)
+    # Secteur d'activité de l'instance — copié depuis la source au moment de
+    # `enregistrer_instance` quand elle en a une (voir enregistrer_instance),
+    # ou fourni directement pour les canaux sans SourceDonnees (CSV/JSON/
+    # GreenSIG/T-R-C-O manuel). Même statut de métadonnée pure que noms_projet.
+    secteurs_activite: dict[str, SecteurActivite | None] = field(default_factory=dict)
     # Dernière modification du contenu T-R-C-O d'une instance (création,
     # `modifier_instance` ou `modifier_objectifs`) — comparée à la date de sa
     # dernière exécution par `supervision/detecteurs.py` pour détecter
@@ -255,6 +289,7 @@ class EtatAPI:
         source_id: str | None = None,
         description_metier: str | None = None,
         nom_projet: str | None = None,
+        secteur_activite: SecteurActivite | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
         instance_id = str(uuid.uuid4())
@@ -263,10 +298,17 @@ class EtatAPI:
             self.source_par_instance[instance_id] = source_id
         self.descriptions_metier[instance_id] = description_metier
         self.noms_projet[instance_id] = nom_projet
+        self.secteurs_activite[instance_id] = secteur_activite
         self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
         return instance_id
 
-    def enregistrer_source(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
+    def enregistrer_source(
+        self,
+        client_id: str,
+        donnees_brutes: str,
+        nom: str | None = None,
+        secteur_activite: SecteurActivite | None = None,
+    ) -> str:
         self.enregistrer_client(client_id)
         source_id = str(uuid.uuid4())
         self.sources[source_id] = SourceDonnees(
@@ -275,6 +317,7 @@ class EtatAPI:
             nom=nom,
             donnees_brutes=donnees_brutes,
             date_creation=datetime.now(UTC).isoformat(),
+            secteur_activite=secteur_activite,
         )
         return source_id
 
@@ -297,6 +340,7 @@ class EtatAPI:
                 "nom": s.nom,
                 "date_creation": s.date_creation,
                 "nb_instances": compteurs.get(s.id, 0),
+                "secteur_activite": s.secteur_activite,
             }
             for s in self.sources.values()
             if client_id is None or s.client_id == client_id
@@ -345,6 +389,14 @@ class EtatAPI:
             raise KeyError(instance_id)
         return self.noms_projet.get(instance_id)
 
+    def recuperer_secteur_activite(self, instance_id: str) -> SecteurActivite | None:
+        """`None` pour toute instance sans secteur déclaré — même convention
+        que `recuperer_nom_projet` (lève `KeyError` pour une instance
+        inconnue, pas seulement pour un secteur absent)."""
+        if instance_id not in self.instances:
+            raise KeyError(instance_id)
+        return self.secteurs_activite.get(instance_id)
+
     def lister_noms_projet(self, client_id: str | None = None) -> list[dict[str, object]]:
         """Noms de projet distincts déjà utilisés (avec leur nombre
         d'instances), pour peupler une auto-complétion côté client et éviter
@@ -380,18 +432,26 @@ class EtatAPI:
         return nouvelle_instance
 
     def modifier_instance(
-        self, instance_id: str, instance: InstanceTRCO, nom_projet: str | None = None
+        self,
+        instance_id: str,
+        instance: InstanceTRCO,
+        nom_projet: str | None = None,
+        secteur_activite: SecteurActivite | None = None,
     ) -> InstanceTRCO:
         """Remplace en place le contenu T-R-C-O complet (tâches/ressources/
         contraintes/objectifs) d'une instance déjà ingérée — même
         instance_id, historique d'exécution/décisions intact (aucune
         cascade). L'appelant a déjà validé `instance` via
-        `valider_payload_trco` (même garde-fou §6.7 qu'à la création)."""
+        `valider_payload_trco` (même garde-fou §6.7 qu'à la création).
+        `nom_projet`/`secteur_activite` sont écrasés sans condition, comme à
+        la création — l'appelant doit toujours renvoyer la valeur courante
+        s'il veut la conserver, jamais l'omettre."""
         if instance_id not in self.instances:
             raise KeyError(instance_id)
         client_id, _ = self.instances[instance_id]
         self.instances[instance_id] = (client_id, instance)
         self.noms_projet[instance_id] = nom_projet
+        self.secteurs_activite[instance_id] = secteur_activite
         self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
         return instance
 
@@ -408,6 +468,7 @@ class EtatAPI:
         self.source_par_instance.pop(instance_id, None)
         self.descriptions_metier.pop(instance_id, None)
         self.noms_projet.pop(instance_id, None)
+        self.secteurs_activite.pop(instance_id, None)
         self.dates_modification.pop(instance_id, None)
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
             del self.executions[execution_id]
@@ -456,12 +517,15 @@ class EtatAPI:
         return resultats
 
     def lister_instances(
-        self, client_id: str | None = None, nom_projet: str | None = None
+        self,
+        client_id: str | None = None,
+        nom_projet: str | None = None,
+        secteur_activite: SecteurActivite | None = None,
     ) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) sur les instances ingérées,
         avec un indicateur `executee` pour repérer celles jamais utilisées.
-        `client_id=None` ne filtre rien (réservé à l'admin). `nom_projet`
-        filtre en plus sur le regroupement libre (voir `noms_projet`)."""
+        `client_id=None` ne filtre rien (réservé à l'admin). `nom_projet`/
+        `secteur_activite` filtrent en plus sur ces métadonnées libres."""
         instances_executees = {iid for (_, iid, _) in self.executions.values()}
         return [
             {
@@ -470,11 +534,13 @@ class EtatAPI:
                 "structure_contraintes": structure_contraintes(instance),
                 "executee": instance_id in instances_executees,
                 "nom_projet": self.noms_projet.get(instance_id),
+                "secteur_activite": self.secteurs_activite.get(instance_id),
                 "date_modification": self.dates_modification.get(instance_id),
             }
             for instance_id, (client_id_instance, instance) in self.instances.items()
             if (client_id is None or client_id_instance == client_id)
             and (nom_projet is None or self.noms_projet.get(instance_id) == nom_projet)
+            and (secteur_activite is None or self.secteurs_activite.get(instance_id) == secteur_activite)
         ]
 
     def enregistrer_decision(self, execution_id: str, decision: Decision, commentaire: str | None = None) -> None:

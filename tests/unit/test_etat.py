@@ -91,6 +91,24 @@ def test_supprimer_source_coupe_la_provenance_sans_toucher_a_linstance() -> None
     etat.recuperer_instance(instance_id)  # survit, indépendante de sa source
 
 
+def test_source_secteur_activite_round_trip() -> None:
+    etat = EtatAPI()
+    source_id = etat.enregistrer_source(
+        "client-test", donnees_brutes="brut", secteur_activite="production_agroalimentaire"
+    )
+
+    source = etat.recuperer_source(source_id)
+
+    assert source.secteur_activite == "production_agroalimentaire"
+
+
+def test_source_secteur_activite_absent_par_defaut() -> None:
+    etat = EtatAPI()
+    source_id = etat.enregistrer_source("client-test", donnees_brutes="brut")
+
+    assert etat.recuperer_source(source_id).secteur_activite is None
+
+
 def test_supprimer_instance_cascade_ses_executions() -> None:
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
@@ -176,6 +194,46 @@ def test_lister_instances_filtre_par_nom_projet() -> None:
     assert [i["instance_id"] for i in instances] == [instance_ciblee]
 
 
+def test_secteur_activite_round_trip() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), secteur_activite="atelier_mecanique"
+    )
+
+    assert etat.recuperer_secteur_activite(instance_id) == "atelier_mecanique"
+
+
+def test_secteur_activite_absent_par_defaut() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat.recuperer_secteur_activite(instance_id) is None
+
+
+def test_supprimer_instance_purge_son_secteur_activite() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), secteur_activite="atelier_mecanique"
+    )
+
+    etat.supprimer_instance(instance_id)
+
+    with pytest.raises(KeyError):
+        etat.recuperer_secteur_activite(instance_id)
+
+
+def test_lister_instances_filtre_par_secteur_activite() -> None:
+    etat = EtatAPI()
+    instance_ciblee = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), secteur_activite="atelier_mecanique"
+    )
+    etat.enregistrer_instance("client-test", _instance_exemple(), secteur_activite="imprimerie")
+
+    instances = etat.lister_instances(client_id="client-test", secteur_activite="atelier_mecanique")
+
+    assert [i["instance_id"] for i in instances] == [instance_ciblee]
+
+
 def _instance_modifiee() -> InstanceTRCO:
     return InstanceTRCO.model_validate(
         {
@@ -202,6 +260,17 @@ def test_modifier_instance_round_trip() -> None:
     assert client_id == "client-test"
     assert [t.id for t in instance_relue.taches] == ["T1", "T2"]
     assert etat.recuperer_nom_projet(instance_id) == "Ligne B"
+
+
+def test_modifier_instance_change_secteur_activite() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), secteur_activite="atelier_mecanique"
+    )
+
+    etat.modifier_instance(instance_id, _instance_modifiee(), secteur_activite="imprimerie")
+
+    assert etat.recuperer_secteur_activite(instance_id) == "imprimerie"
 
 
 def test_modifier_instance_preserve_lhistorique_dexecution() -> None:

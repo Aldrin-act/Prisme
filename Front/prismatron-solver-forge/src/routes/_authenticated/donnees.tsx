@@ -23,6 +23,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -50,8 +57,11 @@ import {
   useSources,
   useSupprimerSource,
   useDeclencherExecution,
+  useNomsProjet,
   PrismeAPIError,
+  LABELS_SECTEUR_ACTIVITE,
   type Justification,
+  type SecteurActivite,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
 
@@ -71,9 +81,20 @@ function DonneesPage() {
   // Pré-rempli depuis l'URL (?source=<id>) — permet un lien direct depuis la
   // page Instances vers le détail de la source qui a généré une instance donnée.
   const [sourceActiveId, setSourceActiveId] = useState<string | null>(source ?? null);
+  // Nom de projet choisi à l'étape de création — porté ici pour être
+  // transmis à SourceActivePanel (chaque génération d'instance en a besoin).
+  // Réinitialisé à l'ouverture d'une source depuis l'historique : on ne le
+  // devine pas, SourceActivePanel se replie alors sur source.nom.
+  const [nomProjetActif, setNomProjetActif] = useState<string | undefined>(undefined);
+
+  function creerEtOuvrirSource(sourceId: string, nomProjet?: string) {
+    setSourceActiveId(sourceId);
+    setNomProjetActif(nomProjet);
+  }
 
   function ouvrirSource(sourceId: string) {
     setSourceActiveId(sourceId);
+    setNomProjetActif(undefined);
     setTab("actif");
   }
 
@@ -95,9 +116,10 @@ function DonneesPage() {
             <SourceActivePanel
               sourceId={sourceActiveId}
               onNouveau={() => setSourceActiveId(null)}
+              nomProjetInitial={nomProjetActif}
             />
           ) : (
-            <FormulaireNouvelleSource onCree={setSourceActiveId} />
+            <FormulaireNouvelleSource onCree={creerEtOuvrirSource} />
           )}
         </TabsContent>
 
@@ -165,8 +187,13 @@ function detecterTypeCsv(contenu: string): string | null {
   return signature?.type ?? null;
 }
 
-function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => void }) {
+function FormulaireNouvelleSource({
+  onCree,
+}: {
+  onCree: (sourceId: string, nomProjet?: string) => void;
+}) {
   const creer = useCreerSource();
+  const { data: nomsProjetConnus } = useNomsProjet();
   const inputFichierRefs = [
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -177,6 +204,11 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
 
   const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
   const [nom, setNom] = useState("");
+  // Étape 1, avant toute donnée : à quel projet cette source se rattache-
+  // t-elle, et dans quel secteur d'activité — ce dernier oriente le prompt
+  // de l'agent de compréhension à la conversion, persisté sur la source.
+  const [nomProjet, setNomProjet] = useState("");
+  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "">("");
   const [donneesBrutes, setDonneesBrutes] = useState("");
   const [formatFichier, setFormatFichier] = useState<FormatFichierBrut>("csv");
   const [fichiers, setFichiers] = useState<(File | null)[]>([null, null, null]);
@@ -244,8 +276,13 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
 
   function enregistrer() {
     creer.mutate(
-      { donneesBrutes, nom: nom.trim() || undefined, clientId: estAdmin ? clientId : undefined },
-      { onSuccess: (data) => onCree(data.source_id) },
+      {
+        donneesBrutes,
+        nom: nom.trim() || undefined,
+        clientId: estAdmin ? clientId : undefined,
+        secteurActivite: secteurActivite || undefined,
+      },
+      { onSuccess: (data) => onCree(data.source_id, nomProjet.trim() || undefined) },
     );
   }
 
@@ -272,6 +309,48 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
             onChange={(e) => setNom(e.target.value)}
             placeholder="ex : Export ERP atelier mécanique"
           />
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="nom_projet_donnees">Nom du projet (optionnel)</Label>
+          <Input
+            id="nom_projet_donnees"
+            list="noms-projet-suggestions-donnees"
+            value={nomProjet}
+            onChange={(e) => setNomProjet(e.target.value)}
+            placeholder="ex : Atelier mécanique"
+          />
+          <datalist id="noms-projet-suggestions-donnees">
+            {nomsProjetConnus?.map((n) => (
+              <option key={n.nom_projet} value={n.nom_projet} />
+            ))}
+          </datalist>
+          <p className="text-xs text-muted-foreground">
+            Retrouve/regroupe les instances générées à partir de cette source.
+          </p>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="secteur_activite_donnees">Secteur d'activité (optionnel)</Label>
+          <Select
+            value={secteurActivite}
+            onValueChange={(v) => setSecteurActivite(v as SecteurActivite)}
+          >
+            <SelectTrigger id="secteur_activite_donnees">
+              <SelectValue placeholder="Non renseigné" />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
+                <SelectItem key={s} value={s}>
+                  {LABELS_SECTEUR_ACTIVITE[s]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            Aide l'agent de compréhension à interpréter des données ambiguës.
+          </p>
         </div>
       </div>
 
@@ -402,12 +481,25 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   );
 }
 
-function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouveau: () => void }) {
+function SourceActivePanel({
+  sourceId,
+  onNouveau,
+  nomProjetInitial,
+}: {
+  sourceId: string;
+  onNouveau: () => void;
+  nomProjetInitial?: string;
+}) {
   const queryClient = useQueryClient();
   const { data: source, isLoading } = useSource(sourceId);
+  const { data: nomsProjetConnus } = useNomsProjet();
   const generer = useGenererInstanceDepuisSource();
   const genererDeterministe = useGenererInstanceDeterministeDepuisSource();
   const executer = useDeclencherExecution();
+  // Éditable ici : chaque génération peut être rattachée à un projet
+  // différent de celui saisi à la création de la source (ex. reconversion
+  // pour un autre usage) — voir genererInstance/genererInstanceDeterministe.
+  const [nomProjet, setNomProjet] = useState(nomProjetInitial ?? "");
   const [dernier, setDernier] = useState<{
     instance_id: string;
     avertissements: string[];
@@ -442,7 +534,7 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
     setDernier(null);
     setGenerationEnCours(true);
     generer.mutate(
-      { sourceId },
+      { sourceId, nomProjet: nomProjet.trim() || undefined },
       {
         onSuccess: (data) => {
           setDernier({
@@ -466,7 +558,7 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
     executer.reset();
     setDernier(null);
     genererDeterministe.mutate(
-      { sourceId },
+      { sourceId, nomProjet: nomProjet.trim() || undefined },
       {
         onSuccess: (data) => {
           setDernier({ instance_id: data.instance_id, avertissements: [], justifications: [] });
@@ -500,6 +592,11 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
               <Badge variant="outline" className="font-mono">
                 {source.source_id}
               </Badge>
+              {source.secteur_activite && (
+                <Badge variant="secondary">
+                  {LABELS_SECTEUR_ACTIVITE[source.secteur_activite]}
+                </Badge>
+              )}
             </div>
           </div>
           <Button variant="outline" onClick={onNouveau}>
@@ -601,6 +698,25 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
             </p>
           </div>
         )}
+
+        <div className="space-y-1.5">
+          <Label htmlFor="nom_projet_source_active" className="text-xs text-muted-foreground">
+            Nom du projet pour la prochaine instance générée (optionnel)
+          </Label>
+          <Input
+            id="nom_projet_source_active"
+            list="noms-projet-suggestions-source-active"
+            value={nomProjet}
+            onChange={(e) => setNomProjet(e.target.value)}
+            placeholder={source.nom ?? "ex : Atelier mécanique"}
+            className="max-w-sm"
+          />
+          <datalist id="noms-projet-suggestions-source-active">
+            {nomsProjetConnus?.map((n) => (
+              <option key={n.nom_projet} value={n.nom_projet} />
+            ))}
+          </datalist>
+        </div>
 
         <div className="flex items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
@@ -756,6 +872,7 @@ function ListeSources({ onOuvrir }: { onOuvrir: (sourceId: string) => void }) {
             <TableRow>
               <TableHead>Source</TableHead>
               <TableHead>Client</TableHead>
+              <TableHead>Secteur</TableHead>
               <TableHead>Créée le</TableHead>
               <TableHead>Instances générées</TableHead>
               <TableHead />
@@ -769,6 +886,13 @@ function ListeSources({ onOuvrir }: { onOuvrir: (sourceId: string) => void }) {
                   <div className="font-mono text-xs text-muted-foreground">{s.source_id}</div>
                 </TableCell>
                 <TableCell>{s.client_id}</TableCell>
+                <TableCell>
+                  {s.secteur_activite ? (
+                    <Badge variant="outline">{LABELS_SECTEUR_ACTIVITE[s.secteur_activite]}</Badge>
+                  ) : (
+                    <span className="text-muted-foreground">—</span>
+                  )}
+                </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {new Date(s.date_creation).toLocaleString()}
                 </TableCell>

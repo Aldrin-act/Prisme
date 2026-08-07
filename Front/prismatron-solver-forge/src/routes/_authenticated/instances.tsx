@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -15,6 +15,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -60,10 +69,13 @@ import {
   useSolveurs,
   useCodeSourceSolveur,
   useJobsGeneration,
+  useNomsProjet,
   PrismeAPIError,
+  LABELS_SECTEUR_ACTIVITE,
   type Contrainte,
   type InstanceDetail,
   type Objectif,
+  type SecteurActivite,
 } from "@/integrations/prisme";
 
 export const Route = createFileRoute("/_authenticated/instances")({
@@ -81,12 +93,25 @@ function InstancesPage() {
   const [instanceAModifier, setInstanceAModifier] = useState<InstanceDetail | null>(null);
   const { data: instances, isLoading } = useInstances();
   const { data: jobsGeneration } = useJobsGeneration();
+  const { data: nomsProjetConnus } = useNomsProjet();
   const queryClient = useQueryClient();
   const supprimer = useSupprimerInstance();
 
   const instancesEnGeneration = new Set(
     (jobsGeneration ?? []).filter((j) => !j.termine).map((j) => j.instance_id),
   );
+
+  // Filtrage côté client — quelques dizaines d'instances au plus, le filtre
+  // serveur existe déjà sur GET /supervision/instances si le volume grossit.
+  const [filtreNomProjet, setFiltreNomProjet] = useState("");
+  const [filtreSecteur, setFiltreSecteur] = useState<SecteurActivite | "">("");
+  const instancesFiltrees = useMemo(() => {
+    return (instances ?? []).filter((i) => {
+      if (filtreNomProjet && i.nom_projet !== filtreNomProjet) return false;
+      if (filtreSecteur && i.secteur_activite !== filtreSecteur) return false;
+      return true;
+    });
+  }, [instances, filtreNomProjet, filtreSecteur]);
 
   // /supervision/instances ne relie pas les instances à leur source — le
   // label (nom de la source + rang de génération) vient de useLabelsInstances.
@@ -152,82 +177,146 @@ function InstancesPage() {
       )}
 
       {instances && instances.length > 0 && (
-        <div className="glass overflow-hidden rounded-2xl">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Instance</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Client</TableHead>
-                <TableHead>Structure des contraintes</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead />
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {instances.map((instance) => {
-                const info = labels.get(instance.instance_id);
-                return (
-                  <TableRow key={instance.instance_id}>
-                    <TableCell className="font-mono text-xs" title={instance.instance_id}>
-                      {info ? info.label : instance.instance_id}
-                    </TableCell>
-                    <TableCell>
-                      {info?.sourceId ? (
-                        <Link
-                          to="/donnees"
-                          search={{ source: info.sourceId }}
-                          className="text-primary underline-offset-2 hover:underline"
-                        >
-                          {info.nomSource}
-                        </Link>
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )}
-                    </TableCell>
-                    <TableCell>{instance.client_id}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="font-mono text-xs">
-                        {instance.structure_contraintes}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {instancesEnGeneration.has(instance.instance_id) ? (
-                        <Badge variant="secondary" className="gap-1.5">
-                          <Loader2 className="h-3 w-3 animate-spin" /> Génération en cours
-                        </Badge>
-                      ) : (
-                        <Badge variant={instance.executee ? "secondary" : "outline"}>
-                          {instance.executee ? "Exécutée" : "En attente"}
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex justify-end gap-1">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          aria-label="Voir l'instance"
-                          onClick={() => setAVoir(instance.instance_id)}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          aria-label="Supprimer l'instance"
-                          onClick={() => ouvrirConfirmation(instance.instance_id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </TableCell>
+        <>
+          <div className="mb-4 flex flex-wrap items-end gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="filtre_nom_projet" className="text-xs text-muted-foreground">
+                Projet
+              </Label>
+              <Input
+                id="filtre_nom_projet"
+                list="filtre-noms-projet-suggestions"
+                value={filtreNomProjet}
+                onChange={(e) => setFiltreNomProjet(e.target.value)}
+                placeholder="Tous les projets"
+                className="w-56"
+              />
+              <datalist id="filtre-noms-projet-suggestions">
+                {nomsProjetConnus?.map((n) => (
+                  <option key={n.nom_projet} value={n.nom_projet} />
+                ))}
+              </datalist>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="filtre_secteur" className="text-xs text-muted-foreground">
+                Secteur
+              </Label>
+              <Select
+                value={filtreSecteur}
+                onValueChange={(v) => setFiltreSecteur(v === "_tous" ? "" : (v as SecteurActivite))}
+              >
+                <SelectTrigger id="filtre_secteur" className="w-56">
+                  <SelectValue placeholder="Tous les secteurs" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="_tous">Tous les secteurs</SelectItem>
+                  {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {LABELS_SECTEUR_ACTIVITE[s]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {instancesFiltrees.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Aucune instance ne correspond à ces filtres.
+            </p>
+          ) : (
+            <div className="glass overflow-hidden rounded-2xl">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Instance</TableHead>
+                    <TableHead>Source</TableHead>
+                    <TableHead>Client</TableHead>
+                    <TableHead>Projet</TableHead>
+                    <TableHead>Secteur</TableHead>
+                    <TableHead>Structure des contraintes</TableHead>
+                    <TableHead>Statut</TableHead>
+                    <TableHead />
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+                </TableHeader>
+                <TableBody>
+                  {instancesFiltrees.map((instance) => {
+                    const info = labels.get(instance.instance_id);
+                    return (
+                      <TableRow key={instance.instance_id}>
+                        <TableCell className="font-mono text-xs" title={instance.instance_id}>
+                          {info ? info.label : instance.instance_id}
+                        </TableCell>
+                        <TableCell>
+                          {info?.sourceId ? (
+                            <Link
+                              to="/donnees"
+                              search={{ source: info.sourceId }}
+                              className="text-primary underline-offset-2 hover:underline"
+                            >
+                              {info.nomSource}
+                            </Link>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </TableCell>
+                        <TableCell>{instance.client_id}</TableCell>
+                        <TableCell>
+                          {instance.nom_projet ?? <span className="text-muted-foreground">—</span>}
+                        </TableCell>
+                        <TableCell>
+                          {instance.secteur_activite ? (
+                            <Badge variant="outline">
+                              {LABELS_SECTEUR_ACTIVITE[instance.secteur_activite]}
+                            </Badge>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="font-mono text-xs">
+                            {instance.structure_contraintes}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {instancesEnGeneration.has(instance.instance_id) ? (
+                            <Badge variant="secondary" className="gap-1.5">
+                              <Loader2 className="h-3 w-3 animate-spin" /> Génération en cours
+                            </Badge>
+                          ) : (
+                            <Badge variant={instance.executee ? "secondary" : "outline"}>
+                              {instance.executee ? "Exécutée" : "En attente"}
+                            </Badge>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex justify-end gap-1">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              aria-label="Voir l'instance"
+                              onClick={() => setAVoir(instance.instance_id)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              aria-label="Supprimer l'instance"
+                              onClick={() => ouvrirConfirmation(instance.instance_id)}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </>
       )}
 
       <IngestionDialog

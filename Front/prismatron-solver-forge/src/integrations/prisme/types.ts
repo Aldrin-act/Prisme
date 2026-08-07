@@ -13,6 +13,32 @@ export interface Client {
 }
 
 // ============================================================================
+// SECTEUR D'ACTIVITÉ — vocabulaire fermé dupliqué à la main depuis
+// api/etat.py::SecteurActivite (pas de pont codegen dans ce projet, même
+// pratique déjà en place pour Contrainte/Objectif). Métadonnée opérationnelle
+// (comme nom_projet), jamais lue par le solveur/DSL, mais avec trois effets
+// réels : oriente le prompt de l'agent de compréhension, filtre les pages
+// Instances/Données, alimente des suggestions de ressources à l'ingestion.
+// ============================================================================
+
+export type SecteurActivite =
+  | "atelier_mecanique"
+  | "assemblage_electronique"
+  | "production_agroalimentaire"
+  | "maintenance_industrielle"
+  | "imprimerie"
+  | "centre_appels";
+
+export const LABELS_SECTEUR_ACTIVITE: Record<SecteurActivite, string> = {
+  atelier_mecanique: "Atelier mécanique",
+  assemblage_electronique: "Assemblage électronique",
+  production_agroalimentaire: "Production agroalimentaire",
+  maintenance_industrielle: "Maintenance industrielle",
+  imprimerie: "Imprimerie",
+  centre_appels: "Centre d'appels",
+};
+
+// ============================================================================
 // MODÈLES DE BASE (DSL T-R-C-O)
 // ============================================================================
 
@@ -181,6 +207,7 @@ export interface InstanceDetail extends InstanceTRCO {
   // Étiquette libre pour retrouver/regrouper des instances liées (voir
   // InstanceInfo.nom_projet).
   nom_projet: string | null;
+  secteur_activite: SecteurActivite | null;
 }
 
 // ============================================================================
@@ -240,6 +267,7 @@ export interface InstanceInfo {
   // instances liées entre elles (réingestions successives d'un même
   // atelier), ou modifiée depuis lors via "Modifier".
   nom_projet: string | null;
+  secteur_activite: SecteurActivite | null;
 }
 
 export interface NomProjetInfo {
@@ -509,6 +537,7 @@ export interface SourceDonnees {
   nom: string | null;
   date_creation: string;
   nb_instances: number;
+  secteur_activite: SecteurActivite | null;
 }
 
 export interface InstanceDeSource {

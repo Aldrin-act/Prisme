@@ -22,7 +22,7 @@ from pydantic import BaseModel
 
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.dependencies import obtenir_registre
-from api.etat import Decision, EtatAPI, PropositionSupervision, obtenir_etat
+from api.etat import Decision, EtatAPI, PropositionSupervision, SecteurActivite, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
 from api.routes.generation import demarrer_generation_solveur
@@ -41,10 +41,13 @@ router = APIRouter(prefix="/supervision", tags=["supervision"])
 @router.get("/instances")
 def lister_instances(
     nom_projet: str | None = None,
+    secteur_activite: SecteurActivite | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> list[dict[str, Any]]:
-    return etat.lister_instances(client_id=client_id_pour_filtre(utilisateur), nom_projet=nom_projet)
+    return etat.lister_instances(
+        client_id=client_id_pour_filtre(utilisateur), nom_projet=nom_projet, secteur_activite=secteur_activite
+    )
 
 
 @router.get("/noms-projet")

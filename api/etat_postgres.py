@@ -136,6 +136,15 @@ class EtatPostgres:
                     "date_creation TEXT NOT NULL)"
                 ).format(table=self._table("sources_donnees"), clients=self._table("clients"))
             )
+            # Migration idempotente : secteur d'activité déclaré une fois à
+            # la création de la source, réutilisé sur chaque reconversion
+            # (`generer_instance`) — oriente le prompt de l'agent de
+            # compréhension sans devoir être re-saisi à chaque tentative.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS secteur_activite TEXT").format(
+                    table=self._table("sources_donnees")
+                )
+            )
             # Ancienne table Projet (portait un pointeur "instance courante" +
             # son propre historique d'exécution) — retirée, remplacée par
             # `sources_donnees` (ci-dessus, ne porte que des données brutes
@@ -189,6 +198,16 @@ class EtatPostgres:
             # supervision.
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS nom_projet TEXT").format(
+                    table=self._table("instances_trco")
+                )
+            )
+            # Migration idempotente : secteur d'activité de l'instance —
+            # copié depuis sa source au moment de `enregistrer_instance`
+            # quand elle en a une, sinon fourni directement pour les canaux
+            # sans SourceDonnees. Même statut de métadonnée pure que
+            # nom_projet ci-dessus.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS secteur_activite TEXT").format(
                     table=self._table("instances_trco")
                 )
             )
@@ -480,7 +499,13 @@ class EtatPostgres:
 
     # --- Sources de données ------------------------------------------------
 
-    def enregistrer_source(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
+    def enregistrer_source(
+        self,
+        client_id: str,
+        donnees_brutes: str,
+        nom: str | None = None,
+        secteur_activite: str | None = None,
+    ) -> str:
         source_id = str(uuid.uuid4())
         with closing(self._connexion()) as connexion:
             connexion.execute(
@@ -491,10 +516,10 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation) "
-                    "VALUES (%s, %s, %s, %s, %s)"
+                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation, secteur_activite) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)"
                 ).format(self._table("sources_donnees")),
-                (source_id, client_id, nom, donnees_brutes, datetime.now(UTC).isoformat()),
+                (source_id, client_id, nom, donnees_brutes, datetime.now(UTC).isoformat(), secteur_activite),
             )
             connexion.commit()
         return source_id
@@ -502,16 +527,22 @@ class EtatPostgres:
     def recuperer_source(self, source_id: str) -> SourceDonnees:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
-                sql.SQL("SELECT id, client_id, nom, donnees_brutes, date_creation FROM {} WHERE id = %s").format(
-                    self._table("sources_donnees")
-                ),
+                sql.SQL(
+                    "SELECT id, client_id, nom, donnees_brutes, date_creation, secteur_activite FROM {} "
+                    "WHERE id = %s"
+                ).format(self._table("sources_donnees")),
                 (source_id,),
             ).fetchone()
         if ligne is None:
             raise KeyError(source_id)
-        id_, client_id, nom, donnees_brutes, date_creation = ligne
+        id_, client_id, nom, donnees_brutes, date_creation, secteur_activite = ligne
         return SourceDonnees(
-            id=id_, client_id=client_id, nom=nom, donnees_brutes=donnees_brutes, date_creation=date_creation
+            id=id_,
+            client_id=client_id,
+            nom=nom,
+            donnees_brutes=donnees_brutes,
+            date_creation=date_creation,
+            secteur_activite=secteur_activite,
         )
 
     def lister_sources(self, client_id: str | None = None) -> list[dict[str, object]]:
@@ -519,7 +550,8 @@ class EtatPostgres:
         `api/autorisation.py`)."""
         requete = sql.SQL(
             "SELECT s.id, s.client_id, s.nom, s.date_creation, "
-            "(SELECT COUNT(*) FROM {instances} i WHERE i.source_id = s.id) AS nb_instances "
+            "(SELECT COUNT(*) FROM {instances} i WHERE i.source_id = s.id) AS nb_instances, "
+            "s.secteur_activite "
             "FROM {sources} s WHERE 1 = 1"
         ).format(sources=self._table("sources_donnees"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -537,8 +569,9 @@ class EtatPostgres:
                 "nom": nom,
                 "date_creation": date_creation,
                 "nb_instances": nb,
+                "secteur_activite": secteur_activite,
             }
-            for id_, client_id, nom, date_creation, nb in lignes
+            for id_, client_id, nom, date_creation, nb, secteur_activite in lignes
         ]
 
     def lister_instances_pour_source(self, source_id: str) -> list[dict[str, object]]:
@@ -582,6 +615,7 @@ class EtatPostgres:
         source_id: str | None = None,
         description_metier: str | None = None,
         nom_projet: str | None = None,
+        secteur_activite: str | None = None,
     ) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
@@ -597,8 +631,8 @@ class EtatPostgres:
                 sql.SQL(
                     "INSERT INTO {} "
                     "(id, client_id, payload, structure_contraintes, date_ingestion, source_id, "
-                    "description_metier, nom_projet, date_modification) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s)"
+                    "description_metier, nom_projet, secteur_activite, date_modification) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
@@ -609,6 +643,7 @@ class EtatPostgres:
                     source_id,
                     description_metier,
                     nom_projet,
+                    secteur_activite,
                     maintenant,
                 ),
             )
@@ -640,6 +675,16 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL("SELECT nom_projet FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(instance_id)
+        return ligne[0]
+
+    def recuperer_secteur_activite(self, instance_id: str) -> str | None:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT secteur_activite FROM {} WHERE id = %s").format(self._table("instances_trco")),
                 (instance_id,),
             ).fetchone()
         if ligne is None:
@@ -702,7 +747,11 @@ class EtatPostgres:
         return nouvelle_instance
 
     def modifier_instance(
-        self, instance_id: str, instance: InstanceTRCO, nom_projet: str | None = None
+        self,
+        instance_id: str,
+        instance: InstanceTRCO,
+        nom_projet: str | None = None,
+        secteur_activite: str | None = None,
     ) -> InstanceTRCO:
         with closing(self._connexion()) as connexion:
             existe = connexion.execute(
@@ -714,12 +763,13 @@ class EtatPostgres:
             connexion.execute(
                 sql.SQL(
                     "UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s, nom_projet = %s, "
-                    "date_modification = %s WHERE id = %s"
+                    "secteur_activite = %s, date_modification = %s WHERE id = %s"
                 ).format(self._table("instances_trco")),
                 (
                     instance.model_dump_json(),
                     structure_contraintes(instance),
                     nom_projet,
+                    secteur_activite,
                     datetime.now(UTC).isoformat(),
                     instance_id,
                 ),
@@ -778,17 +828,21 @@ class EtatPostgres:
             connexion.commit()
 
     def lister_instances(
-        self, client_id: str | None = None, nom_projet: str | None = None
+        self,
+        client_id: str | None = None,
+        nom_projet: str | None = None,
+        secteur_activite: str | None = None,
     ) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) — équivalent SQL du repli
         Python de `EtatAPI.lister_instances` (jointure d'existence sur
         `executions` pour l'indicateur `executee`). `client_id=None` ne
         filtre rien (réservé à l'admin — voir `api/autorisation.py`).
-        `nom_projet` filtre en plus sur le regroupement libre."""
+        `nom_projet`/`secteur_activite` filtrent en plus sur ces métadonnées
+        libres."""
         requete = sql.SQL(
             "SELECT i.id, i.client_id, i.structure_contraintes, "
             "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee, "
-            "i.nom_projet, i.date_modification "
+            "i.nom_projet, i.secteur_activite, i.date_modification "
             "FROM {instances} i WHERE 1 = 1"
         ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -798,19 +852,23 @@ class EtatPostgres:
         if nom_projet is not None:
             requete += sql.SQL(" AND i.nom_projet = %s")
             parametres.append(nom_projet)
+        if secteur_activite is not None:
+            requete += sql.SQL(" AND i.secteur_activite = %s")
+            parametres.append(secteur_activite)
 
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(requete, parametres).fetchall()
         return [
             {
-                "instance_id": instance_id,
-                "client_id": client_id,
-                "structure_contraintes": structure,
-                "executee": executee,
-                "nom_projet": nom_projet_valeur,
-                "date_modification": date_modification,
+                "instance_id": ligne[0],
+                "client_id": ligne[1],
+                "structure_contraintes": ligne[2],
+                "executee": ligne[3],
+                "nom_projet": ligne[4],
+                "secteur_activite": ligne[5],
+                "date_modification": ligne[6],
             }
-            for instance_id, client_id, structure, executee, nom_projet_valeur, date_modification in lignes
+            for ligne in lignes
         ]
 
     # --- Exécutions ------------------------------------------------------

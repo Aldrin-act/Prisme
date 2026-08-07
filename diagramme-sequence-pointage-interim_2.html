@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Diagramme de séquence — Session de pointage · Lear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#0b1220; --bg2:#0e1729; --panel:#111c33; --panel2:#0d1729;
+    --line:#28374f; --line-soft:#1c2942;
+    --ink:#eaf0fb; --muted:#8c9cbd; --muted2:#5f6f92;
+    --signal:#ffb63d; --valid:#3ad9a6; --alert:#ff5468;
+    --interim:#5db4ff; --systeme:#a98bff; --valideur:#ffca6b;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:
+      radial-gradient(1200px 600px at 15% -10%, #16233f 0%, transparent 55%),
+      radial-gradient(1000px 500px at 95% 0%, #14203a 0%, transparent 50%),
+      var(--bg);
+    color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1200px;margin:0 auto;padding:26px 22px 60px}
+
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;
+    padding-bottom:18px;border-bottom:1px solid var(--line-soft)}
+  .brand{display:flex;align-items:center;gap:14px}
+  .mark{width:44px;height:44px;border-radius:12px;flex:0 0 auto;
+    background:linear-gradient(135deg,#ff3b3b,#c81212);position:relative;
+    box-shadow:0 6px 22px rgba(200,20,20,.35), inset 0 1px 0 rgba(255,255,255,.25)}
+  .mark::after{content:"L";position:absolute;inset:0;display:grid;place-items:center;
+    font-family:"Space Grotesk";font-weight:700;font-size:24px;color:#fff}
+  h1{font-family:"Space Grotesk";font-weight:600;font-size:20px;letter-spacing:-.01em;margin:0 0 3px}
+  .sub{color:var(--muted);font-size:13px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .chipmeta{font-family:"IBM Plex Mono";font-size:11px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:rgba(255,255,255,.02)}
+  .chipmeta b{color:var(--ink);font-weight:600}
+
+  .tabs{margin-top:20px;display:flex;gap:8px;flex-wrap:wrap}
+  .tabs button{font-family:"Space Grotesk";font-weight:500;font-size:12.5px;
+    color:var(--muted);background:var(--panel);border:1px solid var(--line);
+    padding:9px 14px;border-radius:10px;cursor:pointer;transition:.18s;display:flex;align-items:center;gap:8px}
+  .tabs button .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.7}
+  .tabs button:hover{color:var(--ink);border-color:#3a4c6d}
+  .tabs button.active{color:#0b1220;background:var(--signal);border-color:var(--signal);
+    box-shadow:0 4px 18px rgba(255,182,61,.28)}
+  .tabs button.s2.active{background:var(--alert);border-color:var(--alert);box-shadow:0 4px 18px rgba(255,84,104,.28)}
+  .tabs button.s3.active{background:var(--alert);border-color:var(--alert);box-shadow:0 4px 18px rgba(255,84,104,.28)}
+  .tabs button.s4.active{background:var(--interim);border-color:var(--interim);box-shadow:0 4px 18px rgba(93,180,255,.28)}
+
+  .caption{margin-top:16px;color:#c6d1e8;font-size:14px;line-height:1.6;
+    background:var(--panel2);border:1px solid var(--line-soft);border-left:3px solid var(--signal);
+    border-radius:10px;padding:13px 16px}
+  .caption.s2{border-left-color:var(--alert)}
+  .caption.s3{border-left-color:var(--alert)}
+  .caption.s4{border-left-color:var(--interim)}
+  .caption b{color:var(--ink);font-weight:600}
+
+  .stage{margin-top:16px;border:1px solid var(--line-soft);border-radius:var(--radius);
+    background:linear-gradient(180deg,var(--bg2),var(--panel2));overflow:auto;
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.8);padding:24px 18px}
+  .mermaid{display:flex;justify-content:center;min-width:640px}
+  .mermaid svg{max-width:100%;height:auto}
+
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft)}
+  .legend .li{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--muted);font-family:"IBM Plex Mono"}
+  .legend .sw{width:22px;height:3px;border-radius:2px}
+
+  .foot{margin-top:24px;color:var(--muted2);font-size:11.5px;font-family:"IBM Plex Mono";
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line-soft);padding-top:16px}
+
+  @media (max-width:760px){ header.top{flex-direction:column} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div>
+        <h1>Diagramme de séquence — Session de pointage</h1>
+        <div class="sub">Application intérim multi-sites · dérivé du modèle BPMN · double validation scan + humain</div>
+      </div>
+    </div>
+    <div class="meta">
+      <span class="chipmeta">Acteurs&nbsp;<b>3</b></span>
+      <span class="chipmeta">Scénarios&nbsp;<b>4</b></span>
+      <span class="chipmeta"><b>UML</b> sequence</span>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs">
+    <button class="s1 active" data-scen="s1"><span class="dot"></span>Nominal</button>
+    <button class="s2" data-scen="s2"><span class="dot"></span>Timeout pause</button>
+    <button class="s3" data-scen="s3"><span class="dot"></span>Refus / anti-fraude</button>
+    <button class="s4" data-scen="s4"><span class="dot"></span>Clôture auto 23:30</button>
+  </div>
+
+  <div class="caption s1" id="caption"></div>
+
+  <div class="stage">
+    <div class="mermaid" id="diagram"></div>
+  </div>
+
+  <div class="legend">
+    <div class="li"><span class="sw" style="background:var(--valid)"></span>Chemin validé</div>
+    <div class="li"><span class="sw" style="background:var(--alert)"></span>Refus / alerte / timeout</div>
+    <div class="li"><span class="sw" style="background:var(--signal)"></span>Scan / action intérimaire</div>
+    <div class="li"><span class="sw" style="background:var(--systeme)"></span>Contrôle système</div>
+  </div>
+
+  <div class="foot">
+    <span>Intérimaire · Système · Technicien / Réceptionniste</span>
+    <span>Source : bpmn-pointage-interim.html</span>
+  </div>
+</div>
+
+<script>
+  const A = "Intérimaire";
+  const S = "Système";
+  const V = "Technicien / Réceptionniste";
+
+  const DIAG = {
+    s1: `sequenceDiagram
+    autonumber
+    actor A as Intérimaire
+    participant S as Système
+    actor V as Technicien / Réceptionniste
+
+    Note over A: Arrivée sur site (QR de session récupéré)
+    A->>S: Scan QR Code — entrée
+    activate S
+    S->>S: Vérifie QR + contrôles auto (statut, session, site)
+    Note right of S: Contrôles OK ✓
+    S->>S: Crée session « En attente (ouverture) »<br/>(horodatage serveur)
+    S->>V: Notifie valideur (photo + infos du jour)
+    deactivate S
+    activate V
+    V->>V: Contrôle identité (photo/personne, CIN, assurance)
+    Note right of V: Identité validée ✓
+    V->>S: Approuve l'ouverture
+    deactivate V
+    activate S
+    S->>S: Session OUVERTE (horodatage définitif figé)
+    S-->>A: Confirmation « Session ouverte à 08:02 »
+    deactivate S
+
+    A->>S: Scan QR — départ pause
+    activate S
+    S->>S: Début pause + timeout 40 min (retour < 12:40:35)
+    deactivate S
+    A->>S: Scan QR — retour pause (12:35)
+    activate S
+    Note right of S: Retour < 40 min ✓
+    S->>S: Calcule durée pause = 34 min · statut « En cours »
+    deactivate S
+
+    A->>S: Scan QR — sortie
+    activate S
+    S->>S: Vérifie session ouverte + cohérence durée
+    S->>V: Notifie clôture (9h00 brut calculé)
+    deactivate S
+    activate V
+    V->>V: Contrôle de la clôture
+    Note right of V: Clôture validée ✓
+    V->>S: Valide la clôture
+    deactivate V
+    activate S
+    S->>S: Temps réel = fin − début − Σpauses = 8h15
+    S-->>A: Session CLÔTURÉE / VALIDÉE
+    deactivate S`,
+
+    s2: `sequenceDiagram
+    autonumber
+    actor A as Intérimaire
+    participant S as Système
+    actor V as Technicien / Réceptionniste
+
+    Note over A,V: Ouverture identique au scénario nominal
+    A->>S: Scan QR — entrée · contrôles OK
+    S->>V: Notifie valideur (identité)
+    V->>S: Approuve · Session OUVERTE
+    S-->>A: Confirmation d'ouverture
+
+    A->>S: Scan QR — départ pause
+    activate S
+    S->>S: Début pause + timeout 40 min
+    Note right of S: Aucun scan retour avant l'échéance ✗
+    S->>V: ALERTE timeout — pause dépassée (départ 12:00)
+    deactivate S
+    activate V
+    Note right of V: Décision Technicien (A / B / C)
+
+    alt Option A — Fermer la session
+        V->>S: Clôture · fin = heure de départ pause (12:00)
+        S->>S: Déduit pauses · flag « À vérifier »
+        S-->>V: Session CLÔTURÉE (Timeout pause)
+    else Option B — Prolonger le délai
+        V->>S: Accorde +10 / 20 / 30 min
+        S->>S: Recalcule l'échéance · surveillance poursuivie
+    else Option C — Retour manuel
+        V->>S: Saisit l'heure de retour réelle (justif. obligatoire)
+        S->>S: Journalise · statut « En cours »
+    end
+    deactivate V`,
+
+    s3: `sequenceDiagram
+    autonumber
+    actor A as Intérimaire
+    participant S as Système
+    actor V as Technicien / Réceptionniste
+
+    Note over A: Arrivée sur site
+    A->>S: Scan QR Code — entrée
+    activate S
+    S->>S: Vérifie QR + contrôles auto
+    Note right of S: Contrôles OK ✓
+    S->>S: Crée session « En attente (ouverture) »
+    S->>V: Notifie valideur (photo + infos)
+    deactivate S
+    activate V
+    V->>V: Contrôle identité (photo/personne, CIN, assurance)
+    Note right of V: Identité NON validée ✗
+    V->>S: Refuse (motif obligatoire)
+    deactivate V
+    activate S
+    S->>S: Journalise le refus · session annulée
+    S-->>A: Accès refusé — session « Annulée / Refusée »
+    deactivate S`,
+
+    s4: `sequenceDiagram
+    autonumber
+    actor A as Intérimaire
+    participant S as Système
+    actor V as Technicien / Réceptionniste
+
+    Note over A,V: Session ouverte normalement dans la journée
+    A->>S: Scan QR — entrée · contrôles OK
+    S->>V: Notifie valideur (identité)
+    V->>S: Approuve · Session OUVERTE
+    S-->>A: Confirmation d'ouverture
+
+    Note over S: Aucun scan de sortie · session encore ouverte
+    S->>S: Minuterie 23:30 — jour comptable clos
+    activate S
+    Note right of S: Clôture forcée déclenchée ✗
+    S->>S: Ferme la session de force · flag « À vérifier »
+    S-->>V: Session CLÔTURÉE automatiquement (À vérifier)
+    Note right of V: Correction de l'heure de sortie le lendemain
+    deactivate S`
+  };
+
+  const CAPTIONS = {
+    s1: `<b>Scénario nominal.</b> L'intérimaire scanne à l'entrée, le système enchaîne les contrôles automatiques et crée la session ; le valideur confirme l'identité (double validation). Après la pause tracée et le scan de sortie, le système calcule le temps réel payable et clôture la session.`,
+    s2: `<b>Timeout de pause.</b> Faute de scan de retour dans les 40 minutes, le système alerte le valideur, qui tranche entre trois options : fermer la session, prolonger le délai, ou saisir un retour manuel justifié.`,
+    s3: `<b>Refus à la validation.</b> Les contrôles automatiques passent, mais le contrôle humain d'identité échoue. Le valideur refuse avec motif obligatoire ; la session est annulée et journalisée.`,
+    s4: `<b>Clôture automatique à 23:30.</b> Une session laissée ouverte au-delà du jour comptable est fermée de force par le système, avec un flag « À vérifier » pour correction humaine le lendemain.`
+  };
+
+  mermaid.initialize({
+    startOnLoad:false,
+    securityLevel:"loose",
+    theme:"base",
+    themeVariables:{
+      fontFamily:"'Space Grotesk', sans-serif",
+      primaryColor:"#141e34",
+      primaryBorderColor:"#3a4c6d",
+      primaryTextColor:"#eaf0fb",
+      lineColor:"#8c9cbd",
+      actorBkg:"#111c33",
+      actorBorder:"#5db4ff",
+      actorTextColor:"#eaf0fb",
+      actorLineColor:"#28374f",
+      signalColor:"#c6d1e8",
+      signalTextColor:"#c6d1e8",
+      noteBkgColor:"#0d1729",
+      noteBorderColor:"#ffb63d",
+      noteTextColor:"#ffe2b0",
+      activationBkgColor:"#1c2942",
+      activationBorderColor:"#a98bff",
+      sequenceNumberColor:"#0b1220",
+      labelBoxBkgColor:"#111c33",
+      labelBoxBorderColor:"#28374f",
+      labelTextColor:"#eaf0fb",
+      altBackground:"#0e1729"
+    }
+  });
+
+  const diagramEl = document.getElementById("diagram");
+  const captionEl = document.getElementById("caption");
+  let seq = 0;
+
+  async function render(sid){
+    seq++;
+    const id = "seq_"+seq;
+    const { svg } = await mermaid.render(id, DIAG[sid]);
+    diagramEl.innerHTML = svg;
+    captionEl.className = "caption "+sid;
+    captionEl.innerHTML = CAPTIONS[sid];
+  }
+
+  document.querySelectorAll("#tabs button").forEach(b=>{
+    b.addEventListener("click",()=>{
+      document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      render(b.dataset.scen);
+    });
+  });
+
+  render("s1");
+</script>
+</body>
+</html>

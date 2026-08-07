@@ -45,16 +45,19 @@ import {
   useDeclencherExecution,
   useNomsProjet,
   PrismeAPIError,
+  LABELS_SECTEUR_ACTIVITE,
   type Contrainte,
   type InstanceDetail,
   type InstanceTRCO,
   type Objectif,
   type Ressource,
+  type SecteurActivite,
   type Tache,
   type TypeContrainte,
   type TypeObjectif,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
+import { RESSOURCES_SUGGEREES_PAR_SECTEUR } from "./suggestions-secteur";
 
 // Adaptateurs ERP réellement branchés côté backend (POST /adapters/{id}/ingerer).
 // Ajouter un adaptateur = ajouter une entrée ici, aucun autre changement de composant.
@@ -328,6 +331,12 @@ export function IngestionDialog({
   // rendu une fois au-dessus des onglets, quel que soit celui utilisé pour
   // soumettre.
   const [nomProjet, setNomProjet] = useState(instanceAEditer?.nom_projet ?? "");
+  // Vocabulaire fermé (contrairement à nom_projet) : oriente le prompt de
+  // l'agent de compréhension, filtre Instances/Données, alimente des
+  // suggestions de ressources sur l'onglet T-R-C-O ci-dessous.
+  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "">(
+    instanceAEditer?.secteur_activite ?? "",
+  );
   const { data: nomsProjetConnus } = useNomsProjet();
   const [succes, setSucces] = useState<{
     instance_id: string;
@@ -341,6 +350,7 @@ export function IngestionDialog({
     setContraintes([]);
     setObjectifs([nouvelObjectif()]);
     setNomProjet("");
+    setSecteurActivite("");
     setFichier(null);
     if (inputFichierRef.current) inputFichierRef.current.value = "";
     setFichierJson(null);
@@ -392,22 +402,32 @@ export function IngestionDialog({
       contraintesNonEditables,
     );
     const nomProjetSoumis = nomProjet.trim() || undefined;
+    const secteurActiviteSoumis = secteurActivite || undefined;
     if (instanceAEditer) {
       modifier.mutate(
-        { instanceId: instanceAEditer.instance_id, instance, nomProjet: nomProjetSoumis },
+        {
+          instanceId: instanceAEditer.instance_id,
+          instance,
+          nomProjet: nomProjetSoumis,
+          secteurActivite: secteurActiviteSoumis,
+        },
         { onSuccess: onIngestionReussie },
       );
       return;
     }
     ingerer.mutate(
-      { clientId, instance, nomProjet: nomProjetSoumis },
+      { clientId, instance, nomProjet: nomProjetSoumis, secteurActivite: secteurActiviteSoumis },
       { onSuccess: onIngestionReussie },
     );
   }
 
   function soumettreImport() {
     importer.mutate(
-      { nomAdaptateur: source, nomProjet: nomProjet.trim() || undefined },
+      {
+        nomAdaptateur: source,
+        nomProjet: nomProjet.trim() || undefined,
+        secteurActivite: secteurActivite || undefined,
+      },
       { onSuccess: onIngestionReussie },
     );
   }
@@ -428,6 +448,7 @@ export function IngestionDialog({
           contraintes: fichierContraintesCsv,
         },
         nomProjet: nomProjet.trim() || undefined,
+        secteurActivite: secteurActivite || undefined,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -444,7 +465,12 @@ export function IngestionDialog({
       return;
     }
     importerJson.mutate(
-      { clientId, payload, nomProjet: nomProjet.trim() || undefined },
+      {
+        clientId,
+        payload,
+        nomProjet: nomProjet.trim() || undefined,
+        secteurActivite: secteurActivite || undefined,
+      },
       { onSuccess: onIngestionReussie },
     );
   }
@@ -452,7 +478,12 @@ export function IngestionDialog({
   function soumettreCsvLocal() {
     if (!cheminDossierCsvLocal.trim()) return;
     importerCsvLocal.mutate(
-      { clientId, cheminDossier: cheminDossierCsvLocal, nomProjet: nomProjet.trim() || undefined },
+      {
+        clientId,
+        cheminDossier: cheminDossierCsvLocal,
+        nomProjet: nomProjet.trim() || undefined,
+        secteurActivite: secteurActivite || undefined,
+      },
       { onSuccess: onIngestionReussie },
     );
   }
@@ -579,6 +610,29 @@ export function IngestionDialog({
               </p>
             </div>
 
+            <div className="space-y-1.5">
+              <Label htmlFor="secteur_activite">Secteur d'activité (optionnel)</Label>
+              <Select
+                value={secteurActivite}
+                onValueChange={(v) => setSecteurActivite(v as SecteurActivite)}
+              >
+                <SelectTrigger id="secteur_activite">
+                  <SelectValue placeholder="Non renseigné" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {LABELS_SECTEUR_ACTIVITE[s]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Aide l'agent de compréhension à interpréter des données ambiguës et suggère des
+                ressources typiques sur l'onglet Saisie T-R-C-O.
+              </p>
+            </div>
+
             {instanceAEditer ? (
               <div className="space-y-5">
                 <div className="flex items-center gap-2 text-sm">
@@ -595,7 +649,11 @@ export function IngestionDialog({
                 )}
 
                 <SectionTaches taches={taches} setTaches={setTaches} />
-                <SectionRessources ressources={ressources} setRessources={setRessources} />
+                <SectionRessources
+                  ressources={ressources}
+                  setRessources={setRessources}
+                  secteurActivite={secteurActivite || undefined}
+                />
                 <SectionContraintes
                   contraintes={contraintes}
                   setContraintes={setContraintes}
@@ -637,7 +695,11 @@ export function IngestionDialog({
                   />
 
                   <SectionTaches taches={taches} setTaches={setTaches} />
-                  <SectionRessources ressources={ressources} setRessources={setRessources} />
+                  <SectionRessources
+                    ressources={ressources}
+                    setRessources={setRessources}
+                    secteurActivite={secteurActivite || undefined}
+                  />
                   <SectionContraintes
                     contraintes={contraintes}
                     setContraintes={setContraintes}
@@ -1043,10 +1105,27 @@ function SectionTaches({
 function SectionRessources({
   ressources,
   setRessources,
+  secteurActivite,
 }: {
   ressources: RessourceLigne[];
   setRessources: React.Dispatch<React.SetStateAction<RessourceLigne[]>>;
+  secteurActivite?: SecteurActivite;
 }) {
+  const suggestions = secteurActivite ? RESSOURCES_SUGGEREES_PAR_SECTEUR[secteurActivite] : [];
+
+  function ajouterSuggestion(suggestion: { id: string; competences?: string[] }) {
+    setRessources((r) => [
+      ...r,
+      {
+        clef: idLocal(),
+        id: suggestion.id,
+        nom: "",
+        competences: suggestion.competences ?? [],
+        competencesTexte: (suggestion.competences ?? []).join(", "),
+      },
+    ]);
+  }
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -1060,6 +1139,23 @@ function SectionRessources({
           <Plus className="mr-1 h-3.5 w-3.5" /> Ajouter
         </Button>
       </div>
+      {suggestions.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 rounded-md border border-dashed border-border p-2">
+          <span className="text-xs text-muted-foreground">
+            Suggestions pour {LABELS_SECTEUR_ACTIVITE[secteurActivite!]} :
+          </span>
+          {suggestions.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => ajouterSuggestion(s)}
+              className="rounded-full border border-border px-2.5 py-0.5 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            >
+              + {s.id}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="space-y-2">
         {ressources.map((r, i) => (
           <div key={r.clef} className="flex gap-2">

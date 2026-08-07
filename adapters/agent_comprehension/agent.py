@@ -79,10 +79,21 @@ class ResultatComprehension:
     justifications: tuple[Justification, ...]
 
 
-def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> ResultatComprehension:
+def comprendre_donnees_erp(
+    modele: BaseChatModel, donnees_brutes: str, secteur_activite: str | None = None
+) -> ResultatComprehension:
+    """`secteur_activite` (optionnel) : contexte métier fourni explicitement
+    par l'utilisateur, jamais deviné par l'agent (voir `comprehension.md`)
+    — absent du prompt (chaîne vide) si `None`, jamais interpolé comme la
+    chaîne littérale "None"."""
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     regles_dsl = CHEMIN_REGLES_DSL.read_text(encoding="utf-8")
-    prompt = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes)
+    bloc_secteur = (
+        f"## Secteur d'activité déclaré par le client\n\n{secteur_activite}\n"
+        if secteur_activite is not None
+        else ""
+    )
+    prompt = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes, secteur_activite=bloc_secteur)
 
     structure = modele.with_structured_output(
         _SchemaComprehension, include_raw=True, method=methode_sortie_structuree(modele)

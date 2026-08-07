@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from api.autorisation import verifier_acces_client
-from api.etat import EtatAPI, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, SecteurActivite, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import Objectif
@@ -25,17 +25,20 @@ def ingerer_instance(
     client_id: str,
     payload: dict[str, Any],
     nom_projet: str | None = None,
+    secteur_activite: SecteurActivite | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     """Valide le payload (garde-fou amont, §6.7) et le met en attente
-    d'exécution. `nom_projet` (query, optionnel) étiquette librement
-    l'instance créée. Pour modifier une instance déjà ingérée, voir
-    `PUT /{instance_id}` ci-dessous — modification en place, jamais une
-    nouvelle instance."""
+    d'exécution. `nom_projet`/`secteur_activite` (query, optionnels)
+    étiquettent librement l'instance créée. Pour modifier une instance déjà
+    ingérée, voir `PUT /{instance_id}` ci-dessous — modification en place,
+    jamais une nouvelle instance."""
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
-    instance_id = etat.enregistrer_instance(client_id, instance, nom_projet=nom_projet)
+    instance_id = etat.enregistrer_instance(
+        client_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
+    )
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 
@@ -61,6 +64,7 @@ def obtenir_instance(
         "structure_contraintes": structure_contraintes(instance),
         "description_metier": etat.recuperer_description_metier(instance_id),
         "nom_projet": etat.recuperer_nom_projet(instance_id),
+        "secteur_activite": etat.recuperer_secteur_activite(instance_id),
         **instance.model_dump(mode="json"),
     }
 
@@ -101,6 +105,7 @@ def modifier_instance(
     instance_id: str,
     payload: dict[str, Any],
     nom_projet: str | None = None,
+    secteur_activite: SecteurActivite | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -115,7 +120,9 @@ def modifier_instance(
 
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
-    instance = etat.modifier_instance(instance_id, instance, nom_projet=nom_projet)
+    instance = etat.modifier_instance(
+        instance_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
+    )
 
     return {
         "instance_id": instance_id,

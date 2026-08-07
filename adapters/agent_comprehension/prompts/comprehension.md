@@ -27,6 +27,7 @@ d'une base de données, description en langage naturel, extrait de tableur...
 {donnees_brutes}
 ```
 
+{secteur_activite}
 ## Ton rôle : Agent de compréhension
 
 Traduis ces données brutes vers le format T-R-C-O canonique décrit
@@ -107,7 +108,15 @@ ci-dessus. Règles impératives :
   ambiguë ou incomplète dans les données, dis-le dans cette description ou
   signale-le dans `avertissements`, plutôt que de combler le vide par une
   supposition plausible — même règle que pour toute autre partie de cette
-  mission.
+  mission. **Exception explicite** : si une section « Secteur d'activité
+  déclaré par le client » apparaît ci-dessus, c'est une donnée d'entrée
+  fournie par l'utilisateur, jamais une supposition de ta part — tu peux
+  t'en servir comme contexte pour interpréter des données ambiguës (ex.
+  deviner qu'un champ court désigne une cuisson plutôt qu'un usinage). Ça ne
+  dispense d'aucune des règles ci-dessus : ça ne justifie toujours pas
+  d'inventer une compatibilité, une compétence ou une contrainte absente des
+  données elles-mêmes. En l'absence de cette section, continue de n'inférer
+  aucun secteur par toi-même.
 - Pour chaque contrainte `precedence`, `echeance` et `competence_requise` que
   tu produis (pas `compatibilite_ressource_tache`, trop nombreuses pour être
   toutes justifiées individuellement), ajoute une entrée dans

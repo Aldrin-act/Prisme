@@ -121,10 +121,17 @@ export const prismeClient = {
       body: JSON.stringify({ client_id: clientId, nom: nom ?? null }),
     }),
 
-  // INGESTION — `nomProjet` (optionnel) étiquette librement l'instance créée.
-  ingererInstance: (clientId: string, instance: Types.InstanceTRCO, nomProjet?: string) => {
+  // INGESTION — `nomProjet`/`secteurActivite` (optionnels) étiquettent
+  // librement l'instance créée.
+  ingererInstance: (
+    clientId: string,
+    instance: Types.InstanceTRCO,
+    nomProjet?: string,
+    secteurActivite?: Types.SecteurActivite,
+  ) => {
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
+    if (secteurActivite) params.set("secteur_activite", secteurActivite);
     const requete = params.toString();
     return apiFetch<Types.ReponseIngestion>(
       `${PRISME_CONFIG.routes.ingestion}/${clientId}${requete ? `?${requete}` : ""}`,
@@ -158,9 +165,15 @@ export const prismeClient = {
   // Remplace en place le contenu T-R-C-O complet d'une instance déjà
   // ingérée — même instance_id, historique d'exécution intact, rien n'est
   // dupliqué.
-  modifierInstance: (instanceId: string, instance: Types.InstanceTRCO, nomProjet?: string) => {
+  modifierInstance: (
+    instanceId: string,
+    instance: Types.InstanceTRCO,
+    nomProjet?: string,
+    secteurActivite?: Types.SecteurActivite,
+  ) => {
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
+    if (secteurActivite) params.set("secteur_activite", secteurActivite);
     const requete = params.toString();
     return apiFetch<Types.InstanceDetail>(
       `${PRISME_CONFIG.routes.ingestion}/${instanceId}${requete ? `?${requete}` : ""}`,
@@ -246,13 +259,20 @@ export const prismeClient = {
 
   // ADAPTATEURS ERP — chaque adaptateur déterministe expose POST /adapters/{nom}/ingerer,
   // sans body : il lit sa source de données côté backend (ex. GreenSIG lit sa propre DB).
-  importerViaAdaptateur: (nomAdaptateur: string, nomProjet?: string) =>
-    apiFetch<Types.ReponseImportAdaptateur>(
-      `${PRISME_CONFIG.routes.adapters}/${nomAdaptateur}/ingerer${
-        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
-      }`,
+  importerViaAdaptateur: (
+    nomAdaptateur: string,
+    nomProjet?: string,
+    secteurActivite?: Types.SecteurActivite,
+  ) => {
+    const params = new URLSearchParams();
+    if (nomProjet) params.set("nom_projet", nomProjet);
+    if (secteurActivite) params.set("secteur_activite", secteurActivite);
+    const requete = params.toString();
+    return apiFetch<Types.ReponseImportAdaptateur>(
+      `${PRISME_CONFIG.routes.adapters}/${nomAdaptateur}/ingerer${requete ? `?${requete}` : ""}`,
       { method: "POST" },
-    ),
+    );
+  },
 
   // Import depuis le gabarit xlsx (POST /adapters/tableur/{client_id}, multipart).
   importerFichierTableur: (clientId: string, fichier: File) => {
@@ -270,15 +290,18 @@ export const prismeClient = {
     clientId: string,
     fichiers: { taches: File; ressources: File; contraintes: File },
     nomProjet?: string,
+    secteurActivite?: Types.SecteurActivite,
   ) => {
     const corps = new FormData();
     corps.append("taches", fichiers.taches);
     corps.append("ressources", fichiers.ressources);
     corps.append("contraintes", fichiers.contraintes);
+    const params = new URLSearchParams();
+    if (nomProjet) params.set("nom_projet", nomProjet);
+    if (secteurActivite) params.set("secteur_activite", secteurActivite);
+    const requete = params.toString();
     return apiFetch<Types.ReponseImportAdaptateur>(
-      `${PRISME_CONFIG.routes.adapters}/csv/${clientId}${
-        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
-      }`,
+      `${PRISME_CONFIG.routes.adapters}/csv/${clientId}${requete ? `?${requete}` : ""}`,
       { method: "POST", body: corps },
     );
   },
@@ -291,23 +314,33 @@ export const prismeClient = {
     clientId: string,
     payload: Record<string, unknown>,
     nomProjet?: string,
-  ) =>
-    apiFetch<Types.ReponseImportAdaptateur>(
-      `${PRISME_CONFIG.routes.adapters}/json/${clientId}${
-        nomProjet ? `?nom_projet=${encodeURIComponent(nomProjet)}` : ""
-      }`,
+    secteurActivite?: Types.SecteurActivite,
+  ) => {
+    const params = new URLSearchParams();
+    if (nomProjet) params.set("nom_projet", nomProjet);
+    if (secteurActivite) params.set("secteur_activite", secteurActivite);
+    const requete = params.toString();
+    return apiFetch<Types.ReponseImportAdaptateur>(
+      `${PRISME_CONFIG.routes.adapters}/json/${clientId}${requete ? `?${requete}` : ""}`,
       { method: "POST", body: JSON.stringify(payload) },
-    ),
+    );
+  },
 
   // Import CSV local : convertit des fichiers CSV présents sur le serveur en instance TRCO
   // (POST /adapters/csv-local/ingerer) — utile pour imports en masse, tests, ou scripts automatisés.
-  importerCsvLocal: (clientId: string, cheminDossier: string, nomProjet?: string) =>
+  importerCsvLocal: (
+    clientId: string,
+    cheminDossier: string,
+    nomProjet?: string,
+    secteurActivite?: Types.SecteurActivite,
+  ) =>
     apiFetch<Types.ReponseImportCsvLocal>(`${PRISME_CONFIG.routes.adapters}/csv-local/ingerer`, {
       method: "POST",
       body: JSON.stringify({
         client_id: clientId,
         chemin_dossier: cheminDossier,
         nom_projet: nomProjet ?? null,
+        secteur_activite: secteurActivite ?? null,
       }),
     }),
 
@@ -328,13 +361,19 @@ export const prismeClient = {
   // volonté. Le client_id est dérivé du compte authentifié côté serveur ;
   // `clientId` n'est envoyé (et n'a d'effet) que pour un compte admin
   // ciblant un autre client (voir `api/routes/sources.py`).
-  creerSource: (donneesBrutes: string, nom?: string, clientId?: string) =>
+  creerSource: (
+    donneesBrutes: string,
+    nom?: string,
+    clientId?: string,
+    secteurActivite?: Types.SecteurActivite,
+  ) =>
     apiFetch<Types.ReponseCreationSource>(PRISME_CONFIG.routes.sources, {
       method: "POST",
       body: JSON.stringify({
         donnees_brutes: donneesBrutes,
         nom: nom ?? null,
         client_id: clientId ?? null,
+        secteur_activite: secteurActivite ?? null,
       }),
     }),
 

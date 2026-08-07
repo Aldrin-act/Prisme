@@ -36,7 +36,7 @@ from adapters.csv_import import traduire as traduire_csv
 from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
 from adapters.json_import import traduire as traduire_json
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
-from api.etat import EtatAPI, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, SecteurActivite, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import InstanceTRCO
@@ -151,6 +151,10 @@ class RequeteCreationSource(BaseModel):
     donnees_brutes: str
     nom: str | None = None
     client_id: str | None = None  # admin uniquement : cible un client autre que le sien
+    # Capturé une fois ici, réutilisé à chaque reconversion (generer_instance/
+    # generer_instance_deterministe) — oriente le prompt de l'agent de
+    # compréhension sans devoir être re-saisi à chaque tentative.
+    secteur_activite: SecteurActivite | None = None
 
 
 def _client_id_effectif(requete_client_id: str | None, utilisateur: dict) -> str:
@@ -169,7 +173,7 @@ def creer_source(
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     client_id = _client_id_effectif(requete.client_id, utilisateur)
-    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom)
+    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom, requete.secteur_activite)
     return {"source_id": source_id}
 
 
@@ -200,6 +204,7 @@ def obtenir_source(
         "nom": source.nom,
         "donnees_brutes": source.donnees_brutes,
         "date_creation": source.date_creation,
+        "secteur_activite": source.secteur_activite,
         "instances": etat.lister_instances_pour_source(source_id),
     }
 
@@ -235,7 +240,10 @@ def generer_instance(
     précédentes. L'instance produite s'exécute directement par son propre
     `instance_id` — aucune association supplémentaire n'est nécessaire.
     `nom_projet` (query, optionnel) étiquette librement l'instance produite ;
-    à défaut, reprend le nom de la source elle-même (`source.nom`)."""
+    à défaut, reprend le nom de la source elle-même (`source.nom`).
+    `secteur_activite` n'est pas un paramètre ici : il vient de la source
+    (`source.secteur_activite`, capturé une fois à sa création) et oriente
+    le prompt de l'agent de compréhension à chaque reconversion."""
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -244,7 +252,7 @@ def generer_instance(
     verifier_acces_client(utilisateur, source.client_id)
 
     try:
-        resultat = comprendre_donnees_erp(modele, source.donnees_brutes)
+        resultat = comprendre_donnees_erp(modele, source.donnees_brutes, secteur_activite=source.secteur_activite)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 
@@ -256,6 +264,7 @@ def generer_instance(
         source_id=source_id,
         description_metier=resultat.description_metier,
         nom_projet=nom_projet if nom_projet is not None else source.nom,
+        secteur_activite=source.secteur_activite,
     )
     return {
         "instance_id": instance_id,
@@ -305,6 +314,7 @@ def generer_instance_deterministe(
         instance,
         source_id=source_id,
         nom_projet=nom_projet if nom_projet is not None else source.nom,
+        secteur_activite=source.secteur_activite,
     )
     return {
         "instance_id": instance_id,

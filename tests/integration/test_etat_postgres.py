@@ -88,6 +88,31 @@ def test_lister_instances_filtre_par_nom_projet(etat_postgres_test: EtatPostgres
     assert [i["instance_id"] for i in instances] == [instance_ciblee]
 
 
+def test_secteur_activite_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), secteur_activite="atelier_mecanique"
+    )
+
+    assert etat_postgres_test.recuperer_secteur_activite(instance_id) == "atelier_mecanique"
+
+
+def test_secteur_activite_absent_par_defaut(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat_postgres_test.recuperer_secteur_activite(instance_id) is None
+
+
+def test_lister_instances_filtre_par_secteur_activite(etat_postgres_test: EtatPostgres) -> None:
+    instance_ciblee = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), secteur_activite="atelier_mecanique"
+    )
+    etat_postgres_test.enregistrer_instance("client-test", _instance_exemple(), secteur_activite="imprimerie")
+
+    instances = etat_postgres_test.lister_instances(client_id="client-test", secteur_activite="atelier_mecanique")
+
+    assert [i["instance_id"] for i in instances] == [instance_ciblee]
+
+
 def _instance_modifiee() -> InstanceTRCO:
     return InstanceTRCO.model_validate(
         {
@@ -112,6 +137,16 @@ def test_modifier_instance_round_trip(etat_postgres_test: EtatPostgres) -> None:
     assert client_id == "client-test"
     assert [t.id for t in instance_relue.taches] == ["T1"]
     assert etat_postgres_test.recuperer_nom_projet(instance_id) == "Ligne B"
+
+
+def test_modifier_instance_change_secteur_activite(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), secteur_activite="atelier_mecanique"
+    )
+
+    etat_postgres_test.modifier_instance(instance_id, _instance_modifiee(), secteur_activite="imprimerie")
+
+    assert etat_postgres_test.recuperer_secteur_activite(instance_id) == "imprimerie"
 
 
 def test_modifier_instance_preserve_lhistorique_dexecution(etat_postgres_test: EtatPostgres) -> None:
@@ -290,6 +325,22 @@ def test_supprimer_source_coupe_la_provenance_sans_toucher_a_linstance(etat_post
     except KeyError:
         pass
     etat_postgres_test.recuperer_instance(instance_id)  # survit, indépendante de sa source
+
+
+def test_source_secteur_activite_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    source_id = etat_postgres_test.enregistrer_source(
+        "client-test", donnees_brutes="brut", secteur_activite="production_agroalimentaire"
+    )
+
+    source = etat_postgres_test.recuperer_source(source_id)
+
+    assert source.secteur_activite == "production_agroalimentaire"
+
+
+def test_source_secteur_activite_absent_par_defaut(etat_postgres_test: EtatPostgres) -> None:
+    source_id = etat_postgres_test.enregistrer_source("client-test", donnees_brutes="brut")
+
+    assert etat_postgres_test.recuperer_source(source_id).secteur_activite is None
 
 
 # --- Suppression d'instance : cascade son propre historique d'exécution ---

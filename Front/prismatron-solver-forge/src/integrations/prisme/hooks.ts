@@ -320,11 +320,13 @@ export function useIngererInstance() {
       clientId,
       instance,
       nomProjet,
+      secteurActivite,
     }: {
       clientId: string;
       instance: Types.InstanceTRCO;
       nomProjet?: string;
-    }) => prismeClient.ingererInstance(clientId, instance, nomProjet),
+      secteurActivite?: Types.SecteurActivite;
+    }) => prismeClient.ingererInstance(clientId, instance, nomProjet, secteurActivite),
   });
 }
 
@@ -357,11 +359,13 @@ export function useModifierInstance() {
       instanceId,
       instance,
       nomProjet,
+      secteurActivite,
     }: {
       instanceId: string;
       instance: Types.InstanceTRCO;
       nomProjet?: string;
-    }) => prismeClient.modifierInstance(instanceId, instance, nomProjet),
+      secteurActivite?: Types.SecteurActivite;
+    }) => prismeClient.modifierInstance(instanceId, instance, nomProjet, secteurActivite),
   });
 }
 
@@ -438,8 +442,15 @@ export function useDeciderPropositionSupervision() {
  */
 export function useImporterViaAdaptateur() {
   return useMutation({
-    mutationFn: ({ nomAdaptateur, nomProjet }: { nomAdaptateur: string; nomProjet?: string }) =>
-      prismeClient.importerViaAdaptateur(nomAdaptateur, nomProjet),
+    mutationFn: ({
+      nomAdaptateur,
+      nomProjet,
+      secteurActivite,
+    }: {
+      nomAdaptateur: string;
+      nomProjet?: string;
+      secteurActivite?: Types.SecteurActivite;
+    }) => prismeClient.importerViaAdaptateur(nomAdaptateur, nomProjet, secteurActivite),
   });
 }
 
@@ -464,11 +475,13 @@ export function useImporterFichiersCsv() {
       clientId,
       fichiers,
       nomProjet,
+      secteurActivite,
     }: {
       clientId: string;
       fichiers: { taches: File; ressources: File; contraintes: File };
       nomProjet?: string;
-    }) => prismeClient.importerFichiersCsv(clientId, fichiers, nomProjet),
+      secteurActivite?: Types.SecteurActivite;
+    }) => prismeClient.importerFichiersCsv(clientId, fichiers, nomProjet, secteurActivite),
   });
 }
 
@@ -484,11 +497,13 @@ export function useImporterJsonAvecCompetences() {
       clientId,
       payload,
       nomProjet,
+      secteurActivite,
     }: {
       clientId: string;
       payload: Record<string, unknown>;
       nomProjet?: string;
-    }) => prismeClient.importerJsonAvecCompetences(clientId, payload, nomProjet),
+      secteurActivite?: Types.SecteurActivite;
+    }) => prismeClient.importerJsonAvecCompetences(clientId, payload, nomProjet, secteurActivite),
   });
 }
 
@@ -502,11 +517,13 @@ export function useImporterCsvLocal() {
       clientId,
       cheminDossier,
       nomProjet,
+      secteurActivite,
     }: {
       clientId: string;
       cheminDossier: string;
       nomProjet?: string;
-    }) => prismeClient.importerCsvLocal(clientId, cheminDossier, nomProjet),
+      secteurActivite?: Types.SecteurActivite;
+    }) => prismeClient.importerCsvLocal(clientId, cheminDossier, nomProjet, secteurActivite),
   });
 }
 
@@ -540,11 +557,13 @@ export function useCreerSource() {
       donneesBrutes,
       nom,
       clientId,
+      secteurActivite,
     }: {
       donneesBrutes: string;
       nom?: string;
       clientId?: string;
-    }) => prismeClient.creerSource(donneesBrutes, nom, clientId),
+      secteurActivite?: Types.SecteurActivite;
+    }) => prismeClient.creerSource(donneesBrutes, nom, clientId, secteurActivite),
   });
 }
 
