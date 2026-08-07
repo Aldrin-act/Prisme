@@ -33,11 +33,19 @@ class Tache(BaseModel):
         default=None,
         ge=1,
         le=5,
-        description="Priorité métier, 1 (critique) à 5 (faible) — optionnel, purement "
-        "informatif : aucune contrainte ni objectif n'en dépend aujourd'hui.",
+        description="Priorité métier, 1 (critique) à 5 (faible) — optionnel. Consommée par le "
+        "code généré comme départage uniquement (choisir entre plannings de même valeur "
+        "d'objectif), jamais comme un poids dans l'objectif ou une contrainte du DSL lui-même.",
     )
     statut: StatutTache | None = Field(
         default=None,
         description="Statut de suivi métier (a_faire/en_cours/termine/bloque) — optionnel, purement "
         "informatif : ni le solveur ni le vérificateur de faisabilité n'en dépendent aujourd'hui.",
+    )
+    quantite: int | None = Field(
+        default=None,
+        ge=1,
+        description="Quantité produite par cette tâche (nombre d'unités) — optionnel. Consommée "
+        "uniquement par `ContrainteTailleLot` pour une validation statique de lot min/max, "
+        "jamais lue par le solveur ni un objectif.",
     )

@@ -39,7 +39,11 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   (capacité implicite de 1 sinon) ; si elle contient des
   `ContrainteIncompatibilite`, ajoute une contrainte de somme `<= 1` sur les
   littéraux de présence des deux tâches pour chaque ressource candidate
-  commune.
+  commune ; si elle contient des `ContrainteDisponibiliteRessource`, ajoute
+  un intervalle fixe par jour indisponible dans la même liste que
+  `AddNoOverlap`/`AddCumulative` de la ressource concernée. Si des tâches
+  ont une `priorite` déclarée, ajoute un terme de départage à l'objectif
+  (jamais au détriment de sa valeur principale — voir la mission).
 - Pour tout autre algorithme (génétique, ACO, recuit simulé, tabou,
   glouton + recherche locale, règles de dispatching) : adapte les mêmes
   champs à cet algorithme — `variables` devient la représentation de la

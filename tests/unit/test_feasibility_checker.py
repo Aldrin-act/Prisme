@@ -9,7 +9,9 @@ from __future__ import annotations
 from dsl.schema import (
     CompatibiliteRessourceTache,
     ContrainteCapacite,
+    ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
+    ContrainteTailleLot,
     Echeance,
     InstanceTRCO,
     MinimiserMakespan,
@@ -335,3 +337,116 @@ def test_incompatibilite_taches_violee_est_detectee() -> None:
     violation = next(v for v in resultat.violations if v.type == "incompatibilite_taches_violee")
     assert {violation.tache, violation.tache_secondaire} == {"T1", "T2"}
     assert violation.ressource == "R1"
+
+
+def test_disponibilite_ressource_respectee_est_legale() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            ContrainteDisponibiliteRessource(ressource="R1", jours_indisponibles=[5, 6]),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0))  # [0, 2) : ne touche pas [5, 6]
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_disponibilite_ressource_violee_est_detectee() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            ContrainteDisponibiliteRessource(ressource="R1", jours_indisponibles=[5, 6]),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 5))  # [5, 7) : chevauche le jour indisponible 5 et 6
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["ressource_indisponible"]
+    assert resultat.violations[0].tache == "T1"
+    assert resultat.violations[0].ressource == "R1"
+
+
+def test_disponibilite_ressource_avec_capacite_superieure_a_un_reste_bloquee() -> None:
+    """Une ressource de capacité 2 reste bloquée un jour indisponible même
+    sans dépasser sa capacité — l'indisponibilité est une interdiction
+    totale ce jour-là, pas seulement une réduction de capacité."""
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=2),
+            ContrainteCapacite(ressource="R1", capacite=2),
+            ContrainteDisponibiliteRessource(ressource="R1", jours_indisponibles=[5]),
+        ],
+    )
+    # T1 [0,2) ne touche pas le jour 5 ; T2 [5,7) le touche — aucun
+    # chevauchement temporel entre T1 et T2, donc la capacité (2) n'est
+    # jamais en cause : seule l'indisponibilité doit être détectée.
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 5))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["ressource_indisponible"]
+    assert resultat.violations[0].tache == "T2"
+
+
+def test_taille_lot_respectee_est_legale() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1", quantite=500)],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            ContrainteTailleLot(tache="T1", lot_min=50, lot_max=1000),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_taille_lot_violee_est_detectee() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1", quantite=5)],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            ContrainteTailleLot(tache="T1", lot_min=50, lot_max=1000),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["taille_lot_hors_bornes"]
+    assert resultat.violations[0].tache == "T1"
+
+
+def test_taille_lot_sans_quantite_est_ignoree() -> None:
+    """`Tache.quantite` non renseignée : rien à vérifier, aucune anomalie —
+    même logique que `Echeance` quand la durée du couple est inconnue."""
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            ContrainteTailleLot(tache="T1", lot_min=50, lot_max=1000),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal

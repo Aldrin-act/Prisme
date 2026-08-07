@@ -7,7 +7,7 @@ vraie base Postgres plutôt que par un dict en mémoire.
 from __future__ import annotations
 
 from api.etat_postgres import EtatPostgres
-from dsl.schema import InstanceTRCO, OperationPlanifiee, Planning
+from dsl.schema import InstanceTRCO, MinimiserMakespan, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from validation_engine.feasibility_checker import ResultatFaisabilite, Violation
 
@@ -130,6 +130,33 @@ def test_modifier_instance_inconnue_leve_key_error(etat_postgres_test: EtatPostg
     except KeyError:
         return
     raise AssertionError("KeyError attendu pour une instance inconnue")
+
+
+def test_date_modification_posee_a_la_creation(etat_postgres_test: EtatPostgres) -> None:
+    etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+
+    instances = etat_postgres_test.lister_instances(client_id="client-test")
+    assert instances[0]["date_modification"] is not None
+
+
+def test_date_modification_mise_a_jour_par_modifier_instance(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    date_initiale = etat_postgres_test.lister_instances(client_id="client-test")[0]["date_modification"]
+
+    etat_postgres_test.modifier_instance(instance_id, _instance_modifiee())
+
+    nouvelle_date = etat_postgres_test.lister_instances(client_id="client-test")[0]["date_modification"]
+    assert nouvelle_date >= date_initiale
+
+
+def test_date_modification_mise_a_jour_par_modifier_objectifs(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    date_initiale = etat_postgres_test.lister_instances(client_id="client-test")[0]["date_modification"]
+
+    etat_postgres_test.modifier_objectifs(instance_id, [MinimiserMakespan()])
+
+    nouvelle_date = etat_postgres_test.lister_instances(client_id="client-test")[0]["date_modification"]
+    assert nouvelle_date >= date_initiale
 
 
 def test_recuperer_instance_inconnue_leve_key_error(etat_postgres_test: EtatPostgres) -> None:

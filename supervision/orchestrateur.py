@@ -35,8 +35,8 @@ _RESUME_REPLI: dict[TypeSignal, str] = {
         "une régénération est nécessaire avant toute exécution."
     ),
     "instance_a_replanifier": (
-        "Un solveur compatible existe déjà mais cette instance n'a pas encore été exécutée — "
-        "une exécution permettrait d'obtenir un planning à jour."
+        "Un solveur compatible existe déjà mais cette instance n'a jamais été exécutée, ou a été "
+        "modifiée depuis sa dernière exécution — une exécution permettrait d'obtenir un planning à jour."
     ),
     "echecs_repetes": (
         "Plusieurs exécutions récentes de cette instance ont échoué — "
@@ -78,16 +78,22 @@ def _unifier_signature_orpheline(signal: SignalSignatureOrpheline) -> _SignalUni
 
 
 def _unifier_instance_a_replanifier(signal: SignalInstanceAReplanifier) -> _SignalUnifie:
+    if signal.raison == "jamais_executee":
+        raison_texte = "mais elle n'a jamais été exécutée"
+    else:
+        raison_texte = (
+            "mais elle a été modifiée depuis sa dernière exécution — le planning actuel ne "
+            "reflète plus son contenu"
+        )
     return _SignalUnifie(
         type_signal="instance_a_replanifier",
         instance_id=signal.instance_id,
         structure_contraintes=signal.structure_contraintes,
         signature_objectifs=signal.signature_objectifs,
         execution_ids=(),
-        details=(f"solveur_disponible={signal.id_solveur_disponible}",),
+        details=(f"solveur_disponible={signal.id_solveur_disponible}", f"raison={signal.raison}"),
         description=(
-            f"Solveur {signal.id_solveur_disponible} disponible et compatible avec cette instance, "
-            "mais elle n'a jamais été exécutée."
+            f"Solveur {signal.id_solveur_disponible} disponible et compatible avec cette instance, {raison_texte}."
         ),
     )
 

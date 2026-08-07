@@ -94,6 +94,18 @@ Le DSL PRISME utilise une **terminologie française précise** pour tous les con
 4. **Compétence Requise** (`competence_requise`)
    - Compétence nécessaire pour exécuter une tâche
 
+5. **Disponibilité Ressource** (`disponibilite_ressource`)
+   - Jours (relatifs, jamais une date calendaire) où une ressource est indisponible — aucune
+     opération ne peut s'y dérouler ces jours-là. Un calendrier global d'atelier (jours fériés
+     communs) s'exprime en déclarant cette contrainte identiquement pour chaque ressource.
+
+6. **Taille de Lot** (`taille_lot`)
+   - Borne (`lot_min`/`lot_max`) la quantité (`Tache.quantite`) attendue pour une tâche —
+     validation statique de la donnée d'entrée, sans aucun effet sur les décisions du solveur.
+
+> Cette liste est en retard sur `dsl/schema/contraintes.py` pour `capacite`/`incompatibilite`
+> (préexistant, pas corrigé ici) — voir le schéma directement pour la liste exhaustive à jour.
+
 **Exemple** :
 ```json
 {

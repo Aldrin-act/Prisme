@@ -42,6 +42,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
+import { FlowGraph } from "@/components/planning/flow-graph";
 import {
   IngestionDialog,
   SectionObjectifs,
@@ -280,17 +281,89 @@ function InstancesPage() {
   );
 }
 
+const LABELS_TYPE_CONTRAINTE: Record<Contrainte["type"], string> = {
+  precedence: "Précédence",
+  compatibilite_ressource_tache: "Compatibilité ressource-tâche",
+  echeance: "Échéance",
+  competence_requise: "Compétence requise",
+  capacite: "Capacité",
+  disponibilite_ressource: "Disponibilité ressource",
+  incompatibilite: "Incompatibilité",
+  taille_lot: "Taille de lot",
+};
+
+// Phrases complètes, destinées à un lecteur métier — distinct du badge
+// compact `structure_contraintes` (liste de types bruts) affiché ailleurs.
 function decrireContrainte(c: Contrainte): string {
   switch (c.type) {
     case "precedence":
-      return `${c.avant} → ${c.apres}`;
+      return `La tâche ${c.avant} doit être terminée avant que ${c.apres} commence.`;
     case "compatibilite_ressource_tache":
-      return `${c.tache} sur ${c.ressource} (${c.duree} min)`;
+      return `${c.tache} peut être réalisée sur ${c.ressource} (durée : ${c.duree} jour${c.duree > 1 ? "s" : ""}).`;
     case "echeance":
-      return `${c.tache} avant ${c.echeance}`;
+      return `${c.tache} doit être terminée au plus tard au jour ${c.echeance}.`;
     case "competence_requise":
-      return `${c.tache} requiert « ${c.competence} »`;
+      return `${c.tache} exige la compétence « ${c.competence} ».`;
+    case "capacite":
+      return `${c.ressource} peut traiter jusqu'à ${c.capacite} opération${c.capacite > 1 ? "s" : ""} simultanément.`;
+    case "disponibilite_ressource":
+      return `${c.ressource} est indisponible le${c.jours_indisponibles.length > 1 ? "s" : ""} jour${
+        c.jours_indisponibles.length > 1 ? "s" : ""
+      } ${c.jours_indisponibles.join(", ")}.`;
+    case "incompatibilite":
+      return `${c.tache} et ${c.tache_incompatible} ne peuvent jamais partager la même ressource.`;
+    case "taille_lot":
+      return `${c.tache} doit produire entre ${c.lot_min} et ${c.lot_max} unités.`;
   }
+}
+
+// Ordre pédagogique (noyau minimal d'abord, extensions ensuite) plutôt
+// qu'alphabétique — voir dsl/schema/contraintes.py pour le même ordre.
+const ORDRE_TYPE_CONTRAINTE: Contrainte["type"][] = [
+  "precedence",
+  "compatibilite_ressource_tache",
+  "competence_requise",
+  "echeance",
+  "capacite",
+  "disponibilite_ressource",
+  "incompatibilite",
+  "taille_lot",
+];
+
+function SectionContraintes({ contraintes }: { contraintes: Contrainte[] }) {
+  if (contraintes.length === 0) {
+    return (
+      <p className="text-sm text-muted-foreground">
+        Aucune contrainte déclarée pour cette instance.
+      </p>
+    );
+  }
+
+  const groupes = new Map<Contrainte["type"], Contrainte[]>();
+  for (const c of contraintes) {
+    groupes.set(c.type, [...(groupes.get(c.type) ?? []), c]);
+  }
+
+  return (
+    <div className="space-y-5">
+      {ORDRE_TYPE_CONTRAINTE.map((type) => {
+        const groupe = groupes.get(type);
+        if (!groupe) return null;
+        return (
+          <div key={type}>
+            <h4 className="mb-2 text-sm font-semibold">
+              {LABELS_TYPE_CONTRAINTE[type]} ({groupe.length})
+            </h4>
+            <ul className="space-y-1.5 text-sm text-muted-foreground">
+              {groupe.map((c, i) => (
+                <li key={i}>{decrireContrainte(c)}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 const LABELS_TYPE_OBJECTIF: Record<Objectif["type"], string> = {
@@ -450,7 +523,7 @@ function DialogDetailInstance({
 
   return (
     <Dialog open={!!instanceId} onOpenChange={fermer}>
-      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-h-[85vh] max-w-5xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Détail de l'instance</DialogTitle>
           <DialogDescription className="font-mono text-xs">{instanceId}</DialogDescription>
@@ -462,6 +535,8 @@ function DialogDetailInstance({
           <Tabs defaultValue="details">
             <TabsList>
               <TabsTrigger value="details">Détails</TabsTrigger>
+              <TabsTrigger value="flux">Flux</TabsTrigger>
+              <TabsTrigger value="contraintes">Contraintes</TabsTrigger>
               <TabsTrigger value="solveurs">Solveurs</TabsTrigger>
             </TabsList>
 
@@ -504,19 +579,6 @@ function DialogDetailInstance({
                     </Badge>
                   ))}
                 </div>
-              </div>
-
-              <div>
-                <h4 className="mb-2 text-sm font-semibold">
-                  Contraintes ({instance.contraintes.length})
-                </h4>
-                <ul className="space-y-1 text-sm text-muted-foreground">
-                  {instance.contraintes.map((c, i) => (
-                    <li key={i} className="font-mono text-xs">
-                      {decrireContrainte(c)}
-                    </li>
-                  ))}
-                </ul>
               </div>
 
               <div>
@@ -573,6 +635,14 @@ function DialogDetailInstance({
                   </div>
                 )}
               </div>
+            </TabsContent>
+
+            <TabsContent value="flux">
+              <FlowGraph taches={instance.taches} contraintes={instance.contraintes} />
+            </TabsContent>
+
+            <TabsContent value="contraintes">
+              <SectionContraintes contraintes={instance.contraintes} />
             </TabsContent>
 
             <TabsContent value="solveurs">

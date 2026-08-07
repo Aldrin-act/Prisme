@@ -8,7 +8,10 @@ un `Planning` proposé et vérifie :
    déclarée par `ContrainteCapacite` — extension optionnelle, §4.2) ;
 3. aucune tâche affectée à une ressource incompatible ;
 4. aucune paire de tâches déclarées incompatibles (`ContrainteIncompatibilite`)
-   affectée à la même ressource, quelle que soit l'heure.
+   affectée à la même ressource, quelle que soit l'heure ;
+5. aucune opération planifiée un jour où sa ressource est déclarée
+   indisponible (`ContrainteDisponibiliteRessource` — extension optionnelle,
+   §4.2).
 
 Sert deux fois (§6.7, garde-fou déterministe) : hors ligne dans la validation
 du code généré (couche 2, §6.1), et en ligne comme garde-fou de production
@@ -36,7 +39,9 @@ from typing import Literal
 from dsl.schema import (
     CompatibiliteRessourceTache,
     ContrainteCapacite,
+    ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
+    ContrainteTailleLot,
     Echeance,
     InstanceTRCO,
     OperationPlanifiee,
@@ -55,6 +60,8 @@ TypeViolation = Literal[
     "echeance_depassee",
     "capacite_depassee",
     "incompatibilite_taches_violee",
+    "ressource_indisponible",
+    "taille_lot_hors_bornes",
 ]
 
 
@@ -192,6 +199,25 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
                 )
             )
 
+    # Validation statique de Tache.quantite contre les bornes déclarées — ne dépend ni du
+    # planning ni des précalculs ci-dessus (contrairement à Echeance) : une donnée d'entrée,
+    # jamais une décision d'ordonnancement. Rien à vérifier si quantite n'est pas renseignée.
+    for contrainte in instance.contraintes:
+        if not isinstance(contrainte, ContrainteTailleLot):
+            continue
+        tache = taches_par_id.get(contrainte.tache)
+        if tache is None or tache.quantite is None:
+            continue
+        if not (contrainte.lot_min <= tache.quantite <= contrainte.lot_max):
+            violations.append(
+                Violation(
+                    "taille_lot_hors_bornes",
+                    f"quantité hors bornes : {contrainte.tache!r} produit {tache.quantite} "
+                    f"unité(s), attendu entre {contrainte.lot_min} et {contrainte.lot_max}",
+                    tache=contrainte.tache,
+                )
+            )
+
     for tache_id, operation in operations_valides.items():
         restrictions = ressources_autorisees.get(tache_id)
         if restrictions and operation.ressource not in restrictions:
@@ -268,6 +294,26 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
                         f"{len(actives)} tâches simultanées {sorted(actives)!r} pour une capacité de {capacite}",
                         ressource=ressource_id,
                         tache=tache_id,
+                    )
+                )
+
+    jours_indisponibles_par_ressource: dict[str, set[int]] = {
+        contrainte.ressource: set(contrainte.jours_indisponibles)
+        for contrainte in instance.contraintes
+        if isinstance(contrainte, ContrainteDisponibiliteRessource)
+    }
+    for ressource_id, jours_bloques in jours_indisponibles_par_ressource.items():
+        for tache_id, debut, fin in operations_par_ressource.get(ressource_id, []):
+            jours_occupes = set(range(debut, fin))
+            jours_en_conflit = jours_occupes & jours_bloques
+            if jours_en_conflit:
+                violations.append(
+                    Violation(
+                        "ressource_indisponible",
+                        f"tâche {tache_id!r} planifiée sur {ressource_id!r} un jour où cette "
+                        f"ressource est indisponible : {sorted(jours_en_conflit)!r}",
+                        tache=tache_id,
+                        ressource=ressource_id,
                     )
                 )
 

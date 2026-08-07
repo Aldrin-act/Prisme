@@ -10,29 +10,39 @@ recalculés ailleurs :
    qui échoue aujourd'hui en synchrone avec un `HTTPException(409, ...)`
    (`api/routes/execution.py`), sans jamais être tracé nulle part.
 2. **Instance à replanifier** — signature qui correspond bien à un solveur
-   actif, mais instance jamais exécutée (`executee=False`,
-   `EtatAPI.lister_instances`) : couvre le cas d'une instance réingérée après
-   un aléa (ressource indisponible, tâche modifiée — mécanisme documenté en
-   `api/etat.py:9-14`) pour laquelle le solveur existant reste valide, juste
-   besoin d'une exécution.
+   actif, mais soit l'instance n'a jamais été exécutée, soit elle l'a été
+   puis a été modifiée depuis (`modifier_instance`/`modifier_objectifs`,
+   `api/etat.py`) sans être ré-exécutée : le planning existant ne
+   correspond plus à son contenu actuel, alors que le solveur enregistré
+   reste valide, juste besoin d'une exécution. Distingue les deux cas via
+   `SignalInstanceAReplanifier.raison`, en comparant la dernière
+   modification de l'instance (`info["date_modification"]`) à sa dernière
+   exécution (`lister_executions`) — jamais via le seul booléen `executee`,
+   qui reste vrai indéfiniment une fois l'instance exécutée au moins une
+   fois, y compris après une modification en place ultérieure.
 3. **Échecs répétés** — les `seuil` dernières exécutions d'une même instance
    sont toutes en échec.
 
 Les signaux 1 et 2 se combinent naturellement sans logique dédiée : une
-instance dont la modification a aussi changé le *type* d'une contrainte
-tombe dans le signal 1 (régénération), une modification qui ne touche que
-des valeurs tombe dans le signal 2 (ré-exécution) — le même passage sur
-`lister_instances` répond aux deux à la fois.
+instance dont la modification a aussi changé le *type* d'une contrainte ou
+d'un objectif tombe dans le signal 1 (régénération, `structure_contraintes`/
+`signature_objectifs` recalculées à chaque appel) ; une modification qui ne
+touche que des valeurs (durées, poids, `methode`...) tombe dans le signal 2
+(ré-exécution) — le même passage sur `lister_instances` répond aux deux à la
+fois.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Literal
 
 from api.etat import EtatAPI, signature_objectifs, structure_contraintes
 from solver_store.registry import Registre
 
 SEUIL_ECHECS_CONSECUTIFS = 3
+
+RaisonReplanification = Literal["jamais_executee", "modifiee_apres_derniere_execution"]
 
 
 @dataclass(frozen=True)
@@ -50,6 +60,7 @@ class SignalInstanceAReplanifier:
     structure_contraintes: str
     signature_objectifs: str
     id_solveur_disponible: str
+    raison: RaisonReplanification
 
 
 @dataclass(frozen=True)
@@ -62,6 +73,21 @@ class SignalEchecsRepetes:
     signature_objectifs: str
 
 
+def _derniere_execution_par_instance(etat: EtatAPI, client_id: str) -> dict[str, str]:
+    """Date de la plus récente exécution de chaque instance — même motif de
+    regroupement que `detecter_echecs_repetes`, sans dépendre de l'ordre déjà
+    trié ou non de `lister_executions` (in-memory vs Postgres)."""
+    dernieres: dict[str, str] = {}
+    for execution in etat.lister_executions(client_id=client_id):
+        instance_id = execution["instance_id"]
+        date_execution = execution["date_execution"]
+        if date_execution is not None and (
+            instance_id not in dernieres or date_execution > dernieres[instance_id]
+        ):
+            dernieres[instance_id] = date_execution
+    return dernieres
+
+
 def detecter_signature_et_replanification(
     etat: EtatAPI, registre: Registre, client_id: str
 ) -> tuple[tuple[SignalSignatureOrpheline, ...], tuple[SignalInstanceAReplanifier, ...]]:
@@ -69,6 +95,7 @@ def detecter_signature_et_replanification(
     fois (voir docstring du module)."""
     orphelines: list[SignalSignatureOrpheline] = []
     a_replanifier: list[SignalInstanceAReplanifier] = []
+    dernieres_executions = _derniere_execution_par_instance(etat, client_id)
     for info in etat.lister_instances(client_id=client_id):
         instance_id = info["instance_id"]
         _, instance = etat.recuperer_instance(instance_id)
@@ -86,7 +113,16 @@ def detecter_signature_et_replanification(
                     signature_objectifs=objectifs,
                 )
             )
-        elif not info["executee"]:
+            continue
+
+        derniere_execution = dernieres_executions.get(instance_id)
+        raison: RaisonReplanification | None = None
+        if derniere_execution is None:
+            raison = "jamais_executee"
+        elif info["date_modification"] is not None and info["date_modification"] > derniere_execution:
+            raison = "modifiee_apres_derniere_execution"
+
+        if raison is not None:
             a_replanifier.append(
                 SignalInstanceAReplanifier(
                     instance_id=instance_id,
@@ -94,6 +130,7 @@ def detecter_signature_et_replanification(
                     structure_contraintes=structure,
                     signature_objectifs=objectifs,
                     id_solveur_disponible=solveurs[0].id,
+                    raison=raison,
                 )
             )
     return tuple(orphelines), tuple(a_replanifier)

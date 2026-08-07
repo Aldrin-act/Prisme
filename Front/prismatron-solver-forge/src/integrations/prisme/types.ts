@@ -56,8 +56,40 @@ export interface CompetenceRequise {
   competence: string;
 }
 
+export interface ContrainteCapacite {
+  type: "capacite";
+  ressource: string;
+  capacite: number; // >= 1 — nombre d'opérations simultanées supportées
+}
+
+export interface ContrainteDisponibiliteRessource {
+  type: "disponibilite_ressource";
+  ressource: string;
+  jours_indisponibles: number[]; // jours relatifs, jamais une date calendaire
+}
+
+export interface ContrainteIncompatibilite {
+  type: "incompatibilite";
+  tache: string;
+  tache_incompatible: string;
+}
+
+export interface ContrainteTailleLot {
+  type: "taille_lot";
+  tache: string;
+  lot_min: number;
+  lot_max: number;
+}
+
 export type Contrainte =
-  ContraintePrecedence | CompatibiliteRessourceTache | ContrainteEcheance | CompetenceRequise;
+  | ContraintePrecedence
+  | CompatibiliteRessourceTache
+  | ContrainteEcheance
+  | CompetenceRequise
+  | ContrainteCapacite
+  | ContrainteDisponibiliteRessource
+  | ContrainteIncompatibilite
+  | ContrainteTailleLot;
 
 export interface ObjectifMinimiserMakespan {
   type: "minimiser_makespan";

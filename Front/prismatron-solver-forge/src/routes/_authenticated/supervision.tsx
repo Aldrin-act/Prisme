@@ -32,6 +32,7 @@ import {
   usePropositionsSupervision,
   useDeclencherAnalyseSupervision,
   useDeciderPropositionSupervision,
+  useLabelsInstances,
   PrismeAPIError,
   type PropositionSupervision,
   type ReponseDecisionPropositionSupervision,
@@ -120,6 +121,7 @@ function SupervisionPage() {
   const { data: propositions, isLoading } = usePropositionsSupervision();
   const analyser = useDeclencherAnalyseSupervision();
   const decider = useDeciderPropositionSupervision();
+  const labels = useLabelsInstances();
 
   const erreurAnalyse = analyser.error as PrismeAPIError | null;
 
@@ -235,8 +237,8 @@ function SupervisionPage() {
                   <TableCell className="max-w-md text-sm">{p.resume}</TableCell>
                   <TableCell>
                     {p.instance_id ? (
-                      <Badge variant="outline" className="font-mono text-xs">
-                        {p.instance_id}
+                      <Badge variant="outline" className="font-mono text-xs" title={p.instance_id}>
+                        {labels.get(p.instance_id)?.label ?? p.instance_id}
                       </Badge>
                     ) : (
                       <span className="text-xs text-muted-foreground">instance supprimée</span>

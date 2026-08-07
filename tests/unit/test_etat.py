@@ -12,7 +12,7 @@ from __future__ import annotations
 import pytest
 
 from api.etat import EtatAPI
-from dsl.schema import InstanceTRCO
+from dsl.schema import InstanceTRCO, MinimiserMakespan
 from sandbox.runner import ResultatExecution
 
 
@@ -222,3 +222,42 @@ def test_modifier_instance_inconnue_leve_key_error() -> None:
 
     with pytest.raises(KeyError):
         etat.modifier_instance("id-inexistant", _instance_modifiee())
+
+
+def test_date_modification_posee_a_la_creation() -> None:
+    etat = EtatAPI()
+    etat.enregistrer_instance("client-test", _instance_exemple())
+
+    instances = etat.lister_instances(client_id="client-test")
+    assert instances[0]["date_modification"] is not None
+
+
+def test_date_modification_mise_a_jour_par_modifier_instance() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    etat.dates_modification[instance_id] = "2020-01-01T00:00:00"  # forcer une valeur antérieure connue
+
+    etat.modifier_instance(instance_id, _instance_modifiee())
+
+    nouvelle_date = etat.lister_instances(client_id="client-test")[0]["date_modification"]
+    assert nouvelle_date != "2020-01-01T00:00:00"
+
+
+def test_date_modification_mise_a_jour_par_modifier_objectifs() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    etat.dates_modification[instance_id] = "2020-01-01T00:00:00"
+
+    etat.modifier_objectifs(instance_id, [MinimiserMakespan()])
+
+    nouvelle_date = etat.lister_instances(client_id="client-test")[0]["date_modification"]
+    assert nouvelle_date != "2020-01-01T00:00:00"
+
+
+def test_supprimer_instance_purge_sa_date_modification() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+
+    etat.supprimer_instance(instance_id)
+
+    assert instance_id not in etat.dates_modification

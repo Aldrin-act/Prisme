@@ -196,6 +196,10 @@ function construireInstance(
   ressources: RessourceLigne[],
   contraintes: ContrainteLigne[],
   objectifs: ObjectifLigne[],
+  // Contraintes d'un type que ce formulaire ne sait pas éditer, à réinjecter
+  // telles quelles (voir contraintesNonEditables) — jamais perdues au
+  // réenregistrement d'une instance qui en avait.
+  contraintesNonEditables: Contrainte[] = [],
 ): InstanceTRCO {
   return {
     taches: taches.map(({ id, nom, priorite }) => ({
@@ -211,23 +215,25 @@ function construireInstance(
         .map((c) => c.trim())
         .filter(Boolean),
     })),
-    contraintes: contraintes.map((c): Contrainte => {
-      switch (c.type) {
-        case "precedence":
-          return { type: "precedence", avant: c.avant, apres: c.apres };
-        case "compatibilite_ressource_tache":
-          return {
-            type: "compatibilite_ressource_tache",
-            tache: c.tache,
-            ressource: c.ressource,
-            duree: Number(c.duree),
-          };
-        case "echeance":
-          return { type: "echeance", tache: c.tache, echeance: Number(c.echeance) };
-        case "competence_requise":
-          return { type: "competence_requise", tache: c.tache, competence: c.competence };
-      }
-    }),
+    contraintes: contraintes
+      .map((c): Contrainte => {
+        switch (c.type) {
+          case "precedence":
+            return { type: "precedence", avant: c.avant, apres: c.apres };
+          case "compatibilite_ressource_tache":
+            return {
+              type: "compatibilite_ressource_tache",
+              tache: c.tache,
+              ressource: c.ressource,
+              duree: Number(c.duree),
+            };
+          case "echeance":
+            return { type: "echeance", tache: c.tache, echeance: Number(c.echeance) };
+          case "competence_requise":
+            return { type: "competence_requise", tache: c.tache, competence: c.competence };
+        }
+      })
+      .concat(contraintesNonEditables),
     objectifs: construireObjectifs(objectifs),
   };
 }
@@ -290,7 +296,15 @@ export function IngestionDialog({
     instanceAEditer ? instanceAEditer.ressources.map(ressourceVersLigne) : [nouvelleRessource()],
   );
   const [contraintes, setContraintes] = useState<ContrainteLigne[]>(
-    instanceAEditer ? instanceAEditer.contraintes.map(contrainteVersLigne) : [],
+    instanceAEditer
+      ? instanceAEditer.contraintes.filter(estContrainteEditable).map(contrainteVersLigne)
+      : [],
+  );
+  // Contraintes présentes sur l'instance éditée mais que ce formulaire ne
+  // sait pas éditer (capacite/disponibilite_ressource) — conservées telles
+  // quelles et réinjectées à la soumission, jamais perdues silencieusement.
+  const [contraintesNonEditables] = useState<Contrainte[]>(
+    instanceAEditer ? instanceAEditer.contraintes.filter((c) => !estContrainteEditable(c)) : [],
   );
   const [objectifs, setObjectifs] = useState<ObjectifLigne[]>(
     instanceAEditer ? instanceAEditer.objectifs.map(objectifVersLigne) : [nouvelObjectif()],
@@ -370,7 +384,13 @@ export function IngestionDialog({
   }
 
   function soumettreTRCO() {
-    const instance = construireInstance(taches, ressources, contraintes, objectifs);
+    const instance = construireInstance(
+      taches,
+      ressources,
+      contraintes,
+      objectifs,
+      contraintesNonEditables,
+    );
     const nomProjetSoumis = nomProjet.trim() || undefined;
     if (instanceAEditer) {
       modifier.mutate(
@@ -565,6 +585,14 @@ export function IngestionDialog({
                   <span className="text-muted-foreground">Client :</span>
                   <span className="font-medium">{clientId}</span>
                 </div>
+
+                {contraintesNonEditables.length > 0 && (
+                  <p className="rounded-lg border border-border/50 bg-muted/20 p-2 text-xs text-muted-foreground">
+                    {contraintesNonEditables.length} contrainte(s) supplémentaire(s) (capacité,
+                    disponibilité de ressource) ne sont pas éditables dans ce formulaire — elles
+                    seront conservées telles quelles à l'enregistrement.
+                  </p>
+                )}
 
                 <SectionTaches taches={taches} setTaches={setTaches} />
                 <SectionRessources ressources={ressources} setRessources={setRessources} />
@@ -1244,7 +1272,32 @@ function ressourceVersLigne(r: Ressource): RessourceLigne {
   };
 }
 
-function contrainteVersLigne(c: Contrainte): ContrainteLigne {
+// Le formulaire T-R-C-O ne sait éditer que ces 4 types (voir TypeContrainte
+// et le <Select> de SectionContraintes) — `capacite`/`disponibilite_ressource`
+// existent côté DSL mais n'ont pas de champs dédiés ici. Sans ce filtre, les
+// convertir via contrainteVersLigne serait non exhaustif ; les ignorer sans
+// les préserver ailleurs les supprimerait silencieusement à l'enregistrement
+// d'une instance qui en a déjà — voir contraintesNonEditables plus bas.
+function estContrainteEditable(
+  c: Contrainte,
+): c is Extract<
+  Contrainte,
+  { type: "precedence" | "compatibilite_ressource_tache" | "echeance" | "competence_requise" }
+> {
+  return (
+    c.type === "precedence" ||
+    c.type === "compatibilite_ressource_tache" ||
+    c.type === "echeance" ||
+    c.type === "competence_requise"
+  );
+}
+
+function contrainteVersLigne(
+  c: Extract<
+    Contrainte,
+    { type: "precedence" | "compatibilite_ressource_tache" | "echeance" | "competence_requise" }
+  >,
+): ContrainteLigne {
   const base = nouvelleContrainte();
   switch (c.type) {
     case "precedence":

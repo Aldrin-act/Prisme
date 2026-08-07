@@ -1,0 +1,23 @@
+{
+  "taches": [
+    {"id": "T1", "nom": "Decoupe", "priorite": 1},
+    {"id": "T2", "nom": "Assemblage"},
+    {"id": "T3", "nom": "Controle"}
+  ],
+  "ressources": [
+    {"id": "R1", "nom": "Decoupeuse"},
+    {"id": "R2", "nom": "Poste assemblage"}
+  ],
+  "contraintes": [
+    {"type": "precedence", "avant": "T1", "apres": "T2"},
+    {"type": "precedence", "avant": "T2", "apres": "T3"},
+    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 2},
+    {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 1},
+    {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R2", "duree": 1},
+    {"type": "compatibilite_ressource_tache", "tache": "T3", "ressource": "R2", "duree": 1},
+    {"type": "disponibilite_ressource", "ressource": "R1", "jours_indisponibles": [2, 3]}
+  ],
+  "objectifs": [
+    {"type": "minimiser_makespan"}
+  ]
+}

@@ -22,7 +22,9 @@ from .contraintes import (
     CompetenceRequise,
     Contrainte,
     ContrainteCapacite,
+    ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
+    ContrainteTailleLot,
     Echeance,
     Precedence,
 )
@@ -81,6 +83,12 @@ class InstanceTRCO(BaseModel):
                 for id_tache in (contrainte.tache, contrainte.tache_incompatible):
                     if id_tache not in ids_taches:
                         raise ValueError(f"incompatibilité référence une tâche inconnue : {id_tache!r}")
+            elif isinstance(contrainte, ContrainteDisponibiliteRessource):
+                if contrainte.ressource not in ids_ressources:
+                    raise ValueError(f"disponibilité référence une ressource inconnue : {contrainte.ressource!r}")
+            elif isinstance(contrainte, ContrainteTailleLot):
+                if contrainte.tache not in ids_taches:
+                    raise ValueError(f"taille de lot référence une tâche inconnue : {contrainte.tache!r}")
 
         return self
 

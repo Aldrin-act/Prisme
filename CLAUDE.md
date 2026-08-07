@@ -161,10 +161,18 @@ at the ingestion layer only, see `adapters/competence_derivation.py`), `Contrain
 resource processes up to N operations concurrently — `AddCumulative` in generated CP-SAT code
 instead of `AddNoOverlap`; implicit capacity 1, i.e. today's behavior, if absent),
 `ContrainteIncompatibilite` (two named tasks can never share a resource, regardless of time —
-independent of any temporal overlap check). `Tache.statut`/`Ressource.type` are purely
-informative fields (no constraint or objective reads them). Calendars (business days,
-availability windows) and setup times stay **out of scope** by design; guard against further
-scope creep.
+independent of any temporal overlap check), `ContrainteDisponibiliteRessource` (a resource is
+unavailable on listed relative days — never a calendar date, converting a real calendar/holiday
+list to days stays an adapter's job upstream of ingestion; a global workshop calendar is *not* a
+separate mechanism, it's the same constraint declared identically for every resource — in
+generated CP-SAT code, a fixed interval per unavailable day added to that resource's own
+`AddNoOverlap`/`AddCumulative` list, at full capacity demand), `ContrainteTailleLot` (bound-checks
+`Tache.quantite` against `lot_min`/`lot_max` — a static value check, no solver encoding: verified
+entirely by `feasibility_checker.py`, never read by generated code). `Tache.priorite` (1–5) is
+consumed by generated code as a **tie-break only** — never a weight on the primary objective,
+never a constraint — see "Priorité des tâches" in `generation_solveur.md`.
+`Tache.statut`/`Ressource.type` remain purely informative fields (no constraint or objective reads
+them). Setup times stay **out of scope** by design; guard against further scope creep.
 
 ## Module map
 

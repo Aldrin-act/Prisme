@@ -1,0 +1,18 @@
+/* Surcharge des boutons de contrôle (zoom/fit) de React Flow — leur fond
+blanc par défaut (@xyflow/react/dist/style.css) est hors cascade layer
+Tailwind, donc jamais battu par une classe utilitaire (bg-card, etc.) :
+CSS brut ciblant directement les classes de la lib, dans ce fichier importé
+après sa feuille de style (voir flow-graph.tsx). */
+.react-flow__controls-button {
+  background: var(--card);
+  border-bottom-color: var(--border);
+  color: var(--foreground);
+}
+
+.react-flow__controls-button:hover {
+  background: var(--muted);
+}
+
+.react-flow__controls-button svg {
+  fill: var(--foreground);
+}

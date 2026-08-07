@@ -221,6 +221,12 @@ class EtatAPI:
     # par la sélection de solveur (`structure_contraintes`/
     # `signature_objectifs`) ni par la détection de signaux de supervision.
     noms_projet: dict[str, str | None] = field(default_factory=dict)
+    # Dernière modification du contenu T-R-C-O d'une instance (création,
+    # `modifier_instance` ou `modifier_objectifs`) — comparée à la date de sa
+    # dernière exécution par `supervision/detecteurs.py` pour détecter
+    # qu'une instance déjà exécutée a depuis été modifiée et doit être
+    # ré-exécutée (signal `instance_a_replanifier`).
+    dates_modification: dict[str, str] = field(default_factory=dict)
     clients: dict[str, Client] = field(default_factory=dict)
     dates_execution: dict[str, str] = field(default_factory=dict)
     jobs_generation: dict[str, JobGeneration] = field(default_factory=dict)
@@ -257,6 +263,7 @@ class EtatAPI:
             self.source_par_instance[instance_id] = source_id
         self.descriptions_metier[instance_id] = description_metier
         self.noms_projet[instance_id] = nom_projet
+        self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
         return instance_id
 
     def enregistrer_source(self, client_id: str, donnees_brutes: str, nom: str | None = None) -> str:
@@ -369,6 +376,7 @@ class EtatAPI:
             objectifs=objectifs,
         )
         self.instances[instance_id] = (client_id, nouvelle_instance)
+        self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
         return nouvelle_instance
 
     def modifier_instance(
@@ -384,6 +392,7 @@ class EtatAPI:
         client_id, _ = self.instances[instance_id]
         self.instances[instance_id] = (client_id, instance)
         self.noms_projet[instance_id] = nom_projet
+        self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
         return instance
 
     def supprimer_instance(self, instance_id: str) -> None:
@@ -399,6 +408,7 @@ class EtatAPI:
         self.source_par_instance.pop(instance_id, None)
         self.descriptions_metier.pop(instance_id, None)
         self.noms_projet.pop(instance_id, None)
+        self.dates_modification.pop(instance_id, None)
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
             del self.executions[execution_id]
             self.decisions.pop(execution_id, None)
@@ -460,6 +470,7 @@ class EtatAPI:
                 "structure_contraintes": structure_contraintes(instance),
                 "executee": instance_id in instances_executees,
                 "nom_projet": self.noms_projet.get(instance_id),
+                "date_modification": self.dates_modification.get(instance_id),
             }
             for instance_id, (client_id_instance, instance) in self.instances.items()
             if (client_id is None or client_id_instance == client_id)

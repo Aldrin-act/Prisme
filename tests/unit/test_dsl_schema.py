@@ -299,3 +299,69 @@ def test_incompatibilite_vers_tache_inconnue_rejetee() -> None:
     )
     with pytest.raises(ValidationError, match="incompatibilité référence une tâche inconnue"):
         charger_instance(payload)
+
+
+def test_disponibilite_ressource_valide_acceptee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1", "jours_indisponibles": [2, 3]},
+        ]
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 2
+
+
+def test_disponibilite_ressource_liste_vide_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1", "jours_indisponibles": []},
+        ]
+    )
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_disponibilite_ressource_vers_ressource_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R99", "jours_indisponibles": [1]},
+        ]
+    )
+    with pytest.raises(ValidationError, match="disponibilité référence une ressource inconnue"):
+        charger_instance(payload)
+
+
+def test_taille_lot_valide_acceptee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "taille_lot", "tache": "T1", "lot_min": 50, "lot_max": 1000},
+        ]
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 2
+
+
+def test_taille_lot_min_superieur_max_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "taille_lot", "tache": "T1", "lot_min": 1000, "lot_max": 50},
+        ]
+    )
+    with pytest.raises(ValidationError, match="lot_min doit être inférieur ou égal à lot_max"):
+        charger_instance(payload)
+
+
+def test_taille_lot_vers_tache_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "taille_lot", "tache": "T99", "lot_min": 50, "lot_max": 1000},
+        ]
+    )
+    with pytest.raises(ValidationError, match="taille de lot référence une tâche inconnue"):
+        charger_instance(payload)

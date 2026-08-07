@@ -19,9 +19,10 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
 - `InstanceTRCO`, `Planning`, `OperationPlanifiee`, `Tache`, `Ressource`,
   `Contrainte`, `Precedence`, `CompatibiliteRessourceTache`, `Echeance`,
   `CompetenceRequise`, `ContrainteCapacite`, `ContrainteIncompatibilite`,
-  `Objectif`, `MinimiserMakespan`, `EquilibrerCharge` s'importent depuis
-  `dsl.schema` (n'importe que les types d'objectif réellement utilisés dans
-  le code généré).
+  `ContrainteDisponibiliteRessource`, `ContrainteTailleLot`, `Objectif`,
+  `MinimiserMakespan`, `EquilibrerCharge` s'importent depuis `dsl.schema`
+  (n'importe que les types d'objectif réellement utilisés dans le code
+  généré).
 - `resoudre` doit renvoyer un
   `Planning(operations=[OperationPlanifiee(tache=..., ressource=..., debut=...), ...])`
   légal et optimal (ou proche de l'optimal) au sens du ou des objectifs
@@ -58,15 +59,22 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
   plan technique de l'agent Architecte pour le schéma exact) — la recherche
   (génétique, ACO, recuit...) n'optimise alors que le makespan du planning
   déjà légal, jamais un score composite mêlant faisabilité et qualité.
-- `Echeance`/`CompetenceRequise`/`ContrainteCapacite`/`ContrainteIncompatibilite`
-  sont des extensions optionnelles du noyau minimal (absentes de la plupart
-  des instances) : si l'instance contient des `Echeance`, encode-les en
+- `Echeance`/`CompetenceRequise`/`ContrainteCapacite`/`ContrainteIncompatibilite`/
+  `ContrainteDisponibiliteRessource`/`ContrainteTailleLot` sont des
+  extensions optionnelles du noyau minimal (absentes de la plupart des
+  instances) : si l'instance contient des `Echeance`, encode-les en
   contrainte dure sur la fin de la tâche concernée (`modele.Add(fin <=
   echeance)`) — sinon ignore-les, elles n'existent pas. `CompetenceRequise`
   ne demande aucun traitement côté solveur : `InstanceTRCO` garantit déjà,
   avant que `resoudre` ne soit appelé, que toute `CompatibiliteRessourceTache`
   respecte les compétences requises — `CompatibiliteRessourceTache` reste la
-  seule source de compatibilité et de durée à utiliser.
+  seule source de compatibilité et de durée à utiliser. `ContrainteTailleLot`
+  non plus : elle borne `Tache.quantite` (une donnée d'entrée, pas une durée
+  ni une date) entre `lot_min`/`lot_max`, entièrement vérifiée par
+  `validation_engine/feasibility_checker.py` avant même que le planning
+  existe — `Tache.quantite`/`ContrainteTailleLot` ne doivent jamais
+  apparaître dans le modèle CP-SAT ni dans une heuristique, ni comme borne de
+  décision, ni comme poids d'objectif.
 - `ContrainteCapacite(ressource, capacite)` : sans elle, une ressource a une
   capacité implicite de **1** (jamais deux opérations en même temps —
   `AddNoOverlap`/décodeur qui refuse tout chevauchement). Pour une ressource
@@ -87,6 +95,24 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
   correspondants ; pour un décodeur non-CP-SAT, exclut simplement toute
   ressource déjà occupée (à n'importe quel instant) par la tâche incompatible
   au moment de choisir une ressource pour l'autre tâche.
+- `ContrainteDisponibiliteRessource(ressource, jours_indisponibles)` : la
+  ressource citée est indisponible durant chacun des jours (relatifs) listés
+  — aucune opération ne peut y démarrer ni s'y poursuivre ces jours-là. Un
+  calendrier global d'atelier (jours fériés communs à toutes les ressources)
+  n'est pas un mécanisme séparé : c'est la même contrainte déclarée
+  identiquement pour chaque ressource de l'instance. En CP-SAT : pour
+  chaque jour indisponible, ajoute un intervalle **fixe** (obligatoire, pas
+  optionnel, `NewIntervalVar` couvrant `[jour, jour + 1)`) dans la **même**
+  liste d'intervalles déjà passée à `AddNoOverlap`/`AddCumulative` de cette
+  ressource, avec une demande égale à sa capacité complète
+  (`capacite_par_ressource.get(ressource, 1)` — voir `ContrainteCapacite`
+  ci-dessus) : ça bloque tout le reste ce jour-là sans code de contrainte
+  séparé, et ça compose naturellement si la ressource a aussi une
+  `ContrainteCapacite`. Pour un décodeur non-CP-SAT : au moment de choisir
+  un jour de début sur cette ressource, rejette tout choix dont l'intervalle
+  `[debut, fin)` intersecte les jours indisponibles de la ressource (table
+  précalculée, jamais une recherche dans `instance.contraintes` à
+  l'intérieur du décodeur — voir "Précalcule tout" plus bas).
 
 ## Objectifs (`instance.objectifs`, liste polymorphe — jamais un seul supposé)
 
@@ -144,6 +170,31 @@ différentes.
     c'est une approximation volontaire de `methode="variance"`/`"gini"` en
     CP-SAT, pas une omission**.
 
+## Priorité des tâches (`Tache.priorite`, départage uniquement)
+
+`Tache.priorite` (1 = critique, 5 = faible, optionnelle) **ne fait jamais
+perdre à l'objectif principal la moindre unité** — elle ne départage
+qu'entre plusieurs plannings de même valeur d'objectif (celui ou ceux de
+`instance.objectifs`, voir ci-dessus). Jamais un poids ajouté à l'objectif
+principal, jamais une contrainte.
+
+- CP-SAT (une seule résolution, pas de solve en deux phases) : calcule
+  `terme_priorite = somme((6 - t.priorite) * fin_tache)` sur les seules
+  tâches ayant une `priorite` déclarée (poids 5 pour priorité 1/critique,
+  poids 1 pour priorité 5/faible ; tâches sans `priorite` exclues de la
+  somme, aucune contribution). Choisis une `ECHELLE` strictement supérieure
+  au maximum possible de `terme_priorite` (ex. `5 * nb_taches *
+  horizon_max`, `horizon_max` étant la même borne que celle déjà utilisée
+  pour la variable makespan — somme de toutes les durées possibles), puis
+  `modele.Minimize(objectif_principal * ECHELLE + terme_priorite)`. Avec ce
+  choix d'échelle, `terme_priorite` ne peut jamais faire préférer un
+  planning de moins bonne valeur d'objectif principal — il ne fait que
+  départager entre plannings à égalité sur celui-ci.
+- Décodeur non-CP-SAT : fais renvoyer à la fitness un **tuple**
+  `(objectif_principal, terme_priorite)` plutôt qu'un seul nombre — la
+  comparaison lexicographique native des tuples Python fait exactement ce
+  départage, sans aucune échelle à calculer ni risque de dépassement.
+
 ## Accès aux données de l'instance (noms de champs exacts — ne pas en deviner d'autres)
 
 `InstanceTRCO` n'a que **quatre** champs : `taches`, `ressources`,
@@ -151,8 +202,9 @@ différentes.
 `instance.precedences` ou `instance.compatibilite_ressource_tache` —
 `contraintes` est une **liste polymorphe unique** (`Precedence |
 CompatibiliteRessourceTache | Echeance | CompetenceRequise |
-ContrainteCapacite | ContrainteIncompatibilite`), à filtrer par type avec
-`isinstance` :
+ContrainteCapacite | ContrainteIncompatibilite |
+ContrainteDisponibiliteRessource | ContrainteTailleLot`), à filtrer par type
+avec `isinstance` :
 
 ```python
 compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
@@ -160,6 +212,8 @@ precedences = [c for c in instance.contraintes if isinstance(c, Precedence)]
 echeances = [c for c in instance.contraintes if isinstance(c, Echeance)]
 capacites = [c for c in instance.contraintes if isinstance(c, ContrainteCapacite)]
 incompatibilites = [c for c in instance.contraintes if isinstance(c, ContrainteIncompatibilite)]
+disponibilites = [c for c in instance.contraintes if isinstance(c, ContrainteDisponibiliteRessource)]
+tailles_lot = [c for c in instance.contraintes if isinstance(c, ContrainteTailleLot)]  # jamais lue par le solveur
 ```
 
 Champs exacts de chaque type — vérifie-les avant d'écrire du code qui y
@@ -175,6 +229,15 @@ accède, ne les devine jamais par analogie avec un autre projet :
 - `ContrainteIncompatibilite.tache`, `.tache_incompatible` (pas
   `tache_1`/`tache_2`) : relation symétrique, l'ordre des deux champs n'a
   aucun sens métier.
+- `ContrainteDisponibiliteRessource.ressource`, `.jours_indisponibles`
+  (liste de jours relatifs, jamais une date calendaire).
+- `ContrainteTailleLot.tache`, `.lot_min`, `.lot_max` : validation statique
+  uniquement (voir plus haut) — jamais lue dans le code généré.
+- `Tache.priorite` (`int | None`, 1 à 5) : départage uniquement, voir
+  "Priorité des tâches" plus haut — jamais un champ de contrainte/objectif.
+- `Tache.quantite` (`int | None`) : donnée d'entrée pour `ContrainteTailleLot`
+  uniquement (déjà vérifiée en amont) — jamais lue dans le code généré, ni
+  comme durée, ni comme poids, ni comme borne de décision.
 - `Tache.id`, `Ressource.id` (type `Identifiant`, une chaîne) sont les
   **seuls** identifiants stables à utiliser partout où une tâche/ressource
   doit être référencée : clé de dictionnaire, gène de chromosome,
@@ -218,6 +281,12 @@ for c in instance.contraintes:
     if isinstance(c, ContrainteIncompatibilite):
         taches_incompatibles.setdefault(c.tache, set()).add(c.tache_incompatible)
         taches_incompatibles.setdefault(c.tache_incompatible, set()).add(c.tache)
+
+jours_indisponibles_par_ressource: dict[str, set[int]] = {
+    c.ressource: set(c.jours_indisponibles)
+    for c in instance.contraintes
+    if isinstance(c, ContrainteDisponibiliteRessource)
+}
 ```
 
 Pour un algorithme non-CP-SAT dont le décodeur/la fitness est appelé des

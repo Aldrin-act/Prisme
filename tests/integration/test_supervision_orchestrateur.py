@@ -8,7 +8,9 @@ from __future__ import annotations
 import json
 
 from api.etat import EtatAPI
-from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Ressource, Tache
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
+from sandbox.runner import ResultatExecution
+from scripts.enregistrer_solveur_reference import enregistrer
 from solver_store.registry import Registre
 from supervision import agent as agent_module
 from supervision.orchestrateur import analyser_et_proposer
@@ -18,6 +20,17 @@ _INSTANCE_SANS_SOLVEUR = InstanceTRCO(
     taches=[Tache(id="T1")],
     ressources=[Ressource(id="R1")],
     contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
+    objectifs=[MinimiserMakespan()],
+)
+
+_INSTANCE_STRUCTURE_MINIMALE = InstanceTRCO(
+    taches=[Tache(id="T1"), Tache(id="T2")],
+    ressources=[Ressource(id="R1")],
+    contraintes=[
+        Precedence(avant="T1", apres="T2"),
+        CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+        CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=5),
+    ],
     objectifs=[MinimiserMakespan()],
 )
 
@@ -81,3 +94,28 @@ def test_repli_sur_resume_canne_si_le_llm_omet_la_reference(registre_test: Regis
     assert propositions[0].instance_id == instance_id
     assert propositions[0].priorite == "moyenne"
     assert "régénération est nécessaire" in propositions[0].resume
+
+
+def test_instance_modifiee_apres_execution_propose_bien_une_reexecution(registre_test: Registre) -> None:
+    """Bout en bout : une instance exécutée puis modifiée en place (même
+    instance_id) doit produire une proposition `instance_a_replanifier` dont
+    le résumé de repli mentionne la modification — pas "jamais exécutée"."""
+    enregistrer(registre_test, client_id="client_test")
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="peu importe")
+    execution_id = etat.enregistrer_execution("un-solveur", instance_id, resultat)
+    etat.dates_execution[execution_id] = "2026-01-01T00:00:00"
+    etat.modifier_instance(instance_id, _INSTANCE_STRUCTURE_MINIMALE)
+    etat.dates_modification[instance_id] = "2026-01-02T00:00:00"
+
+    # Le LLM ne répond rien d'utilisable pour ce signal — le résumé de repli fait foi.
+    modele = _modele_avec_propositions([])
+
+    propositions = analyser_et_proposer(etat, registre_test, modele, "client_test")
+
+    assert len(propositions) == 1
+    assert propositions[0].type_signal == "instance_a_replanifier"
+    assert propositions[0].instance_id == instance_id
+    assert propositions[0].action_suggeree == "executer"
+    assert "modifiée depuis sa dernière exécution" in propositions[0].resume

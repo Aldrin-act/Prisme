@@ -192,6 +192,24 @@ class EtatPostgres:
                     table=self._table("instances_trco")
                 )
             )
+            # Migration idempotente : dernière modification du contenu
+            # T-R-C-O (création, `modifier_instance` ou `modifier_objectifs`)
+            # — comparée à la date de dernière exécution par
+            # `supervision/detecteurs.py` pour détecter qu'une instance déjà
+            # exécutée a depuis été modifiée et doit être ré-exécutée.
+            # Backfill sur `date_ingestion` pour les lignes déjà en base
+            # avant cette migration (sinon NULL, jamais périmée par défaut —
+            # cohérent avec "aucune modification connue depuis la création").
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS date_modification TEXT").format(
+                    table=self._table("instances_trco")
+                )
+            )
+            connexion.execute(
+                sql.SQL(
+                    "UPDATE {table} SET date_modification = date_ingestion WHERE date_modification IS NULL"
+                ).format(table=self._table("instances_trco"))
+            )
             # Ancienne racine de lignée ("dérivée de") — retirée : une
             # instance se modifie désormais en place (`modifier_instance`,
             # même instance_id) plutôt que de générer une dérivée. La FK
@@ -567,6 +585,7 @@ class EtatPostgres:
     ) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
+        maintenant = datetime.now(UTC).isoformat()
         with closing(self._connexion()) as connexion:
             connexion.execute(
                 sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(
@@ -578,18 +597,19 @@ class EtatPostgres:
                 sql.SQL(
                     "INSERT INTO {} "
                     "(id, client_id, payload, structure_contraintes, date_ingestion, source_id, "
-                    "description_metier, nom_projet) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s)"
+                    "description_metier, nom_projet, date_modification) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
                     client_id,
                     instance.model_dump_json(),
                     structure,
-                    datetime.now(UTC).isoformat(),
+                    maintenant,
                     source_id,
                     description_metier,
                     nom_projet,
+                    maintenant,
                 ),
             )
             connexion.commit()
@@ -667,10 +687,16 @@ class EtatPostgres:
             )
 
             connexion.execute(
-                sql.SQL("UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s WHERE id = %s").format(
-                    self._table("instances_trco")
+                sql.SQL(
+                    "UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s, "
+                    "date_modification = %s WHERE id = %s"
+                ).format(self._table("instances_trco")),
+                (
+                    nouvelle_instance.model_dump_json(),
+                    structure_contraintes(nouvelle_instance),
+                    datetime.now(UTC).isoformat(),
+                    instance_id,
                 ),
-                (nouvelle_instance.model_dump_json(), structure_contraintes(nouvelle_instance), instance_id),
             )
             connexion.commit()
         return nouvelle_instance
@@ -687,9 +713,16 @@ class EtatPostgres:
                 raise KeyError(instance_id)
             connexion.execute(
                 sql.SQL(
-                    "UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s, nom_projet = %s WHERE id = %s"
+                    "UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s, nom_projet = %s, "
+                    "date_modification = %s WHERE id = %s"
                 ).format(self._table("instances_trco")),
-                (instance.model_dump_json(), structure_contraintes(instance), nom_projet, instance_id),
+                (
+                    instance.model_dump_json(),
+                    structure_contraintes(instance),
+                    nom_projet,
+                    datetime.now(UTC).isoformat(),
+                    instance_id,
+                ),
             )
             connexion.commit()
         return instance
@@ -755,7 +788,7 @@ class EtatPostgres:
         requete = sql.SQL(
             "SELECT i.id, i.client_id, i.structure_contraintes, "
             "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee, "
-            "i.nom_projet "
+            "i.nom_projet, i.date_modification "
             "FROM {instances} i WHERE 1 = 1"
         ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -775,8 +808,9 @@ class EtatPostgres:
                 "structure_contraintes": structure,
                 "executee": executee,
                 "nom_projet": nom_projet_valeur,
+                "date_modification": date_modification,
             }
-            for instance_id, client_id, structure, executee, nom_projet_valeur in lignes
+            for instance_id, client_id, structure, executee, nom_projet_valeur, date_modification in lignes
         ]
 
     # --- Exécutions ------------------------------------------------------

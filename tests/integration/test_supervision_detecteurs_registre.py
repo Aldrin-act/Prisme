@@ -55,6 +55,7 @@ def test_instance_a_replanifier_quand_solveur_disponible_mais_jamais_executee(re
     assert a_replanifier[0].instance_id == instance_id
     assert a_replanifier[0].id_solveur_disponible == id_solveur
     assert a_replanifier[0].structure_contraintes == STRUCTURE_MINIMALE
+    assert a_replanifier[0].raison == "jamais_executee"
 
 
 def test_instance_deja_executee_avec_solveur_disponible_nest_ni_lun_ni_lautre(registre_test: Registre) -> None:
@@ -68,3 +69,28 @@ def test_instance_deja_executee_avec_solveur_disponible_nest_ni_lun_ni_lautre(re
 
     assert orphelines == ()
     assert a_replanifier == ()
+
+
+def test_instance_a_replanifier_quand_modifiee_apres_sa_derniere_execution(registre_test: Registre) -> None:
+    """Régression : avant le retrait de la logique de "dérivée", toute
+    modification qui ne changeait pas la structure créait une instance neuve
+    (donc `executee=False` par construction). Depuis `modifier_instance`
+    (même `instance_id`, en place), ce cas ne se déclenchait plus du tout —
+    voir le docstring de `supervision/detecteurs.py`."""
+    id_solveur = enregistrer(registre_test, client_id="client_test")
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="peu importe")
+    execution_id = etat.enregistrer_execution("un-solveur", instance_id, resultat)
+    etat.dates_execution[execution_id] = "2026-01-01T00:00:00"
+
+    etat.modifier_instance(instance_id, _INSTANCE_STRUCTURE_MINIMALE)
+    etat.dates_modification[instance_id] = "2026-01-02T00:00:00"
+
+    orphelines, a_replanifier = detecter_signature_et_replanification(etat, registre_test, "client_test")
+
+    assert orphelines == ()
+    assert len(a_replanifier) == 1
+    assert a_replanifier[0].instance_id == instance_id
+    assert a_replanifier[0].id_solveur_disponible == id_solveur
+    assert a_replanifier[0].raison == "modifiee_apres_derniere_execution"

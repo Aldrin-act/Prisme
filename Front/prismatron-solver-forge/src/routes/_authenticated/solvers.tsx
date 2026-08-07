@@ -173,7 +173,7 @@ function DialogSolveur({
 
   return (
     <Dialog open={!!solveur} onOpenChange={fermer}>
-      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-h-[85vh] max-w-5xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Solveur</DialogTitle>
           <DialogDescription className="font-mono text-xs">{solveur?.id}</DialogDescription>

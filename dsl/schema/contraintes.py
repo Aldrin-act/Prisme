@@ -1,13 +1,12 @@
 """C — Contraintes : précédence, compatibilité ressource-tâche, échéance,
-compétence requise, capacité et incompatibilité (§3.1, §4). Les deux
-premières forment le noyau minimal ; `Echeance`/`CompetenceRequise`/
-`ContrainteCapacite`/`ContrainteIncompatibilite` sont des extensions
-optionnelles (aucun effet sur une instance qui ne les utilise pas) — voir
-`docs/dsl/modele_ingestion_client.md`.
+compétence requise, capacité, incompatibilité, disponibilité ressource et
+taille de lot (§3.1, §4). Les deux premières forment le noyau minimal ; les
+autres sont des extensions optionnelles (aucun effet sur une instance qui ne
+les utilise pas) — voir `docs/dsl/modele_ingestion_client.md`.
 
 Une contrainte est un objet discriminé par son champ `type`, pour rester
-homogène et extensible : calendrier, etc. pourront encore s'ajouter à cette
-union sans toucher aux contraintes existantes.
+homogène et extensible : d'autres pourront encore s'ajouter à cette union
+sans toucher aux contraintes existantes.
 """
 
 from __future__ import annotations
@@ -130,12 +129,62 @@ class ContrainteIncompatibilite(BaseModel):
         return self
 
 
+class ContrainteDisponibiliteRessource(BaseModel):
+    """La ressource `ressource` est indisponible durant les jours listés dans
+    `jours_indisponibles` — aucune opération ne peut s'y dérouler un jour
+    indisponible (même référentiel que `Echeance`/`duree` : jours relatifs,
+    jamais une date calendaire — convertir un vrai calendrier/jours fériés
+    en jours reste un problème d'adaptateur, en amont de l'ingestion).
+
+    Un calendrier global d'atelier (ex. jours fériés communs) s'exprime en
+    déclarant cette contrainte identiquement pour chaque ressource de
+    l'instance — pas un mécanisme séparé.
+
+    Une ressource sans cette contrainte n'est pas affectée — extension
+    optionnelle, comme `Echeance`/`ContrainteCapacite` (§4.2)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["disponibilite_ressource"] = "disponibilite_ressource"
+    ressource: Identifiant
+    jours_indisponibles: list[int] = Field(
+        min_length=1, description="Jours (relatifs) où cette ressource est indisponible"
+    )
+
+
+class ContrainteTailleLot(BaseModel):
+    """La tâche `tache` doit produire une quantité (`Tache.quantite`) comprise entre
+    `lot_min` et `lot_max` inclus — une validation statique de la donnée d'entrée,
+    sans aucun effet sur les décisions d'ordonnancement du solveur (contrairement à
+    `Echeance`, qui contraint le *moment* où la tâche se termine ; ici seule la
+    *quantité* déclarée est bornée, jamais lue par le solveur ni un objectif).
+
+    Si `Tache.quantite` n'est pas renseignée pour la tâche référencée, cette
+    contrainte n'a rien à vérifier et ne produit aucune anomalie — extension
+    optionnelle, comme `Echeance`/`ContrainteDisponibiliteRessource` (§4.2)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["taille_lot"] = "taille_lot"
+    tache: Identifiant
+    lot_min: int = Field(ge=1, description="Quantité minimale attendue pour cette tâche")
+    lot_max: int = Field(ge=1, description="Quantité maximale attendue pour cette tâche")
+
+    @model_validator(mode="after")
+    def _lot_min_inferieur_ou_egal_lot_max(self) -> ContrainteTailleLot:
+        if self.lot_min > self.lot_max:
+            raise ValueError("lot_min doit être inférieur ou égal à lot_max")
+        return self
+
+
 Contrainte = Annotated[
     Precedence
     | CompatibiliteRessourceTache
     | Echeance
     | CompetenceRequise
     | ContrainteCapacite
-    | ContrainteIncompatibilite,
+    | ContrainteIncompatibilite
+    | ContrainteDisponibiliteRessource
+    | ContrainteTailleLot,
     Field(discriminator="type"),
 ]

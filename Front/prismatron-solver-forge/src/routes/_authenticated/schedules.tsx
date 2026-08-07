@@ -22,6 +22,7 @@ import { PageHeader, EmptyState } from "@/components/app-page";
 import { GanttChart } from "@/components/planning/gantt-chart";
 import {
   useExecutions,
+  useInstance,
   useLabelsInstances,
   usePlanning,
   PrismeAPIError,
@@ -143,6 +144,10 @@ function DialogPlanning({
   onOpenChange: (open: boolean) => void;
 }) {
   const { data: planning, isLoading, error } = usePlanning(execution?.execution_id ?? null);
+  // Charges/capacités/disponibilités par ressource, pour le taux
+  // d'utilisation affiché par GanttChart — même instance que l'exécution,
+  // toujours disponible sans requête supplémentaire (ExecutionInfo.instance_id).
+  const { data: instance } = useInstance(execution?.instance_id ?? null);
 
   return (
     <Dialog open={!!execution} onOpenChange={onOpenChange}>
@@ -159,7 +164,7 @@ function DialogPlanning({
         ) : error ? (
           <p className="text-sm text-destructive">{(error as PrismeAPIError).message}</p>
         ) : planning ? (
-          <GanttChart planning={planning} />
+          <GanttChart planning={planning} contraintes={instance?.contraintes} />
         ) : null}
       </DialogContent>
     </Dialog>
