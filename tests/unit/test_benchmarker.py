@@ -62,6 +62,48 @@ def test_analyser_caracteristiques_instance_classifie_par_taille(nb_taches: int,
     assert carac.taille_categorie == categorie_attendue
 
 
+def _instance_minimale_avec_objectifs(objectifs: list[dict]) -> dict:
+    return {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1"}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}],
+        "objectifs": objectifs,
+    }
+
+
+def test_analyser_caracteristiques_instance_sans_objectifs() -> None:
+    carac = analyser_caracteristiques_instance(_instance_minimale_avec_objectifs([]))
+    assert carac.types_objectifs == ()
+    assert carac.nb_objectifs == 0
+    assert carac.equilibrage_methode_approchee_en_cpsat is False
+
+
+def test_analyser_caracteristiques_instance_objectifs_combines_tries_et_distincts() -> None:
+    instance_json = _instance_minimale_avec_objectifs(
+        [
+            {"type": "minimiser_makespan", "poids": 0.7},
+            {"type": "equilibrer_charge", "poids": 0.3, "methode": "ecart_max"},
+        ]
+    )
+    carac = analyser_caracteristiques_instance(instance_json)
+    assert carac.types_objectifs == ("equilibrer_charge", "minimiser_makespan")
+    assert carac.nb_objectifs == 2
+    assert carac.equilibrage_methode_approchee_en_cpsat is False
+
+
+@pytest.mark.parametrize("methode", ["variance", "gini"])
+def test_analyser_caracteristiques_instance_detecte_equilibrage_approche_en_cpsat(methode: str) -> None:
+    instance_json = _instance_minimale_avec_objectifs([{"type": "equilibrer_charge", "methode": methode}])
+    carac = analyser_caracteristiques_instance(instance_json)
+    assert carac.equilibrage_methode_approchee_en_cpsat is True
+
+
+def test_analyser_caracteristiques_instance_equilibrage_ecart_max_nest_pas_approche() -> None:
+    instance_json = _instance_minimale_avec_objectifs([{"type": "equilibrer_charge", "methode": "ecart_max"}])
+    carac = analyser_caracteristiques_instance(instance_json)
+    assert carac.equilibrage_methode_approchee_en_cpsat is False
+
+
 def test_benchmarker_algorithmes_construit_le_resultat_depuis_le_schema() -> None:
     schema = benchmarker._SchemaBenchmark(
         recommandation=benchmarker._SchemaRecommandation(

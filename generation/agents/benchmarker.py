@@ -67,6 +67,14 @@ class CaracteristiquesInstance:
     a_precedences: bool
     taille_categorie: str  # "petite", "moyenne", "grande", "très grande"
     densite_contraintes: float  # Ratio contraintes / (tâches × ressources)
+    types_objectifs: tuple[str, ...]  # Types distincts présents dans instance.objectifs, triés
+    nb_objectifs: int  # Nombre d'objectifs combinés (somme pondérée si > 1)
+    # True si un EquilibrerCharge à méthode "variance"/"gini" est demandé —
+    # en CP-SAT, cette méthode n'est qu'une approximation linéarisée (voir
+    # la section "Objectifs" de generation_solveur.md, la mission commune) ;
+    # un algorithme non-CP-SAT peut calculer la vraie variance/le vrai Gini
+    # exactement dans sa fonction de fitness, signal pertinent pour ce choix.
+    equilibrage_methode_approchee_en_cpsat: bool
 
 
 @dataclass(frozen=True)
@@ -160,6 +168,17 @@ def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesI
     # Densité de contraintes
     densite_contraintes = nb_contraintes / (nb_taches * nb_ressources) if nb_ressources > 0 else 0
 
+    # Objectifs — jamais lus avant cette section : le choix d'algorithme ne
+    # dépendait jusqu'ici que de la forme/taille du problème, jamais de ce
+    # qu'on cherche à optimiser.
+    objectifs = instance_json.get("objectifs", [])
+    types_objectifs = tuple(sorted({o.get("type", "?") for o in objectifs}))
+    nb_objectifs = len(objectifs)
+    equilibrage_methode_approchee_en_cpsat = any(
+        o.get("type") == "equilibrer_charge" and o.get("methode", "ecart_max") in {"variance", "gini"}
+        for o in objectifs
+    )
+
     return CaracteristiquesInstance(
         nb_taches=nb_taches,
         nb_ressources=nb_ressources,
@@ -168,6 +187,9 @@ def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesI
         a_precedences=a_precedences,
         taille_categorie=taille_categorie,
         densite_contraintes=densite_contraintes,
+        types_objectifs=types_objectifs,
+        nb_objectifs=nb_objectifs,
+        equilibrage_methode_approchee_en_cpsat=equilibrage_methode_approchee_en_cpsat,
     )
 
 
@@ -195,6 +217,9 @@ def benchmarker_algorithmes(modele: BaseChatModel, instance_json: dict) -> Resul
         a_precedences="Oui" if carac.a_precedences else "Non",
         taille_categorie=carac.taille_categorie,
         densite_contraintes=carac.densite_contraintes,
+        types_objectifs=", ".join(carac.types_objectifs) if carac.types_objectifs else "aucun",
+        nb_objectifs=carac.nb_objectifs,
+        equilibrage_methode_approchee_en_cpsat="Oui" if carac.equilibrage_methode_approchee_en_cpsat else "Non",
     )
 
     structure = modele.with_structured_output(

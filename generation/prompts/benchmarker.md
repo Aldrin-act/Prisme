@@ -15,6 +15,9 @@ Analyser les caractéristiques d'une instance FJSP et recommander le **meilleur 
 - **Présence de précédences** : {a_precedences}
 - **Taille** : {taille_categorie}
 - **Densité de contraintes** : {densite_contraintes:.3f}
+- **Types d'objectifs déclarés** : {types_objectifs}
+- **Nombre d'objectifs combinés** : {nb_objectifs} (somme pondérée si > 1)
+- **Équilibrage de charge à méthode variance/gini demandé** : {equilibrage_methode_approchee_en_cpsat}
 
 ## Algorithmes candidats
 
@@ -143,6 +146,27 @@ Analyser les caractéristiques d'une instance FJSP et recommander le **meilleur 
    - Faible flexibilité (<2) : CP-SAT, Glouton
    - Avec précédences complexes : CP-SAT
    - Sans précédences : Tous algorithmes
+
+5. **Objectifs déclarés**
+   - Un seul objectif `minimiser_makespan` : n'influence pas le choix au-delà des critères 1-4
+     ci-dessus — c'est le cas par défaut pour lequel CP-SAT (petite/moyenne) ou GA/ACO (grande)
+     restent les choix naturels.
+   - Plusieurs objectifs combinés (somme pondérée) : favorise un algorithme dont la fonction de
+     fitness peut sommer directement les termes pondérés (GA, ACO, Tabu, SA) — CP-SAT reste
+     possible mais demande une linéarisation explicite de chaque terme, coûteuse en variables
+     auxiliaires si les objectifs sont nombreux.
+   - `equilibrer_charge` à méthode `ecart_max` : encodable **exactement** en CP-SAT
+     (`AddMaxEquality`/`AddMinEquality` sur la charge par ressource) — ne change pas la
+     recommandation par rapport aux critères 1-4.
+   - `equilibrer_charge` à méthode `variance` ou `gini` (signalé ci-dessus) : en CP-SAT, cette
+     méthode n'est **qu'une approximation linéarisée** de la vraie variance/du vrai Gini (quadratique
+     par nature — voir la section « Objectifs » de la mission commune,
+     `generation/prompts/generation_solveur.md`). Un algorithme non-CP-SAT (GA, ACO, Tabu, SA) peut
+     calculer la vraie variance/le vrai Gini exactement dans sa fonction de fitness, sans
+     approximation. Sur une instance petite/moyenne où CP-SAT serait sinon le choix par défaut, si la
+     précision de l'équilibrage prime sur la garantie d'optimalité du makespan, signale ce compromis
+     explicitement dans `raison` et envisage une alternative non-CP-SAT ou une variante hybride
+     (CP-SAT pour une solution initiale, puis affinage local sur la métrique exacte).
 
 ## Format de réponse (JSON strict)
 
