@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes import (
     adapters,
+    api_keys,
     audit,
     auth,
     clients,
@@ -65,6 +66,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(api_keys.router)
 app.include_router(clients.router)
 app.include_router(ingestion.router)
 app.include_router(adapters.router)

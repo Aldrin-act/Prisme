@@ -14,8 +14,9 @@ geste humain, hors ligne, déclenché depuis le Générateur de solveurs, jamais
 un effet de bord d'un appel ERP.
 
 Trois entrées, une par forme de donnée reçue :
-- `POST /greensig` — lit directement `db_greensig` (adaptateur déterministe,
-  gratuit, `adapters/greensig/`) ; pas de `{client_id}` dans le chemin, le
+- `POST /greensig` — lit GreenSIG via `adapters.greensig.extraire_et_traduire`
+  (base Postgres directe ou API HTTP publique selon `GREENSIG_MODE`, voir
+  `adapters/greensig/service.py`) ; pas de `{client_id}` dans le chemin, le
   client GreenSIG est fixe (`CLIENT_ID_GREENSIG`). Déclarée avant `/{client_id}`
   ci-dessous : un chemin littéral doit toujours être enregistré avant un
   chemin paramétré qui matcherait la même forme (Starlette résout dans
@@ -34,12 +35,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+import httpx
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import comprendre_donnees_erp
-from adapters.greensig import extraire_payload, traduire
+from adapters.greensig import extraire_et_traduire
 from api.autorisation import verifier_acces_client
 from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, SecteurActivite, durees_par_contrainte, obtenir_etat, structure_contraintes
@@ -85,17 +87,15 @@ def planifier_depuis_greensig(
     registre: Registre = Depends(obtenir_registre),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
-    """Lit directement `db_greensig` (adaptateur écrit à la main,
-    déterministe, gratuit), puis compose exactement comme `planifier()` —
-    même garde-fou, même composition ingestion+exécution en un seul appel.
-    Pas de `{client_id}` dans le chemin : le client GreenSIG est fixe."""
+    """Lit GreenSIG (base directe ou API HTTP publique selon `GREENSIG_MODE`,
+    voir `adapters/greensig/service.py`), puis compose exactement comme
+    `planifier()` — même garde-fou, même composition ingestion+exécution en
+    un seul appel. Pas de `{client_id}` dans le chemin : le client GreenSIG
+    est fixe."""
     try:
-        payload = extraire_payload()
-    except psycopg.OperationalError as erreur:
-        raise HTTPException(status_code=503, detail="base GreenSIG (db_greensig) injoignable") from erreur
-
-    try:
-        instance = traduire(payload)
+        instance = extraire_et_traduire()
+    except (psycopg.OperationalError, httpx.HTTPError) as erreur:
+        raise HTTPException(status_code=503, detail="service GreenSIG injoignable") from erreur
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 

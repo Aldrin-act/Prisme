@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import httpx
 import psycopg
 from fastapi import APIRouter, Body, Depends, File, HTTPException, UploadFile
 from langchain_core.language_models.chat_models import BaseChatModel
@@ -30,7 +31,7 @@ from pydantic import BaseModel, ValidationError
 from adapters.agent_comprehension import comprendre_donnees_erp
 from adapters.csv_import import ErreurFichierInvalide as ErreurFichierCsvInvalide
 from adapters.csv_import import traduire as traduire_csv
-from adapters.greensig import extraire_payload, traduire
+from adapters.greensig import extraire_et_traduire
 from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
 from adapters.json_import import traduire as traduire_json
 from api.autorisation import verifier_acces_client
@@ -53,12 +54,9 @@ def ingerer_depuis_greensig(
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     try:
-        payload = extraire_payload()
-    except psycopg.OperationalError as erreur:
-        raise HTTPException(status_code=503, detail="base GreenSIG (db_greensig) injoignable") from erreur
-
-    try:
-        instance = traduire(payload)
+        instance = extraire_et_traduire()
+    except (psycopg.OperationalError, httpx.HTTPError) as erreur:
+        raise HTTPException(status_code=503, detail="service GreenSIG injoignable") from erreur
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 

@@ -558,6 +558,24 @@ export interface ReponseCreationSource {
 }
 
 // ============================================================================
+// CLÉS API
+// ============================================================================
+
+export interface CleApi {
+  cle_id: string;
+  nom: string;
+  prefixe: string;
+  date_creation: string;
+  derniere_utilisation: string | null;
+}
+
+// Le secret complet (`secret`) n'est renvoyé qu'une seule fois, à la création — jamais
+// à nouveau via listerClesApi (voir CleApi ci-dessus, qui n'a que `prefixe`).
+export interface ReponseCreationCleApi extends CleApi {
+  secret: string;
+}
+
+// ============================================================================
 // ERREURS API
 // ============================================================================
 

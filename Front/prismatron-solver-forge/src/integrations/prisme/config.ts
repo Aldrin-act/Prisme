@@ -4,7 +4,7 @@
 
 export const PRISME_CONFIG = {
   // Base URL de l'API (backend FastAPI)
-  baseURL: import.meta.env.VITE_PRISME_API_URL || 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_PRISME_API_URL || "http://localhost:8000",
 
   // Timeout par défaut (ms)
   timeout: 30000,
@@ -18,22 +18,23 @@ export const PRISME_CONFIG = {
 
   // Headers par défaut
   headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
 
   // Routes
   routes: {
-    ingestion: '/ingestion',
-    execution: '/execution',
-    planning: '/planning',
-    audit: '/audit',
-    diagnostics: '/diagnostics',
-    supervision: '/supervision',
-    validation: '/validation',
-    adapters: '/adapters',
-    sources: '/sources',
-    clients: '/clients',
-    generation: '/generation',
+    ingestion: "/ingestion",
+    execution: "/execution",
+    planning: "/planning",
+    audit: "/audit",
+    diagnostics: "/diagnostics",
+    supervision: "/supervision",
+    validation: "/validation",
+    adapters: "/adapters",
+    sources: "/sources",
+    clients: "/clients",
+    generation: "/generation",
+    apiKeys: "/api-keys",
   },
 } as const;

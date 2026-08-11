@@ -2,7 +2,7 @@
  * Types pour l'authentification PRISME
  */
 
-export type RoleUtilisateur = 'maintenant' | 'operateur' | 'admin';
+export type RoleUtilisateur = "maintenant" | "operateur" | "admin";
 
 export interface Utilisateur {
   id: string;
@@ -41,7 +41,7 @@ export interface ReponseAuth {
 }
 
 export interface ErreurAuth {
-  code: 'INVALID_CREDENTIALS' | 'USER_EXISTS' | 'UNAUTHORIZED' | 'TOKEN_EXPIRED' | 'UNKNOWN';
+  code: "INVALID_CREDENTIALS" | "USER_EXISTS" | "UNAUTHORIZED" | "TOKEN_EXPIRED" | "UNKNOWN";
   message: string;
 }
 

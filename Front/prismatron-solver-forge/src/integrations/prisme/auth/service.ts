@@ -2,10 +2,10 @@
  * Service d'authentification PRISME
  */
 
-import { PRISME_CONFIG } from '../config';
-import { PrismeAPIError } from '../client';
-import { PERMISSIONS_PAR_ROLE } from './types';
-import { AUTH_TOKEN_KEY, AUTH_USER_KEY, AUTH_EXPIRES_KEY } from './storage';
+import { PRISME_CONFIG } from "../config";
+import { PrismeAPIError } from "../client";
+import { PERMISSIONS_PAR_ROLE } from "./types";
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY, AUTH_EXPIRES_KEY } from "./storage";
 import type {
   Utilisateur,
   SessionAuth,
@@ -14,7 +14,7 @@ import type {
   ReponseAuth,
   ErreurAuth,
   PermissionsRole,
-} from './types';
+} from "./types";
 
 // ============================================================================
 // STORAGE (localStorage)
@@ -56,18 +56,15 @@ function effacerSession(): void {
 // API CALLS
 // ============================================================================
 
-async function apiAuthFetch<T>(
-  path: string,
-  options?: RequestInit
-): Promise<T> {
+async function apiAuthFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const session = chargerSession();
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   };
 
   if (session) {
-    headers['Authorization'] = `Bearer ${session.token}`;
+    headers["Authorization"] = `Bearer ${session.token}`;
   }
 
   try {
@@ -86,30 +83,26 @@ async function apiAuthFetch<T>(
       // `.code`/`.message` systématiquement `undefined`. `detail` est soit
       // {code, message} (ex. TOKEN_EXPIRED, voir api/routes/auth.py), soit
       // une simple chaîne (ex. "client_id inconnu" sur /register).
-      let errorData: ErreurAuth = { code: 'UNKNOWN', message: response.statusText };
+      let errorData: ErreurAuth = { code: "UNKNOWN", message: response.statusText };
       try {
         const body: { detail?: string | ErreurAuth } = await response.json();
-        if (body.detail && typeof body.detail === 'object') {
+        if (body.detail && typeof body.detail === "object") {
           errorData = body.detail;
-        } else if (typeof body.detail === 'string') {
-          errorData = { code: 'UNKNOWN', message: body.detail };
+        } else if (typeof body.detail === "string") {
+          errorData = { code: "UNKNOWN", message: body.detail };
         }
       } catch {
         // garder le fallback statusText
       }
 
-      throw new PrismeAPIError(
-        errorData.message,
-        response.status,
-        errorData.code
-      );
+      throw new PrismeAPIError(errorData.message, response.status, errorData.code);
     }
 
     return response.json();
   } catch (error) {
     if (error instanceof PrismeAPIError) throw error;
     throw new PrismeAPIError(
-      `Erreur réseau: ${error instanceof Error ? error.message : 'Inconnue'}`
+      `Erreur réseau: ${error instanceof Error ? error.message : "Inconnue"}`,
     );
   }
 }
@@ -123,8 +116,8 @@ export const authService = {
    * Connexion avec email/password
    */
   async login(credentials: CredentialsLogin): Promise<SessionAuth> {
-    const response = await apiAuthFetch<ReponseAuth>('/auth/login', {
-      method: 'POST',
+    const response = await apiAuthFetch<ReponseAuth>("/auth/login", {
+      method: "POST",
       body: JSON.stringify(credentials),
     });
 
@@ -136,8 +129,8 @@ export const authService = {
    * Inscription d'un nouvel utilisateur
    */
   async register(credentials: CredentialsRegister): Promise<SessionAuth> {
-    const response = await apiAuthFetch<ReponseAuth>('/auth/register', {
-      method: 'POST',
+    const response = await apiAuthFetch<ReponseAuth>("/auth/register", {
+      method: "POST",
       body: JSON.stringify(credentials),
     });
 
@@ -150,7 +143,7 @@ export const authService = {
    */
   async logout(): Promise<void> {
     try {
-      await apiAuthFetch('/auth/logout', { method: 'POST' });
+      await apiAuthFetch("/auth/logout", { method: "POST" });
     } finally {
       effacerSession();
     }
@@ -190,7 +183,7 @@ export const authService = {
    */
   async verifierToken(): Promise<boolean> {
     try {
-      await apiAuthFetch<{ valid: boolean }>('/auth/verify');
+      await apiAuthFetch<{ valid: boolean }>("/auth/verify");
       return true;
     } catch {
       effacerSession();
@@ -202,8 +195,8 @@ export const authService = {
    * Rafraîchit le token
    */
   async rafraichirToken(): Promise<SessionAuth> {
-    const response = await apiAuthFetch<ReponseAuth>('/auth/refresh', {
-      method: 'POST',
+    const response = await apiAuthFetch<ReponseAuth>("/auth/refresh", {
+      method: "POST",
     });
 
     sauvegarderSession(response.session);
@@ -238,12 +231,9 @@ export const authService = {
   /**
    * Change le mot de passe
    */
-  async changerMotDePasse(
-    ancienMotDePasse: string,
-    nouveauMotDePasse: string
-  ): Promise<void> {
-    await apiAuthFetch('/auth/change-password', {
-      method: 'POST',
+  async changerMotDePasse(ancienMotDePasse: string, nouveauMotDePasse: string): Promise<void> {
+    await apiAuthFetch("/auth/change-password", {
+      method: "POST",
       body: JSON.stringify({
         ancien_mot_de_passe: ancienMotDePasse,
         nouveau_mot_de_passe: nouveauMotDePasse,
@@ -255,8 +245,8 @@ export const authService = {
    * Demande de réinitialisation de mot de passe
    */
   async demanderReinitialisationMotDePasse(email: string): Promise<void> {
-    await apiAuthFetch('/auth/forgot-password', {
-      method: 'POST',
+    await apiAuthFetch("/auth/forgot-password", {
+      method: "POST",
       body: JSON.stringify({ email }),
     });
   },
@@ -264,12 +254,9 @@ export const authService = {
   /**
    * Réinitialise le mot de passe avec un token
    */
-  async reinitialiserMotDePasse(
-    token: string,
-    nouveauMotDePasse: string
-  ): Promise<void> {
-    await apiAuthFetch('/auth/reset-password', {
-      method: 'POST',
+  async reinitialiserMotDePasse(token: string, nouveauMotDePasse: string): Promise<void> {
+    await apiAuthFetch("/auth/reset-password", {
+      method: "POST",
       body: JSON.stringify({ token, nouveau_mot_de_passe: nouveauMotDePasse }),
     });
   },

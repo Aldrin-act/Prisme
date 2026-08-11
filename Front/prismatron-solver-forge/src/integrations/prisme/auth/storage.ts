@@ -4,9 +4,9 @@
  * token sans créer d'import circulaire avec `auth/service.ts`.
  */
 
-export const AUTH_TOKEN_KEY = 'prisme_auth_token';
-export const AUTH_USER_KEY = 'prisme_auth_user';
-export const AUTH_EXPIRES_KEY = 'prisme_auth_expires';
+export const AUTH_TOKEN_KEY = "prisme_auth_token";
+export const AUTH_USER_KEY = "prisme_auth_user";
+export const AUTH_EXPIRES_KEY = "prisme_auth_expires";
 
 export function lireTokenStocke(): string | null {
   return localStorage.getItem(AUTH_TOKEN_KEY);

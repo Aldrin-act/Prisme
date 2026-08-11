@@ -2,10 +2,10 @@
  * Composant de protection de route
  */
 
-import { ReactNode } from 'react';
-import { Navigate } from '@tanstack/react-router';
-import { useAuth } from '../context';
-import type { RoleUtilisateur, PermissionsRole } from '../types';
+import { ReactNode } from "react";
+import { Navigate } from "@tanstack/react-router";
+import { useAuth } from "../context";
+import type { RoleUtilisateur, PermissionsRole } from "../types";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ export function ProtectedRoute({
   children,
   requiredRole,
   requiredPermission,
-  redirectTo = '/login',
+  redirectTo = "/login",
   fallback,
 }: ProtectedRouteProps) {
   const { estAuthentifie, estChargement, aRole, aPermission } = useAuth();
@@ -45,32 +45,34 @@ export function ProtectedRoute({
   if (requiredRole) {
     const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
     if (!aRole(...roles)) {
-      return fallback || (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-red-600">403</h1>
-            <p className="mt-4 text-gray-600">Accès refusé</p>
-            <p className="mt-2 text-sm text-gray-500">
-              Vous n'avez pas les permissions nécessaires
-            </p>
+      return (
+        fallback || (
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-red-600">403</h1>
+              <p className="mt-4 text-gray-600">Accès refusé</p>
+              <p className="mt-2 text-sm text-gray-500">
+                Vous n'avez pas les permissions nécessaires
+              </p>
+            </div>
           </div>
-        </div>
+        )
       );
     }
   }
 
   // Vérifier la permission requise
   if (requiredPermission && !aPermission(requiredPermission)) {
-    return fallback || (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-red-600">403</h1>
-          <p className="mt-4 text-gray-600">Accès refusé</p>
-          <p className="mt-2 text-sm text-gray-500">
-            Permission "{requiredPermission}" requise
-          </p>
+    return (
+      fallback || (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-red-600">403</h1>
+            <p className="mt-4 text-gray-600">Accès refusé</p>
+            <p className="mt-2 text-sm text-gray-500">Permission "{requiredPermission}" requise</p>
+          </div>
         </div>
-      </div>
+      )
     );
   }
 

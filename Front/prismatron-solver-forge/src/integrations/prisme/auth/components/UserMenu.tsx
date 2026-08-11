@@ -2,8 +2,8 @@
  * Menu utilisateur avec profil et déconnexion
  */
 
-import { useState } from 'react';
-import { useAuth } from '../context';
+import { useState } from "react";
+import { useAuth } from "../context";
 
 export function UserMenu() {
   const { utilisateur, logout } = useAuth();
@@ -13,20 +13,20 @@ export function UserMenu() {
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'admin':
-        return 'bg-purple-100 text-purple-800';
-      case 'maintenant':
-        return 'bg-blue-100 text-blue-800';
-      case 'operateur':
-        return 'bg-green-100 text-green-800';
+      case "admin":
+        return "bg-purple-100 text-purple-800";
+      case "maintenant":
+        return "bg-blue-100 text-blue-800";
+      case "operateur":
+        return "bg-green-100 text-green-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const handleLogout = async () => {
     await logout();
-    window.location.href = '/login';
+    window.location.href = "/login";
   };
 
   return (
@@ -46,40 +46,28 @@ export function UserMenu() {
           <div className="text-xs text-gray-500">{utilisateur.email}</div>
         </div>
         <svg
-          className={`w-5 h-5 text-gray-400 transition-transform ${
-            menuOuvert ? 'rotate-180' : ''
-          }`}
+          className={`w-5 h-5 text-gray-400 transition-transform ${menuOuvert ? "rotate-180" : ""}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
       {menuOuvert && (
         <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setMenuOuvert(false)}
-          />
+          <div className="fixed inset-0 z-10" onClick={() => setMenuOuvert(false)} />
           <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
             <div className="p-4 border-b border-gray-200">
               <div className="font-medium text-gray-900">
                 {utilisateur.prenom} {utilisateur.nom}
               </div>
-              <div className="text-sm text-gray-500 mt-1">
-                {utilisateur.email}
-              </div>
+              <div className="text-sm text-gray-500 mt-1">{utilisateur.email}</div>
               <div className="mt-2">
                 <span
                   className={`inline-block px-2 py-1 text-xs font-medium rounded ${getRoleBadgeColor(
-                    utilisateur.role
+                    utilisateur.role,
                   )}`}
                 >
                   {utilisateur.role.toUpperCase()}
@@ -92,7 +80,7 @@ export function UserMenu() {
                 onClick={() => {
                   setMenuOuvert(false);
                   // Navigate to profile
-                  window.location.href = '/profile';
+                  window.location.href = "/profile";
                 }}
                 className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
               >
@@ -102,7 +90,7 @@ export function UserMenu() {
                 onClick={() => {
                   setMenuOuvert(false);
                   // Navigate to settings
-                  window.location.href = '/settings';
+                  window.location.href = "/settings";
                 }}
                 className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
               >

@@ -6,8 +6,9 @@ Même architecture que solver_store/registry.py : table auto-créée, schéma pu
 
 from __future__ import annotations
 
+import hashlib
 import os
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 import jwt
@@ -16,7 +17,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr
 
-from api.auth_db import UtilisateursDB, RoleUtilisateur
+from api.auth_db import RoleUtilisateur, UtilisateursDB
+from api.cles_api_db import PREFIXE_CLE_API, ClesApiDB
 from api.etat import EtatAPI, obtenir_etat
 
 # Charger les variables d'environnement
@@ -50,10 +52,15 @@ security = HTTPBearer(auto_error=False)
 # Utilise DATABASE_URL (même base que solver_store, etat_postgres, etc.)
 utilisateurs_db = UtilisateursDB()
 
+# Même style eager-global que ci-dessus, pour que les deux bases d'identifiants
+# (mot de passe, clé API) restent cohérentes entre elles — voir api/cles_api_db.py.
+cles_api_db = ClesApiDB()
+
 
 # ============================================================================
 # MODÈLES PYDANTIC (API)
 # ============================================================================
+
 
 class Utilisateur(BaseModel):
     id: str
@@ -110,6 +117,7 @@ class ResetPasswordRequest(BaseModel):
 # UTILITAIRES JWT
 # ============================================================================
 
+
 def creer_token_jwt(utilisateur_id: str, role: str, client_id: str | None) -> tuple[str, str]:
     """Crée un JWT token avec expiration."""
     expires_at = datetime.now(UTC) + timedelta(minutes=JWT_EXPIRE_MINUTES)
@@ -147,10 +155,35 @@ def decoder_token_jwt(token: str) -> dict:
 # DÉPENDANCES FASTAPI
 # ============================================================================
 
+
+def _utilisateur_depuis_cle_api(cle: str) -> dict:
+    """Résout une clé API (`Authorization: Bearer pk_live_...`) vers le même dict
+    qu'un JWT — une clé n'est jamais un instantané figé du rôle/client_id de son
+    propriétaire, toujours relu en base à chaque appel (voir `api/cles_api_db.py`)."""
+    ligne = cles_api_db.recuperer_par_hash(hashlib.sha256(cle.encode("utf-8")).hexdigest())
+    if ligne is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"code": "UNAUTHORIZED", "message": "Clé API invalide"},
+        )
+
+    utilisateur_db = utilisateurs_db.recuperer_par_id(ligne.utilisateur_id)
+    if not utilisateur_db:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"code": "UNAUTHORIZED", "message": "Clé API invalide"},
+        )
+
+    cles_api_db.mettre_a_jour_derniere_utilisation(ligne.id)
+    return utilisateur_db.to_dict()
+
+
 async def obtenir_utilisateur_courant(
     credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(security)] = None,
 ) -> dict:
-    """Dépendance FastAPI pour extraire l'utilisateur du token JWT.
+    """Dépendance FastAPI pour extraire l'utilisateur du token JWT ou d'une clé API
+    (`pk_live_...`, voir `_utilisateur_depuis_cle_api`) — mêmes droits, même dict renvoyé,
+    peu importe le type de credential.
 
     `PRISME_AUTH_DESACTIVEE=1` (dev uniquement) court-circuite entièrement
     cette vérification et renvoie un admin factice, sans exiger de token."""
@@ -164,6 +197,10 @@ async def obtenir_utilisateur_courant(
         )
 
     token = credentials.credentials
+
+    if token.startswith(PREFIXE_CLE_API):
+        return _utilisateur_depuis_cle_api(token)
+
     payload = decoder_token_jwt(token)
 
     # Récupérer utilisateur de la base de données PostgreSQL
@@ -184,6 +221,7 @@ def require_role(*roles: str):
     `Depends(require_role("admin"))`. Factory volontairement synchrone : elle
     ne fait que construire et renvoyer `role_checker`, seul ce dernier est
     exécuté par FastAPI comme dépendance (async)."""
+
     async def role_checker(utilisateur: dict = Depends(obtenir_utilisateur_courant)):
         if utilisateur["role"] not in roles:
             raise HTTPException(
@@ -198,6 +236,7 @@ def require_role(*roles: str):
 # ============================================================================
 # ROUTES D'AUTHENTIFICATION
 # ============================================================================
+
 
 @router.post("/login")
 def login(credentials: CredentialsLogin) -> ReponseAuth:
@@ -217,9 +256,7 @@ def login(credentials: CredentialsLogin) -> ReponseAuth:
         )
 
     # Générer token JWT
-    token, expires_at = creer_token_jwt(
-        utilisateur_db.id, utilisateur_db.role, utilisateur_db.client_id
-    )
+    token, expires_at = creer_token_jwt(utilisateur_db.id, utilisateur_db.role, utilisateur_db.client_id)
 
     # Mettre à jour dernier accès dans PostgreSQL
     utilisateurs_db.mettre_a_jour_dernier_acces(utilisateur_db.id)
@@ -277,9 +314,7 @@ def register(credentials: CredentialsRegister, etat: EtatAPI = Depends(obtenir_e
     )
 
     # Générer token JWT
-    token, expires_at = creer_token_jwt(
-        utilisateur_db.id, utilisateur_db.role, utilisateur_db.client_id
-    )
+    token, expires_at = creer_token_jwt(utilisateur_db.id, utilisateur_db.role, utilisateur_db.client_id)
 
     # Créer session
     session = SessionAuth(
@@ -312,9 +347,7 @@ def verify_token(utilisateur: dict = Depends(obtenir_utilisateur_courant)) -> di
 def refresh_token(utilisateur: dict = Depends(obtenir_utilisateur_courant)) -> ReponseAuth:
     """Rafraîchit le token d'authentification."""
     # Générer nouveau token
-    token, expires_at = creer_token_jwt(
-        utilisateur["id"], utilisateur["role"], utilisateur.get("client_id")
-    )
+    token, expires_at = creer_token_jwt(utilisateur["id"], utilisateur["role"], utilisateur.get("client_id"))
 
     # Créer nouvelle session
     session = SessionAuth(
@@ -345,9 +378,7 @@ def change_password(
         )
 
     # Vérifier ancien mot de passe
-    if not utilisateurs_db.verifier_mot_de_passe(
-        request.ancien_mot_de_passe, utilisateur_db.password_hash
-    ):
+    if not utilisateurs_db.verifier_mot_de_passe(request.ancien_mot_de_passe, utilisateur_db.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={

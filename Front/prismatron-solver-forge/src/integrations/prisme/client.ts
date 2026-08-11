@@ -121,6 +121,20 @@ export const prismeClient = {
       body: JSON.stringify({ client_id: clientId, nom: nom ?? null }),
     }),
 
+  // CLÉS API — personnelles au compte authentifié (jamais partagées entre
+  // comptes d'un même client). Le `secret` de `creerCleApi` n'est renvoyé
+  // qu'une seule fois, jamais reconstructible ensuite.
+  listerClesApi: () => apiFetch<Types.CleApi[]>(PRISME_CONFIG.routes.apiKeys),
+
+  creerCleApi: (nom: string) =>
+    apiFetch<Types.ReponseCreationCleApi>(PRISME_CONFIG.routes.apiKeys, {
+      method: "POST",
+      body: JSON.stringify({ nom }),
+    }),
+
+  revoquerCleApi: (cleId: string) =>
+    apiFetch<void>(`${PRISME_CONFIG.routes.apiKeys}/${cleId}`, { method: "DELETE" }),
+
   // INGESTION — `nomProjet`/`secteurActivite` (optionnels) étiquettent
   // librement l'instance créée.
   ingererInstance: (

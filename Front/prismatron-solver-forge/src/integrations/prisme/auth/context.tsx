@@ -2,15 +2,15 @@
  * Context et Provider pour l'authentification PRISME
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { authService } from './service';
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { authService } from "./service";
 import type {
   Utilisateur,
   SessionAuth,
   CredentialsLogin,
   CredentialsRegister,
   PermissionsRole,
-} from './types';
+} from "./types";
 
 // ============================================================================
 // TYPES
@@ -124,14 +124,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     (permission: keyof PermissionsRole) => {
       return authService.aPermission(permission);
     },
-    [session]
+    [session],
   );
 
   const aRole = useCallback(
     (...roles: string[]) => {
       return authService.aRole(...roles);
     },
-    [session]
+    [session],
   );
 
   const value: AuthContextValue = {
@@ -157,7 +157,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth doit être utilisé dans un AuthProvider');
+    throw new Error("useAuth doit être utilisé dans un AuthProvider");
   }
   return context;
 }

@@ -31,6 +31,7 @@ export const prismeKeys = {
   propositionsSupervision: (enAttente?: boolean) =>
     [...prismeKeys.all, "propositionsSupervision", enAttente ?? false] as const,
   nomsProjet: () => [...prismeKeys.all, "nomsProjet"] as const,
+  clesApi: () => [...prismeKeys.all, "clesApi"] as const,
 } as const;
 
 // ============================================================================
@@ -214,6 +215,19 @@ export function useSources(
   return useQuery({
     queryKey: prismeKeys.sources(),
     queryFn: () => prismeClient.listerSources(),
+    ...options,
+  });
+}
+
+/**
+ * Liste les clés API du compte authentifié (jamais celles d'un autre compte).
+ */
+export function useClesApi(
+  options?: Omit<UseQueryOptions<Types.CleApi[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.clesApi(),
+    queryFn: () => prismeClient.listerClesApi(),
     ...options,
   });
 }
@@ -545,6 +559,26 @@ export function useCreerClient() {
   return useMutation({
     mutationFn: ({ clientId, nom }: { clientId: string; nom?: string }) =>
       prismeClient.creerClient(clientId, nom),
+  });
+}
+
+/**
+ * Mutation pour créer une clé API — le `secret` de la réponse n'est jamais
+ * renvoyé à nouveau ensuite, à afficher immédiatement à l'utilisateur.
+ */
+export function useCreerCleApi() {
+  return useMutation({
+    mutationFn: (nom: string) => prismeClient.creerCleApi(nom),
+  });
+}
+
+/**
+ * Mutation pour révoquer une clé API — irréversible, la clé cesse
+ * immédiatement de s'authentifier.
+ */
+export function useRevoquerCleApi() {
+  return useMutation({
+    mutationFn: (cleId: string) => prismeClient.revoquerCleApi(cleId),
   });
 }
 

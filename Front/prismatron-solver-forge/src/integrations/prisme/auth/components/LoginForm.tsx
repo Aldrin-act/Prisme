@@ -2,36 +2,36 @@
  * Formulaire de connexion
  */
 
-import { useState } from 'react';
-import { useAuth } from '../context';
-import { PrismeAPIError } from '../../client';
+import { useState } from "react";
+import { useAuth } from "../context";
+import { PrismeAPIError } from "../../client";
 
 export function LoginForm() {
   const { login, estChargement } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [erreur, setErreur] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [erreur, setErreur] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErreur('');
+    setErreur("");
 
     try {
       await login({ email, password });
     } catch (error) {
       if (error instanceof PrismeAPIError) {
         switch (error.detail) {
-          case 'INVALID_CREDENTIALS':
-            setErreur('Email ou mot de passe incorrect');
+          case "INVALID_CREDENTIALS":
+            setErreur("Email ou mot de passe incorrect");
             break;
-          case 'UNAUTHORIZED':
-            setErreur('Accès non autorisé');
+          case "UNAUTHORIZED":
+            setErreur("Accès non autorisé");
             break;
           default:
             setErreur(error.message);
         }
       } else {
-        setErreur('Erreur de connexion');
+        setErreur("Erreur de connexion");
       }
     }
   };
@@ -39,7 +39,7 @@ export function LoginForm() {
   const remplirFormulaire = (email: string, password: string) => {
     setEmail(email);
     setPassword(password);
-    setErreur('');
+    setErreur("");
   };
 
   return (
@@ -52,9 +52,7 @@ export function LoginForm() {
 
         {/* Comptes de test */}
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm font-semibold text-blue-900 mb-3">
-            Comptes de test disponibles :
-          </p>
+          <p className="text-sm font-semibold text-blue-900 mb-3">Comptes de test disponibles :</p>
           <div className="space-y-3">
             {/* Compte Maintenant */}
             <div className="bg-white p-3 rounded border border-blue-200">
@@ -62,7 +60,7 @@ export function LoginForm() {
                 <span className="text-xs font-semibold text-blue-700">MAINTENANT</span>
                 <button
                   type="button"
-                  onClick={() => remplirFormulaire('maintenant@example.com', 'password_123')}
+                  onClick={() => remplirFormulaire("maintenant@example.com", "password_123")}
                   className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
                 >
                   Utiliser
@@ -70,11 +68,11 @@ export function LoginForm() {
               </div>
               <div className="text-xs text-gray-600 space-y-1">
                 <div>
-                  <span className="font-medium">Email:</span>{' '}
+                  <span className="font-medium">Email:</span>{" "}
                   <code className="bg-gray-100 px-2 py-0.5 rounded">maintenant@example.com</code>
                 </div>
                 <div>
-                  <span className="font-medium">Password:</span>{' '}
+                  <span className="font-medium">Password:</span>{" "}
                   <code className="bg-gray-100 px-2 py-0.5 rounded">password_123</code>
                 </div>
               </div>
@@ -86,7 +84,7 @@ export function LoginForm() {
                 <span className="text-xs font-semibold text-purple-700">ADMIN</span>
                 <button
                   type="button"
-                  onClick={() => remplirFormulaire('admin@example.com', 'password_456')}
+                  onClick={() => remplirFormulaire("admin@example.com", "password_456")}
                   className="text-xs bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition-colors"
                 >
                   Utiliser
@@ -94,11 +92,11 @@ export function LoginForm() {
               </div>
               <div className="text-xs text-gray-600 space-y-1">
                 <div>
-                  <span className="font-medium">Email:</span>{' '}
+                  <span className="font-medium">Email:</span>{" "}
                   <code className="bg-gray-100 px-2 py-0.5 rounded">admin@example.com</code>
                 </div>
                 <div>
-                  <span className="font-medium">Password:</span>{' '}
+                  <span className="font-medium">Password:</span>{" "}
                   <code className="bg-gray-100 px-2 py-0.5 rounded">password_456</code>
                 </div>
               </div>
@@ -148,15 +146,12 @@ export function LoginForm() {
             disabled={estChargement}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {estChargement ? 'Connexion...' : 'Se connecter'}
+            {estChargement ? "Connexion..." : "Se connecter"}
           </button>
         </form>
 
         <div className="mt-6 text-center">
-          <a
-            href="/forgot-password"
-            className="text-sm text-blue-600 hover:text-blue-700"
-          >
+          <a href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-700">
             Mot de passe oublié ?
           </a>
         </div>
