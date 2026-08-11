@@ -373,6 +373,14 @@ class EtatPostgres:
                     table=self._table("jobs_generation")
                 )
             )
+            # Migration idempotente : sortie de l'agent Documentation (§6.6),
+            # jusqu'ici produite mais jamais persistée — NULL pour tout job
+            # généré avant cette migration.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS documentation TEXT").format(
+                    table=self._table("jobs_generation")
+                )
+            )
             # Migration idempotente : `instance_id` devient nullable —
             # `supprimer_instance` oprheline désormais les jobs de génération
             # qui la référencent (`ON DELETE SET NULL`) plutôt que de les
@@ -1226,6 +1234,34 @@ class EtatPostgres:
             )
             connexion.commit()
 
+    def mettre_a_jour_job_generation(self, job_id: str, **champs: object) -> None:
+        """Persiste un ou plusieurs champs dès qu'ils sont connus, sans marquer le job
+        terminé (contrairement à `terminer_job_generation`) — capture incrémentale des
+        sorties d'agents au fil du pipeline (§6.6), pour ne rien perdre d'un plantage en
+        cours de route. `UPDATE` dynamique ne portant que sur les colonnes fournies ;
+        `algorithme_parametres` (le seul champ `dict`) est sérialisé en JSON."""
+        if not champs:
+            return
+        colonnes = list(champs.keys())
+        valeurs = [
+            json.dumps(valeur) if colonne == "algorithme_parametres" else valeur
+            for colonne, valeur in champs.items()
+        ]
+        set_clause = sql.SQL(", ").join(
+            sql.SQL("{} = %s").format(sql.Identifier(colonne))
+            if colonne != "algorithme_parametres"
+            else sql.SQL("{} = %s::jsonb").format(sql.Identifier(colonne))
+            for colonne in colonnes
+        )
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("UPDATE {table} SET {set_clause} WHERE id = %s").format(
+                    table=self._table("jobs_generation"), set_clause=set_clause
+                ),
+                (*valeurs, job_id),
+            )
+            connexion.commit()
+
     def terminer_job_generation(
         self,
         job_id: str,
@@ -1240,33 +1276,34 @@ class EtatPostgres:
         code_genere: str | None = None,
         tests_generes: str | None = None,
         code_final: str | None = None,
+        documentation: str | None = None,
         nombre_tentatives: int | None = None,
         erreur: str | None = None,
     ) -> None:
+        """`None` sur un champ de contenu signifie « ne pas toucher », jamais « écraser à
+        vide » — ces champs peuvent déjà avoir été posés incrémentalement par
+        `mettre_a_jour_job_generation` pendant le pipeline (§6.6) ; les réécraser à `None`
+        sur un plantage effacerait ce qui a déjà été sauvé."""
+        champs_contenu = {
+            "specification": specification,
+            "plan_technique": plan_technique,
+            "algorithme": algorithme,
+            "algorithme_raison": algorithme_raison,
+            "algorithme_parametres": algorithme_parametres,
+            "code_genere": code_genere,
+            "tests_generes": tests_generes,
+            "code_final": code_final,
+            "documentation": documentation,
+        }
+        self.mettre_a_jour_job_generation(job_id, **{k: v for k, v in champs_contenu.items() if v is not None})
+
         with closing(self._connexion()) as connexion:
             connexion.execute(
                 sql.SQL(
-                    "UPDATE {} SET termine = TRUE, reussi = %s, id_solveur = %s, specification = %s, "
-                    "plan_technique = %s, algorithme = %s, algorithme_raison = %s, "
-                    "algorithme_parametres = %s::jsonb, code_genere = %s, tests_generes = %s, code_final = %s, "
+                    "UPDATE {} SET termine = TRUE, reussi = %s, id_solveur = %s, "
                     "nombre_tentatives = %s, erreur = %s, termine_le = %s WHERE id = %s"
                 ).format(self._table("jobs_generation")),
-                (
-                    reussi,
-                    id_solveur,
-                    specification,
-                    plan_technique,
-                    algorithme,
-                    algorithme_raison,
-                    json.dumps(algorithme_parametres) if algorithme_parametres is not None else None,
-                    code_genere,
-                    tests_generes,
-                    code_final,
-                    nombre_tentatives,
-                    erreur,
-                    datetime.now(UTC).isoformat(),
-                    job_id,
-                ),
+                (reussi, id_solveur, nombre_tentatives, erreur, datetime.now(UTC).isoformat(), job_id),
             )
             connexion.commit()
 
@@ -1276,7 +1313,8 @@ class EtatPostgres:
                 sql.SQL(
                     "SELECT id, instance_id, client_id, cree_le, termine, reussi, id_solveur, specification, "
                     "plan_technique, algorithme, algorithme_raison, algorithme_parametres, code_genere, "
-                    "tests_generes, code_final, nombre_tentatives, erreur, termine_le FROM {} WHERE id = %s"
+                    "tests_generes, code_final, documentation, nombre_tentatives, erreur, termine_le "
+                    "FROM {} WHERE id = %s"
                 ).format(self._table("jobs_generation")),
                 (job_id,),
             ).fetchone()
@@ -1315,6 +1353,7 @@ class EtatPostgres:
             code_genere,
             tests_generes,
             code_final,
+            documentation,
             nombre_tentatives,
             erreur,
             termine_le,
@@ -1336,6 +1375,7 @@ class EtatPostgres:
             code_genere=code_genere,
             tests_generes=tests_generes,
             code_final=code_final,
+            documentation=documentation,
             nombre_tentatives=nombre_tentatives,
             erreur=erreur,
             termine_le=termine_le,

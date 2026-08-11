@@ -49,8 +49,9 @@ from api.etat import EtatAPI, TentativeGeneration, obtenir_etat, structure_contr
 from api.etat import signature_objectifs as calculer_signature_objectifs
 from api.routes.auth import obtenir_utilisateur_courant
 from generation.graph import (
-    ResultatBoucleReparation,
+    ResultatPartiel,
     ResultatPipelineAvecBoucle,
+    TentativeReparation,
     tenter_generation_avec_boucle,
     tenter_generation_avec_boucle_stream,
 )
@@ -158,30 +159,26 @@ def _construire_reponse(
     }
 
 
-def _persister_tentatives(etat: EtatAPI, job_id: str, boucle: ResultatBoucleReparation) -> None:
-    """Écrit chaque tentative de la boucle de réparation (§6.6), y compris
-    celles rejetées — le code candidat de chacune est conservé, pas
-    seulement celui de la tentative finale (choix explicite : « historique
-    complet »)."""
-    for tentative in boucle.tentatives:
-        etat.ajouter_tentative_generation(
-            job_id,
-            TentativeGeneration(
-                numero=tentative.numero,
-                code_candidat=tentative.code_candidat,
-                reussi=tentative.reussi,
-                erreur_execution=tentative.erreur_execution,
-                revue_approuve=tentative.revue.approuve if tentative.revue else None,
-                revue_reponse_brute=tentative.revue.reponse_brute if tentative.revue else None,
-                revue_problemes=tentative.revue.problemes if tentative.revue else (),
-                validation_statique_valide=(
-                    tentative.validation_statique.valide if tentative.validation_statique else None
-                ),
-                validation_statique_violations=(
-                    tentative.validation_statique.violations if tentative.validation_statique else ()
-                ),
-            ),
-        )
+def _tentative_persistee(tentative: TentativeReparation) -> TentativeGeneration:
+    """Convertit une tentative interne du pipeline (§6.6) en sa forme persistée — réutilisée
+    pour la capture incrémentale (`ResultatPartiel(champ="tentative", ...)`, voir
+    `_executer_job`), pour ne jamais perdre une tentative déjà accumulée si le pipeline
+    plante avant la fin de la boucle de réparation."""
+    return TentativeGeneration(
+        numero=tentative.numero,
+        code_candidat=tentative.code_candidat,
+        reussi=tentative.reussi,
+        erreur_execution=tentative.erreur_execution,
+        revue_approuve=tentative.revue.approuve if tentative.revue else None,
+        revue_reponse_brute=tentative.revue.reponse_brute if tentative.revue else None,
+        revue_problemes=tentative.revue.problemes if tentative.revue else (),
+        validation_statique_valide=(
+            tentative.validation_statique.valide if tentative.validation_statique else None
+        ),
+        validation_statique_violations=(
+            tentative.validation_statique.violations if tentative.validation_statique else ()
+        ),
+    )
 
 
 def _executer_job(
@@ -197,13 +194,23 @@ def _executer_job(
     pipeline peut échouer, la mesure/le suivi doit survivre). Persiste en
     base au fil de l'eau (`etat`), en plus du suivi en mémoire process
     (`job`) déjà utilisé par le flux SSE — les deux coexistent, le premier
-    survit à un redémarrage du serveur, le second reste la source du direct."""
+    survit à un redémarrage du serveur, le second reste la source du direct.
+
+    Chaque sortie d'agent (`ResultatPartiel`) est persistée dès qu'elle est connue, pas
+    seulement à la toute fin — un plantage en cours de route (pas l'échec « propre » après
+    épuisement des tentatives) ne perd donc plus ce que les agents précédents ont déjà
+    produit."""
     resultat_pipeline: ResultatPipelineAvecBoucle | None = None
     try:
         for item in tenter_generation_avec_boucle_stream(instance_dict):
             if isinstance(item, ResultatPipelineAvecBoucle):
                 resultat_pipeline = item
                 job.resultat = _construire_reponse(item, registre, client_id, structure, signature_obj)
+            elif isinstance(item, ResultatPartiel):
+                if item.champ == "tentative":
+                    etat.ajouter_tentative_generation(job.id, _tentative_persistee(item.valeur))
+                else:
+                    etat.mettre_a_jour_job_generation(job.id, **{item.champ: item.valeur})
             else:
                 job.evenements.append(item)
                 etat.ajouter_evenement_generation(job.id, item["agent"], item["statut"], item["resume"])
@@ -211,8 +218,6 @@ def _executer_job(
         job.erreur = str(erreur)
     finally:
         job.termine = True
-        if resultat_pipeline is not None:
-            _persister_tentatives(etat, job.id, resultat_pipeline.boucle_reparation)
 
         if job.resultat is not None:
             reussi = job.resultat.get("reussi")
@@ -223,20 +228,31 @@ def _executer_job(
             id_solveur = None
             nombre_tentatives = None
 
+        # `champs_contenu` reste vide si le pipeline a planté avant d'atteindre un nœud
+        # terminal (`resultat_pipeline is None`) — `terminer_job_generation` traite alors
+        # l'absence de ces kwargs comme « ne pas toucher », jamais comme un effacement de ce
+        # que `mettre_a_jour_job_generation` a déjà persisté ci-dessus au fil de l'eau.
+        champs_contenu: dict[str, object] = {}
+        if resultat_pipeline is not None:
+            champs_contenu = {
+                "specification": resultat_pipeline.specification,
+                "plan_technique": resultat_pipeline.plan_technique,
+                "algorithme": resultat_pipeline.algorithme_recommande,
+                "algorithme_raison": resultat_pipeline.justification_algorithme,
+                "algorithme_parametres": resultat_pipeline.parametres_algorithme,
+                "code_genere": resultat_pipeline.code_genere,
+                "tests_generes": resultat_pipeline.tests_generes,
+                "code_final": resultat_pipeline.code_final,
+                "documentation": resultat_pipeline.documentation,
+            }
+
         etat.terminer_job_generation(
             job.id,
             reussi=reussi,
             id_solveur=id_solveur,
-            specification=resultat_pipeline.specification if resultat_pipeline else None,
-            plan_technique=resultat_pipeline.plan_technique if resultat_pipeline else None,
-            algorithme=resultat_pipeline.algorithme_recommande if resultat_pipeline else None,
-            algorithme_raison=resultat_pipeline.justification_algorithme if resultat_pipeline else None,
-            algorithme_parametres=resultat_pipeline.parametres_algorithme if resultat_pipeline else None,
-            code_genere=resultat_pipeline.code_genere if resultat_pipeline else None,
-            tests_generes=resultat_pipeline.tests_generes if resultat_pipeline else None,
-            code_final=resultat_pipeline.code_final if resultat_pipeline else None,
             nombre_tentatives=nombre_tentatives,
             erreur=job.erreur,
+            **champs_contenu,
         )
 
 
@@ -260,7 +276,8 @@ def generer_solveur(
     resultat = tenter_generation_avec_boucle(instance_exemple=instance_dict)
     reponse = _construire_reponse(resultat, registre, client_id, structure, signature_obj)
 
-    _persister_tentatives(etat, job_id, resultat.boucle_reparation)
+    for tentative in resultat.boucle_reparation.tentatives:
+        etat.ajouter_tentative_generation(job_id, _tentative_persistee(tentative))
     etat.terminer_job_generation(
         job_id,
         reussi=reponse["reussi"],
@@ -273,6 +290,7 @@ def generer_solveur(
         code_genere=resultat.code_genere,
         tests_generes=resultat.tests_generes,
         code_final=resultat.code_final,
+        documentation=resultat.documentation,
         nombre_tentatives=reponse["nombre_tentatives"],
         erreur=reponse["erreur"],
     )
@@ -407,6 +425,7 @@ def obtenir_historique_job_generation(
         "code_genere": job.code_genere,
         "tests_generes": job.tests_generes,
         "code_final": job.code_final,
+        "documentation": job.documentation,
         "nombre_tentatives": job.nombre_tentatives,
         "erreur": job.erreur,
         "termine_le": job.termine_le,

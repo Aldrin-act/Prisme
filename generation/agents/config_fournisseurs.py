@@ -4,17 +4,22 @@ Chaque agent du pipeline multi-agents utilise le fournisseur le mieux adapté
 à sa tâche spécifique, optimisant ainsi le rapport qualité/coût/performance.
 
 Répartition justifiée :
-- **deepseek** (6 agents) : Thinking mode + 16K tokens pour raisonnement complexe
-  → Développeur, Debugger, Architecte, Analyste, Reviewer, Agent ERP
+- **nemotron** (8 agents) : 16K tokens pour raisonnement complexe → Développeur,
+  Debugger, Architecte, Analyste, Reviewer, Testeur, Agent ERP. Remplace
+  deepseek (`deepseek-ai/deepseek-v4-pro`) — `nvidia/nemotron-3-super-120b-a12b`
+  (voir `client_llm.py::_MODELES_PAR_DEFAUT` : la variante nano, choisie
+  d'abord pour sa latence, produit une sortie JSON structurée incohérente en
+  pratique, vérifié par appel réel — super est la plus petite variante
+  nemotron-3 qui reste fiable sur cette tâche).
 - **minimax** (2 agents) : Créativité maximale (temp=1.0) pour exploration
   → Benchmarker, Optimiseur
 - **nvidia** (1 agent) : Déterministe (temp=0.6) pour tâches simples/structurées
   → Documentation
-- **together** (1 agent) : Équilibré créativité/structure
-  → Testeur
 
 Le fournisseur peut toujours être surchargé par variable d'environnement
-`PRISME_LLM_PROVIDER_<AGENT>` (ex: `PRISME_LLM_PROVIDER_GENERATEUR=mistral`).
+`PRISME_LLM_PROVIDER_<AGENT>` (ex: `PRISME_LLM_PROVIDER_GENERATEUR=mistral`) —
+`deepseek` reste un fournisseur valide pour un retour en arrière ponctuel,
+juste plus la valeur par défaut d'aucun agent.
 """
 
 from __future__ import annotations
@@ -23,24 +28,24 @@ import os
 
 # Répartition optimale des fournisseurs par agent
 FOURNISSEURS_PAR_AGENT: dict[str, str] = {
-    # Agents critiques (génération/débogage de code) — DeepSeek
-    "generateur": "deepseek",  # 16K tokens, thinking mode
-    "developpeur": "deepseek",  # Alias de generateur
-    "debugger": "deepseek",  # Thinking mode pour analyse d'erreurs
-    "architecte": "deepseek",  # Raisonnement structurel complexe
-    # Agents d'analyse — DeepSeek
-    "analyste": "deepseek",  # Compréhension profonde
-    "reviewer": "deepseek",  # Revue critique approfondie
+    # Agents critiques (génération/débogage de code) — Nemotron-3
+    "generateur": "nemotron",  # 16K tokens
+    "developpeur": "nemotron",  # Alias de generateur
+    "debugger": "nemotron",  # Analyse d'erreurs
+    "architecte": "nemotron",  # Raisonnement structurel complexe
+    # Agents d'analyse — Nemotron-3
+    "analyste": "nemotron",  # Compréhension profonde
+    "reviewer": "nemotron",  # Revue critique approfondie
     # Agents créatifs — MiniMax
     "benchmarker": "minimax",  # Exploration d'algorithmes alternatifs
     "optimiseur": "minimax",  # Optimisations non évidentes
     # Agents utilitaires simples — NVIDIA
     "documentation": "nvidia",  # Tâche simple, peu de tokens
-    # Agents équilibrés — DeepSeek (fallback depuis Together)
-    "testeur": "deepseek",  # Équilibre créativité/structure (16K tokens)
-    # Agent ERP — DeepSeek
-    "comprehension": "deepseek",  # 16K tokens pour grandes données ERP
-    "erp": "deepseek",  # Alias de comprehension
+    # Agents équilibrés — Nemotron-3
+    "testeur": "nemotron",  # Équilibre créativité/structure (16K tokens)
+    # Agent ERP — Nemotron-3
+    "comprehension": "nemotron",  # 16K tokens pour grandes données ERP
+    "erp": "nemotron",  # Alias de comprehension
     # Agent de supervision (MT7) — Mistral
     "supervision": "mistral",  # Synthèse JSON courte, pas de génération de code
 }

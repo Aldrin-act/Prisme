@@ -82,6 +82,18 @@ def etape(agent: str, statut: str, resume: str) -> EvenementEtape:
 
 
 @dataclass(frozen=True)
+class ResultatPartiel:
+    """Un champ de `jobs_generation` devenu disponible avant la fin du pipeline — l'appelant
+    (`api/routes/generation.py::_executer_job`) le persiste immédiatement (§6.6), pour ne
+    jamais perdre la sortie d'un agent si un agent suivant plante. `champ="tentative"` porte
+    une `TentativeReparation` complète plutôt qu'une valeur scalaire (voir
+    `_partiels_nouveaux`)."""
+
+    champ: str
+    valeur: object
+
+
+@dataclass(frozen=True)
 class TentativeReparation:
     """Une tentative de correction dans la boucle."""
 
@@ -239,9 +251,16 @@ def _modele(config: RunnableConfig, nom_agent: str):
 
 
 def _noeud_analyste(etat: EtatGeneration, config: RunnableConfig) -> dict:
+    """Lit `instance_exemple` comme le Benchmarker (même fallback) — les deux
+    nœuds partent en parallèle depuis `START` sans dépendance croisée l'un
+    envers l'autre, cette clé est déjà présente dans `etat_initial` avant que
+    l'un ou l'autre ne démarre. Seule la *structure* de l'instance (types de
+    contraintes/objectifs, compteurs) atteint l'Analyste, jamais ses valeurs
+    — voir `analyste.py::extraire_structure_instance`."""
     writer = get_stream_writer()
     writer(etape("analyste", "en_cours", "Analyse de la mission..."))
-    resultat = analyste.analyser_mission(_modele(config, "analyste"))
+    instance = etat.get("instance_exemple") or benchmarker.creer_instance_exemple_defaut()
+    resultat = analyste.analyser_mission(_modele(config, "analyste"), instance)
     writer(etape("analyste", "termine", "Spécification technique produite"))
     return {"analyse": resultat}
 
@@ -547,9 +566,34 @@ def _obtenir_graphe_compile():
 _LIMITE_RECURSION = 60
 
 
+def _partiels_nouveaux(ancien: dict, nouveau: dict) -> Iterator[ResultatPartiel]:
+    """Compare deux instantanés successifs de l'état LangGraph (`stream_mode="values"`) et
+    yield ce qui vient d'apparaître — détection par présence de clé, pas par égalité de
+    valeur : chaque champ n'apparaît qu'une fois dans l'état, jamais réécrit par un nœud
+    suivant, donc « apparaît pour la première fois » suffit sans comparer du texte long.
+    `tentatives` (liste qui grandit via le réducteur `operator.add`) traité à part : slicing
+    par longueur pour ne yield que les entrées nouvelles depuis le dernier passage.
+    `code_final`/`documentation` n'ont pas besoin de capture partielle : ils n'existent que
+    dans `resultat_final`, construit uniquement aux nœuds terminaux."""
+    if "analyse" in nouveau and "analyse" not in ancien:
+        yield ResultatPartiel("specification", nouveau["analyse"].en_texte())
+    if "algo" in nouveau and "algo" not in ancien:
+        yield ResultatPartiel("algorithme", nouveau["algo"])
+        yield ResultatPartiel("algorithme_raison", nouveau["raison_algo"])
+        yield ResultatPartiel("algorithme_parametres", nouveau["parametres_algo"])
+    if "conception" in nouveau and "conception" not in ancien:
+        yield ResultatPartiel("plan_technique", nouveau["conception"].en_texte())
+    if "code_genere" in nouveau and "code_genere" not in ancien:
+        yield ResultatPartiel("code_genere", nouveau["code_genere"])
+    if "tests_generes" in nouveau and "tests_generes" not in ancien:
+        yield ResultatPartiel("tests_generes", nouveau["tests_generes"])
+    for tentative in nouveau.get("tentatives", [])[len(ancien.get("tentatives", [])) :]:
+        yield ResultatPartiel("tentative", tentative)
+
+
 def tenter_generation_avec_boucle_stream(
     instance_exemple: dict | None = None,
-) -> Iterator[EvenementEtape | ResultatPipelineAvecBoucle]:
+) -> Iterator[EvenementEtape | ResultatPartiel | ResultatPipelineAvecBoucle]:
     """Version streaming du pipeline complet — yield un `EvenementEtape`
     après chaque agent (et chaque sous-étape de la boucle de réparation) ;
     le tout dernier élément produit est toujours le `ResultatPipelineAvecBoucle`
@@ -580,14 +624,21 @@ def tenter_generation_avec_boucle_stream(
     graphe = _obtenir_graphe_compile()
     etat_initial: EtatGeneration = {"instance_exemple": instance_exemple}
     resultat_final: ResultatPipelineAvecBoucle | None = None
+    dernier_etat: dict = {}
 
     for mode, payload in graphe.stream(
         etat_initial, stream_mode=["custom", "values"], config={"recursion_limit": _LIMITE_RECURSION}
     ):
         if mode == "custom":
             yield payload
-        elif isinstance(payload, dict) and payload.get("resultat_final") is not None:
+            continue
+        if not isinstance(payload, dict):
+            continue
+        if payload.get("resultat_final") is not None:
             resultat_final = payload["resultat_final"]
+            continue
+        yield from _partiels_nouveaux(dernier_etat, payload)
+        dernier_etat = payload
 
     assert resultat_final is not None  # le graphe atteint toujours fin_boucle ou documentation
     yield resultat_final

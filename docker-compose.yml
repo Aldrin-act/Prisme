@@ -11,6 +11,9 @@
 #   docker compose --profile full up -d frontend  # dashboard seul, sur http://localhost:5173
 #   docker compose --profile dev up -d dev  # + le conteneur dev (uv sync au démarrage)
 #   docker compose --profile greensig up -d db_greensig  # base PostGIS, restaure backup_20260503.sql
+#   docker compose --profile tools up -d pgadmin  # interface web pour explorer `db` — http://localhost:8090
+#     (login pgAdmin : PGADMIN_DEFAULT_EMAIL/PASSWORD ci-dessous, PAS les identifiants Postgres —
+#     une fois connecté : clic droit "Servers" > Register > Server, host "db", credentials .env)
 #   docker compose exec dev uv run pytest -v
 #   docker compose exec dev uv run ruff check .
 #   docker compose exec dev uv run uvicorn api.app:app --host 0.0.0.0 --reload
@@ -32,6 +35,27 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+
+  # Interface web (Postgres ne parle pas HTTP — un navigateur ne peut jamais
+  # afficher `db` directement, voir l'usage ci-dessus). Login pgAdmin distinct
+  # des identifiants Postgres (PGADMIN_DEFAULT_EMAIL/PASSWORD, pas
+  # POSTGRES_USER/PASSWORD) : le serveur `db` se déclare manuellement une fois
+  # connecté, jamais préconfiguré ici — éviter de coucher un mot de passe
+  # Postgres dans un fichier de provisioning versionné. Volume nommé requis
+  # (contrairement à Adminer) : pgAdmin persiste sa propre config/session.
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-changeme}
+    ports:
+      - "${PGADMIN_PORT:-8090}:80"
+    volumes:
+      - prisme_pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["tools"]
 
   api:
     image: python:3.11-slim
@@ -116,3 +140,4 @@ volumes:
   prisme_dev_venv:
   prisme_frontend_node_modules:
   prisme_greensig_db_data:
+  prisme_pgadmin_data:

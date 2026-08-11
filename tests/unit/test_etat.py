@@ -136,6 +136,46 @@ def test_supprimer_instance_orpheline_les_jobs_generation_sans_les_detruire() ->
     assert job.instance_id is None
 
 
+def test_mettre_a_jour_job_generation_persiste_sans_marquer_termine() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    etat.enregistrer_job_generation("job-1", instance_id, "client-test")
+
+    etat.mettre_a_jour_job_generation("job-1", specification="spec produite par l'analyste")
+
+    job = etat.recuperer_job_generation("job-1")
+    assert job.specification == "spec produite par l'analyste"
+    assert job.termine is False
+
+
+def test_terminer_job_generation_necrase_pas_un_champ_deja_persiste() -> None:
+    """Un plantage en cours de pipeline (§6.6) passe `None` pour les champs
+    de contenu non encore connus — ça ne doit jamais effacer ce qu'une
+    capture partielle antérieure (`mettre_a_jour_job_generation`) a déjà
+    sauvé."""
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    etat.enregistrer_job_generation("job-1", instance_id, "client-test")
+    etat.mettre_a_jour_job_generation("job-1", specification="spec déjà produite")
+
+    etat.terminer_job_generation("job-1", reussi=False, erreur="panne simulée")
+
+    job = etat.recuperer_job_generation("job-1")
+    assert job.specification == "spec déjà produite"
+    assert job.termine is True
+    assert job.erreur == "panne simulée"
+
+
+def test_terminer_job_generation_persiste_la_documentation() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    etat.enregistrer_job_generation("job-1", instance_id, "client-test")
+
+    etat.terminer_job_generation("job-1", reussi=True, documentation="Résumé et limites connues.")
+
+    assert etat.recuperer_job_generation("job-1").documentation == "Résumé et limites connues."
+
+
 def test_lister_executions_filtre_par_client_de_linstance() -> None:
     etat = EtatAPI()
     instance_a = etat.enregistrer_instance("client-a", _instance_exemple())

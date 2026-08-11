@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 import generation.graph as g
 from generation.agents import (
     analyste,
@@ -282,3 +284,108 @@ def test_stream_produit_des_evenements_etape_puis_le_resultat_final() -> None:
     assert "benchmarker" in noms_agents
     assert "documentation" in noms_agents
     assert all(e["statut"] in ("en_cours", "termine", "echec") for e in elements)
+
+
+def _fabrique_qui_explose_sur(agent_cible: str, specs: dict[str, object | list[object]]):
+    """Comme `_fabrique`, mais lève pour `agent_cible` — simule une panne en cours de
+    pipeline (§6.6), pour vérifier que `tenter_generation_avec_boucle_stream` a bien
+    yield les `ResultatPartiel` des agents précédents avant que l'exception ne remonte."""
+    fabrique_normale = _fabrique(specs)
+
+    def fabrique_modele(nom_agent: str):
+        if nom_agent == agent_cible:
+            raise RuntimeError(f"panne simulée sur {agent_cible}")
+        return fabrique_normale(nom_agent)
+
+    return fabrique_modele
+
+
+def test_stream_persiste_les_champs_deja_produits_avant_un_plantage(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Un plantage en cours de pipeline (pas l'échec « propre » après épuisement des
+    tentatives) ne doit pas faire perdre ce que les agents précédents ont déjà produit
+    (§6.6) — voir `generation/graph.py::_partiels_nouveaux`. Le Testeur explose, donc
+    Analyste/Benchmarker/Architecte/Développeur ont déjà tourné, jamais le Testeur."""
+    specs = _reponses_communes()
+    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
+    monkeypatch.setattr(g, "construire_modele_pour_agent", _fabrique_qui_explose_sur("testeur", specs))
+
+    elements: list = []
+    with pytest.raises(RuntimeError, match="panne simulée sur testeur"):
+        for item in g.tenter_generation_avec_boucle_stream(None):
+            elements.append(item)
+
+    champs = {e.champ: e.valeur for e in elements if isinstance(e, g.ResultatPartiel)}
+    assert champs["specification"]
+    assert champs["algorithme"] == "cp_sat"
+    assert champs["plan_technique"]
+    assert champs["code_genere"].strip() == CODE_BON.strip()
+    assert "tests_generes" not in champs  # le testeur n'a jamais eu la chance de produire ça
+
+
+def test_stream_persiste_les_tentatives_deja_accumulees_avant_un_plantage(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Une tentative déjà rejetée par le Reviewer (donc déjà accumulée dans l'état
+    LangGraph) ne doit pas être perdue si le Debugger plante juste après."""
+    specs = _reponses_communes()
+    specs["reviewer"] = _modele_revue(verdict="A_CORRIGER", problemes=["import os interdit"])
+    monkeypatch.setattr(g, "construire_modele_pour_agent", _fabrique_qui_explose_sur("debugger", specs))
+
+    elements: list = []
+    with pytest.raises(RuntimeError, match="panne simulée sur debugger"):
+        for item in g.tenter_generation_avec_boucle_stream(None):
+            elements.append(item)
+
+    tentatives = [e.valeur for e in elements if isinstance(e, g.ResultatPartiel) and e.champ == "tentative"]
+    assert len(tentatives) == 1
+    assert tentatives[0].reussi is False
+
+
+class _ModeleFacticeCapturant(ModeleFactice):
+    """Capture le dernier prompt envoyé — vérifie que `_noeud_analyste` transmet bien la
+    structure de l'instance reçue par le graphe jusqu'au prompt de l'agent, sans dépendre
+    d'un vrai appel LLM."""
+
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)
+        self.dernier_prompt: str | None = None
+
+    def with_structured_output(self, schema: type, include_raw: bool = True, method: str | None = None):
+        runnable = super().with_structured_output(schema, include_raw, method)
+        invoke_original = runnable.invoke
+
+        def invoke_capturant(messages):
+            self.dernier_prompt = messages[-1].content
+            return invoke_original(messages)
+
+        runnable.invoke = invoke_capturant
+        return runnable
+
+
+def test_noeud_analyste_recoit_la_structure_de_linstance_du_graphe() -> None:
+    specs = _reponses_communes()
+    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
+    modele_analyste = _ModeleFacticeCapturant(
+        raw_content="{}", parsed=analyste._SchemaAnalyse(entrees="e", sorties="s", contraintes_a_couvrir=["c"])
+    )
+    specs["analyste"] = modele_analyste
+
+    instance_avec_echeance = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1"}],
+        "contraintes": [
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 1},
+            {"type": "echeance", "tache": "T1", "echeance": 5},
+        ],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+
+    graphe = g._construire_graphe().compile()
+    graphe.invoke(
+        {"instance_exemple": instance_avec_echeance},
+        config={"configurable": {"fabrique_modele": _fabrique(specs)}, "recursion_limit": 60},
+    )
+
+    assert modele_analyste.dernier_prompt is not None
+    assert "echeance" in modele_analyste.dernier_prompt
+    assert "compatibilite_ressource_tache" in modele_analyste.dernier_prompt

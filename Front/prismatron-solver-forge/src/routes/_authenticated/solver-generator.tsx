@@ -473,7 +473,8 @@ function ContenuOnglet({
           </div>
           <p className="mb-3 text-xs text-muted-foreground">
             Cliquez sur "Voir le raisonnement complet" pour consulter les détails de chaque agent
-            (spécification de l'Analyste, choix du Benchmarker, plan de l'Architecte, code généré, etc.)
+            (spécification de l'Analyste, choix du Benchmarker, plan de l'Architecte, code généré,
+            etc.)
           </p>
           <ul className="space-y-2">
             {onglet.evenements.map((e, i) => (
@@ -546,7 +547,9 @@ function ContenuOnglet({
                 </Badge>
               </div>
               {onglet.resultat.algorithme_raison && (
-                <p className="mt-1 text-xs text-muted-foreground">{onglet.resultat.algorithme_raison}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {onglet.resultat.algorithme_raison}
+                </p>
               )}
             </>
           ) : (
@@ -675,21 +678,26 @@ function DialogHistoriqueGeneration({
 
             {historique.algorithme && (
               <div>
-                <h4 className="mb-2 text-sm font-semibold">🎯 Algorithme recommandé (Benchmarker)</h4>
+                <h4 className="mb-2 text-sm font-semibold">
+                  🎯 Algorithme recommandé (Benchmarker)
+                </h4>
                 <Badge variant="outline" className="font-mono text-xs">
                   {historique.algorithme}
                 </Badge>
                 {historique.algorithme_raison && (
-                  <p className="mt-2 text-xs text-muted-foreground">{historique.algorithme_raison}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {historique.algorithme_raison}
+                  </p>
                 )}
-                {historique.algorithme_parametres && Object.keys(historique.algorithme_parametres).length > 0 && (
-                  <div className="mt-2">
-                    <p className="text-xs font-medium text-muted-foreground">Paramètres :</p>
-                    <pre className="mt-1 rounded-md bg-muted/50 p-2 text-xs">
-                      {JSON.stringify(historique.algorithme_parametres, null, 2)}
-                    </pre>
-                  </div>
-                )}
+                {historique.algorithme_parametres &&
+                  Object.keys(historique.algorithme_parametres).length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-xs font-medium text-muted-foreground">Paramètres :</p>
+                      <pre className="mt-1 rounded-md bg-muted/50 p-2 text-xs">
+                        {JSON.stringify(historique.algorithme_parametres, null, 2)}
+                      </pre>
+                    </div>
+                  )}
               </div>
             )}
 
@@ -736,7 +744,9 @@ function DialogHistoriqueGeneration({
             )}
 
             <div>
-              <h4 className="mb-2 text-sm font-semibold">Évènements ({historique.evenements.length})</h4>
+              <h4 className="mb-2 text-sm font-semibold">
+                Évènements ({historique.evenements.length})
+              </h4>
               <ul className="space-y-1.5">
                 {historique.evenements.map((e) => (
                   <li key={e.ordre} className="flex items-start gap-2 text-xs">
@@ -819,6 +829,20 @@ function DialogHistoriqueGeneration({
                 <pre className="max-h-80 overflow-auto rounded-lg border border-primary/30 bg-muted/30 p-3 text-xs">
                   <code>{historique.code_final}</code>
                 </pre>
+              </div>
+            )}
+
+            {historique.documentation && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">📚 Documentation</h4>
+                <div className="rounded-lg border border-border/50 bg-muted/30 p-3">
+                  <pre className="max-h-64 overflow-auto whitespace-pre-wrap text-xs">
+                    {historique.documentation}
+                  </pre>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Documentation produite par l'agent Documentation
+                </p>
               </div>
             )}
           </div>

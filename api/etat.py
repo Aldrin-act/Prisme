@@ -224,6 +224,7 @@ class JobGeneration:
     code_genere: str | None = None
     tests_generes: str | None = None
     code_final: str | None = None
+    documentation: str | None = None
     nombre_tentatives: int | None = None
     erreur: str | None = None
     termine_le: str | None = None
@@ -648,6 +649,15 @@ class EtatAPI:
     def ajouter_tentative_generation(self, job_id: str, tentative: TentativeGeneration) -> None:
         self.jobs_generation[job_id].tentatives.append(tentative)
 
+    def mettre_a_jour_job_generation(self, job_id: str, **champs: object) -> None:
+        """Persiste un ou plusieurs champs dès qu'ils sont connus, sans marquer le job
+        terminé (contrairement à `terminer_job_generation`) — capture incrémentale des
+        sorties d'agents au fil du pipeline (§6.6), pour ne rien perdre d'un plantage en
+        cours de route."""
+        job = self.jobs_generation[job_id]
+        for champ, valeur in champs.items():
+            setattr(job, champ, valeur)
+
     def terminer_job_generation(
         self,
         job_id: str,
@@ -662,21 +672,31 @@ class EtatAPI:
         code_genere: str | None = None,
         tests_generes: str | None = None,
         code_final: str | None = None,
+        documentation: str | None = None,
         nombre_tentatives: int | None = None,
         erreur: str | None = None,
     ) -> None:
+        """`None` sur un champ de contenu signifie « ne pas toucher », jamais « écraser à
+        vide » — ces champs peuvent déjà avoir été posés incrémentalement par
+        `mettre_a_jour_job_generation` pendant le pipeline (§6.6) ; les réécraser à `None`
+        sur un plantage effacerait ce qui a déjà été sauvé."""
+        champs_contenu = {
+            "specification": specification,
+            "plan_technique": plan_technique,
+            "algorithme": algorithme,
+            "algorithme_raison": algorithme_raison,
+            "algorithme_parametres": algorithme_parametres,
+            "code_genere": code_genere,
+            "tests_generes": tests_generes,
+            "code_final": code_final,
+            "documentation": documentation,
+        }
+        self.mettre_a_jour_job_generation(job_id, **{k: v for k, v in champs_contenu.items() if v is not None})
+
         job = self.jobs_generation[job_id]
         job.termine = True
         job.reussi = reussi
         job.id_solveur = id_solveur
-        job.specification = specification
-        job.plan_technique = plan_technique
-        job.algorithme = algorithme
-        job.algorithme_raison = algorithme_raison
-        job.algorithme_parametres = algorithme_parametres
-        job.code_genere = code_genere
-        job.tests_generes = tests_generes
-        job.code_final = code_final
         job.nombre_tentatives = nombre_tentatives
         job.erreur = erreur
         job.termine_le = datetime.now(UTC).isoformat()

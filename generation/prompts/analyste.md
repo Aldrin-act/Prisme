@@ -1,5 +1,21 @@
 {mission}
 
+## Structure de cette famille d'instances (types uniquement, jamais des valeurs)
+
+Cette structure (types de contraintes + types d'objectifs) est la clé qui décide quelles instances
+futures réutiliseront le solveur que ce pipeline s'apprête à générer — toute instance partageant
+exactement cette structure le réexécutera tel quel, avec des valeurs potentiellement très
+différentes de celles-ci :
+
+- Types de contraintes présents : {types_contraintes}
+- Types d'objectifs présents : {types_objectifs}
+- Ordre de grandeur (exemple, jamais une borne à coder en dur) : {nb_taches} tâche(s),
+  {nb_ressources} ressource(s)
+
+Ne mentionne jamais une valeur précise (identifiant de tâche, échéance, poids d'objectif...) dans ta
+réponse — uniquement les types ci-dessus. `contraintes_a_couvrir` doit se limiter aux types
+réellement présents dans cette structure, pas à la liste complète des types possibles du DSL.
+
 ## Ton rôle : Agent Analyste
 
 Tu n'écris aucun code à cette étape. À partir de la mission ci-dessus,

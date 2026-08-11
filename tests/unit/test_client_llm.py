@@ -106,6 +106,13 @@ class TestConstructeursModeleParite:
         assert modele.extra_body == {"chat_template_kwargs": {"thinking": False}}
         assert modele.max_tokens == 16384
 
+    def test_nemotron_reutilise_la_cle_nvidia(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("NVIDIA_API_KEY", "cle-test")
+        modele = client_llm._construire_modele_nemotron("nvidia/nemotron-3-super-120b-a12b", 120.0)
+        assert modele.openai_api_base == "https://integrate.api.nvidia.com/v1"
+        assert modele.model_name == "nvidia/nemotron-3-super-120b-a12b"
+        assert modele.max_tokens == 16384
+
     def test_qwen_est_bien_un_alias_de_together(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("TOGETHER_API_KEY", "cle-test")
         modele = client_llm._construire_modele_qwen("Qwen/Qwen2.5-72B-Instruct", 120.0)
@@ -136,8 +143,9 @@ class TestErreurTransitoire:
     """429 (quota/débit dépassé) doit être retenté comme un 5xx — vu en
     pratique : la répartition par défaut envoie la majorité des agents
     (`config_fournisseurs.FOURNISSEURS_PAR_AGENT`) vers un seul fournisseur
-    (DeepSeek), ce qui peut suffire à dépasser son débit pendant la boucle de
-    réparation. Les autres 4xx (clé invalide...) restent définitifs."""
+    (Nemotron-3, via NVIDIA), ce qui peut suffire à dépasser son débit
+    pendant la boucle de réparation. Les autres 4xx (clé invalide...)
+    restent définitifs."""
 
     @pytest.mark.parametrize("code_statut", [500, 502, 503, 504, 429])
     def test_erreurs_retentables(self, code_statut: int) -> None:

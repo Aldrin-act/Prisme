@@ -520,6 +520,7 @@ export interface HistoriqueJobGeneration {
   code_genere: string | null;
   tests_generes: string | null;
   code_final: string | null;
+  documentation: string | null;
   nombre_tentatives: number | null;
   erreur: string | null;
   termine_le: string | null;

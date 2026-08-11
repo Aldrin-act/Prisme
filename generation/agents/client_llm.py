@@ -3,12 +3,14 @@
 Le fournisseur et le modèle sont choisis par variables d'environnement,
 jamais codés en dur, pour ne lier ce projet à aucun fournisseur particulier :
 
-- `PRISME_LLM_PROVIDER` : "mistral" (défaut), "qwen", "together", "nvidia", "minimax" ou "deepseek".
+- `PRISME_LLM_PROVIDER` : "mistral" (défaut), "qwen", "together", "nvidia", "minimax",
+  "deepseek" ou "nemotron".
 - `PRISME_LLM_MODEL` : nom du modèle (défaut selon le fournisseur, ci-dessous).
 - la clé d'API suit la convention standard de chaque SDK (`MISTRAL_API_KEY`,
   `TOGETHER_API_KEY`, `NVIDIA_API_KEY`, `MINIMAX_API_KEY`, `DEEPSEEK_API_KEY`)
   — jamais lue, manipulée ou journalisée directement ici, uniquement passée
-  telle quelle au constructeur LangChain du fournisseur.
+  telle quelle au constructeur LangChain du fournisseur. `nemotron` réutilise
+  `NVIDIA_API_KEY` (même catalogue que le fournisseur `nvidia`).
 
 Construit sur LangChain (`langchain-core`/`langchain-openai`/`langchain-mistralai`,
 `extra` optionnel `llm` du projet) plutôt que sur les SDK bruts : donne un
@@ -99,6 +101,16 @@ _MODELES_PAR_DEFAUT = {
     # par appel réel.
     "minimax": "minimaxai/minimax-m3",
     "deepseek": "deepseek-ai/deepseek-v4-pro",
+    # Remplace deepseek pour les agents à raisonnement complexe (§5.6) —
+    # nano-30b-a3b (choisi d'abord pour sa latence, quelques secondes contre
+    # 52s pour super) s'est révélé cassé en pratique : sortie JSON
+    # structurée incohérente (`{"./": 2}` au lieu du schéma attendu, vérifié
+    # par appel réel sur l'agent Architecte, `finish_reason="stop"` — pas
+    # une troncature, le modèle "réussit" juste à produire n'importe quoi).
+    # super-120b-a12b, vérifié par le même appel réel, produit un JSON
+    # conforme au schéma avec un contenu techniquement correct — plus lent
+    # (~52s observées) mais reste sous _TIMEOUT_DEFAUT_SECONDES (120s).
+    "nemotron": "nvidia/nemotron-3-super-120b-a12b",
 }
 
 
@@ -182,6 +194,23 @@ def _construire_modele_qwen(modele: str, timeout: float) -> BaseChatModel:
     return _construire_modele_together(modele, timeout)
 
 
+def _construire_modele_nemotron(modele: str, timeout: float) -> BaseChatModel:
+    """Nemotron-3 via NVIDIA (même clé/catalogue que le fournisseur `nvidia`,
+    juste des paramètres de génération différents — reasoning/code longs).
+    Pas d'`extra_body` façon `deepseek` (mode "thinking" spécifique à son
+    chat template) : nemotron renvoie déjà `reasoning_content` nativement,
+    vérifié par appel réel, aucun bascule à passer explicitement."""
+    return _construire_modele_openai_compatible(
+        modele,
+        "https://integrate.api.nvidia.com/v1",
+        "NVIDIA_API_KEY",
+        timeout,
+        temperature=1,
+        top_p=0.95,
+        max_tokens=16384,
+    )
+
+
 _CONSTRUCTEURS_MODELE: dict[str, Callable[[str, float], BaseChatModel]] = {
     "mistral": _construire_modele_mistral,
     "together": _construire_modele_together,
@@ -189,6 +218,7 @@ _CONSTRUCTEURS_MODELE: dict[str, Callable[[str, float], BaseChatModel]] = {
     "nvidia": _construire_modele_nvidia,
     "minimax": _construire_modele_minimax,
     "deepseek": _construire_modele_deepseek,
+    "nemotron": _construire_modele_nemotron,
 }
 
 
