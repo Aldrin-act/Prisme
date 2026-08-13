@@ -24,13 +24,13 @@ function AppDashboard() {
           Prêt à construire avec <span className="gradient-text">PRISME</span>
         </h2>
         <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-          Démarrez une instance, décrivez vos contraintes en T-R-C-O, et laissez l'IA rédiger votre
-          premier solveur prêt pour la production.
+          Ingérez vos données brutes, laissez l'agent de compréhension proposer une instance en
+          T-R-C-O, et laissez l'IA rédiger votre premier solveur prêt pour la production.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild className="bg-gradient-to-r from-primary to-accent">
-            <Link to="/instances">
-              Nouvelle instance <ArrowUpRight className="ml-2 h-4 w-4" />
+            <Link to="/donnees">
+              Ingérer des données <ArrowUpRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline">

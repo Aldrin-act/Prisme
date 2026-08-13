@@ -9,7 +9,6 @@ import {
   FolderKanban,
   Loader2,
   Pencil,
-  Plus,
   Trash2,
   X,
 } from "lucide-react";
@@ -117,15 +116,9 @@ function InstancesPage() {
   // label (nom de la source + rang de génération) vient de useLabelsInstances.
   const labels = useLabelsInstances();
 
-  const boutonNouvelleInstance = (
-    <Button
-      className="bg-gradient-to-r from-primary to-accent"
-      onClick={() => {
-        setInstanceAModifier(null);
-        setDialogOuvert(true);
-      }}
-    >
-      <Plus className="mr-2 h-4 w-4" /> Nouvelle instance
+  const boutonAllerDonnees = (
+    <Button asChild className="bg-gradient-to-r from-primary to-accent">
+      <Link to="/donnees">Aller à Données</Link>
     </Button>
   );
 
@@ -164,15 +157,14 @@ function InstancesPage() {
       <PageHeader
         title="Instances"
         desc="Regroupez vos problèmes de planification, définitions DSL et solveurs générés en instances."
-        action={boutonNouvelleInstance}
       />
 
       {!isLoading && instances && instances.length === 0 && (
         <EmptyState
           icon={FolderKanban}
           title="Aucune instance pour l'instant"
-          desc="Une instance regroupe votre DSL, vos solveurs générés, vos exécutions et votre historique d'audit. Créez votre première instance pour commencer."
-          action={boutonNouvelleInstance}
+          desc="Une instance regroupe votre DSL, vos solveurs générés, vos exécutions et votre historique d'audit. Ingérez des données brutes depuis la page Données pour générer votre première instance."
+          action={boutonAllerDonnees}
         />
       )}
 
