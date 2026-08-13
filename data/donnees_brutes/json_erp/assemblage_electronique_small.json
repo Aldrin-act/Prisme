@@ -1,0 +1,118 @@
+{
+  "operations": [
+    {
+      "code_operation": "REFUSION_B_001",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION"
+    },
+    {
+      "code_operation": "PREP_002",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE",
+      "operation_precedente": "REFUSION_B_001"
+    },
+    {
+      "code_operation": "REFUSION_A_003",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION",
+      "operation_precedente": "PREP_002"
+    },
+    {
+      "code_operation": "SOUDURE_THT_004",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL"
+    },
+    {
+      "code_operation": "PACKAGE_005",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING",
+      "operation_precedente": "SOUDURE_THT_004"
+    },
+    {
+      "code_operation": "DEPANEL_006",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION",
+      "operation_precedente": "PACKAGE_005"
+    },
+    {
+      "code_operation": "TEST_ICT_007",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT",
+      "operation_precedente": "DEPANEL_006"
+    },
+    {
+      "code_operation": "POSE_CMS_A_008",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE",
+      "operation_precedente": "TEST_ICT_007"
+    },
+    {
+      "code_operation": "SOUDURE_THT_009",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL"
+    },
+    {
+      "code_operation": "PACKAGE_010",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING"
+    },
+    {
+      "code_operation": "REFUSION_A_011",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION",
+      "operation_precedente": "PACKAGE_010"
+    },
+    {
+      "code_operation": "COATING_012",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING"
+    },
+    {
+      "code_operation": "POSE_CMS_A_013",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE"
+    },
+    {
+      "code_operation": "PREP_014",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE",
+      "operation_precedente": "POSE_CMS_A_013"
+    },
+    {
+      "code_operation": "DEPANEL_015",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION"
+    },
+    {
+      "code_operation": "POSE_CMS_B_016",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "FOUR_REFUSION"
+    },
+    {
+      "code_poste": "STATION_ASSEMBLAGE"
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_MANUEL"
+    },
+    {
+      "code_poste": "STATION_PACKAGING"
+    },
+    {
+      "code_poste": "POSTE_DEPANNELISATION"
+    },
+    {
+      "code_poste": "BANC_TEST_ICT"
+    },
+    {
+      "code_poste": "PICK_PLACE"
+    },
+    {
+      "code_poste": "ROBOT_COATING"
+    }
+  ]
+}

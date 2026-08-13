@@ -1,0 +1,120 @@
+{
+  "operations": [
+    {
+      "code_operation": "PROJET_GROUPE_001",
+      "duree_jours": 1,
+      "poste_id": "BIBLIOTHEQUE"
+    },
+    {
+      "code_operation": "EXAMEN_002",
+      "duree_jours": 1,
+      "poste_id": "AMPHITHEATRE"
+    },
+    {
+      "code_operation": "TP_SCIENCES_003",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE",
+      "operation_precedente": "EXAMEN_002"
+    },
+    {
+      "code_operation": "CONFERENCE_004",
+      "duree_jours": 1,
+      "poste_id": "AMPHITHEATRE",
+      "operation_precedente": "TP_SCIENCES_003"
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_005",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE",
+      "operation_precedente": "CONFERENCE_004"
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_006",
+      "duree_jours": 1,
+      "poste_id": "SALLE_COURS_STANDARD",
+      "operation_precedente": "TP_INFORMATIQUE_005"
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_007",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TD"
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_008",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE"
+    },
+    {
+      "code_operation": "EXAMEN_009",
+      "duree_jours": 1,
+      "poste_id": "SALLE_EXAMEN",
+      "operation_precedente": "TP_INFORMATIQUE_008"
+    },
+    {
+      "code_operation": "PROJET_GROUPE_010",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TD",
+      "operation_precedente": "EXAMEN_009"
+    },
+    {
+      "code_operation": "TP_SCIENCES_011",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE",
+      "operation_precedente": "PROJET_GROUPE_010"
+    },
+    {
+      "code_operation": "CONFERENCE_012",
+      "duree_jours": 1,
+      "poste_id": "SALLE_CONFERENCE",
+      "operation_precedente": "TP_SCIENCES_011"
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_013",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_INFORMATIQUE"
+    },
+    {
+      "code_operation": "EXAMEN_014",
+      "duree_jours": 1,
+      "poste_id": "AMPHITHEATRE",
+      "operation_precedente": "TP_INFORMATIQUE_013"
+    },
+    {
+      "code_operation": "CONFERENCE_015",
+      "duree_jours": 1,
+      "poste_id": "SALLE_CONFERENCE",
+      "operation_precedente": "EXAMEN_014"
+    },
+    {
+      "code_operation": "PROJET_GROUPE_016",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TD"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "BIBLIOTHEQUE"
+    },
+    {
+      "code_poste": "AMPHITHEATRE"
+    },
+    {
+      "code_poste": "LABORATOIRE"
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE"
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD"
+    },
+    {
+      "code_poste": "SALLE_TD"
+    },
+    {
+      "code_poste": "SALLE_EXAMEN"
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE"
+    }
+  ]
+}

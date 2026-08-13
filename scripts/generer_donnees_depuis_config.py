@@ -2,14 +2,22 @@
 Générateur de données brutes à partir de configurations YAML de secteurs.
 
 Ce script lit une configuration de secteur depuis data/configurations_secteurs/
-et génère des données brutes au format ERP (JSON et/ou CSV) en utilisant
-les paramètres définis dans la configuration.
+et génère des données brutes au format ERP (JSON) — le vocabulaire fixe
+`adapters.erp_reference.schema_erp.PayloadERP` (`code_operation`/`poste_id`/
+`duree_jours`/`operation_precedente`), pour rester traduisible tel quel par
+`adapters.erp_reference.translator.traduire`, comme les 6 secteurs "officiels"
+de `scripts/generer_donnees_brutes.py`.
 
 Usage:
     uv run python -m scripts.generer_donnees_depuis_config --secteur gestion_espaces_verts
     uv run python -m scripts.generer_donnees_depuis_config --secteur hopital_bloc_operatoire --taille 100
     uv run python -m scripts.generer_donnees_depuis_config --secteur restauration_collective --format json
     uv run python -m scripts.generer_donnees_depuis_config --tous --taille 50
+
+Le format CSV (`--format csv`/`both`) reste délibérément hors de portée de cette traduction :
+`sauvegarder_csv` écrit un schéma (`nom,capacite`) incompatible avec le format CSV à 3 fichiers de
+`data/donnees_brutes/csv/` (voir `csv/MIGRATION_NOUVEAU_FORMAT.md`) — ne pas l'utiliser sans
+migration équivalente.
 """
 
 import argparse
@@ -19,6 +27,12 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+
+# Les configs YAML expriment les durées en minutes (voir configurations_secteurs/README.md) ;
+# `OperationERP.duree_jours` est en jours entiers (DSL, voir CLAUDE.md "DSL time unit is now
+# jours") — journée ouvrée de 8h comme unité de conversion, jamais 0 jour (une opération de
+# quelques minutes reste au moins 1 jour, même compromis que l'intégration GreenSIG réelle).
+MINUTES_PAR_JOUR_OUVRE = 8 * 60
 
 
 def charger_configuration(nom_secteur: str) -> dict[str, Any]:
@@ -52,21 +66,22 @@ def generer_donnees_depuis_config(
     n_operations: int = 20,
 ) -> dict[str, Any]:
     """
-    Génère des données brutes au format ERP à partir d'une configuration.
+    Génère un payload `PayloadERP` (`operations`/`postes`, vocabulaire
+    `code_operation`/`poste_id`/`duree_jours`/`operation_precedente`) à
+    partir d'une configuration de secteur.
 
     Args:
         config: Configuration du secteur chargée depuis YAML
         n_operations: Nombre d'opérations à générer
 
     Returns:
-        Payload ERP au format JSON
+        Payload ERP au format JSON, directement passable à
+        `adapters.erp_reference.schema_erp.PayloadERP(**payload)`.
     """
-    nom_secteur = config["nom"]
     types_postes = config["types_postes"]
     phases = config["phases_production"]
     generation = config.get("generation", {})
 
-    prefix_lot = generation.get("prefix_lot", "LOT")
     ops_par_lot_min = generation.get("operations_par_lot_min", 4)
     ops_par_lot_max = generation.get("operations_par_lot_max", 8)
 
@@ -74,14 +89,12 @@ def generer_donnees_depuis_config(
     ops_par_lot_moyen = (ops_par_lot_min + ops_par_lot_max) / 2
     n_lots = max(1, int(n_operations / ops_par_lot_moyen))
 
-    operations = []
-    postes_crees = {}
+    operations: list[dict[str, Any]] = []
+    postes_crees: dict[str, dict[str, Any]] = {}
     op_id = 1
 
     # Génération par lots
-    for i_lot in range(n_lots):
-        id_lot = f"{prefix_lot}_{i_lot + 1:03d}"
-
+    for _i_lot in range(n_lots):
         # Nombre d'opérations dans ce lot
         n_ops_lot = random.randint(ops_par_lot_min, ops_par_lot_max)
 
@@ -93,32 +106,26 @@ def generer_donnees_depuis_config(
             type_poste_nom = random.choice(phase["types_poste"])
             type_poste_config = types_postes[type_poste_nom]
 
-            # Créer le poste s'il n'existe pas encore
+            # Créer le poste s'il n'existe pas encore (code_poste = nom du type, déjà unique)
             if type_poste_nom not in postes_crees:
-                postes_crees[type_poste_nom] = {
-                    "nom": type_poste_nom,
-                    "capacite": type_poste_config["capacite"],
-                }
+                postes_crees[type_poste_nom] = {"code_poste": type_poste_nom}
 
-            # Générer l'opération
-            duree = random.randint(
+            # Durée générée en minutes (config), convertie en jours entiers (DSL)
+            duree_minutes = random.randint(
                 type_poste_config["duree_min"],
                 type_poste_config["duree_max"],
             )
+            duree_jours = max(1, round(duree_minutes / MINUTES_PAR_JOUR_OUVRE))
 
             operation = {
-                "id": f"OP_{op_id:04d}",
-                "nom": f"{phase['nom']}_{i_op + 1}",
-                "lot": id_lot,
-                "phase": phase["nom"],
-                "poste_requis": type_poste_nom,
-                "duree_estimee": duree,
-                "priorite": random.randint(1, 5),
+                "code_operation": f"{phase['nom']}_{op_id:03d}",
+                "duree_jours": duree_jours,
+                "poste_id": type_poste_nom,
             }
 
-            # Ajouter des précédences dans le lot
+            # Précédence dans le lot uniquement (jamais entre lots, indépendants entre eux)
             if i_op > 0 and random.random() < 0.6:  # 60% de chance
-                operation["predecesseurs"] = [f"OP_{op_id - 1:04d}"]
+                operation["operation_precedente"] = operations[-1]["code_operation"]
 
             operations.append(operation)
             op_id += 1
@@ -129,20 +136,7 @@ def generer_donnees_depuis_config(
         if len(operations) >= n_operations:
             break
 
-    # Construire le payload
-    payload = {
-        "metadata": {
-            "secteur": nom_secteur,
-            "description": config.get("description", ""),
-            "source": "generer_donnees_depuis_config.py",
-            "n_operations": len(operations),
-            "n_postes": len(postes_crees),
-        },
-        "postes": list(postes_crees.values()),
-        "operations": operations,
-    }
-
-    return payload
+    return {"operations": operations, "postes": list(postes_crees.values())}
 
 
 def sauvegarder_json(payload: dict[str, Any], nom_secteur: str, taille: str) -> Path:

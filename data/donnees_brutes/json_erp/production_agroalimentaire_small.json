@@ -1,0 +1,144 @@
+{
+  "operations": [
+    {
+      "code_operation": "LAVAGE_001",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE"
+    },
+    {
+      "code_operation": "CONTROLE_002",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE"
+    },
+    {
+      "code_operation": "RECEPTION_003",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION",
+      "operation_precedente": "CONTROLE_002"
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_004",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_REFROIDISSEMENT"
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_005",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_CONDITIONNEMENT",
+      "operation_precedente": "REFROIDISSEMENT_004"
+    },
+    {
+      "code_operation": "ETIQUETAGE_006",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE",
+      "operation_precedente": "CONDITIONNEMENT_005"
+    },
+    {
+      "code_operation": "DECOUPE_007",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE"
+    },
+    {
+      "code_operation": "EPLUCHAGE_008",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE"
+    },
+    {
+      "code_operation": "PALETTISATION_009",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR"
+    },
+    {
+      "code_operation": "CUISSON_010",
+      "duree_jours": 1,
+      "poste_id": "AUTOCLAVE",
+      "operation_precedente": "PALETTISATION_009"
+    },
+    {
+      "code_operation": "RECEPTION_011",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION"
+    },
+    {
+      "code_operation": "EPLUCHAGE_012",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_EPLUCHAGE",
+      "operation_precedente": "RECEPTION_011"
+    },
+    {
+      "code_operation": "LAVAGE_013",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_LAVAGE"
+    },
+    {
+      "code_operation": "ETIQUETAGE_014",
+      "duree_jours": 1,
+      "poste_id": "ETIQUETEUSE"
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_015",
+      "duree_jours": 1,
+      "poste_id": "LIGNE_CONDITIONNEMENT",
+      "operation_precedente": "ETIQUETAGE_014"
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_016",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_REFROIDISSEMENT",
+      "operation_precedente": "CONDITIONNEMENT_015"
+    },
+    {
+      "code_operation": "CUISSON_017",
+      "duree_jours": 1,
+      "poste_id": "AUTOCLAVE",
+      "operation_precedente": "REFROIDISSEMENT_016"
+    },
+    {
+      "code_operation": "PALETTISATION_018",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_PALETTISEUR"
+    },
+    {
+      "code_operation": "CONTROLE_019",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE"
+    },
+    {
+      "code_operation": "DECOUPE_020",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_DECOUPE"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "TUNNEL_LAVAGE"
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE"
+    },
+    {
+      "code_poste": "QUAI_RECEPTION"
+    },
+    {
+      "code_poste": "TUNNEL_REFROIDISSEMENT"
+    },
+    {
+      "code_poste": "LIGNE_CONDITIONNEMENT"
+    },
+    {
+      "code_poste": "ETIQUETEUSE"
+    },
+    {
+      "code_poste": "ROBOT_DECOUPE"
+    },
+    {
+      "code_poste": "LIGNE_EPLUCHAGE"
+    },
+    {
+      "code_poste": "ROBOT_PALETTISEUR"
+    },
+    {
+      "code_poste": "AUTOCLAVE"
+    }
+  ]
+}

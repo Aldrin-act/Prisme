@@ -1,0 +1,123 @@
+{
+  "operations": [
+    {
+      "code_operation": "SOINS_POSTOP_001",
+      "duree_jours": 2,
+      "poste_id": "UNITE_SOINS_INTENSIFS"
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_002",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE",
+      "operation_precedente": "SOINS_POSTOP_001"
+    },
+    {
+      "code_operation": "INTERVENTION_003",
+      "duree_jours": 1,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE"
+    },
+    {
+      "code_operation": "ADMISSION_004",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION",
+      "operation_precedente": "INTERVENTION_003"
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_005",
+      "duree_jours": 1,
+      "poste_id": "LABORATOIRE_ANALYSES"
+    },
+    {
+      "code_operation": "REVEIL_006",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL"
+    },
+    {
+      "code_operation": "REVEIL_007",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL"
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_008",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE"
+    },
+    {
+      "code_operation": "SOINS_POSTOP_009",
+      "duree_jours": 3,
+      "poste_id": "UNITE_SOINS_INTENSIFS",
+      "operation_precedente": "EXAMENS_PREOP_008"
+    },
+    {
+      "code_operation": "ADMISSION_010",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION",
+      "operation_precedente": "SOINS_POSTOP_009"
+    },
+    {
+      "code_operation": "INTERVENTION_011",
+      "duree_jours": 1,
+      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE"
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_012",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE"
+    },
+    {
+      "code_operation": "REVEIL_013",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL",
+      "operation_precedente": "EXAMENS_PREOP_012"
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_014",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE",
+      "operation_precedente": "REVEIL_013"
+    },
+    {
+      "code_operation": "SOINS_POSTOP_015",
+      "duree_jours": 3,
+      "poste_id": "UNITE_SOINS_INTENSIFS"
+    },
+    {
+      "code_operation": "ADMISSION_016",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION"
+    },
+    {
+      "code_operation": "INTERVENTION_017",
+      "duree_jours": 1,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE"
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_018",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS"
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE"
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE"
+    },
+    {
+      "code_poste": "SALLE_PREPARATION"
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES"
+    },
+    {
+      "code_poste": "SALLE_REVEIL"
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE"
+    }
+  ]
+}

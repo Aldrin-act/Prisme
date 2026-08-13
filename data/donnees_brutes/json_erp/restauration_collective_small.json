@@ -1,0 +1,124 @@
+{
+  "operations": [
+    {
+      "code_operation": "NETTOYAGE_001",
+      "duree_jours": 1,
+      "poste_id": "ZONE_LAVERIE"
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_002",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CUISSON_FOUR",
+      "operation_precedente": "NETTOYAGE_001"
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_003",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CUISSON_PLAQUE"
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_004",
+      "duree_jours": 1,
+      "poste_id": "CELLULE_REFROIDISSEMENT",
+      "operation_precedente": "CUISSON_MINUTE_003"
+    },
+    {
+      "code_operation": "PATISSERIE_005",
+      "duree_jours": 1,
+      "poste_id": "POSTE_PATISSERIE"
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_006",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONDITIONNEMENT",
+      "operation_precedente": "PATISSERIE_005"
+    },
+    {
+      "code_operation": "CONTROLE_007",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE"
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_008",
+      "duree_jours": 1,
+      "poste_id": "POSTE_PREPARATION_VIANDES",
+      "operation_precedente": "CONTROLE_007"
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_009",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CUISSON_FOUR"
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_010",
+      "duree_jours": 1,
+      "poste_id": "POSTE_PREPARATION_LEGUMES"
+    },
+    {
+      "code_operation": "DRESSAGE_011",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DRESSAGE",
+      "operation_precedente": "PREP_INGREDIENTS_010"
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_012",
+      "duree_jours": 1,
+      "poste_id": "CELLULE_REFROIDISSEMENT",
+      "operation_precedente": "DRESSAGE_011"
+    },
+    {
+      "code_operation": "PATISSERIE_013",
+      "duree_jours": 1,
+      "poste_id": "POSTE_PATISSERIE",
+      "operation_precedente": "REFROIDISSEMENT_012"
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_014",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CUISSON_PLAQUE"
+    },
+    {
+      "code_operation": "CONTROLE_015",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE",
+      "operation_precedente": "CUISSON_MINUTE_014"
+    },
+    {
+      "code_operation": "NETTOYAGE_016",
+      "duree_jours": 1,
+      "poste_id": "ZONE_LAVERIE"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "ZONE_LAVERIE"
+    },
+    {
+      "code_poste": "POSTE_CUISSON_FOUR"
+    },
+    {
+      "code_poste": "POSTE_CUISSON_PLAQUE"
+    },
+    {
+      "code_poste": "CELLULE_REFROIDISSEMENT"
+    },
+    {
+      "code_poste": "POSTE_PATISSERIE"
+    },
+    {
+      "code_poste": "POSTE_CONDITIONNEMENT"
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE"
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_VIANDES"
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_LEGUMES"
+    },
+    {
+      "code_poste": "POSTE_DRESSAGE"
+    }
+  ]
+}

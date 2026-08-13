@@ -1,0 +1,128 @@
+{
+  "operations": [
+    {
+      "code_operation": "FINITION_001",
+      "duree_jours": 1,
+      "poste_id": "POSTE_POLISSAGE"
+    },
+    {
+      "code_operation": "FORMAGE_002",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_EMBOUTISSAGE",
+      "operation_precedente": "FINITION_001"
+    },
+    {
+      "code_operation": "USINAGE_003",
+      "duree_jours": 1,
+      "poste_id": "POSTE_EBAVURAGE"
+    },
+    {
+      "code_operation": "SOUDURE_004",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE",
+      "operation_precedente": "USINAGE_003"
+    },
+    {
+      "code_operation": "ASSEMBLAGE_005",
+      "duree_jours": 1,
+      "poste_id": "POSTE_ASSEMBLAGE"
+    },
+    {
+      "code_operation": "PEINTURE_006",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_PEINTURE"
+    },
+    {
+      "code_operation": "CONTROLE_007",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE",
+      "operation_precedente": "PEINTURE_006"
+    },
+    {
+      "code_operation": "PREPARATION_008",
+      "duree_jours": 1,
+      "poste_id": "DECOUPEUSE_PLASMA"
+    },
+    {
+      "code_operation": "FORMAGE_009",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_PLIAGE"
+    },
+    {
+      "code_operation": "PEINTURE_010",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_PEINTURE"
+    },
+    {
+      "code_operation": "CONTROLE_011",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE",
+      "operation_precedente": "PEINTURE_010"
+    },
+    {
+      "code_operation": "PREPARATION_012",
+      "duree_jours": 1,
+      "poste_id": "PERCEUSE_CNC"
+    },
+    {
+      "code_operation": "USINAGE_013",
+      "duree_jours": 1,
+      "poste_id": "CENTRE_USINAGE",
+      "operation_precedente": "PREPARATION_012"
+    },
+    {
+      "code_operation": "SOUDURE_014",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_SOUDURE"
+    },
+    {
+      "code_operation": "FINITION_015",
+      "duree_jours": 1,
+      "poste_id": "POSTE_POLISSAGE"
+    },
+    {
+      "code_operation": "ASSEMBLAGE_016",
+      "duree_jours": 1,
+      "poste_id": "POSTE_ASSEMBLAGE",
+      "operation_precedente": "FINITION_015"
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "POSTE_POLISSAGE"
+    },
+    {
+      "code_poste": "PRESSE_EMBOUTISSAGE"
+    },
+    {
+      "code_poste": "POSTE_EBAVURAGE"
+    },
+    {
+      "code_poste": "POSTE_SOUDURE"
+    },
+    {
+      "code_poste": "POSTE_ASSEMBLAGE"
+    },
+    {
+      "code_poste": "TUNNEL_PEINTURE"
+    },
+    {
+      "code_poste": "STATION_CONTROLE"
+    },
+    {
+      "code_poste": "DECOUPEUSE_PLASMA"
+    },
+    {
+      "code_poste": "PRESSE_PLIAGE"
+    },
+    {
+      "code_poste": "PERCEUSE_CNC"
+    },
+    {
+      "code_poste": "CENTRE_USINAGE"
+    },
+    {
+      "code_poste": "ROBOT_SOUDURE"
+    }
+  ]
+}
