@@ -1,0 +1,10 @@
+id,nom,competences
+EQUIPE_TRAITEMENT_PHYTO,,equipe_traitement_phyto
+EQUIPE_TAILLE,,equipe_taille
+EQUIPE_AMENAGEMENT,,equipe_amenagement
+EQUIPE_PLANTATION,,equipe_plantation
+EQUIPE_NETTOYAGE,,equipe_nettoyage
+EQUIPE_TONTE,,equipe_tonte
+EQUIPE_DESHERBAGE,,equipe_desherbage
+EQUIPE_ARROSAGE,,equipe_arrosage
+EQUIPE_ELAGAGE,,equipe_elagage

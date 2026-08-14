@@ -1,0 +1,11 @@
+id,nom,competences
+LIGNE_EPLUCHAGE,,ligne_epluchage
+QUAI_RECEPTION,,quai_reception
+TUNNEL_LAVAGE,,tunnel_lavage
+ROBOT_PALETTISEUR,,robot_palettiseur
+LIGNE_CONDITIONNEMENT,,ligne_conditionnement
+AUTOCLAVE,,autoclave
+ETIQUETEUSE,,etiqueteuse
+ROBOT_DECOUPE,,robot_decoupe
+POSTE_CONTROLE_QUALITE,,poste_controle_qualite
+TUNNEL_REFROIDISSEMENT,,tunnel_refroidissement

@@ -1,0 +1,12 @@
+id,nom,competences
+POSTE_ASSEMBLAGE,,poste_assemblage
+PRESSE_PLIAGE,,presse_pliage
+CABINE_PEINTURE,,cabine_peinture
+FRAISEUSE_CNC,,fraiseuse_cnc
+POSTE_POLISSAGE,,poste_polissage
+POSTE_SOUDURE,,poste_soudure
+DECOUPEUSE_LASER,,decoupeuse_laser
+STATION_CONTROLE,,station_controle
+DECOUPEUSE_PLASMA,,decoupeuse_plasma
+CENTRE_USINAGE,,centre_usinage
+PRESSE_EMBOUTISSAGE,,presse_emboutissage

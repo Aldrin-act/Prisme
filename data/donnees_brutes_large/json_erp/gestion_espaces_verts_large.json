@@ -1,1729 +1,1757 @@
 {
   "operations": [
     {
-      "code_operation": "PARC_MONCEAU_TRAITEMENT_0001",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_2",
-      "operation_precedente": null,
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_TONTE_0002",
-      "duree_jours": 3,
-      "poste_id": "TONDEUSE_TRACTEE_3",
-      "operation_precedente": "PARC_MONCEAU_TRAITEMENT_0001",
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_DESHERBAGE_0003",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_2",
-      "operation_precedente": "PARC_MONCEAU_TONTE_0002",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_EVACUATION_DECHETS_0004",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_2",
-      "operation_precedente": "PARC_MONCEAU_DESHERBAGE_0003",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_PLANTATION_0005",
-      "duree_jours": 5,
-      "poste_id": "EQUIPE_PLANTATION_4",
-      "operation_precedente": "PARC_MONCEAU_EVACUATION_DECHETS_0004",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_TAILLE_HAIES_0006",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TAILLE_2",
-      "operation_precedente": "PARC_MONCEAU_PLANTATION_0005",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "SQUARE_RECAMIER_DESHERBAGE_0007",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_4",
-      "operation_precedente": null,
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "SQUARE_RECAMIER_TONTE_0008",
-      "duree_jours": 3,
-      "poste_id": "TONDEUSE_TRACTEE_3",
-      "operation_precedente": "SQUARE_RECAMIER_DESHERBAGE_0007",
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "SQUARE_RECAMIER_TAILLE_HAIES_0009",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TAILLE_3",
-      "operation_precedente": "SQUARE_RECAMIER_TONTE_0008",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "SQUARE_RECAMIER_TRAITEMENT_0010",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_2",
-      "operation_precedente": "SQUARE_RECAMIER_TAILLE_HAIES_0009",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "SQUARE_RECAMIER_PLANTATION_0011",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_6",
-      "operation_precedente": "SQUARE_RECAMIER_TRAITEMENT_0010",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "SQUARE_RECAMIER_EVACUATION_DECHETS_0012",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_5",
-      "operation_precedente": "SQUARE_RECAMIER_PLANTATION_0011",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_BERCY_TAILLE_HAIES_0013",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TAILLE_1",
-      "operation_precedente": null,
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PARC_BERCY_EVACUATION_DECHETS_0014",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_1",
-      "operation_precedente": "PARC_BERCY_TAILLE_HAIES_0013",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_BERCY_TONTE_0015",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TONTE_10",
-      "operation_precedente": "PARC_BERCY_EVACUATION_DECHETS_0014",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_BERCY_PLANTATION_0016",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_4",
-      "operation_precedente": "PARC_BERCY_TONTE_0015",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_BERCY_TRAITEMENT_0017",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_6",
-      "operation_precedente": "PARC_BERCY_PLANTATION_0016",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BERCY_DESHERBAGE_0018",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_14",
-      "operation_precedente": "PARC_BERCY_TRAITEMENT_0017",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_PLANTATION_0019",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_PLANTATION_10",
-      "operation_precedente": null,
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_TAILLE_HAIES_0020",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TAILLE_2",
-      "operation_precedente": "PARC_SAINTE_PERINE_PLANTATION_0019",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_TONTE_0021",
-      "duree_jours": 1,
-      "poste_id": "TONDEUSE_TRACTEE_1",
-      "operation_precedente": "PARC_SAINTE_PERINE_TAILLE_HAIES_0020",
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_ARROSAGE_0022",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_6",
-      "operation_precedente": "PARC_SAINTE_PERINE_TONTE_0021",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_DESHERBAGE_0023",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_2",
-      "operation_precedente": "PARC_SAINTE_PERINE_ARROSAGE_0022",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_TRAITEMENT_0024",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_5",
-      "operation_precedente": "PARC_SAINTE_PERINE_DESHERBAGE_0023",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BERCY_EVACUATION_DECHETS_0025",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_5",
-      "operation_precedente": null,
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_BERCY_TAILLE_HAIES_0026",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_TAILLE_10",
-      "operation_precedente": "PARC_BERCY_EVACUATION_DECHETS_0025",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PARC_BERCY_ARROSAGE_0027",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_6",
-      "operation_precedente": "PARC_BERCY_TAILLE_HAIES_0026",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_BERCY_PLANTATION_0028",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_10",
-      "operation_precedente": "PARC_BERCY_ARROSAGE_0027",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_BERCY_TRAITEMENT_0029",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_5",
-      "operation_precedente": "PARC_BERCY_PLANTATION_0028",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BERCY_DESHERBAGE_0030",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_1",
-      "operation_precedente": "PARC_BERCY_TRAITEMENT_0029",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "JARDIN_LUXEMBOURG_ARROSAGE_0031",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_7",
-      "operation_precedente": null,
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "JARDIN_LUXEMBOURG_DESHERBAGE_0032",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_6",
-      "operation_precedente": "JARDIN_LUXEMBOURG_ARROSAGE_0031",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "JARDIN_LUXEMBOURG_EVACUATION_DECHETS_0033",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_3",
-      "operation_precedente": "JARDIN_LUXEMBOURG_DESHERBAGE_0032",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "JARDIN_LUXEMBOURG_TONTE_0034",
-      "duree_jours": 1,
-      "poste_id": "TONDEUSE_TRACTEE_6",
-      "operation_precedente": "JARDIN_LUXEMBOURG_EVACUATION_DECHETS_0033",
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "JARDIN_LUXEMBOURG_TRAITEMENT_0035",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_6",
-      "operation_precedente": "JARDIN_LUXEMBOURG_TONTE_0034",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "ZONE_TUILERIES_PLANTATION_0036",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_PLANTATION_1",
-      "operation_precedente": null,
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "ZONE_TUILERIES_TAILLE_HAIES_0037",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_TAILLE_7",
-      "operation_precedente": "ZONE_TUILERIES_PLANTATION_0036",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "ZONE_TUILERIES_TONTE_0038",
+      "code_operation": "SQUARE_TROUSSEAU_TONTE_0001",
       "duree_jours": 3,
       "poste_id": "EQUIPE_TONTE_11",
-      "operation_precedente": "ZONE_TUILERIES_TAILLE_HAIES_0037",
-      "competence_requise": "tonte"
+      "operation_precedente": null,
+      "competence_requise": "equipe_tonte"
     },
     {
-      "code_operation": "ZONE_TUILERIES_ARROSAGE_0039",
+      "code_operation": "SQUARE_TROUSSEAU_TAILLE_HAIES_0002",
       "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_8",
-      "operation_precedente": "ZONE_TUILERIES_TONTE_0038",
-      "competence_requise": "arrosage"
+      "poste_id": "EQUIPE_TAILLE_1",
+      "operation_precedente": "SQUARE_TROUSSEAU_TONTE_0001",
+      "competence_requise": "equipe_taille"
     },
     {
-      "code_operation": "ZONE_TUILERIES_EVACUATION_DECHETS_0040",
+      "code_operation": "SQUARE_TROUSSEAU_EVACUATION_DECHETS_0003",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_4",
+      "operation_precedente": "SQUARE_TROUSSEAU_TAILLE_HAIES_0002",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_ARROSAGE_0004",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_3",
+      "operation_precedente": "SQUARE_TROUSSEAU_EVACUATION_DECHETS_0003",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_TRAITEMENT_0005",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_1",
+      "operation_precedente": "SQUARE_TROUSSEAU_ARROSAGE_0004",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_PLANTATION_0006",
+      "duree_jours": 5,
+      "poste_id": "EQUIPE_PLANTATION_8",
+      "operation_precedente": "SQUARE_TROUSSEAU_TRAITEMENT_0005",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_DESHERBAGE_0007",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_6",
+      "operation_precedente": "SQUARE_TROUSSEAU_PLANTATION_0006",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_PLANTATION_0008",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_PLANTATION_6",
+      "operation_precedente": null,
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_TONTE_0009",
+      "duree_jours": 3,
+      "poste_id": "TONDEUSE_TRACTEE_3",
+      "operation_precedente": "JARDIN_LUXEMBOURG_PLANTATION_0008",
+      "competence_requise": "tondeuse_tractee"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_TAILLE_HAIES_0010",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TAILLE_3",
+      "operation_precedente": "JARDIN_LUXEMBOURG_TONTE_0009",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_TRAITEMENT_0011",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "JARDIN_LUXEMBOURG_TAILLE_HAIES_0010",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_DESHERBAGE_0012",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_14",
+      "operation_precedente": "JARDIN_LUXEMBOURG_TRAITEMENT_0011",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_ARROSAGE_0013",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_1",
+      "operation_precedente": "JARDIN_LUXEMBOURG_DESHERBAGE_0012",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_TONTE_0014",
+      "duree_jours": 3,
+      "poste_id": "TONDEUSE_TRACTEE_8",
+      "operation_precedente": null,
+      "competence_requise": "tondeuse_tractee"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_PLANTATION_0015",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_PLANTATION_2",
+      "operation_precedente": "PROMENADE_PLANTEE_TONTE_0014",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_TRAITEMENT_0016",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_5",
+      "operation_precedente": "PROMENADE_PLANTEE_PLANTATION_0015",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0017",
       "duree_jours": 2,
       "poste_id": "CAMION_BENNE_3",
-      "operation_precedente": "ZONE_TUILERIES_ARROSAGE_0039",
-      "competence_requise": "benne"
+      "operation_precedente": "PROMENADE_PLANTEE_TRAITEMENT_0016",
+      "competence_requise": "camion_benne"
     },
     {
-      "code_operation": "ZONE_TUILERIES_TRAITEMENT_0041",
+      "code_operation": "PROMENADE_PLANTEE_TAILLE_HAIES_0018",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TAILLE_9",
+      "operation_precedente": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0017",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_BERCY_DESHERBAGE_0019",
       "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_3",
-      "operation_precedente": "ZONE_TUILERIES_EVACUATION_DECHETS_0040",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "JARDIN_PALAIS_ROYAL_TAILLE_HAIES_0042",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_1",
+      "poste_id": "EQUIPE_DESHERBAGE_13",
       "operation_precedente": null,
-      "competence_requise": "taille"
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "JARDIN_PALAIS_ROYAL_EVACUATION_DECHETS_0043",
+      "code_operation": "PARC_BERCY_ARROSAGE_0020",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_5",
+      "operation_precedente": "PARC_BERCY_DESHERBAGE_0019",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_BERCY_TRAITEMENT_0021",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "PARC_BERCY_ARROSAGE_0020",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_BERCY_TAILLE_HAIES_0022",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TAILLE_1",
+      "operation_precedente": "PARC_BERCY_TRAITEMENT_0021",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_BERCY_EVACUATION_DECHETS_0023",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_4",
+      "operation_precedente": "PARC_BERCY_TAILLE_HAIES_0022",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "JARDIN_ATLANTIQUE_ARROSAGE_0024",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_2",
+      "operation_precedente": null,
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "JARDIN_ATLANTIQUE_PLANTATION_0025",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_1",
+      "operation_precedente": "JARDIN_ATLANTIQUE_ARROSAGE_0024",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "JARDIN_ATLANTIQUE_EVACUATION_DECHETS_0026",
       "duree_jours": 2,
       "poste_id": "CAMION_BENNE_1",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_TAILLE_HAIES_0042",
-      "competence_requise": "benne"
+      "operation_precedente": "JARDIN_ATLANTIQUE_PLANTATION_0025",
+      "competence_requise": "camion_benne"
     },
     {
-      "code_operation": "JARDIN_PALAIS_ROYAL_DESHERBAGE_0044",
+      "code_operation": "JARDIN_ATLANTIQUE_TRAITEMENT_0027",
       "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_7",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_EVACUATION_DECHETS_0043",
-      "competence_requise": "desherbage"
+      "poste_id": "EQUIPE_TRAITEMENT_6",
+      "operation_precedente": "JARDIN_ATLANTIQUE_EVACUATION_DECHETS_0026",
+      "competence_requise": "equipe_traitement"
     },
     {
-      "code_operation": "JARDIN_PALAIS_ROYAL_TRAITEMENT_0045",
+      "code_operation": "JARDIN_ATLANTIQUE_TONTE_0028",
       "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_4",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_DESHERBAGE_0044",
-      "competence_requise": "traitement"
+      "poste_id": "EQUIPE_TONTE_8",
+      "operation_precedente": "JARDIN_ATLANTIQUE_TRAITEMENT_0027",
+      "competence_requise": "equipe_tonte"
     },
     {
-      "code_operation": "JARDIN_PALAIS_ROYAL_ARROSAGE_0046",
+      "code_operation": "JARDIN_ATLANTIQUE_DESHERBAGE_0029",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_7",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_TRAITEMENT_0045",
-      "competence_requise": "arrosage"
+      "poste_id": "EQUIPE_DESHERBAGE_6",
+      "operation_precedente": "JARDIN_ATLANTIQUE_TONTE_0028",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_TONTE_0030",
+      "duree_jours": 3,
+      "poste_id": "TONDEUSE_TRACTEE_4",
+      "operation_precedente": null,
+      "competence_requise": "tondeuse_tractee"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_EVACUATION_DECHETS_0031",
+      "duree_jours": 2,
+      "poste_id": "CAMION_BENNE_3",
+      "operation_precedente": "SQUARE_TEMPLE_TONTE_0030",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_DESHERBAGE_0032",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_13",
+      "operation_precedente": "SQUARE_TEMPLE_EVACUATION_DECHETS_0031",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_PLANTATION_0033",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_PLANTATION_9",
+      "operation_precedente": "SQUARE_TEMPLE_DESHERBAGE_0032",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_TRAITEMENT_0034",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "SQUARE_TEMPLE_PLANTATION_0033",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_TAILLE_HAIES_0035",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TAILLE_10",
+      "operation_precedente": "SQUARE_TEMPLE_TRAITEMENT_0034",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_ARROSAGE_0036",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_4",
+      "operation_precedente": "SQUARE_TEMPLE_TAILLE_HAIES_0035",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_BELLEVILLE_TRAITEMENT_0037",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_5",
+      "operation_precedente": null,
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_BELLEVILLE_TONTE_0038",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TONTE_11",
+      "operation_precedente": "PARC_BELLEVILLE_TRAITEMENT_0037",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_BELLEVILLE_ARROSAGE_0039",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_4",
+      "operation_precedente": "PARC_BELLEVILLE_TONTE_0038",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_BELLEVILLE_TAILLE_HAIES_0040",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TAILLE_10",
+      "operation_precedente": "PARC_BELLEVILLE_ARROSAGE_0039",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_BELLEVILLE_EVACUATION_DECHETS_0041",
+      "duree_jours": 2,
+      "poste_id": "CAMION_BENNE_4",
+      "operation_precedente": "PARC_BELLEVILLE_TAILLE_HAIES_0040",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "JARDIN_PALAIS_ROYAL_ARROSAGE_0042",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_5",
+      "operation_precedente": null,
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "JARDIN_PALAIS_ROYAL_TONTE_0043",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TONTE_6",
+      "operation_precedente": "JARDIN_PALAIS_ROYAL_ARROSAGE_0042",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "JARDIN_PALAIS_ROYAL_TAILLE_HAIES_0044",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TAILLE_8",
+      "operation_precedente": "JARDIN_PALAIS_ROYAL_TONTE_0043",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "JARDIN_PALAIS_ROYAL_DESHERBAGE_0045",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_5",
+      "operation_precedente": "JARDIN_PALAIS_ROYAL_TAILLE_HAIES_0044",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "JARDIN_PALAIS_ROYAL_EVACUATION_DECHETS_0046",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_1",
+      "operation_precedente": "JARDIN_PALAIS_ROYAL_DESHERBAGE_0045",
+      "competence_requise": "camion_benne"
     },
     {
       "code_operation": "JARDIN_PALAIS_ROYAL_PLANTATION_0047",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_PLANTATION_6",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_ARROSAGE_0046",
-      "competence_requise": "plantation"
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_PLANTATION_2",
+      "operation_precedente": "JARDIN_PALAIS_ROYAL_EVACUATION_DECHETS_0046",
+      "competence_requise": "equipe_plantation"
     },
     {
-      "code_operation": "JARDIN_ATLANTIQUE_EVACUATION_DECHETS_0048",
+      "code_operation": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0048",
       "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_3",
+      "poste_id": "EQUIPE_TAILLE_1",
       "operation_precedente": null,
-      "competence_requise": "benne"
+      "competence_requise": "equipe_taille"
     },
     {
-      "code_operation": "JARDIN_ATLANTIQUE_TONTE_0049",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TONTE_11",
-      "operation_precedente": "JARDIN_ATLANTIQUE_EVACUATION_DECHETS_0048",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "JARDIN_ATLANTIQUE_TAILLE_HAIES_0050",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_8",
-      "operation_precedente": "JARDIN_ATLANTIQUE_TONTE_0049",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "JARDIN_ATLANTIQUE_PLANTATION_0051",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_PLANTATION_4",
-      "operation_precedente": "JARDIN_ATLANTIQUE_TAILLE_HAIES_0050",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "JARDIN_ATLANTIQUE_TRAITEMENT_0052",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_5",
-      "operation_precedente": "JARDIN_ATLANTIQUE_PLANTATION_0051",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_EVACUATION_DECHETS_0053",
+      "code_operation": "JARDIN_ACCLIMATATION_EVACUATION_DECHETS_0049",
       "duree_jours": 1,
       "poste_id": "CAMION_BENNE_5",
-      "operation_precedente": null,
-      "competence_requise": "benne"
+      "operation_precedente": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0048",
+      "competence_requise": "camion_benne"
     },
     {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0054",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_5",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_EVACUATION_DECHETS_0053",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0055",
+      "code_operation": "JARDIN_ACCLIMATATION_PLANTATION_0050",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_4",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0054",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TONTE_0056",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_12",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0055",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_ARROSAGE_0057",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_5",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TONTE_0056",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_PLANTATION_0058",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_PLANTATION_3",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_ARROSAGE_0057",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_EVACUATION_DECHETS_0059",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_2",
-      "operation_precedente": null,
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_DESHERBAGE_0060",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_14",
-      "operation_precedente": "PARC_MONCEAU_EVACUATION_DECHETS_0059",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_PLANTATION_0061",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_6",
-      "operation_precedente": "PARC_MONCEAU_DESHERBAGE_0060",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_TONTE_0062",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TONTE_11",
-      "operation_precedente": "PARC_MONCEAU_PLANTATION_0061",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_ARROSAGE_0063",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_6",
-      "operation_precedente": "PARC_MONCEAU_TONTE_0062",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_TRAITEMENT_0064",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_2",
-      "operation_precedente": "PARC_MONCEAU_ARROSAGE_0063",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_TAILLE_HAIES_0065",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_TAILLE_9",
-      "operation_precedente": "PARC_MONCEAU_TRAITEMENT_0064",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_TONTE_0066",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_3",
-      "operation_precedente": null,
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_TRAITEMENT_0067",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_3",
-      "operation_precedente": "PARC_SAINTE_PERINE_TONTE_0066",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_PLANTATION_0068",
-      "duree_jours": 5,
-      "poste_id": "EQUIPE_PLANTATION_2",
-      "operation_precedente": "PARC_SAINTE_PERINE_TRAITEMENT_0067",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_DESHERBAGE_0069",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_11",
-      "operation_precedente": "PARC_SAINTE_PERINE_PLANTATION_0068",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_EVACUATION_DECHETS_0070",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_4",
-      "operation_precedente": "PARC_SAINTE_PERINE_DESHERBAGE_0069",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_TAILLE_HAIES_0071",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TAILLE_3",
-      "operation_precedente": "PARC_SAINTE_PERINE_EVACUATION_DECHETS_0070",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_TONTE_0072",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_1",
-      "operation_precedente": null,
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_TRAITEMENT_0073",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_1",
-      "operation_precedente": "SQUARE_TEMPLE_TONTE_0072",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_TAILLE_HAIES_0074",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_TAILLE_5",
-      "operation_precedente": "SQUARE_TEMPLE_TRAITEMENT_0073",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_PLANTATION_0075",
-      "duree_jours": 2,
       "poste_id": "EQUIPE_PLANTATION_9",
-      "operation_precedente": "SQUARE_TEMPLE_TAILLE_HAIES_0074",
-      "competence_requise": "plantation"
+      "operation_precedente": "JARDIN_ACCLIMATATION_EVACUATION_DECHETS_0049",
+      "competence_requise": "equipe_plantation"
     },
     {
-      "code_operation": "SQUARE_TEMPLE_EVACUATION_DECHETS_0076",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_2",
-      "operation_precedente": "SQUARE_TEMPLE_PLANTATION_0075",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "BOIS_VINCENNES_TAILLE_HAIES_0077",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_1",
-      "operation_precedente": null,
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "BOIS_VINCENNES_TONTE_0078",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TONTE_10",
-      "operation_precedente": "BOIS_VINCENNES_TAILLE_HAIES_0077",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "BOIS_VINCENNES_PLANTATION_0079",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_PLANTATION_3",
-      "operation_precedente": "BOIS_VINCENNES_TONTE_0078",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "BOIS_VINCENNES_ARROSAGE_0080",
+      "code_operation": "JARDIN_ACCLIMATATION_TRAITEMENT_0051",
       "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_7",
-      "operation_precedente": "BOIS_VINCENNES_PLANTATION_0079",
-      "competence_requise": "arrosage"
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "JARDIN_ACCLIMATATION_PLANTATION_0050",
+      "competence_requise": "equipe_traitement"
     },
     {
-      "code_operation": "BOIS_VINCENNES_EVACUATION_DECHETS_0081",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_2",
-      "operation_precedente": "BOIS_VINCENNES_ARROSAGE_0080",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "BOIS_VINCENNES_DESHERBAGE_0082",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_6",
-      "operation_precedente": "BOIS_VINCENNES_EVACUATION_DECHETS_0081",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "BOIS_VINCENNES_TRAITEMENT_0083",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_4",
-      "operation_precedente": "BOIS_VINCENNES_DESHERBAGE_0082",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_PLANTATION_0084",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_2",
-      "operation_precedente": null,
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_TONTE_0085",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_5",
-      "operation_precedente": "SQUARE_TEMPLE_PLANTATION_0084",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_TAILLE_HAIES_0086",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_TAILLE_1",
-      "operation_precedente": "SQUARE_TEMPLE_TONTE_0085",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_ARROSAGE_0087",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_4",
-      "operation_precedente": "SQUARE_TEMPLE_TAILLE_HAIES_0086",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_DESHERBAGE_0088",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_3",
-      "operation_precedente": "SQUARE_TEMPLE_ARROSAGE_0087",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_ARROSAGE_0089",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_4",
-      "operation_precedente": null,
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_PLANTATION_0090",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_PLANTATION_1",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_ARROSAGE_0089",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TONTE_0091",
-      "duree_jours": 3,
-      "poste_id": "TONDEUSE_TRACTEE_3",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_PLANTATION_0090",
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0092",
+      "code_operation": "JARDIN_ACCLIMATATION_DESHERBAGE_0052",
       "duree_jours": 1,
       "poste_id": "EQUIPE_DESHERBAGE_5",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TONTE_0091",
-      "competence_requise": "desherbage"
+      "operation_precedente": "JARDIN_ACCLIMATATION_TRAITEMENT_0051",
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0093",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_6",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0092",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_ARROSAGE_0094",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_3",
+      "code_operation": "BOIS_VINCENNES_ARROSAGE_0053",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_1",
       "operation_precedente": null,
-      "competence_requise": "arrosage"
+      "competence_requise": "equipe_arrosage"
     },
     {
-      "code_operation": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0095",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_8",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_ARROSAGE_0094",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0096",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_3",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0095",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TONTE_0097",
+      "code_operation": "BOIS_VINCENNES_TONTE_0054",
       "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_5",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0096",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_EVACUATION_DECHETS_0098",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_1",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TONTE_0097",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "SQUARE_BATIGNOLLES_DESHERBAGE_0099",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_2",
-      "operation_precedente": null,
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "SQUARE_BATIGNOLLES_TRAITEMENT_0100",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_1",
-      "operation_precedente": "SQUARE_BATIGNOLLES_DESHERBAGE_0099",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "SQUARE_BATIGNOLLES_ARROSAGE_0101",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_7",
-      "operation_precedente": "SQUARE_BATIGNOLLES_TRAITEMENT_0100",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "SQUARE_BATIGNOLLES_EVACUATION_DECHETS_0102",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_4",
-      "operation_precedente": "SQUARE_BATIGNOLLES_ARROSAGE_0101",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "SQUARE_BATIGNOLLES_PLANTATION_0103",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_PLANTATION_5",
-      "operation_precedente": "SQUARE_BATIGNOLLES_EVACUATION_DECHETS_0102",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "SQUARE_BATIGNOLLES_TAILLE_HAIES_0104",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TAILLE_4",
-      "operation_precedente": "SQUARE_BATIGNOLLES_PLANTATION_0103",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0105",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_4",
-      "operation_precedente": null,
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_TAILLE_HAIES_0106",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_TAILLE_9",
-      "operation_precedente": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0105",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_PLANTATION_0107",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_PLANTATION_3",
-      "operation_precedente": "ESPLANADE_INVALIDES_TAILLE_HAIES_0106",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_DESHERBAGE_0108",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_9",
-      "operation_precedente": "ESPLANADE_INVALIDES_PLANTATION_0107",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_TONTE_0109",
-      "duree_jours": 3,
-      "poste_id": "TONDEUSE_TRACTEE_1",
-      "operation_precedente": "ESPLANADE_INVALIDES_DESHERBAGE_0108",
+      "poste_id": "TONDEUSE_TRACTEE_6",
+      "operation_precedente": "BOIS_VINCENNES_ARROSAGE_0053",
       "competence_requise": "tondeuse_tractee"
     },
     {
-      "code_operation": "PARC_SAINTE_PERINE_PLANTATION_0110",
+      "code_operation": "BOIS_VINCENNES_PLANTATION_0055",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_3",
-      "operation_precedente": null,
-      "competence_requise": "plantation"
+      "poste_id": "EQUIPE_PLANTATION_1",
+      "operation_precedente": "BOIS_VINCENNES_TONTE_0054",
+      "competence_requise": "equipe_plantation"
     },
     {
-      "code_operation": "PARC_SAINTE_PERINE_EVACUATION_DECHETS_0111",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_1",
-      "operation_precedente": "PARC_SAINTE_PERINE_PLANTATION_0110",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_DESHERBAGE_0112",
+      "code_operation": "BOIS_VINCENNES_TAILLE_HAIES_0056",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_2",
-      "operation_precedente": "PARC_SAINTE_PERINE_EVACUATION_DECHETS_0111",
-      "competence_requise": "desherbage"
+      "poste_id": "EQUIPE_TAILLE_1",
+      "operation_precedente": "BOIS_VINCENNES_PLANTATION_0055",
+      "competence_requise": "equipe_taille"
     },
     {
-      "code_operation": "PARC_SAINTE_PERINE_TAILLE_HAIES_0113",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TAILLE_4",
-      "operation_precedente": "PARC_SAINTE_PERINE_DESHERBAGE_0112",
-      "competence_requise": "taille"
+      "code_operation": "BOIS_VINCENNES_EVACUATION_DECHETS_0057",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_3",
+      "operation_precedente": "BOIS_VINCENNES_TAILLE_HAIES_0056",
+      "competence_requise": "camion_benne"
     },
     {
-      "code_operation": "PARC_SAINTE_PERINE_TRAITEMENT_0114",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_4",
-      "operation_precedente": "PARC_SAINTE_PERINE_TAILLE_HAIES_0113",
-      "competence_requise": "traitement"
+      "code_operation": "BOIS_VINCENNES_DESHERBAGE_0058",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_3",
+      "operation_precedente": "BOIS_VINCENNES_EVACUATION_DECHETS_0057",
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "PARC_SAINTE_PERINE_ARROSAGE_0115",
+      "code_operation": "BOIS_VINCENNES_TRAITEMENT_0059",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "BOIS_VINCENNES_DESHERBAGE_0058",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "ZONE_TUILERIES_ARROSAGE_0060",
       "duree_jours": 2,
       "poste_id": "EQUIPE_ARROSAGE_1",
-      "operation_precedente": "PARC_SAINTE_PERINE_TRAITEMENT_0114",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_SAINTE_PERINE_TONTE_0116",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_9",
-      "operation_precedente": "PARC_SAINTE_PERINE_ARROSAGE_0115",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_DESHERBAGE_0117",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_11",
       "operation_precedente": null,
-      "competence_requise": "desherbage"
+      "competence_requise": "equipe_arrosage"
     },
     {
-      "code_operation": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0118",
+      "code_operation": "ZONE_TUILERIES_PLANTATION_0061",
+      "duree_jours": 5,
+      "poste_id": "EQUIPE_PLANTATION_10",
+      "operation_precedente": "ZONE_TUILERIES_ARROSAGE_0060",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "ZONE_TUILERIES_DESHERBAGE_0062",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_4",
+      "operation_precedente": "ZONE_TUILERIES_PLANTATION_0061",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "ZONE_TUILERIES_EVACUATION_DECHETS_0063",
       "duree_jours": 1,
       "poste_id": "CAMION_BENNE_3",
-      "operation_precedente": "PROMENADE_PLANTEE_DESHERBAGE_0117",
-      "competence_requise": "benne"
+      "operation_precedente": "ZONE_TUILERIES_DESHERBAGE_0062",
+      "competence_requise": "camion_benne"
     },
     {
-      "code_operation": "PROMENADE_PLANTEE_PLANTATION_0119",
+      "code_operation": "ZONE_TUILERIES_TAILLE_HAIES_0064",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_9",
-      "operation_precedente": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0118",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_TAILLE_HAIES_0120",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TAILLE_7",
-      "operation_precedente": "PROMENADE_PLANTEE_PLANTATION_0119",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_TRAITEMENT_0121",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_6",
-      "operation_precedente": "PROMENADE_PLANTEE_TAILLE_HAIES_0120",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_TONTE_0122",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_1",
-      "operation_precedente": "PROMENADE_PLANTEE_TRAITEMENT_0121",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "JARDIN_PLANTES_TONTE_0123",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TONTE_2",
-      "operation_precedente": null,
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "JARDIN_PLANTES_TAILLE_HAIES_0124",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TAILLE_2",
-      "operation_precedente": "JARDIN_PLANTES_TONTE_0123",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "JARDIN_PLANTES_EVACUATION_DECHETS_0125",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_5",
-      "operation_precedente": "JARDIN_PLANTES_TAILLE_HAIES_0124",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "JARDIN_PLANTES_DESHERBAGE_0126",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_8",
-      "operation_precedente": "JARDIN_PLANTES_EVACUATION_DECHETS_0125",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "JARDIN_PLANTES_PLANTATION_0127",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_PLANTATION_8",
-      "operation_precedente": "JARDIN_PLANTES_DESHERBAGE_0126",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "JARDIN_PLANTES_ARROSAGE_0128",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_8",
-      "operation_precedente": "JARDIN_PLANTES_PLANTATION_0127",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_TONTE_0129",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_12",
-      "operation_precedente": null,
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0130",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_4",
-      "operation_precedente": "ESPLANADE_INVALIDES_TONTE_0129",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_PLANTATION_0131",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_PLANTATION_3",
-      "operation_precedente": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0130",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_TRAITEMENT_0132",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_5",
-      "operation_precedente": "ESPLANADE_INVALIDES_PLANTATION_0131",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "ESPLANADE_INVALIDES_DESHERBAGE_0133",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_12",
-      "operation_precedente": "ESPLANADE_INVALIDES_TRAITEMENT_0132",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_PLANTATION_0134",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_PLANTATION_10",
-      "operation_precedente": null,
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_TONTE_0135",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TONTE_1",
-      "operation_precedente": "PARC_MONCEAU_PLANTATION_0134",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_ARROSAGE_0136",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_8",
-      "operation_precedente": "PARC_MONCEAU_TONTE_0135",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_TRAITEMENT_0137",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_1",
-      "operation_precedente": "PARC_MONCEAU_ARROSAGE_0136",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_MONCEAU_EVACUATION_DECHETS_0138",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_4",
-      "operation_precedente": "PARC_MONCEAU_TRAITEMENT_0137",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_MONTSOURIS_EVACUATION_DECHETS_0139",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_1",
-      "operation_precedente": null,
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_MONTSOURIS_TONTE_0140",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TONTE_9",
-      "operation_precedente": "PARC_MONTSOURIS_EVACUATION_DECHETS_0139",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_MONTSOURIS_TRAITEMENT_0141",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_6",
-      "operation_precedente": "PARC_MONTSOURIS_TONTE_0140",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_MONTSOURIS_TAILLE_HAIES_0142",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TAILLE_9",
-      "operation_precedente": "PARC_MONTSOURIS_TRAITEMENT_0141",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PARC_MONTSOURIS_PLANTATION_0143",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_9",
-      "operation_precedente": "PARC_MONTSOURIS_TAILLE_HAIES_0142",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_MONTSOURIS_DESHERBAGE_0144",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_13",
-      "operation_precedente": "PARC_MONTSOURIS_PLANTATION_0143",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_MONTSOURIS_ARROSAGE_0145",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_5",
-      "operation_precedente": "PARC_MONTSOURIS_DESHERBAGE_0144",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PARC_BELLEVILLE_DESHERBAGE_0146",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_10",
-      "operation_precedente": null,
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "PARC_BELLEVILLE_TONTE_0147",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TONTE_11",
-      "operation_precedente": "PARC_BELLEVILLE_DESHERBAGE_0146",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PARC_BELLEVILLE_PLANTATION_0148",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_4",
-      "operation_precedente": "PARC_BELLEVILLE_TONTE_0147",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_BELLEVILLE_EVACUATION_DECHETS_0149",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_5",
-      "operation_precedente": "PARC_BELLEVILLE_PLANTATION_0148",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "PARC_BELLEVILLE_TRAITEMENT_0150",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_1",
-      "operation_precedente": "PARC_BELLEVILLE_EVACUATION_DECHETS_0149",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BELLEVILLE_TAILLE_HAIES_0151",
-      "duree_jours": 2,
       "poste_id": "EQUIPE_TAILLE_8",
-      "operation_precedente": "PARC_BELLEVILLE_TRAITEMENT_0150",
-      "competence_requise": "taille"
+      "operation_precedente": "ZONE_TUILERIES_EVACUATION_DECHETS_0063",
+      "competence_requise": "equipe_taille"
     },
     {
-      "code_operation": "PARC_BELLEVILLE_ARROSAGE_0152",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_8",
-      "operation_precedente": "PARC_BELLEVILLE_TAILLE_HAIES_0151",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "JARDIN_SERRES_AUTEUIL_ARROSAGE_0153",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_4",
+      "code_operation": "JARDIN_LUXEMBOURG_TAILLE_HAIES_0065",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_8",
       "operation_precedente": null,
-      "competence_requise": "arrosage"
+      "competence_requise": "equipe_taille"
     },
     {
-      "code_operation": "JARDIN_SERRES_AUTEUIL_TAILLE_HAIES_0154",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_3",
-      "operation_precedente": "JARDIN_SERRES_AUTEUIL_ARROSAGE_0153",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "JARDIN_SERRES_AUTEUIL_PLANTATION_0155",
-      "duree_jours": 5,
-      "poste_id": "EQUIPE_PLANTATION_7",
-      "operation_precedente": "JARDIN_SERRES_AUTEUIL_TAILLE_HAIES_0154",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "JARDIN_SERRES_AUTEUIL_TRAITEMENT_0156",
+      "code_operation": "JARDIN_LUXEMBOURG_TONTE_0066",
       "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_2",
-      "operation_precedente": "JARDIN_SERRES_AUTEUIL_PLANTATION_0155",
-      "competence_requise": "traitement"
+      "poste_id": "EQUIPE_TONTE_3",
+      "operation_precedente": "JARDIN_LUXEMBOURG_TAILLE_HAIES_0065",
+      "competence_requise": "equipe_tonte"
     },
     {
-      "code_operation": "JARDIN_SERRES_AUTEUIL_TONTE_0157",
-      "duree_jours": 1,
-      "poste_id": "TONDEUSE_TRACTEE_1",
-      "operation_precedente": "JARDIN_SERRES_AUTEUIL_TRAITEMENT_0156",
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "JARDIN_SERRES_AUTEUIL_EVACUATION_DECHETS_0158",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_4",
-      "operation_precedente": "JARDIN_SERRES_AUTEUIL_TONTE_0157",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_TRAITEMENT_0159",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_4",
-      "operation_precedente": null,
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_ARROSAGE_0160",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_7",
-      "operation_precedente": "SQUARE_TEMPLE_TRAITEMENT_0159",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_TONTE_0161",
-      "duree_jours": 2,
-      "poste_id": "TONDEUSE_TRACTEE_2",
-      "operation_precedente": "SQUARE_TEMPLE_ARROSAGE_0160",
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_EVACUATION_DECHETS_0162",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_5",
-      "operation_precedente": "SQUARE_TEMPLE_TONTE_0161",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "SQUARE_TEMPLE_PLANTATION_0163",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_10",
-      "operation_precedente": "SQUARE_TEMPLE_EVACUATION_DECHETS_0162",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "JARDIN_PALAIS_ROYAL_DESHERBAGE_0164",
+      "code_operation": "JARDIN_LUXEMBOURG_DESHERBAGE_0067",
       "duree_jours": 2,
       "poste_id": "EQUIPE_DESHERBAGE_15",
-      "operation_precedente": null,
-      "competence_requise": "desherbage"
+      "operation_precedente": "JARDIN_LUXEMBOURG_TONTE_0066",
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "JARDIN_PALAIS_ROYAL_EVACUATION_DECHETS_0165",
-      "duree_jours": 2,
-      "poste_id": "CAMION_BENNE_1",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_DESHERBAGE_0164",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "JARDIN_PALAIS_ROYAL_TAILLE_HAIES_0166",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_7",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_EVACUATION_DECHETS_0165",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "JARDIN_PALAIS_ROYAL_PLANTATION_0167",
-      "duree_jours": 5,
-      "poste_id": "EQUIPE_PLANTATION_3",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_TAILLE_HAIES_0166",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "JARDIN_PALAIS_ROYAL_TONTE_0168",
+      "code_operation": "JARDIN_LUXEMBOURG_EVACUATION_DECHETS_0068",
       "duree_jours": 1,
-      "poste_id": "TONDEUSE_TRACTEE_6",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_PLANTATION_0167",
-      "competence_requise": "tondeuse_tractee"
+      "poste_id": "CAMION_BENNE_4",
+      "operation_precedente": "JARDIN_LUXEMBOURG_DESHERBAGE_0067",
+      "competence_requise": "camion_benne"
     },
     {
-      "code_operation": "JARDIN_PALAIS_ROYAL_TRAITEMENT_0169",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_4",
-      "operation_precedente": "JARDIN_PALAIS_ROYAL_TONTE_0168",
-      "competence_requise": "traitement"
+      "code_operation": "JARDIN_LUXEMBOURG_PLANTATION_0069",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_9",
+      "operation_precedente": "JARDIN_LUXEMBOURG_EVACUATION_DECHETS_0068",
+      "competence_requise": "equipe_plantation"
     },
     {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TONTE_0170",
-      "duree_jours": 3,
-      "poste_id": "TONDEUSE_TRACTEE_7",
-      "operation_precedente": null,
-      "competence_requise": "tondeuse_tractee"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_PLANTATION_0171",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_PLANTATION_6",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TONTE_0170",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0172",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_3",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_PLANTATION_0171",
-      "competence_requise": "taille"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0173",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_2",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0172",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0174",
+      "code_operation": "ZONE_TUILERIES_DESHERBAGE_0070",
       "duree_jours": 1,
       "poste_id": "EQUIPE_DESHERBAGE_2",
-      "operation_precedente": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0173",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "JARDIN_ACCLIMATATION_TRAITEMENT_0175",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_TRAITEMENT_1",
       "operation_precedente": null,
-      "competence_requise": "traitement"
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0176",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_TAILLE_6",
-      "operation_precedente": "JARDIN_ACCLIMATATION_TRAITEMENT_0175",
-      "competence_requise": "taille"
+      "code_operation": "ZONE_TUILERIES_TONTE_0071",
+      "duree_jours": 3,
+      "poste_id": "TONDEUSE_TRACTEE_8",
+      "operation_precedente": "ZONE_TUILERIES_DESHERBAGE_0070",
+      "competence_requise": "tondeuse_tractee"
     },
     {
-      "code_operation": "JARDIN_ACCLIMATATION_ARROSAGE_0177",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE_3",
-      "operation_precedente": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0176",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "JARDIN_ACCLIMATATION_PLANTATION_0178",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION_6",
-      "operation_precedente": "JARDIN_ACCLIMATATION_ARROSAGE_0177",
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "JARDIN_ACCLIMATATION_DESHERBAGE_0179",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESHERBAGE_4",
-      "operation_precedente": "JARDIN_ACCLIMATATION_PLANTATION_0178",
-      "competence_requise": "desherbage"
-    },
-    {
-      "code_operation": "JARDIN_ACCLIMATATION_EVACUATION_DECHETS_0180",
-      "duree_jours": 1,
-      "poste_id": "CAMION_BENNE_5",
-      "operation_precedente": "JARDIN_ACCLIMATATION_DESHERBAGE_0179",
-      "competence_requise": "benne"
-    },
-    {
-      "code_operation": "JARDIN_ACCLIMATATION_TONTE_0181",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TONTE_3",
-      "operation_precedente": "JARDIN_ACCLIMATATION_EVACUATION_DECHETS_0180",
-      "competence_requise": "tonte"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_PLANTATION_0182",
-      "duree_jours": 4,
-      "poste_id": "EQUIPE_PLANTATION_4",
-      "operation_precedente": null,
-      "competence_requise": "plantation"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_ARROSAGE_0183",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_ARROSAGE_7",
-      "operation_precedente": "PROMENADE_PLANTEE_PLANTATION_0182",
-      "competence_requise": "arrosage"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_TRAITEMENT_0184",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_1",
-      "operation_precedente": "PROMENADE_PLANTEE_ARROSAGE_0183",
-      "competence_requise": "traitement"
-    },
-    {
-      "code_operation": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0185",
+      "code_operation": "ZONE_TUILERIES_EVACUATION_DECHETS_0072",
       "duree_jours": 2,
       "poste_id": "CAMION_BENNE_1",
-      "operation_precedente": "PROMENADE_PLANTEE_TRAITEMENT_0184",
-      "competence_requise": "benne"
+      "operation_precedente": "ZONE_TUILERIES_TONTE_0071",
+      "competence_requise": "camion_benne"
     },
     {
-      "code_operation": "PROMENADE_PLANTEE_TONTE_0186",
+      "code_operation": "ZONE_TUILERIES_TRAITEMENT_0073",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_4",
+      "operation_precedente": "ZONE_TUILERIES_EVACUATION_DECHETS_0072",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "ZONE_TUILERIES_PLANTATION_0074",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_5",
+      "operation_precedente": "ZONE_TUILERIES_TRAITEMENT_0073",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "ZONE_TUILERIES_TAILLE_HAIES_0075",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_2",
+      "operation_precedente": "ZONE_TUILERIES_PLANTATION_0074",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "ZONE_TUILERIES_ARROSAGE_0076",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_3",
+      "operation_precedente": "ZONE_TUILERIES_TAILLE_HAIES_0075",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0077",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TAILLE_1",
+      "operation_precedente": null,
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0078",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_1",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0077",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_ARROSAGE_0079",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_2",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0078",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0080",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_3",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_ARROSAGE_0079",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_PLANTATION_0081",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_PLANTATION_10",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0080",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_ARROSAGE_0082",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_3",
+      "operation_precedente": null,
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_TRAITEMENT_0083",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_6",
+      "operation_precedente": "SQUARE_TROUSSEAU_ARROSAGE_0082",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_TAILLE_HAIES_0084",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TAILLE_4",
+      "operation_precedente": "SQUARE_TROUSSEAU_TRAITEMENT_0083",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_TONTE_0085",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TONTE_6",
+      "operation_precedente": "SQUARE_TROUSSEAU_TAILLE_HAIES_0084",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "SQUARE_TROUSSEAU_EVACUATION_DECHETS_0086",
+      "duree_jours": 2,
+      "poste_id": "CAMION_BENNE_1",
+      "operation_precedente": "SQUARE_TROUSSEAU_TONTE_0085",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0087",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_4",
+      "operation_precedente": null,
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_PLANTATION_0088",
+      "duree_jours": 5,
+      "poste_id": "EQUIPE_PLANTATION_5",
+      "operation_precedente": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0087",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_TONTE_0089",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TONTE_4",
+      "operation_precedente": "ESPLANADE_INVALIDES_PLANTATION_0088",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_TAILLE_HAIES_0090",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_10",
+      "operation_precedente": "ESPLANADE_INVALIDES_TONTE_0089",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_DESHERBAGE_0091",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_1",
+      "operation_precedente": "ESPLANADE_INVALIDES_TAILLE_HAIES_0090",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_BERCY_TAILLE_HAIES_0092",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_10",
+      "operation_precedente": null,
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_BERCY_TONTE_0093",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TONTE_7",
+      "operation_precedente": "PARC_BERCY_TAILLE_HAIES_0092",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_BERCY_DESHERBAGE_0094",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_1",
+      "operation_precedente": "PARC_BERCY_TONTE_0093",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_BERCY_ARROSAGE_0095",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_6",
+      "operation_precedente": "PARC_BERCY_DESHERBAGE_0094",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_BERCY_EVACUATION_DECHETS_0096",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_2",
+      "operation_precedente": "PARC_BERCY_ARROSAGE_0095",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "PARC_BERCY_PLANTATION_0097",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_7",
+      "operation_precedente": "PARC_BERCY_EVACUATION_DECHETS_0096",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_TRAITEMENT_0098",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_1",
+      "operation_precedente": null,
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_ARROSAGE_0099",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_1",
+      "operation_precedente": "ESPLANADE_INVALIDES_TRAITEMENT_0098",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0100",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_3",
+      "operation_precedente": "ESPLANADE_INVALIDES_ARROSAGE_0099",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_PLANTATION_0101",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_PLANTATION_6",
+      "operation_precedente": "ESPLANADE_INVALIDES_EVACUATION_DECHETS_0100",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "ESPLANADE_INVALIDES_TONTE_0102",
       "duree_jours": 3,
-      "poste_id": "TONDEUSE_TRACTEE_6",
-      "operation_precedente": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0185",
+      "poste_id": "EQUIPE_TONTE_10",
+      "operation_precedente": "ESPLANADE_INVALIDES_PLANTATION_0101",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_EVACUATION_DECHETS_0103",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_2",
+      "operation_precedente": null,
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TAILLE_HAIES_0104",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TAILLE_1",
+      "operation_precedente": "PARC_ANDRE_CITROEN_EVACUATION_DECHETS_0103",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_PLANTATION_0105",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_8",
+      "operation_precedente": "PARC_ANDRE_CITROEN_TAILLE_HAIES_0104",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_ARROSAGE_0106",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_7",
+      "operation_precedente": "PARC_ANDRE_CITROEN_PLANTATION_0105",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TONTE_0107",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TONTE_5",
+      "operation_precedente": "PARC_ANDRE_CITROEN_ARROSAGE_0106",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_DESHERBAGE_0108",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_7",
+      "operation_precedente": "PARC_ANDRE_CITROEN_TONTE_0107",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TRAITEMENT_0109",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_5",
+      "operation_precedente": "PARC_ANDRE_CITROEN_DESHERBAGE_0108",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "JARDIN_CATHERINE_LABOURE_DESHERBAGE_0110",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_11",
+      "operation_precedente": null,
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "JARDIN_CATHERINE_LABOURE_EVACUATION_DECHETS_0111",
+      "duree_jours": 2,
+      "poste_id": "CAMION_BENNE_2",
+      "operation_precedente": "JARDIN_CATHERINE_LABOURE_DESHERBAGE_0110",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "JARDIN_CATHERINE_LABOURE_PLANTATION_0112",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_4",
+      "operation_precedente": "JARDIN_CATHERINE_LABOURE_EVACUATION_DECHETS_0111",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "JARDIN_CATHERINE_LABOURE_ARROSAGE_0113",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_8",
+      "operation_precedente": "JARDIN_CATHERINE_LABOURE_PLANTATION_0112",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "JARDIN_CATHERINE_LABOURE_TONTE_0114",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TONTE_4",
+      "operation_precedente": "JARDIN_CATHERINE_LABOURE_ARROSAGE_0113",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "JARDIN_CATHERINE_LABOURE_TAILLE_HAIES_0115",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_8",
+      "operation_precedente": "JARDIN_CATHERINE_LABOURE_TONTE_0114",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_PLANTATION_0116",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_PLANTATION_9",
+      "operation_precedente": null,
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0117",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TAILLE_4",
+      "operation_precedente": "JARDIN_ACCLIMATATION_PLANTATION_0116",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_DESHERBAGE_0118",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_1",
+      "operation_precedente": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0117",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_TONTE_0119",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TONTE_2",
+      "operation_precedente": "JARDIN_ACCLIMATATION_DESHERBAGE_0118",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_EVACUATION_DECHETS_0120",
+      "duree_jours": 2,
+      "poste_id": "CAMION_BENNE_1",
+      "operation_precedente": "JARDIN_ACCLIMATATION_TONTE_0119",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_ARROSAGE_0121",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_1",
+      "operation_precedente": "JARDIN_ACCLIMATATION_EVACUATION_DECHETS_0120",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_TRAITEMENT_0122",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_1",
+      "operation_precedente": "JARDIN_ACCLIMATATION_ARROSAGE_0121",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0123",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TAILLE_4",
+      "operation_precedente": null,
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0124",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_TAILLE_HAIES_0123",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_ARROSAGE_0125",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_7",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_TRAITEMENT_0124",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0126",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_1",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_ARROSAGE_0125",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_PLANTATION_0127",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_PLANTATION_3",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_DESHERBAGE_0126",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_EVACUATION_DECHETS_0128",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_5",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_PLANTATION_0127",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "PARC_BUTTES_CHAUMONT_TONTE_0129",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TONTE_6",
+      "operation_precedente": "PARC_BUTTES_CHAUMONT_EVACUATION_DECHETS_0128",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_ARROSAGE_0130",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_2",
+      "operation_precedente": null,
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TRAITEMENT_0131",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "PARC_ANDRE_CITROEN_ARROSAGE_0130",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_EVACUATION_DECHETS_0132",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_3",
+      "operation_precedente": "PARC_ANDRE_CITROEN_TRAITEMENT_0131",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_DESHERBAGE_0133",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_13",
+      "operation_precedente": "PARC_ANDRE_CITROEN_EVACUATION_DECHETS_0132",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TONTE_0134",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TONTE_5",
+      "operation_precedente": "PARC_ANDRE_CITROEN_DESHERBAGE_0133",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_PLANTATION_0135",
+      "duree_jours": 5,
+      "poste_id": "EQUIPE_PLANTATION_5",
+      "operation_precedente": "PARC_ANDRE_CITROEN_TONTE_0134",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TAILLE_HAIES_0136",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_3",
+      "operation_precedente": "PARC_ANDRE_CITROEN_PLANTATION_0135",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_TAILLE_HAIES_0137",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_9",
+      "operation_precedente": null,
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_EVACUATION_DECHETS_0138",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_3",
+      "operation_precedente": "SQUARE_BATIGNOLLES_TAILLE_HAIES_0137",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_ARROSAGE_0139",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_1",
+      "operation_precedente": "SQUARE_BATIGNOLLES_EVACUATION_DECHETS_0138",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_TONTE_0140",
+      "duree_jours": 1,
+      "poste_id": "TONDEUSE_TRACTEE_3",
+      "operation_precedente": "SQUARE_BATIGNOLLES_ARROSAGE_0139",
       "competence_requise": "tondeuse_tractee"
     },
     {
-      "code_operation": "PROMENADE_PLANTEE_DESHERBAGE_0187",
-      "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_14",
-      "operation_precedente": "PROMENADE_PLANTEE_TONTE_0186",
-      "competence_requise": "desherbage"
+      "code_operation": "SQUARE_BATIGNOLLES_DESHERBAGE_0141",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_5",
+      "operation_precedente": "SQUARE_BATIGNOLLES_TONTE_0140",
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "ZONE_TUILERIES_TONTE_0188",
+      "code_operation": "SQUARE_BATIGNOLLES_PLANTATION_0142",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_PLANTATION_8",
+      "operation_precedente": "SQUARE_BATIGNOLLES_DESHERBAGE_0141",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_TRAITEMENT_0143",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_1",
+      "operation_precedente": "SQUARE_BATIGNOLLES_PLANTATION_0142",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_TRAITEMENT_0144",
       "duree_jours": 1,
-      "poste_id": "TONDEUSE_TRACTEE_6",
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": null,
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_DESHERBAGE_0145",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_14",
+      "operation_precedente": "SQUARE_TEMPLE_TRAITEMENT_0144",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_PLANTATION_0146",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_PLANTATION_5",
+      "operation_precedente": "SQUARE_TEMPLE_DESHERBAGE_0145",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_TAILLE_HAIES_0147",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TAILLE_4",
+      "operation_precedente": "SQUARE_TEMPLE_PLANTATION_0146",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_EVACUATION_DECHETS_0148",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_4",
+      "operation_precedente": "SQUARE_TEMPLE_TAILLE_HAIES_0147",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "SQUARE_TEMPLE_TONTE_0149",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TONTE_7",
+      "operation_precedente": "SQUARE_TEMPLE_EVACUATION_DECHETS_0148",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_ARROSAGE_0150",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_6",
+      "operation_precedente": null,
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TRAITEMENT_0151",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": "PARC_ANDRE_CITROEN_ARROSAGE_0150",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_PLANTATION_0152",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_PLANTATION_8",
+      "operation_precedente": "PARC_ANDRE_CITROEN_TRAITEMENT_0151",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_DESHERBAGE_0153",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_15",
+      "operation_precedente": "PARC_ANDRE_CITROEN_PLANTATION_0152",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TONTE_0154",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TONTE_3",
+      "operation_precedente": "PARC_ANDRE_CITROEN_DESHERBAGE_0153",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_EVACUATION_DECHETS_0155",
+      "duree_jours": 2,
+      "poste_id": "CAMION_BENNE_1",
+      "operation_precedente": "PARC_ANDRE_CITROEN_TONTE_0154",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "PARC_ANDRE_CITROEN_TAILLE_HAIES_0156",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TAILLE_9",
+      "operation_precedente": "PARC_ANDRE_CITROEN_EVACUATION_DECHETS_0155",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "PARC_MONTSOURIS_TONTE_0157",
+      "duree_jours": 1,
+      "poste_id": "TONDEUSE_TRACTEE_1",
       "operation_precedente": null,
       "competence_requise": "tondeuse_tractee"
     },
     {
-      "code_operation": "ZONE_TUILERIES_TAILLE_HAIES_0189",
-      "duree_jours": 3,
-      "poste_id": "EQUIPE_TAILLE_7",
-      "operation_precedente": "ZONE_TUILERIES_TONTE_0188",
-      "competence_requise": "taille"
+      "code_operation": "PARC_MONTSOURIS_TAILLE_HAIES_0158",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TAILLE_4",
+      "operation_precedente": "PARC_MONTSOURIS_TONTE_0157",
+      "competence_requise": "equipe_taille"
     },
     {
-      "code_operation": "ZONE_TUILERIES_ARROSAGE_0190",
+      "code_operation": "PARC_MONTSOURIS_DESHERBAGE_0159",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_6",
+      "operation_precedente": "PARC_MONTSOURIS_TAILLE_HAIES_0158",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PARC_MONTSOURIS_TRAITEMENT_0160",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_5",
+      "operation_precedente": "PARC_MONTSOURIS_DESHERBAGE_0159",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "PARC_MONTSOURIS_ARROSAGE_0161",
       "duree_jours": 1,
       "poste_id": "EQUIPE_ARROSAGE_5",
-      "operation_precedente": "ZONE_TUILERIES_TAILLE_HAIES_0189",
-      "competence_requise": "arrosage"
+      "operation_precedente": "PARC_MONTSOURIS_TRAITEMENT_0160",
+      "competence_requise": "equipe_arrosage"
     },
     {
-      "code_operation": "ZONE_TUILERIES_DESHERBAGE_0191",
+      "code_operation": "SQUARE_BATIGNOLLES_ARROSAGE_0162",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_3",
+      "operation_precedente": null,
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_EVACUATION_DECHETS_0163",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_5",
+      "operation_precedente": "SQUARE_BATIGNOLLES_ARROSAGE_0162",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_TRAITEMENT_0164",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_TRAITEMENT_1",
+      "operation_precedente": "SQUARE_BATIGNOLLES_EVACUATION_DECHETS_0163",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_PLANTATION_0165",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_2",
+      "operation_precedente": "SQUARE_BATIGNOLLES_TRAITEMENT_0164",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "SQUARE_BATIGNOLLES_DESHERBAGE_0166",
       "duree_jours": 2,
-      "poste_id": "EQUIPE_DESHERBAGE_9",
-      "operation_precedente": "ZONE_TUILERIES_ARROSAGE_0190",
-      "competence_requise": "desherbage"
+      "poste_id": "EQUIPE_DESHERBAGE_3",
+      "operation_precedente": "SQUARE_BATIGNOLLES_PLANTATION_0165",
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "ZONE_TUILERIES_TRAITEMENT_0192",
+      "code_operation": "SQUARE_BATIGNOLLES_TAILLE_HAIES_0167",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TAILLE_6",
+      "operation_precedente": "SQUARE_BATIGNOLLES_DESHERBAGE_0166",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_TAILLE_HAIES_0168",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TAILLE_3",
+      "operation_precedente": null,
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_ARROSAGE_0169",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_6",
+      "operation_precedente": "SQUARE_RECAMIER_TAILLE_HAIES_0168",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_DESHERBAGE_0170",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_5",
+      "operation_precedente": "SQUARE_RECAMIER_ARROSAGE_0169",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_TONTE_0171",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TONTE_12",
+      "operation_precedente": "SQUARE_RECAMIER_DESHERBAGE_0170",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_EVACUATION_DECHETS_0172",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_5",
+      "operation_precedente": "SQUARE_RECAMIER_TONTE_0171",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_PLANTATION_0173",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_PLANTATION_2",
+      "operation_precedente": "SQUARE_RECAMIER_EVACUATION_DECHETS_0172",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_TRAITEMENT_0174",
       "duree_jours": 2,
       "poste_id": "EQUIPE_TRAITEMENT_2",
-      "operation_precedente": "ZONE_TUILERIES_DESHERBAGE_0191",
-      "competence_requise": "traitement"
+      "operation_precedente": "SQUARE_RECAMIER_PLANTATION_0173",
+      "competence_requise": "equipe_traitement"
     },
     {
-      "code_operation": "ZONE_TUILERIES_PLANTATION_0193",
-      "duree_jours": 5,
-      "poste_id": "EQUIPE_PLANTATION_10",
-      "operation_precedente": "ZONE_TUILERIES_TRAITEMENT_0192",
-      "competence_requise": "plantation"
+      "code_operation": "PROMENADE_PLANTEE_TRAITEMENT_0175",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_2",
+      "operation_precedente": null,
+      "competence_requise": "equipe_traitement"
     },
     {
-      "code_operation": "ZONE_TUILERIES_EVACUATION_DECHETS_0194",
+      "code_operation": "PROMENADE_PLANTEE_DESHERBAGE_0176",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_2",
+      "operation_precedente": "PROMENADE_PLANTEE_TRAITEMENT_0175",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_TONTE_0177",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TONTE_8",
+      "operation_precedente": "PROMENADE_PLANTEE_DESHERBAGE_0176",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_ARROSAGE_0178",
       "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_3",
+      "operation_precedente": "PROMENADE_PLANTEE_TONTE_0177",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0179",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_4",
+      "operation_precedente": "PROMENADE_PLANTEE_ARROSAGE_0178",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "PROMENADE_PLANTEE_TAILLE_HAIES_0180",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_1",
+      "operation_precedente": "PROMENADE_PLANTEE_EVACUATION_DECHETS_0179",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_PLANTATION_0181",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_PLANTATION_2",
+      "operation_precedente": null,
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_TONTE_0182",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TONTE_11",
+      "operation_precedente": "JARDIN_ACCLIMATATION_PLANTATION_0181",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_ARROSAGE_0183",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_4",
+      "operation_precedente": "JARDIN_ACCLIMATATION_TONTE_0182",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0184",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_TAILLE_8",
+      "operation_precedente": "JARDIN_ACCLIMATATION_ARROSAGE_0183",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_DESHERBAGE_0185",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_DESHERBAGE_7",
+      "operation_precedente": "JARDIN_ACCLIMATATION_TAILLE_HAIES_0184",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "JARDIN_ACCLIMATATION_EVACUATION_DECHETS_0186",
+      "duree_jours": 1,
+      "poste_id": "CAMION_BENNE_5",
+      "operation_precedente": "JARDIN_ACCLIMATATION_DESHERBAGE_0185",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_DESHERBAGE_0187",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_14",
+      "operation_precedente": null,
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_EVACUATION_DECHETS_0188",
+      "duree_jours": 2,
       "poste_id": "CAMION_BENNE_3",
-      "operation_precedente": "ZONE_TUILERIES_PLANTATION_0193",
-      "competence_requise": "benne"
+      "operation_precedente": "JARDIN_LUXEMBOURG_DESHERBAGE_0187",
+      "competence_requise": "camion_benne"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_TRAITEMENT_0189",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_5",
+      "operation_precedente": "JARDIN_LUXEMBOURG_EVACUATION_DECHETS_0188",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_TONTE_0190",
+      "duree_jours": 1,
+      "poste_id": "TONDEUSE_TRACTEE_6",
+      "operation_precedente": "JARDIN_LUXEMBOURG_TRAITEMENT_0189",
+      "competence_requise": "tondeuse_tractee"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_ARROSAGE_0191",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ARROSAGE_7",
+      "operation_precedente": "JARDIN_LUXEMBOURG_TONTE_0190",
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_PLANTATION_0192",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_PLANTATION_7",
+      "operation_precedente": "JARDIN_LUXEMBOURG_ARROSAGE_0191",
+      "competence_requise": "equipe_plantation"
+    },
+    {
+      "code_operation": "JARDIN_LUXEMBOURG_TAILLE_HAIES_0193",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TAILLE_10",
+      "operation_precedente": "JARDIN_LUXEMBOURG_PLANTATION_0192",
+      "competence_requise": "equipe_taille"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_ARROSAGE_0194",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ARROSAGE_8",
+      "operation_precedente": null,
+      "competence_requise": "equipe_arrosage"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_DESHERBAGE_0195",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DESHERBAGE_9",
+      "operation_precedente": "SQUARE_RECAMIER_ARROSAGE_0194",
+      "competence_requise": "equipe_desherbage"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_TRAITEMENT_0196",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_TRAITEMENT_3",
+      "operation_precedente": "SQUARE_RECAMIER_DESHERBAGE_0195",
+      "competence_requise": "equipe_traitement"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_TONTE_0197",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TONTE_6",
+      "operation_precedente": "SQUARE_RECAMIER_TRAITEMENT_0196",
+      "competence_requise": "equipe_tonte"
+    },
+    {
+      "code_operation": "SQUARE_RECAMIER_TAILLE_HAIES_0198",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_TAILLE_6",
+      "operation_precedente": "SQUARE_RECAMIER_TONTE_0197",
+      "competence_requise": "equipe_taille"
     }
   ],
   "postes": [
     {
       "code_poste": "EQUIPE_TONTE_1",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_2",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_3",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_4",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_5",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_6",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_7",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_8",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_9",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_10",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_11",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TONTE_12",
       "competences": [
-        "tonte"
+        "equipe_tonte"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_1",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_2",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_3",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_4",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_5",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_6",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_7",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_8",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_9",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_TAILLE_10",
       "competences": [
-        "taille"
+        "equipe_taille"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_1",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_2",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_3",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_4",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_5",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_6",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_7",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_8",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_9",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_10",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_11",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_12",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_13",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_14",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_DESHERBAGE_15",
       "competences": [
-        "desherbage"
+        "equipe_desherbage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_1",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_2",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_3",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_4",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_5",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_6",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_7",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_ARROSAGE_8",
       "competences": [
-        "arrosage"
+        "equipe_arrosage"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_1",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_2",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_3",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_4",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_5",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_6",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_7",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_8",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_9",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_PLANTATION_10",
       "competences": [
-        "plantation"
+        "equipe_plantation"
       ]
     },
     {
       "code_poste": "EQUIPE_TRAITEMENT_1",
       "competences": [
-        "traitement"
+        "equipe_traitement"
       ]
     },
     {
       "code_poste": "EQUIPE_TRAITEMENT_2",
       "competences": [
-        "traitement"
+        "equipe_traitement"
       ]
     },
     {
       "code_poste": "EQUIPE_TRAITEMENT_3",
       "competences": [
-        "traitement"
+        "equipe_traitement"
       ]
     },
     {
       "code_poste": "EQUIPE_TRAITEMENT_4",
       "competences": [
-        "traitement"
+        "equipe_traitement"
       ]
     },
     {
       "code_poste": "EQUIPE_TRAITEMENT_5",
       "competences": [
-        "traitement"
+        "equipe_traitement"
       ]
     },
     {
       "code_poste": "EQUIPE_TRAITEMENT_6",
       "competences": [
-        "traitement"
+        "equipe_traitement"
       ]
     },
     {
@@ -1777,31 +1805,31 @@
     {
       "code_poste": "CAMION_BENNE_1",
       "competences": [
-        "benne"
+        "camion_benne"
       ]
     },
     {
       "code_poste": "CAMION_BENNE_2",
       "competences": [
-        "benne"
+        "camion_benne"
       ]
     },
     {
       "code_poste": "CAMION_BENNE_3",
       "competences": [
-        "benne"
+        "camion_benne"
       ]
     },
     {
       "code_poste": "CAMION_BENNE_4",
       "competences": [
-        "benne"
+        "camion_benne"
       ]
     },
     {
       "code_poste": "CAMION_BENNE_5",
       "competences": [
-        "benne"
+        "camion_benne"
       ]
     }
   ]

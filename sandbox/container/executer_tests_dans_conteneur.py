@@ -50,9 +50,27 @@ class _CollecteurResultats:
                     # `reussi=False` (le contrat JSON est binaire, un audit informationnel
                     # n'a pas besoin d'un troisième état).
                     "reussi": report.outcome == "passed",
-                    "message": None if report.outcome == "passed" else str(report.longrepr)[:2000],
+                    "message": None if report.outcome == "passed" else _message_echec(report.longrepr),
                 }
             )
+
+
+# Le traceback par défaut de pytest (`--tb=auto`/`long`) imprime le code source
+# complet de chaque frame, y compris `resoudre()` en entier avec ses variables
+# locales — pour une fonction de plusieurs dizaines de lignes, l'exception réelle
+# (toujours en toute fin de message) était perdue par une troncature naïve en
+# tête de chaîne (`[:2000]`, régression constatée en usage réel : le Debugger ne
+# recevait jamais que le préambule, jamais la cause). `--tb=short` (voir
+# `pytest.main` ci-dessous) réduit déjà fortement la taille ; la troncature reste
+# ancrée en fin de message par sécurité, jamais en tête.
+_LIMITE_MESSAGE = 4000
+
+
+def _message_echec(longrepr: object) -> str:
+    message = str(longrepr)
+    if len(message) <= _LIMITE_MESSAGE:
+        return message
+    return "…(tronqué)…\n" + message[-_LIMITE_MESSAGE:]
 
 
 def main() -> None:
@@ -69,7 +87,13 @@ def main() -> None:
         # no:cacheprovider : évite une tentative d'écriture de .pytest_cache/ dans
         # /mnt, monté en lecture seule (échec silencieux sinon, mais autant l'éviter
         # explicitement plutôt que de compter sur la dégradation de pytest).
-        code_sortie = pytest.main(["-q", "-p", "no:cacheprovider", chemin_tests], plugins=[collecteur])
+        # --tb=short : le format par défaut réimprime tout le corps de la fonction en
+        # échec (avec ses variables locales) avant l'exception elle-même — pour un
+        # `resoudre()` de plusieurs dizaines de lignes, ça noyait l'information utile
+        # (voir `_message_echec` ci-dessus) sans jamais aider le Debugger à diagnostiquer.
+        code_sortie = pytest.main(
+            ["-q", "--tb=short", "-p", "no:cacheprovider", chemin_tests], plugins=[collecteur]
+        )
     except Exception as erreur:  # pytest ne devrait jamais lever, mais le conteneur doit
         # TOUJOURS produire un JSON exploitable côté hôte, jamais planter sans trace.
         print(json.dumps({"tests": [], "erreur": f"pytest n'a pas pu s'exécuter : {erreur}"}))

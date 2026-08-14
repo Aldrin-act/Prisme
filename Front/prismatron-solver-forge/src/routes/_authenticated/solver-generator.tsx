@@ -164,16 +164,20 @@ function RapportTestsSandboxAffichage({ rapport }: { rapport: RapportTestsSandbo
 // et Benchmarker tournent en parallèle (`generation/graph.py`, `START ->
 // analyste`/`START -> benchmarker` simultanés), leurs évènements s'entrelacent
 // — l'évènement "termine" de l'un peut arriver après celui de l'autre, donc
-// ne plus être en dernière position au moment de la fusion.
-function fusionnerEvenement(
-  precedents: EvenementGeneration[],
-  nouveau: EvenementGeneration,
-): EvenementGeneration[] {
+// ne plus être en dernière position au moment de la fusion. Générique pour
+// être réutilisée à la fois sur le flux SSE en direct (repli élément par
+// élément, voir plus bas) et sur la liste complète déjà persistée de
+// `DialogHistoriqueGeneration` (repli via `reduce`, voir `fusionnerEvenements`).
+function fusionnerEvenement<T extends { agent: string }>(precedents: T[], nouveau: T): T[] {
   const index = precedents.findIndex((e) => e.agent === nouveau.agent);
   if (index === -1) {
     return [...precedents, nouveau];
   }
   return [...precedents.slice(0, index), nouveau, ...precedents.slice(index + 1)];
+}
+
+function fusionnerEvenements<T extends { agent: string }>(bruts: T[]): T[] {
+  return bruts.reduce<T[]>((acc, e) => fusionnerEvenement(acc, e), []);
 }
 
 function SolverGeneratorPage() {
@@ -835,26 +839,33 @@ function DialogHistoriqueGeneration({
                 <h4 className="mb-2 text-sm font-semibold">🧫 Tests sandbox (exécution réelle)</h4>
                 <RapportTestsSandboxAffichage rapport={historique.rapport_tests_sandbox} />
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Exécution réelle des tests ci-dessus dans le bac à sable Docker — un échec
-                  renvoie déjà au Debugger (voir Événements et Tentatives ci-dessous), ceci est
-                  la trace du dernier passage
+                  Exécution réelle des tests ci-dessus dans le bac à sable Docker — un échec renvoie
+                  déjà au Debugger (voir Événements et Tentatives ci-dessous), ceci est la trace du
+                  dernier passage
                 </p>
               </div>
             )}
 
             <div>
-              <h4 className="mb-2 text-sm font-semibold">
-                Évènements ({historique.evenements.length})
-              </h4>
-              <ul className="space-y-1.5">
-                {historique.evenements.map((e) => (
-                  <li key={e.ordre} className="flex items-start gap-2 text-xs">
-                    <IconeStatut statut={e.statut} />
-                    <span className="font-medium capitalize">{e.agent}</span>
-                    <span className="text-muted-foreground">{e.resume}</span>
-                  </li>
-                ))}
-              </ul>
+              {(() => {
+                const evenementsFusionnes = fusionnerEvenements(historique.evenements);
+                return (
+                  <>
+                    <h4 className="mb-2 text-sm font-semibold">
+                      Évènements ({evenementsFusionnes.length})
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {evenementsFusionnes.map((e) => (
+                        <li key={e.ordre} className="flex items-start gap-2 text-xs">
+                          <IconeStatut statut={e.statut} />
+                          <span className="font-medium capitalize">{e.agent}</span>
+                          <span className="text-muted-foreground">{e.resume}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                );
+              })()}
             </div>
 
             <div>

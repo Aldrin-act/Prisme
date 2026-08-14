@@ -22,8 +22,15 @@ Développeur ci-dessus est disponible comme un module Python nommé
 
 Couvre notamment :
 - une instance à une seule tâche/une seule ressource compatible ;
-- une instance clairement infaisable (aucune ressource compatible pour une
-  tâche) — vérifie que `resoudre()` renvoie `None`, ne lève pas d'exception ;
+- une instance clairement infaisable — **jamais** en omettant la compatibilité
+  ressource-tâche d'une tâche, ni via une précédence qu'une tâche se donnerait
+  à elle-même : `InstanceTRCO` (respectivement `Precedence`) l'interdit dès la
+  **construction** de l'instance elle-même (`ValidationError` avant même
+  d'appeler `resoudre()` — le test échouerait alors systématiquement, quelle
+  que soit la qualité du solveur). Construis plutôt une instance valide mais
+  impossible à honorer : une tâche dont l'unique ressource compatible a une
+  `duree` supérieure à son `Echeance` (deadline) — vérifie que `resoudre()`
+  renvoie `None`, ne lève pas d'exception ;
 - une instance avec plusieurs ressources compatibles pour une même tâche,
   chacune avec une durée différente.
 
@@ -42,6 +49,6 @@ Exemple de réponse valide (structure attendue, pas les seuls tests à écrire) 
 
 ```json
 {{
-  "code_tests": "from dsl.schema import InstanceTRCO, Tache, Ressource\nfrom solveur_candidat import resoudre\n\n\ndef test_instance_infaisable_renvoie_none():\n    instance = InstanceTRCO(taches=[...], ressources=[], contraintes=[], objectifs=[...])\n    assert resoudre(instance) is None\n"
+  "code_tests": "from dsl.schema import InstanceTRCO, Tache, Ressource, CompatibiliteRessourceTache, Echeance, MinimiserMakespan\nfrom solveur_candidat import resoudre\n\n\ndef test_instance_infaisable_renvoie_none():\n    # duree (10) > echeance (5) sur l'unique ressource compatible : instance valide,\n    # mais aucun planning ne peut respecter l'echeance.\n    instance = InstanceTRCO(\n        taches=[Tache(id='T1')],\n        ressources=[Ressource(id='R1')],\n        contraintes=[\n            CompatibiliteRessourceTache(tache='T1', ressource='R1', duree=10),\n            Echeance(tache='T1', echeance=5),\n        ],\n        objectifs=[MinimiserMakespan(poids=1)],\n    )\n    assert resoudre(instance) is None\n"
 }}
 ```

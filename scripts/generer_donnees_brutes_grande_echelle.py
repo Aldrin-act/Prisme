@@ -12,20 +12,67 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import random
+import re
 from pathlib import Path
+
+from scripts.generer_donnees_depuis_config import sauvegarder_csv
+
+# Chaque poste est généré comme `f"{type_poste}_{i}"` (instance numérotée d'un type — voir
+# les 9 générateurs ci-dessous, tous antérieurs à l'enrichissement compétences de §5.4) :
+# retirer ce suffixe numérique donne une compétence stable par type, partagée par toutes ses
+# instances.
+_SUFFIXE_INSTANCE = re.compile(r"_\d+$")
+
+
+def _competence_depuis_code_poste(code_poste: str) -> str:
+    return _SUFFIXE_INSTANCE.sub("", code_poste).lower()
+
+
+def enrichir_avec_competences(data: dict) -> dict:
+    """Ajoute `competences`/`competence_requise`, absents des générateurs ci-dessus — une
+    compétence par type de poste, dérivée du code (`_competence_depuis_code_poste`), donc déjà
+    cohérente entre `postes` et `operations` par construction (même fonction appliquée aux deux
+    côtés, jamais de dérive possible entre les deux). Permet de réutiliser tel quel
+    `sauvegarder_csv` (`scripts/generer_donnees_depuis_config.py`), qui suppose ces deux champs
+    présents."""
+    for poste in data["postes"]:
+        poste["competences"] = [_competence_depuis_code_poste(poste["code_poste"])]
+    for operation in data["operations"]:
+        operation["competence_requise"] = _competence_depuis_code_poste(operation["poste_id"])
+    return data
 
 
 def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
     """Atelier de fabrication mécanique - grande échelle."""
     # Noms de pièces réalistes
     noms_pieces = [
-        "CARTER", "ARBRE", "VILEBREQUIN", "PISTON", "VANNE", "FLASQUE", "BOITIER",
-        "CHASSIS", "BRIDE", "AXE", "PALIER", "ENGRENAGE", "POULIE", "ROTOR",
-        "STATOR", "BIELLE", "PLAQUE", "SUPPORT", "EQUERRE", "MANIVELLE",
-        "COUVERCLE", "SOCLE", "CORPS_VALVE", "ARBRE_TRANSMISSION", "MOYEU"
+        "CARTER",
+        "ARBRE",
+        "VILEBREQUIN",
+        "PISTON",
+        "VANNE",
+        "FLASQUE",
+        "BOITIER",
+        "CHASSIS",
+        "BRIDE",
+        "AXE",
+        "PALIER",
+        "ENGRENAGE",
+        "POULIE",
+        "ROTOR",
+        "STATOR",
+        "BIELLE",
+        "PLAQUE",
+        "SUPPORT",
+        "EQUERRE",
+        "MANIVELLE",
+        "COUVERCLE",
+        "SOCLE",
+        "CORPS_VALVE",
+        "ARBRE_TRANSMISSION",
+        "MOYEU",
     ]
 
     # Définir les types de postes et leurs caractéristiques (durées en jours)
@@ -83,11 +130,7 @@ def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
             type_poste = random.choice(types_poste_phase)
 
             # Choisir une instance de ce type de poste
-            instances_disponibles = [
-                p["code_poste"]
-                for p in postes
-                if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
 
             # Générer une durée aléatoire
@@ -96,12 +139,14 @@ def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
 
             # Créer l'opération avec nom réaliste
             code_op = f"{nom_piece}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -116,22 +161,20 @@ def generer_atelier_mecanique_large(n_operations: int = 100) -> dict:
     while len(operations) < n_operations:
         nom_piece = random.choice(noms_pieces)
         type_poste = random.choice(list(types_postes.keys()))
-        instances_disponibles = [
-            p["code_poste"]
-            for p in postes
-            if p["code_poste"].startswith(type_poste)
-        ]
+        instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
         poste_choisi = random.choice(instances_disponibles)
         specs = types_postes[type_poste]
         duree = random.randint(specs["duree_min"], specs["duree_max"])
 
         code_op = f"{nom_piece}_COMP_{op_id:04d}"
-        operations.append({
-            "code_operation": code_op,
-            "duree_jours": duree,
-            "poste_id": poste_choisi,
-            "operation_precedente": None,
-        })
+        operations.append(
+            {
+                "code_operation": code_op,
+                "duree_jours": duree,
+                "poste_id": poste_choisi,
+                "operation_precedente": None,
+            }
+        )
         op_id += 1
 
     return {"operations": operations[:n_operations], "postes": postes}
@@ -141,12 +184,30 @@ def generer_assemblage_electronique_large(n_operations: int = 100) -> dict:
     """Assemblage électronique - grande échelle."""
     # Noms de produits/cartes réalistes
     noms_produits = [
-        "PLATINE_SMARTPHONE", "CARTE_ROUTEUR", "PCB_LED", "CONTROLEUR_MOTEUR",
-        "MODULE_WIFI", "CARTE_ALIMENTATION", "PCB_CAPTEUR", "INTERFACE_USB",
-        "CARTE_AUDIO", "MODULE_BLUETOOTH", "REGULATEUR_TENSION", "CARTE_MERE",
-        "MODULE_GPS", "CONVERTISSEUR_DC", "CARTE_AFFICHAGE", "PCB_TEMPERATURE",
-        "CONTROLEUR_RGB", "MODULE_ZIGBEE", "CARTE_ETHERNET", "DRIVER_LED",
-        "CARTE_MEMOIRE", "INTERFACE_CAN", "MODULE_LORA", "PCB_PUISSANCE"
+        "PLATINE_SMARTPHONE",
+        "CARTE_ROUTEUR",
+        "PCB_LED",
+        "CONTROLEUR_MOTEUR",
+        "MODULE_WIFI",
+        "CARTE_ALIMENTATION",
+        "PCB_CAPTEUR",
+        "INTERFACE_USB",
+        "CARTE_AUDIO",
+        "MODULE_BLUETOOTH",
+        "REGULATEUR_TENSION",
+        "CARTE_MERE",
+        "MODULE_GPS",
+        "CONVERTISSEUR_DC",
+        "CARTE_AFFICHAGE",
+        "PCB_TEMPERATURE",
+        "CONTROLEUR_RGB",
+        "MODULE_ZIGBEE",
+        "CARTE_ETHERNET",
+        "DRIVER_LED",
+        "CARTE_MEMOIRE",
+        "INTERFACE_CAN",
+        "MODULE_LORA",
+        "PCB_PUISSANCE",
     ]
 
     types_postes = {
@@ -197,22 +258,20 @@ def generer_assemblage_electronique_large(n_operations: int = 100) -> dict:
 
         for phase_nom, types_poste_phase in phases_carte:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"]
-                for p in postes
-                if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_produit}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -226,22 +285,20 @@ def generer_assemblage_electronique_large(n_operations: int = 100) -> dict:
     while len(operations) < n_operations:
         nom_produit = random.choice(noms_produits)
         type_poste = random.choice(list(types_postes.keys()))
-        instances_disponibles = [
-            p["code_poste"]
-            for p in postes
-            if p["code_poste"].startswith(type_poste)
-        ]
+        instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
         poste_choisi = random.choice(instances_disponibles)
         specs = types_postes[type_poste]
         duree = random.randint(specs["duree_min"], specs["duree_max"])
 
         code_op = f"{nom_produit}_EXTRA_{op_id:04d}"
-        operations.append({
-            "code_operation": code_op,
-            "duree_jours": duree,
-            "poste_id": poste_choisi,
-            "operation_precedente": None,
-        })
+        operations.append(
+            {
+                "code_operation": code_op,
+                "duree_jours": duree,
+                "poste_id": poste_choisi,
+                "operation_precedente": None,
+            }
+        )
         op_id += 1
 
     return {"operations": operations[:n_operations], "postes": postes}
@@ -251,12 +308,30 @@ def generer_agroalimentaire_large(n_operations: int = 100) -> dict:
     """Production agro-alimentaire - grande échelle."""
     # Noms de produits alimentaires réalistes
     noms_produits = [
-        "CONSERVE_TOMATES", "LOT_CAROTTES", "BATCH_HARICOTS", "PUREE_POMMES",
-        "COMPOTE_FRUITS", "SOUPE_LEGUMES", "SAUCE_TOMATE", "CONFITURE_FRAISES",
-        "JUS_ORANGE", "PLAT_PREPARE", "SALADE_MACEDOINE", "RATATOUILLE",
-        "PATE_TOMATE", "COULIS_FRUITS", "SIROP_AGAVE", "VELOUTE_POTIRON",
-        "MACEDOINE_LEGUMES", "CHAMPIGNONS_BOCAL", "CORNICHONS", "KETCHUP",
-        "MAYONNAISE", "MOUTARDE", "VINAIGRETTE", "PESTO"
+        "CONSERVE_TOMATES",
+        "LOT_CAROTTES",
+        "BATCH_HARICOTS",
+        "PUREE_POMMES",
+        "COMPOTE_FRUITS",
+        "SOUPE_LEGUMES",
+        "SAUCE_TOMATE",
+        "CONFITURE_FRAISES",
+        "JUS_ORANGE",
+        "PLAT_PREPARE",
+        "SALADE_MACEDOINE",
+        "RATATOUILLE",
+        "PATE_TOMATE",
+        "COULIS_FRUITS",
+        "SIROP_AGAVE",
+        "VELOUTE_POTIRON",
+        "MACEDOINE_LEGUMES",
+        "CHAMPIGNONS_BOCAL",
+        "CORNICHONS",
+        "KETCHUP",
+        "MAYONNAISE",
+        "MOUTARDE",
+        "VINAIGRETTE",
+        "PESTO",
     ]
 
     types_postes = {
@@ -304,22 +379,20 @@ def generer_agroalimentaire_large(n_operations: int = 100) -> dict:
 
         for phase_nom, types_poste_phase in phases_lot:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"]
-                for p in postes
-                if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_produit}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -333,22 +406,20 @@ def generer_agroalimentaire_large(n_operations: int = 100) -> dict:
     while len(operations) < n_operations:
         nom_produit = random.choice(noms_produits)
         type_poste = random.choice(list(types_postes.keys()))
-        instances_disponibles = [
-            p["code_poste"]
-            for p in postes
-            if p["code_poste"].startswith(type_poste)
-        ]
+        instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
         poste_choisi = random.choice(instances_disponibles)
         specs = types_postes[type_poste]
         duree = random.randint(specs["duree_min"], specs["duree_max"])
 
         code_op = f"{nom_produit}_SUPP_{op_id:04d}"
-        operations.append({
-            "code_operation": code_op,
-            "duree_jours": duree,
-            "poste_id": poste_choisi,
-            "operation_precedente": None,
-        })
+        operations.append(
+            {
+                "code_operation": code_op,
+                "duree_jours": duree,
+                "poste_id": poste_choisi,
+                "operation_precedente": None,
+            }
+        )
         op_id += 1
 
     return {"operations": operations[:n_operations], "postes": postes}
@@ -358,12 +429,30 @@ def generer_hopital_bloc_operatoire_large(n_operations: int = 100) -> dict:
     """Hôpital - Bloc opératoire - grande échelle."""
     # Noms de patients réalistes
     noms_patients = [
-        "PATIENT_DUPONT", "PATIENT_MARTIN", "PATIENT_BERNARD", "PATIENT_THOMAS",
-        "PATIENT_ROBERT", "PATIENT_PETIT", "PATIENT_DUBOIS", "PATIENT_RICHARD",
-        "PATIENT_MOREAU", "PATIENT_SIMON", "PATIENT_LAURENT", "PATIENT_LEFEBVRE",
-        "PATIENT_MICHEL", "PATIENT_GARCIA", "PATIENT_DAVID", "PATIENT_BERTRAND",
-        "PATIENT_ROUX", "PATIENT_VINCENT", "PATIENT_FOURNIER", "PATIENT_MOREL",
-        "PATIENT_GIRARD", "PATIENT_ANDRE", "PATIENT_LEFEVRE", "PATIENT_MERCIER"
+        "PATIENT_DUPONT",
+        "PATIENT_MARTIN",
+        "PATIENT_BERNARD",
+        "PATIENT_THOMAS",
+        "PATIENT_ROBERT",
+        "PATIENT_PETIT",
+        "PATIENT_DUBOIS",
+        "PATIENT_RICHARD",
+        "PATIENT_MOREAU",
+        "PATIENT_SIMON",
+        "PATIENT_LAURENT",
+        "PATIENT_LEFEBVRE",
+        "PATIENT_MICHEL",
+        "PATIENT_GARCIA",
+        "PATIENT_DAVID",
+        "PATIENT_BERTRAND",
+        "PATIENT_ROUX",
+        "PATIENT_VINCENT",
+        "PATIENT_FOURNIER",
+        "PATIENT_MOREL",
+        "PATIENT_GIRARD",
+        "PATIENT_ANDRE",
+        "PATIENT_LEFEVRE",
+        "PATIENT_MERCIER",
     ]
 
     types_postes = {
@@ -407,20 +496,20 @@ def generer_hopital_bloc_operatoire_large(n_operations: int = 100) -> dict:
 
         for phase_nom, types_poste_phase in phases_patient:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_patient}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -438,11 +527,29 @@ def generer_logistique_transport_large(n_operations: int = 100) -> dict:
     """Logistique et transport - grande échelle."""
     # Noms de villes/destinations réalistes
     noms_destinations = [
-        "CMD_PARIS", "CMD_LYON", "CMD_MARSEILLE", "CMD_TOULOUSE", "CMD_BORDEAUX",
-        "CMD_LILLE", "CMD_NANTES", "CMD_STRASBOURG", "CMD_RENNES", "CMD_NICE",
-        "LIV_GRENOBLE", "LIV_DIJON", "LIV_ANGERS", "LIV_TOURS", "LIV_REIMS",
-        "COLIS_CAEN", "COLIS_NANCY", "COLIS_ROUEN", "ENVOI_CLERMONT",
-        "ENVOI_ORLEANS", "PALETTE_LIMOGES", "PALETTE_TROYES", "FRET_VALENCE"
+        "CMD_PARIS",
+        "CMD_LYON",
+        "CMD_MARSEILLE",
+        "CMD_TOULOUSE",
+        "CMD_BORDEAUX",
+        "CMD_LILLE",
+        "CMD_NANTES",
+        "CMD_STRASBOURG",
+        "CMD_RENNES",
+        "CMD_NICE",
+        "LIV_GRENOBLE",
+        "LIV_DIJON",
+        "LIV_ANGERS",
+        "LIV_TOURS",
+        "LIV_REIMS",
+        "COLIS_CAEN",
+        "COLIS_NANCY",
+        "COLIS_ROUEN",
+        "ENVOI_CLERMONT",
+        "ENVOI_ORLEANS",
+        "PALETTE_LIMOGES",
+        "PALETTE_TROYES",
+        "FRET_VALENCE",
     ]
 
     types_postes = {
@@ -487,20 +594,20 @@ def generer_logistique_transport_large(n_operations: int = 100) -> dict:
 
         for phase_nom, types_poste_phase in phases_commande:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_destination}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -518,12 +625,30 @@ def generer_restauration_collective_large(n_operations: int = 100) -> dict:
     """Restauration collective - grande échelle."""
     # Noms de plats/menus réalistes
     noms_menus = [
-        "MENU_VEGETARIEN", "PLAT_POULET_ROTI", "ENTREE_SALADE", "DESSERT_TARTE",
-        "MENU_POISSON", "PLAT_BOEUF_BOURGUIGNON", "SOUPE_JOUR", "GRATIN_DAUPHINOIS",
-        "SALADE_CESAR", "QUICHE_LORRAINE", "LASAGNES_MAISON", "COUSCOUS",
-        "PAELLA", "BLANQUETTE_VEAU", "CHILI_CON_CARNE", "CURRY_LEGUMES",
-        "PIZZA_MARGHERITA", "HAMBURGER_MAISON", "TAJINE_POULET", "RISOTTO",
-        "PATES_BOLOGNAISE", "HACHIS_PARMENTIER", "CASSOULET", "POT_AU_FEU"
+        "MENU_VEGETARIEN",
+        "PLAT_POULET_ROTI",
+        "ENTREE_SALADE",
+        "DESSERT_TARTE",
+        "MENU_POISSON",
+        "PLAT_BOEUF_BOURGUIGNON",
+        "SOUPE_JOUR",
+        "GRATIN_DAUPHINOIS",
+        "SALADE_CESAR",
+        "QUICHE_LORRAINE",
+        "LASAGNES_MAISON",
+        "COUSCOUS",
+        "PAELLA",
+        "BLANQUETTE_VEAU",
+        "CHILI_CON_CARNE",
+        "CURRY_LEGUMES",
+        "PIZZA_MARGHERITA",
+        "HAMBURGER_MAISON",
+        "TAJINE_POULET",
+        "RISOTTO",
+        "PATES_BOLOGNAISE",
+        "HACHIS_PARMENTIER",
+        "CASSOULET",
+        "POT_AU_FEU",
     ]
 
     types_postes = {
@@ -568,20 +693,20 @@ def generer_restauration_collective_large(n_operations: int = 100) -> dict:
 
         for phase_nom, types_poste_phase in phases_repas:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_menu}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -599,13 +724,28 @@ def generer_services_nettoyage_large(n_operations: int = 100) -> dict:
     """Services de nettoyage - grande échelle."""
     # Noms de bâtiments/sites réalistes
     noms_sites = [
-        "IMMEUBLE_HAUSMANN", "BUREAUX_LAFAYETTE", "TOUR_MONTPARNASSE",
-        "CENTRE_COMMERCIAL_VELIZY", "HOPITAL_POMPIDOU", "ECOLE_PASTEUR",
-        "RESIDENCE_BELLE_VUE", "USINE_RENAULT", "ENTREPOT_LOGISTICS",
-        "HOTEL_MERIDIEN", "AEROPORT_ORLY", "GARE_LYON", "STADE_FRANCE",
-        "MUSEE_LOUVRE", "THEATRE_CHATELET", "PISCINE_MUNICIPALE",
-        "MAIRIE_15EME", "CASERNE_POMPIERS", "COMMISSARIAT_CENTRAL",
-        "TRIBUNAL_GRANDE_INSTANCE", "CENTRE_LOISIRS", "MEDIATHEQUE"
+        "IMMEUBLE_HAUSMANN",
+        "BUREAUX_LAFAYETTE",
+        "TOUR_MONTPARNASSE",
+        "CENTRE_COMMERCIAL_VELIZY",
+        "HOPITAL_POMPIDOU",
+        "ECOLE_PASTEUR",
+        "RESIDENCE_BELLE_VUE",
+        "USINE_RENAULT",
+        "ENTREPOT_LOGISTICS",
+        "HOTEL_MERIDIEN",
+        "AEROPORT_ORLY",
+        "GARE_LYON",
+        "STADE_FRANCE",
+        "MUSEE_LOUVRE",
+        "THEATRE_CHATELET",
+        "PISCINE_MUNICIPALE",
+        "MAIRIE_15EME",
+        "CASERNE_POMPIERS",
+        "COMMISSARIAT_CENTRAL",
+        "TRIBUNAL_GRANDE_INSTANCE",
+        "CENTRE_LOISIRS",
+        "MEDIATHEQUE",
     ]
 
     types_postes = {
@@ -646,20 +786,20 @@ def generer_services_nettoyage_large(n_operations: int = 100) -> dict:
 
         for phase_nom, types_poste_phase in phases_site:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_site}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -677,13 +817,28 @@ def generer_gestion_espaces_verts_large(n_operations: int = 100) -> dict:
     """Gestion d'espaces verts - grande échelle."""
     # Noms de parcs/zones réalistes
     noms_zones = [
-        "PARC_MONCEAU", "JARDIN_LUXEMBOURG", "ZONE_TUILERIES", "BOIS_VINCENNES",
-        "PARC_BUTTES_CHAUMONT", "JARDIN_PLANTES", "PARC_MONTSOURIS",
-        "SQUARE_TEMPLE", "JARDIN_PALAIS_ROYAL", "ESPLANADE_INVALIDES",
-        "PARC_ANDRE_CITROEN", "JARDIN_ACCLIMATATION", "PARC_BERCY",
-        "SQUARE_BATIGNOLLES", "JARDIN_ATLANTIQUE", "PROMENADE_PLANTEE",
-        "PARC_BELLEVILLE", "SQUARE_TROUSSEAU", "JARDIN_CATHERINE_LABOURE",
-        "PARC_SAINTE_PERINE", "SQUARE_RECAMIER", "JARDIN_SERRES_AUTEUIL"
+        "PARC_MONCEAU",
+        "JARDIN_LUXEMBOURG",
+        "ZONE_TUILERIES",
+        "BOIS_VINCENNES",
+        "PARC_BUTTES_CHAUMONT",
+        "JARDIN_PLANTES",
+        "PARC_MONTSOURIS",
+        "SQUARE_TEMPLE",
+        "JARDIN_PALAIS_ROYAL",
+        "ESPLANADE_INVALIDES",
+        "PARC_ANDRE_CITROEN",
+        "JARDIN_ACCLIMATATION",
+        "PARC_BERCY",
+        "SQUARE_BATIGNOLLES",
+        "JARDIN_ATLANTIQUE",
+        "PROMENADE_PLANTEE",
+        "PARC_BELLEVILLE",
+        "SQUARE_TROUSSEAU",
+        "JARDIN_CATHERINE_LABOURE",
+        "PARC_SAINTE_PERINE",
+        "SQUARE_RECAMIER",
+        "JARDIN_SERRES_AUTEUIL",
     ]
 
     types_postes = {
@@ -726,20 +881,20 @@ def generer_gestion_espaces_verts_large(n_operations: int = 100) -> dict:
 
         for phase_nom, types_poste_phase in phases_zone:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_zone}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -757,13 +912,30 @@ def generer_education_planification_cours_large(n_operations: int = 100) -> dict
     """Éducation - Planification de cours - grande échelle."""
     # Noms de cours/matières réalistes
     noms_cours = [
-        "COURS_MATHS", "ALGO_AVANCE", "CHIMIE_ORGANIQUE", "PHYSIQUE_QUANTIQUE",
-        "PROG_PYTHON", "BASE_DONNEES", "RESEAUX_TELECOM", "GENIE_LOGICIEL",
-        "THERMODYNAMIQUE", "MECANIQUE_FLUIDES", "ELECTRONIQUE_ANALOGIQUE",
-        "ANALYSE_NUMERIQUE", "INTELLIGENCE_ARTIFICIELLE", "SYSTEMES_EMBARQUES",
-        "TRAITEMENT_SIGNAL", "AUTOMATIQUE", "RESISTANCE_MATERIAUX",
-        "ELECTROMAGNETISME", "OPTIQUE_PHOTONIQUE", "CRYPTO_SECURITE",
-        "COMPILATEURS", "SYSTEMES_EXPLOITATION", "CLOUD_COMPUTING", "DEVOPS"
+        "COURS_MATHS",
+        "ALGO_AVANCE",
+        "CHIMIE_ORGANIQUE",
+        "PHYSIQUE_QUANTIQUE",
+        "PROG_PYTHON",
+        "BASE_DONNEES",
+        "RESEAUX_TELECOM",
+        "GENIE_LOGICIEL",
+        "THERMODYNAMIQUE",
+        "MECANIQUE_FLUIDES",
+        "ELECTRONIQUE_ANALOGIQUE",
+        "ANALYSE_NUMERIQUE",
+        "INTELLIGENCE_ARTIFICIELLE",
+        "SYSTEMES_EMBARQUES",
+        "TRAITEMENT_SIGNAL",
+        "AUTOMATIQUE",
+        "RESISTANCE_MATERIAUX",
+        "ELECTROMAGNETISME",
+        "OPTIQUE_PHOTONIQUE",
+        "CRYPTO_SECURITE",
+        "COMPILATEURS",
+        "SYSTEMES_EXPLOITATION",
+        "CLOUD_COMPUTING",
+        "DEVOPS",
     ]
 
     types_postes = {
@@ -804,20 +976,20 @@ def generer_education_planification_cours_large(n_operations: int = 100) -> dict
 
         for phase_nom, types_poste_phase in phases_cours:
             type_poste = random.choice(types_poste_phase)
-            instances_disponibles = [
-                p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)
-            ]
+            instances_disponibles = [p["code_poste"] for p in postes if p["code_poste"].startswith(type_poste)]
             poste_choisi = random.choice(instances_disponibles)
             specs = types_postes[type_poste]
             duree = random.randint(specs["duree_min"], specs["duree_max"])
 
             code_op = f"{nom_cours}_{phase_nom}_{op_id:04d}"
-            operations.append({
-                "code_operation": code_op,
-                "duree_jours": duree,
-                "poste_id": poste_choisi,
-                "operation_precedente": precedente,
-            })
+            operations.append(
+                {
+                    "code_operation": code_op,
+                    "duree_jours": duree,
+                    "poste_id": poste_choisi,
+                    "operation_precedente": precedente,
+                }
+            )
 
             precedente = code_op
             op_id += 1
@@ -831,9 +1003,11 @@ def generer_education_planification_cours_large(n_operations: int = 100) -> dict
     return {"operations": operations[:n_operations], "postes": postes}
 
 
-def sauvegarder_donnees(nom: str, data: dict, output_dir: Path) -> None:
-    """Sauvegarde les données en JSON et CSV."""
-    # JSON
+def sauvegarder_donnees(nom: str, data: dict, output_dir: Path) -> tuple[Path, Path, Path, Path]:
+    """Sauvegarde les données en JSON (vocabulaire ERP, `adapters.erp_reference.translator`)
+    et en CSV à 3 fichiers (`sauvegarder_csv`, `scripts/generer_donnees_depuis_config.py` —
+    compatible `adapters.csv_import.traducteur.traduire`). `data` doit déjà être passé par
+    `enrichir_avec_competences` (le CSV en a besoin, voir sa docstring)."""
     json_dir = output_dir / "json_erp"
     json_dir.mkdir(parents=True, exist_ok=True)
     json_path = json_dir / f"{nom}.json"
@@ -841,27 +1015,11 @@ def sauvegarder_donnees(nom: str, data: dict, output_dir: Path) -> None:
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-    # CSV
-    csv_dir = output_dir / "csv"
-    csv_dir.mkdir(parents=True, exist_ok=True)
+    chemin_taches, chemin_ressources, chemin_contraintes = sauvegarder_csv(
+        data, nom, repertoire=output_dir / "csv"
+    )
 
-    # Operations CSV
-    ops_path = csv_dir / f"{nom}_operations.csv"
-    with open(ops_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f, fieldnames=["code_operation", "duree_jours", "poste_id", "operation_precedente"]
-        )
-        writer.writeheader()
-        writer.writerows(data["operations"])
-
-    # Postes CSV
-    postes_path = csv_dir / f"{nom}_postes.csv"
-    with open(postes_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["code_poste"])
-        writer.writeheader()
-        writer.writerows(data["postes"])
-
-    return json_path, ops_path, postes_path
+    return json_path, chemin_taches, chemin_ressources, chemin_contraintes
 
 
 def main():
@@ -892,7 +1050,7 @@ def main():
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Generation de jeux de donnees a grande echelle")
+    print("Generation de jeux de donnees a grande echelle")
     print(f"Taille cible: {args.taille} operations par fichier")
     print(f"Repertoire de sortie: {output_dir}")
     print()
@@ -912,15 +1070,18 @@ def main():
 
     for nom, generateur in datasets:
         print(f"[GENERATION] {nom}...")
-        data = generateur(args.taille)
+        data = enrichir_avec_competences(generateur(args.taille))
 
-        json_path, ops_path, postes_path = sauvegarder_donnees(nom, data, output_dir)
+        json_path, chemin_taches, chemin_ressources, chemin_contraintes = sauvegarder_donnees(
+            nom, data, output_dir
+        )
 
         print(f"  Operations: {len(data['operations'])}")
         print(f"  Postes: {len(data['postes'])}")
         print(f"  JSON: {json_path.relative_to(output_dir.parent)}")
-        print(f"  CSV Operations: {ops_path.relative_to(output_dir.parent)}")
-        print(f"  CSV Postes: {postes_path.relative_to(output_dir.parent)}")
+        print(f"  CSV: {chemin_taches.relative_to(output_dir.parent)}")
+        print(f"       {chemin_ressources.relative_to(output_dir.parent)}")
+        print(f"       {chemin_contraintes.relative_to(output_dir.parent)}")
         print()
 
     # Créer un README

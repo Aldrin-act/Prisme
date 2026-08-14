@@ -14,13 +14,17 @@ Usage:
     uv run python -m scripts.generer_donnees_depuis_config --secteur restauration_collective --format json
     uv run python -m scripts.generer_donnees_depuis_config --tous --taille 50
 
-Le format CSV (`--format csv`/`both`) reste délibérément hors de portée de cette traduction :
-`sauvegarder_csv` écrit un schéma (`nom,capacite`) incompatible avec le format CSV à 3 fichiers de
-`data/donnees_brutes/csv/` (voir `csv/MIGRATION_NOUVEAU_FORMAT.md`) — ne pas l'utiliser sans
-migration équivalente.
+Le format CSV (`--format csv`/`both`) produit le même contenu que le JSON, sérialisé en 3
+fichiers `<secteur>_<taille>_{taches,ressources,contraintes}.csv` (compatible
+`adapters.csv_import.traducteur.traduire`) — `sauvegarder_csv` reproduit fidèlement le mapping
+de référence d'`adapters.erp_reference.translator.traduire` : compatibilité ressource-tâche
+**explicite** (depuis `poste_id`/`duree_jours`), jamais seulement dérivée par compétence, plus
+une contrainte `competence_requise` en signal additionnel (les deux mécanismes coexistent, voir
+`adapters/csv_import/traducteur.py`).
 """
 
 import argparse
+import csv
 import json
 import random
 from pathlib import Path
@@ -165,34 +169,62 @@ def sauvegarder_json(payload: dict[str, Any], nom_secteur: str, taille: str) -> 
     return chemin
 
 
-def sauvegarder_csv(payload: dict[str, Any], nom_secteur: str, taille: str) -> tuple[Path, Path]:
-    """Sauvegarde le payload au format CSV (2 fichiers: postes et operations)."""
-    repertoire = Path("data/donnees_brutes/csv")
+def sauvegarder_csv(
+    payload: dict[str, Any], prefixe: str, *, repertoire: Path | None = None
+) -> tuple[Path, Path, Path]:
+    """Sauvegarde le payload au format CSV à 3 fichiers (`taches`/`ressources`/`contraintes`),
+    compatible `adapters.csv_import.traducteur.traduire` — voir docstring module pour le mapping.
+    `nom` reste vide dans `taches.csv`/`ressources.csv` : le payload ERP (`OperationERP`/
+    `PosteERP`, `adapters/erp_reference/schema_erp.py`) n'a pas ce champ, tout comme
+    `translator.py` ne le renseigne jamais sur `Tache`/`Ressource` — même contenu que le JSON,
+    juste une autre sérialisation. `repertoire` paramétrable (défaut `data/donnees_brutes/csv`)
+    pour être réutilisée telle quelle par `scripts/generer_donnees_brutes_grande_echelle.py`
+    (sortie dans `data/donnees_brutes_large/csv`) — un seul écrivain CSV pour tout le dépôt."""
+    repertoire = repertoire or Path("data/donnees_brutes/csv")
     repertoire.mkdir(parents=True, exist_ok=True)
 
-    # Fichier postes
-    nom_postes = f"{nom_secteur}_{taille}_postes.csv"
-    chemin_postes = repertoire / nom_postes
-
-    with open(chemin_postes, "w", encoding="utf-8") as f:
-        f.write("nom,capacite\n")
-        for poste in payload["postes"]:
-            f.write(f"{poste['nom']},{poste['capacite']}\n")
-
-    # Fichier opérations
-    nom_ops = f"{nom_secteur}_{taille}_operations.csv"
-    chemin_ops = repertoire / nom_ops
-
-    with open(chemin_ops, "w", encoding="utf-8") as f:
-        f.write("id,nom,lot,phase,poste_requis,duree_estimee,priorite,predecesseurs\n")
+    chemin_taches = repertoire / f"{prefixe}_taches.csv"
+    with open(chemin_taches, "w", encoding="utf-8", newline="") as f:
+        ecrivain = csv.writer(f)
+        ecrivain.writerow(["id", "nom", "duree_estimee_jours"])
         for op in payload["operations"]:
-            preds = ";".join(op.get("predecesseurs", []))
-            f.write(
-                f"{op['id']},{op['nom']},{op['lot']},{op['phase']},"
-                f"{op['poste_requis']},{op['duree_estimee']},{op['priorite']},{preds}\n"
-            )
+            ecrivain.writerow([op["code_operation"], "", op["duree_jours"]])
 
-    return chemin_postes, chemin_ops
+    chemin_ressources = repertoire / f"{prefixe}_ressources.csv"
+    with open(chemin_ressources, "w", encoding="utf-8", newline="") as f:
+        ecrivain = csv.writer(f)
+        ecrivain.writerow(["id", "nom", "competences"])
+        for poste in payload["postes"]:
+            ecrivain.writerow([poste["code_poste"], "", ";".join(poste["competences"])])
+
+    chemin_contraintes = repertoire / f"{prefixe}_contraintes.csv"
+    with open(chemin_contraintes, "w", encoding="utf-8", newline="") as f:
+        ecrivain = csv.writer(f)
+        ecrivain.writerow(
+            ["type", "tache_avant", "tache_apres", "tache", "ressource", "duree_jours", "competence"]
+        )
+        for op in payload["operations"]:
+            # Compatibilité explicite (poste_id/duree_jours) — même source de vérité que le
+            # JSON (`translator.py::traduire`), jamais seulement dérivée par compétence.
+            ecrivain.writerow(
+                [
+                    "compatibilite_ressource_tache",
+                    "",
+                    "",
+                    op["code_operation"],
+                    op["poste_id"],
+                    op["duree_jours"],
+                    "",
+                ]
+            )
+            if op.get("operation_precedente"):
+                ecrivain.writerow(["precedence", op["operation_precedente"], op["code_operation"], "", "", "", ""])
+            if op.get("competence_requise"):
+                ecrivain.writerow(
+                    ["competence_requise", "", "", op["code_operation"], "", "", op["competence_requise"]]
+                )
+
+    return chemin_taches, chemin_ressources, chemin_contraintes
 
 
 def main():
@@ -288,10 +320,13 @@ def main():
                 print(f"  JSON: {chemin_json}")
 
             if args.format in ["csv", "both"]:
-                chemin_postes, chemin_ops = sauvegarder_csv(payload, nom_secteur, taille_str)
-                fichiers_crees.extend([chemin_postes, chemin_ops])
-                print(f"  CSV: {chemin_postes}")
-                print(f"       {chemin_ops}")
+                chemin_taches, chemin_ressources, chemin_contraintes = sauvegarder_csv(
+                    payload, f"{nom_secteur}_{taille_str}"
+                )
+                fichiers_crees.extend([chemin_taches, chemin_ressources, chemin_contraintes])
+                print(f"  CSV: {chemin_taches}")
+                print(f"       {chemin_ressources}")
+                print(f"       {chemin_contraintes}")
 
             resultats.append(
                 {
