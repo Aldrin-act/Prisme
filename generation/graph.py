@@ -23,7 +23,11 @@ Workflow complet :
      avec le diagnostic de la validation, puis retour au Reviewer.
    - Le nombre de tentatives est vérifié **avant** d'appeler le Debugger sur
      la toute dernière tentative — jamais de correction au-delà de la borne.
-6. Documentation (meilleur-effort, après re-validation finale du code)
+6. Tests sandbox (meilleur-effort, canal d'audit pur — exécute les tests de
+   l'agent Testeur dans le bac à sable Docker une seule fois, après le
+   succès de la boucle ; n'affecte jamais `boucle_reussie` ni la suite du
+   pipeline, voir `sandbox/runner.py::executer_tests_dans_sandbox`)
+7. Documentation (meilleur-effort, après re-validation finale du code)
 
 Pas d'Optimiseur : agent retiré du pipeline (réponse JSON trop fragile — il
 embarque un code Python multi-lignes complet comme valeur de chaîne JSON, un
@@ -63,6 +67,7 @@ from generation.agents.generateur import generer_code_depuis_plan
 from generation.agents.reviewer import ResultatRevue
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
+from sandbox.runner import RapportTestsSandbox, executer_tests_dans_sandbox
 from validation_engine.cascade import VerdictCascade, evaluer_cascade
 
 # Constante : nombre max de tentatives de réparation. Un rejet du Reviewer
@@ -152,6 +157,11 @@ class ResultatPipelineAvecBoucle:
     erreur_execution: str | None
     verdict_cascade: VerdictCascade | None
 
+    # Tests sandbox (canal d'audit, `None` si le sandbox était indisponible —
+    # jamais un critère d'acceptation, voir `reussi` ci-dessous qui ne s'en
+    # sert pas)
+    rapport_tests_sandbox: RapportTestsSandbox | None
+
     # Documentation
     documentation: str | None
 
@@ -233,6 +243,8 @@ class EtatGeneration(TypedDict, total=False):
     dernier_verdict_cascade: VerdictCascade | None
     message_pour_debugger: str | None
     boucle_reussie: bool
+
+    rapport_tests_sandbox: RapportTestsSandbox | None
 
     resultat_final: ResultatPipelineAvecBoucle
 
@@ -400,12 +412,44 @@ def _noeud_validation(etat: EtatGeneration, config: RunnableConfig) -> dict:
     return maj
 
 
-def _route_apres_validation(etat: EtatGeneration) -> Literal["documentation", "debugger", "fin_boucle"]:
+def _route_apres_validation(etat: EtatGeneration) -> Literal["test_sandbox", "debugger", "fin_boucle"]:
     if etat["boucle_reussie"]:
-        return "documentation"
+        return "test_sandbox"
     if etat["numero_tentative"] >= MAX_TENTATIVES_REPARATION:
         return "fin_boucle"
     return "debugger"
+
+
+def _noeud_test_sandbox(etat: EtatGeneration) -> dict:
+    """Meilleur-effort, canal d'audit pur (§6.6bis) : exécute les tests de
+    l'agent Testeur dans le bac à sable, une seule fois, après le succès de
+    la boucle de réparation — n'affecte jamais `boucle_reussie` ni la suite
+    du pipeline. Toute défaillance (Docker indisponible, image non
+    construite, délai dépassé...) dégrade silencieusement vers `None`, comme
+    `_noeud_documentation` le fait déjà pour la documentation.
+
+    Le statut SSE `"echec"` ne signale qu'une défaillance de l'infrastructure
+    d'audit elle-même — jamais des tests générés qui ont simplement échoué,
+    ou une collecte pytest impossible (ces deux derniers cas restent
+    `"termine"`, détail dans `resume`/`rapport.reussi`), pour qu'aucun
+    opérateur ne lise "echec" comme un second critère d'acceptation."""
+    writer = get_stream_writer()
+    writer(etape("test_sandbox", "en_cours", "Exécution des tests générés dans le sandbox..."))
+
+    rapport: RapportTestsSandbox | None = None
+    try:
+        rapport = executer_tests_dans_sandbox(etat["code_candidat"], etat["tests_generes"])
+    except Exception as erreur:  # noqa: BLE001 — meilleur-effort, ne doit jamais faire échouer la génération
+        writer(etape("test_sandbox", "echec", f"Tests sandbox ignorés ({type(erreur).__name__}) : {erreur}"))
+    else:
+        if rapport.erreur is not None:
+            resume = f"Collecte pytest impossible : {rapport.erreur}"
+        else:
+            nb_reussis = sum(t.reussi for t in rapport.tests)
+            resume = f"{nb_reussis}/{len(rapport.tests)} test(s) généré(s) réussi(s) en sandbox"
+        writer(etape("test_sandbox", "termine", resume))
+
+    return {"rapport_tests_sandbox": rapport}
 
 
 def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
@@ -457,6 +501,7 @@ def _noeud_fin_boucle(etat: EtatGeneration) -> dict:
         validation_statique=boucle.derniere_validation_statique,
         erreur_execution=boucle.derniere_erreur_execution,
         verdict_cascade=boucle.dernier_verdict_cascade,
+        rapport_tests_sandbox=None,
         documentation=None,
     )
     return {"resultat_final": resultat}
@@ -497,6 +542,7 @@ def _noeud_documentation(etat: EtatGeneration, config: RunnableConfig) -> dict:
         validation_statique=validation,
         erreur_execution=erreur_exec,
         verdict_cascade=verdict,
+        rapport_tests_sandbox=etat.get("rapport_tests_sandbox"),
         documentation=documentation_texte,
     )
     return {"resultat_final": resultat}
@@ -513,6 +559,7 @@ def _construire_graphe() -> StateGraph:
     graphe.add_node("validation", _noeud_validation)
     graphe.add_node("debugger", _noeud_debugger)
     graphe.add_node("fin_boucle", _noeud_fin_boucle)
+    graphe.add_node("test_sandbox", _noeud_test_sandbox)
     graphe.add_node("documentation", _noeud_documentation)
 
     # Analyste et Benchmarker n'ont aucune dépendance de données l'un envers
@@ -538,10 +585,11 @@ def _construire_graphe() -> StateGraph:
     graphe.add_conditional_edges(
         "validation",
         _route_apres_validation,
-        {"documentation": "documentation", "debugger": "debugger", "fin_boucle": "fin_boucle"},
+        {"test_sandbox": "test_sandbox", "debugger": "debugger", "fin_boucle": "fin_boucle"},
     )
     graphe.add_edge("debugger", "reviewer")
     graphe.add_edge("fin_boucle", END)
+    graphe.add_edge("test_sandbox", "documentation")
     graphe.add_edge("documentation", END)
     return graphe
 
@@ -587,6 +635,9 @@ def _partiels_nouveaux(ancien: dict, nouveau: dict) -> Iterator[ResultatPartiel]
         yield ResultatPartiel("code_genere", nouveau["code_genere"])
     if "tests_generes" in nouveau and "tests_generes" not in ancien:
         yield ResultatPartiel("tests_generes", nouveau["tests_generes"])
+    if "rapport_tests_sandbox" in nouveau and "rapport_tests_sandbox" not in ancien:
+        rapport = nouveau["rapport_tests_sandbox"]
+        yield ResultatPartiel("rapport_tests_sandbox", rapport.en_dict() if rapport is not None else None)
     for tentative in nouveau.get("tentatives", [])[len(ancien.get("tentatives", [])) :]:
         yield ResultatPartiel("tentative", tentative)
 

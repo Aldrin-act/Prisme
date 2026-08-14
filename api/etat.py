@@ -224,6 +224,7 @@ class JobGeneration:
     code_genere: str | None = None
     tests_generes: str | None = None
     code_final: str | None = None
+    rapport_tests_sandbox: dict | None = None
     documentation: str | None = None
     nombre_tentatives: int | None = None
     erreur: str | None = None
@@ -672,6 +673,7 @@ class EtatAPI:
         code_genere: str | None = None,
         tests_generes: str | None = None,
         code_final: str | None = None,
+        rapport_tests_sandbox: dict | None = None,
         documentation: str | None = None,
         nombre_tentatives: int | None = None,
         erreur: str | None = None,
@@ -689,6 +691,7 @@ class EtatAPI:
             "code_genere": code_genere,
             "tests_generes": tests_generes,
             "code_final": code_final,
+            "rapport_tests_sandbox": rapport_tests_sandbox,
             "documentation": documentation,
         }
         self.mettre_a_jour_job_generation(job_id, **{k: v for k, v in champs_contenu.items() if v is not None})

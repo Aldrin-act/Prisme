@@ -19,9 +19,11 @@ validation d'entrée (garde-fou amont) est supposée déjà faite par l'appelant
 
 from __future__ import annotations
 
+import json
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from dsl.schema import InstanceTRCO, Planning
 from solver_store.registry import ErreurIntegriteSolveur, Registre
@@ -30,6 +32,16 @@ from validation_engine.feasibility_checker import ResultatFaisabilite, verifier_
 IMAGE_SANDBOX = "prisme-sandbox:latest"
 _CHEMIN_CODE_CONTENEUR = "/mnt/solveur.py"
 _CHEMIN_INSTANCE_CONTENEUR = "/mnt/instance.json"
+
+# Mode audit des tests générés (canal d'audit, voir generation/agents/testeur.py) — même
+# image que le mode solveur ci-dessus, sélectionné par un `entrypoint=` docker-py explicite
+# (voir `_executer_et_recuperer_logs`/`executer_tests_dans_sandbox`) plutôt qu'un second
+# Dockerfile/image à maintenir. Le solveur DOIT être monté sous ce nom de fichier exact —
+# c'est le contrat d'import des tests générés (`from solveur_candidat import resoudre`,
+# voir `generation/prompts/testeur.md`).
+_CHEMIN_SOLVEUR_TESTS_CONTENEUR = "/mnt/solveur_candidat.py"
+_CHEMIN_TESTS_CONTENEUR = "/mnt/test_solveur_candidat.py"
+_ENTRYPOINT_TESTS = ["python", "/app/executer_tests_dans_conteneur.py"]
 
 
 class ErreurExecutionSandbox(Exception):
@@ -59,6 +71,67 @@ class LimitesSandbox:
     limite_pids: int = 64
 
 
+def _executer_et_recuperer_logs(
+    client: Any,
+    *,
+    entrypoint: list[str] | None,
+    command: list[str],
+    volumes: dict[str, dict[str, str]],
+    limites: LimitesSandbox,
+) -> tuple[int, str]:
+    """Lance un conteneur jetable avec les restrictions d'isolation standard
+    (§5.2/§7 : réseau coupé, racine en lecture seule, non-root, limites
+    CPU/mémoire/PID, `--rm`), attend sa fin, récupère ses logs, le
+    force-supprime — commun aux deux modes du sandbox (solveur et audit des
+    tests générés, qui ne diffèrent que par `entrypoint`/`command`/
+    `volumes`). Lève `ErreurExecutionSandbox` pour tout échec Docker (image
+    absente, délai dépassé, erreur du démon) ; ne juge jamais du contenu de
+    la sortie — ça reste au appelant (code de sortie non nul, parsing...)."""
+    from docker.errors import ImageNotFound
+
+    conteneur = None
+    try:
+        conteneur = client.containers.run(
+            IMAGE_SANDBOX,
+            entrypoint=entrypoint,
+            command=command,
+            volumes=volumes,
+            network_mode="none",
+            read_only=True,
+            tmpfs={"/tmp": "size=64m"},
+            mem_limit=limites.limite_memoire,
+            nano_cpus=limites.limite_cpu_nano,
+            pids_limit=limites.limite_pids,
+            security_opt=["no-new-privileges"],
+            user="10001:10001",
+            detach=True,
+            auto_remove=False,
+        )
+        resultat_attente = conteneur.wait(timeout=limites.limite_temps_s)
+        code_sortie = resultat_attente.get("StatusCode", 1)
+        sortie_brute = conteneur.logs(stdout=True, stderr=True).decode("utf-8", errors="replace")
+    except ImageNotFound as erreur:
+        raise ErreurExecutionSandbox(
+            f"image {IMAGE_SANDBOX!r} introuvable — construire avec "
+            "`docker build -t prisme-sandbox:latest -f sandbox/container/Dockerfile .`"
+        ) from erreur
+    except Exception as erreur:  # délai dépassé, erreur du démon, etc.
+        if conteneur is not None:
+            try:
+                conteneur.kill()
+            except Exception:
+                pass
+        raise ErreurExecutionSandbox(f"échec d'exécution dans le sandbox : {erreur}") from erreur
+    finally:
+        if conteneur is not None:
+            try:
+                conteneur.remove(force=True)
+            except Exception:
+                pass
+
+    return code_sortie, sortie_brute
+
+
 def executer_dans_sandbox(
     chemin_code: Path, instance: InstanceTRCO, limites: LimitesSandbox = LimitesSandbox()
 ) -> Planning | None:
@@ -67,7 +140,7 @@ def executer_dans_sandbox(
     conteneur échoue, dépasse son délai, ou si l'isolation a empêché
     l'exécution (image absente en premier lieu)."""
     import docker
-    from docker.errors import DockerException, ImageNotFound
+    from docker.errors import DockerException
 
     try:
         client = docker.from_env()
@@ -78,50 +151,19 @@ def executer_dans_sandbox(
         chemin_instance_hote = Path(dossier_temp) / "instance.json"
         chemin_instance_hote.write_text(instance.model_dump_json(), encoding="utf-8")
 
-        conteneur = None
-        try:
-            conteneur = client.containers.run(
-                IMAGE_SANDBOX,
-                command=[_CHEMIN_CODE_CONTENEUR, _CHEMIN_INSTANCE_CONTENEUR],
-                volumes={
-                    str(Path(chemin_code).resolve()): {"bind": _CHEMIN_CODE_CONTENEUR, "mode": "ro"},
-                    str(chemin_instance_hote.resolve()): {
-                        "bind": _CHEMIN_INSTANCE_CONTENEUR,
-                        "mode": "ro",
-                    },
+        code_sortie, sortie_brute = _executer_et_recuperer_logs(
+            client,
+            entrypoint=None,
+            command=[_CHEMIN_CODE_CONTENEUR, _CHEMIN_INSTANCE_CONTENEUR],
+            volumes={
+                str(Path(chemin_code).resolve()): {"bind": _CHEMIN_CODE_CONTENEUR, "mode": "ro"},
+                str(chemin_instance_hote.resolve()): {
+                    "bind": _CHEMIN_INSTANCE_CONTENEUR,
+                    "mode": "ro",
                 },
-                network_mode="none",
-                read_only=True,
-                tmpfs={"/tmp": "size=64m"},
-                mem_limit=limites.limite_memoire,
-                nano_cpus=limites.limite_cpu_nano,
-                pids_limit=limites.limite_pids,
-                security_opt=["no-new-privileges"],
-                user="10001:10001",
-                detach=True,
-                auto_remove=False,
-            )
-            resultat_attente = conteneur.wait(timeout=limites.limite_temps_s)
-            code_sortie = resultat_attente.get("StatusCode", 1)
-            sortie_brute = conteneur.logs(stdout=True, stderr=True).decode("utf-8", errors="replace")
-        except ImageNotFound as erreur:
-            raise ErreurExecutionSandbox(
-                f"image {IMAGE_SANDBOX!r} introuvable — construire avec "
-                "`docker build -t prisme-sandbox:latest -f sandbox/container/Dockerfile .`"
-            ) from erreur
-        except Exception as erreur:  # délai dépassé, erreur du démon, etc.
-            if conteneur is not None:
-                try:
-                    conteneur.kill()
-                except Exception:
-                    pass
-            raise ErreurExecutionSandbox(f"échec d'exécution dans le sandbox : {erreur}") from erreur
-        finally:
-            if conteneur is not None:
-                try:
-                    conteneur.remove(force=True)
-                except Exception:
-                    pass
+            },
+            limites=limites,
+        )
 
     if code_sortie != 0:
         raise ErreurExecutionSandbox(f"le conteneur a quitté avec le code {code_sortie} : {sortie_brute.strip()}")
@@ -130,6 +172,99 @@ def executer_dans_sandbox(
     if sortie == "null":
         return None
     return Planning.model_validate_json(sortie)
+
+
+@dataclass(frozen=True)
+class ResultatTestUnitaire:
+    nom: str
+    reussi: bool
+    message: str | None
+
+
+@dataclass(frozen=True)
+class RapportTestsSandbox:
+    """Résultat de l'exécution des tests générés par l'agent Testeur dans le
+    bac à sable — canal d'audit pur (voir `generation/agents/testeur.py`),
+    jamais un critère d'acceptation."""
+
+    tests: tuple[ResultatTestUnitaire, ...]
+    erreur: str | None
+
+    @property
+    def reussi(self) -> bool:
+        """Aucune erreur de collecte ET tous les tests générés passent.
+        `tests == ()` avec `erreur is None` compte comme réussi (Testeur peu
+        prolixe, pas un échec du sandbox) — de toute façon jamais un gate."""
+        return self.erreur is None and all(t.reussi for t in self.tests)
+
+    def en_dict(self) -> dict:
+        """Forme sérialisable pour la persistance (`api/etat.py`/
+        `api/etat_postgres.py`, colonne JSONB) — écrit à la main plutôt que
+        `dataclasses.asdict` (convention `.en_texte()`/`.en_dict()` du reste
+        du code, jamais de sérialisation par réflexion générique)."""
+        return {
+            "tests": [{"nom": t.nom, "reussi": t.reussi, "message": t.message} for t in self.tests],
+            "erreur": self.erreur,
+            "reussi": self.reussi,
+        }
+
+
+def executer_tests_dans_sandbox(
+    code_source: str, code_tests: str, limites: LimitesSandbox = LimitesSandbox()
+) -> RapportTestsSandbox:
+    """Écrit `code_source`/`code_tests` sur disque (contrairement à
+    `executer_dans_sandbox`, rien n'existe encore sur le disque hôte à ce
+    stade — voir `generation/graph.py::_noeud_test_sandbox`), monte les deux
+    en lecture seule dans le même conteneur jetable que le mode solveur
+    (`entrypoint=` explicite pour sélectionner le mode, voir
+    `sandbox/container/executer_tests_dans_conteneur.py`), et parse le JSON
+    produit. Canal d'audit : lève `ErreurExecutionSandbox` uniquement pour un
+    échec Docker (démon injoignable, image absente, délai dépassé, sortie non
+    nulle) — jamais parce que des tests générés ont échoué, ce que
+    `RapportTestsSandbox.reussi` porte déjà."""
+    import docker
+    from docker.errors import DockerException
+
+    try:
+        client = docker.from_env()
+    except DockerException as erreur:
+        raise ErreurExecutionSandbox(f"impossible de joindre le démon Docker : {erreur}") from erreur
+
+    with tempfile.TemporaryDirectory() as dossier_temp:
+        chemin_solveur_hote = Path(dossier_temp) / "solveur_candidat.py"
+        chemin_tests_hote = Path(dossier_temp) / "test_solveur_candidat.py"
+        chemin_solveur_hote.write_text(code_source, encoding="utf-8")
+        chemin_tests_hote.write_text(code_tests, encoding="utf-8")
+
+        code_sortie, sortie_brute = _executer_et_recuperer_logs(
+            client,
+            entrypoint=_ENTRYPOINT_TESTS,
+            command=[_CHEMIN_SOLVEUR_TESTS_CONTENEUR, _CHEMIN_TESTS_CONTENEUR],
+            volumes={
+                str(chemin_solveur_hote.resolve()): {"bind": _CHEMIN_SOLVEUR_TESTS_CONTENEUR, "mode": "ro"},
+                str(chemin_tests_hote.resolve()): {"bind": _CHEMIN_TESTS_CONTENEUR, "mode": "ro"},
+            },
+            limites=limites,
+        )
+
+    if code_sortie != 0:
+        raise ErreurExecutionSandbox(f"le conteneur a quitté avec le code {code_sortie} : {sortie_brute.strip()}")
+
+    # pytest imprime lui-même son propre rapport (points de progression, erreurs de
+    # collecte...) sur stdout AVANT le JSON du harnais — jamais après (`print(json.dumps(...))`
+    # est toujours le tout dernier appel de `main()`, une fois `pytest.main()` déjà retourné) —
+    # donc seule la dernière ligne non vide est le contrat à parser, jamais la sortie entière.
+    lignes = [ligne for ligne in sortie_brute.splitlines() if ligne.strip()]
+    if not lignes:
+        raise ErreurExecutionSandbox("le conteneur n'a produit aucune sortie exploitable")
+    donnees = json.loads(lignes[-1])
+    return RapportTestsSandbox(
+        tests=tuple(
+            ResultatTestUnitaire(nom=t["nom"], reussi=t["reussi"], message=t.get("message"))
+            for t in donnees["tests"]
+        ),
+        erreur=donnees.get("erreur"),
+    )
 
 
 @dataclass(frozen=True)

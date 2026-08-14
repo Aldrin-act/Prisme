@@ -55,6 +55,49 @@ def test_comprehension_tolere_labsence_davertissements() -> None:
     assert resultat.avertissements == ()
 
 
+def test_comprehension_corrige_une_faute_sur_le_type_dun_objectif() -> None:
+    """Régression : un modèle a produit "minimizer_makespan" (anglicisme/faute) au lieu de
+    "minimiser_makespan", provoquant un rejet 422 en aval malgré une donnée par ailleurs correcte
+    — voir `_corriger_types_dsl` (agent.py)."""
+    schema = _SchemaComprehension(
+        instance={
+            "taches": [{"id": "T1"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [
+                {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}
+            ],
+            "objectifs": [{"type": "minimizer_makespan"}],
+        },
+        description_metier="Une tâche T1 exécutée sur la ressource R1.",
+    )
+    modele = ModeleFactice(raw_content="{}", parsed=schema)
+
+    resultat = comprendre_donnees_erp(modele, "T1;M1;10min")
+
+    assert resultat.instance_brute["objectifs"] == [{"type": "minimiser_makespan"}]
+    assert resultat.avertissements == ("objectif : type 'minimizer_makespan' corrigé en 'minimiser_makespan'",)
+
+
+def test_comprehension_ne_corrige_pas_un_type_sans_correspondance_proche() -> None:
+    """Un type manifestement différent (pas une faute de frappe) n'est jamais réinterprété — la
+    validation `InstanceTRCO` en aval reste l'arbitre honnête de ce cas."""
+    schema = _SchemaComprehension(
+        instance={
+            "taches": [{"id": "T1"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [{"type": "un_type_totalement_invente", "tache": "T1"}],
+            "objectifs": [{"type": "minimiser_makespan"}],
+        },
+        description_metier="Une tâche T1 exécutée sur la ressource R1.",
+    )
+    modele = ModeleFactice(raw_content="{}", parsed=schema)
+
+    resultat = comprendre_donnees_erp(modele, "T1;M1;10min")
+
+    assert resultat.instance_brute["contraintes"][0]["type"] == "un_type_totalement_invente"
+    assert resultat.avertissements == ()
+
+
 def test_comprehension_leve_une_erreur_explicite_sur_reponse_non_conforme() -> None:
     modele = ModeleFactice(raw_content="pas du JSON valide", parsed=None, parsing_error=ValueError("mal formé"))
 

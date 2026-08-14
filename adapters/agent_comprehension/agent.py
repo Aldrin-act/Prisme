@@ -15,13 +15,15 @@ confiance au planning qui en résultera.
 
 from __future__ import annotations
 
+import difflib
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, get_args
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
+from dsl.schema import Contrainte, Objectif
 from generation.agents.base import ErreurReponseAgentInvalide, extraire_texte_brut
 from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
 
@@ -30,6 +32,43 @@ if TYPE_CHECKING:
 
 CHEMIN_PROMPT = Path(__file__).resolve().parent / "prompts" / "comprehension.md"
 CHEMIN_REGLES_DSL = Path(__file__).resolve().parents[2] / "docs" / "dsl" / "modele_ingestion_client.md"
+
+# Seuil `difflib` : assez haut pour ne corriger que de vraies fautes d'orthographe/traduction du
+# LLM sur le tag discriminant `type` ("minimizer_makespan" -> "minimiser_makespan"), jamais assez
+# permissif pour faire correspondre deux types réellement différents entre eux.
+_SEUIL_CORRESPONDANCE_TYPE = 0.6
+
+
+def _valeurs_type_valides(union_annote: Any) -> tuple[str, ...]:
+    """Extrait par introspection les valeurs `Literal` du champ discriminant `type` de chaque
+    membre d'une union annotée façon `Contrainte`/`Objectif` (`dsl/schema`) — jamais recopiées à la
+    main, pour ne jamais désynchroniser cette liste du DSL réel si un type est ajouté/retiré."""
+    membres = get_args(get_args(union_annote)[0])
+    return tuple(get_args(membre.model_fields["type"].annotation)[0] for membre in membres)
+
+
+def _corriger_types_dsl(entrees: list[Any], valeurs_valides: tuple[str, ...], categorie: str) -> list[str]:
+    """Corrige en place le champ `type` de chaque entrée (dict) dont la valeur ne correspond à
+    aucun type DSL connu mais s'en approche assez pour qu'il s'agisse manifestement d'une faute du
+    LLM plutôt que d'un type réellement différent — jamais une réinterprétation sémantique, juste
+    une correction orthographique. Une entrée sans correspondance suffisamment proche est laissée
+    intacte : la validation `InstanceTRCO` en aval reste l'arbitre final, honnête, de ce cas.
+    Retourne la liste des corrections effectuées (pour transparence dans `avertissements`)."""
+    corrections: list[str] = []
+    for entree in entrees:
+        if not isinstance(entree, dict):
+            continue
+        type_fourni = entree.get("type")
+        if not isinstance(type_fourni, str) or type_fourni in valeurs_valides:
+            continue
+        correspondance = difflib.get_close_matches(
+            type_fourni, valeurs_valides, n=1, cutoff=_SEUIL_CORRESPONDANCE_TYPE
+        )
+        if correspondance:
+            entree["type"] = correspondance[0]
+            corrections.append(f"{categorie} : type {type_fourni!r} corrigé en {correspondance[0]!r}")
+    return corrections
+
 
 _PROMPT_SYSTEME = (
     "Tu es un analyste d'intégration de données spécialisé dans la traduction de formats ERP "
@@ -106,11 +145,17 @@ def comprendre_donnees_erp(
         ) from sortie["parsing_error"]
 
     donnees = sortie["parsed"]
+    corrections = [
+        *_corriger_types_dsl(
+            donnees.instance.get("contraintes") or [], _valeurs_type_valides(Contrainte), "contrainte"
+        ),
+        *_corriger_types_dsl(donnees.instance.get("objectifs") or [], _valeurs_type_valides(Objectif), "objectif"),
+    ]
     return ResultatComprehension(
         reponse_brute=reponse_brute,
         instance_brute=donnees.instance,
         description_metier=donnees.description_metier,
-        avertissements=tuple(donnees.avertissements),
+        avertissements=(*donnees.avertissements, *corrections),
         justifications=tuple(
             Justification(contrainte=j.contrainte, raison=j.raison) for j in donnees.justifications
         ),

@@ -381,6 +381,15 @@ class EtatPostgres:
                     table=self._table("jobs_generation")
                 )
             )
+            # Migration idempotente : rapport d'exécution des tests générés par l'agent
+            # Testeur dans le bac à sable (canal d'audit — jamais un critère d'acceptation,
+            # voir generation/agents/testeur.py) — NULL pour tout job généré avant cette
+            # migration.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS rapport_tests_sandbox JSONB").format(
+                    table=self._table("jobs_generation")
+                )
+            )
             # Migration idempotente : `instance_id` devient nullable —
             # `supprimer_instance` oprheline désormais les jobs de génération
             # qui la référencent (`ON DELETE SET NULL`) plutôt que de les
@@ -1234,22 +1243,26 @@ class EtatPostgres:
             )
             connexion.commit()
 
+    # Champs `dict | None` du job de génération, sérialisés en JSON avant écriture
+    # (colonnes JSONB) — tout le reste passe tel quel. Voir `mettre_a_jour_job_generation`.
+    _COLONNES_JSONB_JOB_GENERATION = frozenset({"algorithme_parametres", "rapport_tests_sandbox"})
+
     def mettre_a_jour_job_generation(self, job_id: str, **champs: object) -> None:
         """Persiste un ou plusieurs champs dès qu'ils sont connus, sans marquer le job
         terminé (contrairement à `terminer_job_generation`) — capture incrémentale des
         sorties d'agents au fil du pipeline (§6.6), pour ne rien perdre d'un plantage en
         cours de route. `UPDATE` dynamique ne portant que sur les colonnes fournies ;
-        `algorithme_parametres` (le seul champ `dict`) est sérialisé en JSON."""
+        les champs `dict` (`_COLONNES_JSONB_JOB_GENERATION`) sont sérialisés en JSON."""
         if not champs:
             return
         colonnes = list(champs.keys())
         valeurs = [
-            json.dumps(valeur) if colonne == "algorithme_parametres" else valeur
+            json.dumps(valeur) if colonne in self._COLONNES_JSONB_JOB_GENERATION else valeur
             for colonne, valeur in champs.items()
         ]
         set_clause = sql.SQL(", ").join(
             sql.SQL("{} = %s").format(sql.Identifier(colonne))
-            if colonne != "algorithme_parametres"
+            if colonne not in self._COLONNES_JSONB_JOB_GENERATION
             else sql.SQL("{} = %s::jsonb").format(sql.Identifier(colonne))
             for colonne in colonnes
         )
@@ -1276,6 +1289,7 @@ class EtatPostgres:
         code_genere: str | None = None,
         tests_generes: str | None = None,
         code_final: str | None = None,
+        rapport_tests_sandbox: dict | None = None,
         documentation: str | None = None,
         nombre_tentatives: int | None = None,
         erreur: str | None = None,
@@ -1293,6 +1307,7 @@ class EtatPostgres:
             "code_genere": code_genere,
             "tests_generes": tests_generes,
             "code_final": code_final,
+            "rapport_tests_sandbox": rapport_tests_sandbox,
             "documentation": documentation,
         }
         self.mettre_a_jour_job_generation(job_id, **{k: v for k, v in champs_contenu.items() if v is not None})
@@ -1313,7 +1328,8 @@ class EtatPostgres:
                 sql.SQL(
                     "SELECT id, instance_id, client_id, cree_le, termine, reussi, id_solveur, specification, "
                     "plan_technique, algorithme, algorithme_raison, algorithme_parametres, code_genere, "
-                    "tests_generes, code_final, documentation, nombre_tentatives, erreur, termine_le "
+                    "tests_generes, code_final, rapport_tests_sandbox, documentation, nombre_tentatives, "
+                    "erreur, termine_le "
                     "FROM {} WHERE id = %s"
                 ).format(self._table("jobs_generation")),
                 (job_id,),
@@ -1353,6 +1369,7 @@ class EtatPostgres:
             code_genere,
             tests_generes,
             code_final,
+            rapport_tests_sandbox,
             documentation,
             nombre_tentatives,
             erreur,
@@ -1375,6 +1392,7 @@ class EtatPostgres:
             code_genere=code_genere,
             tests_generes=tests_generes,
             code_final=code_final,
+            rapport_tests_sandbox=rapport_tests_sandbox,
             documentation=documentation,
             nombre_tentatives=nombre_tentatives,
             erreur=erreur,

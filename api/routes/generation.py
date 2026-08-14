@@ -243,6 +243,11 @@ def _executer_job(
                 "code_genere": resultat_pipeline.code_genere,
                 "tests_generes": resultat_pipeline.tests_generes,
                 "code_final": resultat_pipeline.code_final,
+                "rapport_tests_sandbox": (
+                    resultat_pipeline.rapport_tests_sandbox.en_dict()
+                    if resultat_pipeline.rapport_tests_sandbox is not None
+                    else None
+                ),
                 "documentation": resultat_pipeline.documentation,
             }
 
@@ -290,6 +295,9 @@ def generer_solveur(
         code_genere=resultat.code_genere,
         tests_generes=resultat.tests_generes,
         code_final=resultat.code_final,
+        rapport_tests_sandbox=(
+            resultat.rapport_tests_sandbox.en_dict() if resultat.rapport_tests_sandbox is not None else None
+        ),
         documentation=resultat.documentation,
         nombre_tentatives=reponse["nombre_tentatives"],
         erreur=reponse["erreur"],
@@ -425,6 +433,7 @@ def obtenir_historique_job_generation(
         "code_genere": job.code_genere,
         "tests_generes": job.tests_generes,
         "code_final": job.code_final,
+        "rapport_tests_sandbox": job.rapport_tests_sandbox,
         "documentation": job.documentation,
         "nombre_tentatives": job.nombre_tentatives,
         "erreur": job.erreur,

@@ -82,9 +82,11 @@ def test_route_apres_reviewer_va_a_fin_boucle_si_rejete_et_tentatives_epuisees()
     assert g._route_apres_reviewer(etat) == "fin_boucle"
 
 
-def test_route_apres_validation_va_a_documentation_si_reussi() -> None:
+def test_route_apres_validation_va_au_test_sandbox_si_reussi() -> None:
+    """Depuis l'ajout du nœud test_sandbox (canal d'audit, exécute les tests
+    générés une seule fois avant documentation) — voir generation/graph.py."""
     etat: g.EtatGeneration = {"boucle_reussie": True, "numero_tentative": 3}
-    assert g._route_apres_validation(etat) == "documentation"
+    assert g._route_apres_validation(etat) == "test_sandbox"
 
 
 def test_route_apres_validation_va_au_debugger_si_echec_et_tentatives_restantes() -> None:

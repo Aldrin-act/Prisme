@@ -5,13 +5,19 @@
 
 FROM python:3.11-slim
 
-RUN pip install --no-cache-dir "ortools>=9.9" "pydantic>=2.6" \
+# pytest==9.1.1 (même version que l'extra `dev` de pyproject.toml) : mode audit des
+# tests générés par l'agent Testeur, voir sandbox/runner.py::executer_tests_dans_sandbox
+# — jamais de plugin tiers (pytest-json-report ou équivalent), le harnais collecte les
+# résultats lui-même via un plugin en process.
+RUN pip install --no-cache-dir "ortools>=9.9" "pydantic>=2.6" "pytest==9.1.1" \
     && useradd --no-create-home --uid 10001 --shell /usr/sbin/nologin executant
 
 COPY dsl/ /app/dsl/
 COPY sandbox/container/executer_dans_conteneur.py /app/executer_dans_conteneur.py
+COPY sandbox/container/executer_tests_dans_conteneur.py /app/executer_tests_dans_conteneur.py
 
 WORKDIR /app
 USER 10001:10001
+ENV PYTHONDONTWRITEBYTECODE=1
 
 ENTRYPOINT ["python", "executer_dans_conteneur.py"]

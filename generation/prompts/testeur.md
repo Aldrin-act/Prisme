@@ -14,6 +14,12 @@ les propriétés du planning produit — faisabilité, optimalité, fidélité).
 Ces tests-ci ne la remplacent pas : ils explorent des cas limites
 supplémentaires sur `resoudre()` elle-même.
 
+Ton module sera exécuté tel quel, dans un environnement où le code du
+Développeur ci-dessus est disponible comme un module Python nommé
+`solveur_candidat` — commence donc systématiquement ton module par
+`from solveur_candidat import resoudre` (jamais un autre nom d'import :
+`resoudre` n'est accessible que via ce module).
+
 Couvre notamment :
 - une instance à une seule tâche/une seule ressource compatible ;
 - une instance clairement infaisable (aucune ressource compatible pour une
@@ -36,6 +42,6 @@ Exemple de réponse valide (structure attendue, pas les seuls tests à écrire) 
 
 ```json
 {{
-  "code_tests": "from dsl.schema import InstanceTRCO, Tache, Ressource\n\n\ndef test_instance_infaisable_renvoie_none():\n    instance = InstanceTRCO(taches=[...], ressources=[], contraintes=[], objectifs=[...])\n    assert resoudre(instance) is None\n"
+  "code_tests": "from dsl.schema import InstanceTRCO, Tache, Ressource\nfrom solveur_candidat import resoudre\n\n\ndef test_instance_infaisable_renvoie_none():\n    instance = InstanceTRCO(taches=[...], ressources=[], contraintes=[], objectifs=[...])\n    assert resoudre(instance) is None\n"
 }}
 ```

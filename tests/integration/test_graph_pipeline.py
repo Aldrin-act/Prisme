@@ -171,6 +171,9 @@ def test_pipeline_reussi_quand_le_reviewer_approuve_directement() -> None:
     assert len(resultat.boucle_reparation.tentatives) == 1
     assert resultat.boucle_reparation.tentatives[0].reussi is True
     assert resultat.documentation is not None
+    # Aucune image sandbox construite dans ce test — dégradation silencieuse attendue
+    # du nœud test_sandbox (canal d'audit, meilleur-effort, voir generation/graph.py).
+    assert resultat.rapport_tests_sandbox is None
 
 
 def test_pipeline_recupere_via_le_debugger_quand_le_reviewer_rejette() -> None:

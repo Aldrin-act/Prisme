@@ -1,11 +1,13 @@
 """Agent Testeur (pipeline multi-agents, §5.6) — génère des tests pytest
 complémentaires à la cascade de validation (`validation_engine/cascade.py`).
 
-Important : ces tests sont **générés mais jamais exécutés automatiquement**
-par le pipeline — les exécuter demanderait le même traitement de sécurité
-(allowlist AST, bac à sable) que le code du solveur lui-même, hors périmètre
-de cette étape. Ils sont renvoyés pour lecture humaine (canal d'audit),
-jamais un critère d'acceptation du solveur — seule la cascade l'est.
+Ces tests sont exécutés une seule fois, en meilleur effort, dans le bac à
+sable Docker après le succès de la boucle de réparation
+(`generation/graph.py::_noeud_test_sandbox`,
+`sandbox/runner.py::executer_tests_dans_sandbox`) — jamais un critère
+d'acceptation du solveur, seule la cascade de validation l'est. Canal
+d'audit pur : leur échec (ou l'indisponibilité du sandbox) n'affecte jamais
+`boucle_reussie` ni la réponse de `/generation/{instance_id}`.
 """
 
 from __future__ import annotations
