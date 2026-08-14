@@ -24,6 +24,7 @@ from generation.agents import (
 from generation.agents import (
     reviewer as reviewer_agent,
 )
+from sandbox.runner import ErreurExecutionSandbox, RapportTestsSandbox, ResultatTestUnitaire
 from tests.unit.aides_test_agents import ModeleFactice
 
 # Respecte l'allowlist AST (generation/validation_statique.py) et résout
@@ -148,12 +149,29 @@ def _fabrique(specs: dict[str, object | list[object]]):
     return fabrique_modele
 
 
-def _invoquer(specs: dict[str, object | list[object]]) -> g.ResultatPipelineAvecBoucle:
+def _sandbox_indisponible(code_source: str, code_tests: str, limites=None):
+    """Stub par défaut pour `executer_tests_dans_sandbox` — ce fichier teste
+    l'orchestration LangGraph avec de faux modèles (voir docstring module),
+    jamais un appel réel (LLM ou Docker) : sans ce monkeypatch, le
+    comportement de ces tests dépendrait de si `prisme-sandbox:latest` est
+    construite sur la machine qui les lance, non déterministe. Simule le cas
+    « sandbox indisponible » — le nœud test_sandbox doit dégrader en silence
+    (voir `generation/graph.py::_noeud_test_sandbox`)."""
+    raise ErreurExecutionSandbox("stub : sandbox non disponible dans ce test")
+
+
+def _invoquer(
+    specs: dict[str, object | list[object]],
+    *,
+    executer_tests_sandbox_stub=_sandbox_indisponible,
+) -> g.ResultatPipelineAvecBoucle:
     graphe = g._construire_graphe().compile()
-    etat_final = graphe.invoke(
-        {"instance_exemple": None},
-        config={"configurable": {"fabrique_modele": _fabrique(specs)}, "recursion_limit": 60},
-    )
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(g, "executer_tests_dans_sandbox", executer_tests_sandbox_stub)
+        etat_final = graphe.invoke(
+            {"instance_exemple": None},
+            config={"configurable": {"fabrique_modele": _fabrique(specs)}, "recursion_limit": 60},
+        )
     resultat = etat_final["resultat_final"]
     assert resultat is not None
     return resultat
@@ -171,8 +189,9 @@ def test_pipeline_reussi_quand_le_reviewer_approuve_directement() -> None:
     assert len(resultat.boucle_reparation.tentatives) == 1
     assert resultat.boucle_reparation.tentatives[0].reussi is True
     assert resultat.documentation is not None
-    # Aucune image sandbox construite dans ce test — dégradation silencieuse attendue
-    # du nœud test_sandbox (canal d'audit, meilleur-effort, voir generation/graph.py).
+    # `_sandbox_indisponible` (stub par défaut de `_invoquer`) simule un sandbox
+    # injoignable — dégradation silencieuse attendue du nœud test_sandbox
+    # (meilleur-effort, voir generation/graph.py::_noeud_test_sandbox).
     assert resultat.rapport_tests_sandbox is None
 
 
@@ -197,6 +216,56 @@ def test_pipeline_recupere_via_le_debugger_quand_le_reviewer_rejette() -> None:
     assert resultat.boucle_reparation.tentatives[0].reussi is False
     assert resultat.boucle_reparation.tentatives[0].validation_statique is None  # sauté, reviewer a rejeté
     assert resultat.boucle_reparation.tentatives[1].reussi is True
+
+
+def test_pipeline_renvoie_au_debugger_si_tests_sandbox_echouent_puis_reussissent() -> None:
+    """§6.6bis : un échec des tests générés en sandbox est traité comme un
+    échec de cascade — renvoie au Debugger, repasse par le Reviewer, puis
+    revalide ; succès si la seconde tentative des tests sandbox passe."""
+    specs = _reponses_communes()
+    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
+    specs["debugger"] = ModeleFactice(
+        raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_BON, cause="tests sandbox en échec")
+    )
+
+    appels = {"n": 0}
+
+    def stub_echoue_puis_reussit(code_source: str, code_tests: str, limites=None) -> RapportTestsSandbox:
+        appels["n"] += 1
+        if appels["n"] == 1:
+            return RapportTestsSandbox(
+                tests=(ResultatTestUnitaire("test_x", False, "AssertionError"),), erreur=None
+            )
+        return RapportTestsSandbox(tests=(ResultatTestUnitaire("test_x", True, None),), erreur=None)
+
+    resultat = _invoquer(specs, executer_tests_sandbox_stub=stub_echoue_puis_reussit)
+
+    assert appels["n"] == 2
+    assert resultat.reussi is True
+    assert resultat.rapport_tests_sandbox is not None
+    assert resultat.rapport_tests_sandbox.reussi is True
+    assert resultat.boucle_reparation.nombre_tentatives == 2
+
+
+def test_pipeline_echoue_si_tests_sandbox_echouent_apres_epuisement_des_tentatives() -> None:
+    """Cascade toujours au vert, mais les tests générés ne passent jamais en
+    sandbox : le pipeline doit finir par un échec honnête (fin_boucle),
+    jamais enregistrer un solveur dont les tests générés échouent encore."""
+    specs = _reponses_communes()
+    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
+    specs["debugger"] = ModeleFactice(
+        raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_BON, cause="tests sandbox en échec")
+    )
+
+    def stub_toujours_en_echec(code_source: str, code_tests: str, limites=None) -> RapportTestsSandbox:
+        return RapportTestsSandbox(tests=(ResultatTestUnitaire("test_x", False, "AssertionError"),), erreur=None)
+
+    resultat = _invoquer(specs, executer_tests_sandbox_stub=stub_toujours_en_echec)
+
+    assert resultat.reussi is False
+    assert resultat.rapport_tests_sandbox is not None
+    assert resultat.rapport_tests_sandbox.reussi is False
+    assert resultat.boucle_reparation.nombre_tentatives == g.MAX_TENTATIVES_REPARATION
 
 
 def test_pipeline_echoue_apres_epuisement_des_tentatives() -> None:

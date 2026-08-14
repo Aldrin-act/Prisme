@@ -21,13 +21,17 @@ Workflow complet :
    - Si approuvé : Validation complète (statique → exécution → cascade,
      tolérance selon l'algorithme). Si elle échoue aussi, Debugger corrige
      avec le diagnostic de la validation, puis retour au Reviewer.
+   - Si la validation réussit : Tests sandbox — exécute les tests de l'agent
+     Testeur dans le bac à sable Docker (§6.6bis). S'ils échouent (ou si
+     pytest n'a pas pu les collecter), Debugger corrige avec ce diagnostic,
+     puis retour au Reviewer — traité comme n'importe quel autre échec de
+     cascade. Seule l'**indisponibilité du sandbox lui-même** (Docker
+     injoignable, image absente...) est meilleur-effort et ne bloque jamais
+     — voir `sandbox/runner.py::executer_tests_dans_sandbox`,
+     `_noeud_test_sandbox`.
    - Le nombre de tentatives est vérifié **avant** d'appeler le Debugger sur
      la toute dernière tentative — jamais de correction au-delà de la borne.
-6. Tests sandbox (meilleur-effort, canal d'audit pur — exécute les tests de
-   l'agent Testeur dans le bac à sable Docker une seule fois, après le
-   succès de la boucle ; n'affecte jamais `boucle_reussie` ni la suite du
-   pipeline, voir `sandbox/runner.py::executer_tests_dans_sandbox`)
-7. Documentation (meilleur-effort, après re-validation finale du code)
+6. Documentation (meilleur-effort, après re-validation finale du code)
 
 Pas d'Optimiseur : agent retiré du pipeline (réponse JSON trop fragile — il
 embarque un code Python multi-lignes complet comme valeur de chaîne JSON, un
@@ -157,9 +161,11 @@ class ResultatPipelineAvecBoucle:
     erreur_execution: str | None
     verdict_cascade: VerdictCascade | None
 
-    # Tests sandbox (canal d'audit, `None` si le sandbox était indisponible —
-    # jamais un critère d'acceptation, voir `reussi` ci-dessous qui ne s'en
-    # sert pas)
+    # Tests sandbox (§6.6bis) — `None` uniquement si le sandbox était
+    # indisponible (jamais bloquant, voir `reussi` ci-dessous) ; un rapport
+    # présent mais en échec (`.reussi` faux) fait déjà échouer `reussi` ici,
+    # et a normalement épuisé la boucle de réparation avant d'arriver
+    # jusqu'ici (voir `generation/graph.py::_route_apres_test_sandbox`).
     rapport_tests_sandbox: RapportTestsSandbox | None
 
     # Documentation
@@ -173,6 +179,7 @@ class ResultatPipelineAvecBoucle:
             and self.erreur_execution is None
             and self.verdict_cascade is not None
             and self.verdict_cascade.reussi
+            and (self.rapport_tests_sandbox is None or self.rapport_tests_sandbox.reussi)
         )
 
 
@@ -214,6 +221,17 @@ def _message_echec_validation(
         return "La validation cascade n'a pas pu être exécutée"
     details_echecs = "; ".join(f"[{d.brique_en_echec}] {d.nom} : {'; '.join(d.details)}" for d in verdict.echecs)
     return f"Validation cascade échouée : {details_echecs}"
+
+
+def _message_echec_tests_sandbox(rapport: RapportTestsSandbox) -> str:
+    """Message de diagnostic pour le Debugger quand les tests générés par
+    l'agent Testeur échouent en sandbox — traité comme un signal de bug réel
+    dans `resoudre()` (ces tests la ciblent directement, voir
+    `generation/prompts/testeur.md`), au même titre qu'un échec de cascade."""
+    if rapport.erreur is not None:
+        return f"Les tests générés n'ont pas pu être collectés/exécutés en sandbox : {rapport.erreur}"
+    details_echecs = "; ".join(f"{t.nom} : {t.message}" for t in rapport.tests if not t.reussi)
+    return f"Tests générés en échec dans le sandbox : {details_echecs}"
 
 
 class EtatGeneration(TypedDict, total=False):
@@ -421,35 +439,50 @@ def _route_apres_validation(etat: EtatGeneration) -> Literal["test_sandbox", "de
 
 
 def _noeud_test_sandbox(etat: EtatGeneration) -> dict:
-    """Meilleur-effort, canal d'audit pur (§6.6bis) : exécute les tests de
-    l'agent Testeur dans le bac à sable, une seule fois, après le succès de
-    la boucle de réparation — n'affecte jamais `boucle_reussie` ni la suite
-    du pipeline. Toute défaillance (Docker indisponible, image non
-    construite, délai dépassé...) dégrade silencieusement vers `None`, comme
-    `_noeud_documentation` le fait déjà pour la documentation.
+    """Exécute les tests de l'agent Testeur dans le bac à sable, une fois par
+    tentative de validation réussie. Un échec des tests générés (ou une
+    collecte pytest impossible) renvoie au Debugger comme n'importe quel
+    échec de cascade (§6.6bis) — ces tests ciblent `resoudre()` directement
+    (voir `generation/prompts/testeur.md`), donc leur échec est traité comme
+    un signal de bug réel dans le solveur, plus un simple avertissement pour
+    lecture humaine.
 
-    Le statut SSE `"echec"` ne signale qu'une défaillance de l'infrastructure
-    d'audit elle-même — jamais des tests générés qui ont simplement échoué,
-    ou une collecte pytest impossible (ces deux derniers cas restent
-    `"termine"`, détail dans `resume`/`rapport.reussi`), pour qu'aucun
-    opérateur ne lise "echec" comme un second critère d'acceptation."""
+    Seule l'indisponibilité de l'infrastructure d'audit elle-même (Docker
+    injoignable, image non construite, délai dépassé...) dégrade en silence
+    vers `rapport_tests_sandbox=None`, sans jamais bloquer l'acceptation —
+    un environnement sans Docker ne doit jamais rendre la génération
+    impossible, contrairement à un vrai échec de tests."""
     writer = get_stream_writer()
     writer(etape("test_sandbox", "en_cours", "Exécution des tests générés dans le sandbox..."))
 
-    rapport: RapportTestsSandbox | None = None
     try:
         rapport = executer_tests_dans_sandbox(etat["code_candidat"], etat["tests_generes"])
-    except Exception as erreur:  # noqa: BLE001 — meilleur-effort, ne doit jamais faire échouer la génération
+    except Exception as erreur:  # noqa: BLE001 — infrastructure d'audit indisponible, jamais bloquant
         writer(etape("test_sandbox", "echec", f"Tests sandbox ignorés ({type(erreur).__name__}) : {erreur}"))
-    else:
-        if rapport.erreur is not None:
-            resume = f"Collecte pytest impossible : {rapport.erreur}"
-        else:
-            nb_reussis = sum(t.reussi for t in rapport.tests)
-            resume = f"{nb_reussis}/{len(rapport.tests)} test(s) généré(s) réussi(s) en sandbox"
-        writer(etape("test_sandbox", "termine", resume))
+        return {"rapport_tests_sandbox": None}
 
-    return {"rapport_tests_sandbox": rapport}
+    if rapport.reussi:
+        nb_reussis = sum(t.reussi for t in rapport.tests)
+        writer(etape("test_sandbox", "termine", f"{nb_reussis}/{len(rapport.tests)} test(s) généré(s) réussi(s)"))
+        return {"rapport_tests_sandbox": rapport}
+
+    message = _message_echec_tests_sandbox(rapport)
+    writer(etape("test_sandbox", "echec", message))
+    return {"rapport_tests_sandbox": rapport, "message_pour_debugger": message}
+
+
+def _route_apres_test_sandbox(etat: EtatGeneration) -> Literal["documentation", "debugger", "fin_boucle"]:
+    """Indisponibilité du sandbox (`rapport_tests_sandbox is None`) : jamais
+    bloquant, direction Documentation comme avant §6.6bis. Un rapport
+    présent mais en échec (`.reussi` faux) est traité exactement comme un
+    échec de cascade — même borne `MAX_TENTATIVES_REPARATION`, retour au
+    Debugger."""
+    rapport = etat.get("rapport_tests_sandbox")
+    if rapport is None or rapport.reussi:
+        return "documentation"
+    if etat["numero_tentative"] >= MAX_TENTATIVES_REPARATION:
+        return "fin_boucle"
+    return "debugger"
 
 
 def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
@@ -486,7 +519,15 @@ def _construire_boucle_reparation(etat: EtatGeneration, *, reussi: bool) -> Resu
 def _noeud_fin_boucle(etat: EtatGeneration) -> dict:
     """Échec après épuisement des tentatives — retour honnête à l'humain
     (§6.6), jamais masqué par un acharnement automatique. Documentation
-    sautée : pas de code retenu à documenter."""
+    sautée : pas de code retenu à documenter.
+
+    Atteint soit avant `test_sandbox` (reviewer/validation jamais résolus),
+    soit après (validation réussie mais tests sandbox jamais résolus, voir
+    `_route_apres_test_sandbox`) — dans ce second cas, `derniere_validation_
+    statique`/`dernier_verdict_cascade` reflètent une validation qui a
+    pourtant réussi ; `rapport_tests_sandbox` doit donc être propagé tel
+    quel (jamais figé à `None`) pour que `ResultatPipelineAvecBoucle.reussi`
+    reste correctement `False`."""
     boucle = _construire_boucle_reparation(etat, reussi=False)
     resultat = ResultatPipelineAvecBoucle(
         specification=etat["analyse"].en_texte(),
@@ -501,7 +542,7 @@ def _noeud_fin_boucle(etat: EtatGeneration) -> dict:
         validation_statique=boucle.derniere_validation_statique,
         erreur_execution=boucle.derniere_erreur_execution,
         verdict_cascade=boucle.dernier_verdict_cascade,
-        rapport_tests_sandbox=None,
+        rapport_tests_sandbox=etat.get("rapport_tests_sandbox"),
         documentation=None,
     )
     return {"resultat_final": resultat}
@@ -589,7 +630,11 @@ def _construire_graphe() -> StateGraph:
     )
     graphe.add_edge("debugger", "reviewer")
     graphe.add_edge("fin_boucle", END)
-    graphe.add_edge("test_sandbox", "documentation")
+    graphe.add_conditional_edges(
+        "test_sandbox",
+        _route_apres_test_sandbox,
+        {"documentation": "documentation", "debugger": "debugger", "fin_boucle": "fin_boucle"},
+    )
     graphe.add_edge("documentation", END)
     return graphe
 
@@ -606,8 +651,8 @@ def _obtenir_graphe_compile():
     return _GRAPHE_COMPILE
 
 
-# 5 nœuds de mise en place + jusqu'à 10 × (reviewer + validation + debugger)
-# ≈ 35 super-steps dans le pire cas — grande marge au-dessus de la limite par
+# 5 nœuds de mise en place + jusqu'à 10 × (reviewer + validation + test_sandbox
+# + debugger) ≈ 45 super-steps dans le pire cas — grande marge au-dessus de la limite par
 # défaut de LangGraph (25) pour ne jamais couper la boucle avant qu'elle
 # n'épuise légitimement ses tentatives (`GraphRecursionError` silencieux
 # sinon, voir tests/integration/test_graph_pipeline.py).

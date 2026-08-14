@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import generation.graph as g
 from generation.agents.reviewer import ResultatRevue
+from generation.validation_statique import ResultatValidationStatique
+from sandbox.runner import RapportTestsSandbox, ResultatTestUnitaire
 from validation_engine.cascade import VerdictCascade
 
 CODE_BON = """
@@ -92,6 +94,89 @@ def test_route_apres_validation_va_au_test_sandbox_si_reussi() -> None:
 def test_route_apres_validation_va_au_debugger_si_echec_et_tentatives_restantes() -> None:
     etat: g.EtatGeneration = {"boucle_reussie": False, "numero_tentative": 5}
     assert g._route_apres_validation(etat) == "debugger"
+
+
+_RAPPORT_TESTS_REUSSI = RapportTestsSandbox(tests=(ResultatTestUnitaire("test_x", True, None),), erreur=None)
+_RAPPORT_TESTS_ECHEC = RapportTestsSandbox(
+    tests=(ResultatTestUnitaire("test_x", False, "AssertionError"),), erreur=None
+)
+
+
+def test_route_apres_test_sandbox_va_a_documentation_si_sandbox_indisponible() -> None:
+    """`rapport_tests_sandbox is None` (Docker injoignable, image absente...)
+    ne doit jamais bloquer — voir `_noeud_test_sandbox`."""
+    etat: g.EtatGeneration = {"rapport_tests_sandbox": None, "numero_tentative": 3}
+    assert g._route_apres_test_sandbox(etat) == "documentation"
+
+
+def test_route_apres_test_sandbox_va_a_documentation_si_tests_reussis() -> None:
+    etat: g.EtatGeneration = {"rapport_tests_sandbox": _RAPPORT_TESTS_REUSSI, "numero_tentative": 3}
+    assert g._route_apres_test_sandbox(etat) == "documentation"
+
+
+def test_route_apres_test_sandbox_va_au_debugger_si_tests_en_echec_et_tentatives_restantes() -> None:
+    etat: g.EtatGeneration = {"rapport_tests_sandbox": _RAPPORT_TESTS_ECHEC, "numero_tentative": 5}
+    assert g._route_apres_test_sandbox(etat) == "debugger"
+
+
+def test_route_apres_test_sandbox_va_a_fin_boucle_si_tests_en_echec_et_tentatives_epuisees() -> None:
+    etat: g.EtatGeneration = {
+        "rapport_tests_sandbox": _RAPPORT_TESTS_ECHEC,
+        "numero_tentative": g.MAX_TENTATIVES_REPARATION,
+    }
+    assert g._route_apres_test_sandbox(etat) == "fin_boucle"
+
+
+def _resultat_pipeline_minimal(**overrides: object) -> g.ResultatPipelineAvecBoucle:
+    validation_ok = ResultatValidationStatique(valide=True, violations=())
+    boucle = g.ResultatBoucleReparation(
+        code_initial=CODE_BON,
+        tentatives=(),
+        code_final=CODE_BON,
+        reussi=True,
+        nombre_tentatives=1,
+        derniere_revue=_revue(True),
+        derniere_validation_statique=validation_ok,
+        derniere_erreur_execution=None,
+        dernier_verdict_cascade=VerdictCascade(()),
+    )
+    champs: dict[str, object] = {
+        "specification": "s",
+        "plan_technique": "p",
+        "algorithme_recommande": "cp_sat",
+        "justification_algorithme": "petite instance",
+        "parametres_algorithme": {},
+        "code_genere": CODE_BON,
+        "tests_generes": "def test_x(): assert True",
+        "boucle_reparation": boucle,
+        "code_final": CODE_BON,
+        "validation_statique": validation_ok,
+        "erreur_execution": None,
+        "verdict_cascade": VerdictCascade(()),
+        "rapport_tests_sandbox": None,
+        "documentation": None,
+    }
+    champs.update(overrides)
+    return g.ResultatPipelineAvecBoucle(**champs)
+
+
+def test_reussi_est_vrai_si_rapport_tests_sandbox_absent() -> None:
+    """Sandbox indisponible : n'empêche jamais le succès global (meilleur-effort)."""
+    resultat = _resultat_pipeline_minimal(rapport_tests_sandbox=None)
+    assert resultat.reussi is True
+
+
+def test_reussi_est_vrai_si_tests_sandbox_reussis() -> None:
+    resultat = _resultat_pipeline_minimal(rapport_tests_sandbox=_RAPPORT_TESTS_REUSSI)
+    assert resultat.reussi is True
+
+
+def test_reussi_est_faux_si_tests_sandbox_en_echec_malgre_cascade_au_vert() -> None:
+    """Régression : avant §6.6bis, `reussi` ignorait `rapport_tests_sandbox` —
+    un solveur pouvait être enregistré malgré des tests générés jamais
+    corrigés après épuisement des tentatives."""
+    resultat = _resultat_pipeline_minimal(rapport_tests_sandbox=_RAPPORT_TESTS_ECHEC)
+    assert resultat.reussi is False
 
 
 def test_route_apres_validation_va_a_fin_boucle_si_echec_et_tentatives_epuisees() -> None:

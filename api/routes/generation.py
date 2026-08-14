@@ -125,6 +125,19 @@ def _construire_reponse(
             )
         elif resultat.erreur_execution is not None:
             erreur = f"erreur à l'exécution du code : {resultat.erreur_execution}"
+        elif (
+            resultat.verdict_cascade is not None
+            and resultat.verdict_cascade.reussi
+            and resultat.rapport_tests_sandbox is not None
+            and not resultat.rapport_tests_sandbox.reussi
+        ):
+            # Cascade au vert, mais tests générés par l'agent Testeur en échec en
+            # sandbox après épuisement des tentatives (§6.6bis) — seul cas où la
+            # cascade seule ne suffit pas à expliquer l'échec global.
+            detail = resultat.rapport_tests_sandbox.erreur or "; ".join(
+                t.nom for t in resultat.rapport_tests_sandbox.tests if not t.reussi
+            )
+            erreur = f"cascade de validation réussie, mais tests générés en échec en sandbox : {detail}"
 
         echecs_cascade = list(resultat.verdict_cascade.echecs) if resultat.verdict_cascade else []
         return {
