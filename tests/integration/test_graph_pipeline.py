@@ -7,8 +7,6 @@ via OR-Tools (comme `test_executer.py`), d'où `integration/` plutôt que
 
 from __future__ import annotations
 
-import json
-
 import pytest
 
 import generation.graph as g
@@ -20,9 +18,6 @@ from generation.agents import (
     documentation,
     generateur,
     testeur,
-)
-from generation.agents import (
-    reviewer as reviewer_agent,
 )
 from sandbox.runner import ErreurExecutionSandbox, RapportTestsSandbox, ResultatTestUnitaire
 from tests.unit.aides_test_agents import ModeleFactice
@@ -105,15 +100,11 @@ def resoudre(instance):
 CODE_INVALIDE = "import os\n\n\ndef resoudre(instance):\n    return None\n"
 
 
-def _modele_revue(*, verdict: str | None, problemes: list[str] | None) -> ModeleFactice:
-    schema = reviewer_agent._SchemaRevue(verdict=verdict, problemes=problemes)
-    return ModeleFactice(raw_content=json.dumps(schema.model_dump()), parsed=schema)
-
-
 def _reponses_communes() -> dict[str, object]:
-    """Une réponse par agent, suffisante pour amener le pipeline jusqu'au
-    Reviewer sans jamais échouer avant — chaque test surcharge ensuite
-    `reviewer`/`debugger` selon le scénario."""
+    """Une réponse par agent, suffisante pour amener le pipeline jusqu'à la
+    Validation sans jamais échouer avant (Reviewer désactivé, voir
+    `generation/graph.py::_construire_graphe`) — chaque test surcharge
+    ensuite `generateur`/`debugger` selon le scénario."""
     return {
         "analyste": ModeleFactice(
             raw_content="{}",
@@ -177,9 +168,10 @@ def _invoquer(
     return resultat
 
 
-def test_pipeline_reussi_quand_le_reviewer_approuve_directement() -> None:
+def test_pipeline_reussi_directement() -> None:
+    """Reviewer désactivé (voir `generation/graph.py::_construire_graphe`) :
+    un succès de Validation dès la première tentative suffit, sans détour."""
     specs = _reponses_communes()
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
 
     resultat = _invoquer(specs)
 
@@ -195,37 +187,16 @@ def test_pipeline_reussi_quand_le_reviewer_approuve_directement() -> None:
     assert resultat.rapport_tests_sandbox is None
 
 
-def test_pipeline_recupere_via_le_debugger_quand_le_reviewer_rejette() -> None:
-    specs = _reponses_communes()
-    # 1re tentative : Reviewer rejette. Debugger corrige (renvoie CODE_BON).
-    # 2e tentative : Reviewer approuve, la validation passe.
-    specs["reviewer"] = [
-        _modele_revue(verdict="A_CORRIGER", problemes=["import os interdit"]),
-        _modele_revue(verdict="APPROUVE", problemes=None),
-    ]
-    specs["debugger"] = ModeleFactice(
-        raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_BON, cause="import interdit retiré")
-    )
-
-    resultat = _invoquer(specs)
-
-    assert resultat.reussi is True
-    assert resultat.code_final.strip() == CODE_BON.strip()
-    assert resultat.boucle_reparation.nombre_tentatives == 2
-    assert len(resultat.boucle_reparation.tentatives) == 2
-    assert resultat.boucle_reparation.tentatives[0].reussi is False
-    assert resultat.boucle_reparation.tentatives[0].validation_statique is None  # sauté, reviewer a rejeté
-    assert resultat.boucle_reparation.tentatives[1].reussi is True
-
-
 def test_pipeline_renvoie_au_debugger_si_tests_sandbox_echouent_puis_reussissent() -> None:
     """§6.6bis : un échec des tests générés en sandbox est traité comme un
-    échec de cascade — renvoie au Debugger, repasse par le Reviewer, puis
-    revalide ; succès si la seconde tentative des tests sandbox passe."""
+    échec de cascade — renvoie directement au Debugger (Reviewer désactivé),
+    puis revalide ; succès si la seconde tentative des tests sandbox passe."""
     specs = _reponses_communes()
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
     specs["debugger"] = ModeleFactice(
-        raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_BON, cause="tests sandbox en échec")
+        raw_content="{}",
+        parsed=debugger._SchemaCorrectionTestsSandbox(
+            cible="solveur", code=CODE_BON, tests="def test_x(): assert True", cause="tests sandbox en échec"
+        ),
     )
 
     appels = {"n": 0}
@@ -247,14 +218,47 @@ def test_pipeline_renvoie_au_debugger_si_tests_sandbox_echouent_puis_reussissent
     assert resultat.boucle_reparation.nombre_tentatives == 2
 
 
+def test_pipeline_corrige_le_test_genere_plutot_que_le_solveur_si_designe_fautif() -> None:
+    """Le Debugger peut désigner le test généré comme fautif plutôt que le
+    solveur (voir generation/agents/debugger.py::corriger_solveur_ou_tests) —
+    `tests_generes` doit alors refléter le test corrigé, `code_final` rester
+    inchangé."""
+    tests_corriges = "from solveur_candidat import resoudre\n\n\ndef test_x_corrige():\n    assert True\n"
+    specs = _reponses_communes()
+    specs["debugger"] = ModeleFactice(
+        raw_content="{}",
+        parsed=debugger._SchemaCorrectionTestsSandbox(
+            cible="tests", code=CODE_BON, tests=tests_corriges, cause="le test attendait une valeur erronée"
+        ),
+    )
+
+    appels = {"n": 0}
+
+    def stub_echoue_puis_reussit(code_source: str, code_tests: str, limites=None) -> RapportTestsSandbox:
+        appels["n"] += 1
+        if appels["n"] == 1:
+            return RapportTestsSandbox(
+                tests=(ResultatTestUnitaire("test_x", False, "AssertionError"),), erreur=None
+            )
+        return RapportTestsSandbox(tests=(ResultatTestUnitaire("test_x_corrige", True, None),), erreur=None)
+
+    resultat = _invoquer(specs, executer_tests_sandbox_stub=stub_echoue_puis_reussit)
+
+    assert resultat.reussi is True
+    assert resultat.code_final.strip() == CODE_BON.strip()  # solveur jamais touché
+    assert resultat.tests_generes == tests_corriges  # le test corrigé remplace l'original
+
+
 def test_pipeline_echoue_si_tests_sandbox_echouent_apres_epuisement_des_tentatives() -> None:
     """Cascade toujours au vert, mais les tests générés ne passent jamais en
     sandbox : le pipeline doit finir par un échec honnête (fin_boucle),
     jamais enregistrer un solveur dont les tests générés échouent encore."""
     specs = _reponses_communes()
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
     specs["debugger"] = ModeleFactice(
-        raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_BON, cause="tests sandbox en échec")
+        raw_content="{}",
+        parsed=debugger._SchemaCorrectionTestsSandbox(
+            cible="solveur", code=CODE_BON, tests="def test_x(): assert True", cause="tests sandbox en échec"
+        ),
     )
 
     def stub_toujours_en_echec(code_source: str, code_tests: str, limites=None) -> RapportTestsSandbox:
@@ -273,10 +277,9 @@ def test_pipeline_echoue_apres_epuisement_des_tentatives() -> None:
     specs["generateur"] = ModeleFactice(
         raw_content="{}", parsed=generateur._SchemaGenerationCode(code=CODE_INVALIDE)
     )
-    # Reviewer approuve toujours, mais le code reste invalide (import os) —
-    # la validation échoue à chaque tentative, le Debugger ne corrige jamais
-    # vraiment (renvoie le même code invalide).
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
+    # Le code reste invalide (import os) — la validation échoue à chaque
+    # tentative, le Debugger ne corrige jamais vraiment (renvoie le même
+    # code invalide).
     specs["debugger"] = ModeleFactice(
         raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_INVALIDE, cause="tentative infructueuse")
     )
@@ -297,7 +300,6 @@ def test_debugger_jamais_appele_sur_la_derniere_tentative_epuisee() -> None:
     specs["generateur"] = ModeleFactice(
         raw_content="{}", parsed=generateur._SchemaGenerationCode(code=CODE_INVALIDE)
     )
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
 
     appels_debugger = 0
     modele_debugger = ModeleFactice(
@@ -322,13 +324,12 @@ def test_debugger_jamais_appele_sur_la_derniere_tentative_epuisee() -> None:
 
 def test_boucle_epuisee_ne_leve_pas_graphrecursionerror() -> None:
     """Couvre le risque de limite de récursion : 5 nœuds de mise en place +
-    10 × (reviewer + validation + debugger) doit rester sous la limite
+    10 × (test_sandbox + validation + debugger) doit rester sous la limite
     passée à `.invoke()` (voir `generation.graph._LIMITE_RECURSION`)."""
     specs = _reponses_communes()
     specs["generateur"] = ModeleFactice(
         raw_content="{}", parsed=generateur._SchemaGenerationCode(code=CODE_INVALIDE)
     )
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
     specs["debugger"] = ModeleFactice(
         raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_INVALIDE, cause="c")
     )
@@ -340,7 +341,6 @@ def test_boucle_epuisee_ne_leve_pas_graphrecursionerror() -> None:
 
 def test_stream_produit_des_evenements_etape_puis_le_resultat_final() -> None:
     specs = _reponses_communes()
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
 
     graphe = g._construire_graphe().compile()
     elements: list = []
@@ -378,7 +378,6 @@ def test_stream_persiste_les_champs_deja_produits_avant_un_plantage(monkeypatch:
     (§6.6) — voir `generation/graph.py::_partiels_nouveaux`. Le Testeur explose, donc
     Analyste/Benchmarker/Architecte/Développeur ont déjà tourné, jamais le Testeur."""
     specs = _reponses_communes()
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
     monkeypatch.setattr(g, "construire_modele_pour_agent", _fabrique_qui_explose_sur("testeur", specs))
 
     elements: list = []
@@ -397,10 +396,13 @@ def test_stream_persiste_les_champs_deja_produits_avant_un_plantage(monkeypatch:
 def test_stream_persiste_les_tentatives_deja_accumulees_avant_un_plantage(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Une tentative déjà rejetée par le Reviewer (donc déjà accumulée dans l'état
-    LangGraph) ne doit pas être perdue si le Debugger plante juste après."""
+    """Une tentative déjà en échec (via Validation — Reviewer désactivé, donc
+    déjà accumulée dans l'état LangGraph) ne doit pas être perdue si le
+    Debugger plante juste après."""
     specs = _reponses_communes()
-    specs["reviewer"] = _modele_revue(verdict="A_CORRIGER", problemes=["import os interdit"])
+    specs["generateur"] = ModeleFactice(
+        raw_content="{}", parsed=generateur._SchemaGenerationCode(code=CODE_INVALIDE)
+    )
     monkeypatch.setattr(g, "construire_modele_pour_agent", _fabrique_qui_explose_sur("debugger", specs))
 
     elements: list = []
@@ -436,7 +438,6 @@ class _ModeleFacticeCapturant(ModeleFactice):
 
 def test_noeud_analyste_recoit_la_structure_de_linstance_du_graphe() -> None:
     specs = _reponses_communes()
-    specs["reviewer"] = _modele_revue(verdict="APPROUVE", problemes=None)
     modele_analyste = _ModeleFacticeCapturant(
         raw_content="{}", parsed=analyste._SchemaAnalyse(entrees="e", sorties="s", contraintes_a_couvrir=["c"])
     )

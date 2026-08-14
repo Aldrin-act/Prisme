@@ -1,120 +1,145 @@
 {
   "operations": [
     {
-      "code_operation": "PROJET_GROUPE_001",
+      "code_operation": "CONFERENCE_001",
       "duree_jours": 1,
-      "poste_id": "BIBLIOTHEQUE"
+      "poste_id": "SALLE_CONFERENCE",
+      "competence_requise": "salle_conference"
     },
     {
-      "code_operation": "EXAMEN_002",
+      "code_operation": "PROJET_GROUPE_002",
       "duree_jours": 1,
-      "poste_id": "AMPHITHEATRE"
+      "poste_id": "SALLE_TD",
+      "competence_requise": "salle_td"
     },
     {
-      "code_operation": "TP_SCIENCES_003",
-      "duree_jours": 1,
-      "poste_id": "LABORATOIRE",
-      "operation_precedente": "EXAMEN_002"
-    },
-    {
-      "code_operation": "CONFERENCE_004",
+      "code_operation": "EXAMEN_003",
       "duree_jours": 1,
       "poste_id": "AMPHITHEATRE",
-      "operation_precedente": "TP_SCIENCES_003"
+      "competence_requise": "amphitheatre"
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_004",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TD",
+      "competence_requise": "salle_td",
+      "operation_precedente": "EXAMEN_003"
     },
     {
       "code_operation": "TP_INFORMATIQUE_005",
       "duree_jours": 1,
       "poste_id": "SALLE_TP_INFORMATIQUE",
-      "operation_precedente": "CONFERENCE_004"
+      "competence_requise": "salle_tp_informatique"
     },
     {
       "code_operation": "COURS_MAGISTRAL_006",
       "duree_jours": 1,
       "poste_id": "SALLE_COURS_STANDARD",
-      "operation_precedente": "TP_INFORMATIQUE_005"
+      "competence_requise": "salle_cours_standard"
     },
     {
-      "code_operation": "TRAVAUX_DIRIGES_007",
+      "code_operation": "COURS_MAGISTRAL_007",
       "duree_jours": 1,
-      "poste_id": "SALLE_TD"
+      "poste_id": "AMPHITHEATRE",
+      "competence_requise": "amphitheatre"
     },
     {
-      "code_operation": "TP_INFORMATIQUE_008",
+      "code_operation": "CONFERENCE_008",
       "duree_jours": 1,
-      "poste_id": "SALLE_TP_INFORMATIQUE"
+      "poste_id": "AMPHITHEATRE",
+      "competence_requise": "amphitheatre",
+      "operation_precedente": "COURS_MAGISTRAL_007"
     },
     {
-      "code_operation": "EXAMEN_009",
-      "duree_jours": 1,
-      "poste_id": "SALLE_EXAMEN",
-      "operation_precedente": "TP_INFORMATIQUE_008"
-    },
-    {
-      "code_operation": "PROJET_GROUPE_010",
+      "code_operation": "PROJET_GROUPE_009",
       "duree_jours": 1,
       "poste_id": "SALLE_TD",
-      "operation_precedente": "EXAMEN_009"
+      "competence_requise": "salle_td",
+      "operation_precedente": "CONFERENCE_008"
     },
     {
-      "code_operation": "TP_SCIENCES_011",
+      "code_operation": "TP_INFORMATIQUE_010",
       "duree_jours": 1,
-      "poste_id": "LABORATOIRE",
-      "operation_precedente": "PROJET_GROUPE_010"
+      "poste_id": "SALLE_TP_INFORMATIQUE",
+      "competence_requise": "salle_tp_informatique"
     },
     {
-      "code_operation": "CONFERENCE_012",
+      "code_operation": "TRAVAUX_DIRIGES_011",
       "duree_jours": 1,
-      "poste_id": "SALLE_CONFERENCE",
-      "operation_precedente": "TP_SCIENCES_011"
+      "poste_id": "SALLE_TD",
+      "competence_requise": "salle_td",
+      "operation_precedente": "TP_INFORMATIQUE_010"
+    },
+    {
+      "code_operation": "TP_SCIENCES_012",
+      "duree_jours": 1,
+      "poste_id": "SALLE_TP_SCIENCES",
+      "competence_requise": "salle_tp_sciences",
+      "operation_precedente": "TRAVAUX_DIRIGES_011"
     },
     {
       "code_operation": "TP_INFORMATIQUE_013",
       "duree_jours": 1,
-      "poste_id": "SALLE_TP_INFORMATIQUE"
+      "poste_id": "SALLE_TP_INFORMATIQUE",
+      "competence_requise": "salle_tp_informatique"
     },
     {
-      "code_operation": "EXAMEN_014",
+      "code_operation": "TRAVAUX_DIRIGES_014",
       "duree_jours": 1,
-      "poste_id": "AMPHITHEATRE",
+      "poste_id": "SALLE_TD",
+      "competence_requise": "salle_td",
       "operation_precedente": "TP_INFORMATIQUE_013"
     },
     {
-      "code_operation": "CONFERENCE_015",
+      "code_operation": "EXAMEN_015",
       "duree_jours": 1,
-      "poste_id": "SALLE_CONFERENCE",
-      "operation_precedente": "EXAMEN_014"
+      "poste_id": "AMPHITHEATRE",
+      "competence_requise": "amphitheatre",
+      "operation_precedente": "TRAVAUX_DIRIGES_014"
     },
     {
-      "code_operation": "PROJET_GROUPE_016",
+      "code_operation": "COURS_MAGISTRAL_016",
       "duree_jours": 1,
-      "poste_id": "SALLE_TD"
+      "poste_id": "AMPHITHEATRE",
+      "competence_requise": "amphitheatre"
     }
   ],
   "postes": [
     {
-      "code_poste": "BIBLIOTHEQUE"
+      "code_poste": "SALLE_CONFERENCE",
+      "competences": [
+        "salle_conference"
+      ]
     },
     {
-      "code_poste": "AMPHITHEATRE"
+      "code_poste": "SALLE_TD",
+      "competences": [
+        "salle_td"
+      ]
     },
     {
-      "code_poste": "LABORATOIRE"
+      "code_poste": "AMPHITHEATRE",
+      "competences": [
+        "amphitheatre"
+      ]
     },
     {
-      "code_poste": "SALLE_TP_INFORMATIQUE"
+      "code_poste": "SALLE_TP_INFORMATIQUE",
+      "competences": [
+        "salle_tp_informatique"
+      ]
     },
     {
-      "code_poste": "SALLE_COURS_STANDARD"
+      "code_poste": "SALLE_COURS_STANDARD",
+      "competences": [
+        "salle_cours_standard"
+      ]
     },
     {
-      "code_poste": "SALLE_TD"
-    },
-    {
-      "code_poste": "SALLE_EXAMEN"
-    },
-    {
-      "code_poste": "SALLE_CONFERENCE"
+      "code_poste": "SALLE_TP_SCIENCES",
+      "competences": [
+        "salle_tp_sciences"
+      ]
     }
   ]
 }

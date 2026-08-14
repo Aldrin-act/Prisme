@@ -1,112 +1,141 @@
 {
   "operations": [
     {
-      "code_operation": "PREPARATION_COMMANDE_001",
+      "code_operation": "CHARGEMENT_001",
       "duree_jours": 1,
-      "poste_id": "ZONE_PREPARATION"
+      "poste_id": "CHARIOT_ELEVATEUR",
+      "competence_requise": "chariot_elevateur"
     },
     {
-      "code_operation": "STOCKAGE_002",
+      "code_operation": "LIVRAISON_002",
       "duree_jours": 1,
-      "poste_id": "ZONE_STOCKAGE"
+      "poste_id": "CAMION_10T",
+      "competence_requise": "camion_10t",
+      "operation_precedente": "CHARGEMENT_001"
     },
     {
       "code_operation": "RECEPTION_003",
       "duree_jours": 1,
-      "poste_id": "QUAI_DECHARGEMENT"
+      "poste_id": "QUAI_DECHARGEMENT",
+      "competence_requise": "quai_dechargement"
     },
     {
-      "code_operation": "CHARGEMENT_004",
+      "code_operation": "PREPARATION_COMMANDE_004",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION",
+      "competence_requise": "zone_preparation"
+    },
+    {
+      "code_operation": "STOCKAGE_005",
       "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR",
-      "operation_precedente": "RECEPTION_003"
+      "competence_requise": "chariot_elevateur",
+      "operation_precedente": "PREPARATION_COMMANDE_004"
     },
     {
-      "code_operation": "LIVRAISON_005",
-      "duree_jours": 1,
-      "poste_id": "CAMIONNETTE",
-      "operation_precedente": "CHARGEMENT_004"
-    },
-    {
-      "code_operation": "TRANSPORT_006",
-      "duree_jours": 1,
-      "poste_id": "CAMION_10T"
-    },
-    {
-      "code_operation": "EMBALLAGE_007",
-      "duree_jours": 1,
-      "poste_id": "ZONE_PREPARATION",
-      "operation_precedente": "TRANSPORT_006"
-    },
-    {
-      "code_operation": "CHARGEMENT_008",
-      "duree_jours": 1,
-      "poste_id": "CHARIOT_ELEVATEUR"
-    },
-    {
-      "code_operation": "TRANSPORT_009",
-      "duree_jours": 1,
-      "poste_id": "CAMION_10T",
-      "operation_precedente": "CHARGEMENT_008"
-    },
-    {
-      "code_operation": "LIVRAISON_010",
-      "duree_jours": 1,
-      "poste_id": "CAMION_20T"
-    },
-    {
-      "code_operation": "EMBALLAGE_011",
-      "duree_jours": 1,
-      "poste_id": "ZONE_PREPARATION"
-    },
-    {
-      "code_operation": "CONTROLE_ENTREE_012",
+      "code_operation": "CONTROLE_ENTREE_006",
       "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE",
-      "operation_precedente": "EMBALLAGE_011"
+      "competence_requise": "poste_controle"
     },
     {
-      "code_operation": "STOCKAGE_013",
+      "code_operation": "TRANSPORT_007",
       "duree_jours": 1,
-      "poste_id": "ZONE_STOCKAGE"
+      "poste_id": "CAMIONNETTE",
+      "competence_requise": "camionnette",
+      "operation_precedente": "CONTROLE_ENTREE_006"
     },
     {
-      "code_operation": "RECEPTION_014",
-      "duree_jours": 1,
-      "poste_id": "QUAI_DECHARGEMENT",
-      "operation_precedente": "STOCKAGE_013"
-    },
-    {
-      "code_operation": "PREPARATION_COMMANDE_015",
+      "code_operation": "EMBALLAGE_008",
       "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION",
-      "operation_precedente": "RECEPTION_014"
+      "competence_requise": "zone_preparation",
+      "operation_precedente": "TRANSPORT_007"
+    },
+    {
+      "code_operation": "EMBALLAGE_009",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION",
+      "competence_requise": "zone_preparation"
+    },
+    {
+      "code_operation": "RECEPTION_010",
+      "duree_jours": 1,
+      "poste_id": "QUAI_DECHARGEMENT",
+      "competence_requise": "quai_dechargement",
+      "operation_precedente": "EMBALLAGE_009"
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_011",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE",
+      "competence_requise": "poste_controle"
+    },
+    {
+      "code_operation": "LIVRAISON_012",
+      "duree_jours": 1,
+      "poste_id": "CAMION_10T",
+      "competence_requise": "camion_10t",
+      "operation_precedente": "CONTROLE_ENTREE_011"
+    },
+    {
+      "code_operation": "CHARGEMENT_013",
+      "duree_jours": 1,
+      "poste_id": "CHARIOT_ELEVATEUR",
+      "competence_requise": "chariot_elevateur",
+      "operation_precedente": "LIVRAISON_012"
+    },
+    {
+      "code_operation": "STOCKAGE_014",
+      "duree_jours": 1,
+      "poste_id": "CHARIOT_ELEVATEUR",
+      "competence_requise": "chariot_elevateur",
+      "operation_precedente": "CHARGEMENT_013"
+    },
+    {
+      "code_operation": "TRANSPORT_015",
+      "duree_jours": 1,
+      "poste_id": "CAMION_10T",
+      "competence_requise": "camion_10t",
+      "operation_precedente": "STOCKAGE_014"
     }
   ],
   "postes": [
     {
-      "code_poste": "ZONE_PREPARATION"
+      "code_poste": "CHARIOT_ELEVATEUR",
+      "competences": [
+        "chariot_elevateur"
+      ]
     },
     {
-      "code_poste": "ZONE_STOCKAGE"
+      "code_poste": "CAMION_10T",
+      "competences": [
+        "camion_10t"
+      ]
     },
     {
-      "code_poste": "QUAI_DECHARGEMENT"
+      "code_poste": "QUAI_DECHARGEMENT",
+      "competences": [
+        "quai_dechargement"
+      ]
     },
     {
-      "code_poste": "CHARIOT_ELEVATEUR"
+      "code_poste": "ZONE_PREPARATION",
+      "competences": [
+        "zone_preparation"
+      ]
     },
     {
-      "code_poste": "CAMIONNETTE"
+      "code_poste": "POSTE_CONTROLE",
+      "competences": [
+        "poste_controle"
+      ]
     },
     {
-      "code_poste": "CAMION_10T"
-    },
-    {
-      "code_poste": "CAMION_20T"
-    },
-    {
-      "code_poste": "POSTE_CONTROLE"
+      "code_poste": "CAMIONNETTE",
+      "competences": [
+        "camionnette"
+      ]
     }
   ]
 }

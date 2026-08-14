@@ -1,118 +1,197 @@
 {
   "operations": [
     {
-      "code_operation": "REFUSION_B_001",
+      "code_operation": "POSE_CMS_A_001",
       "duree_jours": 1,
-      "poste_id": "FOUR_REFUSION"
+      "poste_id": "PICK_PLACE",
+      "competence_requise": "pick_place"
     },
     {
-      "code_operation": "PREP_002",
-      "duree_jours": 1,
-      "poste_id": "STATION_ASSEMBLAGE",
-      "operation_precedente": "REFUSION_B_001"
-    },
-    {
-      "code_operation": "REFUSION_A_003",
+      "code_operation": "REFUSION_B_002",
       "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
-      "operation_precedente": "PREP_002"
+      "competence_requise": "four_refusion",
+      "operation_precedente": "POSE_CMS_A_001"
     },
     {
-      "code_operation": "SOUDURE_THT_004",
-      "duree_jours": 1,
-      "poste_id": "POSTE_SOUDURE_MANUEL"
-    },
-    {
-      "code_operation": "PACKAGE_005",
-      "duree_jours": 1,
-      "poste_id": "STATION_PACKAGING",
-      "operation_precedente": "SOUDURE_THT_004"
-    },
-    {
-      "code_operation": "DEPANEL_006",
+      "code_operation": "DEPANEL_003",
       "duree_jours": 1,
       "poste_id": "POSTE_DEPANNELISATION",
-      "operation_precedente": "PACKAGE_005"
+      "competence_requise": "poste_depannelisation",
+      "operation_precedente": "REFUSION_B_002"
+    },
+    {
+      "code_operation": "REFUSION_A_004",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION",
+      "competence_requise": "four_refusion",
+      "operation_precedente": "DEPANEL_003"
+    },
+    {
+      "code_operation": "COATING_005",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING",
+      "competence_requise": "robot_coating"
+    },
+    {
+      "code_operation": "SOUDURE_THT_006",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL",
+      "competence_requise": "poste_soudure_manuel"
     },
     {
       "code_operation": "TEST_ICT_007",
       "duree_jours": 1,
       "poste_id": "BANC_TEST_ICT",
-      "operation_precedente": "DEPANEL_006"
+      "competence_requise": "banc_test_ict",
+      "operation_precedente": "SOUDURE_THT_006"
     },
     {
-      "code_operation": "POSE_CMS_A_008",
+      "code_operation": "TEST_FONC_008",
       "duree_jours": 1,
-      "poste_id": "PICK_PLACE",
+      "poste_id": "BANC_TEST_FONCTIONNEL",
+      "competence_requise": "banc_test_fonctionnel",
       "operation_precedente": "TEST_ICT_007"
     },
     {
-      "code_operation": "SOUDURE_THT_009",
-      "duree_jours": 1,
-      "poste_id": "POSTE_SOUDURE_MANUEL"
-    },
-    {
-      "code_operation": "PACKAGE_010",
-      "duree_jours": 1,
-      "poste_id": "STATION_PACKAGING"
-    },
-    {
-      "code_operation": "REFUSION_A_011",
-      "duree_jours": 1,
-      "poste_id": "FOUR_REFUSION",
-      "operation_precedente": "PACKAGE_010"
-    },
-    {
-      "code_operation": "COATING_012",
-      "duree_jours": 1,
-      "poste_id": "ROBOT_COATING"
-    },
-    {
-      "code_operation": "POSE_CMS_A_013",
-      "duree_jours": 1,
-      "poste_id": "PICK_PLACE"
-    },
-    {
-      "code_operation": "PREP_014",
+      "code_operation": "PREP_009",
       "duree_jours": 1,
       "poste_id": "STATION_ASSEMBLAGE",
-      "operation_precedente": "POSE_CMS_A_013"
+      "competence_requise": "station_assemblage",
+      "operation_precedente": "TEST_FONC_008"
     },
     {
-      "code_operation": "DEPANEL_015",
+      "code_operation": "POSE_CMS_B_010",
       "duree_jours": 1,
-      "poste_id": "POSTE_DEPANNELISATION"
+      "poste_id": "PICK_PLACE",
+      "competence_requise": "pick_place"
     },
     {
-      "code_operation": "POSE_CMS_B_016",
+      "code_operation": "AOI_A_011",
       "duree_jours": 1,
-      "poste_id": "PICK_PLACE"
+      "poste_id": "AOI",
+      "competence_requise": "aoi",
+      "operation_precedente": "POSE_CMS_B_010"
+    },
+    {
+      "code_operation": "PACKAGE_012",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING",
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "SOUDURE_THT_013",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "REFUSION_A_014",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION",
+      "competence_requise": "four_refusion",
+      "operation_precedente": "SOUDURE_THT_013"
+    },
+    {
+      "code_operation": "AOI_A_015",
+      "duree_jours": 1,
+      "poste_id": "AOI",
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "TEST_FONC_016",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL",
+      "competence_requise": "banc_test_fonctionnel"
+    },
+    {
+      "code_operation": "PACKAGE_017",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING",
+      "competence_requise": "station_packaging",
+      "operation_precedente": "TEST_FONC_016"
+    },
+    {
+      "code_operation": "COATING_018",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING",
+      "competence_requise": "robot_coating",
+      "operation_precedente": "PACKAGE_017"
+    },
+    {
+      "code_operation": "POSE_CMS_B_019",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "POSE_CMS_A_020",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE",
+      "competence_requise": "pick_place",
+      "operation_precedente": "POSE_CMS_B_019"
     }
   ],
   "postes": [
     {
-      "code_poste": "FOUR_REFUSION"
+      "code_poste": "PICK_PLACE",
+      "competences": [
+        "pick_place"
+      ]
     },
     {
-      "code_poste": "STATION_ASSEMBLAGE"
+      "code_poste": "FOUR_REFUSION",
+      "competences": [
+        "four_refusion"
+      ]
     },
     {
-      "code_poste": "POSTE_SOUDURE_MANUEL"
+      "code_poste": "POSTE_DEPANNELISATION",
+      "competences": [
+        "poste_depannelisation"
+      ]
     },
     {
-      "code_poste": "STATION_PACKAGING"
+      "code_poste": "ROBOT_COATING",
+      "competences": [
+        "robot_coating"
+      ]
     },
     {
-      "code_poste": "POSTE_DEPANNELISATION"
+      "code_poste": "POSTE_SOUDURE_MANUEL",
+      "competences": [
+        "poste_soudure_manuel"
+      ]
     },
     {
-      "code_poste": "BANC_TEST_ICT"
+      "code_poste": "BANC_TEST_ICT",
+      "competences": [
+        "banc_test_ict"
+      ]
     },
     {
-      "code_poste": "PICK_PLACE"
+      "code_poste": "BANC_TEST_FONCTIONNEL",
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
     },
     {
-      "code_poste": "ROBOT_COATING"
+      "code_poste": "STATION_ASSEMBLAGE",
+      "competences": [
+        "station_assemblage"
+      ]
+    },
+    {
+      "code_poste": "AOI",
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "code_poste": "STATION_PACKAGING",
+      "competences": [
+        "station_packaging"
+      ]
     }
   ]
 }

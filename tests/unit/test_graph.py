@@ -84,11 +84,11 @@ def test_route_apres_reviewer_va_a_fin_boucle_si_rejete_et_tentatives_epuisees()
     assert g._route_apres_reviewer(etat) == "fin_boucle"
 
 
-def test_route_apres_validation_va_au_test_sandbox_si_reussi() -> None:
-    """Depuis l'ajout du nœud test_sandbox (canal d'audit, exécute les tests
-    générés une seule fois avant documentation) — voir generation/graph.py."""
+def test_route_apres_validation_va_a_documentation_si_reussi() -> None:
+    """test_sandbox tourne désormais avant Reviewer/Validation, pas après
+    (§6.6bis) — une validation réussie va directement à Documentation."""
     etat: g.EtatGeneration = {"boucle_reussie": True, "numero_tentative": 3}
-    assert g._route_apres_validation(etat) == "test_sandbox"
+    assert g._route_apres_validation(etat) == "documentation"
 
 
 def test_route_apres_validation_va_au_debugger_si_echec_et_tentatives_restantes() -> None:
@@ -102,16 +102,18 @@ _RAPPORT_TESTS_ECHEC = RapportTestsSandbox(
 )
 
 
-def test_route_apres_test_sandbox_va_a_documentation_si_sandbox_indisponible() -> None:
+def test_route_apres_test_sandbox_va_a_validation_si_sandbox_indisponible() -> None:
     """`rapport_tests_sandbox is None` (Docker injoignable, image absente...)
-    ne doit jamais bloquer — voir `_noeud_test_sandbox`."""
+    ne doit jamais bloquer — voir `_noeud_test_sandbox`. Le Reviewer est
+    désactivé (voir `_construire_graphe`), donc la dégradation va directement
+    à Validation."""
     etat: g.EtatGeneration = {"rapport_tests_sandbox": None, "numero_tentative": 3}
-    assert g._route_apres_test_sandbox(etat) == "documentation"
+    assert g._route_apres_test_sandbox(etat) == "validation"
 
 
-def test_route_apres_test_sandbox_va_a_documentation_si_tests_reussis() -> None:
+def test_route_apres_test_sandbox_va_a_validation_si_tests_reussis() -> None:
     etat: g.EtatGeneration = {"rapport_tests_sandbox": _RAPPORT_TESTS_REUSSI, "numero_tentative": 3}
-    assert g._route_apres_test_sandbox(etat) == "documentation"
+    assert g._route_apres_test_sandbox(etat) == "validation"
 
 
 def test_route_apres_test_sandbox_va_au_debugger_si_tests_en_echec_et_tentatives_restantes() -> None:
@@ -203,3 +205,13 @@ def test_message_echec_validation_signale_erreur_execution() -> None:
     message = g._message_echec_validation(validation, "boom", None)
     assert "Erreur d'exécution" in message
     assert "boom" in message
+
+
+def test_reviewer_est_absent_du_graphe_compile() -> None:
+    """Reviewer désactivé : son nœud ne doit pas apparaître dans le graphe
+    réellement exécuté, même si `_noeud_reviewer`/`_route_apres_reviewer`
+    restent définis dans le module (réactivation possible plus tard)."""
+    noeuds = g._construire_graphe().compile().get_graph().nodes
+    assert "reviewer" not in noeuds
+    assert "test_sandbox" in noeuds
+    assert "validation" in noeuds

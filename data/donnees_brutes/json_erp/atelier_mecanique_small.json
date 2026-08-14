@@ -3,126 +3,184 @@
     {
       "code_operation": "FINITION_001",
       "duree_jours": 1,
-      "poste_id": "POSTE_POLISSAGE"
+      "poste_id": "POSTE_POLISSAGE",
+      "competence_requise": "poste_polissage"
     },
     {
-      "code_operation": "FORMAGE_002",
+      "code_operation": "CONTROLE_002",
       "duree_jours": 1,
-      "poste_id": "PRESSE_EMBOUTISSAGE",
+      "poste_id": "STATION_CONTROLE",
+      "competence_requise": "station_controle",
       "operation_precedente": "FINITION_001"
     },
     {
-      "code_operation": "USINAGE_003",
+      "code_operation": "PREPARATION_003",
       "duree_jours": 1,
-      "poste_id": "POSTE_EBAVURAGE"
+      "poste_id": "DECOUPEUSE_PLASMA",
+      "competence_requise": "decoupeuse_plasma"
     },
     {
-      "code_operation": "SOUDURE_004",
+      "code_operation": "FORMAGE_004",
       "duree_jours": 1,
-      "poste_id": "POSTE_SOUDURE",
-      "operation_precedente": "USINAGE_003"
+      "poste_id": "PRESSE_EMBOUTISSAGE",
+      "competence_requise": "presse_emboutissage",
+      "operation_precedente": "PREPARATION_003"
     },
     {
       "code_operation": "ASSEMBLAGE_005",
       "duree_jours": 1,
-      "poste_id": "POSTE_ASSEMBLAGE"
+      "poste_id": "POSTE_ASSEMBLAGE",
+      "competence_requise": "poste_assemblage",
+      "operation_precedente": "FORMAGE_004"
     },
     {
       "code_operation": "PEINTURE_006",
       "duree_jours": 1,
-      "poste_id": "TUNNEL_PEINTURE"
+      "poste_id": "CABINE_PEINTURE",
+      "competence_requise": "cabine_peinture",
+      "operation_precedente": "ASSEMBLAGE_005"
     },
     {
-      "code_operation": "CONTROLE_007",
+      "code_operation": "SOUDURE_007",
       "duree_jours": 1,
-      "poste_id": "STATION_CONTROLE",
+      "poste_id": "POSTE_SOUDURE",
+      "competence_requise": "poste_soudure",
       "operation_precedente": "PEINTURE_006"
     },
     {
-      "code_operation": "PREPARATION_008",
+      "code_operation": "USINAGE_008",
       "duree_jours": 1,
-      "poste_id": "DECOUPEUSE_PLASMA"
+      "poste_id": "POSTE_EBAVURAGE",
+      "competence_requise": "poste_ebavurage",
+      "operation_precedente": "SOUDURE_007"
     },
     {
-      "code_operation": "FORMAGE_009",
-      "duree_jours": 1,
-      "poste_id": "PRESSE_PLIAGE"
-    },
-    {
-      "code_operation": "PEINTURE_010",
-      "duree_jours": 1,
-      "poste_id": "TUNNEL_PEINTURE"
-    },
-    {
-      "code_operation": "CONTROLE_011",
-      "duree_jours": 1,
-      "poste_id": "STATION_CONTROLE",
-      "operation_precedente": "PEINTURE_010"
-    },
-    {
-      "code_operation": "PREPARATION_012",
-      "duree_jours": 1,
-      "poste_id": "PERCEUSE_CNC"
-    },
-    {
-      "code_operation": "USINAGE_013",
-      "duree_jours": 1,
-      "poste_id": "CENTRE_USINAGE",
-      "operation_precedente": "PREPARATION_012"
-    },
-    {
-      "code_operation": "SOUDURE_014",
-      "duree_jours": 1,
-      "poste_id": "ROBOT_SOUDURE"
-    },
-    {
-      "code_operation": "FINITION_015",
-      "duree_jours": 1,
-      "poste_id": "POSTE_POLISSAGE"
-    },
-    {
-      "code_operation": "ASSEMBLAGE_016",
+      "code_operation": "ASSEMBLAGE_009",
       "duree_jours": 1,
       "poste_id": "POSTE_ASSEMBLAGE",
-      "operation_precedente": "FINITION_015"
+      "competence_requise": "poste_assemblage"
+    },
+    {
+      "code_operation": "CONTROLE_010",
+      "duree_jours": 1,
+      "poste_id": "STATION_CONTROLE",
+      "competence_requise": "station_controle",
+      "operation_precedente": "ASSEMBLAGE_009"
+    },
+    {
+      "code_operation": "USINAGE_011",
+      "duree_jours": 1,
+      "poste_id": "FRAISEUSE_CNC",
+      "competence_requise": "fraiseuse_cnc",
+      "operation_precedente": "CONTROLE_010"
+    },
+    {
+      "code_operation": "SOUDURE_012",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE",
+      "competence_requise": "poste_soudure",
+      "operation_precedente": "USINAGE_011"
+    },
+    {
+      "code_operation": "FINITION_013",
+      "duree_jours": 1,
+      "poste_id": "POSTE_POLISSAGE",
+      "competence_requise": "poste_polissage",
+      "operation_precedente": "SOUDURE_012"
+    },
+    {
+      "code_operation": "PEINTURE_014",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_PEINTURE",
+      "competence_requise": "tunnel_peinture"
+    },
+    {
+      "code_operation": "PREPARATION_015",
+      "duree_jours": 1,
+      "poste_id": "DECOUPEUSE_LASER",
+      "competence_requise": "decoupeuse_laser",
+      "operation_precedente": "PEINTURE_014"
+    },
+    {
+      "code_operation": "FORMAGE_016",
+      "duree_jours": 1,
+      "poste_id": "PRESSE_PLIAGE",
+      "competence_requise": "presse_pliage",
+      "operation_precedente": "PREPARATION_015"
     }
   ],
   "postes": [
     {
-      "code_poste": "POSTE_POLISSAGE"
+      "code_poste": "POSTE_POLISSAGE",
+      "competences": [
+        "poste_polissage"
+      ]
     },
     {
-      "code_poste": "PRESSE_EMBOUTISSAGE"
+      "code_poste": "STATION_CONTROLE",
+      "competences": [
+        "station_controle"
+      ]
     },
     {
-      "code_poste": "POSTE_EBAVURAGE"
+      "code_poste": "DECOUPEUSE_PLASMA",
+      "competences": [
+        "decoupeuse_plasma"
+      ]
     },
     {
-      "code_poste": "POSTE_SOUDURE"
+      "code_poste": "PRESSE_EMBOUTISSAGE",
+      "competences": [
+        "presse_emboutissage"
+      ]
     },
     {
-      "code_poste": "POSTE_ASSEMBLAGE"
+      "code_poste": "POSTE_ASSEMBLAGE",
+      "competences": [
+        "poste_assemblage"
+      ]
     },
     {
-      "code_poste": "TUNNEL_PEINTURE"
+      "code_poste": "CABINE_PEINTURE",
+      "competences": [
+        "cabine_peinture"
+      ]
     },
     {
-      "code_poste": "STATION_CONTROLE"
+      "code_poste": "POSTE_SOUDURE",
+      "competences": [
+        "poste_soudure"
+      ]
     },
     {
-      "code_poste": "DECOUPEUSE_PLASMA"
+      "code_poste": "POSTE_EBAVURAGE",
+      "competences": [
+        "poste_ebavurage"
+      ]
     },
     {
-      "code_poste": "PRESSE_PLIAGE"
+      "code_poste": "FRAISEUSE_CNC",
+      "competences": [
+        "fraiseuse_cnc"
+      ]
     },
     {
-      "code_poste": "PERCEUSE_CNC"
+      "code_poste": "TUNNEL_PEINTURE",
+      "competences": [
+        "tunnel_peinture"
+      ]
     },
     {
-      "code_poste": "CENTRE_USINAGE"
+      "code_poste": "DECOUPEUSE_LASER",
+      "competences": [
+        "decoupeuse_laser"
+      ]
     },
     {
-      "code_poste": "ROBOT_SOUDURE"
+      "code_poste": "PRESSE_PLIAGE",
+      "competences": [
+        "presse_pliage"
+      ]
     }
   ]
 }

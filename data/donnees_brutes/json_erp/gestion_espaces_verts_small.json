@@ -1,122 +1,151 @@
 {
   "operations": [
     {
-      "code_operation": "ELAGAGE_ARBRES_001",
+      "code_operation": "DESHERBAGE_001",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_ELAGAGE"
+      "poste_id": "EQUIPE_DESHERBAGE",
+      "competence_requise": "equipe_desherbage"
     },
     {
-      "code_operation": "NETTOYAGE_002",
+      "code_operation": "TRAITEMENT_002",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_NETTOYAGE",
-      "operation_precedente": "ELAGAGE_ARBRES_001"
+      "poste_id": "EQUIPE_TRAITEMENT_PHYTO",
+      "competence_requise": "equipe_traitement_phyto",
+      "operation_precedente": "DESHERBAGE_001"
     },
     {
       "code_operation": "TONTE_GAZON_003",
       "duree_jours": 1,
       "poste_id": "EQUIPE_TONTE",
-      "operation_precedente": "NETTOYAGE_002"
+      "competence_requise": "equipe_tonte"
     },
     {
-      "code_operation": "AMENAGEMENT_004",
+      "code_operation": "NETTOYAGE_004",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_NETTOYAGE",
+      "competence_requise": "equipe_nettoyage"
+    },
+    {
+      "code_operation": "AMENAGEMENT_005",
       "duree_jours": 1,
       "poste_id": "EQUIPE_AMENAGEMENT",
-      "operation_precedente": "TONTE_GAZON_003"
-    },
-    {
-      "code_operation": "TRAITEMENT_005",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_PHYTO",
-      "operation_precedente": "AMENAGEMENT_004"
+      "competence_requise": "equipe_amenagement",
+      "operation_precedente": "NETTOYAGE_004"
     },
     {
       "code_operation": "PLANTATION_006",
       "duree_jours": 1,
       "poste_id": "EQUIPE_PLANTATION",
-      "operation_precedente": "TRAITEMENT_005"
+      "competence_requise": "equipe_plantation"
     },
     {
-      "code_operation": "ARROSAGE_007",
+      "code_operation": "TAILLE_HAIES_007",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE",
+      "poste_id": "EQUIPE_TAILLE",
+      "competence_requise": "equipe_taille",
       "operation_precedente": "PLANTATION_006"
     },
     {
-      "code_operation": "TAILLE_HAIES_008",
+      "code_operation": "ARROSAGE_008",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_TAILLE",
-      "operation_precedente": "ARROSAGE_007"
+      "poste_id": "EQUIPE_ARROSAGE",
+      "competence_requise": "equipe_arrosage"
     },
     {
-      "code_operation": "AMENAGEMENT_009",
+      "code_operation": "ELAGAGE_ARBRES_009",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_AMENAGEMENT"
+      "poste_id": "EQUIPE_ELAGAGE",
+      "competence_requise": "equipe_elagage",
+      "operation_precedente": "ARROSAGE_008"
     },
     {
       "code_operation": "PLANTATION_010",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_PLANTATION"
+      "poste_id": "EQUIPE_PLANTATION",
+      "competence_requise": "equipe_plantation"
     },
     {
-      "code_operation": "TONTE_GAZON_011",
+      "code_operation": "AMENAGEMENT_011",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_TONTE",
+      "poste_id": "EQUIPE_AMENAGEMENT",
+      "competence_requise": "equipe_amenagement",
       "operation_precedente": "PLANTATION_010"
     },
     {
-      "code_operation": "TRAITEMENT_012",
+      "code_operation": "NETTOYAGE_012",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_TRAITEMENT_PHYTO",
-      "operation_precedente": "TONTE_GAZON_011"
+      "poste_id": "EQUIPE_NETTOYAGE",
+      "competence_requise": "equipe_nettoyage"
     },
     {
-      "code_operation": "ARROSAGE_013",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_ARROSAGE",
-      "operation_precedente": "TRAITEMENT_012"
-    },
-    {
-      "code_operation": "TAILLE_HAIES_014",
+      "code_operation": "TAILLE_HAIES_013",
       "duree_jours": 1,
       "poste_id": "EQUIPE_TAILLE",
-      "operation_precedente": "ARROSAGE_013"
+      "competence_requise": "equipe_taille",
+      "operation_precedente": "NETTOYAGE_012"
     },
     {
-      "code_operation": "ELAGAGE_ARBRES_015",
+      "code_operation": "DESHERBAGE_014",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_ELAGAGE",
-      "operation_precedente": "TAILLE_HAIES_014"
-    },
-    {
-      "code_operation": "NETTOYAGE_016",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_NETTOYAGE"
+      "poste_id": "EQUIPE_DESHERBAGE",
+      "competence_requise": "equipe_desherbage",
+      "operation_precedente": "TAILLE_HAIES_013"
     }
   ],
   "postes": [
     {
-      "code_poste": "EQUIPE_ELAGAGE"
+      "code_poste": "EQUIPE_DESHERBAGE",
+      "competences": [
+        "equipe_desherbage"
+      ]
     },
     {
-      "code_poste": "EQUIPE_NETTOYAGE"
+      "code_poste": "EQUIPE_TRAITEMENT_PHYTO",
+      "competences": [
+        "equipe_traitement_phyto"
+      ]
     },
     {
-      "code_poste": "EQUIPE_TONTE"
+      "code_poste": "EQUIPE_TONTE",
+      "competences": [
+        "equipe_tonte"
+      ]
     },
     {
-      "code_poste": "EQUIPE_AMENAGEMENT"
+      "code_poste": "EQUIPE_NETTOYAGE",
+      "competences": [
+        "equipe_nettoyage"
+      ]
     },
     {
-      "code_poste": "EQUIPE_TRAITEMENT_PHYTO"
+      "code_poste": "EQUIPE_AMENAGEMENT",
+      "competences": [
+        "equipe_amenagement"
+      ]
     },
     {
-      "code_poste": "EQUIPE_PLANTATION"
+      "code_poste": "EQUIPE_PLANTATION",
+      "competences": [
+        "equipe_plantation"
+      ]
     },
     {
-      "code_poste": "EQUIPE_ARROSAGE"
+      "code_poste": "EQUIPE_TAILLE",
+      "competences": [
+        "equipe_taille"
+      ]
     },
     {
-      "code_poste": "EQUIPE_TAILLE"
+      "code_poste": "EQUIPE_ARROSAGE",
+      "competences": [
+        "equipe_arrosage"
+      ]
+    },
+    {
+      "code_poste": "EQUIPE_ELAGAGE",
+      "competences": [
+        "equipe_elagage"
+      ]
     }
   ]
 }

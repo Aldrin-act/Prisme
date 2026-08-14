@@ -10,6 +10,7 @@ export {
   prismeClient,
   PrismeAPIError,
   demarrerGenerationSolveur,
+  annulerGenerationSolveur,
   suivreJobGeneration,
   type EvenementGenererSolveurStream,
   type ReponseDemarrageJob,

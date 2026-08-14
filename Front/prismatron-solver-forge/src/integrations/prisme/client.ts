@@ -517,6 +517,20 @@ export function demarrerGenerationSolveur(instanceId: string): Promise<ReponseDe
 }
 
 /**
+ * Demande d'arrêt d'un job en cours (POST /generation/jobs/{id}/annuler) —
+ * coopératif : le pipeline s'arrête au prochain évènement produit, pas
+ * instantanément (un appel LLM déjà en cours va jusqu'à son terme). Le flux
+ * SSE déjà ouvert (`suivreJobGeneration`) reçoit alors un évènement `erreur`
+ * explicite ("Génération annulée par l'utilisateur"), aucun canal séparé
+ * n'est nécessaire pour que l'UI le reflète.
+ */
+export function annulerGenerationSolveur(jobId: string): Promise<{ annule: boolean }> {
+  return apiFetch<{ annule: boolean }>(`${PRISME_CONFIG.routes.generation}/jobs/${jobId}/annuler`, {
+    method: "POST",
+  });
+}
+
+/**
  * Jobs de génération connus du serveur (GET /generation/jobs) — pour un
  * indicateur "génération en cours" visible depuis n'importe quelle page
  * (sidebar, liste d'instances...), pas seulement celle qui a lancé le job.

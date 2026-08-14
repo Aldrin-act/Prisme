@@ -457,11 +457,14 @@ export interface ReponseGenerationSolveur {
   // avant la boucle de réparation.
   algorithme: string;
   algorithme_raison: string;
-  // Boucle de réparation bornée (generation/pipeline_avec_boucle.py) : 1 à 3
-  // tentatives, Reviewer/Debugger corrigeant le code entre chaque essai.
+  // Boucle de réparation bornée (generation/graph.py) : jusqu'à 10 tentatives,
+  // Debugger corrigeant le code entre chaque essai (Reviewer désactivé).
   nombre_tentatives: number;
   erreur: string | null;
   echecs_cascade: EchecCascade[];
+  // Dernier passage des tests générés par l'agent Testeur, réellement exécutés
+  // en sandbox (§6.6bis) — `null` uniquement si le sandbox était indisponible.
+  rapport_tests_sandbox: RapportTestsSandbox | null;
 }
 
 // Un job de génération connu du serveur (GET /generation/jobs) — pour savoir
@@ -504,6 +507,22 @@ export interface TentativeGenerationHistorisee {
   validation_statique_violations: string[];
 }
 
+export interface ResultatTestUnitaireSandbox {
+  nom: string;
+  reussi: boolean;
+  message: string | null;
+}
+
+// Miroir de `sandbox.runner.RapportTestsSandbox.en_dict()` — canal d'audit des
+// tests générés par l'agent Testeur, exécutés réellement dans le bac à sable
+// Docker (§6.6bis) ; un échec renvoie déjà au Debugger côté pipeline, ceci
+// n'est que la trace de ce qui s'est passé, pour lecture humaine.
+export interface RapportTestsSandbox {
+  tests: ResultatTestUnitaireSandbox[];
+  erreur: string | null;
+  reussi: boolean;
+}
+
 export interface HistoriqueJobGeneration {
   job_id: string;
   instance_id: string;
@@ -520,6 +539,7 @@ export interface HistoriqueJobGeneration {
   code_genere: string | null;
   tests_generes: string | null;
   code_final: string | null;
+  rapport_tests_sandbox: RapportTestsSandbox | null;
   documentation: string | null;
   nombre_tentatives: number | null;
   erreur: string | null;

@@ -1,144 +1,192 @@
 {
   "operations": [
     {
-      "code_operation": "LAVAGE_001",
+      "code_operation": "EPLUCHAGE_001",
       "duree_jours": 1,
-      "poste_id": "TUNNEL_LAVAGE"
+      "poste_id": "LIGNE_EPLUCHAGE",
+      "competence_requise": "ligne_epluchage"
     },
     {
-      "code_operation": "CONTROLE_002",
-      "duree_jours": 1,
-      "poste_id": "POSTE_CONTROLE_QUALITE"
-    },
-    {
-      "code_operation": "RECEPTION_003",
-      "duree_jours": 1,
-      "poste_id": "QUAI_RECEPTION",
-      "operation_precedente": "CONTROLE_002"
-    },
-    {
-      "code_operation": "REFROIDISSEMENT_004",
-      "duree_jours": 1,
-      "poste_id": "TUNNEL_REFROIDISSEMENT"
-    },
-    {
-      "code_operation": "CONDITIONNEMENT_005",
-      "duree_jours": 1,
-      "poste_id": "LIGNE_CONDITIONNEMENT",
-      "operation_precedente": "REFROIDISSEMENT_004"
-    },
-    {
-      "code_operation": "ETIQUETAGE_006",
+      "code_operation": "ETIQUETAGE_002",
       "duree_jours": 1,
       "poste_id": "ETIQUETEUSE",
-      "operation_precedente": "CONDITIONNEMENT_005"
+      "competence_requise": "etiqueteuse",
+      "operation_precedente": "EPLUCHAGE_001"
     },
     {
-      "code_operation": "DECOUPE_007",
+      "code_operation": "CONDITIONNEMENT_003",
       "duree_jours": 1,
-      "poste_id": "ROBOT_DECOUPE"
+      "poste_id": "LIGNE_CONDITIONNEMENT",
+      "competence_requise": "ligne_conditionnement",
+      "operation_precedente": "ETIQUETAGE_002"
     },
     {
-      "code_operation": "EPLUCHAGE_008",
+      "code_operation": "DECOUPE_004",
       "duree_jours": 1,
-      "poste_id": "LIGNE_EPLUCHAGE"
+      "poste_id": "ROBOT_DECOUPE",
+      "competence_requise": "robot_decoupe"
+    },
+    {
+      "code_operation": "CUISSON_005",
+      "duree_jours": 1,
+      "poste_id": "AUTOCLAVE",
+      "competence_requise": "autoclave"
+    },
+    {
+      "code_operation": "CONTROLE_006",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE",
+      "competence_requise": "poste_controle_qualite",
+      "operation_precedente": "CUISSON_005"
+    },
+    {
+      "code_operation": "RECEPTION_007",
+      "duree_jours": 1,
+      "poste_id": "QUAI_RECEPTION",
+      "competence_requise": "quai_reception"
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_008",
+      "duree_jours": 1,
+      "poste_id": "TUNNEL_REFROIDISSEMENT",
+      "competence_requise": "tunnel_refroidissement"
     },
     {
       "code_operation": "PALETTISATION_009",
       "duree_jours": 1,
-      "poste_id": "ROBOT_PALETTISEUR"
+      "poste_id": "ROBOT_PALETTISEUR",
+      "competence_requise": "robot_palettiseur",
+      "operation_precedente": "REFROIDISSEMENT_008"
     },
     {
-      "code_operation": "CUISSON_010",
+      "code_operation": "LAVAGE_010",
       "duree_jours": 1,
-      "poste_id": "AUTOCLAVE",
-      "operation_precedente": "PALETTISATION_009"
+      "poste_id": "TUNNEL_LAVAGE",
+      "competence_requise": "tunnel_lavage"
     },
     {
-      "code_operation": "RECEPTION_011",
+      "code_operation": "ETIQUETAGE_011",
       "duree_jours": 1,
-      "poste_id": "QUAI_RECEPTION"
+      "poste_id": "ETIQUETEUSE",
+      "competence_requise": "etiqueteuse"
     },
     {
-      "code_operation": "EPLUCHAGE_012",
+      "code_operation": "DECOUPE_012",
       "duree_jours": 1,
-      "poste_id": "LIGNE_EPLUCHAGE",
-      "operation_precedente": "RECEPTION_011"
+      "poste_id": "ROBOT_DECOUPE",
+      "competence_requise": "robot_decoupe",
+      "operation_precedente": "ETIQUETAGE_011"
     },
     {
-      "code_operation": "LAVAGE_013",
+      "code_operation": "CONTROLE_013",
       "duree_jours": 1,
-      "poste_id": "TUNNEL_LAVAGE"
+      "poste_id": "POSTE_CONTROLE_QUALITE",
+      "competence_requise": "poste_controle_qualite",
+      "operation_precedente": "DECOUPE_012"
     },
     {
-      "code_operation": "ETIQUETAGE_014",
+      "code_operation": "RECEPTION_014",
       "duree_jours": 1,
-      "poste_id": "ETIQUETEUSE"
+      "poste_id": "QUAI_RECEPTION",
+      "competence_requise": "quai_reception",
+      "operation_precedente": "CONTROLE_013"
     },
     {
       "code_operation": "CONDITIONNEMENT_015",
       "duree_jours": 1,
       "poste_id": "LIGNE_CONDITIONNEMENT",
-      "operation_precedente": "ETIQUETAGE_014"
+      "competence_requise": "ligne_conditionnement",
+      "operation_precedente": "RECEPTION_014"
     },
     {
       "code_operation": "REFROIDISSEMENT_016",
       "duree_jours": 1,
       "poste_id": "TUNNEL_REFROIDISSEMENT",
+      "competence_requise": "tunnel_refroidissement",
       "operation_precedente": "CONDITIONNEMENT_015"
     },
     {
-      "code_operation": "CUISSON_017",
+      "code_operation": "EPLUCHAGE_017",
       "duree_jours": 1,
-      "poste_id": "AUTOCLAVE",
+      "poste_id": "LIGNE_EPLUCHAGE",
+      "competence_requise": "ligne_epluchage",
       "operation_precedente": "REFROIDISSEMENT_016"
     },
     {
-      "code_operation": "PALETTISATION_018",
+      "code_operation": "CUISSON_018",
       "duree_jours": 1,
-      "poste_id": "ROBOT_PALETTISEUR"
+      "poste_id": "AUTOCLAVE",
+      "competence_requise": "autoclave",
+      "operation_precedente": "EPLUCHAGE_017"
     },
     {
-      "code_operation": "CONTROLE_019",
+      "code_operation": "LAVAGE_019",
       "duree_jours": 1,
-      "poste_id": "POSTE_CONTROLE_QUALITE"
-    },
-    {
-      "code_operation": "DECOUPE_020",
-      "duree_jours": 1,
-      "poste_id": "ROBOT_DECOUPE"
+      "poste_id": "TUNNEL_LAVAGE",
+      "competence_requise": "tunnel_lavage",
+      "operation_precedente": "CUISSON_018"
     }
   ],
   "postes": [
     {
-      "code_poste": "TUNNEL_LAVAGE"
+      "code_poste": "LIGNE_EPLUCHAGE",
+      "competences": [
+        "ligne_epluchage"
+      ]
     },
     {
-      "code_poste": "POSTE_CONTROLE_QUALITE"
+      "code_poste": "ETIQUETEUSE",
+      "competences": [
+        "etiqueteuse"
+      ]
     },
     {
-      "code_poste": "QUAI_RECEPTION"
+      "code_poste": "LIGNE_CONDITIONNEMENT",
+      "competences": [
+        "ligne_conditionnement"
+      ]
     },
     {
-      "code_poste": "TUNNEL_REFROIDISSEMENT"
+      "code_poste": "ROBOT_DECOUPE",
+      "competences": [
+        "robot_decoupe"
+      ]
     },
     {
-      "code_poste": "LIGNE_CONDITIONNEMENT"
+      "code_poste": "AUTOCLAVE",
+      "competences": [
+        "autoclave"
+      ]
     },
     {
-      "code_poste": "ETIQUETEUSE"
+      "code_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ]
     },
     {
-      "code_poste": "ROBOT_DECOUPE"
+      "code_poste": "QUAI_RECEPTION",
+      "competences": [
+        "quai_reception"
+      ]
     },
     {
-      "code_poste": "LIGNE_EPLUCHAGE"
+      "code_poste": "TUNNEL_REFROIDISSEMENT",
+      "competences": [
+        "tunnel_refroidissement"
+      ]
     },
     {
-      "code_poste": "ROBOT_PALETTISEUR"
+      "code_poste": "ROBOT_PALETTISEUR",
+      "competences": [
+        "robot_palettiseur"
+      ]
     },
     {
-      "code_poste": "AUTOCLAVE"
+      "code_poste": "TUNNEL_LAVAGE",
+      "competences": [
+        "tunnel_lavage"
+      ]
     }
   ]
 }

@@ -1,7 +1,8 @@
 """Déclenche le pipeline de génération de solveur multi-agents avec boucle
 de réparation bornée (`generation.graph`, StateGraph LangGraph, Étape 6 —
 déjà construite : analyste → benchmarker → architecte →
-développeur → testeur → [Reviewer/Debugger, jusqu'à 10 tentatives] →
+développeur → testeur → [Tests sandbox/Validation/Debugger, jusqu'à 10
+tentatives — Reviewer désactivé, voir `generation/graph.py`] →
 documentation)
 depuis une instance déjà ingérée. La boucle reste bornée : après épuisement
 des tentatives, l'échec est renvoyé tel quel à l'humain, jamais masqué par
@@ -79,6 +80,12 @@ class _JobGeneration:
     erreur: str | None = None
     termine: bool = False
     cree_le: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
+    # Coopératif, jamais un arrêt forcé du fil (Python ne le permet pas
+    # proprement) : `_executer_job` ne consulte ce drapeau qu'entre deux
+    # évènements du pipeline (chaque `yield` de `tenter_generation_avec_
+    # boucle_stream` correspond à un nœud terminé) — un appel LLM déjà en
+    # cours va jusqu'à son terme, l'arrêt réel intervient au yield suivant.
+    annule: bool = False
 
 
 _JOBS: dict[str, _JobGeneration] = {}
@@ -116,6 +123,11 @@ def _construire_reponse(
     """Le résultat final, sous la même forme pour tous les canaux — enregistre
     le solveur si la cascade est au vert, sinon renvoie le diagnostic tel quel."""
     nombre_tentatives = resultat.boucle_reparation.nombre_tentatives
+    # Visible directement sur le résultat (succès ou échec), pas seulement via
+    # `/historique` — dernier passage des tests générés par l'agent Testeur
+    # réellement exécutés en sandbox (§6.6bis), `None` uniquement si le
+    # sandbox était indisponible (jamais bloquant, voir `ResultatPipelineAvecBoucle.reussi`).
+    rapport_tests_sandbox = resultat.rapport_tests_sandbox.en_dict() if resultat.rapport_tests_sandbox else None
 
     if not resultat.reussi:
         erreur: str | None = None
@@ -153,6 +165,7 @@ def _construire_reponse(
                 {"nom": d.nom, "brique_en_echec": d.brique_en_echec, "details": list(d.details)}
                 for d in echecs_cascade
             ],
+            "rapport_tests_sandbox": rapport_tests_sandbox,
         }
 
     assert resultat.verdict_cascade is not None  # garanti par ResultatPipelineAvecBoucle.reussi
@@ -169,6 +182,7 @@ def _construire_reponse(
         "nombre_tentatives": nombre_tentatives,
         "erreur": None,
         "echecs_cascade": [],
+        "rapport_tests_sandbox": rapport_tests_sandbox,
     }
 
 
@@ -227,6 +241,9 @@ def _executer_job(
             else:
                 job.evenements.append(item)
                 etat.ajouter_evenement_generation(job.id, item["agent"], item["statut"], item["resume"])
+            if job.annule:
+                job.erreur = "Génération annulée par l'utilisateur"
+                break
     except Exception as erreur:  # noqa: BLE001 — le pipeline peut lever n'importe quoi (appel LLM, réseau...)
         job.erreur = str(erreur)
     finally:
@@ -345,6 +362,29 @@ def demarrer_generation_solveur(
     fil.start()
 
     return {"job_id": job_id}
+
+
+@router.post("/jobs/{job_id}/annuler")
+def annuler_generation_solveur(
+    job_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, bool]:
+    """Demande d'arrêt coopérative — voir `_JobGeneration.annule`. Un job
+    déjà terminé (succès, échec, ou déjà annulé) est un no-op, jamais une
+    erreur : annuler deux fois, ou annuler après la fin naturelle, reste
+    sans effet plutôt que de faire échouer l'appelant sur une course
+    inoffensive (double-clic, requête réseau en retard...)."""
+    job = _JOBS.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="job de génération inconnu")
+
+    verifier_acces_client(utilisateur, job.client_id)
+
+    if not job.termine:
+        job.annule = True
+
+    return {"annule": job.annule}
 
 
 @router.get("/jobs")

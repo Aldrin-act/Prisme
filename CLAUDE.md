@@ -88,12 +88,19 @@ found and fixed then.
   (`api/routes/generation.py`): a LangGraph `StateGraph` — analyste → benchmarker (always runs,
   picks an algorithm; only `cp_sat` is *exact*, the rest of its catalogue are heuristics for very
   large instances, mostly generated inline since `generation/algorithms/` only has a `genetic.py`
-  skeleton) → architecte → développeur → testeur → **reviewer/debugger loop, max 10 tentatives**
-  (`MAX_TENTATIVES_REPARATION`) → documentation (best-effort). 3 channels: blocking
-  `POST /{instance_id}`, or `POST /{instance_id}/demarrer` + SSE `GET /jobs/{job_id}/stream`
-  (background thread, state in `_JOBS`/`api/etat.py`, survives client disconnects). Replaced the
-  earlier `loop.py`/`pipeline_avec_boucle.py`/`pipeline_multi_agents.py`; no Orchestrateur (deleted,
-  never routed anything) or Optimiseur (`optimiseur.py` orphaned, unreliable JSON-string code) either.
+  skeleton) → architecte → développeur → testeur → **test_sandbox/validation/debugger loop, max 10
+  tentatives** (`MAX_TENTATIVES_REPARATION`) → documentation (best-effort). Each attempt runs the
+  Testeur's generated pytest module for real inside the Docker sandbox first (§6.6bis,
+  `sandbox/runner.py::executer_tests_dans_sandbox`) — a failure routes straight to the Debugger,
+  never blocking if the sandbox itself is unreachable — then the deterministic cascade. Reviewer
+  (LLM code critique) is **disabled**: not wired into `_construire_graphe`, its signal being
+  redundant once tests run for real in sandbox; `_noeud_reviewer`/`_route_apres_reviewer`/
+  `generation/agents/reviewer.py` are untouched and re-wirable in two lines if ever needed. 3
+  channels: blocking `POST /{instance_id}`, or `POST /{instance_id}/demarrer` + SSE
+  `GET /jobs/{job_id}/stream` (background thread, state in `_JOBS`/`api/etat.py`, survives client
+  disconnects). Replaced the earlier `loop.py`/`pipeline_avec_boucle.py`/`pipeline_multi_agents.py`;
+  no Orchestrateur (deleted, never routed anything) or Optimiseur (`optimiseur.py` orphaned,
+  unreliable JSON-string code) either.
 - **Étape 7 — store + ephemeral sandbox** (`solver_store/`, `sandbox/`). `Registre` is
   PostgreSQL-backed (`DATABASE_URL`, migrated from the original SQLite PoC per PH8-T1) — one schema
   per instance; artifacts stay on disk, never duplicated in the DB. **Refuses to register** any

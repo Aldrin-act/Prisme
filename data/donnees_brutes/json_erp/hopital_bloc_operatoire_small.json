@@ -1,123 +1,172 @@
 {
   "operations": [
     {
-      "code_operation": "SOINS_POSTOP_001",
-      "duree_jours": 2,
-      "poste_id": "UNITE_SOINS_INTENSIFS"
+      "code_operation": "INTERVENTION_001",
+      "duree_jours": 1,
+      "poste_id": "BLOC_CHIRURGIE_GENERALE",
+      "competence_requise": "bloc_chirurgie_generale"
     },
     {
       "code_operation": "CONTROLE_POSTOP_002",
       "duree_jours": 1,
       "poste_id": "SALLE_RADIOLOGIE",
-      "operation_precedente": "SOINS_POSTOP_001"
+      "competence_requise": "salle_radiologie"
     },
     {
-      "code_operation": "INTERVENTION_003",
-      "duree_jours": 1,
-      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE"
-    },
-    {
-      "code_operation": "ADMISSION_004",
+      "code_operation": "PREPARATION_PATIENT_003",
       "duree_jours": 1,
       "poste_id": "SALLE_PREPARATION",
-      "operation_precedente": "INTERVENTION_003"
+      "competence_requise": "salle_preparation"
     },
     {
-      "code_operation": "EXAMENS_PREOP_005",
+      "code_operation": "REVEIL_004",
       "duree_jours": 1,
-      "poste_id": "LABORATOIRE_ANALYSES"
+      "poste_id": "SALLE_REVEIL",
+      "competence_requise": "salle_reveil",
+      "operation_precedente": "PREPARATION_PATIENT_003"
     },
     {
-      "code_operation": "REVEIL_006",
+      "code_operation": "SOINS_POSTOP_005",
       "duree_jours": 1,
-      "poste_id": "SALLE_REVEIL"
-    },
-    {
-      "code_operation": "REVEIL_007",
-      "duree_jours": 1,
-      "poste_id": "SALLE_REVEIL"
-    },
-    {
-      "code_operation": "EXAMENS_PREOP_008",
-      "duree_jours": 1,
-      "poste_id": "SALLE_RADIOLOGIE"
-    },
-    {
-      "code_operation": "SOINS_POSTOP_009",
-      "duree_jours": 3,
       "poste_id": "UNITE_SOINS_INTENSIFS",
-      "operation_precedente": "EXAMENS_PREOP_008"
+      "competence_requise": "unite_soins_intensifs",
+      "operation_precedente": "REVEIL_004"
     },
     {
-      "code_operation": "ADMISSION_010",
+      "code_operation": "ADMISSION_006",
       "duree_jours": 1,
       "poste_id": "SALLE_PREPARATION",
-      "operation_precedente": "SOINS_POSTOP_009"
+      "competence_requise": "salle_preparation",
+      "operation_precedente": "SOINS_POSTOP_005"
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_007",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION",
+      "competence_requise": "salle_preparation"
+    },
+    {
+      "code_operation": "ADMISSION_008",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION",
+      "competence_requise": "salle_preparation",
+      "operation_precedente": "PREPARATION_PATIENT_007"
+    },
+    {
+      "code_operation": "REVEIL_009",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL",
+      "competence_requise": "salle_reveil",
+      "operation_precedente": "ADMISSION_008"
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_010",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE",
+      "competence_requise": "salle_radiologie"
     },
     {
       "code_operation": "INTERVENTION_011",
       "duree_jours": 1,
-      "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE"
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE",
+      "competence_requise": "bloc_chirurgie_cardiaque",
+      "operation_precedente": "EXAMENS_PREOP_010"
     },
     {
-      "code_operation": "EXAMENS_PREOP_012",
-      "duree_jours": 1,
-      "poste_id": "SALLE_RADIOLOGIE"
+      "code_operation": "SOINS_POSTOP_012",
+      "duree_jours": 2,
+      "poste_id": "UNITE_SOINS_INTENSIFS",
+      "competence_requise": "unite_soins_intensifs"
     },
     {
-      "code_operation": "REVEIL_013",
-      "duree_jours": 1,
-      "poste_id": "SALLE_REVEIL",
-      "operation_precedente": "EXAMENS_PREOP_012"
-    },
-    {
-      "code_operation": "CONTROLE_POSTOP_014",
+      "code_operation": "CONTROLE_POSTOP_013",
       "duree_jours": 1,
       "poste_id": "SALLE_RADIOLOGIE",
-      "operation_precedente": "REVEIL_013"
+      "competence_requise": "salle_radiologie"
     },
     {
-      "code_operation": "SOINS_POSTOP_015",
+      "code_operation": "ADMISSION_014",
+      "duree_jours": 1,
+      "poste_id": "SALLE_PREPARATION",
+      "competence_requise": "salle_preparation"
+    },
+    {
+      "code_operation": "REVEIL_015",
+      "duree_jours": 1,
+      "poste_id": "SALLE_REVEIL",
+      "competence_requise": "salle_reveil"
+    },
+    {
+      "code_operation": "SOINS_POSTOP_016",
       "duree_jours": 3,
-      "poste_id": "UNITE_SOINS_INTENSIFS"
+      "poste_id": "UNITE_SOINS_INTENSIFS",
+      "competence_requise": "unite_soins_intensifs",
+      "operation_precedente": "REVEIL_015"
     },
     {
-      "code_operation": "ADMISSION_016",
+      "code_operation": "CONTROLE_POSTOP_017",
       "duree_jours": 1,
-      "poste_id": "SALLE_PREPARATION"
-    },
-    {
-      "code_operation": "INTERVENTION_017",
-      "duree_jours": 1,
-      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE"
+      "poste_id": "SALLE_RADIOLOGIE",
+      "competence_requise": "salle_radiologie"
     },
     {
       "code_operation": "PREPARATION_PATIENT_018",
       "duree_jours": 1,
-      "poste_id": "SALLE_PREPARATION"
+      "poste_id": "SALLE_PREPARATION",
+      "competence_requise": "salle_preparation",
+      "operation_precedente": "CONTROLE_POSTOP_017"
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_019",
+      "duree_jours": 1,
+      "poste_id": "SALLE_RADIOLOGIE",
+      "competence_requise": "salle_radiologie",
+      "operation_precedente": "PREPARATION_PATIENT_018"
+    },
+    {
+      "code_operation": "INTERVENTION_020",
+      "duree_jours": 1,
+      "poste_id": "BLOC_CHIRURGIE_CARDIAQUE",
+      "competence_requise": "bloc_chirurgie_cardiaque",
+      "operation_precedente": "EXAMENS_PREOP_019"
     }
   ],
   "postes": [
     {
-      "code_poste": "UNITE_SOINS_INTENSIFS"
+      "code_poste": "BLOC_CHIRURGIE_GENERALE",
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
     },
     {
-      "code_poste": "SALLE_RADIOLOGIE"
+      "code_poste": "SALLE_RADIOLOGIE",
+      "competences": [
+        "salle_radiologie"
+      ]
     },
     {
-      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE"
+      "code_poste": "SALLE_PREPARATION",
+      "competences": [
+        "salle_preparation"
+      ]
     },
     {
-      "code_poste": "SALLE_PREPARATION"
+      "code_poste": "SALLE_REVEIL",
+      "competences": [
+        "salle_reveil"
+      ]
     },
     {
-      "code_poste": "LABORATOIRE_ANALYSES"
+      "code_poste": "UNITE_SOINS_INTENSIFS",
+      "competences": [
+        "unite_soins_intensifs"
+      ]
     },
     {
-      "code_poste": "SALLE_REVEIL"
-    },
-    {
-      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE"
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE",
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
     }
   ]
 }

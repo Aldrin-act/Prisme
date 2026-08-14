@@ -15,23 +15,27 @@ Workflow complet :
 3. Développeur (code initial)
 4. Testeur (tests pytest)
 5. ** BOUCLE DE RÉPARATION (max 10 tentatives, `MAX_TENTATIVES_REPARATION`) **
-   - Reviewer relit le code
-   - Si rejeté : Debugger corrige avec les commentaires du Reviewer (la
-     validation est sautée pour cette tentative), puis retour au Reviewer.
-   - Si approuvé : Validation complète (statique → exécution → cascade,
-     tolérance selon l'algorithme). Si elle échoue aussi, Debugger corrige
-     avec le diagnostic de la validation, puis retour au Reviewer.
-   - Si la validation réussit : Tests sandbox — exécute les tests de l'agent
-     Testeur dans le bac à sable Docker (§6.6bis). S'ils échouent (ou si
-     pytest n'a pas pu les collecter), Debugger corrige avec ce diagnostic,
-     puis retour au Reviewer — traité comme n'importe quel autre échec de
-     cascade. Seule l'**indisponibilité du sandbox lui-même** (Docker
-     injoignable, image absente...) est meilleur-effort et ne bloque jamais
-     — voir `sandbox/runner.py::executer_tests_dans_sandbox`,
+   - Tests sandbox **en premier** (§6.6bis) : exécute les tests de l'agent
+     Testeur dans le bac à sable Docker sur le code candidat. S'ils échouent
+     (ou si pytest n'a pas pu les collecter), Debugger corrige directement.
+     Seule l'**indisponibilité du sandbox lui-même** (Docker injoignable,
+     image absente...) est meilleur-effort et laisse passer vers Validation
+     sans bloquer — voir `sandbox/runner.py::executer_tests_dans_sandbox`,
      `_noeud_test_sandbox`.
+   - Si les tests sandbox réussissent (ou sandbox indisponible) : Validation
+     complète (statique → exécution → cascade, tolérance selon
+     l'algorithme). Si elle échoue, Debugger corrige avec le diagnostic de
+     la validation, puis retour à Tests sandbox.
    - Le nombre de tentatives est vérifié **avant** d'appeler le Debugger sur
      la toute dernière tentative — jamais de correction au-delà de la borne.
 6. Documentation (meilleur-effort, après re-validation finale du code)
+
+Pas de Reviewer non plus, pour l'instant : désactivé (nœud non câblé dans
+`_construire_graphe`), son avis LLM consultatif étant redevenu redondant une
+fois les tests sandbox exécutés réellement (§6.6bis) — deux vrais arbitres
+(cascade déterministe + tests réels) suffisent déjà. `_noeud_reviewer`/
+`_route_apres_reviewer`/`generation/agents/reviewer.py` restent intacts,
+prêts à être recâblés (voir historique git de ce fichier pour l'état câblé).
 
 Pas d'Optimiseur : agent retiré du pipeline (réponse JSON trop fragile — il
 embarque un code Python multi-lignes complet comme valeur de chaîne JSON, un
@@ -66,7 +70,7 @@ from generation.agents import analyste, architecte, benchmarker, documentation, 
 from generation.agents.analyste import ResultatAnalyse
 from generation.agents.architecte import ResultatConception
 from generation.agents.client_llm import construire_modele_pour_agent
-from generation.agents.debugger import corriger_code
+from generation.agents.debugger import corriger_code, corriger_solveur_ou_tests
 from generation.agents.generateur import generer_code_depuis_plan
 from generation.agents.reviewer import ResultatRevue
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
@@ -108,7 +112,9 @@ class TentativeReparation:
 
     numero: int
     code_candidat: str
-    revue: ResultatRevue
+    # `None` tant que le Reviewer reste désactivé (voir `_construire_graphe` :
+    # nœud non câblé, code conservé pour une réactivation triviale).
+    revue: ResultatRevue | None
     validation_statique: ResultatValidationStatique | None
     erreur_execution: str | None
     verdict_cascade: VerdictCascade | None
@@ -125,8 +131,11 @@ class ResultatBoucleReparation:
     reussi: bool
     nombre_tentatives: int
 
-    # Derniers résultats (pour reporting)
-    derniere_revue: ResultatRevue
+    # Derniers résultats (pour reporting) — `derniere_revue` reste `None` si
+    # la boucle a épuisé ses tentatives avant même d'atteindre le Reviewer
+    # une seule fois (possible depuis §6.6bis : le Debugger peut boucler
+    # indéfiniment entre `test_sandbox` et lui-même sans jamais y passer).
+    derniere_revue: ResultatRevue | None
     derniere_validation_statique: ResultatValidationStatique | None
     derniere_erreur_execution: str | None
     dernier_verdict_cascade: VerdictCascade | None
@@ -260,6 +269,13 @@ class EtatGeneration(TypedDict, total=False):
     derniere_erreur_execution: str | None
     dernier_verdict_cascade: VerdictCascade | None
     message_pour_debugger: str | None
+    # D'où vient `message_pour_debugger`, pour que `_noeud_debugger` sache lequel
+    # des deux chemins de correction appeler (`corriger_code`, qui suppose toujours
+    # le solveur fautif — vrai pour reviewer/validation, jugés contre une vérité
+    # terrain déterministe — ou `corriger_solveur_ou_tests`, seul cas ambigu :
+    # échec des tests sandbox, eux-mêmes écrits par un LLM, voir
+    # `generation/agents/debugger.py`).
+    origine_probleme: Literal["reviewer", "validation", "test_sandbox"] | None
     boucle_reussie: bool
 
     rapport_tests_sandbox: RapportTestsSandbox | None
@@ -381,6 +397,7 @@ def _noeud_reviewer(etat: EtatGeneration, config: RunnableConfig) -> dict:
             )
         ]
         maj["message_pour_debugger"] = revue.commentaires
+        maj["origine_probleme"] = "reviewer"
     return maj
 
 
@@ -412,7 +429,7 @@ def _noeud_validation(etat: EtatGeneration, config: RunnableConfig) -> dict:
     tentative = TentativeReparation(
         numero=n,
         code_candidat=etat["code_candidat"],
-        revue=etat["derniere_revue"],
+        revue=etat.get("derniere_revue"),
         validation_statique=validation,
         erreur_execution=erreur_exec,
         verdict_cascade=verdict,
@@ -427,69 +444,102 @@ def _noeud_validation(etat: EtatGeneration, config: RunnableConfig) -> dict:
     }
     if not reussi:
         maj["message_pour_debugger"] = _message_echec_validation(validation, erreur_exec, verdict)
+        maj["origine_probleme"] = "validation"
     return maj
 
 
-def _route_apres_validation(etat: EtatGeneration) -> Literal["test_sandbox", "debugger", "fin_boucle"]:
+def _route_apres_validation(etat: EtatGeneration) -> Literal["documentation", "debugger", "fin_boucle"]:
     if etat["boucle_reussie"]:
-        return "test_sandbox"
-    if etat["numero_tentative"] >= MAX_TENTATIVES_REPARATION:
-        return "fin_boucle"
-    return "debugger"
-
-
-def _noeud_test_sandbox(etat: EtatGeneration) -> dict:
-    """Exécute les tests de l'agent Testeur dans le bac à sable, une fois par
-    tentative de validation réussie. Un échec des tests générés (ou une
-    collecte pytest impossible) renvoie au Debugger comme n'importe quel
-    échec de cascade (§6.6bis) — ces tests ciblent `resoudre()` directement
-    (voir `generation/prompts/testeur.md`), donc leur échec est traité comme
-    un signal de bug réel dans le solveur, plus un simple avertissement pour
-    lecture humaine.
-
-    Seule l'indisponibilité de l'infrastructure d'audit elle-même (Docker
-    injoignable, image non construite, délai dépassé...) dégrade en silence
-    vers `rapport_tests_sandbox=None`, sans jamais bloquer l'acceptation —
-    un environnement sans Docker ne doit jamais rendre la génération
-    impossible, contrairement à un vrai échec de tests."""
-    writer = get_stream_writer()
-    writer(etape("test_sandbox", "en_cours", "Exécution des tests générés dans le sandbox..."))
-
-    try:
-        rapport = executer_tests_dans_sandbox(etat["code_candidat"], etat["tests_generes"])
-    except Exception as erreur:  # noqa: BLE001 — infrastructure d'audit indisponible, jamais bloquant
-        writer(etape("test_sandbox", "echec", f"Tests sandbox ignorés ({type(erreur).__name__}) : {erreur}"))
-        return {"rapport_tests_sandbox": None}
-
-    if rapport.reussi:
-        nb_reussis = sum(t.reussi for t in rapport.tests)
-        writer(etape("test_sandbox", "termine", f"{nb_reussis}/{len(rapport.tests)} test(s) généré(s) réussi(s)"))
-        return {"rapport_tests_sandbox": rapport}
-
-    message = _message_echec_tests_sandbox(rapport)
-    writer(etape("test_sandbox", "echec", message))
-    return {"rapport_tests_sandbox": rapport, "message_pour_debugger": message}
-
-
-def _route_apres_test_sandbox(etat: EtatGeneration) -> Literal["documentation", "debugger", "fin_boucle"]:
-    """Indisponibilité du sandbox (`rapport_tests_sandbox is None`) : jamais
-    bloquant, direction Documentation comme avant §6.6bis. Un rapport
-    présent mais en échec (`.reussi` faux) est traité exactement comme un
-    échec de cascade — même borne `MAX_TENTATIVES_REPARATION`, retour au
-    Debugger."""
-    rapport = etat.get("rapport_tests_sandbox")
-    if rapport is None or rapport.reussi:
         return "documentation"
     if etat["numero_tentative"] >= MAX_TENTATIVES_REPARATION:
         return "fin_boucle"
     return "debugger"
 
 
+def _noeud_test_sandbox(etat: EtatGeneration) -> dict:
+    """Première vérification de chaque tentative (§6.6bis) — tourne juste
+    après le Testeur/le Debugger, avant même le Reviewer : Reviewer et
+    Validation ne voient donc jamais que du code déjà passé en sandbox avec
+    succès, jamais de conteneur Docker gaspillé sur du code qu'un filtre
+    plus rapide (allowlist AST, cascade) aurait de toute façon rejeté après
+    coup. Un échec des tests générés (ou une collecte pytest impossible)
+    renvoie directement au Debugger, sans passer par Reviewer — traité comme
+    n'importe quel échec de cascade (§6.6bis), ces tests ciblent `resoudre()`
+    directement (voir `generation/prompts/testeur.md`).
+
+    Seule l'indisponibilité de l'infrastructure d'audit elle-même (Docker
+    injoignable, image non construite, délai dépassé...) dégrade en silence
+    (laisse passer vers Reviewer), sans jamais bloquer l'acceptation — un
+    environnement sans Docker ne doit jamais rendre la génération
+    impossible, contrairement à un vrai échec de tests."""
+    writer = get_stream_writer()
+    n = etat["numero_tentative"]
+    nom = f"test_sandbox (tentative {n}/{MAX_TENTATIVES_REPARATION})"
+    writer(etape(nom, "en_cours", "Exécution des tests générés dans le sandbox..."))
+
+    try:
+        rapport = executer_tests_dans_sandbox(etat["code_candidat"], etat["tests_generes"])
+    except Exception as erreur:  # noqa: BLE001 — infrastructure d'audit indisponible, jamais bloquant
+        writer(etape(nom, "echec", f"Tests sandbox ignorés ({type(erreur).__name__}) : {erreur}"))
+        return {"rapport_tests_sandbox": None}
+
+    if rapport.reussi:
+        nb_reussis = sum(t.reussi for t in rapport.tests)
+        writer(etape(nom, "termine", f"{nb_reussis}/{len(rapport.tests)} test(s) généré(s) réussi(s)"))
+        return {"rapport_tests_sandbox": rapport}
+
+    message = _message_echec_tests_sandbox(rapport)
+    writer(etape(nom, "echec", message))
+    return {"rapport_tests_sandbox": rapport, "message_pour_debugger": message, "origine_probleme": "test_sandbox"}
+
+
+def _route_apres_test_sandbox(etat: EtatGeneration) -> Literal["validation", "debugger", "fin_boucle"]:
+    """Indisponibilité du sandbox (`rapport_tests_sandbox is None`) : jamais
+    bloquant, direction Validation comme si les tests avaient réussi. Un
+    rapport présent mais en échec (`.reussi` faux) est traité exactement
+    comme un échec de cascade — même borne `MAX_TENTATIVES_REPARATION`,
+    retour direct au Debugger.
+
+    Le Reviewer est désactivé (voir `_construire_graphe`) : succès va donc
+    droit à Validation, jamais un détour par une relecture LLM consultative
+    dont la cascade/les tests réels en sandbox rendent le signal redondant."""
+    rapport = etat.get("rapport_tests_sandbox")
+    if rapport is None or rapport.reussi:
+        return "validation"
+    if etat["numero_tentative"] >= MAX_TENTATIVES_REPARATION:
+        return "fin_boucle"
+    return "debugger"
+
+
 def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
+    """Deux chemins de correction distincts, selon `origine_probleme` — voir
+    docstring de `generation/agents/debugger.py`. Un échec de tests sandbox
+    (seul cas ambigu : les tests sont eux-mêmes écrits par un LLM) donne au
+    Debugger le module de tests en plus du solveur, et le laisse désigner
+    lequel des deux corriger (`corriger_solveur_ou_tests`). Validation reste
+    sur `corriger_code` (solveur uniquement) — jugée contre une vérité
+    terrain déterministe, jamais ambiguë (`"reviewer"` reste listé dans
+    `origine_probleme` mais ne peut plus survenir tant que le Reviewer est
+    désactivé, voir `_construire_graphe`)."""
     writer = get_stream_writer()
     n = etat["numero_tentative"]
     nom = f"debugger (tentative {n}/{MAX_TENTATIVES_REPARATION})"
     writer(etape(nom, "en_cours", "Correction du code d'après le diagnostic..."))
+
+    if etat.get("origine_probleme") == "test_sandbox":
+        correction_tests = corriger_solveur_ou_tests(
+            _modele(config, "debugger"),
+            etat["code_candidat"],
+            etat["tests_generes"],
+            etat["message_pour_debugger"] or "",
+        )
+        writer(etape(nom, "termine", f"{correction_tests.cible.capitalize()} corrigé — {correction_tests.cause}"))
+        return {
+            "code_candidat": correction_tests.code_source,
+            "tests_generes": correction_tests.tests_source,
+            "numero_tentative": n + 1,
+        }
+
     correction = corriger_code(
         _modele(config, "debugger"), etat["code_candidat"], etat["message_pour_debugger"] or ""
     )
@@ -502,14 +552,17 @@ def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
 
 def _construire_boucle_reparation(etat: EtatGeneration, *, reussi: bool) -> ResultatBoucleReparation:
     tentatives = tuple(etat["tentatives"])
-    nombre_tentatives = etat["numero_tentative"] if reussi else len(tentatives)
     return ResultatBoucleReparation(
         code_initial=etat["code_genere"],
         tentatives=tentatives,
         code_final=etat["code_candidat"],
         reussi=reussi,
-        nombre_tentatives=nombre_tentatives,
-        derniere_revue=etat["derniere_revue"],
+        # Compteur de boucle, toujours incrémenté par `_noeud_debugger` — pas
+        # `len(tentatives)`, qui ne grandit que via `reviewer`/`validation` et
+        # peut donc rester à 0 si la boucle échoue entièrement dans le cycle
+        # `test_sandbox` ↔ `debugger` sans jamais atteindre le Reviewer (§6.6bis).
+        nombre_tentatives=etat["numero_tentative"],
+        derniere_revue=etat.get("derniere_revue"),
         derniere_validation_statique=etat.get("derniere_validation_statique"),
         derniere_erreur_execution=etat.get("derniere_erreur_execution"),
         dernier_verdict_cascade=etat.get("dernier_verdict_cascade"),
@@ -596,7 +649,11 @@ def _construire_graphe() -> StateGraph:
     graphe.add_node("architecte", _noeud_architecte)
     graphe.add_node("developpeur", _noeud_developpeur)
     graphe.add_node("testeur", _noeud_testeur)
-    graphe.add_node("reviewer", _noeud_reviewer)
+    # Reviewer désactivé (non ajouté au graphe) : son avis LLM consultatif est
+    # redondant avec les tests réels exécutés en sandbox (§6.6bis) et la
+    # cascade déterministe, les deux vrais arbitres. `_noeud_reviewer`/
+    # `_route_apres_reviewer` restent définis, intacts, pour une réactivation
+    # triviale (deux lignes ci-dessous) si besoin.
     graphe.add_node("validation", _noeud_validation)
     graphe.add_node("debugger", _noeud_debugger)
     graphe.add_node("fin_boucle", _noeud_fin_boucle)
@@ -617,24 +674,23 @@ def _construire_graphe() -> StateGraph:
     graphe.add_edge("benchmarker", "architecte")
     graphe.add_edge("architecte", "developpeur")
     graphe.add_edge("developpeur", "testeur")
-    graphe.add_edge("testeur", "reviewer")
+    # test_sandbox est la première vérification de chaque tentative (§6.6bis) —
+    # un succès (ou une indisponibilité du sandbox) va directement à Validation,
+    # le Reviewer étant désactivé : voir _noeud_test_sandbox.
+    graphe.add_edge("testeur", "test_sandbox")
     graphe.add_conditional_edges(
-        "reviewer",
-        _route_apres_reviewer,
+        "test_sandbox",
+        _route_apres_test_sandbox,
         {"validation": "validation", "debugger": "debugger", "fin_boucle": "fin_boucle"},
     )
     graphe.add_conditional_edges(
         "validation",
         _route_apres_validation,
-        {"test_sandbox": "test_sandbox", "debugger": "debugger", "fin_boucle": "fin_boucle"},
-    )
-    graphe.add_edge("debugger", "reviewer")
-    graphe.add_edge("fin_boucle", END)
-    graphe.add_conditional_edges(
-        "test_sandbox",
-        _route_apres_test_sandbox,
         {"documentation": "documentation", "debugger": "debugger", "fin_boucle": "fin_boucle"},
     )
+    # Toute correction du Debugger repasse par test_sandbox en premier.
+    graphe.add_edge("debugger", "test_sandbox")
+    graphe.add_edge("fin_boucle", END)
     graphe.add_edge("documentation", END)
     return graphe
 
@@ -651,11 +707,11 @@ def _obtenir_graphe_compile():
     return _GRAPHE_COMPILE
 
 
-# 5 nœuds de mise en place + jusqu'à 10 × (reviewer + validation + test_sandbox
-# + debugger) ≈ 45 super-steps dans le pire cas — grande marge au-dessus de la limite par
-# défaut de LangGraph (25) pour ne jamais couper la boucle avant qu'elle
-# n'épuise légitimement ses tentatives (`GraphRecursionError` silencieux
-# sinon, voir tests/integration/test_graph_pipeline.py).
+# 5 nœuds de mise en place + jusqu'à 10 × (test_sandbox + validation + debugger)
+# ≈ 35 super-steps dans le pire cas (Reviewer désactivé, voir plus haut) — marge
+# conservée au-dessus de la limite par défaut de LangGraph (25) pour ne jamais
+# couper la boucle avant qu'elle n'épuise légitimement ses tentatives
+# (`GraphRecursionError` silencieux sinon, voir tests/integration/test_graph_pipeline.py).
 _LIMITE_RECURSION = 60
 
 

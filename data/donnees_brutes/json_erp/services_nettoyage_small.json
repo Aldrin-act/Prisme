@@ -1,92 +1,139 @@
 {
   "operations": [
     {
-      "code_operation": "EVACUATION_DECHETS_001",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DECHETS"
-    },
-    {
-      "code_operation": "POLISSAGE_002",
+      "code_operation": "POLISSAGE_001",
       "duree_jours": 1,
       "poste_id": "EQUIPE_POLISSAGE",
-      "operation_precedente": "EVACUATION_DECHETS_001"
+      "competence_requise": "equipe_polissage"
     },
     {
-      "code_operation": "VITRES_003",
+      "code_operation": "VITRES_002",
       "duree_jours": 1,
       "poste_id": "EQUIPE_VITRES",
-      "operation_precedente": "POLISSAGE_002"
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "ASPIRATION_004",
+      "code_operation": "DESINFECTION_003",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL",
-      "operation_precedente": "VITRES_003"
+      "poste_id": "EQUIPE_DESINFECTION",
+      "competence_requise": "equipe_desinfection"
     },
     {
-      "code_operation": "DECAPAGE_005",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DECAPAGE",
-      "operation_precedente": "ASPIRATION_004"
-    },
-    {
-      "code_operation": "DESINFECTION_006",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_DESINFECTION"
-    },
-    {
-      "code_operation": "POLISSAGE_007",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_POLISSAGE"
-    },
-    {
-      "code_operation": "CONTROLE_008",
-      "duree_jours": 1,
-      "poste_id": "EQUIPE_CONTROLE_QUALITE",
-      "operation_precedente": "POLISSAGE_007"
-    },
-    {
-      "code_operation": "EVACUATION_DECHETS_009",
+      "code_operation": "EVACUATION_DECHETS_004",
       "duree_jours": 1,
       "poste_id": "EQUIPE_DECHETS",
-      "operation_precedente": "CONTROLE_008"
+      "competence_requise": "equipe_dechets"
     },
     {
-      "code_operation": "VITRES_010",
+      "code_operation": "SANITAIRES_005",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES",
+      "competence_requise": "equipe_sanitaires",
+      "operation_precedente": "EVACUATION_DECHETS_004"
+    },
+    {
+      "code_operation": "DECAPAGE_006",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DECAPAGE",
+      "competence_requise": "equipe_decapage",
+      "operation_precedente": "SANITAIRES_005"
+    },
+    {
+      "code_operation": "VITRES_007",
       "duree_jours": 1,
       "poste_id": "EQUIPE_VITRES",
-      "operation_precedente": "EVACUATION_DECHETS_009"
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "LAVAGE_SOLS_011",
+      "code_operation": "DESINFECTION_008",
       "duree_jours": 1,
-      "poste_id": "EQUIPE_NETTOYAGE_BUREAUX"
+      "poste_id": "EQUIPE_DESINFECTION",
+      "competence_requise": "equipe_desinfection"
+    },
+    {
+      "code_operation": "POLISSAGE_009",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_POLISSAGE",
+      "competence_requise": "equipe_polissage",
+      "operation_precedente": "DESINFECTION_008"
+    },
+    {
+      "code_operation": "EVACUATION_DECHETS_010",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_DECHETS",
+      "competence_requise": "equipe_dechets",
+      "operation_precedente": "POLISSAGE_009"
+    },
+    {
+      "code_operation": "SANITAIRES_011",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES",
+      "competence_requise": "equipe_sanitaires",
+      "operation_precedente": "EVACUATION_DECHETS_010"
+    },
+    {
+      "code_operation": "LAVAGE_SOLS_012",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SOL_SPECIALISE",
+      "competence_requise": "equipe_sol_specialise",
+      "operation_precedente": "SANITAIRES_011"
+    },
+    {
+      "code_operation": "ASPIRATION_013",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL",
+      "competence_requise": "equipe_nettoyage_industriel",
+      "operation_precedente": "LAVAGE_SOLS_012"
     }
   ],
   "postes": [
     {
-      "code_poste": "EQUIPE_DECHETS"
+      "code_poste": "EQUIPE_POLISSAGE",
+      "competences": [
+        "equipe_polissage"
+      ]
     },
     {
-      "code_poste": "EQUIPE_POLISSAGE"
+      "code_poste": "EQUIPE_VITRES",
+      "competences": [
+        "equipe_vitres"
+      ]
     },
     {
-      "code_poste": "EQUIPE_VITRES"
+      "code_poste": "EQUIPE_DESINFECTION",
+      "competences": [
+        "equipe_desinfection"
+      ]
     },
     {
-      "code_poste": "EQUIPE_NETTOYAGE_INDUSTRIEL"
+      "code_poste": "EQUIPE_DECHETS",
+      "competences": [
+        "equipe_dechets"
+      ]
     },
     {
-      "code_poste": "EQUIPE_DECAPAGE"
+      "code_poste": "EQUIPE_SANITAIRES",
+      "competences": [
+        "equipe_sanitaires"
+      ]
     },
     {
-      "code_poste": "EQUIPE_DESINFECTION"
+      "code_poste": "EQUIPE_DECAPAGE",
+      "competences": [
+        "equipe_decapage"
+      ]
     },
     {
-      "code_poste": "EQUIPE_CONTROLE_QUALITE"
+      "code_poste": "EQUIPE_SOL_SPECIALISE",
+      "competences": [
+        "equipe_sol_specialise"
+      ]
     },
     {
-      "code_poste": "EQUIPE_NETTOYAGE_BUREAUX"
+      "code_poste": "EQUIPE_NETTOYAGE_INDUSTRIEL",
+      "competences": [
+        "equipe_nettoyage_industriel"
+      ]
     }
   ]
 }

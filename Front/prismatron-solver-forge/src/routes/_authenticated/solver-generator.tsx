@@ -36,10 +36,12 @@ import {
   useJobsGeneration,
   useHistoriqueJobGeneration,
   demarrerGenerationSolveur,
+  annulerGenerationSolveur,
   suivreJobGeneration,
   PrismeAPIError,
   type EvenementGeneration,
   type ReponseGenerationSolveur,
+  type RapportTestsSandbox,
   type LabelInstance,
   type InstanceInfo,
 } from "@/integrations/prisme";
@@ -129,17 +131,49 @@ function IconeOnglet({ onglet }: { onglet: OngletGeneration }) {
   return null;
 }
 
+// Liste des tests générés par l'agent Testeur, réellement exécutés dans le
+// bac à sable Docker (§6.6bis) — un échec renvoie déjà au Debugger côté
+// pipeline (Reviewer désactivé), ceci n'est que la trace du dernier passage.
+// Partagé entre le panneau résultat immédiat et le dialogue d'historique.
+function RapportTestsSandboxAffichage({ rapport }: { rapport: RapportTestsSandbox }) {
+  if (rapport.erreur) {
+    return <p className="text-xs text-destructive">Collecte impossible : {rapport.erreur}</p>;
+  }
+  return (
+    <ul className="space-y-1.5">
+      {rapport.tests.map((t) => (
+        <li key={t.nom} className="flex items-start gap-2 text-xs">
+          {t.reussi ? (
+            <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+          ) : (
+            <XCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-destructive" />
+          )}
+          <div>
+            <span className="font-mono">{t.nom}</span>
+            {t.message && <p className="mt-0.5 text-muted-foreground">{t.message}</p>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 // Une ligne par agent : l'évènement "termine"/"echec" remplace le "en_cours"
 // du même agent plutôt que de s'empiler, pour une chronologie lisible.
+// Recherche dans toute la liste, pas seulement le dernier élément : Analyste
+// et Benchmarker tournent en parallèle (`generation/graph.py`, `START ->
+// analyste`/`START -> benchmarker` simultanés), leurs évènements s'entrelacent
+// — l'évènement "termine" de l'un peut arriver après celui de l'autre, donc
+// ne plus être en dernière position au moment de la fusion.
 function fusionnerEvenement(
   precedents: EvenementGeneration[],
   nouveau: EvenementGeneration,
 ): EvenementGeneration[] {
-  const dernier = precedents[precedents.length - 1];
-  if (dernier && dernier.agent === nouveau.agent) {
-    return [...precedents.slice(0, -1), nouveau];
+  const index = precedents.findIndex((e) => e.agent === nouveau.agent);
+  if (index === -1) {
+    return [...precedents, nouveau];
   }
-  return [...precedents, nouveau];
+  return [...precedents.slice(0, index), nouveau, ...precedents.slice(index + 1)];
 }
 
 function SolverGeneratorPage() {
@@ -230,6 +264,19 @@ function SolverGeneratorPage() {
       await suivre(ongletId, job_id);
     } catch (e) {
       mettreAJourOnglet(ongletId, { erreur: e as PrismeAPIError, enCours: false });
+    }
+  }
+
+  // Demande d'arrêt coopérative (voir client.ts::annulerGenerationSolveur) — ne touche pas
+  // `onglet` ici : le flux SSE déjà ouvert par `suivre` reçoit l'évènement `erreur` que le
+  // serveur produit une fois le job réellement arrêté, et met `enCours`/`erreur` à jour lui-même.
+  async function arreter(ongletId: string) {
+    const onglet = onglets.find((o) => o.id === ongletId);
+    if (!onglet?.jobId) return;
+    try {
+      await annulerGenerationSolveur(onglet.jobId);
+    } catch {
+      // best-effort — le flux SSE déjà ouvert reflète l'état réel du job de toute façon
     }
   }
 
@@ -345,6 +392,7 @@ function SolverGeneratorPage() {
               instancesEnGeneration={instancesEnGeneration}
               onChangerInstance={(instanceId) => mettreAJourOnglet(o.id, { instanceId })}
               onLancer={() => lancer(o.id)}
+              onArreter={() => arreter(o.id)}
             />
           </TabsContent>
         ))}
@@ -362,6 +410,7 @@ function ContenuOnglet({
   instancesEnGeneration,
   onChangerInstance,
   onLancer,
+  onArreter,
 }: {
   onglet: OngletGeneration;
   instances: InstanceInfo[] | undefined;
@@ -371,6 +420,7 @@ function ContenuOnglet({
   instancesEnGeneration: Set<string>;
   onChangerInstance: (instanceId: string) => void;
   onLancer: () => void;
+  onArreter: () => void;
 }) {
   // Verrouillé dès qu'une génération a été lancée dans cet onglet — changer
   // d'instance en cours de route n'a pas de sens, on ouvre un autre onglet.
@@ -380,6 +430,13 @@ function ContenuOnglet({
   // le JSON brut reçu du LLM — bien trop long pour le bandeau d'erreur en ligne.
   const [erreurDetailOuverte, setErreurDetailOuverte] = useState(false);
   const erreurLongue = (onglet.erreur?.message.length ?? 0) > 200;
+  // Désactive le bouton dès le clic (évite un double envoi) — se réinitialise tout seul
+  // quand `onglet.enCours` repasse à faux et que le bouton disparaît avec lui.
+  const [arretDemande, setArretDemande] = useState(false);
+  function gererArret() {
+    setArretDemande(true);
+    onArreter();
+  }
 
   return (
     <div className="space-y-4">
@@ -460,16 +517,30 @@ function ContenuOnglet({
         <div className="glass rounded-2xl p-6">
           <div className="mb-3 flex items-center justify-between gap-2">
             <h4 className="text-sm font-semibold">Progression en temps réel</h4>
-            {onglet.jobId && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5"
-                onClick={() => setHistoriqueOuvert(true)}
-              >
-                <History className="h-3.5 w-3.5" /> Voir le raisonnement complet
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {onglet.enCours && onglet.jobId && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 text-destructive hover:text-destructive"
+                  onClick={gererArret}
+                  disabled={arretDemande}
+                >
+                  <XCircle className="h-3.5 w-3.5" />
+                  {arretDemande ? "Arrêt demandé..." : "Arrêter la génération"}
+                </Button>
+              )}
+              {onglet.jobId && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                  onClick={() => setHistoriqueOuvert(true)}
+                >
+                  <History className="h-3.5 w-3.5" /> Voir le raisonnement complet
+                </Button>
+              )}
+            </div>
           </div>
           <p className="mb-3 text-xs text-muted-foreground">
             Cliquez sur "Voir le raisonnement complet" pour consulter les détails de chaque agent
@@ -551,6 +622,14 @@ function ContenuOnglet({
                   {onglet.resultat.algorithme_raison}
                 </p>
               )}
+              {onglet.resultat.rapport_tests_sandbox && (
+                <div className="mt-3 border-t border-border/50 pt-3">
+                  <h5 className="mb-1.5 text-xs font-semibold">
+                    🧫 Tests sandbox (exécution réelle)
+                  </h5>
+                  <RapportTestsSandboxAffichage rapport={onglet.resultat.rapport_tests_sandbox} />
+                </div>
+              )}
             </>
           ) : (
             <>
@@ -590,6 +669,14 @@ function ContenuOnglet({
                     </li>
                   ))}
                 </ul>
+              )}
+              {onglet.resultat.rapport_tests_sandbox && (
+                <div className="mt-3 border-t border-border/50 pt-3">
+                  <h5 className="mb-1.5 text-xs font-semibold">
+                    🧫 Tests sandbox (exécution réelle)
+                  </h5>
+                  <RapportTestsSandboxAffichage rapport={onglet.resultat.rapport_tests_sandbox} />
+                </div>
               )}
             </>
           )}
@@ -739,6 +826,18 @@ function DialogHistoriqueGeneration({
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Suite de tests proposée par l'agent Testeur
+                </p>
+              </div>
+            )}
+
+            {historique.rapport_tests_sandbox && (
+              <div>
+                <h4 className="mb-2 text-sm font-semibold">🧫 Tests sandbox (exécution réelle)</h4>
+                <RapportTestsSandboxAffichage rapport={historique.rapport_tests_sandbox} />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Exécution réelle des tests ci-dessus dans le bac à sable Docker — un échec
+                  renvoie déjà au Debugger (voir Événements et Tentatives ci-dessous), ceci est
+                  la trace du dernier passage
                 </p>
               </div>
             )}

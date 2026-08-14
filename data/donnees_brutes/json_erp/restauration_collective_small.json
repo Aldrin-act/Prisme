@@ -1,124 +1,158 @@
 {
   "operations": [
     {
-      "code_operation": "NETTOYAGE_001",
-      "duree_jours": 1,
-      "poste_id": "ZONE_LAVERIE"
-    },
-    {
-      "code_operation": "CUISSON_PRINCIPALE_002",
-      "duree_jours": 1,
-      "poste_id": "POSTE_CUISSON_FOUR",
-      "operation_precedente": "NETTOYAGE_001"
-    },
-    {
-      "code_operation": "CUISSON_MINUTE_003",
-      "duree_jours": 1,
-      "poste_id": "POSTE_CUISSON_PLAQUE"
-    },
-    {
-      "code_operation": "REFROIDISSEMENT_004",
+      "code_operation": "REFROIDISSEMENT_001",
       "duree_jours": 1,
       "poste_id": "CELLULE_REFROIDISSEMENT",
-      "operation_precedente": "CUISSON_MINUTE_003"
+      "competence_requise": "cellule_refroidissement"
+    },
+    {
+      "code_operation": "NETTOYAGE_002",
+      "duree_jours": 1,
+      "poste_id": "ZONE_LAVERIE",
+      "competence_requise": "zone_laverie"
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_003",
+      "duree_jours": 1,
+      "poste_id": "POSTE_PREPARATION_VIANDES",
+      "competence_requise": "poste_preparation_viandes",
+      "operation_precedente": "NETTOYAGE_002"
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_004",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONDITIONNEMENT",
+      "competence_requise": "poste_conditionnement"
     },
     {
       "code_operation": "PATISSERIE_005",
       "duree_jours": 1,
-      "poste_id": "POSTE_PATISSERIE"
+      "poste_id": "POSTE_PATISSERIE",
+      "competence_requise": "poste_patisserie"
     },
     {
-      "code_operation": "CONDITIONNEMENT_006",
+      "code_operation": "DRESSAGE_006",
       "duree_jours": 1,
-      "poste_id": "POSTE_CONDITIONNEMENT",
+      "poste_id": "POSTE_DRESSAGE",
+      "competence_requise": "poste_dressage",
       "operation_precedente": "PATISSERIE_005"
     },
     {
-      "code_operation": "CONTROLE_007",
+      "code_operation": "CUISSON_PRINCIPALE_007",
       "duree_jours": 1,
-      "poste_id": "POSTE_CONTROLE_QUALITE"
+      "poste_id": "POSTE_CUISSON_FOUR",
+      "competence_requise": "poste_cuisson_four"
     },
     {
-      "code_operation": "PREP_INGREDIENTS_008",
+      "code_operation": "CONTROLE_008",
       "duree_jours": 1,
-      "poste_id": "POSTE_PREPARATION_VIANDES",
-      "operation_precedente": "CONTROLE_007"
+      "poste_id": "POSTE_CONTROLE_QUALITE",
+      "competence_requise": "poste_controle_qualite",
+      "operation_precedente": "CUISSON_PRINCIPALE_007"
     },
     {
-      "code_operation": "CUISSON_PRINCIPALE_009",
+      "code_operation": "CUISSON_MINUTE_009",
       "duree_jours": 1,
-      "poste_id": "POSTE_CUISSON_FOUR"
+      "poste_id": "POSTE_CUISSON_PLAQUE",
+      "competence_requise": "poste_cuisson_plaque",
+      "operation_precedente": "CONTROLE_008"
     },
     {
-      "code_operation": "PREP_INGREDIENTS_010",
+      "code_operation": "NETTOYAGE_010",
       "duree_jours": 1,
-      "poste_id": "POSTE_PREPARATION_LEGUMES"
+      "poste_id": "ZONE_LAVERIE",
+      "competence_requise": "zone_laverie"
     },
     {
       "code_operation": "DRESSAGE_011",
       "duree_jours": 1,
       "poste_id": "POSTE_DRESSAGE",
-      "operation_precedente": "PREP_INGREDIENTS_010"
+      "competence_requise": "poste_dressage",
+      "operation_precedente": "NETTOYAGE_010"
     },
     {
-      "code_operation": "REFROIDISSEMENT_012",
+      "code_operation": "CONDITIONNEMENT_012",
       "duree_jours": 1,
-      "poste_id": "CELLULE_REFROIDISSEMENT",
+      "poste_id": "POSTE_CONDITIONNEMENT",
+      "competence_requise": "poste_conditionnement",
       "operation_precedente": "DRESSAGE_011"
     },
     {
-      "code_operation": "PATISSERIE_013",
-      "duree_jours": 1,
-      "poste_id": "POSTE_PATISSERIE",
-      "operation_precedente": "REFROIDISSEMENT_012"
-    },
-    {
-      "code_operation": "CUISSON_MINUTE_014",
-      "duree_jours": 1,
-      "poste_id": "POSTE_CUISSON_PLAQUE"
-    },
-    {
-      "code_operation": "CONTROLE_015",
+      "code_operation": "CONTROLE_013",
       "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_QUALITE",
-      "operation_precedente": "CUISSON_MINUTE_014"
+      "competence_requise": "poste_controle_qualite",
+      "operation_precedente": "CONDITIONNEMENT_012"
     },
     {
-      "code_operation": "NETTOYAGE_016",
+      "code_operation": "PREP_INGREDIENTS_014",
       "duree_jours": 1,
-      "poste_id": "ZONE_LAVERIE"
+      "poste_id": "POSTE_PREPARATION_VIANDES",
+      "competence_requise": "poste_preparation_viandes"
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_015",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CUISSON_PLAQUE",
+      "competence_requise": "poste_cuisson_plaque",
+      "operation_precedente": "PREP_INGREDIENTS_014"
     }
   ],
   "postes": [
     {
-      "code_poste": "ZONE_LAVERIE"
+      "code_poste": "CELLULE_REFROIDISSEMENT",
+      "competences": [
+        "cellule_refroidissement"
+      ]
     },
     {
-      "code_poste": "POSTE_CUISSON_FOUR"
+      "code_poste": "ZONE_LAVERIE",
+      "competences": [
+        "zone_laverie"
+      ]
     },
     {
-      "code_poste": "POSTE_CUISSON_PLAQUE"
+      "code_poste": "POSTE_PREPARATION_VIANDES",
+      "competences": [
+        "poste_preparation_viandes"
+      ]
     },
     {
-      "code_poste": "CELLULE_REFROIDISSEMENT"
+      "code_poste": "POSTE_CONDITIONNEMENT",
+      "competences": [
+        "poste_conditionnement"
+      ]
     },
     {
-      "code_poste": "POSTE_PATISSERIE"
+      "code_poste": "POSTE_PATISSERIE",
+      "competences": [
+        "poste_patisserie"
+      ]
     },
     {
-      "code_poste": "POSTE_CONDITIONNEMENT"
+      "code_poste": "POSTE_DRESSAGE",
+      "competences": [
+        "poste_dressage"
+      ]
     },
     {
-      "code_poste": "POSTE_CONTROLE_QUALITE"
+      "code_poste": "POSTE_CUISSON_FOUR",
+      "competences": [
+        "poste_cuisson_four"
+      ]
     },
     {
-      "code_poste": "POSTE_PREPARATION_VIANDES"
+      "code_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ]
     },
     {
-      "code_poste": "POSTE_PREPARATION_LEGUMES"
-    },
-    {
-      "code_poste": "POSTE_DRESSAGE"
+      "code_poste": "POSTE_CUISSON_PLAQUE",
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
     }
   ]
 }

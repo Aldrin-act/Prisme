@@ -55,10 +55,7 @@ def lister_configurations_disponibles() -> list[str]:
     if not repertoire.exists():
         return []
 
-    return [
-        fichier.stem
-        for fichier in repertoire.glob("*.yaml")
-    ]
+    return [fichier.stem for fichier in repertoire.glob("*.yaml")]
 
 
 def generer_donnees_depuis_config(
@@ -69,6 +66,18 @@ def generer_donnees_depuis_config(
     Génère un payload `PayloadERP` (`operations`/`postes`, vocabulaire
     `code_operation`/`poste_id`/`duree_jours`/`operation_precedente`) à
     partir d'une configuration de secteur.
+
+    Chaque type de poste porte aussi sa compétence (nom du type de poste en
+    minuscules — un type de poste ici représente un métier/une spécialité
+    unique, ex. `EQUIPE_TONTE` -> `equipe_tonte`) et chaque opération déclare
+    la compétence requise correspondante, sur le modèle de
+    `creer_donnees_centre_appels_json` (`scripts/generer_donnees_brutes.py`)
+    — ces 9 secteurs pilotés par config sont nouveaux, contrairement aux 6
+    secteurs historiques volontairement pauvres en compétences (§5.4) :
+    sans ce signal explicite, l'agent de compréhension (LLM) n'a aucune base
+    pour affirmer une compatibilité ressource-tâche et rejette l'instance à
+    raison (vérifié par appel réel, `poste_id` seul ne suffit pas à le
+    convaincre).
 
     Args:
         config: Configuration du secteur chargée depuis YAML
@@ -106,9 +115,11 @@ def generer_donnees_depuis_config(
             type_poste_nom = random.choice(phase["types_poste"])
             type_poste_config = types_postes[type_poste_nom]
 
-            # Créer le poste s'il n'existe pas encore (code_poste = nom du type, déjà unique)
+            # Créer le poste s'il n'existe pas encore (code_poste = nom du type, déjà unique) —
+            # competence = nom du type de poste en minuscules, voir docstring.
+            competence = type_poste_nom.lower()
             if type_poste_nom not in postes_crees:
-                postes_crees[type_poste_nom] = {"code_poste": type_poste_nom}
+                postes_crees[type_poste_nom] = {"code_poste": type_poste_nom, "competences": [competence]}
 
             # Durée générée en minutes (config), convertie en jours entiers (DSL)
             duree_minutes = random.randint(
@@ -121,6 +132,7 @@ def generer_donnees_depuis_config(
                 "code_operation": f"{phase['nom']}_{op_id:03d}",
                 "duree_jours": duree_jours,
                 "poste_id": type_poste_nom,
+                "competence_requise": competence,
             }
 
             # Précédence dans le lot uniquement (jamais entre lots, indépendants entre eux)
@@ -281,12 +293,14 @@ def main():
                 print(f"  CSV: {chemin_postes}")
                 print(f"       {chemin_ops}")
 
-            resultats.append({
-                "secteur": nom_secteur,
-                "operations": n_ops,
-                "postes": n_postes,
-                "fichiers": fichiers_crees,
-            })
+            resultats.append(
+                {
+                    "secteur": nom_secteur,
+                    "operations": n_ops,
+                    "postes": n_postes,
+                    "fichiers": fichiers_crees,
+                }
+            )
 
         except Exception as e:
             print(f"  Erreur: {e}")
