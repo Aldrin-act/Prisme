@@ -195,15 +195,64 @@ export const prismeClient = {
     );
   },
 
+  // Crée une instance variante d'instanceId (payload T-R-C-O complet, même
+  // garde-fou qu'une ingestion normale) rattachée au même groupe de
+  // scénarios comparatifs — jamais une modification de l'originale.
+  creerScenario: (instanceId: string, instance: Types.InstanceTRCO, nomProjet?: string) => {
+    const params = new URLSearchParams();
+    if (nomProjet) params.set("nom_projet", nomProjet);
+    const requete = params.toString();
+    return apiFetch<Types.ReponseIngestion>(
+      `${PRISME_CONFIG.routes.ingestion}/${instanceId}/scenarios${requete ? `?${requete}` : ""}`,
+      { method: "POST", body: JSON.stringify(instance) },
+    );
+  },
+
+  // Compare toutes les instances du groupe de scénarios d'instanceId (elle
+  // comprise) sur leur dernière exécution réussie connue — ne déclenche
+  // jamais d'exécution elle-même.
+  obtenirComparaisonScenarios: (instanceId: string) =>
+    apiFetch<Types.ReponseComparaisonScenarios>(
+      `${PRISME_CONFIG.routes.ingestion}/${instanceId}/scenarios/comparaison`,
+    ),
+
   // EXÉCUTION — déclenchée directement par instance_id, sans intermédiaire.
-  declencherExecution: (instanceId: string) =>
-    apiFetch<Types.ReponseExecution>(`${PRISME_CONFIG.routes.execution}/${instanceId}`, {
-      method: "POST",
-    }),
+  // horizonGeleJours (Phase 2, replanification à horizon glissant) : si
+  // fourni et > 0, le backend va chercher le dernier planning réussi de
+  // cette même instance et le transmet au solveur comme planning_precedent.
+  declencherExecution: (instanceId: string, horizonGeleJours?: number) => {
+    const params = new URLSearchParams();
+    if (horizonGeleJours && horizonGeleJours > 0) {
+      params.set("horizon_gele_jours", String(horizonGeleJours));
+    }
+    const requete = params.toString();
+    return apiFetch<Types.ReponseExecution>(
+      `${PRISME_CONFIG.routes.execution}/${instanceId}${requete ? `?${requete}` : ""}`,
+      { method: "POST" },
+    );
+  },
 
   // PLANNING
   obtenirPlanning: (executionId: string) =>
     apiFetch<Types.PlanningAvecDurees>(`${PRISME_CONFIG.routes.planning}/${executionId}`),
+
+  // Gantt interactif (Phase 3) : soumet un planning ajusté à la main pour revalidation par le
+  // même vérificateur déterministe que tout le reste du système — toujours 200, `legal`
+  // distingue une révision persistée d'un refus métier (jamais une exception réseau).
+  ajusterPlanning: (executionId: string, planning: Types.Planning) =>
+    apiFetch<Types.ReponseAjustementPlanning>(
+      `${PRISME_CONFIG.routes.planning}/${executionId}/ajuster`,
+      {
+        method: "POST",
+        body: JSON.stringify(planning),
+      },
+    ),
+
+  // null si cette exécution n'a encore aucune révision ajustée — jamais un 404.
+  obtenirPlanningAjuste: (executionId: string) =>
+    apiFetch<Types.PlanningAvecDurees | null>(
+      `${PRISME_CONFIG.routes.planning}/${executionId}/ajuste`,
+    ),
 
   // AUDIT
   obtenirCodeSource: (executionId: string) =>
@@ -294,11 +343,13 @@ export const prismeClient = {
     );
   },
 
-  // Import depuis trois fichiers CSV séparés — Tâches, Ressources, Contraintes
-  // (POST /adapters/csv/{client_id}, multipart, voir adapters/csv_import/).
+  // Import depuis trois fichiers CSV séparés — Tâches, Ressources, Contraintes,
+  // plus un 4ᵉ optionnel Commandes (POST /adapters/csv/{client_id}, multipart,
+  // voir adapters/csv_import/) — dérive des échéances par tâche, une échéance
+  // déjà explicite l'emporte toujours sur une dérivée.
   importerFichiersCsv: (
     clientId: string,
-    fichiers: { taches: File; ressources: File; contraintes: File },
+    fichiers: { taches: File; ressources: File; contraintes: File; commandes?: File },
     nomProjet?: string,
     secteurActivite?: string,
   ) => {
@@ -306,6 +357,7 @@ export const prismeClient = {
     corps.append("taches", fichiers.taches);
     corps.append("ressources", fichiers.ressources);
     corps.append("contraintes", fichiers.contraintes);
+    if (fichiers.commandes) corps.append("commandes", fichiers.commandes);
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
     if (secteurActivite) params.set("secteur_activite", secteurActivite);
@@ -538,6 +590,22 @@ export function annulerGenerationSolveur(jobId: string): Promise<{ annule: boole
 export function listerJobsGeneration(instanceId?: string): Promise<Types.JobGenerationInfo[]> {
   const requete = instanceId ? `?instance_id=${encodeURIComponent(instanceId)}` : "";
   return apiFetch<Types.JobGenerationInfo[]>(`${PRISME_CONFIG.routes.generation}/jobs${requete}`);
+}
+
+/**
+ * KPI d'agrégat sur les générations (GET /generation/statistiques) — page Analytique,
+ * calculés côté serveur depuis le stockage persisté (survit à un redémarrage, contrairement
+ * à `listerJobsGeneration` qui lit la mémoire process). `agent` (déjà normalisé, ex.
+ * "debugger") restreint le calcul aux générations où cet agent est intervenu — voir
+ * `api/statistiques_generation.py::calculer_statistiques`.
+ */
+export function obtenirStatistiquesGeneration(
+  agent?: string,
+): Promise<Types.StatistiquesGeneration> {
+  const requete = agent ? `?agent=${encodeURIComponent(agent)}` : "";
+  return apiFetch<Types.StatistiquesGeneration>(
+    `${PRISME_CONFIG.routes.generation}/statistiques${requete}`,
+  );
 }
 
 /**

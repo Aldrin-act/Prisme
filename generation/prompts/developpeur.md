@@ -23,6 +23,6 @@ Exemple de réponse valide (structure du champ `code`, pas un solveur complet) :
 
 ```json
 {{
-  "code": "from __future__ import annotations\n\nfrom ortools.sat.python import cp_model\n\nfrom dsl.schema import InstanceTRCO, Planning, OperationPlanifiee\n\n\ndef resoudre(instance: InstanceTRCO) -> Planning | None:\n    modele = cp_model.CpModel()\n    # ... variables, contraintes, objectif selon le plan technique ci-dessus ...\n    solveur = cp_model.CpSolver()\n    statut = solveur.Solve(modele)\n    if statut not in (cp_model.OPTIMAL, cp_model.FEASIBLE):\n        return None\n    return Planning(operations=[])\n"
+  "code": "from __future__ import annotations\n\nfrom ortools.sat.python import cp_model\n\nfrom dsl.schema import InstanceTRCO, Planning, OperationPlanifiee\n\n\ndef resoudre(instance: InstanceTRCO, planning_precedent: Planning | None = None, horizon_gele_jours: int = 0) -> Planning | None:\n    modele = cp_model.CpModel()\n    # ... variables, contraintes (dont le gel d'horizon si horizon_gele_jours > 0), objectif selon le plan technique ci-dessus ...\n    solveur = cp_model.CpSolver()\n    statut = solveur.Solve(modele)\n    if statut not in (cp_model.OPTIMAL, cp_model.FEASIBLE):\n        return None\n    return Planning(operations=[])\n"
 }}
 ```

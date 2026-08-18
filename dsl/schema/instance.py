@@ -22,6 +22,7 @@ from .contraintes import (
     CompetenceRequise,
     Contrainte,
     ContrainteCapacite,
+    ContrainteChangementSerie,
     ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
     ContrainteTailleLot,
@@ -89,6 +90,14 @@ class InstanceTRCO(BaseModel):
             elif isinstance(contrainte, ContrainteTailleLot):
                 if contrainte.tache not in ids_taches:
                     raise ValueError(f"taille de lot référence une tâche inconnue : {contrainte.tache!r}")
+            elif isinstance(contrainte, ContrainteChangementSerie):
+                if contrainte.ressource not in ids_ressources:
+                    raise ValueError(
+                        f"changement de série référence une ressource inconnue : {contrainte.ressource!r}"
+                    )
+                for id_tache in (contrainte.tache_avant, contrainte.tache_apres):
+                    if id_tache not in ids_taches:
+                        raise ValueError(f"changement de série référence une tâche inconnue : {id_tache!r}")
 
         return self
 

@@ -19,6 +19,7 @@ validation d'entrée (garde-fou amont) est supposée déjà faite par l'appelant
 
 from __future__ import annotations
 
+import ast
 import json
 import tempfile
 from dataclasses import dataclass
@@ -32,6 +33,25 @@ from validation_engine.feasibility_checker import ResultatFaisabilite, verifier_
 IMAGE_SANDBOX = "prisme-sandbox:latest"
 _CHEMIN_CODE_CONTENEUR = "/mnt/solveur.py"
 _CHEMIN_INSTANCE_CONTENEUR = "/mnt/instance.json"
+_CHEMIN_PLANNING_PRECEDENT_CONTENEUR = "/mnt/planning_precedent.json"
+_PARAMETRES_HORIZON_GELE = {"planning_precedent", "horizon_gele_jours"}
+
+
+def _solveur_supporte_horizon_gele(code_source: str) -> bool:
+    """`ast.parse` uniquement (§5.3 : jamais d'exécution de code non fiable hors sandbox) —
+    vrai si la fonction top-level `resoudre` déclare `planning_precedent`/`horizon_gele_jours`
+    parmi ses paramètres (replanification à horizon glissant, Phase 2). Les solveurs enregistrés
+    avant l'ajout de cette fonctionnalité (signature à un seul paramètre) renvoient `False`."""
+    try:
+        arbre = ast.parse(code_source)
+    except SyntaxError:
+        return False
+    for noeud in arbre.body:
+        if isinstance(noeud, ast.FunctionDef) and noeud.name == "resoudre":
+            noms_parametres = {a.arg for a in (*noeud.args.args, *noeud.args.kwonlyargs)}
+            return _PARAMETRES_HORIZON_GELE.issubset(noms_parametres)
+    return False
+
 
 # Mode audit des tests générés (canal d'audit, voir generation/agents/testeur.py) — même
 # image que le mode solveur ci-dessus, sélectionné par un `entrypoint=` docker-py explicite
@@ -133,12 +153,23 @@ def _executer_et_recuperer_logs(
 
 
 def executer_dans_sandbox(
-    chemin_code: Path, instance: InstanceTRCO, limites: LimitesSandbox = LimitesSandbox()
+    chemin_code: Path,
+    instance: InstanceTRCO,
+    limites: LimitesSandbox = LimitesSandbox(),
+    planning_precedent: Planning | None = None,
+    horizon_gele_jours: int = 0,
 ) -> Planning | None:
     """Exécute le code figé à `chemin_code` sur `instance`, dans un
     conteneur jetable et isolé. Lève `ErreurExecutionSandbox` si le
     conteneur échoue, dépasse son délai, ou si l'isolation a empêché
-    l'exécution (image absente en premier lieu)."""
+    l'exécution (image absente en premier lieu).
+
+    `planning_precedent`/`horizon_gele_jours` (Phase 2, replanification à horizon glissant) ne
+    changent rien à la commande/aux volumes envoyés au conteneur quand `horizon_gele_jours == 0`
+    (le défaut) — comportement strictement identique à avant l'ajout de cette fonctionnalité.
+    L'appelant (`executer_solveur_valide`) est responsable de vérifier au préalable que le
+    solveur ciblé supporte ces paramètres (`_solveur_supporte_horizon_gele`) — ce module ne le
+    refait pas ici."""
     import docker
     from docker.errors import DockerException
 
@@ -151,17 +182,31 @@ def executer_dans_sandbox(
         chemin_instance_hote = Path(dossier_temp) / "instance.json"
         chemin_instance_hote.write_text(instance.model_dump_json(), encoding="utf-8")
 
+        command = [_CHEMIN_CODE_CONTENEUR, _CHEMIN_INSTANCE_CONTENEUR]
+        volumes = {
+            str(Path(chemin_code).resolve()): {"bind": _CHEMIN_CODE_CONTENEUR, "mode": "ro"},
+            str(chemin_instance_hote.resolve()): {
+                "bind": _CHEMIN_INSTANCE_CONTENEUR,
+                "mode": "ro",
+            },
+        }
+        if horizon_gele_jours > 0:
+            chemin_planning_conteneur = "-"
+            if planning_precedent is not None:
+                chemin_planning_precedent_hote = Path(dossier_temp) / "planning_precedent.json"
+                chemin_planning_precedent_hote.write_text(planning_precedent.model_dump_json(), encoding="utf-8")
+                volumes[str(chemin_planning_precedent_hote.resolve())] = {
+                    "bind": _CHEMIN_PLANNING_PRECEDENT_CONTENEUR,
+                    "mode": "ro",
+                }
+                chemin_planning_conteneur = _CHEMIN_PLANNING_PRECEDENT_CONTENEUR
+            command += [chemin_planning_conteneur, str(horizon_gele_jours)]
+
         code_sortie, sortie_brute = _executer_et_recuperer_logs(
             client,
             entrypoint=None,
-            command=[_CHEMIN_CODE_CONTENEUR, _CHEMIN_INSTANCE_CONTENEUR],
-            volumes={
-                str(Path(chemin_code).resolve()): {"bind": _CHEMIN_CODE_CONTENEUR, "mode": "ro"},
-                str(chemin_instance_hote.resolve()): {
-                    "bind": _CHEMIN_INSTANCE_CONTENEUR,
-                    "mode": "ro",
-                },
-            },
+            command=command,
+            volumes=volumes,
             limites=limites,
         )
 
@@ -290,20 +335,42 @@ def executer_solveur_valide(
     id_solveur: str,
     instance: InstanceTRCO,
     limites: LimitesSandbox = LimitesSandbox(),
+    planning_precedent: Planning | None = None,
+    horizon_gele_jours: int = 0,
 ) -> ResultatExecution:
     """Récupère `id_solveur` dans le store, l'exécute en sandbox sur
     `instance`, puis applique le garde-fou de faisabilité en aval (§6.7).
 
     `instance` est supposée déjà validée en amont
     (`dsl.validation.charger_instance`) — ce n'est pas refait ici.
-    """
+
+    Si `horizon_gele_jours > 0` et que le solveur enregistré ne supporte pas ce paramètre
+    (généré avant l'ajout de la replanification à horizon glissant, Phase 2), l'exécution échoue
+    explicitement ici — jamais une dégradation silencieuse vers un solve normal, jamais un
+    conteneur lancé pour rien (décision confirmée : les solveurs déjà enregistrés continuent de
+    fonctionner normalement pour toute exécution *sans* horizon gelé, mais n'apprennent jamais à
+    en gérer un sans être régénérés)."""
     try:
         artefact = registre.recuperer_solveur(id_solveur)
     except (KeyError, ErreurIntegriteSolveur) as erreur:
         return ResultatExecution(None, None, f"solveur introuvable ou corrompu : {erreur}")
 
+    if horizon_gele_jours > 0 and not _solveur_supporte_horizon_gele(artefact.code_source):
+        return ResultatExecution(
+            None,
+            None,
+            "ce solveur (généré avant l'ajout de l'horizon gelé) ne supporte pas "
+            "horizon_gele_jours — régénérez-le pour activer cette fonctionnalité",
+        )
+
     try:
-        planning = executer_dans_sandbox(artefact.chemin_code, instance, limites)
+        planning = executer_dans_sandbox(
+            artefact.chemin_code,
+            instance,
+            limites,
+            planning_precedent=planning_precedent,
+            horizon_gele_jours=horizon_gele_jours,
+        )
     except ErreurExecutionSandbox as erreur:
         return ResultatExecution(None, None, str(erreur))
 

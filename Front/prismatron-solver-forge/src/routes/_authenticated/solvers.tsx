@@ -3,6 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertCircle, CheckCircle2, Cpu, Play, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -35,6 +37,7 @@ import {
   useCodeSourceSolveur,
   useDeclencherExecution,
   usePlanning,
+  usePlanningAjuste,
   PrismeAPIError,
   type SolveurInfo,
 } from "@/integrations/prisme";
@@ -123,13 +126,16 @@ function DialogSolveur({
   const { data: instances } = useInstances();
   const labels = useLabelsInstances();
   const [instanceId, setInstanceId] = useState("");
+  const [horizonGeleJours, setHorizonGeleJours] = useState("");
   const [executionId, setExecutionId] = useState<string | null>(null);
+  const [voirOriginal, setVoirOriginal] = useState(false);
   const declencher = useDeclencherExecution();
   const {
     data: planning,
     isLoading: chargementPlanning,
     error: erreurPlanning,
   } = usePlanning(executionId);
+  const { data: planningAjuste } = usePlanningAjuste(executionId);
   const { data: codeSource, isLoading: chargementCode } = useCodeSourceSolveur(solveur?.id ?? null);
 
   // On choisit une instance dont le client + la structure de contraintes
@@ -146,7 +152,9 @@ function DialogSolveur({
   function fermer(open: boolean) {
     if (!open) {
       setInstanceId("");
+      setHorizonGeleJours("");
       setExecutionId(null);
+      setVoirOriginal(false);
       declencher.reset();
     }
     onOpenChange(open);
@@ -155,17 +163,24 @@ function DialogSolveur({
   function changerInstance(id: string) {
     setInstanceId(id);
     setExecutionId(null);
+    setVoirOriginal(false);
     declencher.reset();
   }
 
   function executer() {
     if (!instanceId) return;
     setExecutionId(null);
-    declencher.mutate(instanceId, {
-      onSuccess: (reponse) => {
-        if (reponse.reussi) setExecutionId(reponse.execution_id);
+    declencher.mutate(
+      {
+        instanceId,
+        horizonGeleJours: horizonGeleJours ? Number(horizonGeleJours) : undefined,
       },
-    });
+      {
+        onSuccess: (reponse) => {
+          if (reponse.reussi) setExecutionId(reponse.execution_id);
+        },
+      },
+    );
   }
 
   const erreurRequete = declencher.error as PrismeAPIError | null;
@@ -222,6 +237,26 @@ function DialogSolveur({
                     </Select>
                   </div>
 
+                  <div className="space-y-1.5">
+                    <Label htmlFor="horizon_gele_jours" className="text-xs text-muted-foreground">
+                      Horizon gelé (jours, optionnel)
+                    </Label>
+                    <Input
+                      id="horizon_gele_jours"
+                      type="number"
+                      min={0}
+                      value={horizonGeleJours}
+                      onChange={(e) => setHorizonGeleJours(e.target.value)}
+                      placeholder="0"
+                      className="w-32"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Fige les opérations déjà planifiées qui commencent avant ce nombre de jours —
+                      reprend le dernier planning réussi de cette instance, sans effet s'il n'y en a
+                      pas encore.
+                    </p>
+                  </div>
+
                   <Button onClick={executer} disabled={!instanceId || declencher.isPending}>
                     <Play className="mr-2 h-4 w-4" />
                     {declencher.isPending ? "Exécution en cours..." : "Exécuter le solveur"}
@@ -251,6 +286,13 @@ function DialogSolveur({
                         <CheckCircle2 className="h-4 w-4" /> Exécution réussie — voir l'onglet
                         Planning
                       </div>
+                      {reponseExecution.horizon_gele_jours > 0 && (
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {reponseExecution.planning_precedent_utilise
+                            ? "Horizon gelé appliqué — les opérations déjà planifiées dans la fenêtre ont été reprises telles quelles."
+                            : "Aucun planning précédent trouvé pour cette instance — solve normal, rien n'a été figé."}
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -265,7 +307,23 @@ function DialogSolveur({
                   {(erreurPlanning as PrismeAPIError).message}
                 </p>
               ) : planning ? (
-                <GanttChart planning={planning} />
+                <div className="space-y-3">
+                  {planningAjuste && (
+                    <div className="flex items-center justify-between">
+                      <Badge variant="secondary">
+                        {voirOriginal ? "Planning original" : "Planning ajusté"}
+                      </Badge>
+                      <Button size="sm" variant="ghost" onClick={() => setVoirOriginal((v) => !v)}>
+                        {voirOriginal ? "Voir l'ajustement" : "Voir l'original"}
+                      </Button>
+                    </div>
+                  )}
+                  <GanttChart
+                    planning={!voirOriginal && planningAjuste ? planningAjuste : planning}
+                    editable={!voirOriginal}
+                    executionId={executionId ?? undefined}
+                  />
+                </div>
               ) : (
                 <p className="text-sm text-muted-foreground">
                   Aucune exécution pour l'instant — lance le solveur depuis l'onglet Exécuter pour

@@ -55,7 +55,12 @@ export interface Ressource {
 }
 
 export type TypeContrainte =
-  "precedence" | "compatibilite_ressource_tache" | "echeance" | "competence_requise";
+  | "precedence"
+  | "compatibilite_ressource_tache"
+  | "echeance"
+  | "competence_requise"
+  | "changement_serie"
+  | "disponibilite_ressource";
 
 export interface ContraintePrecedence {
   type: "precedence";
@@ -92,6 +97,18 @@ export interface ContrainteDisponibiliteRessource {
   type: "disponibilite_ressource";
   ressource: string;
   jours_indisponibles: number[]; // jours relatifs, jamais une date calendaire
+  // Motif récurrent (cycle de 7 jours depuis le jour 0 de l'instance) : positions 0-6 où la
+  // ressource est indisponible chaque semaine. Combiné avec jours_indisponibles, jamais un
+  // remplacement — au moins un des deux doit être renseigné (validé côté backend).
+  jours_semaine_indisponibles?: number[];
+}
+
+export interface ContrainteChangementSerie {
+  type: "changement_serie";
+  ressource: string;
+  tache_avant: string;
+  tache_apres: string;
+  duree_setup: number; // jours, > 0 — délai entre la fin de tache_avant et le début de tache_apres
 }
 
 export interface ContrainteIncompatibilite {
@@ -115,7 +132,8 @@ export type Contrainte =
   | ContrainteCapacite
   | ContrainteDisponibiliteRessource
   | ContrainteIncompatibilite
-  | ContrainteTailleLot;
+  | ContrainteTailleLot
+  | ContrainteChangementSerie;
 
 export interface ObjectifMinimiserMakespan {
   type: "minimiser_makespan";
@@ -191,6 +209,26 @@ export interface PlanningAvecDurees extends Planning {
   durees: Record<string, number>; // Format: "tache|ressource" -> duree
 }
 
+// Gantt interactif (Phase 3) : une contrainte violée par un planning ajusté à la main. `type`
+// reste `string` plutôt qu'une union stricte dupliquée depuis
+// `validation_engine/feasibility_checker.py::TypeViolation` (13 valeurs) — n'est jamais lu que
+// pour affichage, jamais dans un switch exhaustif côté frontend.
+export interface Violation {
+  type: string;
+  message: string;
+  tache: string | null;
+  ressource: string | null;
+  tache_secondaire: string | null;
+}
+
+export interface ReponseAjustementPlanning {
+  legal: boolean;
+  violations: Violation[];
+  // Absent (null) quand legal est faux — rien n'est persisté, et l'appelant garde son propre
+  // état local (jamais écrasé) pour laisser l'utilisateur corriger et re-tenter.
+  planning: PlanningAvecDurees | null;
+}
+
 // ============================================================================
 // INGESTION
 // ============================================================================
@@ -213,6 +251,32 @@ export interface InstanceDetail extends InstanceTRCO {
 }
 
 // ============================================================================
+// SCÉNARIOS COMPARATIFS
+// ============================================================================
+
+export interface MetriquesPlanning {
+  makespan: number;
+  taux_utilisation_par_ressource: Record<string, number>;
+  taches_en_retard: string[];
+}
+
+export interface ScenarioComparaison {
+  instance_id: string;
+  est_instance_de_base: boolean;
+  nom_projet: string | null;
+  execution_id: string | null;
+  date_execution: string | null;
+  // null tant que ce scénario n'a jamais été exécuté avec succès — jamais déclenché
+  // automatiquement par la simple lecture de la comparaison (§2.3).
+  metriques: MetriquesPlanning | null;
+}
+
+export interface ReponseComparaisonScenarios {
+  instance_id: string;
+  scenarios: ScenarioComparaison[];
+}
+
+// ============================================================================
 // EXÉCUTION
 // ============================================================================
 
@@ -220,6 +284,11 @@ export interface ReponseExecution {
   execution_id: string;
   reussi: boolean;
   erreur: string | null;
+  // Replanification à horizon glissant (Phase 2) — horizon_gele_jours tel que demandé (0 =
+  // aucun gel demandé) ; planning_precedent_utilise distingue "rien à figer" (aucun planning
+  // précédent trouvé) d'un gel réellement appliqué, jamais silencieux.
+  horizon_gele_jours: number;
+  planning_precedent_utilise: boolean;
 }
 
 export interface ResultatExecution {
@@ -482,6 +551,25 @@ export interface JobGenerationInfo {
   nombre_tentatives: number | null;
   cree_le: string;
   evenements: EvenementGeneration[];
+}
+
+// KPI d'agrégat (GET /generation/statistiques) — calculés côté serveur depuis le stockage
+// persisté (survit à un redémarrage, contrairement à JobGenerationInfo/mémoire process ci-
+// dessus). `null` sur un champ = pas assez de données pour le calculer (aucune génération
+// terminée, aucune tentative multiple à comparer...), jamais 0 par défaut trompeur. Miroir de
+// `api/statistiques_generation.py::StatistiquesGeneration` — voir sa docstring pour ce qui
+// n'est délibérément pas inclus (coût tokens, MTBF, CSAT...) et pourquoi.
+export interface StatistiquesGeneration {
+  generations_lancees: number;
+  generations_terminees: number;
+  taux_reussite: number | null;
+  duree_moyenne_s: number | null;
+  // Non-répétition (boucles) :
+  tentatives_moyennes_convergence: number | null;
+  taux_epuisement_boucle: number | null;
+  taux_boucles_detectees: number | null;
+  diversite_actions_moyenne: number | null;
+  taux_stagnation: number | null;
 }
 
 // Historique complet et durable d'un job (GET /generation/jobs/{id}/historique),

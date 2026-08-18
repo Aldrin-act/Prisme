@@ -174,6 +174,45 @@ def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
         app.dependency_overrides.clear()
 
 
+def test_ingestion_depuis_csv_avec_commandes_derive_une_echeance() -> None:
+    """Bout en bout (§5.4) : le quatrième fichier optionnel `commandes` relie
+    des tâches à une commande cliente et une date limite — l'adaptateur
+    dérive une `Echeance` pour chaque tâche liée (`adapters/commande_derivation.py`)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            files={
+                "taches": ("taches.csv", b"id,nom\nT1,Decoupe\nT2,Assemblage\n", "text/csv"),
+                "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type,tache_avant,tache_apres,tache,ressource,duree_jours\n"
+                    b"precedence,T1,T2,,,\n"
+                    b"compatibilite_ressource_tache,,,T1,R1,10\n"
+                    b"compatibilite_ressource_tache,,,T2,R1,15\n",
+                    "text/csv",
+                ),
+                "commandes": (
+                    "commandes.csv",
+                    b"id,taches,client,date_limite\nCMD1,T1;T2,Client A,30\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        instance_id = reponse.json()["instance_id"]
+        _, instance = etat_test.instances[instance_id]
+        echeances = {c.tache: c.echeance for c in instance.contraintes if c.type == "echeance"}
+        assert echeances == {"T1": 30, "T2": 30}
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_ingestion_depuis_csv_rejette_une_extension_invalide() -> None:
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test

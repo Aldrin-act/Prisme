@@ -3,7 +3,12 @@
  */
 
 import { useMutation, useQueries, useQuery, type UseQueryOptions } from "@tanstack/react-query";
-import { prismeClient, listerJobsGeneration, obtenirHistoriqueJobGeneration } from "./client";
+import {
+  prismeClient,
+  listerJobsGeneration,
+  obtenirHistoriqueJobGeneration,
+  obtenirStatistiquesGeneration,
+} from "./client";
 import type * as Types from "./types";
 
 // ============================================================================
@@ -17,6 +22,8 @@ export const prismeKeys = {
   solveurs: () => [...prismeKeys.all, "solveurs"] as const,
   sante: () => [...prismeKeys.all, "sante"] as const,
   planning: (executionId: string) => [...prismeKeys.all, "planning", executionId] as const,
+  planningAjuste: (executionId: string) =>
+    [...prismeKeys.all, "planningAjuste", executionId] as const,
   codeSource: (executionId: string) => [...prismeKeys.all, "codeSource", executionId] as const,
   codeSourceSolveur: (idSolveur: string) =>
     [...prismeKeys.all, "codeSourceSolveur", idSolveur] as const,
@@ -26,12 +33,16 @@ export const prismeKeys = {
   instance: (instanceId: string) => [...prismeKeys.all, "instance", instanceId] as const,
   jobsGeneration: (instanceId?: string) =>
     [...prismeKeys.all, "jobsGeneration", instanceId ?? "tous"] as const,
+  statistiquesGeneration: (agent?: string) =>
+    [...prismeKeys.all, "statistiquesGeneration", agent ?? "tous"] as const,
   historiqueJobGeneration: (jobId: string) =>
     [...prismeKeys.all, "historiqueJobGeneration", jobId] as const,
   propositionsSupervision: (enAttente?: boolean) =>
     [...prismeKeys.all, "propositionsSupervision", enAttente ?? false] as const,
   nomsProjet: () => [...prismeKeys.all, "nomsProjet"] as const,
   clesApi: () => [...prismeKeys.all, "clesApi"] as const,
+  comparaisonScenarios: (instanceId: string) =>
+    [...prismeKeys.all, "comparaisonScenarios", instanceId] as const,
 } as const;
 
 // ============================================================================
@@ -138,6 +149,25 @@ export function useJobsGeneration(
 }
 
 /**
+ * KPI d'agrégat (page Analytique) — calculés côté serveur depuis le stockage persisté,
+ * contrairement à `useJobsGeneration` (mémoire process). Pas de génération en cours à
+ * suivre ici (données déjà terminées) : un rafraîchissement modéré suffit. `agent`
+ * (optionnel, déjà normalisé) restreint le calcul aux générations où cet agent est
+ * intervenu — voir `api/statistiques_generation.py::calculer_statistiques`.
+ */
+export function useStatistiquesGeneration(
+  agent?: string,
+  options?: Omit<UseQueryOptions<Types.StatistiquesGeneration>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.statistiquesGeneration(agent),
+    queryFn: () => obtenirStatistiquesGeneration(agent),
+    refetchInterval: 30000,
+    ...options,
+  });
+}
+
+/**
  * Historique complet et durable d'un job de génération (§6.6) — code candidat
  * de chaque tentative de la boucle de réparation, y compris les rejetées.
  * Distinct de `useJobsGeneration` (mémoire process, source du direct SSE) :
@@ -203,6 +233,33 @@ export function usePlanning(
     queryFn: () => prismeClient.obtenirPlanning(executionId!),
     enabled: !!executionId,
     ...options,
+  });
+}
+
+/**
+ * Révision ajustée à la main du planning d'une exécution (Gantt interactif, Phase 3) — `null`
+ * tant qu'aucun ajustement n'a encore été enregistré, jamais une erreur de requête.
+ */
+export function usePlanningAjuste(
+  executionId: string | null,
+  options?: Omit<UseQueryOptions<Types.PlanningAvecDurees | null>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.planningAjuste(executionId || ""),
+    queryFn: () => prismeClient.obtenirPlanningAjuste(executionId!),
+    enabled: !!executionId,
+    ...options,
+  });
+}
+
+/**
+ * Mutation pour soumettre un planning ajusté à la main — voir `ReponseAjustementPlanning.legal`
+ * pour savoir si la révision a bien été persistée (jamais une exception pour un refus métier).
+ */
+export function useAjusterPlanning() {
+  return useMutation({
+    mutationFn: ({ executionId, planning }: { executionId: string; planning: Types.Planning }) =>
+      prismeClient.ajusterPlanning(executionId, planning),
   });
 }
 
@@ -384,11 +441,54 @@ export function useModifierInstance() {
 }
 
 /**
+ * Mutation pour créer une instance variante d'instanceId (scénario comparatif)
+ * — nouvelle instance à part entière, rattachée au même groupe que l'originale.
+ */
+export function useCreerScenario() {
+  return useMutation({
+    mutationFn: ({
+      instanceId,
+      instance,
+      nomProjet,
+    }: {
+      instanceId: string;
+      instance: Types.InstanceTRCO;
+      nomProjet?: string;
+    }) => prismeClient.creerScenario(instanceId, instance, nomProjet),
+  });
+}
+
+/**
+ * Comparaison de toutes les instances du groupe de scénarios d'instanceId
+ * (elle comprise) sur leur dernière exécution réussie connue.
+ */
+export function useComparaisonScenarios(
+  instanceId: string | null,
+  options?: Omit<UseQueryOptions<Types.ReponseComparaisonScenarios>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.comparaisonScenarios(instanceId || ""),
+    queryFn: () => prismeClient.obtenirComparaisonScenarios(instanceId!),
+    enabled: !!instanceId,
+    ...options,
+  });
+}
+
+/**
  * Mutation pour déclencher une exécution — directement par instance_id.
+ * horizonGeleJours (Phase 2) : > 0 pour figer les opérations déjà planifiées
+ * qui tombent dans cette fenêtre, sans effet si aucun planning précédent
+ * n'existe encore pour cette instance.
  */
 export function useDeclencherExecution() {
   return useMutation({
-    mutationFn: (instanceId: string) => prismeClient.declencherExecution(instanceId),
+    mutationFn: ({
+      instanceId,
+      horizonGeleJours,
+    }: {
+      instanceId: string;
+      horizonGeleJours?: number;
+    }) => prismeClient.declencherExecution(instanceId, horizonGeleJours),
   });
 }
 
@@ -492,7 +592,7 @@ export function useImporterFichiersCsv() {
       secteurActivite,
     }: {
       clientId: string;
-      fichiers: { taches: File; ressources: File; contraintes: File };
+      fichiers: { taches: File; ressources: File; contraintes: File; commandes?: File };
       nomProjet?: string;
       secteurActivite?: string;
     }) => prismeClient.importerFichiersCsv(clientId, fichiers, nomProjet, secteurActivite),

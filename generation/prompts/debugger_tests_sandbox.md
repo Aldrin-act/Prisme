@@ -61,7 +61,7 @@ correct) :
 {{
   "cible": "tests",
   "cause": "le test attendait un makespan de 5 alors que la mission fixe la durée de la tâche à 6 jours",
-  "code": "from __future__ import annotations\n\nfrom dsl.schema import InstanceTRCO, Planning\n\n\ndef resoudre(instance: InstanceTRCO) -> Planning | None:\n    ...\n",
+  "code": "from __future__ import annotations\n\nfrom dsl.schema import InstanceTRCO, Planning\n\n\ndef resoudre(instance: InstanceTRCO, planning_precedent: Planning | None = None, horizon_gele_jours: int = 0) -> Planning | None:\n    ...\n",
   "tests": "from solveur_candidat import resoudre\n\n\ndef test_makespan_correct():\n    ...\n    assert makespan == 6\n"
 }}
 ```

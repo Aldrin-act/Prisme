@@ -229,6 +229,20 @@ class EtatPostgres:
                     "UPDATE {table} SET date_modification = date_ingestion WHERE date_modification IS NULL"
                 ).format(table=self._table("instances_trco"))
             )
+            # Migration idempotente : scénarios comparatifs (what-if) — une instance variante
+            # créée par POST /ingestion/{instance_id}/scenarios pointe ici vers l'instance de
+            # base dont elle dérive. Sans rapport avec l'ancien instance_parente_id (retiré
+            # ci-dessous) : celui-là suivait un historique de modification en place (une seule
+            # lignée) ; ceci relie des variantes délibérées, créées pour coexister et être
+            # comparées, jamais fusionnées ni éditées l'une dans l'autre. FK auto-référencée,
+            # ON DELETE SET NULL : supprimer l'instance de base ne cascade jamais sur ses
+            # variantes (elles restent, juste orphelines de groupe).
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS groupe_scenario_id TEXT "
+                    "REFERENCES {table}(id) ON DELETE SET NULL"
+                ).format(table=self._table("instances_trco"))
+            )
             # Ancienne racine de lignée ("dérivée de") — retirée : une
             # instance se modifie désormais en place (`modifier_instance`,
             # même instance_id) plutôt que de générer une dérivée. La FK
@@ -273,6 +287,32 @@ class EtatPostgres:
                     "ressource TEXT NOT NULL, "
                     "debut INTEGER NOT NULL)"
                 ).format(table=self._table("operations_planifiees"), plannings=self._table("plannings"))
+            )
+            # Gantt interactif (Phase 3) : révision ajustée à la main d'un planning, distincte
+            # de l'original ci-dessus — une seule révision "courante" par exécution (écrasée à
+            # chaque nouvel ajustement légal, jamais un historique), jamais lue par le chemin
+            # existant (recuperer_execution/GET /planning/{execution_id}).
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "execution_id TEXT NOT NULL UNIQUE REFERENCES {executions}(id), "
+                    "makespan INTEGER, "
+                    "date_ajustement TEXT NOT NULL)"
+                ).format(table=self._table("plannings_ajustes"), executions=self._table("executions"))
+            )
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "planning_ajuste_id TEXT NOT NULL REFERENCES {plannings_ajustes}(id), "
+                    "tache TEXT NOT NULL, "
+                    "ressource TEXT NOT NULL, "
+                    "debut INTEGER NOT NULL)"
+                ).format(
+                    table=self._table("operations_planifiees_ajustees"),
+                    plannings_ajustes=self._table("plannings_ajustes"),
+                )
             )
             connexion.execute(
                 sql.SQL(
@@ -633,6 +673,7 @@ class EtatPostgres:
         description_metier: str | None = None,
         nom_projet: str | None = None,
         secteur_activite: str | None = None,
+        groupe_scenario_id: str | None = None,
     ) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
@@ -648,8 +689,8 @@ class EtatPostgres:
                 sql.SQL(
                     "INSERT INTO {} "
                     "(id, client_id, payload, structure_contraintes, date_ingestion, source_id, "
-                    "description_metier, nom_projet, secteur_activite, date_modification) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s)"
+                    "description_metier, nom_projet, secteur_activite, date_modification, groupe_scenario_id) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
@@ -662,10 +703,37 @@ class EtatPostgres:
                     nom_projet,
                     secteur_activite,
                     maintenant,
+                    groupe_scenario_id,
                 ),
             )
             connexion.commit()
         return instance_id
+
+    def lister_instances_du_groupe_scenario(self, instance_id: str) -> list[str]:
+        """Toutes les instances du même groupe de scénarios que `instance_id`,
+        elle comprise — voir `EtatAPI.lister_instances_du_groupe_scenario`
+        pour la sémantique complète (même contrat, même docstring)."""
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT groupe_scenario_id FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+            if ligne is None:
+                return []
+            groupe_id = ligne[0] or instance_id
+
+            racine = connexion.execute(
+                sql.SQL("SELECT id FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (groupe_id,),
+            ).fetchone()
+            membres = {groupe_id} if racine is not None else set()
+
+            variantes = connexion.execute(
+                sql.SQL("SELECT id FROM {} WHERE groupe_scenario_id = %s").format(self._table("instances_trco")),
+                (groupe_id,),
+            ).fetchall()
+            membres |= {row[0] for row in variantes}
+        return sorted(membres)
 
     def recuperer_instance(self, instance_id: str) -> tuple[str, InstanceTRCO]:
         with closing(self._connexion()) as connexion:
@@ -796,12 +864,13 @@ class EtatPostgres:
 
     def supprimer_instance(self, instance_id: str) -> None:
         """Cascade-supprime son propre historique d'exécution (exécutions,
-        plannings, opérations planifiées, décisions humaines associées) —
-        une exécution n'existe jamais sans l'instance qui l'a produite. Le
-        lien de provenance depuis `sources_donnees` (`ON DELETE SET NULL`)
-        et depuis `jobs_generation` (même comportement, préserve l'audit de
-        génération) sont gérés par Postgres lui-même via les contraintes de
-        clé étrangère, rien à faire ici pour eux."""
+        plannings, opérations planifiées, décisions humaines, révisions de
+        planning ajustées associées) — une exécution n'existe jamais sans
+        l'instance qui l'a produite. Le lien de provenance depuis
+        `sources_donnees` (`ON DELETE SET NULL`) et depuis `jobs_generation`
+        (même comportement, préserve l'audit de génération) sont gérés par
+        Postgres lui-même via les contraintes de clé étrangère, rien à faire
+        ici pour eux."""
         with closing(self._connexion()) as connexion:
             existe = connexion.execute(
                 sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("instances_trco")),
@@ -832,6 +901,25 @@ class EtatPostgres:
                 sql.SQL(
                     "DELETE FROM {plannings} WHERE execution_id IN (SELECT id FROM {execs} WHERE instance_id = %s)"
                 ).format(plannings=self._table("plannings"), execs=self._table("executions")),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {ops} WHERE planning_ajuste_id IN ("
+                    "SELECT pa.id FROM {plannings_ajustes} pa JOIN {execs} e ON e.id = pa.execution_id "
+                    "WHERE e.instance_id = %s)"
+                ).format(
+                    ops=self._table("operations_planifiees_ajustees"),
+                    plannings_ajustes=self._table("plannings_ajustes"),
+                    execs=self._table("executions"),
+                ),
+                (instance_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {plannings_ajustes} WHERE execution_id IN "
+                    "(SELECT id FROM {execs} WHERE instance_id = %s)"
+                ).format(plannings_ajustes=self._table("plannings_ajustes"), execs=self._table("executions")),
                 (instance_id,),
             )
             connexion.execute(
@@ -994,6 +1082,104 @@ class EtatPostgres:
 
         resultat = ResultatExecution(planning=planning, verdict_faisabilite=verdict_faisabilite, erreur=erreur)
         return solveur_id, instance_id, resultat
+
+    def dernier_planning_pour_instance(self, instance_id: str) -> Planning | None:
+        """Équivalent Postgres d'`EtatAPI.dernier_planning_pour_instance` — voir sa docstring
+        pour le contrat (Phase 2, replanification à horizon glissant). Ne considère que les
+        exécutions `statut = 'reussi'`, la plus récente par `date_execution`."""
+        with closing(self._connexion()) as connexion:
+            ligne_planning = connexion.execute(
+                sql.SQL(
+                    "SELECT p.id FROM {executions} e JOIN {plannings} p ON p.execution_id = e.id "
+                    "WHERE e.instance_id = %s AND e.statut = 'reussi' "
+                    "ORDER BY e.date_execution DESC LIMIT 1"
+                ).format(executions=self._table("executions"), plannings=self._table("plannings")),
+                (instance_id,),
+            ).fetchone()
+            if ligne_planning is None:
+                return None
+            (planning_id,) = ligne_planning
+
+            lignes_ops = connexion.execute(
+                sql.SQL("SELECT tache, ressource, debut FROM {} WHERE planning_id = %s").format(
+                    self._table("operations_planifiees")
+                ),
+                (planning_id,),
+            ).fetchall()
+
+        return Planning(
+            operations=[
+                OperationPlanifiee(tache=tache, ressource=ressource, debut=debut)
+                for tache, ressource, debut in lignes_ops
+            ]
+        )
+
+    def enregistrer_planning_ajuste(
+        self, execution_id: str, planning: Planning, makespan: int | None = None
+    ) -> None:
+        """Écrase toute révision ajustée précédente de cette exécution — une seule révision
+        "courante", jamais un historique (Gantt interactif, Phase 3). Ne touche jamais
+        `plannings`/`operations_planifiees` (l'original figé par le solveur). `makespan` est
+        calculé par l'appelant (`api/routes/planning.py`, qui a déjà l'instance sous la main
+        pour `calculer_makespan`) plutôt que refetché ici — décoratif de toute façon, comme sur
+        `plannings.makespan` : jamais relu par aucune route existante, seulement les opérations
+        elles-mêmes (les durées sont toujours dérivées côté client depuis l'instance)."""
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL(
+                    "DELETE FROM {ops} WHERE planning_ajuste_id IN "
+                    "(SELECT id FROM {plannings_ajustes} WHERE execution_id = %s)"
+                ).format(
+                    ops=self._table("operations_planifiees_ajustees"),
+                    plannings_ajustes=self._table("plannings_ajustes"),
+                ),
+                (execution_id,),
+            )
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE execution_id = %s").format(self._table("plannings_ajustes")),
+                (execution_id,),
+            )
+
+            planning_ajuste_id = str(uuid.uuid4())
+            connexion.execute(
+                sql.SQL(
+                    "INSERT INTO {} (id, execution_id, makespan, date_ajustement) VALUES (%s, %s, %s, %s)"
+                ).format(self._table("plannings_ajustes")),
+                (planning_ajuste_id, execution_id, makespan, datetime.now(UTC).isoformat()),
+            )
+            for operation in planning.operations:
+                connexion.execute(
+                    sql.SQL(
+                        "INSERT INTO {} (id, planning_ajuste_id, tache, ressource, debut) "
+                        "VALUES (%s, %s, %s, %s, %s)"
+                    ).format(self._table("operations_planifiees_ajustees")),
+                    (str(uuid.uuid4()), planning_ajuste_id, operation.tache, operation.ressource, operation.debut),
+                )
+            connexion.commit()
+
+    def recuperer_planning_ajuste(self, execution_id: str) -> Planning | None:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT id FROM {} WHERE execution_id = %s").format(self._table("plannings_ajustes")),
+                (execution_id,),
+            ).fetchone()
+            if ligne is None:
+                return None
+            (planning_ajuste_id,) = ligne
+
+            lignes_ops = connexion.execute(
+                sql.SQL("SELECT tache, ressource, debut FROM {} WHERE planning_ajuste_id = %s").format(
+                    self._table("operations_planifiees_ajustees")
+                ),
+                (planning_ajuste_id,),
+            ).fetchall()
+
+        return Planning(
+            operations=[
+                OperationPlanifiee(tache=tache, ressource=ressource, debut=debut)
+                for tache, ressource, debut in lignes_ops
+            ]
+        )
 
     def lister_executions(self, client_id: str | None = None) -> list[dict[str, object]]:
         """Scopée par le client de l'instance exécutée (`JOIN`, pas
@@ -1470,4 +1656,45 @@ class EtatPostgres:
                 erreur,
                 termine_le,
             ) in lignes
+        ]
+
+    def lister_evenements_generation(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Tous les évènements de tous les jobs (filtrés par client), `job_id` explicite —
+        matière première des KPI d'agrégat (page Analytique). `evenements_generation` n'a
+        pas de colonne `client_id` propre : jointure sur `jobs_generation` pour filtrer."""
+        requete = sql.SQL(
+            "SELECT e.job_id, e.ordre, e.agent, e.statut FROM {} e JOIN {} j ON j.id = e.job_id WHERE 1 = 1"
+        ).format(self._table("evenements_generation"), self._table("jobs_generation"))
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND j.client_id = %s")
+            parametres.append(client_id)
+        requete += sql.SQL(" ORDER BY e.job_id, e.ordre")
+
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(requete, parametres).fetchall()
+        return [
+            {"job_id": job_id, "ordre": ordre, "agent": agent, "statut": statut}
+            for job_id, ordre, agent, statut in lignes
+        ]
+
+    def lister_tentatives_generation(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Toutes les tentatives de tous les jobs (filtrées par client) — seulement
+        `code_candidat`, pour les KPI d'agrégat (détection de stagnation). Même jointure
+        que `lister_evenements_generation` (`tentatives_generation` n'a pas non plus de
+        colonne `client_id`)."""
+        requete = sql.SQL(
+            "SELECT t.job_id, t.numero, t.code_candidat FROM {} t JOIN {} j ON j.id = t.job_id WHERE 1 = 1"
+        ).format(self._table("tentatives_generation"), self._table("jobs_generation"))
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND j.client_id = %s")
+            parametres.append(client_id)
+        requete += sql.SQL(" ORDER BY t.job_id, t.numero")
+
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(requete, parametres).fetchall()
+        return [
+            {"job_id": job_id, "numero": numero, "code_candidat": code_candidat}
+            for job_id, numero, code_candidat in lignes
         ]

@@ -37,6 +37,7 @@ import {
   prismeKeys,
   useIngererInstance,
   useModifierInstance,
+  useCreerScenario,
   useImporterViaAdaptateur,
   useImporterFichierTableur,
   useImporterFichiersCsv,
@@ -86,6 +87,10 @@ interface ContrainteLigne {
   duree: string;
   echeance: string;
   competence: string;
+  // disponibilite_ressource : saisie en chaîne séparée par virgules ("0,3,7"),
+  // parsée en number[] à la soumission — même principe que les autres champs.
+  joursIndisponibles: string;
+  joursSemaineIndisponibles: string;
 }
 
 export interface ObjectifLigne {
@@ -125,6 +130,8 @@ function nouvelleContrainte(): ContrainteLigne {
     duree: "",
     echeance: "",
     competence: "",
+    joursIndisponibles: "",
+    joursSemaineIndisponibles: "",
   };
 }
 export function nouvelObjectif(): ObjectifLigne {
@@ -194,6 +201,15 @@ export function construireObjectifs(objectifs: ObjectifLigne[]): Objectif[] {
   });
 }
 
+// "0, 3,7" -> [0, 3, 7] — même principe que competencesTexte pour les ressources :
+// une chaîne libre séparée par virgules, parsée à la soumission, jamais un composant dédié.
+function parserListeEntiers(texte: string): number[] {
+  return texte
+    .split(",")
+    .map((partie) => Number(partie.trim()))
+    .filter((n) => Number.isInteger(n));
+}
+
 function construireInstance(
   taches: TacheLigne[],
   ressources: RessourceLigne[],
@@ -234,6 +250,23 @@ function construireInstance(
             return { type: "echeance", tache: c.tache, echeance: Number(c.echeance) };
           case "competence_requise":
             return { type: "competence_requise", tache: c.tache, competence: c.competence };
+          case "changement_serie":
+            return {
+              type: "changement_serie",
+              ressource: c.ressource,
+              tache_avant: c.avant,
+              tache_apres: c.apres,
+              duree_setup: Number(c.duree),
+            };
+          case "disponibilite_ressource": {
+            const joursSemaine = parserListeEntiers(c.joursSemaineIndisponibles);
+            return {
+              type: "disponibilite_ressource",
+              ressource: c.ressource,
+              jours_indisponibles: parserListeEntiers(c.joursIndisponibles),
+              ...(joursSemaine.length > 0 ? { jours_semaine_indisponibles: joursSemaine } : {}),
+            };
+          }
         }
       })
       .concat(contraintesNonEditables),
@@ -267,6 +300,7 @@ export function IngestionDialog({
   open,
   onOpenChange,
   instanceAEditer,
+  scenarioDeBase,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -276,10 +310,17 @@ export function IngestionDialog({
   // Absent = formulaire vierge pour une nouvelle instance, comportement
   // inchangé.
   instanceAEditer?: InstanceDetail;
+  // Instance servant de point de départ pour créer un scénario comparatif
+  // (bouton "Créer un scénario", onglet Scénarios) — préremplit le
+  // formulaire exactement comme instanceAEditer, mais la soumission crée une
+  // NOUVELLE instance rattachée au même groupe, jamais une modification en
+  // place. Mutuellement exclusif avec instanceAEditer en pratique.
+  scenarioDeBase?: InstanceDetail;
 }) {
   const queryClient = useQueryClient();
   const ingerer = useIngererInstance();
   const modifier = useModifierInstance();
+  const creerScenario = useCreerScenario();
   const importer = useImporterViaAdaptateur();
   const importerFichier = useImporterFichierTableur();
   const importerCsv = useImporterFichiersCsv();
@@ -289,28 +330,32 @@ export function IngestionDialog({
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
+  // Même préremplissage pour "Modifier" et "Créer un scénario" — seul ce qui
+  // se passe à la soumission diffère (voir soumettreTRCO).
+  const instanceDepart = instanceAEditer ?? scenarioDeBase;
+
   const [clientId, setClientId] = useState(
-    instanceAEditer?.client_id ?? utilisateur?.client_id ?? "",
+    instanceDepart?.client_id ?? utilisateur?.client_id ?? "",
   );
   const [taches, setTaches] = useState<TacheLigne[]>(
-    instanceAEditer ? instanceAEditer.taches.map(tacheVersLigne) : [nouvelleTache()],
+    instanceDepart ? instanceDepart.taches.map(tacheVersLigne) : [nouvelleTache()],
   );
   const [ressources, setRessources] = useState<RessourceLigne[]>(
-    instanceAEditer ? instanceAEditer.ressources.map(ressourceVersLigne) : [nouvelleRessource()],
+    instanceDepart ? instanceDepart.ressources.map(ressourceVersLigne) : [nouvelleRessource()],
   );
   const [contraintes, setContraintes] = useState<ContrainteLigne[]>(
-    instanceAEditer
-      ? instanceAEditer.contraintes.filter(estContrainteEditable).map(contrainteVersLigne)
+    instanceDepart
+      ? instanceDepart.contraintes.filter(estContrainteEditable).map(contrainteVersLigne)
       : [],
   );
-  // Contraintes présentes sur l'instance éditée mais que ce formulaire ne
-  // sait pas éditer (capacite/disponibilite_ressource) — conservées telles
-  // quelles et réinjectées à la soumission, jamais perdues silencieusement.
+  // Contraintes présentes sur l'instance de départ mais que ce formulaire ne
+  // sait pas éditer — conservées telles quelles et réinjectées à la
+  // soumission, jamais perdues silencieusement.
   const [contraintesNonEditables] = useState<Contrainte[]>(
-    instanceAEditer ? instanceAEditer.contraintes.filter((c) => !estContrainteEditable(c)) : [],
+    instanceDepart ? instanceDepart.contraintes.filter((c) => !estContrainteEditable(c)) : [],
   );
   const [objectifs, setObjectifs] = useState<ObjectifLigne[]>(
-    instanceAEditer ? instanceAEditer.objectifs.map(objectifVersLigne) : [nouvelObjectif()],
+    instanceDepart ? instanceDepart.objectifs.map(objectifVersLigne) : [nouvelObjectif()],
   );
   const [source, setSource] = useState<string>(SOURCES_IMPORT[0].id);
   const [fichier, setFichier] = useState<File | null>(null);
@@ -321,34 +366,34 @@ export function IngestionDialog({
   const [fichierTachesCsv, setFichierTachesCsv] = useState<File | null>(null);
   const [fichierRessourcesCsv, setFichierRessourcesCsv] = useState<File | null>(null);
   const [fichierContraintesCsv, setFichierContraintesCsv] = useState<File | null>(null);
+  const [fichierCommandesCsv, setFichierCommandesCsv] = useState<File | null>(null);
   const inputTachesCsvRef = useRef<HTMLInputElement>(null);
   const inputRessourcesCsvRef = useRef<HTMLInputElement>(null);
   const inputContraintesCsvRef = useRef<HTMLInputElement>(null);
+  const inputCommandesCsvRef = useRef<HTMLInputElement>(null);
   const [cheminDossierCsvLocal, setCheminDossierCsvLocal] = useState("");
   // Étiquette libre partagée par les 6 canaux d'ingestion, pour retrouver/
   // regrouper des instances liées (réingestions successives d'un même
   // atelier après un aléa) — voir InstanceInfo.nom_projet. Un seul champ,
   // rendu une fois au-dessus des onglets, quel que soit celui utilisé pour
   // soumettre.
-  const [nomProjet, setNomProjet] = useState(instanceAEditer?.nom_projet ?? "");
+  const [nomProjet, setNomProjet] = useState(instanceDepart?.nom_projet ?? "");
   // Vocabulaire fermé pour le menu/les suggestions (contrairement à
   // nom_projet), mais avec échappatoire "_autre" (sentinel local, jamais
   // envoyé tel quel) vers secteurActiviteAutre pour un secteur non listé —
   // voir secteurActiviteEffectif.
   const secteurConnuAEditer = (Object.keys(LABELS_SECTEUR_ACTIVITE) as string[]).includes(
-    instanceAEditer?.secteur_activite ?? "",
+    instanceDepart?.secteur_activite ?? "",
   );
   const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "_autre" | "">(
-    instanceAEditer?.secteur_activite
+    instanceDepart?.secteur_activite
       ? secteurConnuAEditer
-        ? (instanceAEditer.secteur_activite as SecteurActivite)
+        ? (instanceDepart.secteur_activite as SecteurActivite)
         : "_autre"
       : "",
   );
   const [secteurActiviteAutre, setSecteurActiviteAutre] = useState(
-    instanceAEditer?.secteur_activite && !secteurConnuAEditer
-      ? instanceAEditer.secteur_activite
-      : "",
+    instanceDepart?.secteur_activite && !secteurConnuAEditer ? instanceDepart.secteur_activite : "",
   );
   const secteurActiviteEffectif =
     secteurActivite === "_autre"
@@ -381,13 +426,16 @@ export function IngestionDialog({
     setFichierTachesCsv(null);
     setFichierRessourcesCsv(null);
     setFichierContraintesCsv(null);
+    setFichierCommandesCsv(null);
     if (inputTachesCsvRef.current) inputTachesCsvRef.current.value = "";
     if (inputRessourcesCsvRef.current) inputRessourcesCsvRef.current.value = "";
     if (inputContraintesCsvRef.current) inputContraintesCsvRef.current.value = "";
+    if (inputCommandesCsvRef.current) inputCommandesCsvRef.current.value = "";
     setCheminDossierCsvLocal("");
     setSucces(null);
     ingerer.reset();
     modifier.reset();
+    creerScenario.reset();
     importer.reset();
     importerFichier.reset();
     importerCsv.reset();
@@ -410,9 +458,15 @@ export function IngestionDialog({
     setSucces(data);
     queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
     queryClient.invalidateQueries({ queryKey: prismeKeys.instance(data.instance_id) });
-    executer.mutate(data.instance_id, {
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: prismeKeys.executions() }),
-    });
+    if (scenarioDeBase) {
+      queryClient.invalidateQueries({
+        queryKey: prismeKeys.comparaisonScenarios(scenarioDeBase.instance_id),
+      });
+    }
+    executer.mutate(
+      { instanceId: data.instance_id },
+      { onSuccess: () => queryClient.invalidateQueries({ queryKey: prismeKeys.executions() }) },
+    );
   }
 
   function soumettreTRCO() {
@@ -424,6 +478,13 @@ export function IngestionDialog({
       contraintesNonEditables,
     );
     const nomProjetSoumis = nomProjet.trim() || undefined;
+    if (scenarioDeBase) {
+      creerScenario.mutate(
+        { instanceId: scenarioDeBase.instance_id, instance, nomProjet: nomProjetSoumis },
+        { onSuccess: onIngestionReussie },
+      );
+      return;
+    }
     if (instanceAEditer) {
       modifier.mutate(
         {
@@ -467,6 +528,7 @@ export function IngestionDialog({
           taches: fichierTachesCsv,
           ressources: fichierRessourcesCsv,
           contraintes: fichierContraintesCsv,
+          commandes: fichierCommandesCsv ?? undefined,
         },
         nomProjet: nomProjet.trim() || undefined,
         secteurActivite: secteurActiviteEffectif,
@@ -511,6 +573,7 @@ export function IngestionDialog({
 
   const erreur = (ingerer.error ??
     modifier.error ??
+    creerScenario.error ??
     importer.error ??
     importerFichier.error ??
     importerCsv.error ??
@@ -519,6 +582,7 @@ export function IngestionDialog({
   const enCours =
     ingerer.isPending ||
     modifier.isPending ||
+    creerScenario.isPending ||
     importer.isPending ||
     importerFichier.isPending ||
     importerCsv.isPending ||
@@ -529,9 +593,22 @@ export function IngestionDialog({
     <Dialog open={open} onOpenChange={fermer}>
       <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{instanceAEditer ? "Modifier l'instance" : "Nouvelle instance"}</DialogTitle>
+          <DialogTitle>
+            {scenarioDeBase
+              ? "Créer un scénario"
+              : instanceAEditer
+                ? "Modifier l'instance"
+                : "Nouvelle instance"}
+          </DialogTitle>
           <DialogDescription>
-            {instanceAEditer ? (
+            {scenarioDeBase ? (
+              <>
+                Formulaire prérempli à partir de{" "}
+                <span className="font-mono text-xs">{scenarioDeBase.instance_id}</span>. La
+                soumission crée une <strong>nouvelle</strong> instance, rattachée au même groupe de
+                scénarios comparatifs — l'originale n'est jamais modifiée.
+              </>
+            ) : instanceAEditer ? (
               <>
                 Formulaire prérempli à partir de{" "}
                 <span className="font-mono text-xs">{instanceAEditer.instance_id}</span>. Les
@@ -663,7 +740,7 @@ export function IngestionDialog({
               </p>
             </div>
 
-            {instanceAEditer ? (
+            {instanceAEditer || scenarioDeBase ? (
               <div className="space-y-5">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-muted-foreground">Client :</span>
@@ -672,9 +749,9 @@ export function IngestionDialog({
 
                 {contraintesNonEditables.length > 0 && (
                   <p className="rounded-lg border border-border/50 bg-muted/20 p-2 text-xs text-muted-foreground">
-                    {contraintesNonEditables.length} contrainte(s) supplémentaire(s) (capacité,
-                    disponibilité de ressource) ne sont pas éditables dans ce formulaire — elles
-                    seront conservées telles quelles à l'enregistrement.
+                    {contraintesNonEditables.length} contrainte(s) supplémentaire(s) ne sont pas
+                    éditables dans ce formulaire — elles seront conservées telles quelles à
+                    l'enregistrement.
                   </p>
                 )}
 
@@ -693,7 +770,9 @@ export function IngestionDialog({
 
                 <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
 
-                {erreur && modifier.error && <ErreursAPI erreur={erreur} />}
+                {erreur && (modifier.error ?? creerScenario.error) && (
+                  <ErreursAPI erreur={erreur} />
+                )}
 
                 <DialogFooter>
                   <Button variant="outline" onClick={() => fermer(false)}>
@@ -701,7 +780,13 @@ export function IngestionDialog({
                   </Button>
                   <Button onClick={soumettreTRCO} disabled={enCours}>
                     <FileJson className="mr-2 h-4 w-4" />
-                    {modifier.isPending ? "Enregistrement..." : "Enregistrer les modifications"}
+                    {scenarioDeBase
+                      ? creerScenario.isPending
+                        ? "Création..."
+                        : "Créer le scénario"
+                      : modifier.isPending
+                        ? "Enregistrement..."
+                        : "Enregistrer les modifications"}
                   </Button>
                 </DialogFooter>
               </div>
@@ -914,6 +999,27 @@ export function IngestionDialog({
                           </a>
                         </span>
                       ))}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="fichier_csv_commandes">Commandes (.csv, optionnel)</Label>
+                    <Input
+                      id="fichier_csv_commandes"
+                      ref={inputCommandesCsvRef}
+                      type="file"
+                      accept=".csv,text/csv"
+                      onChange={(e) => setFichierCommandesCsv(e.target.files?.[0] ?? null)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Quatrième fichier optionnel — colonnes requises :{" "}
+                      <code className="font-mono">id,taches</code> (
+                      <code className="font-mono">taches</code> séparées par{" "}
+                      <code className="font-mono">;</code>), optionnelles :{" "}
+                      <code className="font-mono">client,date_limite</code>. Dérive une échéance par
+                      tâche liée (la plus contraignante si une tâche appartient à plusieurs
+                      commandes) — une échéance déjà déclarée dans le fichier Contraintes l'emporte
+                      toujours.
                     </p>
                   </div>
 
@@ -1281,6 +1387,8 @@ function SectionContraintes({
                 </SelectItem>
                 <SelectItem value="echeance">Échéance</SelectItem>
                 <SelectItem value="competence_requise">Compétence requise</SelectItem>
+                <SelectItem value="changement_serie">Changement de série</SelectItem>
+                <SelectItem value="disponibilite_ressource">Disponibilité ressource</SelectItem>
               </SelectContent>
             </Select>
 
@@ -1358,6 +1466,58 @@ function SectionContraintes({
                 />
               </>
             )}
+            {c.type === "changement_serie" && (
+              <>
+                <ChampSelectId
+                  placeholder="ressource"
+                  value={c.ressource}
+                  options={ressources}
+                  onChange={(v) => majLigne(i, { ressource: v })}
+                />
+                <ChampSelectId
+                  placeholder="avant"
+                  value={c.avant}
+                  options={taches}
+                  onChange={(v) => majLigne(i, { avant: v })}
+                />
+                <ChampSelectId
+                  placeholder="après"
+                  value={c.apres}
+                  options={taches}
+                  onChange={(v) => majLigne(i, { apres: v })}
+                />
+                <Input
+                  placeholder="durée setup (jours)"
+                  type="number"
+                  min={0}
+                  value={c.duree}
+                  onChange={(e) => majLigne(i, { duree: e.target.value })}
+                  className="w-36"
+                />
+              </>
+            )}
+            {c.type === "disponibilite_ressource" && (
+              <>
+                <ChampSelectId
+                  placeholder="ressource"
+                  value={c.ressource}
+                  options={ressources}
+                  onChange={(v) => majLigne(i, { ressource: v })}
+                />
+                <Input
+                  placeholder="jours indisponibles (ex: 0,3,7)"
+                  value={c.joursIndisponibles}
+                  onChange={(e) => majLigne(i, { joursIndisponibles: e.target.value })}
+                  className="w-48"
+                />
+                <Input
+                  placeholder="motif hebdo, jours 0-6 (ex: 5,6)"
+                  value={c.joursSemaineIndisponibles}
+                  onChange={(e) => majLigne(i, { joursSemaineIndisponibles: e.target.value })}
+                  className="w-56"
+                />
+              </>
+            )}
 
             <Button
               type="button"
@@ -1404,25 +1564,23 @@ function ressourceVersLigne(r: Ressource): RessourceLigne {
 // convertir via contrainteVersLigne serait non exhaustif ; les ignorer sans
 // les préserver ailleurs les supprimerait silencieusement à l'enregistrement
 // d'une instance qui en a déjà — voir contraintesNonEditables plus bas.
+const TYPES_CONTRAINTE_EDITABLES = [
+  "precedence",
+  "compatibilite_ressource_tache",
+  "echeance",
+  "competence_requise",
+  "changement_serie",
+  "disponibilite_ressource",
+] as const;
+
 function estContrainteEditable(
   c: Contrainte,
-): c is Extract<
-  Contrainte,
-  { type: "precedence" | "compatibilite_ressource_tache" | "echeance" | "competence_requise" }
-> {
-  return (
-    c.type === "precedence" ||
-    c.type === "compatibilite_ressource_tache" ||
-    c.type === "echeance" ||
-    c.type === "competence_requise"
-  );
+): c is Extract<Contrainte, { type: (typeof TYPES_CONTRAINTE_EDITABLES)[number] }> {
+  return (TYPES_CONTRAINTE_EDITABLES as readonly string[]).includes(c.type);
 }
 
 function contrainteVersLigne(
-  c: Extract<
-    Contrainte,
-    { type: "precedence" | "compatibilite_ressource_tache" | "echeance" | "competence_requise" }
-  >,
+  c: Extract<Contrainte, { type: (typeof TYPES_CONTRAINTE_EDITABLES)[number] }>,
 ): ContrainteLigne {
   const base = nouvelleContrainte();
   switch (c.type) {
@@ -1452,6 +1610,25 @@ function contrainteVersLigne(
         type: "competence_requise",
         tache: c.tache,
         competence: c.competence,
+      };
+    case "changement_serie":
+      return {
+        ...base,
+        clef: idLocal(),
+        type: "changement_serie",
+        ressource: c.ressource,
+        avant: c.tache_avant,
+        apres: c.tache_apres,
+        duree: c.duree_setup.toString(),
+      };
+    case "disponibilite_ressource":
+      return {
+        ...base,
+        clef: idLocal(),
+        type: "disponibilite_ressource",
+        ressource: c.ressource,
+        joursIndisponibles: c.jours_indisponibles.join(","),
+        joursSemaineIndisponibles: (c.jours_semaine_indisponibles ?? []).join(","),
       };
   }
 }

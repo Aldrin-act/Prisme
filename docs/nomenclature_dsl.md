@@ -96,15 +96,28 @@ Le DSL PRISME utilise une **terminologie française précise** pour tous les con
 
 5. **Disponibilité Ressource** (`disponibilite_ressource`)
    - Jours (relatifs, jamais une date calendaire) où une ressource est indisponible — aucune
-     opération ne peut s'y dérouler ces jours-là. Un calendrier global d'atelier (jours fériés
-     communs) s'exprime en déclarant cette contrainte identiquement pour chaque ressource.
+     opération ne peut s'y dérouler ces jours-là. Deux modes, combinables : `jours_indisponibles`
+     (liste explicite) et/ou `jours_semaine_indisponibles` (motif récurrent sur un cycle de 7
+     jours depuis le jour 0 de l'instance — ex. repos hebdomadaire). Un calendrier global
+     d'atelier (jours fériés/repos communs) s'exprime en déclarant cette contrainte identiquement
+     pour chaque ressource.
 
 6. **Taille de Lot** (`taille_lot`)
    - Borne (`lot_min`/`lot_max`) la quantité (`Tache.quantite`) attendue pour une tâche —
      validation statique de la donnée d'entrée, sans aucun effet sur les décisions du solveur.
 
+7. **Changement de Série** (`changement_serie`)
+   - Sur une ressource, temps de changement (`duree_setup`) exigé entre la fin de `tache_avant`
+     et le début de `tache_apres` si le solveur les enchaîne dans cet ordre sur cette ressource.
+     Dirigée (pas symétrique), sans effet si les deux tâches ne se retrouvent jamais consécutives
+     sur cette ressource — n'impose aucun ordre par elle-même (`Precedence` garde ce rôle).
+
 > Cette liste est en retard sur `dsl/schema/contraintes.py` pour `capacite`/`incompatibilite`
 > (préexistant, pas corrigé ici) — voir le schéma directement pour la liste exhaustive à jour.
+
+En amont de l'ingestion, `adapters/commande_derivation.py` peut aussi **dériver** des `Echeance`
+à partir d'objets `Commande` (id, tâches, client, date limite) — jamais un axe du DSL lui-même,
+une échéance explicite déclarée sur la tâche l'emporte toujours sur une dérivée.
 
 **Exemple** :
 ```json

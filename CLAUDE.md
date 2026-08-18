@@ -110,6 +110,13 @@ found and fixed then.
   `validation_engine/` — both §6.7 guardrails run on the **host**; it registers the loaded module in
   `sys.modules` before `exec_module` (`dataclasses` needs `cls.__module__` resolvable) — **verified
   (PH0-T4):** omitting this crashed every frozen `@dataclass` solver on the first real Docker run.
+  `resoudre`'s contract (Phase 2 gap-analysis, `docs/plan_implementation_fonctionnalites_aps.md`)
+  is `resoudre(instance, planning_precedent=None, horizon_gele_jours=0) -> Planning | None` — the
+  two new params are optional/defaulted so every already-registered solver (9 artifacts at time
+  of writing, all still the 1-param signature) keeps working unchanged for a normal execution;
+  requesting `horizon_gele_jours>0` against one of them fails explicitly (`sandbox/runner.py::
+  _solveur_supporte_horizon_gele`, a pure `ast.parse` of `ArtefactSolveur.code_source`, never an
+  exec) rather than silently falling back to a full replan — never automatic regeneration either.
 - **Étape 8 — API + adapters** (`api/`, `adapters/`): a multi-tenant surface — **Instance**
   (`api/etat.py`) is the sole primary entity: it owns its own execution/planning history directly
   and is what execution triggers on (**`POST /execution/{instance_id}`**, solver lookup by
@@ -169,17 +176,33 @@ resource processes up to N operations concurrently — `AddCumulative` in genera
 instead of `AddNoOverlap`; implicit capacity 1, i.e. today's behavior, if absent),
 `ContrainteIncompatibilite` (two named tasks can never share a resource, regardless of time —
 independent of any temporal overlap check), `ContrainteDisponibiliteRessource` (a resource is
-unavailable on listed relative days — never a calendar date, converting a real calendar/holiday
-list to days stays an adapter's job upstream of ingestion; a global workshop calendar is *not* a
-separate mechanism, it's the same constraint declared identically for every resource — in
-generated CP-SAT code, a fixed interval per unavailable day added to that resource's own
-`AddNoOverlap`/`AddCumulative` list, at full capacity demand), `ContrainteTailleLot` (bound-checks
-`Tache.quantite` against `lot_min`/`lot_max` — a static value check, no solver encoding: verified
-entirely by `feasibility_checker.py`, never read by generated code). `Tache.priorite` (1–5) is
-consumed by generated code as a **tie-break only** — never a weight on the primary objective,
-never a constraint — see "Priorité des tâches" in `generation_solveur.md`.
+unavailable on listed relative days and/or on a recurring `jours_semaine_indisponibles` weekly
+pattern — never a calendar date, converting a real calendar/holiday list to days stays an
+adapter's job upstream of ingestion; a global workshop calendar is *not* a separate mechanism,
+it's the same constraint declared identically for every resource — in generated CP-SAT code, a
+fixed interval per unavailable day added to that resource's own `AddNoOverlap`/`AddCumulative`
+list, at full capacity demand), `ContrainteTailleLot` (bound-checks `Tache.quantite` against
+`lot_min`/`lot_max` — a static value check, no solver encoding: verified entirely by
+`feasibility_checker.py`, never read by generated code), `ContrainteChangementSerie` (setup time: a
+directed `ressource`/`tache_avant`/`tache_apres`/`duree_setup` — an extra gap required between the
+two only if the solver chooses to sequence them back-to-back on that resource, never an ordering
+constraint itself, that stays `Precedence`'s job; generated CP-SAT code encodes it deliberately
+**conservatively** via a reified order boolean — the setup gap is enforced whenever `tache_avant`
+precedes `tache_apres` in time on the resource at all, not only when strictly adjacent, traded off
+against exact `AddCircuit`-based sequencing for LLM-generation reliability). `Tache.priorite`
+(1–5) is consumed by generated code as a **tie-break only** — never a weight on the primary
+objective, never a constraint — see "Priorité des tâches" in `generation_solveur.md`.
 `Tache.statut`/`Ressource.type` remain purely informative fields (no constraint or objective reads
-them). Setup times stay **out of scope** by design; guard against further scope creep.
+them).
+
+Order intake also feeds the DSL indirectly: `adapters/commande_derivation.py` derives `Echeance`
+constraints from `Commande` (id, tasks, client, deadline) objects — explicit `Echeance` always
+wins over a derived one, tightest deadline wins when a task belongs to several commandes; wired
+into the CSV/JSON adapters, never a DSL-level concept itself. Separately, `groupe_scenario_id` (a
+self-referencing FK on `instances_trco`, `ON DELETE SET NULL`) lets several what-if instance
+variants be grouped for side-by-side comparison (`POST/GET .../scenarios`,
+`api/comparaison_scenarios.py`) — unrelated to the removed `instance_parente_id` lineage concept
+and to `SourceDonnees`; purely an API/storage-layer grouping, never touches the DSL.
 
 ## Module map
 

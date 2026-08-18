@@ -29,6 +29,12 @@ liste à l'exécution et combinera ce qu'elle contient, jamais un objectif
 unique supposé d'avance — voir la section "Objectifs" de la mission
 ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
 
+- Quel que soit l'algorithme choisi ci-dessous, le plan doit prévoir comment `resoudre` prend en
+  compte `planning_precedent`/`horizon_gele_jours` (replanification à horizon glissant, voir la
+  mission ci-dessus) : toute opération de `planning_precedent` dont `debut < horizon_gele_jours`
+  reste fixée (même ressource, même début) dans le nouveau planning, tant que le couple
+  (tâche, ressource) reste compatible dans l'instance courante — sans effet si
+  `planning_precedent` est absent ou `horizon_gele_jours` vaut 0.
 - Si l'algorithme recommandé est `cp_sat` : conçois un modèle CP-SAT
   classique avec `ortools.sat.python.cp_model` (variables d'intervalle,
   contraintes de précédence/non-chevauchement, objectif combinant par somme
@@ -41,9 +47,16 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   littéraux de présence des deux tâches pour chaque ressource candidate
   commune ; si elle contient des `ContrainteDisponibiliteRessource`, ajoute
   un intervalle fixe par jour indisponible dans la même liste que
-  `AddNoOverlap`/`AddCumulative` de la ressource concernée. Si des tâches
-  ont une `priorite` déclarée, ajoute un terme de départage à l'objectif
-  (jamais au détriment de sa valeur principale — voir la mission).
+  `AddNoOverlap`/`AddCumulative` de la ressource concernée. Si elle contient
+  des `ContrainteChangementSerie`, ajoute pour chaque paire (`tache_avant`,
+  `tache_apres`, `ressource`) un booléen d'ordre réifié qui force
+  `debut(tache_apres) >= fin(tache_avant) + duree_setup` quand les deux sont
+  présentes sur cette ressource dans cet ordre (encodage volontairement
+  conservateur — un délai est imposé dès que `tache_avant` précède
+  `tache_apres` dans le temps sur la ressource, pas seulement si elles sont
+  strictement consécutives ; voir la mission pour l'exemple CP-SAT complet).
+  Si des tâches ont une `priorite` déclarée, ajoute un terme de départage à
+  l'objectif (jamais au détriment de sa valeur principale — voir la mission).
 - Pour tout autre algorithme (génétique, ACO, recuit simulé, tabou,
   glouton + recherche locale, règles de dispatching) : adapte les mêmes
   champs à cet algorithme — `variables` devient la représentation de la
@@ -73,7 +86,12 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
      actives (nouveau départ autorisé tant qu'il reste sous `capacite`, pas
      seulement "libre/occupée"). Si elle contient des
      `ContrainteIncompatibilite`, exclut des candidates toute ressource déjà
-     occupée — à n'importe quel instant — par la tâche incompatible ;
+     occupée — à n'importe quel instant — par la tâche incompatible. Si elle
+     contient des `ContrainteChangementSerie` et que la dernière tâche
+     placée sur la ressource candidate est `tache_avant` d'une de ces
+     contraintes pour la tâche courante (`tache_apres`), repousse l'heure de
+     début la plus tôt possible d'au moins `duree_setup` après la fin de
+     cette dernière tâche ;
   4. Résultat : **toute** solution décodée est légale par construction ; la
      fitness (le score que la recherche optimise) se limite au makespan de
      ce planning déjà légal, sans terme de pénalité pour les contraintes

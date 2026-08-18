@@ -17,7 +17,10 @@ from fastapi.testclient import TestClient
 from api.app import app
 from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, obtenir_etat
+from dsl.schema import OperationPlanifiee, Planning
+from sandbox.runner import ResultatExecution
 from solver_store.registry import Registre
+from validation_engine.feasibility_checker import ResultatFaisabilite
 
 
 @pytest.fixture
@@ -193,3 +196,104 @@ def test_modifier_instance_met_a_jour_le_nom_projet(client_isole: tuple[TestClie
 
     assert reponse.status_code == 200
     assert client.get(f"/ingestion/{instance_id}").json()["nom_projet"] == "Ligne B"
+
+
+# --- Scénarios comparatifs (what-if) --------------------------------------
+
+
+def test_creer_scenario_ajoute_une_instance_variante(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    client, etat_test = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    reponse = client.post(f"/ingestion/{instance_id}/scenarios", json=_PAYLOAD_MODIFIE)
+
+    assert reponse.status_code == 200
+    scenario_id = reponse.json()["instance_id"]
+    assert scenario_id != instance_id
+    assert scenario_id in etat_test.instances
+    assert etat_test.groupes_scenario[scenario_id] == instance_id
+
+
+def test_creer_scenario_instance_de_base_inconnue_404(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    client, _ = client_isole
+    reponse = client.post("/ingestion/id-inexistant/scenarios", json=_PAYLOAD_MODIFIE)
+    assert reponse.status_code == 404
+
+
+def test_creer_scenario_payload_invalide_422(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    payload_invalide = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1"}],
+        "contraintes": [],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+    reponse = client.post(f"/ingestion/{instance_id}/scenarios", json=payload_invalide)
+
+    assert reponse.status_code == 422
+
+
+def test_comparer_scenarios_sans_execution_donne_des_metriques_nulles(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+    scenario_id = client.post(f"/ingestion/{instance_id}/scenarios", json=_PAYLOAD_MODIFIE).json()["instance_id"]
+
+    reponse = client.get(f"/ingestion/{instance_id}/scenarios/comparaison")
+
+    assert reponse.status_code == 200
+    corps = reponse.json()
+    scenarios_par_id = {s["instance_id"]: s for s in corps["scenarios"]}
+    assert set(scenarios_par_id) == {instance_id, scenario_id}
+    assert all(s["metriques"] is None for s in scenarios_par_id.values())
+    assert scenarios_par_id[instance_id]["est_instance_de_base"] is True
+    assert scenarios_par_id[scenario_id]["est_instance_de_base"] is False
+
+
+def test_comparer_scenarios_instance_inconnue_404(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    client, _ = client_isole
+    reponse = client.get("/ingestion/id-inexistant/scenarios/comparaison")
+    assert reponse.status_code == 404
+
+
+def test_instance_sans_scenario_se_compare_a_elle_meme(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    """Une instance qui n'a jamais eu de variante créée reste un groupe d'un
+    seul membre — elle-même — jamais une erreur."""
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    reponse = client.get(f"/ingestion/{instance_id}/scenarios/comparaison")
+
+    assert reponse.status_code == 200
+    corps = reponse.json()
+    assert [s["instance_id"] for s in corps["scenarios"]] == [instance_id]
+
+
+def test_comparer_scenarios_calcule_les_metriques_de_la_derniere_execution(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    """Injecte directement un résultat d'exécution (pas de vrai sandbox ici,
+    couvert par les tests bout-en-bout Docker ailleurs) pour vérifier que la
+    comparaison calcule bien les métriques dessus, sans jamais ré-exécuter."""
+    client, etat_test = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    planning = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    resultat = ResultatExecution(
+        planning=planning, verdict_faisabilite=ResultatFaisabilite(violations=()), erreur=None
+    )
+    etat_test.enregistrer_execution("solveur-factice", instance_id, resultat)
+
+    reponse = client.get(f"/ingestion/{instance_id}/scenarios/comparaison")
+
+    assert reponse.status_code == 200
+    scenario = reponse.json()["scenarios"][0]
+    assert scenario["metriques"] == {
+        "makespan": 10,
+        "taux_utilisation_par_ressource": {"R1": 100.0},
+        "taches_en_retard": [],
+    }
+    assert scenario["execution_id"] is not None

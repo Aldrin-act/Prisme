@@ -334,6 +334,39 @@ def test_disponibilite_ressource_vers_ressource_inconnue_rejetee() -> None:
         charger_instance(payload)
 
 
+def test_disponibilite_ressource_motif_hebdomadaire_seul_est_acceptee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1", "jours_semaine_indisponibles": [5, 6]},
+        ]
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 2
+
+
+def test_disponibilite_ressource_les_deux_champs_vides_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1"},
+        ]
+    )
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_disponibilite_ressource_motif_hebdomadaire_hors_bornes_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1", "jours_semaine_indisponibles": [7]},
+        ]
+    )
+    with pytest.raises(ValidationError, match="entre 0 et 6"):
+        charger_instance(payload)
+
+
 def test_taille_lot_valide_acceptee() -> None:
     payload = _instance_minimale(
         contraintes=[
@@ -364,4 +397,97 @@ def test_taille_lot_vers_tache_inconnue_rejetee() -> None:
         ]
     )
     with pytest.raises(ValidationError, match="taille de lot référence une tâche inconnue"):
+        charger_instance(payload)
+
+
+def test_changement_serie_valide_acceptee() -> None:
+    payload = _instance_minimale(
+        taches=[{"id": "T1"}, {"id": "T2"}],
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 5},
+            {
+                "type": "changement_serie",
+                "ressource": "R1",
+                "tache_avant": "T1",
+                "tache_apres": "T2",
+                "duree_setup": 2,
+            },
+        ],
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 3
+
+
+def test_changement_serie_duree_nulle_rejetee() -> None:
+    payload = _instance_minimale(
+        taches=[{"id": "T1"}, {"id": "T2"}],
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 5},
+            {
+                "type": "changement_serie",
+                "ressource": "R1",
+                "tache_avant": "T1",
+                "tache_apres": "T2",
+                "duree_setup": 0,
+            },
+        ],
+    )
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_changement_serie_autoreference_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {
+                "type": "changement_serie",
+                "ressource": "R1",
+                "tache_avant": "T1",
+                "tache_apres": "T1",
+                "duree_setup": 2,
+            },
+        ]
+    )
+    with pytest.raises(ValidationError, match="ne peut pas nécessiter un changement de série vers elle-même"):
+        charger_instance(payload)
+
+
+def test_changement_serie_vers_ressource_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        taches=[{"id": "T1"}, {"id": "T2"}],
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 5},
+            {
+                "type": "changement_serie",
+                "ressource": "R99",
+                "tache_avant": "T1",
+                "tache_apres": "T2",
+                "duree_setup": 2,
+            },
+        ],
+    )
+    with pytest.raises(ValidationError, match="changement de série référence une ressource inconnue"):
+        charger_instance(payload)
+
+
+def test_changement_serie_vers_tache_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        taches=[{"id": "T1"}, {"id": "T2"}],
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 5},
+            {
+                "type": "changement_serie",
+                "ressource": "R1",
+                "tache_avant": "T1",
+                "tache_apres": "T99",
+                "duree_setup": 2,
+            },
+        ],
+    )
+    with pytest.raises(ValidationError, match="changement de série référence une tâche inconnue"):
         charger_instance(payload)

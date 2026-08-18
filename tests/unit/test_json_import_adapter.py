@@ -73,3 +73,43 @@ def test_traduire_tache_sans_compatibilite_rejetee_par_le_garde_fou_dsl() -> Non
     )
     with pytest.raises(ValidationError):
         traduire(payload)
+
+
+def test_traduire_derive_une_echeance_par_tache_depuis_une_commande() -> None:
+    payload = _payload_de_base(
+        commandes=[{"id": "CMD1", "taches": ["T1", "T2"], "client": "Client A", "date_limite": 20}]
+    )
+
+    instance = traduire(payload)
+
+    echeances = [c for c in instance.contraintes if c.type == "echeance"]
+    assert {(e.tache, e.echeance) for e in echeances} == {("T1", 20), ("T2", 20)}
+
+
+def test_traduire_echeance_explicite_de_la_commande_prevaut_sur_la_derivation() -> None:
+    payload = _payload_de_base(
+        contraintes=[
+            {"type": "precedence", "avant": "T1", "apres": "T2"},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 15},
+            {"type": "echeance", "tache": "T1", "echeance": 5},
+        ],
+        commandes=[{"id": "CMD1", "taches": ["T1", "T2"], "date_limite": 20}],
+    )
+
+    instance = traduire(payload)
+
+    echeances = {c.tache: c.echeance for c in instance.contraintes if c.type == "echeance"}
+    assert echeances == {"T1": 5, "T2": 20}  # T1 garde son échéance explicite, jamais 20
+
+
+def test_traduire_sans_commandes_ne_derive_aucune_echeance() -> None:
+    instance = traduire(_payload_de_base())
+
+    assert not [c for c in instance.contraintes if c.type == "echeance"]
+
+
+def test_traduire_commande_sans_taches_rejetee() -> None:
+    payload = _payload_de_base(commandes=[{"id": "CMD1", "taches": []}])
+    with pytest.raises(ErreurPayloadInvalide):
+        traduire(payload)

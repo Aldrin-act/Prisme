@@ -11,9 +11,11 @@ formats de sortie coexistent :
   comme les autres agents du pipeline.
 
 Le contrat de sortie attendu dans les deux cas — une fonction
-`resoudre(instance) -> Planning | None` (`Callable[[InstanceTRCO], Planning | None]`,
-§5.6, §6.2) — permet au code produit de se brancher directement dans
-`validation_engine.cascade.evaluer_cascade` sans adaptation.
+`resoudre(instance, planning_precedent=None, horizon_gele_jours=0) -> Planning | None`
+(reste compatible avec `Callable[[InstanceTRCO], Planning | None]`, §5.6, §6.2, puisque les deux
+derniers paramètres sont optionnels — la replanification à horizon glissant, §Phase 2) — permet au
+code produit de se brancher directement dans `validation_engine.cascade.evaluer_cascade` sans
+adaptation.
 """
 
 from __future__ import annotations

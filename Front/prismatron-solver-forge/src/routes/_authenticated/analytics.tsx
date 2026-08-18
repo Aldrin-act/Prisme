@@ -1,13 +1,24 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, EmptyState } from "@/components/app-page";
 import { BarChart3, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   useJobsGeneration,
   useSolveurs,
   useLabelsInstances,
+  useStatistiquesGeneration,
   type JobGenerationInfo,
 } from "@/integrations/prisme";
+
+const TOUS_LES_AGENTS = "tous";
 
 export const Route = createFileRoute("/_authenticated/analytics")({
   head: () => ({ meta: [{ title: "Analytique — PRISME" }] }),
@@ -42,9 +53,32 @@ function calculerStatsAgents(jobs: JobGenerationInfo[]): StatAgent[] {
   return [...parAgent.values()].sort((a, b) => b.total - a.total);
 }
 
+// Même seuil que `SEUIL_ECHECS_BOUCLE` (api/statistiques_generation.py) — un même agent en
+// échec au moins ce nombre de fois dans une génération compte comme une boucle détectée.
+const SEUIL_ECHECS_BOUCLE = 3;
+
+// Même liste que `AGENTS_CAPABLES_ECHEC` (api/statistiques_generation.py) — seuls ces nœuds
+// émettent jamais `statut="echec"` dans generation/graph.py ; filtrer "Boucles détectées" sur
+// un autre agent renvoie `null` côté serveur (non applicable, jamais un 0% trompeur).
+const AGENTS_CAPABLES_ECHEC = new Set(["test_sandbox", "validation", "documentation", "reviewer"]);
+
+function KpiTile({ label, valeur, detail }: { label: string; valeur: string; detail: string }) {
+  return (
+    <div className="rounded-xl border border-border/50 p-4">
+      <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="mt-2 text-2xl font-bold">{valeur}</div>
+      <div className="mt-1 text-xs text-muted-foreground">{detail}</div>
+    </div>
+  );
+}
+
 function AnalyticsPage() {
+  const [agentSelectionne, setAgentSelectionne] = useState<string>(TOUS_LES_AGENTS);
   const { data: jobs, isLoading } = useJobsGeneration();
   const { data: solveurs } = useSolveurs();
+  const { data: stats } = useStatistiquesGeneration(
+    agentSelectionne === TOUS_LES_AGENTS ? undefined : agentSelectionne,
+  );
   const labelParInstance = useLabelsInstances();
 
   const tousLesJobs = jobs ?? [];
@@ -62,7 +96,11 @@ function AnalyticsPage() {
       : null;
 
   const statsAgents = calculerStatsAgents(tousLesJobs);
-  const maxTotal = Math.max(1, ...statsAgents.map((s) => s.total));
+  const statsAgentsAffiches =
+    agentSelectionne === TOUS_LES_AGENTS
+      ? statsAgents
+      : statsAgents.filter((s) => s.agent === agentSelectionne);
+  const maxTotal = Math.max(1, ...statsAgentsAffiches.map((s) => s.total));
 
   const jobsRecents = [...tousLesJobs]
     .sort((a, b) => b.cree_le.localeCompare(a.cree_le))
@@ -111,13 +149,100 @@ function AnalyticsPage() {
       </div>
 
       <div className="glass mt-6 rounded-2xl p-6">
+        <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
+          <div className="text-sm font-semibold">Non-répétition (boucles)</div>
+          <Select value={agentSelectionne} onValueChange={setAgentSelectionne}>
+            <SelectTrigger className="h-8 w-44 text-xs">
+              <SelectValue placeholder="Tous les agents" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={TOUS_LES_AGENTS}>Tous les agents</SelectItem>
+              {statsAgents.map((s) => (
+                <SelectItem key={s.agent} value={s.agent} className="capitalize">
+                  {s.agent}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <p className="mb-4 text-xs text-muted-foreground">
+          Détection de non-convergence dans la boucle de réparation bornée (tests
+          sandbox/validation/debugger, max 10 tentatives) — calculé côté serveur sur toutes les
+          générations persistées en base, pas seulement celles connues du process en cours (voir
+          "Générations lancées" ci-dessus).
+          {agentSelectionne !== TOUS_LES_AGENTS && (
+            <>
+              {" "}
+              Restreint aux générations où <span className="capitalize">
+                {agentSelectionne}
+              </span>{" "}
+              est intervenu ; "Boucles détectées" ne compte alors que ses propres échecs répétés.
+            </>
+          )}
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <KpiTile
+            label="Étapes avant convergence"
+            valeur={
+              stats?.tentatives_moyennes_convergence != null
+                ? stats.tentatives_moyennes_convergence.toFixed(1)
+                : "—"
+            }
+            detail="tentatives en moyenne, sur les succès"
+          />
+          <KpiTile
+            label="Taux d'épuisement"
+            valeur={
+              stats?.taux_epuisement_boucle != null
+                ? `${stats.taux_epuisement_boucle.toFixed(0)}%`
+                : "—"
+            }
+            detail="échecs ayant atteint la borne (10/10)"
+          />
+          <KpiTile
+            label="Boucles détectées"
+            valeur={
+              agentSelectionne !== TOUS_LES_AGENTS && !AGENTS_CAPABLES_ECHEC.has(agentSelectionne)
+                ? "N/A"
+                : stats?.taux_boucles_detectees != null
+                  ? `${stats.taux_boucles_detectees.toFixed(0)}%`
+                  : "—"
+            }
+            detail={
+              agentSelectionne === TOUS_LES_AGENTS
+                ? `générations avec ≥${SEUIL_ECHECS_BOUCLE} échecs du même agent`
+                : AGENTS_CAPABLES_ECHEC.has(agentSelectionne)
+                  ? `générations avec ≥${SEUIL_ECHECS_BOUCLE} échecs de cet agent`
+                  : "cet agent ne rapporte jamais d'échec (produit toujours une sortie)"
+            }
+          />
+          <KpiTile
+            label="Diversité des actions"
+            valeur={
+              stats?.diversite_actions_moyenne != null
+                ? stats.diversite_actions_moyenne.toFixed(2)
+                : "—"
+            }
+            detail="agents uniques / évènements, en moyenne"
+          />
+          <KpiTile
+            label="Taux de stagnation"
+            valeur={stats?.taux_stagnation != null ? `${stats.taux_stagnation.toFixed(0)}%` : "—"}
+            detail="corrections du Debugger sans changement de code"
+          />
+        </div>
+      </div>
+
+      <div className="glass mt-6 rounded-2xl p-6">
         <div className="mb-1 text-sm font-semibold">Activité par agent</div>
         <p className="mb-4 text-xs text-muted-foreground">
           Nombre de passages par agent (toutes tentatives confondues) et proportion en échec, sur
           toutes les générations connues du serveur.
+          {agentSelectionne !== TOUS_LES_AGENTS && " Filtré par le sélecteur ci-dessus."}
         </p>
 
-        {!isLoading && statsAgents.length === 0 && (
+        {!isLoading && statsAgentsAffiches.length === 0 && (
           <EmptyState
             icon={BarChart3}
             title="Aucune génération pour l'instant"
@@ -126,7 +251,7 @@ function AnalyticsPage() {
         )}
 
         <div className="space-y-2.5">
-          {statsAgents.map((s) => {
+          {statsAgentsAffiches.map((s) => {
             const largeurTotale = (s.total / maxTotal) * 100;
             const largeurEchecs = s.total > 0 ? (s.echecs / s.total) * largeurTotale : 0;
             return (

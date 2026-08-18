@@ -131,14 +131,27 @@ class ContrainteIncompatibilite(BaseModel):
 
 class ContrainteDisponibiliteRessource(BaseModel):
     """La ressource `ressource` est indisponible durant les jours listés dans
-    `jours_indisponibles` — aucune opération ne peut s'y dérouler un jour
-    indisponible (même référentiel que `Echeance`/`duree` : jours relatifs,
-    jamais une date calendaire — convertir un vrai calendrier/jours fériés
-    en jours reste un problème d'adaptateur, en amont de l'ingestion).
+    `jours_indisponibles` et/ou durant chaque occurrence du motif récurrent
+    `jours_semaine_indisponibles` — aucune opération ne peut s'y dérouler un
+    jour indisponible (même référentiel que `Echeance`/`duree` : jours
+    relatifs, jamais une date calendaire — convertir un vrai calendrier/jours
+    fériés en jours reste un problème d'adaptateur, en amont de l'ingestion).
 
-    Un calendrier global d'atelier (ex. jours fériés communs) s'exprime en
-    déclarant cette contrainte identiquement pour chaque ressource de
-    l'instance — pas un mécanisme séparé.
+    `jours_semaine_indisponibles` exprime un motif qui se répète tous les 7
+    jours à partir du jour 0 de l'instance (`0` = position 0 du cycle, ...,
+    `6` = position 6) — pour un vrai "week-end" calendaire, c'est à
+    l'adaptateur de savoir quel jour relatif de l'instance correspond à quel
+    jour de la semaine réel, pas au DSL (toujours relatif, jamais une date).
+    Les deux champs se combinent : une ressource peut avoir un motif
+    récurrent (repos hebdomadaire) *et* des jours exceptionnels explicites
+    (jours fériés), déclarés soit dans la même contrainte, soit dans deux
+    contraintes distinctes pour la même ressource (elles s'additionnent,
+    jamais un remplacement — même principe que plusieurs
+    `CompatibiliteRessourceTache` pour la même tâche, §4.2).
+
+    Un calendrier global d'atelier (ex. jours fériés/week-end communs)
+    s'exprime en déclarant cette contrainte identiquement pour chaque
+    ressource de l'instance — pas un mécanisme séparé.
 
     Une ressource sans cette contrainte n'est pas affectée — extension
     optionnelle, comme `Echeance`/`ContrainteCapacite` (§4.2)."""
@@ -148,8 +161,31 @@ class ContrainteDisponibiliteRessource(BaseModel):
     type: Literal["disponibilite_ressource"] = "disponibilite_ressource"
     ressource: Identifiant
     jours_indisponibles: list[int] = Field(
-        min_length=1, description="Jours (relatifs) où cette ressource est indisponible"
+        default_factory=list, description="Jours (relatifs) où cette ressource est indisponible"
     )
+    jours_semaine_indisponibles: list[int] | None = Field(
+        default=None,
+        description="Motif récurrent (cycle de 7 jours depuis le jour 0 de l'instance) : "
+        "positions 0 à 6 où cette ressource est indisponible chaque semaine.",
+    )
+
+    @model_validator(mode="after")
+    def _au_moins_un_mode_de_disponibilite_declare(self) -> ContrainteDisponibiliteRessource:
+        if not self.jours_indisponibles and not self.jours_semaine_indisponibles:
+            raise ValueError(
+                "jours_indisponibles ou jours_semaine_indisponibles doit être renseigné (au moins un jour)"
+            )
+        return self
+
+    @model_validator(mode="after")
+    def _jours_semaine_dans_le_cycle(self) -> ContrainteDisponibiliteRessource:
+        if self.jours_semaine_indisponibles is not None:
+            invalides = sorted({j for j in self.jours_semaine_indisponibles if not (0 <= j <= 6)})
+            if invalides:
+                raise ValueError(
+                    f"jours_semaine_indisponibles doit contenir des valeurs entre 0 et 6 : {invalides}"
+                )
+        return self
 
 
 class ContrainteTailleLot(BaseModel):
@@ -177,6 +213,42 @@ class ContrainteTailleLot(BaseModel):
         return self
 
 
+class ContrainteChangementSerie(BaseModel):
+    """Sur la ressource `ressource`, faire suivre immédiatement la tâche `tache_avant` par la
+    tâche `tache_apres` (aucune autre tâche intercalée sur cette même ressource) exige un temps
+    de changement de série `duree_setup` — un délai supplémentaire entre la fin de `tache_avant`
+    et le début de `tache_apres`, distinct de leurs durées propres
+    (`CompatibiliteRessourceTache`). Modélise un changement d'outillage, un nettoyage entre
+    lots, etc.
+
+    Contrainte dirigée et propre à cette ressource : `tache_avant` → `tache_apres` uniquement
+    dans ce sens — si l'ordre inverse a aussi un coût (pas forcément le même), déclarer une
+    seconde contrainte symétrique avec sa propre durée.
+
+    Sans effet si `tache_avant`/`tache_apres` ne se retrouvent jamais consécutives sur
+    `ressource` dans le planning proposé : cette contrainte n'impose aucun ordre entre les deux
+    (ça reste le rôle de `Precedence`) — seulement un coût *si* le solveur choisit de les
+    enchaîner ainsi sur cette ressource. Une ressource/paire non citée n'est affectée par aucune
+    contrainte de ce type — extension optionnelle, comme `Echeance`/`ContrainteCapacite` (§4.2)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["changement_serie"] = "changement_serie"
+    ressource: Identifiant
+    tache_avant: Identifiant
+    tache_apres: Identifiant
+    duree_setup: int = Field(
+        gt=0,
+        description="Délai (jours) entre la fin de tache_avant et le début de tache_apres sur cette ressource",
+    )
+
+    @model_validator(mode="after")
+    def _pas_d_autoreference(self) -> ContrainteChangementSerie:
+        if self.tache_avant == self.tache_apres:
+            raise ValueError("une tâche ne peut pas nécessiter un changement de série vers elle-même")
+        return self
+
+
 Contrainte = Annotated[
     Precedence
     | CompatibiliteRessourceTache
@@ -185,6 +257,7 @@ Contrainte = Annotated[
     | ContrainteCapacite
     | ContrainteIncompatibilite
     | ContrainteDisponibiliteRessource
-    | ContrainteTailleLot,
+    | ContrainteTailleLot
+    | ContrainteChangementSerie,
     Field(discriminator="type"),
 ]

@@ -103,7 +103,7 @@ def planifier_depuis_greensig(
         CLIENT_ID_GREENSIG, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
     )
 
-    execution_id, resultat = executer_pour_instance(etat, registre, instance_id, utilisateur)
+    execution_id, resultat, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)
 
     return _reponse_planning(instance_id, execution_id, instance, resultat)
 
@@ -126,7 +126,7 @@ def planifier(
         client_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
     )
 
-    execution_id, resultat = executer_pour_instance(etat, registre, instance_id, utilisateur)
+    execution_id, resultat, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)
 
     return _reponse_planning(instance_id, execution_id, instance, resultat)
 
@@ -169,7 +169,7 @@ def planifier_via_comprehension(
         secteur_activite=requete.secteur_activite,
     )
 
-    execution_id, resultat = executer_pour_instance(etat, registre, instance_id, utilisateur)
+    execution_id, resultat, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)
 
     reponse = _reponse_planning(instance_id, execution_id, instance, resultat)
     reponse["description_metier"] = resultat_comprehension.description_metier

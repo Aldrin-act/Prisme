@@ -72,6 +72,7 @@ async def ingerer_depuis_csv(
     taches: UploadFile = File(...),
     ressources: UploadFile = File(...),
     contraintes: UploadFile = File(...),
+    commandes: UploadFile | None = File(None),
     nom_projet: str | None = None,
     secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
@@ -79,9 +80,13 @@ async def ingerer_depuis_csv(
 ) -> dict[str, str]:
     """Ingestion depuis trois fichiers CSV séparés (§5.4) — Tâches, Ressources
     et Contraintes (`adapters/csv_import/`), format standard pour l'import
-    de données tabulaires."""
+    de données tabulaires. `commandes` (optionnel, quatrième fichier) relie
+    des tâches à une commande cliente et une date limite — dérive une
+    échéance par tâche liée (`adapters/commande_derivation.py`), jamais
+    transmis au solveur tel quel."""
     verifier_acces_client(utilisateur, client_id)
-    for fichier in (taches, ressources, contraintes):
+    fichiers_requis = (taches, ressources, contraintes)
+    for fichier in (*fichiers_requis, *((commandes,) if commandes is not None else ())):
         if not (fichier.filename or "").lower().endswith(".csv"):
             nom = fichier.filename or "(sans nom)"
             raise HTTPException(status_code=422, detail=f"{nom} doit être un fichier .csv")
@@ -91,8 +96,9 @@ async def ingerer_depuis_csv(
         await ressources.read(),
         await contraintes.read(),
     )
+    commandes_octets = await commandes.read() if commandes is not None else None
     try:
-        instance = traduire_csv(taches_octets, ressources_octets, contraintes_octets)
+        instance = traduire_csv(taches_octets, ressources_octets, contraintes_octets, commandes_octets)
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:

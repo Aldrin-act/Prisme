@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from api.autorisation import verifier_acces_client
+from api.comparaison_scenarios import calculer_metriques
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
@@ -67,6 +68,87 @@ def obtenir_instance(
         "secteur_activite": etat.recuperer_secteur_activite(instance_id),
         **instance.model_dump(mode="json"),
     }
+
+
+@router.post("/{instance_id}/scenarios")
+def creer_scenario(
+    instance_id: str,
+    payload: dict[str, Any],
+    nom_projet: str | None = None,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, str]:
+    """Crée une instance variante d'`instance_id` (payload T-R-C-O complet,
+    même garde-fou §6.7 qu'une ingestion normale) et la rattache au même
+    groupe de scénarios comparatifs — voir
+    `GET /{instance_id}/scenarios/comparaison`. Une nouvelle instance à part
+    entière (son propre historique d'exécution), jamais une modification de
+    l'originale : `instance_id` reste intact et exécutable indépendamment."""
+    try:
+        client_id, _ = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+
+    verifier_acces_client(utilisateur, client_id)
+    instance = valider_payload_trco(payload)
+    scenario_id = etat.enregistrer_instance(
+        client_id, instance, nom_projet=nom_projet, groupe_scenario_id=instance_id
+    )
+    return {"instance_id": scenario_id, "structure_contraintes": structure_contraintes(instance)}
+
+
+@router.get("/{instance_id}/scenarios/comparaison")
+def comparer_scenarios(
+    instance_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Compare toutes les instances du groupe de scénarios d'`instance_id`
+    (elle comprise) sur leur dernière exécution connue — makespan, taux
+    d'utilisation par ressource, tâches en retard
+    (`api/comparaison_scenarios.py`). Ne déclenche jamais d'exécution : une
+    instance du groupe pas encore exécutée apparaît avec `metriques: null`,
+    à exécuter explicitement via `POST /execution/{instance_id}` (§2.3,
+    l'exécution reste toujours une décision humaine explicite, jamais un
+    effet de bord d'une lecture)."""
+    try:
+        client_id, _ = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+
+    verifier_acces_client(utilisateur, client_id)
+    membres = etat.lister_instances_du_groupe_scenario(instance_id)
+
+    dernieres_executions: dict[str, dict[str, object]] = {}
+    for execution in etat.lister_executions(client_id=client_id):
+        iid = execution["instance_id"]
+        if iid not in membres:
+            continue
+        existante = dernieres_executions.get(iid)
+        if existante is None or (execution["date_execution"] or "") > (existante["date_execution"] or ""):
+            dernieres_executions[iid] = execution
+
+    scenarios: list[dict[str, object]] = []
+    for membre_id in membres:
+        _, instance_membre = etat.recuperer_instance(membre_id)
+        derniere = dernieres_executions.get(membre_id)
+        metriques = None
+        if derniere is not None:
+            _, _, resultat = etat.recuperer_execution(derniere["execution_id"])
+            if resultat.reussi and resultat.planning is not None:
+                metriques = calculer_metriques(instance_membre, resultat.planning).en_dict()
+        scenarios.append(
+            {
+                "instance_id": membre_id,
+                "est_instance_de_base": membre_id == instance_id,
+                "nom_projet": etat.recuperer_nom_projet(membre_id),
+                "execution_id": derniere["execution_id"] if derniere else None,
+                "date_execution": derniere["date_execution"] if derniere else None,
+                "metriques": metriques,
+            }
+        )
+
+    return {"instance_id": instance_id, "scenarios": scenarios}
 
 
 @router.patch("/{instance_id}/objectifs")

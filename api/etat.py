@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal
 
-from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif, Planning
 from sandbox.runner import ResultatExecution
 
 if TYPE_CHECKING:
@@ -267,10 +267,25 @@ class EtatAPI:
     # qu'une instance déjà exécutée a depuis été modifiée et doit être
     # ré-exécutée (signal `instance_a_replanifier`).
     dates_modification: dict[str, str] = field(default_factory=dict)
+    # Scénarios comparatifs (what-if) : une instance variante créée par
+    # `POST /ingestion/{instance_id}/scenarios` pointe ici vers l'instance de
+    # base dont elle dérive — le groupe entier (base + variantes) se compare
+    # ensuite via `GET /ingestion/{instance_id}/scenarios/comparaison`. Sans
+    # rapport avec l'ancien `instance_parente_id` (retiré, voir
+    # `api/etat_postgres.py`) : celui-là suivait un historique de
+    # modification en place (une seule lignée) ; ceci relie des variantes
+    # délibérées, créées pour coexister et être comparées, jamais fusionnées
+    # ni éditées l'une dans l'autre.
+    groupes_scenario: dict[str, str] = field(default_factory=dict)
     clients: dict[str, Client] = field(default_factory=dict)
     dates_execution: dict[str, str] = field(default_factory=dict)
     jobs_generation: dict[str, JobGeneration] = field(default_factory=dict)
     propositions: dict[str, PropositionSupervision] = field(default_factory=dict)
+    # Gantt interactif (Phase 3) : révision ajustée à la main d'un planning, distincte de
+    # l'original figé dans executions[execution_id][2].planning — une seule révision "courante"
+    # par exécution (écrasée à chaque nouvel ajustement légal), jamais un historique de
+    # révisions. Purgée avec l'exécution dans supprimer_instance.
+    plannings_ajustes: dict[str, Planning] = field(default_factory=dict)
 
     def enregistrer_client(self, client_id: str, nom: str | None = None) -> None:
         """Idempotent au sens applicatif : ré-enregistrer un `client_id`
@@ -296,6 +311,7 @@ class EtatAPI:
         description_metier: str | None = None,
         nom_projet: str | None = None,
         secteur_activite: str | None = None,
+        groupe_scenario_id: str | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
         instance_id = str(uuid.uuid4())
@@ -306,7 +322,20 @@ class EtatAPI:
         self.noms_projet[instance_id] = nom_projet
         self.secteurs_activite[instance_id] = secteur_activite
         self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
+        if groupe_scenario_id is not None:
+            self.groupes_scenario[instance_id] = groupe_scenario_id
         return instance_id
+
+    def lister_instances_du_groupe_scenario(self, instance_id: str) -> list[str]:
+        """Toutes les instances du même groupe de scénarios que `instance_id`,
+        elle comprise — que `instance_id` soit l'instance de base (jamais
+        elle-même dans `groupes_scenario`, sa propre présence dans
+        `self.instances` suffit à la qualifier de racine) ou l'une des
+        variantes créées ensuite. Ordre non garanti."""
+        groupe_id = self.groupes_scenario.get(instance_id, instance_id)
+        membres = {groupe_id} if groupe_id in self.instances else set()
+        membres |= {iid for iid, gid in self.groupes_scenario.items() if gid == groupe_id}
+        return sorted(membres)
 
     def enregistrer_source(
         self,
@@ -476,10 +505,12 @@ class EtatAPI:
         self.noms_projet.pop(instance_id, None)
         self.secteurs_activite.pop(instance_id, None)
         self.dates_modification.pop(instance_id, None)
+        self.groupes_scenario.pop(instance_id, None)
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
             del self.executions[execution_id]
             self.decisions.pop(execution_id, None)
             self.dates_execution.pop(execution_id, None)
+            self.plannings_ajustes.pop(execution_id, None)
         for job in self.jobs_generation.values():
             if job.instance_id == instance_id:
                 job.instance_id = None
@@ -497,6 +528,36 @@ class EtatAPI:
         if execution_id not in self.executions:
             raise KeyError(execution_id)
         return self.executions[execution_id]
+
+    def dernier_planning_pour_instance(self, instance_id: str) -> Planning | None:
+        """Le planning de la plus récente exécution *réussie* de `instance_id` — jamais une
+        exécution échouée (`resultat.reussi`), même si elle est plus récente. Utilisé par
+        `POST /execution/{instance_id}?horizon_gele_jours=...` (Phase 2, replanification à
+        horizon glissant) pour retrouver ce qu'il faut potentiellement figer ; `None` si cette
+        instance n'a encore jamais été exécutée avec succès."""
+        candidats = [
+            (self.dates_execution[execution_id], resultat.planning)
+            for execution_id, (_, id_instance, resultat) in self.executions.items()
+            if id_instance == instance_id and resultat.reussi
+        ]
+        if not candidats:
+            return None
+        candidats.sort(key=lambda candidat: candidat[0])
+        return candidats[-1][1]
+
+    def enregistrer_planning_ajuste(
+        self, execution_id: str, planning: Planning, makespan: int | None = None
+    ) -> None:
+        """Écrase toute révision ajustée précédente de cette exécution — une seule révision
+        "courante", jamais un historique (Gantt interactif, Phase 3). Ne touche jamais
+        `executions[execution_id][2].planning` (l'original figé par le solveur). `makespan`
+        accepté pour rester substituable avec `EtatPostgres` — jamais lu en mémoire, rien ne le
+        consomme ici (les durées sont toujours dérivées côté client depuis l'instance)."""
+        del makespan
+        self.plannings_ajustes[execution_id] = planning
+
+    def recuperer_planning_ajuste(self, execution_id: str) -> Planning | None:
+        return self.plannings_ajustes.get(execution_id)
 
     def lister_executions(self, client_id: str | None = None) -> list[dict[str, object]]:
         """Vue de supervision (lecture seule) sur les exécutions connues,
@@ -728,6 +789,28 @@ class EtatAPI:
             for j in self.jobs_generation.values()
             if (client_id is None or j.client_id == client_id)
             and (instance_id is None or j.instance_id == instance_id)
+        ]
+
+    def lister_evenements_generation(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Tous les évènements de tous les jobs (filtrés par client), `job_id` explicite —
+        matière première des KPI d'agrégat (page Analytique), jamais consultés job par job
+        ici contrairement à `recuperer_job_generation`."""
+        return [
+            {"job_id": j.id, "ordre": e.ordre, "agent": e.agent, "statut": e.statut}
+            for j in self.jobs_generation.values()
+            if client_id is None or j.client_id == client_id
+            for e in j.evenements
+        ]
+
+    def lister_tentatives_generation(self, client_id: str | None = None) -> list[dict[str, object]]:
+        """Toutes les tentatives de tous les jobs (filtrées par client) — seulement
+        `code_candidat` (les autres champs de détail restent réservés à la vue par job,
+        `recuperer_job_generation`), pour les KPI d'agrégat (détection de stagnation)."""
+        return [
+            {"job_id": j.id, "numero": t.numero, "code_candidat": t.code_candidat}
+            for j in self.jobs_generation.values()
+            if client_id is None or j.client_id == client_id
+            for t in j.tentatives
         ]
 
 

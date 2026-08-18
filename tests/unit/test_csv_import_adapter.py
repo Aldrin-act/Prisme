@@ -145,3 +145,42 @@ def test_compatibilite_explicite_et_derivee_par_competence_coexistent() -> None:
         (c.tache, c.ressource, c.duree) for c in instance.contraintes if c.type == "compatibilite_ressource_tache"
     }
     assert compatibilites == {("T1", "R2", 40), ("T1", "R1", 25)}
+
+
+# --- Commandes (quatrième fichier optionnel, dérive des échéances) ---
+
+
+def test_commandes_absentes_ne_derivent_aucune_echeance() -> None:
+    instance = traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV)
+    assert not [c for c in instance.contraintes if c.type == "echeance"]
+
+
+def test_commande_avec_date_limite_derive_une_echeance_par_tache_liee() -> None:
+    commandes_csv = b"id,taches,client,date_limite\nCMD1,T1;T2,Client A,20\n"
+
+    instance = traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV, commandes_csv)
+
+    echeances = {c.tache: c.echeance for c in instance.contraintes if c.type == "echeance"}
+    assert echeances == {"T1": 20, "T2": 20}
+
+
+def test_commande_sans_date_limite_ne_derive_rien() -> None:
+    commandes_csv = b"id,taches,client\nCMD1,T1;T2,Client A\n"
+
+    instance = traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV, commandes_csv)
+
+    assert not [c for c in instance.contraintes if c.type == "echeance"]
+
+
+def test_commande_sans_tache_liee_leve_erreur_fichier_invalide() -> None:
+    commandes_csv = b"id,taches,date_limite\nCMD1,,20\n"
+
+    with pytest.raises(ErreurFichierInvalide, match="sans aucune t.che li.e"):
+        traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV, commandes_csv)
+
+
+def test_commande_date_limite_non_numerique_leve_erreur_fichier_invalide() -> None:
+    commandes_csv = b"id,taches,date_limite\nCMD1,T1,pas-un-nombre\n"
+
+    with pytest.raises(ErreurFichierInvalide, match="date limite invalide"):
+        traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV, commandes_csv)

@@ -8,7 +8,15 @@ hôte, avant l'appel (validation d'entrée) et après le retour du conteneur
 (faisabilité), jamais dans le conteneur lui-même, qui ne doit faire tourner
 que le code figé sur les données reçues.
 
-Usage : executer_dans_conteneur.py <chemin_code> <chemin_instance>
+Usage : executer_dans_conteneur.py <chemin_code> <chemin_instance> [<chemin_planning_precedent>|-
+    [<horizon_gele_jours>]]
+
+Les deux derniers argv sont optionnels (Phase 2, replanification à horizon glissant) : absents,
+le harnais appelle `resoudre(instance)` exactement comme avant leur ajout — c'est ce qui garantit
+qu'un solveur enregistré avant cette fonctionnalité continue de fonctionner sans changement.
+L'appelant hôte (`sandbox/runner.py::executer_solveur_valide`) a déjà vérifié statiquement (sans
+exécuter le code) que le solveur ciblé supporte ces paramètres avant de les fournir ici — ce
+harnais ne le revérifie pas.
 """
 
 from __future__ import annotations
@@ -16,7 +24,7 @@ from __future__ import annotations
 import importlib.util
 import sys
 
-from dsl.schema import InstanceTRCO
+from dsl.schema import InstanceTRCO, Planning
 
 
 def _charger_solveur_fige(chemin: str):
@@ -34,12 +42,22 @@ def _charger_solveur_fige(chemin: str):
 
 def main() -> None:
     chemin_code, chemin_instance = sys.argv[1], sys.argv[2]
+    horizon_gele_jours = int(sys.argv[4]) if len(sys.argv) > 4 else 0
 
     with open(chemin_instance, encoding="utf-8") as fichier:
         instance = InstanceTRCO.model_validate_json(fichier.read())
 
     resoudre = _charger_solveur_fige(chemin_code)
-    planning = resoudre(instance)
+
+    if horizon_gele_jours > 0:
+        planning_precedent: Planning | None = None
+        chemin_planning_precedent = sys.argv[3] if len(sys.argv) > 3 else "-"
+        if chemin_planning_precedent != "-":
+            with open(chemin_planning_precedent, encoding="utf-8") as fichier:
+                planning_precedent = Planning.model_validate_json(fichier.read())
+        planning = resoudre(instance, planning_precedent=planning_precedent, horizon_gele_jours=horizon_gele_jours)
+    else:
+        planning = resoudre(instance)
 
     print("null" if planning is None else planning.model_dump_json())
 

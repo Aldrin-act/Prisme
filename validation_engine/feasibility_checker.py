@@ -11,7 +11,12 @@ un `Planning` proposé et vérifie :
    affectée à la même ressource, quelle que soit l'heure ;
 5. aucune opération planifiée un jour où sa ressource est déclarée
    indisponible (`ContrainteDisponibiliteRessource` — extension optionnelle,
-   §4.2).
+   §4.2 ; jours explicites et/ou motif récurrent hebdomadaire, les deux se
+   combinent) ;
+6. tout temps de changement de série (`ContrainteChangementSerie` — extension
+   optionnelle, §4.2) respecté entre deux opérations directement consécutives
+   sur une même ressource, sans effet si la paire déclarée ne se retrouve pas
+   consécutive dans le planning proposé.
 
 Sert deux fois (§6.7, garde-fou déterministe) : hors ligne dans la validation
 du code généré (couche 2, §6.1), et en ligne comme garde-fou de production
@@ -39,6 +44,7 @@ from typing import Literal
 from dsl.schema import (
     CompatibiliteRessourceTache,
     ContrainteCapacite,
+    ContrainteChangementSerie,
     ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
     ContrainteTailleLot,
@@ -62,6 +68,7 @@ TypeViolation = Literal[
     "incompatibilite_taches_violee",
     "ressource_indisponible",
     "taille_lot_hors_bornes",
+    "changement_serie_insuffisant",
 ]
 
 
@@ -297,15 +304,59 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
                     )
                 )
 
-    jours_indisponibles_par_ressource: dict[str, set[int]] = {
-        contrainte.ressource: set(contrainte.jours_indisponibles)
-        for contrainte in instance.contraintes
-        if isinstance(contrainte, ContrainteDisponibiliteRessource)
-    }
-    for ressource_id, jours_bloques in jours_indisponibles_par_ressource.items():
+    # Temps de changement de série : ne porte que sur des paires directement consécutives sur
+    # une même ressource (triée par debut) — sans effet si tache_avant/tache_apres ne se
+    # retrouvent jamais adjacentes dans le planning proposé (ContrainteChangementSerie n'impose
+    # aucun ordre entre elles, seulement un coût *si* le solveur les enchaîne ainsi).
+    setups_par_ressource: dict[str, dict[tuple[str, str], int]] = defaultdict(dict)
+    for contrainte in instance.contraintes:
+        if isinstance(contrainte, ContrainteChangementSerie):
+            setups_par_ressource[contrainte.ressource][(contrainte.tache_avant, contrainte.tache_apres)] = (
+                contrainte.duree_setup
+            )
+
+    for ressource_id, setups in setups_par_ressource.items():
+        intervalles_tries = sorted(operations_par_ressource.get(ressource_id, []), key=lambda i: i[1])
+        for (tache_a, _debut_a, fin_a), (tache_b, debut_b, _fin_b) in zip(
+            intervalles_tries, intervalles_tries[1:]
+        ):
+            duree_setup = setups.get((tache_a, tache_b))
+            if duree_setup is None:
+                continue
+            ecart = debut_b - fin_a
+            if ecart < duree_setup:
+                violations.append(
+                    Violation(
+                        "changement_serie_insuffisant",
+                        f"changement de série insuffisant sur {ressource_id!r} entre {tache_a!r} et "
+                        f"{tache_b!r} : {ecart} jour(s) laissé(s), {duree_setup} requis",
+                        tache=tache_a,
+                        tache_secondaire=tache_b,
+                        ressource=ressource_id,
+                    )
+                )
+
+    # `.update(...)`, jamais un remplacement : plusieurs `ContrainteDisponibiliteRessource`
+    # pour la même ressource se combinent (jours explicites + motif récurrent, ou plusieurs
+    # contraintes distinctes déclarées pour la même ressource), même principe que plusieurs
+    # `CompatibiliteRessourceTache` pour une même tâche (§4.2) — voir docstring du schéma.
+    jours_indisponibles_par_ressource: dict[str, set[int]] = defaultdict(set)
+    motif_hebdo_par_ressource: dict[str, set[int]] = defaultdict(set)
+    for contrainte in instance.contraintes:
+        if not isinstance(contrainte, ContrainteDisponibiliteRessource):
+            continue
+        jours_indisponibles_par_ressource[contrainte.ressource].update(contrainte.jours_indisponibles)
+        if contrainte.jours_semaine_indisponibles:
+            motif_hebdo_par_ressource[contrainte.ressource].update(contrainte.jours_semaine_indisponibles)
+
+    for ressource_id in jours_indisponibles_par_ressource.keys() | motif_hebdo_par_ressource.keys():
+        jours_bloques = jours_indisponibles_par_ressource.get(ressource_id, set())
+        motif_hebdo = motif_hebdo_par_ressource.get(ressource_id, set())
         for tache_id, debut, fin in operations_par_ressource.get(ressource_id, []):
             jours_occupes = set(range(debut, fin))
-            jours_en_conflit = jours_occupes & jours_bloques
+            jours_en_conflit = {
+                jour for jour in jours_occupes if jour in jours_bloques or (jour % 7) in motif_hebdo
+            }
             if jours_en_conflit:
                 violations.append(
                     Violation(

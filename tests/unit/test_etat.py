@@ -12,8 +12,9 @@ from __future__ import annotations
 import pytest
 
 from api.etat import EtatAPI
-from dsl.schema import InstanceTRCO, MinimiserMakespan
+from dsl.schema import InstanceTRCO, MinimiserMakespan, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
+from validation_engine.feasibility_checker import ResultatFaisabilite
 
 
 def _instance_exemple() -> InstanceTRCO:
@@ -331,6 +332,84 @@ def test_modifier_instance_inconnue_leve_key_error() -> None:
 
     with pytest.raises(KeyError):
         etat.modifier_instance("id-inexistant", _instance_modifiee())
+
+
+def test_dernier_planning_pour_instance_absente_renvoie_none() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat.dernier_planning_pour_instance(instance_id) is None
+
+
+def test_dernier_planning_pour_instance_ignore_les_executions_echouees() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    echec = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    etat.enregistrer_execution("solveur-abc", instance_id, echec)
+
+    assert etat.dernier_planning_pour_instance(instance_id) is None
+
+
+def test_dernier_planning_pour_instance_prend_la_plus_recente_reussie() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    planning_ancien = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    planning_recent = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=5)])
+    verdict_legal = ResultatFaisabilite(violations=())
+    etat.enregistrer_execution("solveur-abc", instance_id, ResultatExecution(planning_ancien, verdict_legal, None))
+    etat.enregistrer_execution("solveur-abc", instance_id, ResultatExecution(planning_recent, verdict_legal, None))
+
+    assert etat.dernier_planning_pour_instance(instance_id) == planning_recent
+
+
+def test_planning_ajuste_absent_renvoie_none() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat.enregistrer_execution("solveur-abc", instance_id, resultat)
+
+    assert etat.recuperer_planning_ajuste(execution_id) is None
+
+
+def test_planning_ajuste_round_trip() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat.enregistrer_execution("solveur-abc", instance_id, resultat)
+    planning_ajuste = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=7)])
+
+    etat.enregistrer_planning_ajuste(execution_id, planning_ajuste)
+
+    assert etat.recuperer_planning_ajuste(execution_id) == planning_ajuste
+
+
+def test_planning_ajuste_ecrase_la_revision_precedente() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat.enregistrer_execution("solveur-abc", instance_id, resultat)
+    etat.enregistrer_planning_ajuste(
+        execution_id, Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    )
+
+    planning_recent = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=9)])
+    etat.enregistrer_planning_ajuste(execution_id, planning_recent)
+
+    assert etat.recuperer_planning_ajuste(execution_id) == planning_recent
+
+
+def test_supprimer_instance_purge_le_planning_ajuste() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat.enregistrer_execution("solveur-abc", instance_id, resultat)
+    etat.enregistrer_planning_ajuste(
+        execution_id, Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    )
+
+    etat.supprimer_instance(instance_id)
+
+    assert execution_id not in etat.plannings_ajustes
 
 
 def test_date_modification_posee_a_la_creation() -> None:

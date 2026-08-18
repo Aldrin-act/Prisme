@@ -539,9 +539,10 @@ function SourceActivePanel({
   // échoue proprement (409) si aucun solveur validé n'existe encore pour
   // cette structure, sans jamais en générer un à la volée.
   function executerAutomatiquement(instanceId: string) {
-    executer.mutate(instanceId, {
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: prismeKeys.executions() }),
-    });
+    executer.mutate(
+      { instanceId },
+      { onSuccess: () => queryClient.invalidateQueries({ queryKey: prismeKeys.executions() }) },
+    );
   }
 
   function genererInstance() {

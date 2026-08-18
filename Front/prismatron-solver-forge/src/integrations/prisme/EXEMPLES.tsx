@@ -216,12 +216,15 @@ export function ExecutionPanel({ instanceId }: { instanceId: string }) {
   });
 
   const handleExecute = () => {
-    mutation.mutate(instanceId, {
-      onSuccess: (data) => {
-        setExecutionId(data.execution_id);
-        queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
+    mutation.mutate(
+      { instanceId },
+      {
+        onSuccess: (data) => {
+          setExecutionId(data.execution_id);
+          queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
+        },
       },
-    });
+    );
   };
 
   return (

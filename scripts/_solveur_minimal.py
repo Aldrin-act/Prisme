@@ -27,11 +27,22 @@ from dsl.schema import (
 )
 
 
-def resoudre(instance: InstanceTRCO, limite_temps_s: float = 30.0) -> Planning | None:
+def resoudre(
+    instance: InstanceTRCO,
+    limite_temps_s: float = 30.0,
+    planning_precedent: Planning | None = None,
+    horizon_gele_jours: int = 0,
+) -> Planning | None:
     """Modélisation FJSP classique en CP-SAT — voir `dsl.schema.InstanceTRCO` :
     un intervalle optionnel par couple (tâche, ressource compatible), une
     ressource choisie par tâche, non-chevauchement par ressource,
-    précédence, minimisation du makespan."""
+    précédence, minimisation du makespan.
+
+    `planning_precedent`/`horizon_gele_jours` (Phase 2, replanification à horizon glissant,
+    additif — `resoudre(instance)`/`resoudre(instance, limite_temps_s=...)` continuent de
+    marcher sans changement) : toute opération de `planning_precedent` dont `debut <
+    horizon_gele_jours` est fixée (même ressource, même début), voir
+    `generation/prompts/generation_solveur.md`."""
     modele = cp_model.CpModel()
 
     ressources_compatibles: dict[str, set[str]] = defaultdict(set)
@@ -67,6 +78,16 @@ def resoudre(instance: InstanceTRCO, limite_temps_s: float = 30.0) -> Planning |
             presence_par_couple[(tache.id, ressource_id)] = presence
             presences.append(presence)
         modele.AddExactlyOne(presences)
+
+    if horizon_gele_jours > 0 and planning_precedent is not None:
+        for operation in planning_precedent.operations:
+            if operation.debut >= horizon_gele_jours:
+                continue
+            couple = (operation.tache, operation.ressource)
+            if couple not in presence_par_couple:
+                continue  # tâche/ressource plus valide dans l'instance courante
+            modele.Add(presence_par_couple[couple] == 1)
+            modele.Add(debut_tache[operation.tache] == operation.debut)
 
     for ressource in instance.ressources:
         modele.AddNoOverlap(intervalles_par_ressource[ressource.id])

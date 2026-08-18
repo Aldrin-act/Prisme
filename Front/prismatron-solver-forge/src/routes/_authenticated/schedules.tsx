@@ -25,6 +25,7 @@ import {
   useInstance,
   useLabelsInstances,
   usePlanning,
+  usePlanningAjuste,
   PrismeAPIError,
   type ExecutionInfo,
 } from "@/integrations/prisme";
@@ -144,13 +145,22 @@ function DialogPlanning({
   onOpenChange: (open: boolean) => void;
 }) {
   const { data: planning, isLoading, error } = usePlanning(execution?.execution_id ?? null);
+  const { data: planningAjuste } = usePlanningAjuste(execution?.execution_id ?? null);
   // Charges/capacités/disponibilités par ressource, pour le taux
   // d'utilisation affiché par GanttChart — même instance que l'exécution,
   // toujours disponible sans requête supplémentaire (ExecutionInfo.instance_id).
   const { data: instance } = useInstance(execution?.instance_id ?? null);
+  const [voirOriginal, setVoirOriginal] = useState(false);
+
+  const planningAffiche = !voirOriginal && planningAjuste ? planningAjuste : planning;
+
+  function fermer(open: boolean) {
+    if (!open) setVoirOriginal(false);
+    onOpenChange(open);
+  }
 
   return (
-    <Dialog open={!!execution} onOpenChange={onOpenChange}>
+    <Dialog open={!!execution} onOpenChange={fermer}>
       <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Planning</DialogTitle>
@@ -163,8 +173,25 @@ function DialogPlanning({
           <p className="text-sm text-muted-foreground">Chargement du planning...</p>
         ) : error ? (
           <p className="text-sm text-destructive">{(error as PrismeAPIError).message}</p>
-        ) : planning ? (
-          <GanttChart planning={planning} contraintes={instance?.contraintes} />
+        ) : planningAffiche ? (
+          <div className="space-y-3">
+            {planningAjuste && (
+              <div className="flex items-center justify-between">
+                <Badge variant="secondary">
+                  {voirOriginal ? "Planning original" : "Planning ajusté"}
+                </Badge>
+                <Button size="sm" variant="ghost" onClick={() => setVoirOriginal((v) => !v)}>
+                  {voirOriginal ? "Voir l'ajustement" : "Voir l'original"}
+                </Button>
+              </div>
+            )}
+            <GanttChart
+              planning={planningAffiche}
+              contraintes={instance?.contraintes}
+              editable={!voirOriginal}
+              executionId={execution?.execution_id}
+            />
+          </div>
         ) : null}
       </DialogContent>
     </Dialog>

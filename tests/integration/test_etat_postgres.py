@@ -52,6 +52,47 @@ def test_description_metier_absente_pour_une_ingestion_sans_agent(etat_postgres_
     assert etat_postgres_test.recuperer_description_metier(instance_id) is None
 
 
+def test_groupe_scenario_lie_deux_instances(etat_postgres_test: EtatPostgres) -> None:
+    base_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    scenario_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), groupe_scenario_id=base_id
+    )
+
+    membres = etat_postgres_test.lister_instances_du_groupe_scenario(base_id)
+
+    assert membres == sorted([base_id, scenario_id])
+    # Interrogée depuis la variante elle-même, le même groupe complet ressort.
+    assert etat_postgres_test.lister_instances_du_groupe_scenario(scenario_id) == membres
+
+
+def test_instance_sans_scenario_est_seule_dans_son_groupe(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat_postgres_test.lister_instances_du_groupe_scenario(instance_id) == [instance_id]
+
+
+def test_groupe_scenario_instance_inconnue_liste_vide(etat_postgres_test: EtatPostgres) -> None:
+    assert etat_postgres_test.lister_instances_du_groupe_scenario("id-inexistant") == []
+
+
+def test_supprimer_instance_de_base_laisse_les_variantes_orphelines_pas_detruites(
+    etat_postgres_test: EtatPostgres,
+) -> None:
+    """Suppression de l'instance de base d'un groupe : la variante survit
+    (elle reste exécutable indépendamment), juste orpheline de groupe —
+    ON DELETE SET NULL sur la FK auto-référencée, jamais un CASCADE."""
+    base_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    scenario_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), groupe_scenario_id=base_id
+    )
+
+    etat_postgres_test.supprimer_instance(base_id)
+
+    _, instance_relue = etat_postgres_test.recuperer_instance(scenario_id)
+    assert instance_relue is not None
+    assert etat_postgres_test.lister_instances_du_groupe_scenario(scenario_id) == [scenario_id]
+
+
 def test_nom_projet_round_trip(etat_postgres_test: EtatPostgres) -> None:
     instance_id = etat_postgres_test.enregistrer_instance(
         "client-test", _instance_exemple(), nom_projet="Atelier mécanique"
@@ -249,6 +290,99 @@ def test_execution_en_echec_round_trip_sans_planning(etat_postgres_test: EtatPos
     assert resultat_relu.verdict_faisabilite is not None
     assert not resultat_relu.verdict_faisabilite.legal
     assert resultat_relu.verdict_faisabilite.violations[0].message == "pas de ressource compatible"
+
+
+def test_dernier_planning_pour_instance_absente_renvoie_none(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat_postgres_test.dernier_planning_pour_instance(instance_id) is None
+
+
+def test_dernier_planning_pour_instance_ignore_les_executions_echouees(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    echec = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, echec)
+
+    assert etat_postgres_test.dernier_planning_pour_instance(instance_id) is None
+
+
+def test_dernier_planning_pour_instance_prend_la_plus_recente_reussie(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    verdict_legal = ResultatFaisabilite(violations=())
+    planning_ancien = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    planning_recent = Planning(
+        operations=[
+            OperationPlanifiee(tache="T1", ressource="R1", debut=0),
+            OperationPlanifiee(tache="T2", ressource="R1", debut=10),
+        ]
+    )
+    etat_postgres_test.enregistrer_execution(
+        "solveur-abc", instance_id, ResultatExecution(planning_ancien, verdict_legal, None)
+    )
+    etat_postgres_test.enregistrer_execution(
+        "solveur-abc", instance_id, ResultatExecution(planning_recent, verdict_legal, None)
+    )
+
+    dernier = etat_postgres_test.dernier_planning_pour_instance(instance_id)
+    assert dernier is not None
+    assert len(dernier.operations) == 2
+
+
+def test_planning_ajuste_absent_renvoie_none(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, resultat)
+
+    assert etat_postgres_test.recuperer_planning_ajuste(execution_id) is None
+
+
+def test_planning_ajuste_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, resultat)
+    planning_ajuste = Planning(
+        operations=[
+            OperationPlanifiee(tache="T1", ressource="R1", debut=5),
+            OperationPlanifiee(tache="T2", ressource="R1", debut=20),
+        ]
+    )
+
+    etat_postgres_test.enregistrer_planning_ajuste(execution_id, planning_ajuste, makespan=35)
+
+    relu = etat_postgres_test.recuperer_planning_ajuste(execution_id)
+    assert relu is not None
+    assert {(o.tache, o.ressource, o.debut) for o in relu.operations} == {
+        ("T1", "R1", 5),
+        ("T2", "R1", 20),
+    }
+
+
+def test_planning_ajuste_ecrase_la_revision_precedente(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, resultat)
+    etat_postgres_test.enregistrer_planning_ajuste(
+        execution_id, Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    )
+
+    etat_postgres_test.enregistrer_planning_ajuste(
+        execution_id, Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=8)])
+    )
+
+    relu = etat_postgres_test.recuperer_planning_ajuste(execution_id)
+    assert relu is not None
+    assert [o.debut for o in relu.operations] == [8]
+
+
+def test_supprimer_instance_purge_le_planning_ajuste(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    execution_id = etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, resultat)
+    etat_postgres_test.enregistrer_planning_ajuste(
+        execution_id, Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    )
+
+    etat_postgres_test.supprimer_instance(instance_id)  # ne doit jamais lever (ordre des FK)
 
 
 def test_lister_instances_et_executions(etat_postgres_test: EtatPostgres) -> None:

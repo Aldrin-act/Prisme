@@ -24,6 +24,12 @@ compétences — un garde-fou de plus, pas remplacé ici.
 Les deux mécanismes (compatibilité explicite et compatibilité dérivée par
 compétence) peuvent coexister pour une même tâche : leurs résultats s'additionnent,
 rien n'oblige à choisir l'un ou l'autre pour toutes les tâches d'un même fichier.
+
+Commandes (`adapters/commande_derivation.py`) : un quatrième fichier optionnel
+`commandes.csv` relie des tâches à une commande cliente et une date limite — pure
+métadonnée de traçabilité d'ingestion, dérive une `Echeance` par tâche liée (sauf si déjà
+explicite pour cette tâche dans `contraintes.csv`), le solveur ne voit jamais la notion de
+"commande" elle-même (§5.3, vocabulaire DSL fini).
 """
 
 from __future__ import annotations
@@ -31,6 +37,7 @@ from __future__ import annotations
 import csv
 from io import StringIO
 
+from adapters.commande_derivation import Commande, deriver_echeances_par_commande
 from adapters.competence_derivation import CompetenceSansDureeEstimee, deriver_compatibilites_par_competence
 from dsl.schema import (
     CompatibiliteRessourceTache,
@@ -57,10 +64,15 @@ COLONNES_CONTRAINTES_OPTIONNELLES = (
     "competence",
 )
 TYPES_CONTRAINTE_SUPPORTES = ("precedence", "compatibilite_ressource_tache", "competence_requise")
+COLONNES_COMMANDES_REQUISES = ("id", "taches")
+COLONNES_COMMANDES_OPTIONNELLES = ("client", "date_limite")
 
 # Séparateur des compétences dans une même cellule (ressources.csv) — la
 # virgule est déjà le délimiteur CSV, illisible pour une liste dans une cellule.
 SEPARATEUR_COMPETENCES = ";"
+
+# Même motif pour la liste de tâches d'une commande (commandes.csv, colonne `taches`).
+SEPARATEUR_TACHES = ";"
 
 
 class ErreurFichierInvalide(Exception):
@@ -182,13 +194,41 @@ def _lire_contraintes(contenu: bytes) -> list[Contrainte]:
     return contraintes
 
 
-def traduire(taches_csv: bytes, ressources_csv: bytes, contraintes_csv: bytes) -> InstanceTRCO:
-    """Traduit trois fichiers CSV (Tâches, Ressources, Contraintes) en une
-    instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est illisible,
-    vide, ou qu'une colonne requise manque (y compris une durée estimée
-    manquante pour une dérivation par compétence) ; `pydantic.ValidationError`
-    si les données une fois lues ne forment pas une instance valide (id
-    dupliqué, référence inconnue, tâche sans compatibilité...)."""
+def _lire_commandes(contenu: bytes) -> list[Commande]:
+    """`taches` (séparées par `;`, même convention que `competences` sur
+    ressources.csv) — voir `adapters/commande_derivation.py::Commande`."""
+    lignes = _lire_lignes(contenu, "commandes.csv", COLONNES_COMMANDES_REQUISES, COLONNES_COMMANDES_OPTIONNELLES)
+    commandes: list[Commande] = []
+    for ligne in lignes:
+        taches_liees = tuple(t.strip() for t in ligne["taches"].split(SEPARATEUR_TACHES) if t.strip())
+        if not taches_liees:
+            raise ErreurFichierInvalide(f"commandes.csv : commande {ligne['id']!r} sans aucune tâche liée")
+        date_limite: int | None = None
+        if ligne["date_limite"]:
+            try:
+                date_limite = int(float(ligne["date_limite"]))
+            except ValueError as erreur:
+                raise ErreurFichierInvalide(
+                    f"commandes.csv : date limite invalide « {ligne['date_limite']} » pour {ligne['id']!r}"
+                ) from erreur
+        commandes.append(
+            Commande(id=ligne["id"], taches=taches_liees, client=ligne["client"] or None, date_limite=date_limite)
+        )
+    return commandes
+
+
+def traduire(
+    taches_csv: bytes,
+    ressources_csv: bytes,
+    contraintes_csv: bytes,
+    commandes_csv: bytes | None = None,
+) -> InstanceTRCO:
+    """Traduit trois fichiers CSV (Tâches, Ressources, Contraintes), plus un quatrième optionnel
+    (Commandes), en une instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est
+    illisible, vide, ou qu'une colonne requise manque (y compris une durée estimée manquante
+    pour une dérivation par compétence) ; `pydantic.ValidationError` si les données une fois
+    lues ne forment pas une instance valide (id dupliqué, référence inconnue, tâche sans
+    compatibilité...)."""
     taches, durees_estimees = _lire_taches(taches_csv)
     ressources = _lire_ressources(ressources_csv)
     contraintes = _lire_contraintes(contraintes_csv)
@@ -201,9 +241,12 @@ def traduire(taches_csv: bytes, ressources_csv: bytes, contraintes_csv: bytes) -
     except CompetenceSansDureeEstimee as erreur:
         raise ErreurFichierInvalide(f"taches.csv : {erreur} (colonne duree_estimee_jours)") from erreur
 
+    commandes = _lire_commandes(commandes_csv) if commandes_csv is not None else []
+    echeances_derivees = deriver_echeances_par_commande(commandes, contraintes)
+
     return InstanceTRCO(
         taches=taches,
         ressources=ressources,
-        contraintes=[*contraintes, *compatibilites_derivees],
+        contraintes=[*contraintes, *compatibilites_derivees, *echeances_derivees],
         objectifs=[MinimiserMakespan()],
     )

@@ -49,7 +49,9 @@ from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, TentativeGeneration, obtenir_etat, structure_contraintes
 from api.etat import signature_objectifs as calculer_signature_objectifs
 from api.routes.auth import obtenir_utilisateur_courant
+from api.statistiques_generation import calculer_statistiques
 from generation.graph import (
+    MAX_TENTATIVES_REPARATION,
     ResultatPartiel,
     ResultatPipelineAvecBoucle,
     TentativeReparation,
@@ -418,6 +420,28 @@ def lister_jobs_generation(
         if (filtre_client is None or job.client_id == filtre_client)
         and (instance_id is None or job.instance_id == instance_id)
     ]
+
+
+@router.get("/statistiques")
+def obtenir_statistiques_generation(
+    agent: str | None = None,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """KPI d'agrégat pour la page Analytique (§ non-répétition/boucles, voir
+    `api/statistiques_generation.py`) — lit le stockage **persisté**
+    (`jobs_generation`/`evenements_generation`/`tentatives_generation`),
+    contrairement à `GET /jobs` qui lit `_JOBS` en mémoire process et perd
+    tout à un redémarrage. Même règle de visibilité que le reste de l'API.
+
+    `agent` (déjà normalisé côté frontend, ex. `"debugger"`) restreint tout le
+    calcul aux générations où cet agent est intervenu — voir la docstring de
+    `calculer_statistiques` pour ce qui change précisément sous ce filtre."""
+    filtre_client = client_id_pour_filtre(utilisateur)
+    jobs = etat.lister_jobs_generation_persistes(client_id=filtre_client)
+    evenements = etat.lister_evenements_generation(client_id=filtre_client)
+    tentatives = etat.lister_tentatives_generation(client_id=filtre_client)
+    return calculer_statistiques(jobs, evenements, tentatives, MAX_TENTATIVES_REPARATION, agent=agent).en_dict()
 
 
 @router.get("/jobs/{job_id}/stream")

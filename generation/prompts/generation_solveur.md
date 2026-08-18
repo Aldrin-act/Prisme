@@ -12,17 +12,27 @@ seul possible — voir plus bas).
 Le module doit définir exactement une fonction :
 
 ```python
-def resoudre(instance: InstanceTRCO) -> Planning | None:
+def resoudre(
+    instance: InstanceTRCO,
+    planning_precedent: Planning | None = None,
+    horizon_gele_jours: int = 0,
+) -> Planning | None:
     ...
 ```
+
+`planning_precedent`/`horizon_gele_jours` existent pour la replanification à horizon glissant
+(voir la section dédiée plus bas) — laisse-les avec ces valeurs par défaut dans la signature,
+ne les rends jamais obligatoires : la très grande majorité des appels se font avec
+`horizon_gele_jours=0` (aucun gel demandé), auquel cas `resoudre` doit se comporter exactement
+comme si ces deux paramètres n'existaient pas.
 
 - `InstanceTRCO`, `Planning`, `OperationPlanifiee`, `Tache`, `Ressource`,
   `Contrainte`, `Precedence`, `CompatibiliteRessourceTache`, `Echeance`,
   `CompetenceRequise`, `ContrainteCapacite`, `ContrainteIncompatibilite`,
-  `ContrainteDisponibiliteRessource`, `ContrainteTailleLot`, `Objectif`,
-  `MinimiserMakespan`, `EquilibrerCharge` s'importent depuis `dsl.schema`
-  (n'importe que les types d'objectif réellement utilisés dans le code
-  généré).
+  `ContrainteDisponibiliteRessource`, `ContrainteTailleLot`,
+  `ContrainteChangementSerie`, `Objectif`, `MinimiserMakespan`,
+  `EquilibrerCharge` s'importent depuis `dsl.schema` (n'importe que les
+  types d'objectif réellement utilisés dans le code généré).
 - `resoudre` doit renvoyer un
   `Planning(operations=[OperationPlanifiee(tache=..., ressource=..., debut=...), ...])`
   légal et optimal (ou proche de l'optimal) au sens du ou des objectifs
@@ -60,8 +70,8 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
   (génétique, ACO, recuit...) n'optimise alors que le makespan du planning
   déjà légal, jamais un score composite mêlant faisabilité et qualité.
 - `Echeance`/`CompetenceRequise`/`ContrainteCapacite`/`ContrainteIncompatibilite`/
-  `ContrainteDisponibiliteRessource`/`ContrainteTailleLot` sont des
-  extensions optionnelles du noyau minimal (absentes de la plupart des
+  `ContrainteDisponibiliteRessource`/`ContrainteTailleLot`/`ContrainteChangementSerie`
+  sont des extensions optionnelles du noyau minimal (absentes de la plupart des
   instances) : si l'instance contient des `Echeance`, encode-les en
   contrainte dure sur la fin de la tâche concernée (`modele.Add(fin <=
   echeance)`) — sinon ignore-les, elles n'existent pas. `CompetenceRequise`
@@ -95,24 +105,111 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
   correspondants ; pour un décodeur non-CP-SAT, exclut simplement toute
   ressource déjà occupée (à n'importe quel instant) par la tâche incompatible
   au moment de choisir une ressource pour l'autre tâche.
-- `ContrainteDisponibiliteRessource(ressource, jours_indisponibles)` : la
-  ressource citée est indisponible durant chacun des jours (relatifs) listés
-  — aucune opération ne peut y démarrer ni s'y poursuivre ces jours-là. Un
-  calendrier global d'atelier (jours fériés communs à toutes les ressources)
-  n'est pas un mécanisme séparé : c'est la même contrainte déclarée
-  identiquement pour chaque ressource de l'instance. En CP-SAT : pour
-  chaque jour indisponible, ajoute un intervalle **fixe** (obligatoire, pas
-  optionnel, `NewIntervalVar` couvrant `[jour, jour + 1)`) dans la **même**
-  liste d'intervalles déjà passée à `AddNoOverlap`/`AddCumulative` de cette
-  ressource, avec une demande égale à sa capacité complète
-  (`capacite_par_ressource.get(ressource, 1)` — voir `ContrainteCapacite`
-  ci-dessus) : ça bloque tout le reste ce jour-là sans code de contrainte
-  séparé, et ça compose naturellement si la ressource a aussi une
-  `ContrainteCapacite`. Pour un décodeur non-CP-SAT : au moment de choisir
-  un jour de début sur cette ressource, rejette tout choix dont l'intervalle
-  `[debut, fin)` intersecte les jours indisponibles de la ressource (table
-  précalculée, jamais une recherche dans `instance.contraintes` à
-  l'intérieur du décodeur — voir "Précalcule tout" plus bas).
+- `ContrainteDisponibiliteRessource(ressource, jours_indisponibles,
+  jours_semaine_indisponibles)` : la ressource citée est indisponible durant
+  chacun des jours (relatifs) listés dans `jours_indisponibles`, **et/ou**
+  durant chaque occurrence du motif récurrent `jours_semaine_indisponibles`
+  (positions 0 à 6 d'un cycle de 7 jours depuis le jour 0 de l'instance,
+  répété sur tout l'horizon — ex. `[5, 6]` bloque les jours 5, 6, 12, 13,
+  19, 20...) — aucune opération ne peut y démarrer ni s'y poursuivre ces
+  jours-là. Les deux champs se combinent (jamais l'un remplace l'autre), y
+  compris entre plusieurs `ContrainteDisponibiliteRessource` distinctes pour
+  la **même** ressource (additionne, ne prends jamais seulement la dernière
+  rencontrée). Un calendrier global d'atelier (jours fériés/repos
+  hebdomadaire communs à toutes les ressources) n'est pas un mécanisme
+  séparé : c'est la même contrainte déclarée identiquement pour chaque
+  ressource de l'instance. En CP-SAT : matérialise d'abord
+  `jours_semaine_indisponibles` en jours concrets sur tout l'horizon
+  (`{jour for jour in range(horizon) if jour % 7 in motif}`), fusionne avec
+  `jours_indisponibles` dans le **même** ensemble par ressource, puis pour
+  chaque jour indisponible (peu importe son origine) ajoute un intervalle
+  **fixe** (obligatoire, pas optionnel, `NewIntervalVar` couvrant `[jour,
+  jour + 1)`) dans la **même** liste d'intervalles déjà passée à
+  `AddNoOverlap`/`AddCumulative` de cette ressource, avec une demande égale
+  à sa capacité complète (`capacite_par_ressource.get(ressource, 1)` — voir
+  `ContrainteCapacite` ci-dessus) : ça bloque tout le reste ce jour-là sans
+  code de contrainte séparé, et ça compose naturellement si la ressource a
+  aussi une `ContrainteCapacite`. Pour un décodeur non-CP-SAT : même
+  matérialisation en amont (une seule fois, jamais recalculée par appel),
+  puis au moment de choisir un jour de début sur cette ressource, rejette
+  tout choix dont l'intervalle `[debut, fin)` intersecte les jours
+  indisponibles de la ressource (table précalculée, jamais une recherche
+  dans `instance.contraintes` à l'intérieur du décodeur — voir "Précalcule
+  tout" plus bas).
+- `ContrainteChangementSerie(ressource, tache_avant, tache_apres, duree_setup)` :
+  contrainte **dirigée**, propre à `ressource` — si le solveur affecte à la
+  fois `tache_avant` et `tache_apres` à `ressource` **et** que `tache_avant`
+  finit avant que `tache_apres` ne commence (peu importe si une autre tâche
+  s'intercale entre les deux), impose `debut[tache_apres] >= fin[tache_avant]
+  + duree_setup`. Volontairement **conservateur** par rapport à la définition
+  exacte du vérificateur de faisabilité (qui n'exige le délai que si les deux
+  sont *directement* consécutives, sans aucune tâche intercalée) : cette
+  simplification ne produit jamais un planning illégal, juste parfois un
+  planning légèrement plus prudent qu'absolument nécessaire — bien plus
+  simple et fiable à générer qu'un séquencement explicite par ressource
+  (`AddCircuit`), qui resterait la seule façon d'atteindre l'exigence exacte.
+  En CP-SAT, pour chaque `ContrainteChangementSerie` dont les deux tâches
+  sont compatibles avec `ressource` (sinon, incompatibilité déjà signalée
+  ailleurs, rien à faire ici) :
+  ```python
+  ordre = modele.NewBoolVar(f"ordre_{tache_avant}_{tache_apres}_{ressource}")
+  p_avant = presence[(tache_avant, ressource)]
+  p_apres = presence[(tache_apres, ressource)]
+  modele.Add(debut[tache_apres] >= fin[tache_avant] + duree_setup).OnlyEnforceIf([p_avant, p_apres, ordre])
+  modele.Add(debut[tache_avant] >= fin[tache_apres]).OnlyEnforceIf([p_avant, p_apres, ordre.Not()])
+  ```
+  (`presence[(tache, ressource)]`/`debut`/`fin` : les mêmes variables déjà
+  construites pour `AddNoOverlap`/`AddCumulative` plus haut — jamais
+  redéfinies.) Pour un décodeur non-CP-SAT (liste/glouton qui place les
+  tâches sur une ressource dans l'ordre où il les décide) : au moment
+  d'ajouter une tâche à la fin de la liste déjà placée sur une ressource, si
+  la dernière tâche placée sur cette ressource et la nouvelle forment une
+  paire déclarée, impose `debut >= fin_derniere + duree_setup` avant de
+  fixer le début — le concept de "dernière tâche placée sur cette ressource"
+  existe déjà naturellement dans ce type de décodeur, rien de nouveau à
+  construire.
+
+## Replanification à horizon glissant (`planning_precedent`, `horizon_gele_jours`)
+
+Quand `horizon_gele_jours > 0` **et** `planning_precedent is not None` : toute opération de
+`planning_precedent` dont `debut < horizon_gele_jours` doit être **fixée** dans le nouveau
+planning — même `ressource`, même `debut`, jamais une simple suggestion — à condition que le
+couple `(tache, ressource)` de cette opération soit toujours une `CompatibiliteRessourceTache`
+valide de l'instance courante (sinon ignore cette opération : la tâche ou la ressource a disparu
+entre les deux exécutions, ce n'est pas une erreur à signaler). Si `planning_precedent is None` ou
+`horizon_gele_jours == 0`, ignore complètement ces deux paramètres — solve normal, sans aucune
+opération fixée.
+
+Objectif métier : un atelier qui a déjà commencé à exécuter le planning précédent ne doit pas voir
+les prochains jours perturbés par une replanification ; seul le reste de l'horizon (au-delà de
+`horizon_gele_jours`) reste librement optimisable.
+
+En CP-SAT :
+
+```python
+operations_precedentes = {
+    (op.tache, op.ressource): op.debut
+    for op in (planning_precedent.operations if planning_precedent else [])
+}
+for (tache_id, ressource_id), debut_var in debut.items():  # mêmes variables que plus haut
+    debut_precedent = operations_precedentes.get((tache_id, ressource_id))
+    if (
+        horizon_gele_jours > 0
+        and debut_precedent is not None
+        and debut_precedent < horizon_gele_jours
+        and (tache_id, ressource_id) in presence  # toujours une compatibilité valide
+    ):
+        modele.Add(presence[(tache_id, ressource_id)] == 1)
+        modele.Add(debut_var == debut_precedent)
+```
+
+(`presence`/`debut` : les mêmes variables déjà construites pour `AddNoOverlap`/`AddCumulative`
+plus haut — jamais redéfinies.) Pour un décodeur non-CP-SAT : avant de lancer le décodeur normal,
+place d'abord toutes les opérations gelées (dans leur `(ressource, debut)` fixe, en marquant la
+ressource occupée jusqu'à `debut + duree`), puis laisse le décodeur traiter les tâches restantes
+normalement — le mécanisme "contraintes dures = construction, jamais pénalité" (voir plus haut)
+s'applique ici aussi : une opération gelée n'est jamais un simple biais de coût, c'est une donnée
+d'entrée déjà décidée.
 
 ## Objectifs (`instance.objectifs`, liste polymorphe — jamais un seul supposé)
 
@@ -203,8 +300,8 @@ principal, jamais une contrainte.
 `contraintes` est une **liste polymorphe unique** (`Precedence |
 CompatibiliteRessourceTache | Echeance | CompetenceRequise |
 ContrainteCapacite | ContrainteIncompatibilite |
-ContrainteDisponibiliteRessource | ContrainteTailleLot`), à filtrer par type
-avec `isinstance` :
+ContrainteDisponibiliteRessource | ContrainteTailleLot |
+ContrainteChangementSerie`), à filtrer par type avec `isinstance` :
 
 ```python
 compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
@@ -214,6 +311,7 @@ capacites = [c for c in instance.contraintes if isinstance(c, ContrainteCapacite
 incompatibilites = [c for c in instance.contraintes if isinstance(c, ContrainteIncompatibilite)]
 disponibilites = [c for c in instance.contraintes if isinstance(c, ContrainteDisponibiliteRessource)]
 tailles_lot = [c for c in instance.contraintes if isinstance(c, ContrainteTailleLot)]  # jamais lue par le solveur
+changements_serie = [c for c in instance.contraintes if isinstance(c, ContrainteChangementSerie)]
 ```
 
 Champs exacts de chaque type — vérifie-les avant d'écrire du code qui y
@@ -230,9 +328,15 @@ accède, ne les devine jamais par analogie avec un autre projet :
   `tache_1`/`tache_2`) : relation symétrique, l'ordre des deux champs n'a
   aucun sens métier.
 - `ContrainteDisponibiliteRessource.ressource`, `.jours_indisponibles`
-  (liste de jours relatifs, jamais une date calendaire).
+  (liste de jours relatifs, jamais une date calendaire),
+  `.jours_semaine_indisponibles` (`list[int] | None`, positions 0-6 d'un
+  motif récurrent sur un cycle de 7 jours — voir plus haut ; les deux
+  champs se combinent, aucun des deux n'est garanti non-vide seul).
 - `ContrainteTailleLot.tache`, `.lot_min`, `.lot_max` : validation statique
   uniquement (voir plus haut) — jamais lue dans le code généré.
+- `ContrainteChangementSerie.ressource`, `.tache_avant`, `.tache_apres`,
+  `.duree_setup` (jours) : contrainte dirigée, `tache_avant` → `tache_apres`
+  uniquement dans ce sens — voir plus haut pour l'encodage.
 - `Tache.priorite` (`int | None`, 1 à 5) : départage uniquement, voir
   "Priorité des tâches" plus haut — jamais un champ de contrainte/objectif.
 - `Tache.quantite` (`int | None`) : donnée d'entrée pour `ContrainteTailleLot`
@@ -282,11 +386,21 @@ for c in instance.contraintes:
         taches_incompatibles.setdefault(c.tache, set()).add(c.tache_incompatible)
         taches_incompatibles.setdefault(c.tache_incompatible, set()).add(c.tache)
 
-jours_indisponibles_par_ressource: dict[str, set[int]] = {
-    c.ressource: set(c.jours_indisponibles)
-    for c in instance.contraintes
-    if isinstance(c, ContrainteDisponibiliteRessource)
-}
+# `.update(...)`, jamais une écriture directe `c.ressource: set(...)` dans un dict comprehension
+# — plusieurs ContrainteDisponibiliteRessource pour la MÊME ressource (jours explicites + motif
+# récurrent, ou deux contraintes distinctes) doivent s'additionner, jamais que la dernière
+# rencontrée écrase les précédentes.
+jours_indisponibles_par_ressource: dict[str, set[int]] = {}
+for c in instance.contraintes:
+    if not isinstance(c, ContrainteDisponibiliteRessource):
+        continue
+    jours = jours_indisponibles_par_ressource.setdefault(c.ressource, set())
+    jours.update(c.jours_indisponibles)
+    if c.jours_semaine_indisponibles:
+        # Matérialise le motif récurrent en jours concrets sur tout l'horizon (`horizon`,
+        # déjà connu à ce stade — calculé à partir des durées, voir plus haut/le plan
+        # technique) — une seule fois ici, jamais recalculé à chaque intervalle créé.
+        jours.update(jour for jour in range(horizon) if jour % 7 in c.jours_semaine_indisponibles)
 ```
 
 Pour un algorithme non-CP-SAT dont le décodeur/la fitness est appelé des

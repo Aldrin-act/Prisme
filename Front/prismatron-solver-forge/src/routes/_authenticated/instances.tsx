@@ -7,8 +7,10 @@ import {
   Cpu,
   Eye,
   FolderKanban,
+  GitCompareArrows,
   Loader2,
   Pencil,
+  Plus,
   Trash2,
   X,
 } from "lucide-react";
@@ -69,6 +71,7 @@ import {
   useCodeSourceSolveur,
   useJobsGeneration,
   useNomsProjet,
+  useComparaisonScenarios,
   PrismeAPIError,
   LABELS_SECTEUR_ACTIVITE,
   type Contrainte,
@@ -90,6 +93,10 @@ function InstancesPage() {
   // "Modifier", ouvert depuis DialogDetailInstance qui l'a déjà chargée en
   // entier — pas de fetch séparé).
   const [instanceAModifier, setInstanceAModifier] = useState<InstanceDetail | null>(null);
+  // Instance servant de point de départ pour un nouveau scénario comparatif
+  // (bouton "Créer un scénario", onglet Scénarios de DialogDetailInstance) —
+  // même mécanisme qu'instanceAModifier, jamais les deux en même temps.
+  const [instanceScenarioDeBase, setInstanceScenarioDeBase] = useState<InstanceDetail | null>(null);
   const { data: instances, isLoading } = useInstances();
   const { data: jobsGeneration } = useJobsGeneration();
   const { data: nomsProjetConnus } = useNomsProjet();
@@ -141,15 +148,34 @@ function InstancesPage() {
 
   const erreurSuppression = supprimer.error as PrismeAPIError | null;
 
+  // Seul point d'entrée vers le formulaire de création vierge (onglets Saisie
+  // T-R-C-O/Import ERP/Fichier Excel/Fichiers CSV/CSV Local/Fichier JSON) —
+  // sans instanceAEditer ni scenarioDeBase, IngestionDialog s'ouvre dans son
+  // mode par défaut.
+  function ouvrirCreationVierge() {
+    setInstanceAModifier(null);
+    setInstanceScenarioDeBase(null);
+    setDialogOuvert(true);
+  }
+
   function ouvrirModification(instance: InstanceDetail) {
     setAVoir(null);
     setInstanceAModifier(instance);
     setDialogOuvert(true);
   }
 
+  function ouvrirCreationScenario(instance: InstanceDetail) {
+    setAVoir(null);
+    setInstanceScenarioDeBase(instance);
+    setDialogOuvert(true);
+  }
+
   function fermerDialogIngestion(open: boolean) {
     setDialogOuvert(open);
-    if (!open) setInstanceAModifier(null);
+    if (!open) {
+      setInstanceAModifier(null);
+      setInstanceScenarioDeBase(null);
+    }
   }
 
   return (
@@ -157,6 +183,14 @@ function InstancesPage() {
       <PageHeader
         title="Instances"
         desc="Regroupez vos problèmes de planification, définitions DSL et solveurs générés en instances."
+        action={
+          <Button
+            onClick={ouvrirCreationVierge}
+            className="bg-gradient-to-r from-primary to-accent"
+          >
+            <Plus className="mr-2 h-4 w-4" /> Nouvelle instance
+          </Button>
+        }
       />
 
       {!isLoading && instances && instances.length === 0 && (
@@ -314,10 +348,11 @@ function InstancesPage() {
       )}
 
       <IngestionDialog
-        key={instanceAModifier?.instance_id ?? "nouvelle"}
+        key={instanceAModifier?.instance_id ?? instanceScenarioDeBase?.instance_id ?? "nouvelle"}
         open={dialogOuvert}
         onOpenChange={fermerDialogIngestion}
         instanceAEditer={instanceAModifier ?? undefined}
+        scenarioDeBase={instanceScenarioDeBase ?? undefined}
       />
 
       <AlertDialog open={!!aSupprimer} onOpenChange={(open) => !open && setASupprimer(null)}>
@@ -359,6 +394,7 @@ function InstancesPage() {
         instanceId={aVoir}
         onOpenChange={(open) => !open && setAVoir(null)}
         onModifier={ouvrirModification}
+        onCreerScenario={ouvrirCreationScenario}
       />
     </>
   );
@@ -373,6 +409,7 @@ const LABELS_TYPE_CONTRAINTE: Record<Contrainte["type"], string> = {
   disponibilite_ressource: "Disponibilité ressource",
   incompatibilite: "Incompatibilité",
   taille_lot: "Taille de lot",
+  changement_serie: "Changement de série",
 };
 
 // Phrases complètes, destinées à un lecteur métier — distinct du badge
@@ -389,14 +426,28 @@ function decrireContrainte(c: Contrainte): string {
       return `${c.tache} exige la compétence « ${c.competence} ».`;
     case "capacite":
       return `${c.ressource} peut traiter jusqu'à ${c.capacite} opération${c.capacite > 1 ? "s" : ""} simultanément.`;
-    case "disponibilite_ressource":
-      return `${c.ressource} est indisponible le${c.jours_indisponibles.length > 1 ? "s" : ""} jour${
-        c.jours_indisponibles.length > 1 ? "s" : ""
-      } ${c.jours_indisponibles.join(", ")}.`;
+    case "disponibilite_ressource": {
+      const parties: string[] = [];
+      if (c.jours_indisponibles.length > 0) {
+        parties.push(
+          `le${c.jours_indisponibles.length > 1 ? "s" : ""} jour${
+            c.jours_indisponibles.length > 1 ? "s" : ""
+          } ${c.jours_indisponibles.join(", ")}`,
+        );
+      }
+      if (c.jours_semaine_indisponibles && c.jours_semaine_indisponibles.length > 0) {
+        parties.push(
+          `chaque semaine aux positions ${c.jours_semaine_indisponibles.join(", ")} (motif récurrent)`,
+        );
+      }
+      return `${c.ressource} est indisponible ${parties.join(" et ")}.`;
+    }
     case "incompatibilite":
       return `${c.tache} et ${c.tache_incompatible} ne peuvent jamais partager la même ressource.`;
     case "taille_lot":
       return `${c.tache} doit produire entre ${c.lot_min} et ${c.lot_max} unités.`;
+    case "changement_serie":
+      return `Sur ${c.ressource}, faire suivre ${c.tache_avant} par ${c.tache_apres} exige un changement de série de ${c.duree_setup} jour${c.duree_setup > 1 ? "s" : ""}.`;
   }
 }
 
@@ -411,6 +462,7 @@ const ORDRE_TYPE_CONTRAINTE: Contrainte["type"][] = [
   "disponibilite_ressource",
   "incompatibilite",
   "taille_lot",
+  "changement_serie",
 ];
 
 function SectionContraintes({ contraintes }: { contraintes: Contrainte[] }) {
@@ -558,14 +610,83 @@ function SectionSolveurs({
   );
 }
 
+function SectionScenarios({
+  instance,
+  onCreerScenario,
+}: {
+  instance: InstanceDetail;
+  onCreerScenario: (instance: InstanceDetail) => void;
+}) {
+  const { data: comparaison, isLoading } = useComparaisonScenarios(instance.instance_id);
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs text-muted-foreground">
+          Compare cette instance à ses variantes (what-if) sur leur dernière exécution réussie
+          connue — n'exécute jamais rien elle-même.
+        </p>
+        <Button size="sm" variant="outline" onClick={() => onCreerScenario(instance)}>
+          <GitCompareArrows className="mr-1.5 h-3.5 w-3.5" /> Créer un scénario
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <p className="text-sm text-muted-foreground">Chargement...</p>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Instance</TableHead>
+              <TableHead>Projet</TableHead>
+              <TableHead>Makespan</TableHead>
+              <TableHead>Utilisation moy.</TableHead>
+              <TableHead>Tâches en retard</TableHead>
+              <TableHead>Exécuté le</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {(comparaison?.scenarios ?? []).map((s) => {
+              const taux = Object.values(s.metriques?.taux_utilisation_par_ressource ?? {});
+              const moyenne =
+                taux.length > 0 ? taux.reduce((a, b) => a + b, 0) / taux.length : null;
+              return (
+                <TableRow key={s.instance_id}>
+                  <TableCell className="font-mono text-xs">
+                    {s.instance_id}
+                    {s.est_instance_de_base && (
+                      <Badge variant="secondary" className="ml-1.5 text-xs">
+                        base
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>{s.nom_projet ?? "—"}</TableCell>
+                  <TableCell>{s.metriques ? s.metriques.makespan : "—"}</TableCell>
+                  <TableCell>{moyenne !== null ? `${moyenne.toFixed(0)}%` : "—"}</TableCell>
+                  <TableCell>{s.metriques ? s.metriques.taches_en_retard.length : "—"}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">
+                    {s.date_execution ? new Date(s.date_execution).toLocaleString() : "jamais"}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      )}
+    </div>
+  );
+}
+
 function DialogDetailInstance({
   instanceId,
   onOpenChange,
   onModifier,
+  onCreerScenario,
 }: {
   instanceId: string | null;
   onOpenChange: (open: boolean) => void;
   onModifier: (instance: InstanceDetail) => void;
+  onCreerScenario: (instance: InstanceDetail) => void;
 }) {
   const { data: instance, isLoading } = useInstance(instanceId);
   const queryClient = useQueryClient();
@@ -621,6 +742,7 @@ function DialogDetailInstance({
               <TabsTrigger value="flux">Flux</TabsTrigger>
               <TabsTrigger value="contraintes">Contraintes</TabsTrigger>
               <TabsTrigger value="solveurs">Solveurs</TabsTrigger>
+              <TabsTrigger value="scenarios">Scénarios</TabsTrigger>
             </TabsList>
 
             <TabsContent value="details" className="space-y-5">
@@ -735,6 +857,10 @@ function DialogDetailInstance({
                 structureContraintes={instance.structure_contraintes}
                 signatureObjectifs={calculerSignatureObjectifs(instance.objectifs)}
               />
+            </TabsContent>
+
+            <TabsContent value="scenarios">
+              <SectionScenarios instance={instance} onCreerScenario={onCreerScenario} />
             </TabsContent>
           </Tabs>
         )}

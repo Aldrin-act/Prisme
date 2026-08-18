@@ -184,7 +184,7 @@ def _dispatcher_action(
         return {"action": "regenerer_solveur", "job_id": resultat["job_id"]}
 
     if proposition.action_suggeree == "executer":
-        execution_id, resultat_execution = executer_pour_instance(
+        execution_id, resultat_execution, _ = executer_pour_instance(
             etat, registre, proposition.instance_id, utilisateur
         )
         return {"action": "executer", "execution_id": execution_id, "reussi": resultat_execution.reussi}
