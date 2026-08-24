@@ -36,9 +36,15 @@ from __future__ import annotations
 
 import csv
 from io import StringIO
+from typing import TYPE_CHECKING
 
 from adapters.commande_derivation import Commande, deriver_echeances_par_commande
-from adapters.competence_derivation import CompetenceSansDureeEstimee, deriver_compatibilites_par_competence
+from adapters.competence_derivation import (
+    CompetenceSansDureeEstimee,
+    ResultatTraduction,
+    completer_durees_par_estimation,
+    deriver_compatibilites_par_competence,
+)
 from dsl.schema import (
     CompatibiliteRessourceTache,
     CompetenceRequise,
@@ -49,6 +55,9 @@ from dsl.schema import (
     Ressource,
     Tache,
 )
+
+if TYPE_CHECKING:
+    from estimation import EstimateurDuree
 
 COLONNES_TACHES_REQUISES = ("id",)
 COLONNES_TACHES_OPTIONNELLES = ("nom", "duree_estimee_jours")
@@ -222,17 +231,29 @@ def traduire(
     ressources_csv: bytes,
     contraintes_csv: bytes,
     commandes_csv: bytes | None = None,
-) -> InstanceTRCO:
+    estimateur_duree: EstimateurDuree | None = None,
+) -> ResultatTraduction:
     """Traduit trois fichiers CSV (Tâches, Ressources, Contraintes), plus un quatrième optionnel
     (Commandes), en une instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est
     illisible, vide, ou qu'une colonne requise manque (y compris une durée estimée manquante
-    pour une dérivation par compétence) ; `pydantic.ValidationError` si les données une fois
-    lues ne forment pas une instance valide (id dupliqué, référence inconnue, tâche sans
-    compatibilité...)."""
+    pour une dérivation par compétence, si `estimateur_duree` n'est pas fourni ou ne peut rien
+    estimer) ; `pydantic.ValidationError` si les données une fois lues ne forment pas une
+    instance valide (id dupliqué, référence inconnue, tâche sans compatibilité...).
+
+    `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
+    automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
+    aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
+    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée)."""
     taches, durees_estimees = _lire_taches(taches_csv)
     ressources = _lire_ressources(ressources_csv)
     contraintes = _lire_contraintes(contraintes_csv)
     durees_estimees_connues = {t: d for t, d in durees_estimees.items() if d is not None}
+
+    avertissements: list[str] = []
+    if estimateur_duree is not None:
+        durees_estimees_connues, avertissements = completer_durees_par_estimation(
+            contraintes, ressources, taches, durees_estimees_connues, estimateur_duree
+        )
 
     try:
         compatibilites_derivees = deriver_compatibilites_par_competence(
@@ -244,9 +265,10 @@ def traduire(
     commandes = _lire_commandes(commandes_csv) if commandes_csv is not None else []
     echeances_derivees = deriver_echeances_par_commande(commandes, contraintes)
 
-    return InstanceTRCO(
+    instance = InstanceTRCO(
         taches=taches,
         ressources=ressources,
         contraintes=[*contraintes, *compatibilites_derivees, *echeances_derivees],
         objectifs=[MinimiserMakespan()],
     )
+    return ResultatTraduction(instance=instance, avertissements=tuple(avertissements))

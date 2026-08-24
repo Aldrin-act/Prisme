@@ -1,8 +1,12 @@
-# Perspective — Estimation de charge par apprentissage supervisé
+# Estimation de charge par apprentissage supervisé
 
-> Destiné au chapitre « Perspectives » du rapport de stage (chapitre 9, renvoyé depuis §3.4 et
-> §1.8 de `docs/contexte_general.md`). Ce texte décrit une évolution **non réalisée dans le cadre
-> de ce PFE**, volontairement laissée hors périmètre (§3.3.2) — il ne modifie aucun code du dépôt.
+> **Statut : implémenté** (`estimation/`, voir `estimation/README.md`) — ce texte documentait à
+> l'origine une évolution laissée hors périmètre (§3.3.2) ; il sert maintenant de justification de
+> conception à l'implémentation réalisée, à réutiliser au chapitre « Réalisation » du rapport de
+> stage plutôt qu'au chapitre « Perspectives ». Le chaînon manquant identifié ci-dessous (aucune
+> durée réellement observée nulle part dans PRISME) reste, lui, non résolu : c'est pourquoi
+> l'implémentation s'entraîne sur des données **synthétiques**, pas sur un historique réel — voir
+> « Statut de l'implémentation » en fin de document.
 
 ## Rappel du choix actuel
 
@@ -33,51 +37,60 @@ méthodologique déjà suivi par le projet : construire ce qui *juge* avant ce q
 §3.2.2). Ici, juger un modèle de prédiction de durée nécessite d'abord de savoir mesurer son
 erreur, ce qui suppose que la durée réelle existe quelque part dans le système.
 
-## Ce qu'impliquerait l'ajout de cette brique
+## Comment l'implémentation s'intègre au système existant
 
-Si cette capture existait, l'estimation de charge s'intégrerait au système existant sans le
-redéfinir :
+L'estimation (`estimation/`) s'intègre sans redéfinir le système existant, exactement comme
+envisagé ci-dessus :
 
-- **Source de la durée, pas structure du DSL.** `CompatibiliteRessourceTache.duree` resterait le
-  seul porteur de durée du modèle pivot (§4.2.3) ; l'estimation ML en deviendrait une source
-  possible parmi d'autres (déclarée → dérivée des compétences → **estimée**), au même niveau que
-  les deux sources actuelles, sans toucher à `InstanceTRCO` ni au solveur généré.
-- **Position dans le pipeline.** L'estimation prendrait place en amont de la génération, au
-  niveau de l'agent de compréhension (§3.3.1) — au moment où une instance T-R-C-O est construite à
-  partir des données brutes du client — jamais au moment de l'exécution répétée du solveur figé,
-  ce qui préserverait le principe fondateur *générer une fois, réexécuter plusieurs fois* (§1.6).
+- **Source de la durée, pas structure du DSL.** `CompatibiliteRessourceTache.duree` reste le seul
+  porteur de durée du modèle pivot (§4.2.3) ; l'estimation ML en est une source de plus (déclarée →
+  dérivée des compétences → **estimée**), au même niveau que les deux sources actuelles
+  (`estimation/modele.py::vers_durees_estimees_par_tache` produit exactement la forme attendue par
+  `adapters/competence_derivation.py::deriver_compatibilites_par_competence`) — `InstanceTRCO` et
+  le solveur généré n'en savent rien.
+- **Position dans le pipeline.** L'estimation prend place à la couche adaptateur/ingestion
+  (`adapters/csv_import/traducteur.py`, `adapters/json_import/traducteur.py` — paramètre optionnel
+  `estimateur_duree`), jamais au moment de l'exécution répétée du solveur figé — le principe
+  fondateur *générer une fois, réexécuter plusieurs fois* (§1.6) reste intact.
 - **Décision humaine préservée.** Conformément au principe transversal du projet (§1.6, FC4 de la
-  Fig. 2.2), une durée estimée par un modèle ne devrait jamais remplacer silencieusement une
-  donnée déclarée : elle serait proposée avec une marque de provenance et un niveau de confiance
-  explicites, à valider par un humain avant d'entrer dans l'instance — le système alerte et
-  propose, il ne décide jamais seul.
-- **Modèle et données.** Une régression supervisée (gradient boosting de type XGBoost, cohérent
-  avec le choix initial) sur des variables tabulaires (type de tâche, ressource, compétences
-  mobilisées, quantité/lot, éventuellement contexte temporel), entraînée sur l'historique propre à
-  *chaque client* — un modèle par atelier, pas un modèle global, la structure des tâches variant
-  trop d'un atelier à l'autre pour un apprentissage transférable.
+  Fig. 2.2), une durée estimée ne remplace jamais silencieusement une donnée déclarée : `traduire()`
+  retourne désormais `ResultatTraduction(instance, avertissements)` plutôt qu'une `InstanceTRCO`
+  nue, et chaque durée comblée par le modèle ajoute un avertissement explicite, visible par
+  l'appelant (dashboard/API) — le système alerte et propose, il ne décide jamais seul.
+- **Modèle et données.** Une régression supervisée (`GradientBoostingRegressor` scikit-learn —
+  pas XGBoost, voir `estimation/README.md` pour la justification) sur des traits tâche/ressource
+  (quantité, priorité, type de ressource, nombre de compétences) — pas la durée déjà déclarée
+  comme trait d'entrée (elle n'existe justement pas dans le cas d'usage réel, combler une durée
+  *manquante*).
 
-## Limites et risques propres à cette évolution
+## Limites et risques
 
-- **Démarrage à froid** : un nouveau client n'a, par construction, aucun historique le temps de
-  quelques cycles d'exécution — l'estimation ne pourrait s'activer qu'après une période de collecte,
-  avec repli sur la durée déclarée en attendant.
-- **Dérive de contexte** : un changement de processus, d'équipement ou d'équipe rend un modèle
-  entraîné obsolète sans qu'il le signale de lui-même — un ré-entraînement périodique et une
-  surveillance de la qualité des prédictions (au même titre que la cascade de validation surveille
-  un solveur généré) seraient nécessaires.
+- **Entraîné sur du synthétique, pas sur un historique réel.** `estimation/donnees_historique.py`
+  dérive ses données d'entraînement du banc synthétique existant (Étape 3) plutôt que d'un
+  historique client — voir « Le chaînon manquant » ci-dessus, toujours vrai : aucune donnée de
+  durée réellement observée n'existe nulle part dans PRISME. La `confiance` rapportée par le modèle
+  mesure un ajustement à ce synthétique, jamais une garantie sur des données réelles.
+- **Démarrage à froid côté réel.** Une fois un historique réel disponible (une fois le chaînon
+  manquant construit), un nouveau client n'en aurait, par construction, aucun le temps de quelques
+  cycles d'exécution — repli sur la durée déclarée en attendant, déjà le comportement par défaut
+  (`estimateur_duree=None`).
+- **Dérive de contexte** : un changement de processus, d'équipement ou d'équipe rendrait un modèle
+  entraîné sur un vrai historique obsolète sans qu'il le signale de lui-même — un ré-entraînement
+  périodique et une surveillance de la qualité des prédictions resteraient nécessaires une fois du
+  réel en jeu.
 - **Auditabilité réduite** : contrairement à une durée déclarée ou dérivée des compétences,
-  vérifiable par simple lecture, une durée prédite introduit une opacité que le reste de
-  l'architecture s'est justement attaché à éviter (§5.3, §6) — un argument supplémentaire pour la
-  cantonner à une proposition explicitement marquée comme telle, jamais une vérité silencieuse.
+  vérifiable par simple lecture, une durée estimée introduit une opacité que le reste de
+  l'architecture s'est justement attaché à éviter (§5.3, §6) — d'où l'avertissement explicite
+  plutôt qu'une fusion silencieuse dans la donnée déclarée.
 
-## Pourquoi ce n'est pas un chantier retenu pour ce PFE
+## Statut de l'implémentation
 
-Le périmètre de la preuve de concept (§1.8) privilégie délibérément la démonstration bout en bout
-de la boucle complète (description → génération → exécution → validation) plutôt que
-l'exhaustivité des sources de données d'entrée. Ajouter l'estimation de charge sans disposer
-d'abord d'un historique d'exécution réel reviendrait à entraîner un modèle sans vérité terrain —
-un risque de fiabilité que le projet a précisément cherché à éviter en écartant cette voie dès le
-cadrage (§3.3.2). Cette évolution reste donc une perspective cohérente avec l'architecture
-existante, à ouvrir une fois PRISME en usage réel chez un ou plusieurs clients, et seulement après
-qu'un mécanisme de capture du réel aura lui-même été construit et validé.
+Implémenté (`estimation/`), branché dans `csv_import`/`json_import`, testé
+(`tests/unit/test_estimation.py`, `tests/unit/test_csv_import_adapter.py`,
+`tests/unit/test_json_import_adapter.py`), démontrable (`uv run python -m
+scripts.demo_estimation_charge`). Non fait, volontairement, et à traiter comme une perspective
+distincte : le chaînon manquant lui-même (capture d'une durée réellement observée — `Planning`/
+`OperationPlanifiee`, tables Postgres `operations_planifiees`), un registre de modèles persistés
+par client, et tout entraînement sur un historique réel. Sans le premier de ces trois,
+les deux autres n'ont pas de donnée à consommer — l'ordre de construction resterait le même que
+celui déjà suivi par le projet (§1.9) : juger avant de générer, donc mesurer avant d'apprendre.

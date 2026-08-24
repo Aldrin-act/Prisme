@@ -27,13 +27,21 @@ jamais la notion de "commande" elle-même (§5.3, vocabulaire DSL fini).
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from adapters.commande_derivation import Commande, deriver_echeances_par_commande
-from adapters.competence_derivation import CompetenceSansDureeEstimee, deriver_compatibilites_par_competence
+from adapters.competence_derivation import (
+    CompetenceSansDureeEstimee,
+    ResultatTraduction,
+    completer_durees_par_estimation,
+    deriver_compatibilites_par_competence,
+)
 from dsl.schema import Contrainte, InstanceTRCO, MinimiserMakespan, Objectif, Ressource, Tache
+
+if TYPE_CHECKING:
+    from estimation import EstimateurDuree
 
 
 class ErreurPayloadInvalide(Exception):
@@ -78,20 +86,34 @@ class InstanceBrute(BaseModel):
     commandes: list[CommandeBrute] = Field(default_factory=list)
 
 
-def traduire(payload: dict[str, Any]) -> InstanceTRCO:
+def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None = None) -> ResultatTraduction:
     """Traduit un payload JSON « brut avec compétences » en instance T-R-C-O.
     Lève `ErreurPayloadInvalide` si la structure ne correspond pas au format
-    attendu (y compris une durée estimée manquante pour une dérivation) ;
+    attendu (y compris une durée estimée manquante pour une dérivation, si
+    `estimateur_duree` n'est pas fourni ou ne peut rien estimer) ;
     `pydantic.ValidationError` si l'instance finale, compatibilités dérivées
     comprises, reste invalide au sens du DSL (id dupliqué, référence
-    inconnue, tâche sans compatibilité...)."""
+    inconnue, tâche sans compatibilité...).
+
+    `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
+    automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
+    aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
+    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée)."""
     try:
         brute = InstanceBrute.model_validate(payload)
     except ValidationError as erreur:
         raise ErreurPayloadInvalide(str(erreur)) from erreur
 
-    taches = [Tache(id=t.id, nom=t.nom, priorite=t.priorite, statut=t.statut) for t in brute.taches]
+    taches = [
+        Tache(id=t.id, nom=t.nom, priorite=t.priorite, statut=t.statut, quantite=t.quantite) for t in brute.taches
+    ]
     durees_estimees = {t.id: t.duree_estimee_jours for t in brute.taches if t.duree_estimee_jours is not None}
+
+    avertissements: list[str] = []
+    if estimateur_duree is not None:
+        durees_estimees, avertissements = completer_durees_par_estimation(
+            brute.contraintes, brute.ressources, taches, durees_estimees, estimateur_duree
+        )
 
     try:
         compatibilites_derivees = deriver_compatibilites_par_competence(
@@ -106,9 +128,10 @@ def traduire(payload: dict[str, Any]) -> InstanceTRCO:
     ]
     echeances_derivees = deriver_echeances_par_commande(commandes, brute.contraintes)
 
-    return InstanceTRCO(
+    instance = InstanceTRCO(
         taches=taches,
         ressources=brute.ressources,
         contraintes=[*brute.contraintes, *compatibilites_derivees, *echeances_derivees],
         objectifs=brute.objectifs,
     )
+    return ResultatTraduction(instance=instance, avertissements=tuple(avertissements))

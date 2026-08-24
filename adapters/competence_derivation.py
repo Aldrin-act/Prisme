@@ -22,8 +22,26 @@ plus, jamais remplacé ici.
 from __future__ import annotations
 
 from collections import defaultdict
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from dsl.schema import CompatibiliteRessourceTache, CompetenceRequise, Contrainte, Ressource
+from dsl.schema import CompatibiliteRessourceTache, CompetenceRequise, Contrainte, InstanceTRCO, Ressource, Tache
+
+if TYPE_CHECKING:
+    from estimation import EstimateurDuree
+
+
+@dataclass(frozen=True)
+class ResultatTraduction:
+    """Résultat d'une traduction d'adaptateur (`csv_import`/`json_import`) —
+    une instance T-R-C-O plus les avertissements à faire vérifier par un
+    humain (§FC4, décision humaine préservée), notamment quand une durée
+    manquante a été comblée par un `EstimateurDuree` plutôt que déclarée.
+    Même forme que `ResultatComprehension`
+    (`adapters/agent_comprehension/agent.py`)."""
+
+    instance: InstanceTRCO
+    avertissements: tuple[str, ...] = ()
 
 
 class CompetenceSansDureeEstimee(Exception):
@@ -66,3 +84,46 @@ def deriver_compatibilites_par_competence(
             if requises <= set(ressource.competences):
                 derivees.append(CompatibiliteRessourceTache(tache=tache_id, ressource=ressource.id, duree=duree))
     return derivees
+
+
+def completer_durees_par_estimation(
+    contraintes: list[Contrainte],
+    ressources: list[Ressource],
+    taches: list[Tache],
+    durees_connues: dict[str, int],
+    estimateur_duree: EstimateurDuree,
+) -> tuple[dict[str, int], list[str]]:
+    """Comble, via `estimateur_duree`, la durée des tâches à compétence(s)
+    requise(s) qui n'ont encore aucune durée connue dans `durees_connues` —
+    seulement si au moins une ressource déclarée couvre les compétences
+    exigées (sinon rien à estimer : c'est la ressource elle-même qui manque,
+    pas seulement sa durée — `CompetenceSansDureeEstimee` se lèvera plus
+    loin, comme aujourd'hui). Ne mute jamais `durees_connues` : renvoie un
+    nouveau dict complété, et un avertissement par tâche comblée, pour que
+    l'appelant les rende visibles (§FC4, décision humaine préservée) plutôt
+    que de laisser une estimation se fondre silencieusement dans une donnée
+    déclarée."""
+    competences_requises_par_tache: dict[str, set[str]] = defaultdict(set)
+    for contrainte in contraintes:
+        if isinstance(contrainte, CompetenceRequise):
+            competences_requises_par_tache[contrainte.tache].add(contrainte.competence)
+
+    taches_par_id = {t.id: t for t in taches}
+    durees_completees = dict(durees_connues)
+    avertissements: list[str] = []
+    for tache_id, requises in competences_requises_par_tache.items():
+        if tache_id in durees_completees:
+            continue
+        tache = taches_par_id.get(tache_id)
+        if tache is None:
+            continue
+        candidates = sorted((r for r in ressources if requises <= set(r.competences)), key=lambda r: r.id)
+        if not candidates:
+            continue
+        estimation = estimateur_duree.estimer(tache, candidates[0])
+        durees_completees[tache_id] = estimation.duree_estimee_jours
+        avertissements.append(
+            f"durée de {tache_id!r} estimée par apprentissage automatique "
+            f"({estimation.duree_estimee_jours} j, confiance {estimation.confiance:.2f}) — à valider"
+        )
+    return durees_completees, avertissements

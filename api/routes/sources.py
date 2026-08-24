@@ -31,6 +31,7 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import comprendre_donnees_erp
+from adapters.competence_derivation import ResultatTraduction
 from adapters.csv_import import ErreurFichierInvalide as ErreurFichierCsvInvalide
 from adapters.csv_import import traduire as traduire_csv
 from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
@@ -39,7 +40,6 @@ from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
-from dsl.schema import InstanceTRCO
 from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.client_llm import construire_modele_comprehension
 
@@ -128,7 +128,7 @@ def _reconstruire_fichiers_csv(texte: str) -> tuple[bytes, bytes, bytes]:
     )
 
 
-def _traduire_deterministe(donnees_brutes: str) -> InstanceTRCO:
+def _traduire_deterministe(donnees_brutes: str) -> ResultatTraduction:
     """JSON canonique (`adapters.json_import`) si le texte entier en est un ;
     sinon CSV Tâches/Ressources/Contraintes (`adapters.csv_import`), reconstitués
     depuis le texte brut. Lève `ErreurStructureNonReconnue` si ni l'un ni
@@ -298,7 +298,7 @@ def generer_instance_deterministe(
     verifier_acces_client(utilisateur, source.client_id)
 
     try:
-        instance = _traduire_deterministe(source.donnees_brutes)
+        resultat = _traduire_deterministe(source.donnees_brutes)
     except ErreurStructureNonReconnue as erreur:
         raise HTTPException(
             status_code=422,
@@ -311,12 +311,13 @@ def generer_instance_deterministe(
 
     instance_id = etat.enregistrer_instance(
         source.client_id,
-        instance,
+        resultat.instance,
         source_id=source_id,
         nom_projet=nom_projet if nom_projet is not None else source.nom,
         secteur_activite=source.secteur_activite,
     )
     return {
         "instance_id": instance_id,
-        "structure_contraintes": structure_contraintes(instance),
+        "structure_contraintes": structure_contraintes(resultat.instance),
+        "avertissements": list(resultat.avertissements),
     }

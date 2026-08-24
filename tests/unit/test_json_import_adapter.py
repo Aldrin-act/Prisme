@@ -8,7 +8,17 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from adapters.json_import import ErreurPayloadInvalide, traduire
+from adapters.json_import import ErreurPayloadInvalide
+from adapters.json_import import traduire as _traduire_resultat
+from dsl.schema import InstanceTRCO
+
+
+def traduire(*args: object, **kwargs: object) -> InstanceTRCO:
+    """`traduire()` renvoie désormais un `ResultatTraduction` (instance +
+    avertissements, §FC4) — les tests ci-dessous ne portent que sur
+    l'instance produite ; le comportement des avertissements/de
+    `estimateur_duree` est couvert séparément plus bas."""
+    return _traduire_resultat(*args, **kwargs).instance  # type: ignore[arg-type]
 
 
 def _payload_de_base(**surcharges: object) -> dict:
@@ -113,3 +123,70 @@ def test_traduire_commande_sans_taches_rejetee() -> None:
     payload = _payload_de_base(commandes=[{"id": "CMD1", "taches": []}])
     with pytest.raises(ErreurPayloadInvalide):
         traduire(payload)
+
+
+# --- ResultatTraduction / estimateur_duree (§FC4, décision humaine préservée) ---
+#
+# Même faux estimateur duck-typé que `tests/unit/test_csv_import_adapter.py` —
+# voir ce fichier pour la justification (ne pas exiger l'extra optionnel
+# `estimation` dans cette suite).
+
+
+class _EstimationFausse:
+    def __init__(self, duree_estimee_jours: int, confiance: float) -> None:
+        self.duree_estimee_jours = duree_estimee_jours
+        self.confiance = confiance
+
+
+class _EstimateurFaux:
+    def __init__(self, duree: int, confiance: float = 0.9) -> None:
+        self._duree = duree
+        self._confiance = confiance
+
+    def estimer(self, tache: object, ressource: object) -> _EstimationFausse:
+        return _EstimationFausse(self._duree, self._confiance)
+
+
+def test_traduire_par_defaut_renvoie_un_resultat_sans_avertissement() -> None:
+    resultat = _traduire_resultat(_payload_de_base())
+    assert resultat.avertissements == ()
+
+
+def test_estimateur_duree_comble_une_duree_manquante_et_previent() -> None:
+    payload = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1", "competences": ["decoupe"]}],
+        "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
+    }
+
+    resultat = _traduire_resultat(payload, estimateur_duree=_EstimateurFaux(17))
+
+    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
+    assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 17)]
+    assert len(resultat.avertissements) == 1
+    assert "T1" in resultat.avertissements[0]
+
+
+def test_duree_declaree_l_emporte_toujours_sur_l_estimateur() -> None:
+    payload = {
+        "taches": [{"id": "T1", "duree_estimee_jours": 25}],
+        "ressources": [{"id": "R1", "competences": ["decoupe"]}],
+        "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
+    }
+
+    resultat = _traduire_resultat(payload, estimateur_duree=_EstimateurFaux(99))
+
+    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
+    assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
+    assert resultat.avertissements == ()
+
+
+def test_sans_estimateur_duree_manquante_leve_toujours_erreur() -> None:
+    payload = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1", "competences": ["decoupe"]}],
+        "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
+    }
+
+    with pytest.raises(ErreurPayloadInvalide, match="durée estimée manquante"):
+        _traduire_resultat(payload)

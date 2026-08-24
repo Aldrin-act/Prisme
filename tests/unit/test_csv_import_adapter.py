@@ -8,7 +8,18 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from adapters.csv_import import ErreurFichierInvalide, traduire
+from adapters.csv_import import ErreurFichierInvalide
+from adapters.csv_import import traduire as _traduire_resultat
+from dsl.schema import InstanceTRCO
+
+
+def traduire(*args: object, **kwargs: object) -> InstanceTRCO:
+    """`traduire()` renvoie désormais un `ResultatTraduction` (instance +
+    avertissements, §FC4) — les tests ci-dessous ne portent que sur
+    l'instance produite ; le comportement des avertissements/de
+    `estimateur_duree` est couvert séparément plus bas."""
+    return _traduire_resultat(*args, **kwargs).instance  # type: ignore[arg-type]
+
 
 TACHES_CSV = b"id,nom\nT1,Decoupe\nT2,Assemblage\n"
 RESSOURCES_CSV = b"id,nom\nR1,Decoupeuse\n"
@@ -184,3 +195,72 @@ def test_commande_date_limite_non_numerique_leve_erreur_fichier_invalide() -> No
 
     with pytest.raises(ErreurFichierInvalide, match="date limite invalide"):
         traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV, commandes_csv)
+
+
+# --- ResultatTraduction / estimateur_duree (§FC4, décision humaine préservée) ---
+#
+# Un faux estimateur duck-typé (pas `estimation.EstimateurDuree`) : ces tests
+# vérifient le branchement dans l'adaptateur, pas le modèle de régression
+# lui-même (couvert par `tests/unit/test_estimation.py`, qui a besoin de
+# l'extra optionnel `estimation` — cette suite `tests/unit` n'en a pas besoin).
+
+
+class _EstimationFausse:
+    def __init__(self, duree_estimee_jours: int, confiance: float) -> None:
+        self.duree_estimee_jours = duree_estimee_jours
+        self.confiance = confiance
+
+
+class _EstimateurFaux:
+    def __init__(self, duree: int, confiance: float = 0.9) -> None:
+        self._duree = duree
+        self._confiance = confiance
+
+    def estimer(self, tache: object, ressource: object) -> _EstimationFausse:
+        return _EstimationFausse(self._duree, self._confiance)
+
+
+def test_traduire_par_defaut_renvoie_un_resultat_sans_avertissement() -> None:
+    resultat = _traduire_resultat(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV)
+    assert resultat.avertissements == ()
+
+
+def test_estimateur_duree_comble_une_duree_manquante_et_previent() -> None:
+    taches_csv = b"id\nT1\n"
+    ressources_csv = b"id,competences\nR1,decoupe\n"
+    contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
+
+    resultat = _traduire_resultat(
+        taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(17)
+    )
+
+    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
+    assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 17)]
+    assert len(resultat.avertissements) == 1
+    assert "T1" in resultat.avertissements[0]
+
+
+def test_duree_declaree_l_emporte_toujours_sur_l_estimateur() -> None:
+    taches_csv = b"id,duree_estimee_jours\nT1,25\n"
+    ressources_csv = b"id,competences\nR1,decoupe\n"
+    contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
+
+    resultat = _traduire_resultat(
+        taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(99)
+    )
+
+    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
+    assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
+    assert resultat.avertissements == ()
+
+
+def test_sans_estimateur_duree_manquante_leve_toujours_erreur() -> None:
+    """`estimateur_duree` est strictement optionnel — comportement par défaut
+    inchangé quand il est absent, même pour une tâche qu'un estimateur
+    aurait pu combler."""
+    taches_csv = b"id\nT1\n"
+    ressources_csv = b"id,competences\nR1,decoupe\n"
+    contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
+
+    with pytest.raises(ErreurFichierInvalide, match="durée estimée manquante"):
+        _traduire_resultat(taches_csv, ressources_csv, contraintes_csv)

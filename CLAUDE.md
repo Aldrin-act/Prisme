@@ -25,6 +25,7 @@ versions — regenerate with `uv lock` after any `pyproject.toml` change. Core d
 ```bash
 uv sync --all-extras   # rebuilds the whole environment (downloads Python 3.11 if needed)
 uv sync --extra llm    # + anthropic, langchain (multi-agent); uv sync --extra sandbox  # + docker SDK
+uv sync --extra estimation                                 # + scikit-learn/numpy (estimation/, MT3)
 uv run pytest                                              # full suite (Docker/Postgres tests self-skip if unreachable)
 uv run pytest tests/unit                                   # Layer-1 only — no OR-Tools/Docker needed
 uv run pytest tests/unit/test_cascade.py::<name> -k <expr> # single test / filter
@@ -213,7 +214,8 @@ and to `SourceDonnees`; purely an API/storage-layer grouping, never touches the 
 | `validation_engine/` | Validation cascade + `stability_test.py` |
 | `solver_store/` + `sandbox/` | Persistent registry (`registry.py`) + frozen `artifacts/`; ephemeral disposable-container execution (`runner.py`, `container/`) |
 | `api/` | `auth`/`clients` (JWT, multi-tenant), `sources`/`ingestion`/`adapters`, `generation` (SSE), `execution`/`planning`/`planifier`/`audit`/`validation`/`diagnostics`/`supervision`; state via `etat.py` (in-memory, tests) or `etat_postgres.py` (prod), same interface |
-| `adapters/` | ERP anti-corruption layer: `erp_reference/` (PoC), `greensig/` (real ERP), `tableur/`/`csv_import/`/`json_import/` (xlsx/CSV/JSON; the latter two can derive `CompatibiliteRessourceTache` from declared competences + an estimated duration instead of it being hand-typed, shared logic in `competence_derivation.py`), `agent_comprehension/` (LLM-proposed mapping, never trusted directly) |
+| `adapters/` | ERP anti-corruption layer: `erp_reference/` (PoC), `greensig/` (real ERP), `tableur/`/`csv_import/`/`json_import/` (xlsx/CSV/JSON; the latter two can derive `CompatibiliteRessourceTache` from declared competences + an estimated duration instead of it being hand-typed, shared logic in `competence_derivation.py`, now optionally backed by `estimation/`), `agent_comprehension/` (LLM-proposed mapping, never trusted directly) |
+| `estimation/` | MT3 (load/duration estimation) implemented: `EstimateurDuree` (scikit-learn `GradientBoostingRegressor`) predicts a task's duration from task/resource traits, trained on **synthetic** data (`historique_synthetique()`, mirrors `validation_engine/synthetic_bench/`) — no real observed-duration data exists anywhere in PRISME yet (see `docs/perspective_estimation_charge.md`). Wired into `csv_import`/`json_import` via an optional `estimateur_duree` param (`competence_derivation.py::completer_durees_par_estimation`); `traduire()` in both now returns `ResultatTraduction(instance, avertissements)` instead of a bare `InstanceTRCO` — every ML-filled duration surfaces as an explicit avertissement, never silently trusted (§FC4). Extra: `uv sync --extra estimation`. |
 | `Front/prismatron-solver-forge/` | TanStack Start + React + TS + Tailwind — auth, clients, instances, solver-generator (SSE), execution, schedules, analytics |
 | `tests/` | `unit/`, `integration/` only — no separate property-based/generation-stability suites (see below) |
 | `docs/` | Substantial by now: agent pipeline (`agents_utilises.md`, `agents_fonctionnement_detaille.md`, `schema_agents.md`), `boucle_reparation.md`, DSL nomenclature |

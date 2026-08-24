@@ -77,7 +77,7 @@ async def ingerer_depuis_csv(
     secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
-) -> dict[str, str]:
+) -> dict[str, object]:
     """Ingestion depuis trois fichiers CSV séparés (§5.4) — Tâches, Ressources
     et Contraintes (`adapters/csv_import/`), format standard pour l'import
     de données tabulaires. `commandes` (optionnel, quatrième fichier) relie
@@ -98,16 +98,20 @@ async def ingerer_depuis_csv(
     )
     commandes_octets = await commandes.read() if commandes is not None else None
     try:
-        instance = traduire_csv(taches_octets, ressources_octets, contraintes_octets, commandes_octets)
+        resultat = traduire_csv(taches_octets, ressources_octets, contraintes_octets, commandes_octets)
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     instance_id = etat.enregistrer_instance(
-        client_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
+        client_id, resultat.instance, nom_projet=nom_projet, secteur_activite=secteur_activite
     )
-    return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
+    return {
+        "instance_id": instance_id,
+        "structure_contraintes": structure_contraintes(resultat.instance),
+        "avertissements": list(resultat.avertissements),
+    }
 
 
 @router.post("/json/{client_id}")
@@ -118,7 +122,7 @@ def ingerer_depuis_json_avec_competences(
     secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
-) -> dict[str, str]:
+) -> dict[str, object]:
     """Ingestion depuis un JSON « brut avec compétences » (§5.4, `adapters/json_import/`)
     — sur-ensemble strict d'une instance T-R-C-O canonique : une tâche peut y
     porter une durée estimée (`duree_estimee_minutes`), permettant de dériver
@@ -127,16 +131,20 @@ def ingerer_depuis_json_avec_competences(
     ingéré tel quel, sans transformation."""
     verifier_acces_client(utilisateur, client_id)
     try:
-        instance = traduire_json(payload)
+        resultat = traduire_json(payload)
     except ErreurPayloadJsonInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     instance_id = etat.enregistrer_instance(
-        client_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
+        client_id, resultat.instance, nom_projet=nom_projet, secteur_activite=secteur_activite
     )
-    return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
+    return {
+        "instance_id": instance_id,
+        "structure_contraintes": structure_contraintes(resultat.instance),
+        "avertissements": list(resultat.avertissements),
+    }
 
 
 class RequeteComprehension(BaseModel):
@@ -255,11 +263,12 @@ def ingerer_depuis_csv_local(
 
     # Traduire en instance TRCO
     try:
-        instance = traduire_csv(taches_octets, ressources_octets, contraintes_octets)
+        resultat = traduire_csv(taches_octets, ressources_octets, contraintes_octets)
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+    instance = resultat.instance
 
     # Enregistrer l'instance
     instance_id = etat.enregistrer_instance(
@@ -270,6 +279,7 @@ def ingerer_depuis_csv_local(
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(instance),
+        "avertissements": list(resultat.avertissements),
         "statistiques": {
             "taches": len(instance.taches),
             "ressources": len(instance.ressources),

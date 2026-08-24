@@ -106,9 +106,9 @@ def test_traduire_deterministe_reconnait_un_json_canonique() -> None:
         '"ressource": "R1", "duree": 10}]}'
     )
 
-    instance = _traduire_deterministe(payload)
+    resultat = _traduire_deterministe(payload)
 
-    assert [t.id for t in instance.taches] == ["T1"]
+    assert [t.id for t in resultat.instance.taches] == ["T1"]
 
 
 def test_traduire_deterministe_reconnait_un_csv_multi_blocs() -> None:
@@ -119,9 +119,9 @@ def test_traduire_deterministe_reconnait_un_csv_multi_blocs() -> None:
         "compatibilite_ressource_tache,T1,R1,10"
     )
 
-    instance = _traduire_deterministe(texte)
+    resultat = _traduire_deterministe(texte)
 
-    assert [t.id for t in instance.taches] == ["T1"]
+    assert [t.id for t in resultat.instance.taches] == ["T1"]
 
 
 def test_traduire_deterministe_leve_une_erreur_sur_texte_libre_non_structure() -> None:
