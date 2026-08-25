@@ -1,0 +1,2412 @@
+{
+  "taches": [
+    {
+      "id": "ASPIRATION_001",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SANITAIRES_002",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_SOLS_003",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POLISSAGE_004",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DECAPAGE_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 63
+    },
+    {
+      "id": "DECAPAGE_006",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 102
+    },
+    {
+      "id": "CONTROLE_007",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_SOLS_008",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 40
+    },
+    {
+      "id": "EVACUATION_DECHETS_009",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESINFECTION_010",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASPIRATION_011",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_SOLS_012",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 97
+    },
+    {
+      "id": "SANITAIRES_013",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POLISSAGE_014",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DECAPAGE_015",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EVACUATION_DECHETS_016",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 22
+    },
+    {
+      "id": "CONTROLE_017",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASPIRATION_018",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "VITRES_019",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESINFECTION_020",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POLISSAGE_021",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASPIRATION_022",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 85
+    },
+    {
+      "id": "VITRES_023",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 22
+    },
+    {
+      "id": "DESINFECTION_024",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_025",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 164
+    },
+    {
+      "id": "DECAPAGE_026",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SANITAIRES_027",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_SOLS_028",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASPIRATION_029",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 181
+    },
+    {
+      "id": "DECAPAGE_030",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_031",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 46
+    },
+    {
+      "id": "EVACUATION_DECHETS_032",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "VITRES_033",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASPIRATION_034",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 71
+    },
+    {
+      "id": "DECAPAGE_035",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 152
+    },
+    {
+      "id": "LAVAGE_SOLS_036",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_037",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESINFECTION_038",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_SOLS_039",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SANITAIRES_040",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EVACUATION_DECHETS_041",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DECAPAGE_042",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 39
+    },
+    {
+      "id": "POLISSAGE_043",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESINFECTION_044",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESINFECTION_045",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_046",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_SOLS_047",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "VITRES_048",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POLISSAGE_049",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 123
+    }
+  ],
+  "ressources": [
+    {
+      "id": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_bureaux"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_bureaux"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_BUREAUX_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_bureaux"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_bureaux"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_industriel"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_industriel"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_industriel"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage_industriel"
+      ]
+    },
+    {
+      "id": "EQUIPE_VITRES_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_vitres"
+      ]
+    },
+    {
+      "id": "EQUIPE_VITRES_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_vitres"
+      ]
+    },
+    {
+      "id": "EQUIPE_VITRES_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_vitres"
+      ]
+    },
+    {
+      "id": "EQUIPE_VITRES_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_vitres"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESINFECTION_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desinfection"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESINFECTION_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desinfection"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESINFECTION_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desinfection"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESINFECTION_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desinfection"
+      ]
+    },
+    {
+      "id": "EQUIPE_SOL_SPECIALISE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sol_specialise"
+      ]
+    },
+    {
+      "id": "EQUIPE_SOL_SPECIALISE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sol_specialise"
+      ]
+    },
+    {
+      "id": "EQUIPE_SOL_SPECIALISE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sol_specialise"
+      ]
+    },
+    {
+      "id": "EQUIPE_SOL_SPECIALISE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sol_specialise"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECAPAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_decapage"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECAPAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_decapage"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECAPAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_decapage"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECAPAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_decapage"
+      ]
+    },
+    {
+      "id": "EQUIPE_POLISSAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_polissage"
+      ]
+    },
+    {
+      "id": "EQUIPE_POLISSAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_polissage"
+      ]
+    },
+    {
+      "id": "EQUIPE_POLISSAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_polissage"
+      ]
+    },
+    {
+      "id": "EQUIPE_POLISSAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_polissage"
+      ]
+    },
+    {
+      "id": "EQUIPE_SANITAIRES_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sanitaires"
+      ]
+    },
+    {
+      "id": "EQUIPE_SANITAIRES_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sanitaires"
+      ]
+    },
+    {
+      "id": "EQUIPE_SANITAIRES_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sanitaires"
+      ]
+    },
+    {
+      "id": "EQUIPE_SANITAIRES_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_sanitaires"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECHETS_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_dechets"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECHETS_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_dechets"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECHETS_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_dechets"
+      ]
+    },
+    {
+      "id": "EQUIPE_DECHETS_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_dechets"
+      ]
+    },
+    {
+      "id": "EQUIPE_CONTROLE_QUALITE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_controle_qualite"
+      ]
+    },
+    {
+      "id": "EQUIPE_CONTROLE_QUALITE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_controle_qualite"
+      ]
+    },
+    {
+      "id": "EQUIPE_CONTROLE_QUALITE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_controle_qualite"
+      ]
+    },
+    {
+      "id": "EQUIPE_CONTROLE_QUALITE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_controle_qualite"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "ASPIRATION_001",
+      "competence": "equipe_nettoyage_bureaux"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_001",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_001",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_001",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_001",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SANITAIRES_002",
+      "competence": "equipe_sanitaires"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_002",
+      "ressource": "EQUIPE_SANITAIRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_002",
+      "ressource": "EQUIPE_SANITAIRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_002",
+      "ressource": "EQUIPE_SANITAIRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_002",
+      "ressource": "EQUIPE_SANITAIRES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_SOLS_003",
+      "competence": "equipe_sol_specialise"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_003",
+      "ressource": "EQUIPE_SOL_SPECIALISE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_003",
+      "ressource": "EQUIPE_SOL_SPECIALISE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_003",
+      "ressource": "EQUIPE_SOL_SPECIALISE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_003",
+      "ressource": "EQUIPE_SOL_SPECIALISE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SANITAIRES_002",
+      "apres": "LAVAGE_SOLS_003"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POLISSAGE_004",
+      "competence": "equipe_polissage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_004",
+      "ressource": "EQUIPE_POLISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_004",
+      "ressource": "EQUIPE_POLISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_004",
+      "ressource": "EQUIPE_POLISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_004",
+      "ressource": "EQUIPE_POLISSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECAPAGE_005",
+      "competence": "equipe_decapage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECAPAGE_005",
+      "lot_min": 51,
+      "lot_max": 75
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_005",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_005",
+      "ressource": "EQUIPE_DECAPAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_005",
+      "ressource": "EQUIPE_DECAPAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_005",
+      "ressource": "EQUIPE_DECAPAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "POLISSAGE_004",
+      "apres": "DECAPAGE_005"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECAPAGE_006",
+      "competence": "equipe_decapage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECAPAGE_006",
+      "lot_min": 82,
+      "lot_max": 122
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_006",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_006",
+      "ressource": "EQUIPE_DECAPAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_006",
+      "ressource": "EQUIPE_DECAPAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_006",
+      "ressource": "EQUIPE_DECAPAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_007",
+      "competence": "equipe_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DECAPAGE_006",
+      "apres": "CONTROLE_007"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_SOLS_008",
+      "competence": "equipe_sol_specialise"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "LAVAGE_SOLS_008",
+      "lot_min": 32,
+      "lot_max": 48
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_008",
+      "ressource": "EQUIPE_SOL_SPECIALISE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_008",
+      "ressource": "EQUIPE_SOL_SPECIALISE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_008",
+      "ressource": "EQUIPE_SOL_SPECIALISE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_008",
+      "ressource": "EQUIPE_SOL_SPECIALISE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_007",
+      "apres": "LAVAGE_SOLS_008"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EVACUATION_DECHETS_009",
+      "competence": "equipe_dechets"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_009",
+      "ressource": "EQUIPE_DECHETS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_009",
+      "ressource": "EQUIPE_DECHETS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_009",
+      "ressource": "EQUIPE_DECHETS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_009",
+      "ressource": "EQUIPE_DECHETS_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESINFECTION_010",
+      "competence": "equipe_desinfection"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_010",
+      "ressource": "EQUIPE_DESINFECTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_010",
+      "ressource": "EQUIPE_DESINFECTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_010",
+      "ressource": "EQUIPE_DESINFECTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_010",
+      "ressource": "EQUIPE_DESINFECTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EVACUATION_DECHETS_009",
+      "apres": "DESINFECTION_010"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASPIRATION_011",
+      "competence": "equipe_nettoyage_industriel"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_011",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_011",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_011",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_011",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DESINFECTION_010",
+      "apres": "ASPIRATION_011"
+    },
+    {
+      "type": "echeance",
+      "tache": "ASPIRATION_011",
+      "echeance": 28
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_SOLS_012",
+      "competence": "equipe_nettoyage_bureaux"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "LAVAGE_SOLS_012",
+      "lot_min": 78,
+      "lot_max": 116
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_012",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_012",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_012",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_012",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SANITAIRES_013",
+      "competence": "equipe_sanitaires"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_013",
+      "ressource": "EQUIPE_SANITAIRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_013",
+      "ressource": "EQUIPE_SANITAIRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_013",
+      "ressource": "EQUIPE_SANITAIRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_013",
+      "ressource": "EQUIPE_SANITAIRES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LAVAGE_SOLS_012",
+      "apres": "SANITAIRES_013"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POLISSAGE_014",
+      "competence": "equipe_polissage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_014",
+      "ressource": "EQUIPE_POLISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_014",
+      "ressource": "EQUIPE_POLISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_014",
+      "ressource": "EQUIPE_POLISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_014",
+      "ressource": "EQUIPE_POLISSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECAPAGE_015",
+      "competence": "equipe_decapage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_015",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_015",
+      "ressource": "EQUIPE_DECAPAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_015",
+      "ressource": "EQUIPE_DECAPAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_015",
+      "ressource": "EQUIPE_DECAPAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "POLISSAGE_014",
+      "apres": "DECAPAGE_015"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EVACUATION_DECHETS_016",
+      "competence": "equipe_dechets"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EVACUATION_DECHETS_016",
+      "lot_min": 18,
+      "lot_max": 26
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_016",
+      "ressource": "EQUIPE_DECHETS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_016",
+      "ressource": "EQUIPE_DECHETS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_016",
+      "ressource": "EQUIPE_DECHETS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_016",
+      "ressource": "EQUIPE_DECHETS_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DECAPAGE_015",
+      "apres": "EVACUATION_DECHETS_016"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_017",
+      "competence": "equipe_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_017",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_017",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_017",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_017",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASPIRATION_018",
+      "competence": "equipe_nettoyage_industriel"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_018",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_018",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_018",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_018",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_017",
+      "apres": "ASPIRATION_018"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "VITRES_019",
+      "competence": "equipe_vitres"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_019",
+      "ressource": "EQUIPE_VITRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_019",
+      "ressource": "EQUIPE_VITRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_019",
+      "ressource": "EQUIPE_VITRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_019",
+      "ressource": "EQUIPE_VITRES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ASPIRATION_018",
+      "apres": "VITRES_019"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESINFECTION_020",
+      "competence": "equipe_desinfection"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_020",
+      "ressource": "EQUIPE_DESINFECTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_020",
+      "ressource": "EQUIPE_DESINFECTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_020",
+      "ressource": "EQUIPE_DESINFECTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_020",
+      "ressource": "EQUIPE_DESINFECTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "VITRES_019",
+      "apres": "DESINFECTION_020"
+    },
+    {
+      "type": "echeance",
+      "tache": "DESINFECTION_020",
+      "echeance": 33
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POLISSAGE_021",
+      "competence": "equipe_polissage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_021",
+      "ressource": "EQUIPE_POLISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_021",
+      "ressource": "EQUIPE_POLISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_021",
+      "ressource": "EQUIPE_POLISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_021",
+      "ressource": "EQUIPE_POLISSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASPIRATION_022",
+      "competence": "equipe_nettoyage_bureaux"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ASPIRATION_022",
+      "lot_min": 68,
+      "lot_max": 102
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_022",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_022",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_022",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_022",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "POLISSAGE_021",
+      "apres": "ASPIRATION_022"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "VITRES_023",
+      "competence": "equipe_vitres"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "VITRES_023",
+      "lot_min": 18,
+      "lot_max": 26
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_023",
+      "ressource": "EQUIPE_VITRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_023",
+      "ressource": "EQUIPE_VITRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_023",
+      "ressource": "EQUIPE_VITRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_023",
+      "ressource": "EQUIPE_VITRES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ASPIRATION_022",
+      "apres": "VITRES_023"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESINFECTION_024",
+      "competence": "equipe_desinfection"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_024",
+      "ressource": "EQUIPE_DESINFECTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_024",
+      "ressource": "EQUIPE_DESINFECTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_024",
+      "ressource": "EQUIPE_DESINFECTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_024",
+      "ressource": "EQUIPE_DESINFECTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "VITRES_023",
+      "apres": "DESINFECTION_024"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_025",
+      "competence": "equipe_controle_qualite"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_025",
+      "lot_min": 132,
+      "lot_max": 196
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECAPAGE_026",
+      "competence": "equipe_decapage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_026",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_026",
+      "ressource": "EQUIPE_DECAPAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_026",
+      "ressource": "EQUIPE_DECAPAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_026",
+      "ressource": "EQUIPE_DECAPAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "DECAPAGE_026",
+      "echeance": 26
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SANITAIRES_027",
+      "competence": "equipe_sanitaires"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_027",
+      "ressource": "EQUIPE_SANITAIRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_027",
+      "ressource": "EQUIPE_SANITAIRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_027",
+      "ressource": "EQUIPE_SANITAIRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_027",
+      "ressource": "EQUIPE_SANITAIRES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_SOLS_028",
+      "competence": "equipe_nettoyage_bureaux"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_028",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_028",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_028",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_028",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASPIRATION_029",
+      "competence": "equipe_nettoyage_industriel"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ASPIRATION_029",
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_029",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_029",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_029",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_029",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LAVAGE_SOLS_028",
+      "apres": "ASPIRATION_029"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECAPAGE_030",
+      "competence": "equipe_decapage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_030",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_030",
+      "ressource": "EQUIPE_DECAPAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_030",
+      "ressource": "EQUIPE_DECAPAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_030",
+      "ressource": "EQUIPE_DECAPAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_031",
+      "competence": "equipe_controle_qualite"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_031",
+      "lot_min": 37,
+      "lot_max": 55
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_031",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_031",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_031",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_031",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EVACUATION_DECHETS_032",
+      "competence": "equipe_dechets"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_032",
+      "ressource": "EQUIPE_DECHETS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_032",
+      "ressource": "EQUIPE_DECHETS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_032",
+      "ressource": "EQUIPE_DECHETS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_032",
+      "ressource": "EQUIPE_DECHETS_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_031",
+      "apres": "EVACUATION_DECHETS_032"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "VITRES_033",
+      "competence": "equipe_vitres"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_033",
+      "ressource": "EQUIPE_VITRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_033",
+      "ressource": "EQUIPE_VITRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_033",
+      "ressource": "EQUIPE_VITRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_033",
+      "ressource": "EQUIPE_VITRES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASPIRATION_034",
+      "competence": "equipe_nettoyage_industriel"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ASPIRATION_034",
+      "lot_min": 57,
+      "lot_max": 85
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_034",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_034",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_034",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASPIRATION_034",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "VITRES_033",
+      "apres": "ASPIRATION_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECAPAGE_035",
+      "competence": "equipe_decapage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECAPAGE_035",
+      "lot_min": 122,
+      "lot_max": 182
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_035",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_035",
+      "ressource": "EQUIPE_DECAPAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_035",
+      "ressource": "EQUIPE_DECAPAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_035",
+      "ressource": "EQUIPE_DECAPAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ASPIRATION_034",
+      "apres": "DECAPAGE_035"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_SOLS_036",
+      "competence": "equipe_nettoyage_bureaux"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_036",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_036",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_036",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_036",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DECAPAGE_035",
+      "apres": "LAVAGE_SOLS_036"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_037",
+      "competence": "equipe_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_037",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_037",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_037",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_037",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESINFECTION_038",
+      "competence": "equipe_desinfection"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_038",
+      "ressource": "EQUIPE_DESINFECTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_038",
+      "ressource": "EQUIPE_DESINFECTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_038",
+      "ressource": "EQUIPE_DESINFECTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_038",
+      "ressource": "EQUIPE_DESINFECTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_037",
+      "apres": "DESINFECTION_038"
+    },
+    {
+      "type": "echeance",
+      "tache": "DESINFECTION_038",
+      "echeance": 38
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_SOLS_039",
+      "competence": "equipe_nettoyage_bureaux"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_039",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_039",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_039",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_039",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SANITAIRES_040",
+      "competence": "equipe_sanitaires"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_040",
+      "ressource": "EQUIPE_SANITAIRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_040",
+      "ressource": "EQUIPE_SANITAIRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_040",
+      "ressource": "EQUIPE_SANITAIRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SANITAIRES_040",
+      "ressource": "EQUIPE_SANITAIRES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LAVAGE_SOLS_039",
+      "apres": "SANITAIRES_040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EVACUATION_DECHETS_041",
+      "competence": "equipe_dechets"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_041",
+      "ressource": "EQUIPE_DECHETS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_041",
+      "ressource": "EQUIPE_DECHETS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_041",
+      "ressource": "EQUIPE_DECHETS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EVACUATION_DECHETS_041",
+      "ressource": "EQUIPE_DECHETS_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SANITAIRES_040",
+      "apres": "EVACUATION_DECHETS_041"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECAPAGE_042",
+      "competence": "equipe_decapage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECAPAGE_042",
+      "lot_min": 32,
+      "lot_max": 46
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_042",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_042",
+      "ressource": "EQUIPE_DECAPAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_042",
+      "ressource": "EQUIPE_DECAPAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECAPAGE_042",
+      "ressource": "EQUIPE_DECAPAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POLISSAGE_043",
+      "competence": "equipe_polissage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_043",
+      "ressource": "EQUIPE_POLISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_043",
+      "ressource": "EQUIPE_POLISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_043",
+      "ressource": "EQUIPE_POLISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_043",
+      "ressource": "EQUIPE_POLISSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESINFECTION_044",
+      "competence": "equipe_desinfection"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_044",
+      "ressource": "EQUIPE_DESINFECTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_044",
+      "ressource": "EQUIPE_DESINFECTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_044",
+      "ressource": "EQUIPE_DESINFECTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_044",
+      "ressource": "EQUIPE_DESINFECTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "POLISSAGE_043",
+      "apres": "DESINFECTION_044"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESINFECTION_045",
+      "competence": "equipe_desinfection"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_045",
+      "ressource": "EQUIPE_DESINFECTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_045",
+      "ressource": "EQUIPE_DESINFECTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_045",
+      "ressource": "EQUIPE_DESINFECTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESINFECTION_045",
+      "ressource": "EQUIPE_DESINFECTION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_046",
+      "competence": "equipe_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_SOLS_047",
+      "competence": "equipe_sol_specialise"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_047",
+      "ressource": "EQUIPE_SOL_SPECIALISE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_047",
+      "ressource": "EQUIPE_SOL_SPECIALISE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_047",
+      "ressource": "EQUIPE_SOL_SPECIALISE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_SOLS_047",
+      "ressource": "EQUIPE_SOL_SPECIALISE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "VITRES_048",
+      "competence": "equipe_vitres"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_048",
+      "ressource": "EQUIPE_VITRES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_048",
+      "ressource": "EQUIPE_VITRES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_048",
+      "ressource": "EQUIPE_VITRES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "VITRES_048",
+      "ressource": "EQUIPE_VITRES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POLISSAGE_049",
+      "competence": "equipe_polissage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "POLISSAGE_049",
+      "lot_min": 99,
+      "lot_max": 147
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_049",
+      "ressource": "EQUIPE_POLISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_049",
+      "ressource": "EQUIPE_POLISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_049",
+      "ressource": "EQUIPE_POLISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POLISSAGE_049",
+      "ressource": "EQUIPE_POLISSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "POLISSAGE_049",
+      "echeance": 33
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_2",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_4",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_VITRES_2",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_DESINFECTION_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_CONTROLE_QUALITE_3",
+      "capacite": 3
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_NETTOYAGE_BUREAUX_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        2
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_DECAPAGE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_POLISSAGE_2",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_DECHETS_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

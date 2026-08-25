@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
+import api.routes.adapters as routes_adapters
 from adapters.agent_comprehension.agent import _SchemaComprehension
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
@@ -316,7 +317,45 @@ def test_ingestion_depuis_json_derive_la_compatibilite_par_competence() -> None:
         app.dependency_overrides.clear()
 
 
-def test_ingestion_depuis_json_relaie_une_duree_estimee_manquante() -> None:
+def test_ingestion_depuis_json_comble_une_duree_manquante_par_estimation_ml() -> None:
+    """`estimation` (scikit-learn) est branché par défaut sur cette route
+    (`_estimateur_duree_optionnel`, `api/routes/adapters.py`) — une durée
+    manquante n'est donc plus un rejet : elle est comblée par apprentissage
+    automatique, signalée par un avertissement explicite (§FC4), jamais
+    silencieusement. Voir le test suivant pour le comportement de repli
+    quand `estimation` n'est pas installé."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/json/client_test",
+            json={
+                "taches": [{"id": "T1"}],
+                "ressources": [{"id": "R1", "competences": ["decoupe"]}],
+                "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert any("estimée par apprentissage automatique" in a for a in corps["avertissements"])
+        _, instance = etat_test.instances[corps["instance_id"]]
+        compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
+        assert len(compatibilites) == 1
+        assert compatibilites[0].tache == "T1"
+        assert compatibilites[0].duree >= 1
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_json_signale_une_duree_manquante_sans_estimateur(monkeypatch) -> None:
+    """Comportement de repli quand `estimation` n'est pas installé
+    (`uv sync` sans `--extra estimation`) — `_estimateur_duree_optionnel`
+    renvoie alors `None` et une durée manquante reste un rejet explicite,
+    exactement comme avant le branchement de l'estimateur."""
+    monkeypatch.setattr(routes_adapters, "_estimateur_duree_optionnel", lambda: None)
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
 

@@ -1,0 +1,1681 @@
+{
+  "secteur": "atelier_mecanique",
+  "operations": [
+    {
+      "code_operation": "PREPARATION_001",
+      "operations_precedentes": [],
+      "competence_requise": "perceuse_cnc",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PERCEUSE_CNC_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PERCEUSE_CNC_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PERCEUSE_CNC_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PERCEUSE_CNC_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 64,
+      "lot_min": 52,
+      "lot_max": 76
+    },
+    {
+      "code_operation": "PEINTURE_002",
+      "operations_precedentes": [],
+      "competence_requise": "tunnel_peinture",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_PEINTURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_PEINTURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_PEINTURE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 6,
+      "lot_min": 5,
+      "lot_max": 7
+    },
+    {
+      "code_operation": "FORMAGE_003",
+      "operations_precedentes": [
+        "PEINTURE_002"
+      ],
+      "competence_requise": "presse_emboutissage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 93,
+      "lot_min": 75,
+      "lot_max": 111
+    },
+    {
+      "code_operation": "USINAGE_004",
+      "operations_precedentes": [],
+      "competence_requise": "centre_usinage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CENTRE_USINAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CENTRE_USINAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CENTRE_USINAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CENTRE_USINAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "FINITION_005",
+      "operations_precedentes": [
+        "USINAGE_004"
+      ],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_006",
+      "operations_precedentes": [
+        "FINITION_005"
+      ],
+      "competence_requise": "station_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ASSEMBLAGE_007",
+      "operations_precedentes": [
+        "CONTROLE_006"
+      ],
+      "competence_requise": "poste_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "SOUDURE_008",
+      "operations_precedentes": [],
+      "competence_requise": "robot_soudure",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_SOUDURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "echeance_jours": 41
+    },
+    {
+      "code_operation": "SOUDURE_009",
+      "operations_precedentes": [],
+      "competence_requise": "poste_soudure",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "USINAGE_010",
+      "operations_precedentes": [
+        "SOUDURE_009"
+      ],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 189,
+      "lot_min": 152,
+      "lot_max": 226
+    },
+    {
+      "code_operation": "FINITION_011",
+      "operations_precedentes": [],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONTROLE_012",
+      "operations_precedentes": [
+        "FINITION_011"
+      ],
+      "competence_requise": "station_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PREPARATION_013",
+      "operations_precedentes": [],
+      "competence_requise": "decoupeuse_laser",
+      "ressources_compatibles": [
+        {
+          "poste_id": "DECOUPEUSE_LASER_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_LASER_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_LASER_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_LASER_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 97,
+      "lot_min": 78,
+      "lot_max": 116
+    },
+    {
+      "code_operation": "PEINTURE_014",
+      "operations_precedentes": [],
+      "competence_requise": "cabine_peinture",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CABINE_PEINTURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "FORMAGE_015",
+      "operations_precedentes": [],
+      "competence_requise": "presse_emboutissage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_3",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ASSEMBLAGE_016",
+      "operations_precedentes": [
+        "FORMAGE_015"
+      ],
+      "competence_requise": "poste_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "echeance_jours": 30
+    },
+    {
+      "code_operation": "USINAGE_017",
+      "operations_precedentes": [],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "PREPARATION_018",
+      "operations_precedentes": [
+        "USINAGE_017"
+      ],
+      "competence_requise": "decoupeuse_plasma",
+      "ressources_compatibles": [
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "FORMAGE_019",
+      "operations_precedentes": [
+        "PREPARATION_018"
+      ],
+      "competence_requise": "presse_emboutissage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 54,
+      "lot_min": 44,
+      "lot_max": 64
+    },
+    {
+      "code_operation": "ASSEMBLAGE_020",
+      "operations_precedentes": [
+        "FORMAGE_019"
+      ],
+      "competence_requise": "poste_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 171,
+      "lot_min": 137,
+      "lot_max": 205
+    },
+    {
+      "code_operation": "CONTROLE_021",
+      "operations_precedentes": [
+        "ASSEMBLAGE_020"
+      ],
+      "competence_requise": "station_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "SOUDURE_022",
+      "operations_precedentes": [
+        "CONTROLE_021"
+      ],
+      "competence_requise": "robot_soudure",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_SOUDURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PEINTURE_023",
+      "operations_precedentes": [
+        "SOUDURE_022"
+      ],
+      "competence_requise": "tunnel_peinture",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_PEINTURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_PEINTURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_PEINTURE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "FINITION_024",
+      "operations_precedentes": [
+        "PEINTURE_023"
+      ],
+      "competence_requise": "poste_polissage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_POLISSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_POLISSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_POLISSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_POLISSAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 35,
+      "lot_min": 28,
+      "lot_max": 42,
+      "echeance_jours": 39
+    },
+    {
+      "code_operation": "SOUDURE_025",
+      "operations_precedentes": [],
+      "competence_requise": "robot_soudure",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_SOUDURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_SOUDURE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 164,
+      "lot_min": 132,
+      "lot_max": 196
+    },
+    {
+      "code_operation": "PEINTURE_026",
+      "operations_precedentes": [],
+      "competence_requise": "cabine_peinture",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CABINE_PEINTURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ASSEMBLAGE_027",
+      "operations_precedentes": [
+        "PEINTURE_026"
+      ],
+      "competence_requise": "poste_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "FORMAGE_028",
+      "operations_precedentes": [
+        "ASSEMBLAGE_027"
+      ],
+      "competence_requise": "presse_emboutissage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_EMBOUTISSAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "USINAGE_029",
+      "operations_precedentes": [],
+      "competence_requise": "fraiseuse_cnc",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FRAISEUSE_CNC_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FRAISEUSE_CNC_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FRAISEUSE_CNC_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FRAISEUSE_CNC_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "CONTROLE_030",
+      "operations_precedentes": [
+        "USINAGE_029"
+      ],
+      "competence_requise": "station_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 181,
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "code_operation": "FINITION_031",
+      "operations_precedentes": [],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "PREPARATION_032",
+      "operations_precedentes": [
+        "FINITION_031"
+      ],
+      "competence_requise": "perceuse_cnc",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PERCEUSE_CNC_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PERCEUSE_CNC_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PERCEUSE_CNC_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PERCEUSE_CNC_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ASSEMBLAGE_033",
+      "operations_precedentes": [],
+      "competence_requise": "poste_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 122,
+      "lot_min": 98,
+      "lot_max": 146
+    },
+    {
+      "code_operation": "CONTROLE_034",
+      "operations_precedentes": [
+        "ASSEMBLAGE_033"
+      ],
+      "competence_requise": "station_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "PEINTURE_035",
+      "operations_precedentes": [],
+      "competence_requise": "cabine_peinture",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CABINE_PEINTURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CABINE_PEINTURE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 72,
+      "lot_min": 58,
+      "lot_max": 86
+    },
+    {
+      "code_operation": "USINAGE_036",
+      "operations_precedentes": [],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 16,
+      "lot_min": 13,
+      "lot_max": 19
+    },
+    {
+      "code_operation": "FORMAGE_037",
+      "operations_precedentes": [
+        "USINAGE_036"
+      ],
+      "competence_requise": "presse_pliage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PRESSE_PLIAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_PLIAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_PLIAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_PLIAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "PREPARATION_038",
+      "operations_precedentes": [],
+      "competence_requise": "decoupeuse_plasma",
+      "ressources_compatibles": [
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_3",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "SOUDURE_039",
+      "operations_precedentes": [],
+      "competence_requise": "poste_soudure",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "FINITION_040",
+      "operations_precedentes": [
+        "SOUDURE_039"
+      ],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "echeance_jours": 39
+    },
+    {
+      "code_operation": "SOUDURE_041",
+      "operations_precedentes": [],
+      "competence_requise": "poste_soudure",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PEINTURE_042",
+      "operations_precedentes": [],
+      "competence_requise": "tunnel_peinture",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_PEINTURE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_PEINTURE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_PEINTURE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 181,
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "code_operation": "FORMAGE_043",
+      "operations_precedentes": [],
+      "competence_requise": "presse_pliage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PRESSE_PLIAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_PLIAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_PLIAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PRESSE_PLIAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "USINAGE_044",
+      "operations_precedentes": [
+        "FORMAGE_043"
+      ],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "FINITION_045",
+      "operations_precedentes": [
+        "USINAGE_044"
+      ],
+      "competence_requise": "poste_ebavurage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_EBAVURAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_EBAVURAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "PREPARATION_046",
+      "operations_precedentes": [
+        "FINITION_045"
+      ],
+      "competence_requise": "decoupeuse_plasma",
+      "ressources_compatibles": [
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "DECOUPEUSE_PLASMA_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "ASSEMBLAGE_047",
+      "operations_precedentes": [
+        "PREPARATION_046"
+      ],
+      "competence_requise": "poste_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "CONTROLE_048",
+      "operations_precedentes": [],
+      "competence_requise": "station_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ]
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "DECOUPEUSE_LASER_1",
+      "type_poste": "DECOUPEUSE_LASER",
+      "competences": [
+        "decoupeuse_laser"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "code_poste": "DECOUPEUSE_LASER_2",
+      "type_poste": "DECOUPEUSE_LASER",
+      "competences": [
+        "decoupeuse_laser"
+      ]
+    },
+    {
+      "code_poste": "DECOUPEUSE_LASER_3",
+      "type_poste": "DECOUPEUSE_LASER",
+      "competences": [
+        "decoupeuse_laser"
+      ]
+    },
+    {
+      "code_poste": "DECOUPEUSE_LASER_4",
+      "type_poste": "DECOUPEUSE_LASER",
+      "competences": [
+        "decoupeuse_laser"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "DECOUPEUSE_PLASMA_1",
+      "type_poste": "DECOUPEUSE_PLASMA",
+      "competences": [
+        "decoupeuse_plasma"
+      ]
+    },
+    {
+      "code_poste": "DECOUPEUSE_PLASMA_2",
+      "type_poste": "DECOUPEUSE_PLASMA",
+      "competences": [
+        "decoupeuse_plasma"
+      ]
+    },
+    {
+      "code_poste": "DECOUPEUSE_PLASMA_3",
+      "type_poste": "DECOUPEUSE_PLASMA",
+      "competences": [
+        "decoupeuse_plasma"
+      ]
+    },
+    {
+      "code_poste": "PERCEUSE_CNC_1",
+      "type_poste": "PERCEUSE_CNC",
+      "competences": [
+        "perceuse_cnc"
+      ]
+    },
+    {
+      "code_poste": "PERCEUSE_CNC_2",
+      "type_poste": "PERCEUSE_CNC",
+      "competences": [
+        "perceuse_cnc"
+      ]
+    },
+    {
+      "code_poste": "PERCEUSE_CNC_3",
+      "type_poste": "PERCEUSE_CNC",
+      "competences": [
+        "perceuse_cnc"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "code_poste": "PERCEUSE_CNC_4",
+      "type_poste": "PERCEUSE_CNC",
+      "competences": [
+        "perceuse_cnc"
+      ]
+    },
+    {
+      "code_poste": "FRAISEUSE_CNC_1",
+      "type_poste": "FRAISEUSE_CNC",
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "code_poste": "FRAISEUSE_CNC_2",
+      "type_poste": "FRAISEUSE_CNC",
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "code_poste": "FRAISEUSE_CNC_3",
+      "type_poste": "FRAISEUSE_CNC",
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "code_poste": "FRAISEUSE_CNC_4",
+      "type_poste": "FRAISEUSE_CNC",
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "code_poste": "PRESSE_PLIAGE_1",
+      "type_poste": "PRESSE_PLIAGE",
+      "competences": [
+        "presse_pliage"
+      ]
+    },
+    {
+      "code_poste": "PRESSE_PLIAGE_2",
+      "type_poste": "PRESSE_PLIAGE",
+      "competences": [
+        "presse_pliage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        2
+      ]
+    },
+    {
+      "code_poste": "PRESSE_PLIAGE_3",
+      "type_poste": "PRESSE_PLIAGE",
+      "competences": [
+        "presse_pliage"
+      ]
+    },
+    {
+      "code_poste": "PRESSE_PLIAGE_4",
+      "type_poste": "PRESSE_PLIAGE",
+      "competences": [
+        "presse_pliage"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "PRESSE_EMBOUTISSAGE_1",
+      "type_poste": "PRESSE_EMBOUTISSAGE",
+      "competences": [
+        "presse_emboutissage"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "PRESSE_EMBOUTISSAGE_2",
+      "type_poste": "PRESSE_EMBOUTISSAGE",
+      "competences": [
+        "presse_emboutissage"
+      ]
+    },
+    {
+      "code_poste": "PRESSE_EMBOUTISSAGE_3",
+      "type_poste": "PRESSE_EMBOUTISSAGE",
+      "competences": [
+        "presse_emboutissage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_1",
+      "type_poste": "POSTE_SOUDURE",
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_2",
+      "type_poste": "POSTE_SOUDURE",
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_3",
+      "type_poste": "POSTE_SOUDURE",
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_4",
+      "type_poste": "POSTE_SOUDURE",
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_SOUDURE_1",
+      "type_poste": "ROBOT_SOUDURE",
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_SOUDURE_2",
+      "type_poste": "ROBOT_SOUDURE",
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_SOUDURE_3",
+      "type_poste": "ROBOT_SOUDURE",
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_SOUDURE_4",
+      "type_poste": "ROBOT_SOUDURE",
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "code_poste": "CABINE_PEINTURE_1",
+      "type_poste": "CABINE_PEINTURE",
+      "competences": [
+        "cabine_peinture"
+      ]
+    },
+    {
+      "code_poste": "CABINE_PEINTURE_2",
+      "type_poste": "CABINE_PEINTURE",
+      "competences": [
+        "cabine_peinture"
+      ]
+    },
+    {
+      "code_poste": "CABINE_PEINTURE_3",
+      "type_poste": "CABINE_PEINTURE",
+      "competences": [
+        "cabine_peinture"
+      ],
+      "capacite_simultanee": 3,
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "code_poste": "CABINE_PEINTURE_4",
+      "type_poste": "CABINE_PEINTURE",
+      "competences": [
+        "cabine_peinture"
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_PEINTURE_1",
+      "type_poste": "TUNNEL_PEINTURE",
+      "competences": [
+        "tunnel_peinture"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "TUNNEL_PEINTURE_2",
+      "type_poste": "TUNNEL_PEINTURE",
+      "competences": [
+        "tunnel_peinture"
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_PEINTURE_3",
+      "type_poste": "TUNNEL_PEINTURE",
+      "competences": [
+        "tunnel_peinture"
+      ]
+    },
+    {
+      "code_poste": "POSTE_ASSEMBLAGE_1",
+      "type_poste": "POSTE_ASSEMBLAGE",
+      "competences": [
+        "poste_assemblage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "POSTE_ASSEMBLAGE_2",
+      "type_poste": "POSTE_ASSEMBLAGE",
+      "competences": [
+        "poste_assemblage"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "POSTE_ASSEMBLAGE_3",
+      "type_poste": "POSTE_ASSEMBLAGE",
+      "competences": [
+        "poste_assemblage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_ASSEMBLAGE_4",
+      "type_poste": "POSTE_ASSEMBLAGE",
+      "competences": [
+        "poste_assemblage"
+      ]
+    },
+    {
+      "code_poste": "STATION_CONTROLE_1",
+      "type_poste": "STATION_CONTROLE",
+      "competences": [
+        "station_controle"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "STATION_CONTROLE_2",
+      "type_poste": "STATION_CONTROLE",
+      "competences": [
+        "station_controle"
+      ]
+    },
+    {
+      "code_poste": "STATION_CONTROLE_3",
+      "type_poste": "STATION_CONTROLE",
+      "competences": [
+        "station_controle"
+      ]
+    },
+    {
+      "code_poste": "STATION_CONTROLE_4",
+      "type_poste": "STATION_CONTROLE",
+      "competences": [
+        "station_controle"
+      ]
+    },
+    {
+      "code_poste": "POSTE_EBAVURAGE_1",
+      "type_poste": "POSTE_EBAVURAGE",
+      "competences": [
+        "poste_ebavurage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_EBAVURAGE_2",
+      "type_poste": "POSTE_EBAVURAGE",
+      "competences": [
+        "poste_ebavurage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_EBAVURAGE_3",
+      "type_poste": "POSTE_EBAVURAGE",
+      "competences": [
+        "poste_ebavurage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "POSTE_EBAVURAGE_4",
+      "type_poste": "POSTE_EBAVURAGE",
+      "competences": [
+        "poste_ebavurage"
+      ]
+    },
+    {
+      "code_poste": "CENTRE_USINAGE_1",
+      "type_poste": "CENTRE_USINAGE",
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "code_poste": "CENTRE_USINAGE_2",
+      "type_poste": "CENTRE_USINAGE",
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "code_poste": "CENTRE_USINAGE_3",
+      "type_poste": "CENTRE_USINAGE",
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "code_poste": "CENTRE_USINAGE_4",
+      "type_poste": "CENTRE_USINAGE",
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_POLISSAGE_1",
+      "type_poste": "POSTE_POLISSAGE",
+      "competences": [
+        "poste_polissage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_POLISSAGE_2",
+      "type_poste": "POSTE_POLISSAGE",
+      "competences": [
+        "poste_polissage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_POLISSAGE_3",
+      "type_poste": "POSTE_POLISSAGE",
+      "competences": [
+        "poste_polissage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "POSTE_POLISSAGE_4",
+      "type_poste": "POSTE_POLISSAGE",
+      "competences": [
+        "poste_polissage"
+      ]
+    }
+  ],
+  "changements_serie": [
+    {
+      "poste_id": "TUNNEL_PEINTURE_1",
+      "operation_avant": "PEINTURE_002",
+      "operation_apres": "PEINTURE_023",
+      "duree_setup_jours": 3
+    },
+    {
+      "poste_id": "PRESSE_EMBOUTISSAGE_1",
+      "operation_avant": "FORMAGE_003",
+      "operation_apres": "FORMAGE_015",
+      "duree_setup_jours": 3
+    },
+    {
+      "poste_id": "PRESSE_EMBOUTISSAGE_1",
+      "operation_avant": "FORMAGE_015",
+      "operation_apres": "FORMAGE_019",
+      "duree_setup_jours": 3
+    },
+    {
+      "poste_id": "CABINE_PEINTURE_1",
+      "operation_avant": "PEINTURE_014",
+      "operation_apres": "PEINTURE_026",
+      "duree_setup_jours": 2
+    },
+    {
+      "poste_id": "CABINE_PEINTURE_1",
+      "operation_avant": "PEINTURE_026",
+      "operation_apres": "PEINTURE_035",
+      "duree_setup_jours": 2
+    },
+    {
+      "poste_id": "PRESSE_PLIAGE_1",
+      "operation_avant": "FORMAGE_037",
+      "operation_apres": "FORMAGE_043",
+      "duree_setup_jours": 3
+    }
+  ],
+  "incompatibilites": [
+    {
+      "operation": "FORMAGE_003",
+      "operation_incompatible": "FORMAGE_019"
+    },
+    {
+      "operation": "PEINTURE_023",
+      "operation_incompatible": "PEINTURE_026"
+    }
+  ]
+}

@@ -1,0 +1,2423 @@
+{
+  "taches": [
+    {
+      "id": "TONTE_GAZON_001",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ARROSAGE_002",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TAILLE_HAIES_003",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PLANTATION_004",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAITEMENT_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 63
+    },
+    {
+      "id": "TRAITEMENT_006",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 102
+    },
+    {
+      "id": "NETTOYAGE_007",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TAILLE_HAIES_008",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "AMENAGEMENT_009",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ELAGAGE_ARBRES_010",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TONTE_GAZON_011",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 142
+    },
+    {
+      "id": "NETTOYAGE_012",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ELAGAGE_ARBRES_013",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ARROSAGE_014",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TONTE_GAZON_015",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "AMENAGEMENT_016",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 10
+    },
+    {
+      "id": "TAILLE_HAIES_017",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAITEMENT_018",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TAILLE_HAIES_019",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TONTE_GAZON_020",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESHERBAGE_021",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAITEMENT_022",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ELAGAGE_ARBRES_023",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 154
+    },
+    {
+      "id": "PLANTATION_024",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TAILLE_HAIES_025",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ARROSAGE_026",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "AMENAGEMENT_027",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "NETTOYAGE_028",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 92
+    },
+    {
+      "id": "TONTE_GAZON_029",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TONTE_GAZON_030",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TAILLE_HAIES_031",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "NETTOYAGE_032",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAITEMENT_033",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "AMENAGEMENT_034",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 169
+    },
+    {
+      "id": "PLANTATION_035",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 157
+    },
+    {
+      "id": "ARROSAGE_036",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 142
+    },
+    {
+      "id": "DESHERBAGE_037",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ELAGAGE_ARBRES_038",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAITEMENT_039",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "AMENAGEMENT_040",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESHERBAGE_041",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PLANTATION_042",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TAILLE_HAIES_043",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "NETTOYAGE_044",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ELAGAGE_ARBRES_045",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TONTE_GAZON_046",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ARROSAGE_047",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 104
+    },
+    {
+      "id": "PLANTATION_048",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAITEMENT_049",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 123
+    },
+    {
+      "id": "AMENAGEMENT_050",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 25
+    },
+    {
+      "id": "NETTOYAGE_051",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DESHERBAGE_052",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "EQUIPE_TONTE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_tonte"
+      ]
+    },
+    {
+      "id": "EQUIPE_TONTE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_tonte"
+      ]
+    },
+    {
+      "id": "EQUIPE_TONTE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_tonte"
+      ]
+    },
+    {
+      "id": "EQUIPE_TONTE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_tonte"
+      ]
+    },
+    {
+      "id": "EQUIPE_TAILLE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_taille"
+      ]
+    },
+    {
+      "id": "EQUIPE_TAILLE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_taille"
+      ]
+    },
+    {
+      "id": "EQUIPE_TAILLE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_taille"
+      ]
+    },
+    {
+      "id": "EQUIPE_TAILLE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_taille"
+      ]
+    },
+    {
+      "id": "EQUIPE_PLANTATION_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_plantation"
+      ]
+    },
+    {
+      "id": "EQUIPE_PLANTATION_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_plantation"
+      ]
+    },
+    {
+      "id": "EQUIPE_PLANTATION_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_plantation"
+      ]
+    },
+    {
+      "id": "EQUIPE_PLANTATION_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_plantation"
+      ]
+    },
+    {
+      "id": "EQUIPE_ARROSAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_arrosage"
+      ]
+    },
+    {
+      "id": "EQUIPE_ARROSAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_arrosage"
+      ]
+    },
+    {
+      "id": "EQUIPE_ARROSAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_arrosage"
+      ]
+    },
+    {
+      "id": "EQUIPE_ARROSAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_arrosage"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESHERBAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desherbage"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESHERBAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desherbage"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESHERBAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desherbage"
+      ]
+    },
+    {
+      "id": "EQUIPE_DESHERBAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_desherbage"
+      ]
+    },
+    {
+      "id": "EQUIPE_ELAGAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_elagage"
+      ]
+    },
+    {
+      "id": "EQUIPE_ELAGAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_elagage"
+      ]
+    },
+    {
+      "id": "EQUIPE_ELAGAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_elagage"
+      ]
+    },
+    {
+      "id": "EQUIPE_ELAGAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_elagage"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage"
+      ]
+    },
+    {
+      "id": "EQUIPE_NETTOYAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_nettoyage"
+      ]
+    },
+    {
+      "id": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_traitement_phyto"
+      ]
+    },
+    {
+      "id": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_traitement_phyto"
+      ]
+    },
+    {
+      "id": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_traitement_phyto"
+      ]
+    },
+    {
+      "id": "EQUIPE_AMENAGEMENT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_amenagement"
+      ]
+    },
+    {
+      "id": "EQUIPE_AMENAGEMENT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_amenagement"
+      ]
+    },
+    {
+      "id": "EQUIPE_AMENAGEMENT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_amenagement"
+      ]
+    },
+    {
+      "id": "EQUIPE_AMENAGEMENT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "equipe_amenagement"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "TONTE_GAZON_001",
+      "competence": "equipe_tonte"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_001",
+      "ressource": "EQUIPE_TONTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_001",
+      "ressource": "EQUIPE_TONTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_001",
+      "ressource": "EQUIPE_TONTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_001",
+      "ressource": "EQUIPE_TONTE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ARROSAGE_002",
+      "competence": "equipe_arrosage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_002",
+      "ressource": "EQUIPE_ARROSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_002",
+      "ressource": "EQUIPE_ARROSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_002",
+      "ressource": "EQUIPE_ARROSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_002",
+      "ressource": "EQUIPE_ARROSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TAILLE_HAIES_003",
+      "competence": "equipe_taille"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_003",
+      "ressource": "EQUIPE_TAILLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_003",
+      "ressource": "EQUIPE_TAILLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_003",
+      "ressource": "EQUIPE_TAILLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_003",
+      "ressource": "EQUIPE_TAILLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ARROSAGE_002",
+      "apres": "TAILLE_HAIES_003"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PLANTATION_004",
+      "competence": "equipe_plantation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_004",
+      "ressource": "EQUIPE_PLANTATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_004",
+      "ressource": "EQUIPE_PLANTATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_004",
+      "ressource": "EQUIPE_PLANTATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_004",
+      "ressource": "EQUIPE_PLANTATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TAILLE_HAIES_003",
+      "apres": "PLANTATION_004"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAITEMENT_005",
+      "competence": "equipe_traitement_phyto"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRAITEMENT_005",
+      "lot_min": 51,
+      "lot_max": 75
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_005",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_005",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_005",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PLANTATION_004",
+      "apres": "TRAITEMENT_005"
+    },
+    {
+      "type": "echeance",
+      "tache": "TRAITEMENT_005",
+      "echeance": 31
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAITEMENT_006",
+      "competence": "equipe_traitement_phyto"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRAITEMENT_006",
+      "lot_min": 82,
+      "lot_max": 122
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_006",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_006",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_006",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_007",
+      "competence": "equipe_nettoyage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_007",
+      "ressource": "EQUIPE_NETTOYAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_007",
+      "ressource": "EQUIPE_NETTOYAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_007",
+      "ressource": "EQUIPE_NETTOYAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_007",
+      "ressource": "EQUIPE_NETTOYAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TAILLE_HAIES_008",
+      "competence": "equipe_taille"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_008",
+      "ressource": "EQUIPE_TAILLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_008",
+      "ressource": "EQUIPE_TAILLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_008",
+      "ressource": "EQUIPE_TAILLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_008",
+      "ressource": "EQUIPE_TAILLE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AMENAGEMENT_009",
+      "competence": "equipe_amenagement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_009",
+      "ressource": "EQUIPE_AMENAGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_009",
+      "ressource": "EQUIPE_AMENAGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_009",
+      "ressource": "EQUIPE_AMENAGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_009",
+      "ressource": "EQUIPE_AMENAGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ELAGAGE_ARBRES_010",
+      "competence": "equipe_elagage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_010",
+      "ressource": "EQUIPE_ELAGAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_010",
+      "ressource": "EQUIPE_ELAGAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_010",
+      "ressource": "EQUIPE_ELAGAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_010",
+      "ressource": "EQUIPE_ELAGAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "AMENAGEMENT_009",
+      "apres": "ELAGAGE_ARBRES_010"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TONTE_GAZON_011",
+      "competence": "equipe_tonte"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TONTE_GAZON_011",
+      "lot_min": 114,
+      "lot_max": 170
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_011",
+      "ressource": "EQUIPE_TONTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_011",
+      "ressource": "EQUIPE_TONTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_011",
+      "ressource": "EQUIPE_TONTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_011",
+      "ressource": "EQUIPE_TONTE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ELAGAGE_ARBRES_010",
+      "apres": "TONTE_GAZON_011"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_012",
+      "competence": "equipe_nettoyage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_012",
+      "ressource": "EQUIPE_NETTOYAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_012",
+      "ressource": "EQUIPE_NETTOYAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_012",
+      "ressource": "EQUIPE_NETTOYAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_012",
+      "ressource": "EQUIPE_NETTOYAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ELAGAGE_ARBRES_013",
+      "competence": "equipe_elagage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_013",
+      "ressource": "EQUIPE_ELAGAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_013",
+      "ressource": "EQUIPE_ELAGAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_013",
+      "ressource": "EQUIPE_ELAGAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_013",
+      "ressource": "EQUIPE_ELAGAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ARROSAGE_014",
+      "competence": "equipe_arrosage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_014",
+      "ressource": "EQUIPE_ARROSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_014",
+      "ressource": "EQUIPE_ARROSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_014",
+      "ressource": "EQUIPE_ARROSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_014",
+      "ressource": "EQUIPE_ARROSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TONTE_GAZON_015",
+      "competence": "equipe_tonte"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_015",
+      "ressource": "EQUIPE_TONTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_015",
+      "ressource": "EQUIPE_TONTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_015",
+      "ressource": "EQUIPE_TONTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_015",
+      "ressource": "EQUIPE_TONTE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ARROSAGE_014",
+      "apres": "TONTE_GAZON_015"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AMENAGEMENT_016",
+      "competence": "equipe_amenagement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "AMENAGEMENT_016",
+      "lot_min": 8,
+      "lot_max": 12
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_016",
+      "ressource": "EQUIPE_AMENAGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_016",
+      "ressource": "EQUIPE_AMENAGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_016",
+      "ressource": "EQUIPE_AMENAGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_016",
+      "ressource": "EQUIPE_AMENAGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TONTE_GAZON_015",
+      "apres": "AMENAGEMENT_016"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TAILLE_HAIES_017",
+      "competence": "equipe_taille"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_017",
+      "ressource": "EQUIPE_TAILLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_017",
+      "ressource": "EQUIPE_TAILLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_017",
+      "ressource": "EQUIPE_TAILLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_017",
+      "ressource": "EQUIPE_TAILLE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAITEMENT_018",
+      "competence": "equipe_traitement_phyto"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_018",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_018",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_018",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TAILLE_HAIES_017",
+      "apres": "TRAITEMENT_018"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TAILLE_HAIES_019",
+      "competence": "equipe_taille"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_019",
+      "ressource": "EQUIPE_TAILLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_019",
+      "ressource": "EQUIPE_TAILLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_019",
+      "ressource": "EQUIPE_TAILLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_019",
+      "ressource": "EQUIPE_TAILLE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TONTE_GAZON_020",
+      "competence": "equipe_tonte"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_020",
+      "ressource": "EQUIPE_TONTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_020",
+      "ressource": "EQUIPE_TONTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_020",
+      "ressource": "EQUIPE_TONTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_020",
+      "ressource": "EQUIPE_TONTE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESHERBAGE_021",
+      "competence": "equipe_desherbage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_021",
+      "ressource": "EQUIPE_DESHERBAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_021",
+      "ressource": "EQUIPE_DESHERBAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_021",
+      "ressource": "EQUIPE_DESHERBAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_021",
+      "ressource": "EQUIPE_DESHERBAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TONTE_GAZON_020",
+      "apres": "DESHERBAGE_021"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAITEMENT_022",
+      "competence": "equipe_traitement_phyto"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_022",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_022",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_022",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DESHERBAGE_021",
+      "apres": "TRAITEMENT_022"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ELAGAGE_ARBRES_023",
+      "competence": "equipe_elagage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ELAGAGE_ARBRES_023",
+      "lot_min": 124,
+      "lot_max": 184
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_023",
+      "ressource": "EQUIPE_ELAGAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_023",
+      "ressource": "EQUIPE_ELAGAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_023",
+      "ressource": "EQUIPE_ELAGAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_023",
+      "ressource": "EQUIPE_ELAGAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAITEMENT_022",
+      "apres": "ELAGAGE_ARBRES_023"
+    },
+    {
+      "type": "echeance",
+      "tache": "ELAGAGE_ARBRES_023",
+      "echeance": 22
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PLANTATION_024",
+      "competence": "equipe_plantation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_024",
+      "ressource": "EQUIPE_PLANTATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_024",
+      "ressource": "EQUIPE_PLANTATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_024",
+      "ressource": "EQUIPE_PLANTATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_024",
+      "ressource": "EQUIPE_PLANTATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TAILLE_HAIES_025",
+      "competence": "equipe_taille"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_025",
+      "ressource": "EQUIPE_TAILLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_025",
+      "ressource": "EQUIPE_TAILLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_025",
+      "ressource": "EQUIPE_TAILLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_025",
+      "ressource": "EQUIPE_TAILLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PLANTATION_024",
+      "apres": "TAILLE_HAIES_025"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ARROSAGE_026",
+      "competence": "equipe_arrosage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_026",
+      "ressource": "EQUIPE_ARROSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_026",
+      "ressource": "EQUIPE_ARROSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_026",
+      "ressource": "EQUIPE_ARROSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_026",
+      "ressource": "EQUIPE_ARROSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AMENAGEMENT_027",
+      "competence": "equipe_amenagement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_027",
+      "ressource": "EQUIPE_AMENAGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_027",
+      "ressource": "EQUIPE_AMENAGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_027",
+      "ressource": "EQUIPE_AMENAGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_027",
+      "ressource": "EQUIPE_AMENAGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_028",
+      "competence": "equipe_nettoyage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "NETTOYAGE_028",
+      "lot_min": 74,
+      "lot_max": 110
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_028",
+      "ressource": "EQUIPE_NETTOYAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_028",
+      "ressource": "EQUIPE_NETTOYAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_028",
+      "ressource": "EQUIPE_NETTOYAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_028",
+      "ressource": "EQUIPE_NETTOYAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TONTE_GAZON_029",
+      "competence": "equipe_tonte"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_029",
+      "ressource": "EQUIPE_TONTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_029",
+      "ressource": "EQUIPE_TONTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_029",
+      "ressource": "EQUIPE_TONTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_029",
+      "ressource": "EQUIPE_TONTE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "TONTE_GAZON_029",
+      "echeance": 36
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TONTE_GAZON_030",
+      "competence": "equipe_tonte"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_030",
+      "ressource": "EQUIPE_TONTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_030",
+      "ressource": "EQUIPE_TONTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_030",
+      "ressource": "EQUIPE_TONTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_030",
+      "ressource": "EQUIPE_TONTE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TAILLE_HAIES_031",
+      "competence": "equipe_taille"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_031",
+      "ressource": "EQUIPE_TAILLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_031",
+      "ressource": "EQUIPE_TAILLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_031",
+      "ressource": "EQUIPE_TAILLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_031",
+      "ressource": "EQUIPE_TAILLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TONTE_GAZON_030",
+      "apres": "TAILLE_HAIES_031"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_032",
+      "competence": "equipe_nettoyage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_032",
+      "ressource": "EQUIPE_NETTOYAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_032",
+      "ressource": "EQUIPE_NETTOYAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_032",
+      "ressource": "EQUIPE_NETTOYAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_032",
+      "ressource": "EQUIPE_NETTOYAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAITEMENT_033",
+      "competence": "equipe_traitement_phyto"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_033",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_033",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_033",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "NETTOYAGE_032",
+      "apres": "TRAITEMENT_033"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AMENAGEMENT_034",
+      "competence": "equipe_amenagement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "AMENAGEMENT_034",
+      "lot_min": 136,
+      "lot_max": 202
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_034",
+      "ressource": "EQUIPE_AMENAGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_034",
+      "ressource": "EQUIPE_AMENAGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_034",
+      "ressource": "EQUIPE_AMENAGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_034",
+      "ressource": "EQUIPE_AMENAGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAITEMENT_033",
+      "apres": "AMENAGEMENT_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PLANTATION_035",
+      "competence": "equipe_plantation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PLANTATION_035",
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_035",
+      "ressource": "EQUIPE_PLANTATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_035",
+      "ressource": "EQUIPE_PLANTATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_035",
+      "ressource": "EQUIPE_PLANTATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_035",
+      "ressource": "EQUIPE_PLANTATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "AMENAGEMENT_034",
+      "apres": "PLANTATION_035"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ARROSAGE_036",
+      "competence": "equipe_arrosage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ARROSAGE_036",
+      "lot_min": 114,
+      "lot_max": 170
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_036",
+      "ressource": "EQUIPE_ARROSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_036",
+      "ressource": "EQUIPE_ARROSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_036",
+      "ressource": "EQUIPE_ARROSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_036",
+      "ressource": "EQUIPE_ARROSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PLANTATION_035",
+      "apres": "ARROSAGE_036"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESHERBAGE_037",
+      "competence": "equipe_desherbage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_037",
+      "ressource": "EQUIPE_DESHERBAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_037",
+      "ressource": "EQUIPE_DESHERBAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_037",
+      "ressource": "EQUIPE_DESHERBAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_037",
+      "ressource": "EQUIPE_DESHERBAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ARROSAGE_036",
+      "apres": "DESHERBAGE_037"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ELAGAGE_ARBRES_038",
+      "competence": "equipe_elagage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_038",
+      "ressource": "EQUIPE_ELAGAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_038",
+      "ressource": "EQUIPE_ELAGAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_038",
+      "ressource": "EQUIPE_ELAGAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_038",
+      "ressource": "EQUIPE_ELAGAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DESHERBAGE_037",
+      "apres": "ELAGAGE_ARBRES_038"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAITEMENT_039",
+      "competence": "equipe_traitement_phyto"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_039",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_039",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_039",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AMENAGEMENT_040",
+      "competence": "equipe_amenagement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_040",
+      "ressource": "EQUIPE_AMENAGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_040",
+      "ressource": "EQUIPE_AMENAGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_040",
+      "ressource": "EQUIPE_AMENAGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_040",
+      "ressource": "EQUIPE_AMENAGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAITEMENT_039",
+      "apres": "AMENAGEMENT_040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESHERBAGE_041",
+      "competence": "equipe_desherbage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_041",
+      "ressource": "EQUIPE_DESHERBAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_041",
+      "ressource": "EQUIPE_DESHERBAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_041",
+      "ressource": "EQUIPE_DESHERBAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_041",
+      "ressource": "EQUIPE_DESHERBAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PLANTATION_042",
+      "competence": "equipe_plantation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_042",
+      "ressource": "EQUIPE_PLANTATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_042",
+      "ressource": "EQUIPE_PLANTATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_042",
+      "ressource": "EQUIPE_PLANTATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_042",
+      "ressource": "EQUIPE_PLANTATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DESHERBAGE_041",
+      "apres": "PLANTATION_042"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TAILLE_HAIES_043",
+      "competence": "equipe_taille"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_043",
+      "ressource": "EQUIPE_TAILLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_043",
+      "ressource": "EQUIPE_TAILLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_043",
+      "ressource": "EQUIPE_TAILLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TAILLE_HAIES_043",
+      "ressource": "EQUIPE_TAILLE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_044",
+      "competence": "equipe_nettoyage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_044",
+      "ressource": "EQUIPE_NETTOYAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_044",
+      "ressource": "EQUIPE_NETTOYAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_044",
+      "ressource": "EQUIPE_NETTOYAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_044",
+      "ressource": "EQUIPE_NETTOYAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TAILLE_HAIES_043",
+      "apres": "NETTOYAGE_044"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ELAGAGE_ARBRES_045",
+      "competence": "equipe_elagage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_045",
+      "ressource": "EQUIPE_ELAGAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_045",
+      "ressource": "EQUIPE_ELAGAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_045",
+      "ressource": "EQUIPE_ELAGAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ELAGAGE_ARBRES_045",
+      "ressource": "EQUIPE_ELAGAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "NETTOYAGE_044",
+      "apres": "ELAGAGE_ARBRES_045"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TONTE_GAZON_046",
+      "competence": "equipe_tonte"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_046",
+      "ressource": "EQUIPE_TONTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_046",
+      "ressource": "EQUIPE_TONTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_046",
+      "ressource": "EQUIPE_TONTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TONTE_GAZON_046",
+      "ressource": "EQUIPE_TONTE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ARROSAGE_047",
+      "competence": "equipe_arrosage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ARROSAGE_047",
+      "lot_min": 84,
+      "lot_max": 124
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_047",
+      "ressource": "EQUIPE_ARROSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_047",
+      "ressource": "EQUIPE_ARROSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_047",
+      "ressource": "EQUIPE_ARROSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ARROSAGE_047",
+      "ressource": "EQUIPE_ARROSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TONTE_GAZON_046",
+      "apres": "ARROSAGE_047"
+    },
+    {
+      "type": "echeance",
+      "tache": "ARROSAGE_047",
+      "echeance": 47
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PLANTATION_048",
+      "competence": "equipe_plantation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_048",
+      "ressource": "EQUIPE_PLANTATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_048",
+      "ressource": "EQUIPE_PLANTATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_048",
+      "ressource": "EQUIPE_PLANTATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PLANTATION_048",
+      "ressource": "EQUIPE_PLANTATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAITEMENT_049",
+      "competence": "equipe_traitement_phyto"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRAITEMENT_049",
+      "lot_min": 99,
+      "lot_max": 147
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_049",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_049",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAITEMENT_049",
+      "ressource": "EQUIPE_TRAITEMENT_PHYTO_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PLANTATION_048",
+      "apres": "TRAITEMENT_049"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AMENAGEMENT_050",
+      "competence": "equipe_amenagement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "AMENAGEMENT_050",
+      "lot_min": 20,
+      "lot_max": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_050",
+      "ressource": "EQUIPE_AMENAGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_050",
+      "ressource": "EQUIPE_AMENAGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_050",
+      "ressource": "EQUIPE_AMENAGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AMENAGEMENT_050",
+      "ressource": "EQUIPE_AMENAGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_051",
+      "competence": "equipe_nettoyage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_051",
+      "ressource": "EQUIPE_NETTOYAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_051",
+      "ressource": "EQUIPE_NETTOYAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_051",
+      "ressource": "EQUIPE_NETTOYAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_051",
+      "ressource": "EQUIPE_NETTOYAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "AMENAGEMENT_050",
+      "apres": "NETTOYAGE_051"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DESHERBAGE_052",
+      "competence": "equipe_desherbage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_052",
+      "ressource": "EQUIPE_DESHERBAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_052",
+      "ressource": "EQUIPE_DESHERBAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_052",
+      "ressource": "EQUIPE_DESHERBAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DESHERBAGE_052",
+      "ressource": "EQUIPE_DESHERBAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "NETTOYAGE_051",
+      "apres": "DESHERBAGE_052"
+    },
+    {
+      "type": "echeance",
+      "tache": "DESHERBAGE_052",
+      "echeance": 20
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_ARROSAGE_4",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_DESHERBAGE_2",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_DESHERBAGE_3",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "EQUIPE_ELAGAGE_1",
+      "capacite": 3
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_TONTE_2",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_TAILLE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_DESHERBAGE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "EQUIPE_NETTOYAGE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

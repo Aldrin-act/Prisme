@@ -1,0 +1,1644 @@
+{
+  "secteur": "education_planification_cours",
+  "operations": [
+    {
+      "code_operation": "COURS_MAGISTRAL_001",
+      "operations_precedentes": [],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONFERENCE_002",
+      "operations_precedentes": [],
+      "competence_requise": "salle_conference",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_CONFERENCE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_003",
+      "operations_precedentes": [
+        "CONFERENCE_002"
+      ],
+      "competence_requise": "salle_tp_informatique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_004",
+      "operations_precedentes": [
+        "TP_INFORMATIQUE_003"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 28
+    },
+    {
+      "code_operation": "CONFERENCE_005",
+      "operations_precedentes": [],
+      "competence_requise": "salle_conference",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_CONFERENCE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_3",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_006",
+      "operations_precedentes": [
+        "CONFERENCE_005"
+      ],
+      "competence_requise": "salle_cours_standard",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_COURS_STANDARD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "PROJET_GROUPE_007",
+      "operations_precedentes": [
+        "COURS_MAGISTRAL_006"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 88,
+      "lot_min": 71,
+      "lot_max": 105
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_008",
+      "operations_precedentes": [
+        "PROJET_GROUPE_007"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "TP_SCIENCES_009",
+      "operations_precedentes": [
+        "TRAVAUX_DIRIGES_008"
+      ],
+      "competence_requise": "salle_tp_sciences",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_SCIENCES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "echeance_jours": 21
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_010",
+      "operations_precedentes": [],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CONFERENCE_011",
+      "operations_precedentes": [
+        "TRAVAUX_DIRIGES_010"
+      ],
+      "competence_requise": "salle_conference",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_CONFERENCE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_3",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PROJET_GROUPE_012",
+      "operations_precedentes": [],
+      "competence_requise": "bibliotheque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BIBLIOTHEQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TP_SCIENCES_013",
+      "operations_precedentes": [
+        "PROJET_GROUPE_012"
+      ],
+      "competence_requise": "salle_tp_sciences",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_SCIENCES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_014",
+      "operations_precedentes": [],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_015",
+      "operations_precedentes": [],
+      "competence_requise": "salle_cours_standard",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_COURS_STANDARD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PROJET_GROUPE_016",
+      "operations_precedentes": [
+        "COURS_MAGISTRAL_015"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONFERENCE_017",
+      "operations_precedentes": [],
+      "competence_requise": "salle_conference",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_CONFERENCE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_3",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 22,
+      "lot_min": 18,
+      "lot_max": 26
+    },
+    {
+      "code_operation": "TP_SCIENCES_018",
+      "operations_precedentes": [
+        "CONFERENCE_017"
+      ],
+      "competence_requise": "salle_tp_sciences",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_SCIENCES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "EXAMEN_019",
+      "operations_precedentes": [
+        "TP_SCIENCES_018"
+      ],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "echeance_jours": 37
+    },
+    {
+      "code_operation": "TP_SCIENCES_020",
+      "operations_precedentes": [],
+      "competence_requise": "salle_tp_sciences",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_SCIENCES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 171,
+      "lot_min": 137,
+      "lot_max": 205
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_021",
+      "operations_precedentes": [],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 107,
+      "lot_min": 86,
+      "lot_max": 128
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_022",
+      "operations_precedentes": [
+        "TRAVAUX_DIRIGES_021"
+      ],
+      "competence_requise": "salle_tp_informatique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "PROJET_GROUPE_023",
+      "operations_precedentes": [
+        "TP_INFORMATIQUE_022"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_024",
+      "operations_precedentes": [
+        "PROJET_GROUPE_023"
+      ],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 35,
+      "lot_min": 28,
+      "lot_max": 42,
+      "echeance_jours": 30
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_025",
+      "operations_precedentes": [],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 85,
+      "lot_min": 68,
+      "lot_max": 102
+    },
+    {
+      "code_operation": "CONFERENCE_026",
+      "operations_precedentes": [
+        "TRAVAUX_DIRIGES_025"
+      ],
+      "competence_requise": "salle_conference",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_CONFERENCE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_027",
+      "operations_precedentes": [],
+      "competence_requise": "salle_tp_informatique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "PROJET_GROUPE_028",
+      "operations_precedentes": [],
+      "competence_requise": "bibliotheque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BIBLIOTHEQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "TP_SCIENCES_029",
+      "operations_precedentes": [],
+      "competence_requise": "laboratoire",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "EXAMEN_030",
+      "operations_precedentes": [
+        "TP_SCIENCES_029"
+      ],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "echeance_jours": 34
+    },
+    {
+      "code_operation": "TP_SCIENCES_031",
+      "operations_precedentes": [],
+      "competence_requise": "salle_tp_sciences",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_SCIENCES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 68,
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_032",
+      "operations_precedentes": [
+        "TP_SCIENCES_031"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 46,
+      "lot_min": 37,
+      "lot_max": 55
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_033",
+      "operations_precedentes": [
+        "TRAVAUX_DIRIGES_032"
+      ],
+      "competence_requise": "salle_cours_standard",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_COURS_STANDARD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_034",
+      "operations_precedentes": [
+        "COURS_MAGISTRAL_033"
+      ],
+      "competence_requise": "salle_tp_informatique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "CONFERENCE_035",
+      "operations_precedentes": [
+        "TP_INFORMATIQUE_034"
+      ],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_036",
+      "operations_precedentes": [],
+      "competence_requise": "salle_cours_standard",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_COURS_STANDARD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PROJET_GROUPE_037",
+      "operations_precedentes": [
+        "COURS_MAGISTRAL_036"
+      ],
+      "competence_requise": "bibliotheque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BIBLIOTHEQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BIBLIOTHEQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "EXAMEN_038",
+      "operations_precedentes": [],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TP_SCIENCES_039",
+      "operations_precedentes": [],
+      "competence_requise": "salle_tp_sciences",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_SCIENCES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_SCIENCES_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_040",
+      "operations_precedentes": [
+        "TP_SCIENCES_039"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_041",
+      "operations_precedentes": [],
+      "competence_requise": "salle_tp_informatique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "TP_SCIENCES_042",
+      "operations_precedentes": [],
+      "competence_requise": "laboratoire",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONFERENCE_043",
+      "operations_precedentes": [
+        "TP_SCIENCES_042"
+      ],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "EXAMEN_044",
+      "operations_precedentes": [],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_045",
+      "operations_precedentes": [
+        "EXAMEN_044"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_046",
+      "operations_precedentes": [
+        "TRAVAUX_DIRIGES_045"
+      ],
+      "competence_requise": "salle_tp_informatique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "PROJET_GROUPE_047",
+      "operations_precedentes": [],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_048",
+      "operations_precedentes": [],
+      "competence_requise": "salle_cours_standard",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_COURS_STANDARD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_COURS_STANDARD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 104,
+      "lot_min": 84,
+      "lot_max": 124
+    },
+    {
+      "code_operation": "TRAVAUX_DIRIGES_049",
+      "operations_precedentes": [],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TP_INFORMATIQUE_050",
+      "operations_precedentes": [],
+      "competence_requise": "salle_tp_informatique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TP_INFORMATIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 123,
+      "lot_min": 99,
+      "lot_max": 147
+    },
+    {
+      "code_operation": "TP_SCIENCES_051",
+      "operations_precedentes": [],
+      "competence_requise": "laboratoire",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 25,
+      "lot_min": 20,
+      "lot_max": 30
+    },
+    {
+      "code_operation": "EXAMEN_052",
+      "operations_precedentes": [
+        "TP_SCIENCES_051"
+      ],
+      "competence_requise": "salle_examen",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_EXAMEN_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_EXAMEN_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_EXAMEN_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_EXAMEN_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "COURS_MAGISTRAL_053",
+      "operations_precedentes": [
+        "EXAMEN_052"
+      ],
+      "competence_requise": "amphitheatre",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AMPHITHEATRE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AMPHITHEATRE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "PROJET_GROUPE_054",
+      "operations_precedentes": [
+        "COURS_MAGISTRAL_053"
+      ],
+      "competence_requise": "salle_td",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_TD_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_TD_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONFERENCE_055",
+      "operations_precedentes": [
+        "PROJET_GROUPE_054"
+      ],
+      "competence_requise": "salle_conference",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_CONFERENCE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_CONFERENCE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "echeance_jours": 28
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "SALLE_COURS_STANDARD_1",
+      "type_poste": "SALLE_COURS_STANDARD",
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_2",
+      "type_poste": "SALLE_COURS_STANDARD",
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_3",
+      "type_poste": "SALLE_COURS_STANDARD",
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_COURS_STANDARD_4",
+      "type_poste": "SALLE_COURS_STANDARD",
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_1",
+      "type_poste": "SALLE_TP_INFORMATIQUE",
+      "competences": [
+        "salle_tp_informatique"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_2",
+      "type_poste": "SALLE_TP_INFORMATIQUE",
+      "competences": [
+        "salle_tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_3",
+      "type_poste": "SALLE_TP_INFORMATIQUE",
+      "competences": [
+        "salle_tp_informatique"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_INFORMATIQUE_4",
+      "type_poste": "SALLE_TP_INFORMATIQUE",
+      "competences": [
+        "salle_tp_informatique"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_SCIENCES_1",
+      "type_poste": "SALLE_TP_SCIENCES",
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_SCIENCES_2",
+      "type_poste": "SALLE_TP_SCIENCES",
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_SCIENCES_3",
+      "type_poste": "SALLE_TP_SCIENCES",
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TP_SCIENCES_4",
+      "type_poste": "SALLE_TP_SCIENCES",
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "code_poste": "AMPHITHEATRE_1",
+      "type_poste": "AMPHITHEATRE",
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "code_poste": "AMPHITHEATRE_2",
+      "type_poste": "AMPHITHEATRE",
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "code_poste": "AMPHITHEATRE_3",
+      "type_poste": "AMPHITHEATRE",
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "code_poste": "AMPHITHEATRE_4",
+      "type_poste": "AMPHITHEATRE",
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "code_poste": "SALLE_EXAMEN_1",
+      "type_poste": "SALLE_EXAMEN",
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "code_poste": "SALLE_EXAMEN_2",
+      "type_poste": "SALLE_EXAMEN",
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "code_poste": "SALLE_EXAMEN_3",
+      "type_poste": "SALLE_EXAMEN",
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "code_poste": "SALLE_EXAMEN_4",
+      "type_poste": "SALLE_EXAMEN",
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TD_1",
+      "type_poste": "SALLE_TD",
+      "competences": [
+        "salle_td"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "SALLE_TD_2",
+      "type_poste": "SALLE_TD",
+      "competences": [
+        "salle_td"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TD_3",
+      "type_poste": "SALLE_TD",
+      "competences": [
+        "salle_td"
+      ]
+    },
+    {
+      "code_poste": "SALLE_TD_4",
+      "type_poste": "SALLE_TD",
+      "competences": [
+        "salle_td"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_1",
+      "type_poste": "LABORATOIRE",
+      "competences": [
+        "laboratoire"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_2",
+      "type_poste": "LABORATOIRE",
+      "competences": [
+        "laboratoire"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "LABORATOIRE_3",
+      "type_poste": "LABORATOIRE",
+      "competences": [
+        "laboratoire"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_4",
+      "type_poste": "LABORATOIRE",
+      "competences": [
+        "laboratoire"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_1",
+      "type_poste": "SALLE_CONFERENCE",
+      "competences": [
+        "salle_conference"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_2",
+      "type_poste": "SALLE_CONFERENCE",
+      "competences": [
+        "salle_conference"
+      ]
+    },
+    {
+      "code_poste": "SALLE_CONFERENCE_3",
+      "type_poste": "SALLE_CONFERENCE",
+      "competences": [
+        "salle_conference"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_1",
+      "type_poste": "BIBLIOTHEQUE",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_2",
+      "type_poste": "BIBLIOTHEQUE",
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_3",
+      "type_poste": "BIBLIOTHEQUE",
+      "competences": [
+        "bibliotheque"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "BIBLIOTHEQUE_4",
+      "type_poste": "BIBLIOTHEQUE",
+      "competences": [
+        "bibliotheque"
+      ],
+      "capacite_simultanee": 3
+    }
+  ],
+  "changements_serie": [],
+  "incompatibilites": []
+}

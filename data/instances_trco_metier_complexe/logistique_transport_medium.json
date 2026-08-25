@@ -1,0 +1,2861 @@
+{
+  "taches": [
+    {
+      "id": "CONTROLE_ENTREE_001",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 60
+    },
+    {
+      "id": "RECEPTION_002",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 6
+    },
+    {
+      "id": "CHARGEMENT_003",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "STOCKAGE_004",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LIVRAISON_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRANSPORT_006",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EMBALLAGE_007",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_COMMANDE_008",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_COMMANDE_009",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_ENTREE_010",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EMBALLAGE_011",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 5
+    },
+    {
+      "id": "LIVRAISON_012",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "RECEPTION_013",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CHARGEMENT_014",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "STOCKAGE_015",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_COMMANDE_016",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 166
+    },
+    {
+      "id": "CONTROLE_ENTREE_017",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 38
+    },
+    {
+      "id": "RECEPTION_018",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "STOCKAGE_019",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CHARGEMENT_020",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EMBALLAGE_021",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 5
+    },
+    {
+      "id": "LIVRAISON_022",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_ENTREE_023",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 35
+    },
+    {
+      "id": "TRANSPORT_024",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 188
+    },
+    {
+      "id": "STOCKAGE_025",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CHARGEMENT_026",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "RECEPTION_027",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 39
+    },
+    {
+      "id": "EMBALLAGE_028",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_COMMANDE_029",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "STOCKAGE_030",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EMBALLAGE_031",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "RECEPTION_032",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LIVRAISON_033",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_ENTREE_034",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 169
+    },
+    {
+      "id": "PREPARATION_COMMANDE_035",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 157
+    },
+    {
+      "id": "CHARGEMENT_036",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 142
+    },
+    {
+      "id": "TRANSPORT_037",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "STOCKAGE_038",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EMBALLAGE_039",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 174
+    },
+    {
+      "id": "TRANSPORT_040",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 126
+    },
+    {
+      "id": "LIVRAISON_041",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 172
+    },
+    {
+      "id": "PREPARATION_COMMANDE_042",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CHARGEMENT_043",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "RECEPTION_044",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_ENTREE_045",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LIVRAISON_046",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 104
+    },
+    {
+      "id": "PREPARATION_COMMANDE_047",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "RECEPTION_048",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_ENTREE_049",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRANSPORT_050",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EMBALLAGE_051",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 10
+    },
+    {
+      "id": "CHARGEMENT_052",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 160
+    },
+    {
+      "id": "STOCKAGE_053",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 181
+    },
+    {
+      "id": "TRANSPORT_054",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CHARGEMENT_055",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "STOCKAGE_056",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 123
+    },
+    {
+      "id": "RECEPTION_057",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LIVRAISON_058",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EMBALLAGE_059",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_ENTREE_060",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "CAMION_20T_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "id": "CAMION_20T_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "id": "CAMION_20T_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "id": "CAMION_20T_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "id": "CAMION_10T_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_10t"
+      ]
+    },
+    {
+      "id": "CAMION_10T_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_10t"
+      ]
+    },
+    {
+      "id": "CAMION_10T_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_10t"
+      ]
+    },
+    {
+      "id": "CAMION_10T_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camion_10t"
+      ]
+    },
+    {
+      "id": "CAMIONNETTE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camionnette"
+      ]
+    },
+    {
+      "id": "CAMIONNETTE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camionnette"
+      ]
+    },
+    {
+      "id": "CAMIONNETTE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camionnette"
+      ]
+    },
+    {
+      "id": "CAMIONNETTE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "camionnette"
+      ]
+    },
+    {
+      "id": "CHARIOT_ELEVATEUR_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "chariot_elevateur"
+      ]
+    },
+    {
+      "id": "CHARIOT_ELEVATEUR_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "chariot_elevateur"
+      ]
+    },
+    {
+      "id": "CHARIOT_ELEVATEUR_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "chariot_elevateur"
+      ]
+    },
+    {
+      "id": "CHARIOT_ELEVATEUR_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "chariot_elevateur"
+      ]
+    },
+    {
+      "id": "QUAI_CHARGEMENT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_chargement"
+      ]
+    },
+    {
+      "id": "QUAI_CHARGEMENT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_chargement"
+      ]
+    },
+    {
+      "id": "QUAI_CHARGEMENT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_chargement"
+      ]
+    },
+    {
+      "id": "QUAI_CHARGEMENT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_chargement"
+      ]
+    },
+    {
+      "id": "QUAI_DECHARGEMENT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_dechargement"
+      ]
+    },
+    {
+      "id": "QUAI_DECHARGEMENT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_dechargement"
+      ]
+    },
+    {
+      "id": "QUAI_DECHARGEMENT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_dechargement"
+      ]
+    },
+    {
+      "id": "QUAI_DECHARGEMENT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_dechargement"
+      ]
+    },
+    {
+      "id": "ZONE_PREPARATION_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_preparation"
+      ]
+    },
+    {
+      "id": "ZONE_PREPARATION_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_preparation"
+      ]
+    },
+    {
+      "id": "ZONE_PREPARATION_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_preparation"
+      ]
+    },
+    {
+      "id": "ZONE_PREPARATION_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_preparation"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "id": "ZONE_STOCKAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_stockage"
+      ]
+    },
+    {
+      "id": "ZONE_STOCKAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_stockage"
+      ]
+    },
+    {
+      "id": "ZONE_STOCKAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_stockage"
+      ]
+    },
+    {
+      "id": "ZONE_STOCKAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_stockage"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_001",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_ENTREE_001",
+      "lot_min": 48,
+      "lot_max": 72
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_001",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_001",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_001",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_001",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_002",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "RECEPTION_002",
+      "lot_min": 5,
+      "lot_max": 7
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_002",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_002",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_002",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_002",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_ENTREE_001",
+      "apres": "RECEPTION_002"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_003",
+      "competence": "quai_chargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_003",
+      "ressource": "QUAI_CHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_003",
+      "ressource": "QUAI_CHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_003",
+      "ressource": "QUAI_CHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_003",
+      "ressource": "QUAI_CHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_002",
+      "apres": "CHARGEMENT_003"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_004",
+      "competence": "zone_stockage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_004",
+      "ressource": "ZONE_STOCKAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_004",
+      "ressource": "ZONE_STOCKAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_004",
+      "ressource": "ZONE_STOCKAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_004",
+      "ressource": "ZONE_STOCKAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LIVRAISON_005",
+      "competence": "camion_20t"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_005",
+      "ressource": "CAMION_20T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_005",
+      "ressource": "CAMION_20T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_005",
+      "ressource": "CAMION_20T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_005",
+      "ressource": "CAMION_20T_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "STOCKAGE_004",
+      "apres": "LIVRAISON_005"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRANSPORT_006",
+      "competence": "camion_10t"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_006",
+      "ressource": "CAMION_10T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_006",
+      "ressource": "CAMION_10T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_006",
+      "ressource": "CAMION_10T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_006",
+      "ressource": "CAMION_10T_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LIVRAISON_005",
+      "apres": "TRANSPORT_006"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_007",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_007",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_007",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_007",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_007",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRANSPORT_006",
+      "apres": "EMBALLAGE_007"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_COMMANDE_008",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_008",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_008",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_008",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_008",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EMBALLAGE_007",
+      "apres": "PREPARATION_COMMANDE_008"
+    },
+    {
+      "type": "echeance",
+      "tache": "PREPARATION_COMMANDE_008",
+      "echeance": 41
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_COMMANDE_009",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_009",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_009",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_009",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_009",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_010",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_010",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_010",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_010",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_010",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_011",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EMBALLAGE_011",
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_011",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_011",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_011",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_011",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LIVRAISON_012",
+      "competence": "camionnette"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_012",
+      "ressource": "CAMIONNETTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_012",
+      "ressource": "CAMIONNETTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_012",
+      "ressource": "CAMIONNETTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_012",
+      "ressource": "CAMIONNETTE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_013",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_013",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_013",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_013",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_013",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_014",
+      "competence": "quai_chargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_014",
+      "ressource": "QUAI_CHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_014",
+      "ressource": "QUAI_CHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_014",
+      "ressource": "QUAI_CHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_014",
+      "ressource": "QUAI_CHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_015",
+      "competence": "zone_stockage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_015",
+      "ressource": "ZONE_STOCKAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_015",
+      "ressource": "ZONE_STOCKAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_015",
+      "ressource": "ZONE_STOCKAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_015",
+      "ressource": "ZONE_STOCKAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "STOCKAGE_015",
+      "echeance": 40
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_COMMANDE_016",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREPARATION_COMMANDE_016",
+      "lot_min": 133,
+      "lot_max": 199
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_016",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_016",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_016",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_016",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_017",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_ENTREE_017",
+      "lot_min": 31,
+      "lot_max": 45
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_017",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_017",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_017",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_017",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_COMMANDE_016",
+      "apres": "CONTROLE_ENTREE_017"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_018",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_ENTREE_017",
+      "apres": "RECEPTION_018"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_019",
+      "competence": "chariot_elevateur"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_019",
+      "ressource": "CHARIOT_ELEVATEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_019",
+      "ressource": "CHARIOT_ELEVATEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_019",
+      "ressource": "CHARIOT_ELEVATEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_019",
+      "ressource": "CHARIOT_ELEVATEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_018",
+      "apres": "STOCKAGE_019"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_020",
+      "competence": "quai_chargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_020",
+      "ressource": "QUAI_CHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_020",
+      "ressource": "QUAI_CHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_020",
+      "ressource": "QUAI_CHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_020",
+      "ressource": "QUAI_CHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "STOCKAGE_019",
+      "apres": "CHARGEMENT_020"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_021",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EMBALLAGE_021",
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_021",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_021",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_021",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_021",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LIVRAISON_022",
+      "competence": "camion_20t"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_022",
+      "ressource": "CAMION_20T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_022",
+      "ressource": "CAMION_20T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_022",
+      "ressource": "CAMION_20T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_022",
+      "ressource": "CAMION_20T_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_023",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_ENTREE_023",
+      "lot_min": 28,
+      "lot_max": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_023",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_023",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_023",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_023",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LIVRAISON_022",
+      "apres": "CONTROLE_ENTREE_023"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRANSPORT_024",
+      "competence": "camionnette"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRANSPORT_024",
+      "lot_min": 151,
+      "lot_max": 225
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_024",
+      "ressource": "CAMIONNETTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_024",
+      "ressource": "CAMIONNETTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_024",
+      "ressource": "CAMIONNETTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_024",
+      "ressource": "CAMIONNETTE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_ENTREE_023",
+      "apres": "TRANSPORT_024"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_025",
+      "competence": "chariot_elevateur"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_025",
+      "ressource": "CHARIOT_ELEVATEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_025",
+      "ressource": "CHARIOT_ELEVATEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_025",
+      "ressource": "CHARIOT_ELEVATEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_025",
+      "ressource": "CHARIOT_ELEVATEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_026",
+      "competence": "quai_chargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_026",
+      "ressource": "QUAI_CHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_026",
+      "ressource": "QUAI_CHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_026",
+      "ressource": "QUAI_CHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_026",
+      "ressource": "QUAI_CHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "STOCKAGE_025",
+      "apres": "CHARGEMENT_026"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_027",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "RECEPTION_027",
+      "lot_min": 32,
+      "lot_max": 46
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_027",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_027",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_027",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_027",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_028",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_028",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_028",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_028",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_028",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_027",
+      "apres": "EMBALLAGE_028"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_COMMANDE_029",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_029",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_029",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_029",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_029",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EMBALLAGE_028",
+      "apres": "PREPARATION_COMMANDE_029"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_030",
+      "competence": "zone_stockage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_030",
+      "ressource": "ZONE_STOCKAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_030",
+      "ressource": "ZONE_STOCKAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_030",
+      "ressource": "ZONE_STOCKAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_030",
+      "ressource": "ZONE_STOCKAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_031",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_031",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_031",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_031",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_031",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "STOCKAGE_030",
+      "apres": "EMBALLAGE_031"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_032",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_032",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_032",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_032",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_032",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LIVRAISON_033",
+      "competence": "camion_20t"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_033",
+      "ressource": "CAMION_20T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_033",
+      "ressource": "CAMION_20T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_033",
+      "ressource": "CAMION_20T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_033",
+      "ressource": "CAMION_20T_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_032",
+      "apres": "LIVRAISON_033"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_034",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_ENTREE_034",
+      "lot_min": 136,
+      "lot_max": 202
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_034",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_034",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_034",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_034",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LIVRAISON_033",
+      "apres": "CONTROLE_ENTREE_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_COMMANDE_035",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREPARATION_COMMANDE_035",
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_035",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_035",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_035",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_035",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_ENTREE_034",
+      "apres": "PREPARATION_COMMANDE_035"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_036",
+      "competence": "quai_chargement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CHARGEMENT_036",
+      "lot_min": 114,
+      "lot_max": 170
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_036",
+      "ressource": "QUAI_CHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_036",
+      "ressource": "QUAI_CHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_036",
+      "ressource": "QUAI_CHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_036",
+      "ressource": "QUAI_CHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_COMMANDE_035",
+      "apres": "CHARGEMENT_036"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRANSPORT_037",
+      "competence": "camion_20t"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_037",
+      "ressource": "CAMION_20T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_037",
+      "ressource": "CAMION_20T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_037",
+      "ressource": "CAMION_20T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_037",
+      "ressource": "CAMION_20T_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CHARGEMENT_036",
+      "apres": "TRANSPORT_037"
+    },
+    {
+      "type": "echeance",
+      "tache": "TRANSPORT_037",
+      "echeance": 41
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_038",
+      "competence": "zone_stockage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_038",
+      "ressource": "ZONE_STOCKAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_038",
+      "ressource": "ZONE_STOCKAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_038",
+      "ressource": "ZONE_STOCKAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_038",
+      "ressource": "ZONE_STOCKAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_039",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EMBALLAGE_039",
+      "lot_min": 140,
+      "lot_max": 208
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_039",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_039",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_039",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_039",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "STOCKAGE_038",
+      "apres": "EMBALLAGE_039"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRANSPORT_040",
+      "competence": "camion_20t"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRANSPORT_040",
+      "lot_min": 101,
+      "lot_max": 151
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_040",
+      "ressource": "CAMION_20T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_040",
+      "ressource": "CAMION_20T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_040",
+      "ressource": "CAMION_20T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_040",
+      "ressource": "CAMION_20T_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EMBALLAGE_039",
+      "apres": "TRANSPORT_040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LIVRAISON_041",
+      "competence": "camionnette"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "LIVRAISON_041",
+      "lot_min": 138,
+      "lot_max": 206
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_041",
+      "ressource": "CAMIONNETTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_041",
+      "ressource": "CAMIONNETTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_041",
+      "ressource": "CAMIONNETTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_041",
+      "ressource": "CAMIONNETTE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRANSPORT_040",
+      "apres": "LIVRAISON_041"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_COMMANDE_042",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_042",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_042",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_042",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_042",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LIVRAISON_041",
+      "apres": "PREPARATION_COMMANDE_042"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_043",
+      "competence": "chariot_elevateur"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_043",
+      "ressource": "CHARIOT_ELEVATEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_043",
+      "ressource": "CHARIOT_ELEVATEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_043",
+      "ressource": "CHARIOT_ELEVATEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_043",
+      "ressource": "CHARIOT_ELEVATEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_044",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_044",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_044",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_044",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_044",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CHARGEMENT_043",
+      "apres": "RECEPTION_044"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_045",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_045",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_045",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_045",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_045",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_044",
+      "apres": "CONTROLE_ENTREE_045"
+    },
+    {
+      "type": "echeance",
+      "tache": "CONTROLE_ENTREE_045",
+      "echeance": 39
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LIVRAISON_046",
+      "competence": "camion_10t"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "LIVRAISON_046",
+      "lot_min": 84,
+      "lot_max": 124
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_046",
+      "ressource": "CAMION_10T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_046",
+      "ressource": "CAMION_10T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_046",
+      "ressource": "CAMION_10T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_046",
+      "ressource": "CAMION_10T_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_COMMANDE_047",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_047",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_047",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_047",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_COMMANDE_047",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LIVRAISON_046",
+      "apres": "PREPARATION_COMMANDE_047"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_048",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_048",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_048",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_048",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_048",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_049",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_049",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_049",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_049",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_049",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRANSPORT_050",
+      "competence": "camion_10t"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_050",
+      "ressource": "CAMION_10T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_050",
+      "ressource": "CAMION_10T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_050",
+      "ressource": "CAMION_10T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_050",
+      "ressource": "CAMION_10T_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_051",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EMBALLAGE_051",
+      "lot_min": 8,
+      "lot_max": 12
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_051",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_051",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_051",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_051",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRANSPORT_050",
+      "apres": "EMBALLAGE_051"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_052",
+      "competence": "chariot_elevateur"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CHARGEMENT_052",
+      "lot_min": 128,
+      "lot_max": 192
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_052",
+      "ressource": "CHARIOT_ELEVATEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_052",
+      "ressource": "CHARIOT_ELEVATEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_052",
+      "ressource": "CHARIOT_ELEVATEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_052",
+      "ressource": "CHARIOT_ELEVATEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_053",
+      "competence": "zone_stockage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "STOCKAGE_053",
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_053",
+      "ressource": "ZONE_STOCKAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_053",
+      "ressource": "ZONE_STOCKAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_053",
+      "ressource": "ZONE_STOCKAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_053",
+      "ressource": "ZONE_STOCKAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "STOCKAGE_053",
+      "echeance": 30
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRANSPORT_054",
+      "competence": "camion_10t"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_054",
+      "ressource": "CAMION_10T_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_054",
+      "ressource": "CAMION_10T_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_054",
+      "ressource": "CAMION_10T_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRANSPORT_054",
+      "ressource": "CAMION_10T_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CHARGEMENT_055",
+      "competence": "chariot_elevateur"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_055",
+      "ressource": "CHARIOT_ELEVATEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_055",
+      "ressource": "CHARIOT_ELEVATEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_055",
+      "ressource": "CHARIOT_ELEVATEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CHARGEMENT_055",
+      "ressource": "CHARIOT_ELEVATEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRANSPORT_054",
+      "apres": "CHARGEMENT_055"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "STOCKAGE_056",
+      "competence": "chariot_elevateur"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "STOCKAGE_056",
+      "lot_min": 99,
+      "lot_max": 147
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_056",
+      "ressource": "CHARIOT_ELEVATEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_056",
+      "ressource": "CHARIOT_ELEVATEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_056",
+      "ressource": "CHARIOT_ELEVATEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "STOCKAGE_056",
+      "ressource": "CHARIOT_ELEVATEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CHARGEMENT_055",
+      "apres": "STOCKAGE_056"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_057",
+      "competence": "quai_dechargement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_057",
+      "ressource": "QUAI_DECHARGEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_057",
+      "ressource": "QUAI_DECHARGEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_057",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_057",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "STOCKAGE_056",
+      "apres": "RECEPTION_057"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LIVRAISON_058",
+      "competence": "camionnette"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_058",
+      "ressource": "CAMIONNETTE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_058",
+      "ressource": "CAMIONNETTE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_058",
+      "ressource": "CAMIONNETTE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LIVRAISON_058",
+      "ressource": "CAMIONNETTE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_057",
+      "apres": "LIVRAISON_058"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EMBALLAGE_059",
+      "competence": "zone_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_059",
+      "ressource": "ZONE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_059",
+      "ressource": "ZONE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_059",
+      "ressource": "ZONE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EMBALLAGE_059",
+      "ressource": "ZONE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LIVRAISON_058",
+      "apres": "EMBALLAGE_059"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_ENTREE_060",
+      "competence": "poste_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_060",
+      "ressource": "POSTE_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_060",
+      "ressource": "POSTE_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_060",
+      "ressource": "POSTE_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_ENTREE_060",
+      "ressource": "POSTE_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "CONTROLE_ENTREE_060",
+      "echeance": 29
+    },
+    {
+      "type": "capacite",
+      "ressource": "CAMION_10T_2",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "CAMIONNETTE_2",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "CAMIONNETTE_3",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "CHARIOT_ELEVATEUR_4",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "QUAI_CHARGEMENT_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "QUAI_CHARGEMENT_3",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "QUAI_DECHARGEMENT_3",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "QUAI_DECHARGEMENT_4",
+      "capacite": 3
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "CAMION_10T_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "CAMION_10T_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "ZONE_PREPARATION_2",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

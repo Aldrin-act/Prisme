@@ -1,0 +1,172 @@
+{
+  "articles": [
+    {
+      "id": "ART-001",
+      "designation": "Produit fini A",
+      "type": "fabrique",
+      "unite": "pcs",
+      "stock_initial": 120,
+      "stock_securite": 50,
+      "delai_appro": 5,
+      "lot_min": 100,
+      "lot_multiple": 50
+    },
+    {
+      "id": "COMP-01",
+      "designation": "Composant 1",
+      "type": "achete",
+      "unite": "pcs",
+      "stock_initial": 800,
+      "stock_securite": 200,
+      "delai_appro": 10,
+      "lot_min": 500,
+      "lot_multiple": 100
+    },
+    {
+      "id": "COMP-02",
+      "designation": "Composant 2",
+      "type": "achete",
+      "unite": "pcs",
+      "stock_initial": 400,
+      "stock_securite": 100,
+      "delai_appro": 7,
+      "lot_min": 200,
+      "lot_multiple": 50
+    }
+  ],
+  "nomenclatures": [
+    {
+      "article_parent": "ART-001",
+      "composants": [
+        { "article": "COMP-01", "quantite": 2 },
+        { "article": "COMP-02", "quantite": 1 }
+      ]
+    }
+  ],
+  "gammes": [
+    {
+      "article": "ART-001",
+      "operations": [
+        {
+          "numero": 10,
+          "designation": "Decoupe",
+          "ressource": "MACH-01",
+          "temps_setup": 30,
+          "temps_unitaire": 2.5,
+          "ressources_alternatives": ["MACH-02"]
+        },
+        {
+          "numero": 20,
+          "designation": "Assemblage",
+          "ressource": "MACH-03",
+          "temps_setup": 15,
+          "temps_unitaire": 4.0,
+          "predecesseurs": [10]
+        }
+      ]
+    }
+  ],
+  "ressources": [
+    {
+      "id": "MACH-01",
+      "designation": "Machine decoupe",
+      "type": "machine",
+      "capacite": 1,
+      "calendrier": "CAL-3x8",
+      "cout_horaire": 45,
+      "efficience": 0.9
+    },
+    {
+      "id": "MACH-02",
+      "designation": "Machine decoupe secours",
+      "type": "machine",
+      "capacite": 1,
+      "calendrier": "CAL-2x8",
+      "cout_horaire": 40,
+      "efficience": 0.85
+    },
+    {
+      "id": "MACH-03",
+      "designation": "Poste assemblage",
+      "type": "machine",
+      "capacite": 1,
+      "calendrier": "CAL-3x8",
+      "cout_horaire": 55,
+      "efficience": 0.95
+    }
+  ],
+  "calendriers": [
+    {
+      "id": "CAL-3x8",
+      "shifts": [
+        { "jour": "lundi", "debut": "06:00", "fin": "22:00" },
+        { "jour": "mardi", "debut": "06:00", "fin": "22:00" },
+        { "jour": "mercredi", "debut": "06:00", "fin": "22:00" },
+        { "jour": "jeudi", "debut": "06:00", "fin": "22:00" },
+        { "jour": "vendredi", "debut": "06:00", "fin": "22:00" }
+      ],
+      "jours_feries": ["2026-01-01", "2026-05-01"]
+    },
+    {
+      "id": "CAL-2x8",
+      "shifts": [
+        { "jour": "lundi", "debut": "06:00", "fin": "14:00" },
+        { "jour": "mardi", "debut": "06:00", "fin": "14:00" },
+        { "jour": "mercredi", "debut": "06:00", "fin": "14:00" },
+        { "jour": "jeudi", "debut": "06:00", "fin": "14:00" },
+        { "jour": "vendredi", "debut": "06:00", "fin": "14:00" }
+      ],
+      "jours_feries": ["2026-01-01", "2026-05-01"]
+    }
+  ],
+  "ordres": [
+    {
+      "id": "OF-1001",
+      "type": "OF",
+      "article": "ART-001",
+      "quantite": 200,
+      "date_debut_au_plus_tot": "2026-03-01T06:00:00",
+      "date_fin_au_plus_tard": "2026-03-10T22:00:00",
+      "priorite": 1,
+      "statut": "planifie"
+    },
+    {
+      "id": "OF-1002",
+      "type": "OF",
+      "article": "ART-001",
+      "quantite": 150,
+      "date_debut_au_plus_tot": "2026-03-05T06:00:00",
+      "date_fin_au_plus_tard": "2026-03-15T22:00:00",
+      "priorite": 2,
+      "statut": "ferme"
+    }
+  ],
+  "demandes": [
+    {
+      "id": "CMD-500",
+      "type": "commande_client",
+      "article": "ART-001",
+      "quantite": 200,
+      "date_livraison": "2026-03-12",
+      "client": "CLI-42"
+    },
+    {
+      "id": "PREV-011",
+      "type": "prevision",
+      "article": "ART-001",
+      "quantite": 150,
+      "date_livraison": "2026-03-20",
+      "client": null
+    }
+  ],
+  "stocks": [
+    { "article": "COMP-01", "quantite_disponible": 800, "emplacement": "MP-01" },
+    { "article": "COMP-02", "quantite_disponible": 400, "emplacement": "MP-02" },
+    { "article": "ART-001", "quantite_disponible": 120, "emplacement": "PF-01" }
+  ],
+  "contraintes": {
+    "horizon_planification": { "debut": "2026-03-01", "fin": "2026-04-30" },
+    "objectif": "minimiser_retard",
+    "regles_sequencement": ["respecter_setup_famille", "fifo_par_priorite"]
+  }
+}

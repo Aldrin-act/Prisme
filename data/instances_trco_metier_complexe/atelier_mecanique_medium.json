@@ -1,0 +1,2528 @@
+{
+  "taches": [
+    {
+      "id": "PREPARATION_001",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 64
+    },
+    {
+      "id": "PEINTURE_002",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 6
+    },
+    {
+      "id": "FORMAGE_003",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 93
+    },
+    {
+      "id": "USINAGE_004",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "FINITION_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_006",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASSEMBLAGE_007",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOUDURE_008",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOUDURE_009",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "USINAGE_010",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 189
+    },
+    {
+      "id": "FINITION_011",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_012",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_013",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 97
+    },
+    {
+      "id": "PEINTURE_014",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "FORMAGE_015",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASSEMBLAGE_016",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "USINAGE_017",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_018",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "FORMAGE_019",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 54
+    },
+    {
+      "id": "ASSEMBLAGE_020",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 171
+    },
+    {
+      "id": "CONTROLE_021",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOUDURE_022",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PEINTURE_023",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "FINITION_024",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 35
+    },
+    {
+      "id": "SOUDURE_025",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 164
+    },
+    {
+      "id": "PEINTURE_026",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASSEMBLAGE_027",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "FORMAGE_028",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "USINAGE_029",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_030",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 181
+    },
+    {
+      "id": "FINITION_031",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_032",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASSEMBLAGE_033",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 122
+    },
+    {
+      "id": "CONTROLE_034",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PEINTURE_035",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 72
+    },
+    {
+      "id": "USINAGE_036",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 16
+    },
+    {
+      "id": "FORMAGE_037",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_038",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOUDURE_039",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "FINITION_040",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOUDURE_041",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PEINTURE_042",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 181
+    },
+    {
+      "id": "FORMAGE_043",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "USINAGE_044",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "FINITION_045",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_046",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ASSEMBLAGE_047",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_048",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "DECOUPEUSE_LASER_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "decoupeuse_laser"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_LASER_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "decoupeuse_laser"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_LASER_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "decoupeuse_laser"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_LASER_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "decoupeuse_laser"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "decoupeuse_plasma"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "decoupeuse_plasma"
+      ]
+    },
+    {
+      "id": "DECOUPEUSE_PLASMA_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "decoupeuse_plasma"
+      ]
+    },
+    {
+      "id": "PERCEUSE_CNC_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "perceuse_cnc"
+      ]
+    },
+    {
+      "id": "PERCEUSE_CNC_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "perceuse_cnc"
+      ]
+    },
+    {
+      "id": "PERCEUSE_CNC_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "perceuse_cnc"
+      ]
+    },
+    {
+      "id": "PERCEUSE_CNC_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "perceuse_cnc"
+      ]
+    },
+    {
+      "id": "FRAISEUSE_CNC_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "id": "FRAISEUSE_CNC_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "id": "FRAISEUSE_CNC_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "id": "FRAISEUSE_CNC_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "fraiseuse_cnc"
+      ]
+    },
+    {
+      "id": "PRESSE_PLIAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "presse_pliage"
+      ]
+    },
+    {
+      "id": "PRESSE_PLIAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "presse_pliage"
+      ]
+    },
+    {
+      "id": "PRESSE_PLIAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "presse_pliage"
+      ]
+    },
+    {
+      "id": "PRESSE_PLIAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "presse_pliage"
+      ]
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "presse_emboutissage"
+      ]
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "presse_emboutissage"
+      ]
+    },
+    {
+      "id": "PRESSE_EMBOUTISSAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "presse_emboutissage"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure"
+      ]
+    },
+    {
+      "id": "ROBOT_SOUDURE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "id": "ROBOT_SOUDURE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "id": "ROBOT_SOUDURE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "id": "ROBOT_SOUDURE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_soudure"
+      ]
+    },
+    {
+      "id": "CABINE_PEINTURE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cabine_peinture"
+      ]
+    },
+    {
+      "id": "CABINE_PEINTURE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cabine_peinture"
+      ]
+    },
+    {
+      "id": "CABINE_PEINTURE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cabine_peinture"
+      ]
+    },
+    {
+      "id": "CABINE_PEINTURE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cabine_peinture"
+      ]
+    },
+    {
+      "id": "TUNNEL_PEINTURE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_peinture"
+      ]
+    },
+    {
+      "id": "TUNNEL_PEINTURE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_peinture"
+      ]
+    },
+    {
+      "id": "TUNNEL_PEINTURE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_peinture"
+      ]
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_assemblage"
+      ]
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_assemblage"
+      ]
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_assemblage"
+      ]
+    },
+    {
+      "id": "POSTE_ASSEMBLAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_assemblage"
+      ]
+    },
+    {
+      "id": "STATION_CONTROLE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_controle"
+      ]
+    },
+    {
+      "id": "STATION_CONTROLE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_controle"
+      ]
+    },
+    {
+      "id": "STATION_CONTROLE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_controle"
+      ]
+    },
+    {
+      "id": "STATION_CONTROLE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_controle"
+      ]
+    },
+    {
+      "id": "POSTE_EBAVURAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_ebavurage"
+      ]
+    },
+    {
+      "id": "POSTE_EBAVURAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_ebavurage"
+      ]
+    },
+    {
+      "id": "POSTE_EBAVURAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_ebavurage"
+      ]
+    },
+    {
+      "id": "POSTE_EBAVURAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_ebavurage"
+      ]
+    },
+    {
+      "id": "CENTRE_USINAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "id": "CENTRE_USINAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "id": "CENTRE_USINAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "id": "CENTRE_USINAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "centre_usinage"
+      ]
+    },
+    {
+      "id": "POSTE_POLISSAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_polissage"
+      ]
+    },
+    {
+      "id": "POSTE_POLISSAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_polissage"
+      ]
+    },
+    {
+      "id": "POSTE_POLISSAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_polissage"
+      ]
+    },
+    {
+      "id": "POSTE_POLISSAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_polissage"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_001",
+      "competence": "perceuse_cnc"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREPARATION_001",
+      "lot_min": 52,
+      "lot_max": 76
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_001",
+      "ressource": "PERCEUSE_CNC_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_001",
+      "ressource": "PERCEUSE_CNC_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_001",
+      "ressource": "PERCEUSE_CNC_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_001",
+      "ressource": "PERCEUSE_CNC_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PEINTURE_002",
+      "competence": "tunnel_peinture"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PEINTURE_002",
+      "lot_min": 5,
+      "lot_max": 7
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_002",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_002",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_002",
+      "ressource": "TUNNEL_PEINTURE_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FORMAGE_003",
+      "competence": "presse_emboutissage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "FORMAGE_003",
+      "lot_min": 75,
+      "lot_max": 111
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_003",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_003",
+      "ressource": "PRESSE_EMBOUTISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_003",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PEINTURE_002",
+      "apres": "FORMAGE_003"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "USINAGE_004",
+      "competence": "centre_usinage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_004",
+      "ressource": "CENTRE_USINAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_004",
+      "ressource": "CENTRE_USINAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_004",
+      "ressource": "CENTRE_USINAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_004",
+      "ressource": "CENTRE_USINAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FINITION_005",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_005",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_005",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_005",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_005",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "USINAGE_004",
+      "apres": "FINITION_005"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_006",
+      "competence": "station_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_006",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_006",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_006",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_006",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "FINITION_005",
+      "apres": "CONTROLE_006"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASSEMBLAGE_007",
+      "competence": "poste_assemblage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_007",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_007",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_007",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_007",
+      "ressource": "POSTE_ASSEMBLAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_006",
+      "apres": "ASSEMBLAGE_007"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_008",
+      "competence": "robot_soudure"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_008",
+      "ressource": "ROBOT_SOUDURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_008",
+      "ressource": "ROBOT_SOUDURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_008",
+      "ressource": "ROBOT_SOUDURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_008",
+      "ressource": "ROBOT_SOUDURE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "SOUDURE_008",
+      "echeance": 41
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_009",
+      "competence": "poste_soudure"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_009",
+      "ressource": "POSTE_SOUDURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_009",
+      "ressource": "POSTE_SOUDURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_009",
+      "ressource": "POSTE_SOUDURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_009",
+      "ressource": "POSTE_SOUDURE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "USINAGE_010",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "USINAGE_010",
+      "lot_min": 152,
+      "lot_max": 226
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_010",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_010",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_010",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_010",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_009",
+      "apres": "USINAGE_010"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FINITION_011",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_011",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_011",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_011",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_011",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_012",
+      "competence": "station_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_012",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_012",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_012",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_012",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "FINITION_011",
+      "apres": "CONTROLE_012"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_013",
+      "competence": "decoupeuse_laser"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREPARATION_013",
+      "lot_min": 78,
+      "lot_max": 116
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_013",
+      "ressource": "DECOUPEUSE_LASER_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_013",
+      "ressource": "DECOUPEUSE_LASER_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_013",
+      "ressource": "DECOUPEUSE_LASER_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_013",
+      "ressource": "DECOUPEUSE_LASER_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PEINTURE_014",
+      "competence": "cabine_peinture"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_014",
+      "ressource": "CABINE_PEINTURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_014",
+      "ressource": "CABINE_PEINTURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_014",
+      "ressource": "CABINE_PEINTURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_014",
+      "ressource": "CABINE_PEINTURE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FORMAGE_015",
+      "competence": "presse_emboutissage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_015",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_015",
+      "ressource": "PRESSE_EMBOUTISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_015",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASSEMBLAGE_016",
+      "competence": "poste_assemblage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_016",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_016",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_016",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_016",
+      "ressource": "POSTE_ASSEMBLAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "FORMAGE_015",
+      "apres": "ASSEMBLAGE_016"
+    },
+    {
+      "type": "echeance",
+      "tache": "ASSEMBLAGE_016",
+      "echeance": 30
+    },
+    {
+      "type": "competence_requise",
+      "tache": "USINAGE_017",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_017",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_017",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_017",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_017",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_018",
+      "competence": "decoupeuse_plasma"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_018",
+      "ressource": "DECOUPEUSE_PLASMA_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_018",
+      "ressource": "DECOUPEUSE_PLASMA_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_018",
+      "ressource": "DECOUPEUSE_PLASMA_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "USINAGE_017",
+      "apres": "PREPARATION_018"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FORMAGE_019",
+      "competence": "presse_emboutissage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "FORMAGE_019",
+      "lot_min": 44,
+      "lot_max": 64
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_019",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_019",
+      "ressource": "PRESSE_EMBOUTISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_019",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_018",
+      "apres": "FORMAGE_019"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASSEMBLAGE_020",
+      "competence": "poste_assemblage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ASSEMBLAGE_020",
+      "lot_min": 137,
+      "lot_max": 205
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_020",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_020",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_020",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_020",
+      "ressource": "POSTE_ASSEMBLAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "FORMAGE_019",
+      "apres": "ASSEMBLAGE_020"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_021",
+      "competence": "station_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_021",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_021",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_021",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_021",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ASSEMBLAGE_020",
+      "apres": "CONTROLE_021"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_022",
+      "competence": "robot_soudure"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_022",
+      "ressource": "ROBOT_SOUDURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_022",
+      "ressource": "ROBOT_SOUDURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_022",
+      "ressource": "ROBOT_SOUDURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_022",
+      "ressource": "ROBOT_SOUDURE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_021",
+      "apres": "SOUDURE_022"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PEINTURE_023",
+      "competence": "tunnel_peinture"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_023",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_023",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_023",
+      "ressource": "TUNNEL_PEINTURE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_022",
+      "apres": "PEINTURE_023"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FINITION_024",
+      "competence": "poste_polissage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "FINITION_024",
+      "lot_min": 28,
+      "lot_max": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_024",
+      "ressource": "POSTE_POLISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_024",
+      "ressource": "POSTE_POLISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_024",
+      "ressource": "POSTE_POLISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_024",
+      "ressource": "POSTE_POLISSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PEINTURE_023",
+      "apres": "FINITION_024"
+    },
+    {
+      "type": "echeance",
+      "tache": "FINITION_024",
+      "echeance": 39
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_025",
+      "competence": "robot_soudure"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "SOUDURE_025",
+      "lot_min": 132,
+      "lot_max": 196
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_025",
+      "ressource": "ROBOT_SOUDURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_025",
+      "ressource": "ROBOT_SOUDURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_025",
+      "ressource": "ROBOT_SOUDURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_025",
+      "ressource": "ROBOT_SOUDURE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PEINTURE_026",
+      "competence": "cabine_peinture"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_026",
+      "ressource": "CABINE_PEINTURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_026",
+      "ressource": "CABINE_PEINTURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_026",
+      "ressource": "CABINE_PEINTURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_026",
+      "ressource": "CABINE_PEINTURE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASSEMBLAGE_027",
+      "competence": "poste_assemblage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_027",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_027",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_027",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_027",
+      "ressource": "POSTE_ASSEMBLAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PEINTURE_026",
+      "apres": "ASSEMBLAGE_027"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FORMAGE_028",
+      "competence": "presse_emboutissage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_028",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_028",
+      "ressource": "PRESSE_EMBOUTISSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_028",
+      "ressource": "PRESSE_EMBOUTISSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ASSEMBLAGE_027",
+      "apres": "FORMAGE_028"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "USINAGE_029",
+      "competence": "fraiseuse_cnc"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_029",
+      "ressource": "FRAISEUSE_CNC_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_029",
+      "ressource": "FRAISEUSE_CNC_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_029",
+      "ressource": "FRAISEUSE_CNC_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_029",
+      "ressource": "FRAISEUSE_CNC_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_030",
+      "competence": "station_controle"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_030",
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_030",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_030",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_030",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_030",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "USINAGE_029",
+      "apres": "CONTROLE_030"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FINITION_031",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_031",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_031",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_031",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_031",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_032",
+      "competence": "perceuse_cnc"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_032",
+      "ressource": "PERCEUSE_CNC_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_032",
+      "ressource": "PERCEUSE_CNC_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_032",
+      "ressource": "PERCEUSE_CNC_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_032",
+      "ressource": "PERCEUSE_CNC_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "FINITION_031",
+      "apres": "PREPARATION_032"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASSEMBLAGE_033",
+      "competence": "poste_assemblage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ASSEMBLAGE_033",
+      "lot_min": 98,
+      "lot_max": 146
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_033",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_033",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_033",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_033",
+      "ressource": "POSTE_ASSEMBLAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_034",
+      "competence": "station_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_034",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_034",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_034",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_034",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ASSEMBLAGE_033",
+      "apres": "CONTROLE_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PEINTURE_035",
+      "competence": "cabine_peinture"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PEINTURE_035",
+      "lot_min": 58,
+      "lot_max": 86
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_035",
+      "ressource": "CABINE_PEINTURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_035",
+      "ressource": "CABINE_PEINTURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_035",
+      "ressource": "CABINE_PEINTURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_035",
+      "ressource": "CABINE_PEINTURE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "USINAGE_036",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "USINAGE_036",
+      "lot_min": 13,
+      "lot_max": 19
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_036",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_036",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_036",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_036",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FORMAGE_037",
+      "competence": "presse_pliage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_037",
+      "ressource": "PRESSE_PLIAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_037",
+      "ressource": "PRESSE_PLIAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_037",
+      "ressource": "PRESSE_PLIAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_037",
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "USINAGE_036",
+      "apres": "FORMAGE_037"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_038",
+      "competence": "decoupeuse_plasma"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_038",
+      "ressource": "DECOUPEUSE_PLASMA_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_038",
+      "ressource": "DECOUPEUSE_PLASMA_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_038",
+      "ressource": "DECOUPEUSE_PLASMA_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_039",
+      "competence": "poste_soudure"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_039",
+      "ressource": "POSTE_SOUDURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_039",
+      "ressource": "POSTE_SOUDURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_039",
+      "ressource": "POSTE_SOUDURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_039",
+      "ressource": "POSTE_SOUDURE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FINITION_040",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_040",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_040",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_040",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_040",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_039",
+      "apres": "FINITION_040"
+    },
+    {
+      "type": "echeance",
+      "tache": "FINITION_040",
+      "echeance": 39
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_041",
+      "competence": "poste_soudure"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_041",
+      "ressource": "POSTE_SOUDURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_041",
+      "ressource": "POSTE_SOUDURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_041",
+      "ressource": "POSTE_SOUDURE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_041",
+      "ressource": "POSTE_SOUDURE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PEINTURE_042",
+      "competence": "tunnel_peinture"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PEINTURE_042",
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_042",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_042",
+      "ressource": "TUNNEL_PEINTURE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PEINTURE_042",
+      "ressource": "TUNNEL_PEINTURE_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FORMAGE_043",
+      "competence": "presse_pliage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_043",
+      "ressource": "PRESSE_PLIAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_043",
+      "ressource": "PRESSE_PLIAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_043",
+      "ressource": "PRESSE_PLIAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FORMAGE_043",
+      "ressource": "PRESSE_PLIAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "USINAGE_044",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_044",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_044",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_044",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "USINAGE_044",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "FORMAGE_043",
+      "apres": "USINAGE_044"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "FINITION_045",
+      "competence": "poste_ebavurage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_045",
+      "ressource": "POSTE_EBAVURAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_045",
+      "ressource": "POSTE_EBAVURAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_045",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "FINITION_045",
+      "ressource": "POSTE_EBAVURAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "USINAGE_044",
+      "apres": "FINITION_045"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_046",
+      "competence": "decoupeuse_plasma"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_046",
+      "ressource": "DECOUPEUSE_PLASMA_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_046",
+      "ressource": "DECOUPEUSE_PLASMA_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_046",
+      "ressource": "DECOUPEUSE_PLASMA_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "FINITION_045",
+      "apres": "PREPARATION_046"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ASSEMBLAGE_047",
+      "competence": "poste_assemblage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_047",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_047",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_047",
+      "ressource": "POSTE_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ASSEMBLAGE_047",
+      "ressource": "POSTE_ASSEMBLAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_046",
+      "apres": "ASSEMBLAGE_047"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_048",
+      "competence": "station_controle"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_048",
+      "ressource": "STATION_CONTROLE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_048",
+      "ressource": "STATION_CONTROLE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_048",
+      "ressource": "STATION_CONTROLE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_048",
+      "ressource": "STATION_CONTROLE_4",
+      "duree": 1
+    },
+    {
+      "type": "capacite",
+      "ressource": "PRESSE_PLIAGE_4",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "CABINE_PEINTURE_3",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_ASSEMBLAGE_2",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "STATION_CONTROLE_1",
+      "capacite": 2
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "DECOUPEUSE_LASER_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "DECOUPEUSE_LASER_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "PERCEUSE_CNC_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "PRESSE_PLIAGE_2",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        2
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "CABINE_PEINTURE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_ASSEMBLAGE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_EBAVURAGE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_POLISSAGE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "TUNNEL_PEINTURE_1",
+      "tache_avant": "PEINTURE_002",
+      "tache_apres": "PEINTURE_023",
+      "duree_setup": 3
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "tache_avant": "FORMAGE_003",
+      "tache_apres": "FORMAGE_015",
+      "duree_setup": 3
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "PRESSE_EMBOUTISSAGE_1",
+      "tache_avant": "FORMAGE_015",
+      "tache_apres": "FORMAGE_019",
+      "duree_setup": 3
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "CABINE_PEINTURE_1",
+      "tache_avant": "PEINTURE_014",
+      "tache_apres": "PEINTURE_026",
+      "duree_setup": 2
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "CABINE_PEINTURE_1",
+      "tache_avant": "PEINTURE_026",
+      "tache_apres": "PEINTURE_035",
+      "duree_setup": 2
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "PRESSE_PLIAGE_1",
+      "tache_avant": "FORMAGE_037",
+      "tache_apres": "FORMAGE_043",
+      "duree_setup": 3
+    },
+    {
+      "type": "incompatibilite",
+      "tache": "FORMAGE_003",
+      "tache_incompatible": "FORMAGE_019"
+    },
+    {
+      "type": "incompatibilite",
+      "tache": "PEINTURE_023",
+      "tache_incompatible": "PEINTURE_026"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

@@ -1,0 +1,1791 @@
+{
+  "secteur": "production_agroalimentaire",
+  "operations": [
+    {
+      "code_operation": "RECEPTION_001",
+      "operations_precedentes": [],
+      "competence_requise": "quai_reception",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_RECEPTION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 134,
+      "lot_min": 108,
+      "lot_max": 160
+    },
+    {
+      "code_operation": "CUISSON_002",
+      "operations_precedentes": [
+        "RECEPTION_001"
+      ],
+      "competence_requise": "autoclave",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AUTOCLAVE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "DECOUPE_003",
+      "operations_precedentes": [],
+      "competence_requise": "robot_decoupe",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_DECOUPE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 93,
+      "lot_min": 75,
+      "lot_max": 111
+    },
+    {
+      "code_operation": "LAVAGE_004",
+      "operations_precedentes": [
+        "DECOUPE_003"
+      ],
+      "competence_requise": "tunnel_lavage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_LAVAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_005",
+      "operations_precedentes": [
+        "LAVAGE_004"
+      ],
+      "competence_requise": "ligne_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PALETTISATION_006",
+      "operations_precedentes": [
+        "CONDITIONNEMENT_005"
+      ],
+      "competence_requise": "robot_palettiseur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_PALETTISEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_007",
+      "operations_precedentes": [
+        "PALETTISATION_006"
+      ],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DECOUPE_008",
+      "operations_precedentes": [],
+      "competence_requise": "robot_decoupe",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_DECOUPE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ETIQUETAGE_009",
+      "operations_precedentes": [
+        "DECOUPE_008"
+      ],
+      "competence_requise": "etiqueteuse",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ETIQUETEUSE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_010",
+      "operations_precedentes": [],
+      "competence_requise": "ligne_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_011",
+      "operations_precedentes": [],
+      "competence_requise": "tunnel_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 5,
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "code_operation": "PALETTISATION_012",
+      "operations_precedentes": [
+        "REFROIDISSEMENT_011"
+      ],
+      "competence_requise": "robot_palettiseur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_PALETTISEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "LAVAGE_013",
+      "operations_precedentes": [
+        "PALETTISATION_012"
+      ],
+      "competence_requise": "tunnel_lavage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_LAVAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 97,
+      "lot_min": 78,
+      "lot_max": 116
+    },
+    {
+      "code_operation": "EPLUCHAGE_014",
+      "operations_precedentes": [
+        "LAVAGE_013"
+      ],
+      "competence_requise": "ligne_epluchage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "RECEPTION_015",
+      "operations_precedentes": [],
+      "competence_requise": "quai_reception",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_RECEPTION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_016",
+      "operations_precedentes": [
+        "RECEPTION_015"
+      ],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 33
+    },
+    {
+      "code_operation": "LAVAGE_017",
+      "operations_precedentes": [],
+      "competence_requise": "tunnel_lavage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_LAVAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "RECEPTION_018",
+      "operations_precedentes": [],
+      "competence_requise": "quai_reception",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_RECEPTION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_019",
+      "operations_precedentes": [
+        "RECEPTION_018"
+      ],
+      "competence_requise": "tunnel_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "CONTROLE_020",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 145,
+      "lot_min": 116,
+      "lot_max": 174
+    },
+    {
+      "code_operation": "CUISSON_021",
+      "operations_precedentes": [],
+      "competence_requise": "autoclave",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AUTOCLAVE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "PALETTISATION_022",
+      "operations_precedentes": [
+        "CUISSON_021"
+      ],
+      "competence_requise": "robot_palettiseur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_PALETTISEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "EPLUCHAGE_023",
+      "operations_precedentes": [
+        "PALETTISATION_022"
+      ],
+      "competence_requise": "ligne_epluchage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "DECOUPE_024",
+      "operations_precedentes": [],
+      "competence_requise": "robot_decoupe",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_DECOUPE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 157,
+      "lot_min": 126,
+      "lot_max": 188,
+      "echeance_jours": 39
+    },
+    {
+      "code_operation": "CUISSON_025",
+      "operations_precedentes": [],
+      "competence_requise": "autoclave",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AUTOCLAVE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_026",
+      "operations_precedentes": [],
+      "competence_requise": "ligne_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "EPLUCHAGE_027",
+      "operations_precedentes": [
+        "CONDITIONNEMENT_026"
+      ],
+      "competence_requise": "ligne_epluchage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_028",
+      "operations_precedentes": [],
+      "competence_requise": "tunnel_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CONTROLE_029",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "ETIQUETAGE_030",
+      "operations_precedentes": [
+        "CONTROLE_029"
+      ],
+      "competence_requise": "etiqueteuse",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ETIQUETEUSE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 181,
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "code_operation": "DECOUPE_031",
+      "operations_precedentes": [],
+      "competence_requise": "robot_decoupe",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_DECOUPE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "LAVAGE_032",
+      "operations_precedentes": [],
+      "competence_requise": "tunnel_lavage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_LAVAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 46,
+      "lot_min": 37,
+      "lot_max": 55,
+      "echeance_jours": 42
+    },
+    {
+      "code_operation": "CUISSON_033",
+      "operations_precedentes": [],
+      "competence_requise": "autoclave",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AUTOCLAVE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 173,
+      "lot_min": 139,
+      "lot_max": 207
+    },
+    {
+      "code_operation": "EPLUCHAGE_034",
+      "operations_precedentes": [
+        "CUISSON_033"
+      ],
+      "competence_requise": "ligne_epluchage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "LAVAGE_035",
+      "operations_precedentes": [
+        "EPLUCHAGE_034"
+      ],
+      "competence_requise": "tunnel_lavage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_LAVAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "DECOUPE_036",
+      "operations_precedentes": [
+        "LAVAGE_035"
+      ],
+      "competence_requise": "robot_decoupe",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_DECOUPE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 142,
+      "lot_min": 114,
+      "lot_max": 170
+    },
+    {
+      "code_operation": "RECEPTION_037",
+      "operations_precedentes": [
+        "DECOUPE_036"
+      ],
+      "competence_requise": "quai_reception",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_RECEPTION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_038",
+      "operations_precedentes": [
+        "RECEPTION_037"
+      ],
+      "competence_requise": "ligne_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "ETIQUETAGE_039",
+      "operations_precedentes": [
+        "CONDITIONNEMENT_038"
+      ],
+      "competence_requise": "etiqueteuse",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ETIQUETEUSE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_040",
+      "operations_precedentes": [
+        "ETIQUETAGE_039"
+      ],
+      "competence_requise": "tunnel_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 174,
+      "lot_min": 140,
+      "lot_max": 208
+    },
+    {
+      "code_operation": "RECEPTION_041",
+      "operations_precedentes": [],
+      "competence_requise": "quai_reception",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_RECEPTION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PALETTISATION_042",
+      "operations_precedentes": [
+        "RECEPTION_041"
+      ],
+      "competence_requise": "robot_palettiseur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_PALETTISEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 183,
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "code_operation": "DECOUPE_043",
+      "operations_precedentes": [],
+      "competence_requise": "robot_decoupe",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_DECOUPE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ETIQUETAGE_044",
+      "operations_precedentes": [],
+      "competence_requise": "etiqueteuse",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ETIQUETEUSE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CUISSON_045",
+      "operations_precedentes": [
+        "ETIQUETAGE_044"
+      ],
+      "competence_requise": "autoclave",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AUTOCLAVE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 24,
+      "lot_min": 20,
+      "lot_max": 28
+    },
+    {
+      "code_operation": "CONTROLE_046",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_047",
+      "operations_precedentes": [
+        "CONTROLE_046"
+      ],
+      "competence_requise": "ligne_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "LAVAGE_048",
+      "operations_precedentes": [],
+      "competence_requise": "tunnel_lavage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_LAVAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 37
+    },
+    {
+      "code_operation": "ETIQUETAGE_049",
+      "operations_precedentes": [],
+      "competence_requise": "etiqueteuse",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ETIQUETEUSE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ETIQUETEUSE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 114,
+      "lot_min": 92,
+      "lot_max": 136
+    },
+    {
+      "code_operation": "RECEPTION_050",
+      "operations_precedentes": [],
+      "competence_requise": "quai_reception",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_RECEPTION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_RECEPTION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 112,
+      "lot_min": 90,
+      "lot_max": 134
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_051",
+      "operations_precedentes": [
+        "RECEPTION_050"
+      ],
+      "competence_requise": "ligne_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "EPLUCHAGE_052",
+      "operations_precedentes": [],
+      "competence_requise": "ligne_epluchage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LIGNE_EPLUCHAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_053",
+      "operations_precedentes": [
+        "EPLUCHAGE_052"
+      ],
+      "competence_requise": "tunnel_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 84,
+      "lot_min": 68,
+      "lot_max": 100
+    },
+    {
+      "code_operation": "DECOUPE_054",
+      "operations_precedentes": [
+        "REFROIDISSEMENT_053"
+      ],
+      "competence_requise": "robot_decoupe",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_DECOUPE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_DECOUPE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 82,
+      "lot_min": 66,
+      "lot_max": 98
+    },
+    {
+      "code_operation": "LAVAGE_055",
+      "operations_precedentes": [
+        "DECOUPE_054"
+      ],
+      "competence_requise": "tunnel_lavage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "TUNNEL_LAVAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "TUNNEL_LAVAGE_3",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 170,
+      "lot_min": 136,
+      "lot_max": 204
+    },
+    {
+      "code_operation": "CUISSON_056",
+      "operations_precedentes": [],
+      "competence_requise": "autoclave",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AUTOCLAVE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AUTOCLAVE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_057",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 67,
+      "lot_min": 54,
+      "lot_max": 80
+    },
+    {
+      "code_operation": "PALETTISATION_058",
+      "operations_precedentes": [
+        "CONTROLE_057"
+      ],
+      "competence_requise": "robot_palettiseur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_PALETTISEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_PALETTISEUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 59,
+      "lot_min": 48,
+      "lot_max": 70,
+      "echeance_jours": 41
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "QUAI_RECEPTION_1",
+      "type_poste": "QUAI_RECEPTION",
+      "competences": [
+        "quai_reception"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "QUAI_RECEPTION_2",
+      "type_poste": "QUAI_RECEPTION",
+      "competences": [
+        "quai_reception"
+      ]
+    },
+    {
+      "code_poste": "QUAI_RECEPTION_3",
+      "type_poste": "QUAI_RECEPTION",
+      "competences": [
+        "quai_reception"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "QUAI_RECEPTION_4",
+      "type_poste": "QUAI_RECEPTION",
+      "competences": [
+        "quai_reception"
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_LAVAGE_1",
+      "type_poste": "TUNNEL_LAVAGE",
+      "competences": [
+        "tunnel_lavage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_LAVAGE_2",
+      "type_poste": "TUNNEL_LAVAGE",
+      "competences": [
+        "tunnel_lavage"
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_LAVAGE_3",
+      "type_poste": "TUNNEL_LAVAGE",
+      "competences": [
+        "tunnel_lavage"
+      ]
+    },
+    {
+      "code_poste": "LIGNE_EPLUCHAGE_1",
+      "type_poste": "LIGNE_EPLUCHAGE",
+      "competences": [
+        "ligne_epluchage"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "LIGNE_EPLUCHAGE_2",
+      "type_poste": "LIGNE_EPLUCHAGE",
+      "competences": [
+        "ligne_epluchage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "code_poste": "LIGNE_EPLUCHAGE_3",
+      "type_poste": "LIGNE_EPLUCHAGE",
+      "competences": [
+        "ligne_epluchage"
+      ]
+    },
+    {
+      "code_poste": "LIGNE_EPLUCHAGE_4",
+      "type_poste": "LIGNE_EPLUCHAGE",
+      "competences": [
+        "ligne_epluchage"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_DECOUPE_1",
+      "type_poste": "ROBOT_DECOUPE",
+      "competences": [
+        "robot_decoupe"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "code_poste": "ROBOT_DECOUPE_2",
+      "type_poste": "ROBOT_DECOUPE",
+      "competences": [
+        "robot_decoupe"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_DECOUPE_3",
+      "type_poste": "ROBOT_DECOUPE",
+      "competences": [
+        "robot_decoupe"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "code_poste": "ROBOT_DECOUPE_4",
+      "type_poste": "ROBOT_DECOUPE",
+      "competences": [
+        "robot_decoupe"
+      ]
+    },
+    {
+      "code_poste": "AUTOCLAVE_1",
+      "type_poste": "AUTOCLAVE",
+      "competences": [
+        "autoclave"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "AUTOCLAVE_2",
+      "type_poste": "AUTOCLAVE",
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "code_poste": "AUTOCLAVE_3",
+      "type_poste": "AUTOCLAVE",
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "code_poste": "AUTOCLAVE_4",
+      "type_poste": "AUTOCLAVE",
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_REFROIDISSEMENT_1",
+      "type_poste": "TUNNEL_REFROIDISSEMENT",
+      "competences": [
+        "tunnel_refroidissement"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_REFROIDISSEMENT_2",
+      "type_poste": "TUNNEL_REFROIDISSEMENT",
+      "competences": [
+        "tunnel_refroidissement"
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_REFROIDISSEMENT_3",
+      "type_poste": "TUNNEL_REFROIDISSEMENT",
+      "competences": [
+        "tunnel_refroidissement"
+      ]
+    },
+    {
+      "code_poste": "TUNNEL_REFROIDISSEMENT_4",
+      "type_poste": "TUNNEL_REFROIDISSEMENT",
+      "competences": [
+        "tunnel_refroidissement"
+      ]
+    },
+    {
+      "code_poste": "LIGNE_CONDITIONNEMENT_1",
+      "type_poste": "LIGNE_CONDITIONNEMENT",
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "code_poste": "LIGNE_CONDITIONNEMENT_2",
+      "type_poste": "LIGNE_CONDITIONNEMENT",
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "code_poste": "LIGNE_CONDITIONNEMENT_3",
+      "type_poste": "LIGNE_CONDITIONNEMENT",
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "code_poste": "LIGNE_CONDITIONNEMENT_4",
+      "type_poste": "LIGNE_CONDITIONNEMENT",
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "code_poste": "ETIQUETEUSE_1",
+      "type_poste": "ETIQUETEUSE",
+      "competences": [
+        "etiqueteuse"
+      ]
+    },
+    {
+      "code_poste": "ETIQUETEUSE_2",
+      "type_poste": "ETIQUETEUSE",
+      "competences": [
+        "etiqueteuse"
+      ]
+    },
+    {
+      "code_poste": "ETIQUETEUSE_3",
+      "type_poste": "ETIQUETEUSE",
+      "competences": [
+        "etiqueteuse"
+      ]
+    },
+    {
+      "code_poste": "ETIQUETEUSE_4",
+      "type_poste": "ETIQUETEUSE",
+      "competences": [
+        "etiqueteuse"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "code_poste": "ROBOT_PALETTISEUR_1",
+      "type_poste": "ROBOT_PALETTISEUR",
+      "competences": [
+        "robot_palettiseur"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "ROBOT_PALETTISEUR_2",
+      "type_poste": "ROBOT_PALETTISEUR",
+      "competences": [
+        "robot_palettiseur"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_PALETTISEUR_3",
+      "type_poste": "ROBOT_PALETTISEUR",
+      "competences": [
+        "robot_palettiseur"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_PALETTISEUR_4",
+      "type_poste": "ROBOT_PALETTISEUR",
+      "competences": [
+        "robot_palettiseur"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_1",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_2",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_3",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ],
+      "capacite_simultanee": 2,
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_4",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    }
+  ],
+  "changements_serie": [],
+  "incompatibilites": []
+}

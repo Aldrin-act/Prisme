@@ -1,0 +1,2970 @@
+{
+  "taches": [
+    {
+      "id": "PREP_INGREDIENTS_001",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 60
+    },
+    {
+      "id": "REFROIDISSEMENT_002",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 6
+    },
+    {
+      "id": "CUISSON_PRINCIPALE_003",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_004",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DRESSAGE_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "NETTOYAGE_006",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DRESSAGE_007",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREP_INGREDIENTS_008",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_PRINCIPALE_009",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_010",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_MINUTE_011",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 5
+    },
+    {
+      "id": "PATISSERIE_012",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_013",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_014",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_015",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 13
+    },
+    {
+      "id": "CUISSON_PRINCIPALE_016",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "NETTOYAGE_017",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_018",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 68
+    },
+    {
+      "id": "CUISSON_MINUTE_019",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DRESSAGE_020",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 121
+    },
+    {
+      "id": "PREP_INGREDIENTS_021",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 135
+    },
+    {
+      "id": "NETTOYAGE_022",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 157
+    },
+    {
+      "id": "DRESSAGE_023",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_MINUTE_024",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_025",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_026",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 39
+    },
+    {
+      "id": "CONDITIONNEMENT_027",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_MINUTE_028",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_029",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 68
+    },
+    {
+      "id": "REFROIDISSEMENT_030",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DRESSAGE_031",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PATISSERIE_032",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREP_INGREDIENTS_033",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 71
+    },
+    {
+      "id": "CONDITIONNEMENT_034",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 152
+    },
+    {
+      "id": "NETTOYAGE_035",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_036",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_MINUTE_037",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_PRINCIPALE_038",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 55
+    },
+    {
+      "id": "PATISSERIE_039",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DRESSAGE_040",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 183
+    },
+    {
+      "id": "CONDITIONNEMENT_041",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_042",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "NETTOYAGE_043",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 24
+    },
+    {
+      "id": "PREP_INGREDIENTS_044",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_045",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 91
+    },
+    {
+      "id": "PREP_INGREDIENTS_046",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_MINUTE_047",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_048",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PATISSERIE_049",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 126
+    },
+    {
+      "id": "REFROIDISSEMENT_050",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 84
+    },
+    {
+      "id": "DRESSAGE_051",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 82
+    },
+    {
+      "id": "NETTOYAGE_052",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 170
+    },
+    {
+      "id": "CUISSON_PRINCIPALE_053",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PATISSERIE_054",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 59
+    },
+    {
+      "id": "CUISSON_PRINCIPALE_055",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_MINUTE_056",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 61
+    },
+    {
+      "id": "NETTOYAGE_057",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_058",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DRESSAGE_059",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_060",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "POSTE_PREPARATION_LEGUMES_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_legumes"
+      ]
+    },
+    {
+      "id": "POSTE_PREPARATION_LEGUMES_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_legumes"
+      ]
+    },
+    {
+      "id": "POSTE_PREPARATION_LEGUMES_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_legumes"
+      ]
+    },
+    {
+      "id": "POSTE_PREPARATION_LEGUMES_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_legumes"
+      ]
+    },
+    {
+      "id": "POSTE_PREPARATION_VIANDES_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_viandes"
+      ]
+    },
+    {
+      "id": "POSTE_PREPARATION_VIANDES_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_viandes"
+      ]
+    },
+    {
+      "id": "POSTE_PREPARATION_VIANDES_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_viandes"
+      ]
+    },
+    {
+      "id": "POSTE_PREPARATION_VIANDES_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_preparation_viandes"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_FOUR_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_four"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_FOUR_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_four"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_FOUR_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_four"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_FOUR_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_four"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_PLAQUE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_PLAQUE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_PLAQUE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_PLAQUE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_MARMITE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_marmite"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_MARMITE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_marmite"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_MARMITE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_marmite"
+      ]
+    },
+    {
+      "id": "POSTE_CUISSON_MARMITE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_cuisson_marmite"
+      ]
+    },
+    {
+      "id": "POSTE_PATISSERIE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "id": "POSTE_PATISSERIE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "id": "POSTE_PATISSERIE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "id": "POSTE_PATISSERIE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "id": "POSTE_DRESSAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_dressage"
+      ]
+    },
+    {
+      "id": "POSTE_DRESSAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_dressage"
+      ]
+    },
+    {
+      "id": "POSTE_DRESSAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_dressage"
+      ]
+    },
+    {
+      "id": "POSTE_DRESSAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_dressage"
+      ]
+    },
+    {
+      "id": "CELLULE_REFROIDISSEMENT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cellule_refroidissement"
+      ]
+    },
+    {
+      "id": "CELLULE_REFROIDISSEMENT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cellule_refroidissement"
+      ]
+    },
+    {
+      "id": "CELLULE_REFROIDISSEMENT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cellule_refroidissement"
+      ]
+    },
+    {
+      "id": "CELLULE_REFROIDISSEMENT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "cellule_refroidissement"
+      ]
+    },
+    {
+      "id": "POSTE_CONDITIONNEMENT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_conditionnement"
+      ]
+    },
+    {
+      "id": "POSTE_CONDITIONNEMENT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_conditionnement"
+      ]
+    },
+    {
+      "id": "POSTE_CONDITIONNEMENT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_conditionnement"
+      ]
+    },
+    {
+      "id": "POSTE_CONDITIONNEMENT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_conditionnement"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "id": "ZONE_LAVERIE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_laverie"
+      ]
+    },
+    {
+      "id": "ZONE_LAVERIE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_laverie"
+      ]
+    },
+    {
+      "id": "ZONE_LAVERIE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_laverie"
+      ]
+    },
+    {
+      "id": "ZONE_LAVERIE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "zone_laverie"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "PREP_INGREDIENTS_001",
+      "competence": "poste_preparation_legumes"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREP_INGREDIENTS_001",
+      "lot_min": 48,
+      "lot_max": 72
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_001",
+      "ressource": "POSTE_PREPARATION_LEGUMES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_001",
+      "ressource": "POSTE_PREPARATION_LEGUMES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_001",
+      "ressource": "POSTE_PREPARATION_LEGUMES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_001",
+      "ressource": "POSTE_PREPARATION_LEGUMES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_002",
+      "competence": "cellule_refroidissement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REFROIDISSEMENT_002",
+      "lot_min": 5,
+      "lot_max": 7
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_002",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_002",
+      "ressource": "CELLULE_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_002",
+      "ressource": "CELLULE_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_002",
+      "ressource": "CELLULE_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREP_INGREDIENTS_001",
+      "apres": "REFROIDISSEMENT_002"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_PRINCIPALE_003",
+      "competence": "poste_cuisson_four"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_003",
+      "ressource": "POSTE_CUISSON_FOUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_003",
+      "ressource": "POSTE_CUISSON_FOUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_003",
+      "ressource": "POSTE_CUISSON_FOUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_003",
+      "ressource": "POSTE_CUISSON_FOUR_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_004",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_004",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_004",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_004",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_004",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_PRINCIPALE_003",
+      "apres": "CONDITIONNEMENT_004"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_005",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_005",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_005",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_005",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_005",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONDITIONNEMENT_004",
+      "apres": "DRESSAGE_005"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_006",
+      "competence": "zone_laverie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_006",
+      "ressource": "ZONE_LAVERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_006",
+      "ressource": "ZONE_LAVERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_006",
+      "ressource": "ZONE_LAVERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_006",
+      "ressource": "ZONE_LAVERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DRESSAGE_005",
+      "apres": "NETTOYAGE_006"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_007",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_007",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_007",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_007",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_007",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREP_INGREDIENTS_008",
+      "competence": "poste_preparation_legumes"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_008",
+      "ressource": "POSTE_PREPARATION_LEGUMES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_008",
+      "ressource": "POSTE_PREPARATION_LEGUMES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_008",
+      "ressource": "POSTE_PREPARATION_LEGUMES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_008",
+      "ressource": "POSTE_PREPARATION_LEGUMES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DRESSAGE_007",
+      "apres": "PREP_INGREDIENTS_008"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_PRINCIPALE_009",
+      "competence": "poste_cuisson_four"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_009",
+      "ressource": "POSTE_CUISSON_FOUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_009",
+      "ressource": "POSTE_CUISSON_FOUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_009",
+      "ressource": "POSTE_CUISSON_FOUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_009",
+      "ressource": "POSTE_CUISSON_FOUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREP_INGREDIENTS_008",
+      "apres": "CUISSON_PRINCIPALE_009"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_010",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_010",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_010",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_010",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_010",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_MINUTE_011",
+      "competence": "poste_cuisson_plaque"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CUISSON_MINUTE_011",
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_011",
+      "ressource": "POSTE_CUISSON_PLAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_011",
+      "ressource": "POSTE_CUISSON_PLAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_011",
+      "ressource": "POSTE_CUISSON_PLAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_011",
+      "ressource": "POSTE_CUISSON_PLAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PATISSERIE_012",
+      "competence": "poste_patisserie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_012",
+      "ressource": "POSTE_PATISSERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_012",
+      "ressource": "POSTE_PATISSERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_012",
+      "ressource": "POSTE_PATISSERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_012",
+      "ressource": "POSTE_PATISSERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_MINUTE_011",
+      "apres": "PATISSERIE_012"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_013",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_013",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_013",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_013",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_013",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "CONDITIONNEMENT_013",
+      "echeance": 41
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_014",
+      "competence": "cellule_refroidissement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_014",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_014",
+      "ressource": "CELLULE_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_014",
+      "ressource": "CELLULE_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_014",
+      "ressource": "CELLULE_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_015",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONDITIONNEMENT_015",
+      "lot_min": 11,
+      "lot_max": 15
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_015",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_015",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_015",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_015",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT_014",
+      "apres": "CONDITIONNEMENT_015"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_PRINCIPALE_016",
+      "competence": "poste_cuisson_marmite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_016",
+      "ressource": "POSTE_CUISSON_MARMITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_016",
+      "ressource": "POSTE_CUISSON_MARMITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_016",
+      "ressource": "POSTE_CUISSON_MARMITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_016",
+      "ressource": "POSTE_CUISSON_MARMITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_017",
+      "competence": "zone_laverie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_017",
+      "ressource": "ZONE_LAVERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_017",
+      "ressource": "ZONE_LAVERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_017",
+      "ressource": "ZONE_LAVERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_017",
+      "ressource": "ZONE_LAVERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_PRINCIPALE_016",
+      "apres": "NETTOYAGE_017"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_018",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_018",
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_018",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_018",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_018",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_018",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_MINUTE_019",
+      "competence": "poste_cuisson_plaque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_019",
+      "ressource": "POSTE_CUISSON_PLAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_019",
+      "ressource": "POSTE_CUISSON_PLAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_019",
+      "ressource": "POSTE_CUISSON_PLAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_019",
+      "ressource": "POSTE_CUISSON_PLAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_018",
+      "apres": "CUISSON_MINUTE_019"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_020",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DRESSAGE_020",
+      "lot_min": 97,
+      "lot_max": 145
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_020",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_020",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_020",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_020",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "DRESSAGE_020",
+      "echeance": 35
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREP_INGREDIENTS_021",
+      "competence": "poste_preparation_viandes"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREP_INGREDIENTS_021",
+      "lot_min": 108,
+      "lot_max": 162
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_021",
+      "ressource": "POSTE_PREPARATION_VIANDES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_021",
+      "ressource": "POSTE_PREPARATION_VIANDES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_021",
+      "ressource": "POSTE_PREPARATION_VIANDES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_021",
+      "ressource": "POSTE_PREPARATION_VIANDES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_022",
+      "competence": "zone_laverie"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "NETTOYAGE_022",
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_022",
+      "ressource": "ZONE_LAVERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_022",
+      "ressource": "ZONE_LAVERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_022",
+      "ressource": "ZONE_LAVERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_022",
+      "ressource": "ZONE_LAVERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_023",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_023",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_023",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_023",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_023",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_MINUTE_024",
+      "competence": "poste_cuisson_plaque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_024",
+      "ressource": "POSTE_CUISSON_PLAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_024",
+      "ressource": "POSTE_CUISSON_PLAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_024",
+      "ressource": "POSTE_CUISSON_PLAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_024",
+      "ressource": "POSTE_CUISSON_PLAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_025",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_025",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_MINUTE_024",
+      "apres": "CONTROLE_025"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_026",
+      "competence": "cellule_refroidissement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REFROIDISSEMENT_026",
+      "lot_min": 32,
+      "lot_max": 46
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_026",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_026",
+      "ressource": "CELLULE_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_026",
+      "ressource": "CELLULE_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_026",
+      "ressource": "CELLULE_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_027",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_027",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_027",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_027",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_027",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT_026",
+      "apres": "CONDITIONNEMENT_027"
+    },
+    {
+      "type": "echeance",
+      "tache": "CONDITIONNEMENT_027",
+      "echeance": 30
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_MINUTE_028",
+      "competence": "poste_cuisson_plaque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_028",
+      "ressource": "POSTE_CUISSON_PLAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_028",
+      "ressource": "POSTE_CUISSON_PLAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_028",
+      "ressource": "POSTE_CUISSON_PLAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_028",
+      "ressource": "POSTE_CUISSON_PLAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_029",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_029",
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_030",
+      "competence": "cellule_refroidissement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_030",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_030",
+      "ressource": "CELLULE_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_030",
+      "ressource": "CELLULE_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_030",
+      "ressource": "CELLULE_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_031",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_031",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_031",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_031",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_031",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT_030",
+      "apres": "DRESSAGE_031"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PATISSERIE_032",
+      "competence": "poste_patisserie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_032",
+      "ressource": "POSTE_PATISSERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_032",
+      "ressource": "POSTE_PATISSERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_032",
+      "ressource": "POSTE_PATISSERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_032",
+      "ressource": "POSTE_PATISSERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DRESSAGE_031",
+      "apres": "PATISSERIE_032"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREP_INGREDIENTS_033",
+      "competence": "poste_preparation_viandes"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREP_INGREDIENTS_033",
+      "lot_min": 57,
+      "lot_max": 85
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_033",
+      "ressource": "POSTE_PREPARATION_VIANDES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_033",
+      "ressource": "POSTE_PREPARATION_VIANDES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_033",
+      "ressource": "POSTE_PREPARATION_VIANDES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_033",
+      "ressource": "POSTE_PREPARATION_VIANDES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PATISSERIE_032",
+      "apres": "PREP_INGREDIENTS_033"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_034",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONDITIONNEMENT_034",
+      "lot_min": 122,
+      "lot_max": 182
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_034",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_034",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_034",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_034",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREP_INGREDIENTS_033",
+      "apres": "CONDITIONNEMENT_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_035",
+      "competence": "zone_laverie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_035",
+      "ressource": "ZONE_LAVERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_035",
+      "ressource": "ZONE_LAVERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_035",
+      "ressource": "ZONE_LAVERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_035",
+      "ressource": "ZONE_LAVERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONDITIONNEMENT_034",
+      "apres": "NETTOYAGE_035"
+    },
+    {
+      "type": "echeance",
+      "tache": "NETTOYAGE_035",
+      "echeance": 39
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_036",
+      "competence": "cellule_refroidissement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_036",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_036",
+      "ressource": "CELLULE_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_036",
+      "ressource": "CELLULE_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_036",
+      "ressource": "CELLULE_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_MINUTE_037",
+      "competence": "poste_cuisson_plaque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_037",
+      "ressource": "POSTE_CUISSON_PLAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_037",
+      "ressource": "POSTE_CUISSON_PLAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_037",
+      "ressource": "POSTE_CUISSON_PLAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_037",
+      "ressource": "POSTE_CUISSON_PLAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT_036",
+      "apres": "CUISSON_MINUTE_037"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_PRINCIPALE_038",
+      "competence": "poste_cuisson_four"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CUISSON_PRINCIPALE_038",
+      "lot_min": 44,
+      "lot_max": 66
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_038",
+      "ressource": "POSTE_CUISSON_FOUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_038",
+      "ressource": "POSTE_CUISSON_FOUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_038",
+      "ressource": "POSTE_CUISSON_FOUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_038",
+      "ressource": "POSTE_CUISSON_FOUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_MINUTE_037",
+      "apres": "CUISSON_PRINCIPALE_038"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PATISSERIE_039",
+      "competence": "poste_patisserie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_039",
+      "ressource": "POSTE_PATISSERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_039",
+      "ressource": "POSTE_PATISSERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_039",
+      "ressource": "POSTE_PATISSERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_039",
+      "ressource": "POSTE_PATISSERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_040",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DRESSAGE_040",
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_040",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_040",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_040",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_040",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PATISSERIE_039",
+      "apres": "DRESSAGE_040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_041",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_041",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_041",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_041",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_041",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DRESSAGE_040",
+      "apres": "CONDITIONNEMENT_041"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_042",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_042",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_042",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_042",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_042",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_043",
+      "competence": "zone_laverie"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "NETTOYAGE_043",
+      "lot_min": 20,
+      "lot_max": 28
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_043",
+      "ressource": "ZONE_LAVERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_043",
+      "ressource": "ZONE_LAVERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_043",
+      "ressource": "ZONE_LAVERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_043",
+      "ressource": "ZONE_LAVERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_042",
+      "apres": "NETTOYAGE_043"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREP_INGREDIENTS_044",
+      "competence": "poste_preparation_viandes"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_044",
+      "ressource": "POSTE_PREPARATION_VIANDES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_044",
+      "ressource": "POSTE_PREPARATION_VIANDES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_044",
+      "ressource": "POSTE_PREPARATION_VIANDES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_044",
+      "ressource": "POSTE_PREPARATION_VIANDES_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "PREP_INGREDIENTS_044",
+      "echeance": 32
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_045",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_045",
+      "lot_min": 73,
+      "lot_max": 109
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_045",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_045",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_045",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_045",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREP_INGREDIENTS_046",
+      "competence": "poste_preparation_legumes"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_046",
+      "ressource": "POSTE_PREPARATION_LEGUMES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_046",
+      "ressource": "POSTE_PREPARATION_LEGUMES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_046",
+      "ressource": "POSTE_PREPARATION_LEGUMES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_INGREDIENTS_046",
+      "ressource": "POSTE_PREPARATION_LEGUMES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_045",
+      "apres": "PREP_INGREDIENTS_046"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_MINUTE_047",
+      "competence": "poste_cuisson_plaque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_047",
+      "ressource": "POSTE_CUISSON_PLAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_047",
+      "ressource": "POSTE_CUISSON_PLAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_047",
+      "ressource": "POSTE_CUISSON_PLAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_047",
+      "ressource": "POSTE_CUISSON_PLAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREP_INGREDIENTS_046",
+      "apres": "CUISSON_MINUTE_047"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_048",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_048",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_048",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_048",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_048",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_MINUTE_047",
+      "apres": "CONDITIONNEMENT_048"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PATISSERIE_049",
+      "competence": "poste_patisserie"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PATISSERIE_049",
+      "lot_min": 101,
+      "lot_max": 151
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_049",
+      "ressource": "POSTE_PATISSERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_049",
+      "ressource": "POSTE_PATISSERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_049",
+      "ressource": "POSTE_PATISSERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_049",
+      "ressource": "POSTE_PATISSERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONDITIONNEMENT_048",
+      "apres": "PATISSERIE_049"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_050",
+      "competence": "cellule_refroidissement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REFROIDISSEMENT_050",
+      "lot_min": 68,
+      "lot_max": 100
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_050",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_050",
+      "ressource": "CELLULE_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_050",
+      "ressource": "CELLULE_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_050",
+      "ressource": "CELLULE_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PATISSERIE_049",
+      "apres": "REFROIDISSEMENT_050"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_051",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DRESSAGE_051",
+      "lot_min": 66,
+      "lot_max": 98
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_051",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_051",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_051",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_051",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT_050",
+      "apres": "DRESSAGE_051"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_052",
+      "competence": "zone_laverie"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "NETTOYAGE_052",
+      "lot_min": 136,
+      "lot_max": 204
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_052",
+      "ressource": "ZONE_LAVERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_052",
+      "ressource": "ZONE_LAVERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_052",
+      "ressource": "ZONE_LAVERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_052",
+      "ressource": "ZONE_LAVERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DRESSAGE_051",
+      "apres": "NETTOYAGE_052"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_PRINCIPALE_053",
+      "competence": "poste_cuisson_marmite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_053",
+      "ressource": "POSTE_CUISSON_MARMITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_053",
+      "ressource": "POSTE_CUISSON_MARMITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_053",
+      "ressource": "POSTE_CUISSON_MARMITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_053",
+      "ressource": "POSTE_CUISSON_MARMITE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "CUISSON_PRINCIPALE_053",
+      "echeance": 40
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PATISSERIE_054",
+      "competence": "poste_patisserie"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PATISSERIE_054",
+      "lot_min": 48,
+      "lot_max": 70
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_054",
+      "ressource": "POSTE_PATISSERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_054",
+      "ressource": "POSTE_PATISSERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_054",
+      "ressource": "POSTE_PATISSERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PATISSERIE_054",
+      "ressource": "POSTE_PATISSERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_PRINCIPALE_055",
+      "competence": "poste_cuisson_marmite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_055",
+      "ressource": "POSTE_CUISSON_MARMITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_055",
+      "ressource": "POSTE_CUISSON_MARMITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_055",
+      "ressource": "POSTE_CUISSON_MARMITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_PRINCIPALE_055",
+      "ressource": "POSTE_CUISSON_MARMITE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PATISSERIE_054",
+      "apres": "CUISSON_PRINCIPALE_055"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_MINUTE_056",
+      "competence": "poste_cuisson_plaque"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CUISSON_MINUTE_056",
+      "lot_min": 49,
+      "lot_max": 73
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_056",
+      "ressource": "POSTE_CUISSON_PLAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_056",
+      "ressource": "POSTE_CUISSON_PLAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_056",
+      "ressource": "POSTE_CUISSON_PLAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_MINUTE_056",
+      "ressource": "POSTE_CUISSON_PLAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_PRINCIPALE_055",
+      "apres": "CUISSON_MINUTE_056"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "NETTOYAGE_057",
+      "competence": "zone_laverie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_057",
+      "ressource": "ZONE_LAVERIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_057",
+      "ressource": "ZONE_LAVERIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_057",
+      "ressource": "ZONE_LAVERIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "NETTOYAGE_057",
+      "ressource": "ZONE_LAVERIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_MINUTE_056",
+      "apres": "NETTOYAGE_057"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_058",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_058",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_058",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_058",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_058",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DRESSAGE_059",
+      "competence": "poste_dressage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_059",
+      "ressource": "POSTE_DRESSAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_059",
+      "ressource": "POSTE_DRESSAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_059",
+      "ressource": "POSTE_DRESSAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DRESSAGE_059",
+      "ressource": "POSTE_DRESSAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_058",
+      "apres": "DRESSAGE_059"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_060",
+      "competence": "poste_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_060",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_060",
+      "ressource": "POSTE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_060",
+      "ressource": "POSTE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_060",
+      "ressource": "POSTE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DRESSAGE_059",
+      "apres": "CONDITIONNEMENT_060"
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_PREPARATION_LEGUMES_3",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_PREPARATION_VIANDES_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_CUISSON_FOUR_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_CUISSON_FOUR_2",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_CONDITIONNEMENT_1",
+      "capacite": 3
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_PREPARATION_LEGUMES_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_CUISSON_MARMITE_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_DRESSAGE_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "CELLULE_REFROIDISSEMENT_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "CELLULE_REFROIDISSEMENT_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "POSTE_CUISSON_FOUR_1",
+      "tache_avant": "CUISSON_PRINCIPALE_009",
+      "tache_apres": "CUISSON_PRINCIPALE_038",
+      "duree_setup": 2
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "POSTE_CUISSON_MARMITE_1",
+      "tache_avant": "CUISSON_PRINCIPALE_016",
+      "tache_apres": "CUISSON_PRINCIPALE_053",
+      "duree_setup": 1
+    },
+    {
+      "type": "incompatibilite",
+      "tache": "CUISSON_PRINCIPALE_016",
+      "tache_incompatible": "CUISSON_PRINCIPALE_053"
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

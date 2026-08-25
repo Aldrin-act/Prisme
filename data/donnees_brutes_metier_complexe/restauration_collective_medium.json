@@ -1,0 +1,1919 @@
+{
+  "secteur": "restauration_collective",
+  "operations": [
+    {
+      "code_operation": "PREP_INGREDIENTS_001",
+      "operations_precedentes": [],
+      "competence_requise": "poste_preparation_legumes",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 60,
+      "lot_min": 48,
+      "lot_max": 72
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_002",
+      "operations_precedentes": [
+        "PREP_INGREDIENTS_001"
+      ],
+      "competence_requise": "cellule_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 6,
+      "lot_min": 5,
+      "lot_max": 7
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_003",
+      "operations_precedentes": [],
+      "competence_requise": "poste_cuisson_four",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_004",
+      "operations_precedentes": [
+        "CUISSON_PRINCIPALE_003"
+      ],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "DRESSAGE_005",
+      "operations_precedentes": [
+        "CONDITIONNEMENT_004"
+      ],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "NETTOYAGE_006",
+      "operations_precedentes": [
+        "DRESSAGE_005"
+      ],
+      "competence_requise": "zone_laverie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_LAVERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DRESSAGE_007",
+      "operations_precedentes": [],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_008",
+      "operations_precedentes": [
+        "DRESSAGE_007"
+      ],
+      "competence_requise": "poste_preparation_legumes",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_009",
+      "operations_precedentes": [
+        "PREP_INGREDIENTS_008"
+      ],
+      "competence_requise": "poste_cuisson_four",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONTROLE_010",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_011",
+      "operations_precedentes": [],
+      "competence_requise": "poste_cuisson_plaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 5,
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "code_operation": "PATISSERIE_012",
+      "operations_precedentes": [
+        "CUISSON_MINUTE_011"
+      ],
+      "competence_requise": "poste_patisserie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PATISSERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_013",
+      "operations_precedentes": [],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "echeance_jours": 41
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_014",
+      "operations_precedentes": [],
+      "competence_requise": "cellule_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_015",
+      "operations_precedentes": [
+        "REFROIDISSEMENT_014"
+      ],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 13,
+      "lot_min": 11,
+      "lot_max": 15
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_016",
+      "operations_precedentes": [],
+      "competence_requise": "poste_cuisson_marmite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "NETTOYAGE_017",
+      "operations_precedentes": [
+        "CUISSON_PRINCIPALE_016"
+      ],
+      "competence_requise": "zone_laverie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_LAVERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_018",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 68,
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_019",
+      "operations_precedentes": [
+        "CONTROLE_018"
+      ],
+      "competence_requise": "poste_cuisson_plaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DRESSAGE_020",
+      "operations_precedentes": [],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 121,
+      "lot_min": 97,
+      "lot_max": 145,
+      "echeance_jours": 35
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_021",
+      "operations_precedentes": [],
+      "competence_requise": "poste_preparation_viandes",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 135,
+      "lot_min": 108,
+      "lot_max": 162
+    },
+    {
+      "code_operation": "NETTOYAGE_022",
+      "operations_precedentes": [],
+      "competence_requise": "zone_laverie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_LAVERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 157,
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "code_operation": "DRESSAGE_023",
+      "operations_precedentes": [],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_024",
+      "operations_precedentes": [],
+      "competence_requise": "poste_cuisson_plaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CONTROLE_025",
+      "operations_precedentes": [
+        "CUISSON_MINUTE_024"
+      ],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_026",
+      "operations_precedentes": [],
+      "competence_requise": "cellule_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 39,
+      "lot_min": 32,
+      "lot_max": 46
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_027",
+      "operations_precedentes": [
+        "REFROIDISSEMENT_026"
+      ],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "echeance_jours": 30
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_028",
+      "operations_precedentes": [],
+      "competence_requise": "poste_cuisson_plaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "CONTROLE_029",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 68,
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_030",
+      "operations_precedentes": [],
+      "competence_requise": "cellule_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DRESSAGE_031",
+      "operations_precedentes": [
+        "REFROIDISSEMENT_030"
+      ],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "PATISSERIE_032",
+      "operations_precedentes": [
+        "DRESSAGE_031"
+      ],
+      "competence_requise": "poste_patisserie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PATISSERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_033",
+      "operations_precedentes": [
+        "PATISSERIE_032"
+      ],
+      "competence_requise": "poste_preparation_viandes",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 71,
+      "lot_min": 57,
+      "lot_max": 85
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_034",
+      "operations_precedentes": [
+        "PREP_INGREDIENTS_033"
+      ],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 152,
+      "lot_min": 122,
+      "lot_max": 182
+    },
+    {
+      "code_operation": "NETTOYAGE_035",
+      "operations_precedentes": [
+        "CONDITIONNEMENT_034"
+      ],
+      "competence_requise": "zone_laverie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_LAVERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "echeance_jours": 39
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_036",
+      "operations_precedentes": [],
+      "competence_requise": "cellule_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_037",
+      "operations_precedentes": [
+        "REFROIDISSEMENT_036"
+      ],
+      "competence_requise": "poste_cuisson_plaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_038",
+      "operations_precedentes": [
+        "CUISSON_MINUTE_037"
+      ],
+      "competence_requise": "poste_cuisson_four",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_FOUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 55,
+      "lot_min": 44,
+      "lot_max": 66
+    },
+    {
+      "code_operation": "PATISSERIE_039",
+      "operations_precedentes": [],
+      "competence_requise": "poste_patisserie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PATISSERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DRESSAGE_040",
+      "operations_precedentes": [
+        "PATISSERIE_039"
+      ],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 183,
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_041",
+      "operations_precedentes": [
+        "DRESSAGE_040"
+      ],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_042",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "NETTOYAGE_043",
+      "operations_precedentes": [
+        "CONTROLE_042"
+      ],
+      "competence_requise": "zone_laverie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_LAVERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 24,
+      "lot_min": 20,
+      "lot_max": 28
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_044",
+      "operations_precedentes": [],
+      "competence_requise": "poste_preparation_viandes",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_VIANDES_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 32
+    },
+    {
+      "code_operation": "CONTROLE_045",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 91,
+      "lot_min": 73,
+      "lot_max": 109
+    },
+    {
+      "code_operation": "PREP_INGREDIENTS_046",
+      "operations_precedentes": [
+        "CONTROLE_045"
+      ],
+      "competence_requise": "poste_preparation_legumes",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PREPARATION_LEGUMES_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_047",
+      "operations_precedentes": [
+        "PREP_INGREDIENTS_046"
+      ],
+      "competence_requise": "poste_cuisson_plaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_048",
+      "operations_precedentes": [
+        "CUISSON_MINUTE_047"
+      ],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PATISSERIE_049",
+      "operations_precedentes": [
+        "CONDITIONNEMENT_048"
+      ],
+      "competence_requise": "poste_patisserie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PATISSERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 126,
+      "lot_min": 101,
+      "lot_max": 151
+    },
+    {
+      "code_operation": "REFROIDISSEMENT_050",
+      "operations_precedentes": [
+        "PATISSERIE_049"
+      ],
+      "competence_requise": "cellule_refroidissement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CELLULE_REFROIDISSEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 84,
+      "lot_min": 68,
+      "lot_max": 100
+    },
+    {
+      "code_operation": "DRESSAGE_051",
+      "operations_precedentes": [
+        "REFROIDISSEMENT_050"
+      ],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 82,
+      "lot_min": 66,
+      "lot_max": 98
+    },
+    {
+      "code_operation": "NETTOYAGE_052",
+      "operations_precedentes": [
+        "DRESSAGE_051"
+      ],
+      "competence_requise": "zone_laverie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_LAVERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 170,
+      "lot_min": 136,
+      "lot_max": 204
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_053",
+      "operations_precedentes": [],
+      "competence_requise": "poste_cuisson_marmite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 40
+    },
+    {
+      "code_operation": "PATISSERIE_054",
+      "operations_precedentes": [],
+      "competence_requise": "poste_patisserie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_PATISSERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_PATISSERIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 59,
+      "lot_min": 48,
+      "lot_max": 70
+    },
+    {
+      "code_operation": "CUISSON_PRINCIPALE_055",
+      "operations_precedentes": [
+        "PATISSERIE_054"
+      ],
+      "competence_requise": "poste_cuisson_marmite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_MARMITE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CUISSON_MINUTE_056",
+      "operations_precedentes": [
+        "CUISSON_PRINCIPALE_055"
+      ],
+      "competence_requise": "poste_cuisson_plaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CUISSON_PLAQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 61,
+      "lot_min": 49,
+      "lot_max": 73
+    },
+    {
+      "code_operation": "NETTOYAGE_057",
+      "operations_precedentes": [
+        "CUISSON_MINUTE_056"
+      ],
+      "competence_requise": "zone_laverie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_LAVERIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_LAVERIE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_058",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle_qualite",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_QUALITE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DRESSAGE_059",
+      "operations_precedentes": [
+        "CONTROLE_058"
+      ],
+      "competence_requise": "poste_dressage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DRESSAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DRESSAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONDITIONNEMENT_060",
+      "operations_precedentes": [
+        "DRESSAGE_059"
+      ],
+      "competence_requise": "poste_conditionnement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONDITIONNEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "POSTE_PREPARATION_LEGUMES_1",
+      "type_poste": "POSTE_PREPARATION_LEGUMES",
+      "competences": [
+        "poste_preparation_legumes"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_LEGUMES_2",
+      "type_poste": "POSTE_PREPARATION_LEGUMES",
+      "competences": [
+        "poste_preparation_legumes"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_LEGUMES_3",
+      "type_poste": "POSTE_PREPARATION_LEGUMES",
+      "competences": [
+        "poste_preparation_legumes"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_LEGUMES_4",
+      "type_poste": "POSTE_PREPARATION_LEGUMES",
+      "competences": [
+        "poste_preparation_legumes"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_VIANDES_1",
+      "type_poste": "POSTE_PREPARATION_VIANDES",
+      "competences": [
+        "poste_preparation_viandes"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_VIANDES_2",
+      "type_poste": "POSTE_PREPARATION_VIANDES",
+      "competences": [
+        "poste_preparation_viandes"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_VIANDES_3",
+      "type_poste": "POSTE_PREPARATION_VIANDES",
+      "competences": [
+        "poste_preparation_viandes"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PREPARATION_VIANDES_4",
+      "type_poste": "POSTE_PREPARATION_VIANDES",
+      "competences": [
+        "poste_preparation_viandes"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_FOUR_1",
+      "type_poste": "POSTE_CUISSON_FOUR",
+      "competences": [
+        "poste_cuisson_four"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "POSTE_CUISSON_FOUR_2",
+      "type_poste": "POSTE_CUISSON_FOUR",
+      "competences": [
+        "poste_cuisson_four"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "POSTE_CUISSON_FOUR_3",
+      "type_poste": "POSTE_CUISSON_FOUR",
+      "competences": [
+        "poste_cuisson_four"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_FOUR_4",
+      "type_poste": "POSTE_CUISSON_FOUR",
+      "competences": [
+        "poste_cuisson_four"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_PLAQUE_1",
+      "type_poste": "POSTE_CUISSON_PLAQUE",
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_PLAQUE_2",
+      "type_poste": "POSTE_CUISSON_PLAQUE",
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_PLAQUE_3",
+      "type_poste": "POSTE_CUISSON_PLAQUE",
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_PLAQUE_4",
+      "type_poste": "POSTE_CUISSON_PLAQUE",
+      "competences": [
+        "poste_cuisson_plaque"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_MARMITE_1",
+      "type_poste": "POSTE_CUISSON_MARMITE",
+      "competences": [
+        "poste_cuisson_marmite"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_MARMITE_2",
+      "type_poste": "POSTE_CUISSON_MARMITE",
+      "competences": [
+        "poste_cuisson_marmite"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_MARMITE_3",
+      "type_poste": "POSTE_CUISSON_MARMITE",
+      "competences": [
+        "poste_cuisson_marmite"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CUISSON_MARMITE_4",
+      "type_poste": "POSTE_CUISSON_MARMITE",
+      "competences": [
+        "poste_cuisson_marmite"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "POSTE_PATISSERIE_1",
+      "type_poste": "POSTE_PATISSERIE",
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PATISSERIE_2",
+      "type_poste": "POSTE_PATISSERIE",
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PATISSERIE_3",
+      "type_poste": "POSTE_PATISSERIE",
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "code_poste": "POSTE_PATISSERIE_4",
+      "type_poste": "POSTE_PATISSERIE",
+      "competences": [
+        "poste_patisserie"
+      ]
+    },
+    {
+      "code_poste": "POSTE_DRESSAGE_1",
+      "type_poste": "POSTE_DRESSAGE",
+      "competences": [
+        "poste_dressage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_DRESSAGE_2",
+      "type_poste": "POSTE_DRESSAGE",
+      "competences": [
+        "poste_dressage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_DRESSAGE_3",
+      "type_poste": "POSTE_DRESSAGE",
+      "competences": [
+        "poste_dressage"
+      ]
+    },
+    {
+      "code_poste": "POSTE_DRESSAGE_4",
+      "type_poste": "POSTE_DRESSAGE",
+      "competences": [
+        "poste_dressage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "CELLULE_REFROIDISSEMENT_1",
+      "type_poste": "CELLULE_REFROIDISSEMENT",
+      "competences": [
+        "cellule_refroidissement"
+      ],
+      "capacite_simultanee": 2,
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "code_poste": "CELLULE_REFROIDISSEMENT_2",
+      "type_poste": "CELLULE_REFROIDISSEMENT",
+      "competences": [
+        "cellule_refroidissement"
+      ]
+    },
+    {
+      "code_poste": "CELLULE_REFROIDISSEMENT_3",
+      "type_poste": "CELLULE_REFROIDISSEMENT",
+      "competences": [
+        "cellule_refroidissement"
+      ]
+    },
+    {
+      "code_poste": "CELLULE_REFROIDISSEMENT_4",
+      "type_poste": "CELLULE_REFROIDISSEMENT",
+      "competences": [
+        "cellule_refroidissement"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        4
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONDITIONNEMENT_1",
+      "type_poste": "POSTE_CONDITIONNEMENT",
+      "competences": [
+        "poste_conditionnement"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "POSTE_CONDITIONNEMENT_2",
+      "type_poste": "POSTE_CONDITIONNEMENT",
+      "competences": [
+        "poste_conditionnement"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONDITIONNEMENT_3",
+      "type_poste": "POSTE_CONDITIONNEMENT",
+      "competences": [
+        "poste_conditionnement"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONDITIONNEMENT_4",
+      "type_poste": "POSTE_CONDITIONNEMENT",
+      "competences": [
+        "poste_conditionnement"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_1",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_2",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_3",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_QUALITE_4",
+      "type_poste": "POSTE_CONTROLE_QUALITE",
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "code_poste": "ZONE_LAVERIE_1",
+      "type_poste": "ZONE_LAVERIE",
+      "competences": [
+        "zone_laverie"
+      ]
+    },
+    {
+      "code_poste": "ZONE_LAVERIE_2",
+      "type_poste": "ZONE_LAVERIE",
+      "competences": [
+        "zone_laverie"
+      ]
+    },
+    {
+      "code_poste": "ZONE_LAVERIE_3",
+      "type_poste": "ZONE_LAVERIE",
+      "competences": [
+        "zone_laverie"
+      ]
+    },
+    {
+      "code_poste": "ZONE_LAVERIE_4",
+      "type_poste": "ZONE_LAVERIE",
+      "competences": [
+        "zone_laverie"
+      ]
+    }
+  ],
+  "changements_serie": [
+    {
+      "poste_id": "POSTE_CUISSON_FOUR_1",
+      "operation_avant": "CUISSON_PRINCIPALE_009",
+      "operation_apres": "CUISSON_PRINCIPALE_038",
+      "duree_setup_jours": 2
+    },
+    {
+      "poste_id": "POSTE_CUISSON_MARMITE_1",
+      "operation_avant": "CUISSON_PRINCIPALE_016",
+      "operation_apres": "CUISSON_PRINCIPALE_053",
+      "duree_setup_jours": 1
+    }
+  ],
+  "incompatibilites": [
+    {
+      "operation": "CUISSON_PRINCIPALE_016",
+      "operation_incompatible": "CUISSON_PRINCIPALE_053"
+    }
+  ]
+}

@@ -1,0 +1,2584 @@
+{
+  "taches": [
+    {
+      "id": "ADMISSION_001",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOINS_POSTOP_002",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_PATIENT_003",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMENS_PREOP_004",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOINS_POSTOP_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMENS_PREOP_006",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_PATIENT_007",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ADMISSION_008",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMENS_PREOP_009",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_POSTOP_010",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REVEIL_011",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 5
+    },
+    {
+      "id": "INTERVENTION_012",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 200
+    },
+    {
+      "id": "ADMISSION_013",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_PATIENT_014",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMENS_PREOP_015",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 10
+    },
+    {
+      "id": "REVEIL_016",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_POSTOP_017",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_PATIENT_018",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOINS_POSTOP_019",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 68
+    },
+    {
+      "id": "INTERVENTION_020",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ADMISSION_021",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 121
+    },
+    {
+      "id": "ADMISSION_022",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REVEIL_023",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 35
+    },
+    {
+      "id": "SOINS_POSTOP_024",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 188
+    },
+    {
+      "id": "CONTROLE_POSTOP_025",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_PATIENT_026",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOINS_POSTOP_027",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 92
+    },
+    {
+      "id": "ADMISSION_028",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMENS_PREOP_029",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 181
+    },
+    {
+      "id": "PREPARATION_PATIENT_030",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_POSTOP_031",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 46
+    },
+    {
+      "id": "INTERVENTION_032",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_PATIENT_033",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMENS_PREOP_034",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 71
+    },
+    {
+      "id": "SOINS_POSTOP_035",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 152
+    },
+    {
+      "id": "ADMISSION_036",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_POSTOP_037",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "INTERVENTION_038",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOINS_POSTOP_039",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 55
+    },
+    {
+      "id": "ADMISSION_040",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 183
+    },
+    {
+      "id": "PREPARATION_PATIENT_041",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 183
+    },
+    {
+      "id": "REVEIL_042",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_POSTOP_043",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOINS_POSTOP_044",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 43
+    },
+    {
+      "id": "EXAMENS_PREOP_045",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 112
+    },
+    {
+      "id": "PREPARATION_PATIENT_046",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 104
+    },
+    {
+      "id": "INTERVENTION_047",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ADMISSION_048",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 114
+    },
+    {
+      "id": "CONTROLE_POSTOP_049",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REVEIL_050",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REVEIL_051",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMENS_PREOP_052",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "INTERVENTION_053",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREPARATION_PATIENT_054",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 112
+    }
+  ],
+  "ressources": [
+    {
+      "id": "BLOC_CHIRURGIE_GENERALE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_GENERALE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_GENERALE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_GENERALE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_CARDIAQUE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
+    },
+    {
+      "id": "BLOC_CHIRURGIE_CARDIAQUE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
+    },
+    {
+      "id": "SALLE_REVEIL_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_reveil"
+      ]
+    },
+    {
+      "id": "SALLE_REVEIL_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_reveil"
+      ]
+    },
+    {
+      "id": "SALLE_REVEIL_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_reveil"
+      ]
+    },
+    {
+      "id": "SALLE_REVEIL_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_reveil"
+      ]
+    },
+    {
+      "id": "SALLE_PREPARATION_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "id": "SALLE_PREPARATION_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "id": "SALLE_PREPARATION_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "id": "SALLE_PREPARATION_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "id": "UNITE_SOINS_INTENSIFS_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "unite_soins_intensifs"
+      ]
+    },
+    {
+      "id": "UNITE_SOINS_INTENSIFS_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "unite_soins_intensifs"
+      ]
+    },
+    {
+      "id": "UNITE_SOINS_INTENSIFS_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "unite_soins_intensifs"
+      ]
+    },
+    {
+      "id": "UNITE_SOINS_INTENSIFS_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "unite_soins_intensifs"
+      ]
+    },
+    {
+      "id": "SALLE_RADIOLOGIE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_radiologie"
+      ]
+    },
+    {
+      "id": "SALLE_RADIOLOGIE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_radiologie"
+      ]
+    },
+    {
+      "id": "SALLE_RADIOLOGIE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_radiologie"
+      ]
+    },
+    {
+      "id": "SALLE_RADIOLOGIE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_radiologie"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_ANALYSES_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire_analyses"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_ANALYSES_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire_analyses"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_ANALYSES_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire_analyses"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_ANALYSES_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire_analyses"
+      ]
+    },
+    {
+      "id": "BLOC_URGENCES_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_urgences"
+      ]
+    },
+    {
+      "id": "BLOC_URGENCES_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_urgences"
+      ]
+    },
+    {
+      "id": "BLOC_URGENCES_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_urgences"
+      ]
+    },
+    {
+      "id": "BLOC_URGENCES_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bloc_urgences"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_001",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_001",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_001",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_001",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_001",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_002",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_002",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_002",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_002",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_002",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 2
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_003",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_003",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_003",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_003",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_003",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOINS_POSTOP_002",
+      "apres": "PREPARATION_PATIENT_003"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_004",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_004",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_004",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_004",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_004",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_PATIENT_003",
+      "apres": "EXAMENS_PREOP_004"
+    },
+    {
+      "type": "echeance",
+      "tache": "EXAMENS_PREOP_004",
+      "echeance": 19
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_005",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_005",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_005",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_005",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_005",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 2
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_006",
+      "competence": "laboratoire_analyses"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_006",
+      "ressource": "LABORATOIRE_ANALYSES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_006",
+      "ressource": "LABORATOIRE_ANALYSES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_006",
+      "ressource": "LABORATOIRE_ANALYSES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_006",
+      "ressource": "LABORATOIRE_ANALYSES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOINS_POSTOP_005",
+      "apres": "EXAMENS_PREOP_006"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_007",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_007",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_007",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_007",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_007",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EXAMENS_PREOP_006",
+      "apres": "PREPARATION_PATIENT_007"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_008",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_008",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_008",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_008",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_008",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_PATIENT_007",
+      "apres": "ADMISSION_008"
+    },
+    {
+      "type": "echeance",
+      "tache": "ADMISSION_008",
+      "echeance": 29
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_009",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_009",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_009",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_009",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_009",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_POSTOP_010",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_010",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_010",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_010",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_010",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REVEIL_011",
+      "competence": "salle_reveil"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REVEIL_011",
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_011",
+      "ressource": "SALLE_REVEIL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_011",
+      "ressource": "SALLE_REVEIL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_011",
+      "ressource": "SALLE_REVEIL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_011",
+      "ressource": "SALLE_REVEIL_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "INTERVENTION_012",
+      "competence": "bloc_chirurgie_cardiaque"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "INTERVENTION_012",
+      "lot_min": 160,
+      "lot_max": 240
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_012",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_012",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_012",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_012",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REVEIL_011",
+      "apres": "INTERVENTION_012"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_013",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_013",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_013",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_013",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_013",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "INTERVENTION_012",
+      "apres": "ADMISSION_013"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_014",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_014",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_014",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_014",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_014",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ADMISSION_013",
+      "apres": "PREPARATION_PATIENT_014"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_015",
+      "competence": "laboratoire_analyses"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EXAMENS_PREOP_015",
+      "lot_min": 8,
+      "lot_max": 12
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_015",
+      "ressource": "LABORATOIRE_ANALYSES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_015",
+      "ressource": "LABORATOIRE_ANALYSES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_015",
+      "ressource": "LABORATOIRE_ANALYSES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_015",
+      "ressource": "LABORATOIRE_ANALYSES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REVEIL_016",
+      "competence": "salle_reveil"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_016",
+      "ressource": "SALLE_REVEIL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_016",
+      "ressource": "SALLE_REVEIL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_016",
+      "ressource": "SALLE_REVEIL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_016",
+      "ressource": "SALLE_REVEIL_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_POSTOP_017",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_017",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_017",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_017",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_017",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_018",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_018",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_018",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_018",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_018",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_POSTOP_017",
+      "apres": "PREPARATION_PATIENT_018"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_019",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "SOINS_POSTOP_019",
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_019",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_019",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_019",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_019",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "INTERVENTION_020",
+      "competence": "bloc_chirurgie_generale"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_020",
+      "ressource": "BLOC_CHIRURGIE_GENERALE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_020",
+      "ressource": "BLOC_CHIRURGIE_GENERALE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_020",
+      "ressource": "BLOC_CHIRURGIE_GENERALE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_020",
+      "ressource": "BLOC_CHIRURGIE_GENERALE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOINS_POSTOP_019",
+      "apres": "INTERVENTION_020"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_021",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ADMISSION_021",
+      "lot_min": 97,
+      "lot_max": 145
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_021",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_021",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_021",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_021",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "ADMISSION_021",
+      "echeance": 35
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_022",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_022",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_022",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_022",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_022",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REVEIL_023",
+      "competence": "salle_reveil"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REVEIL_023",
+      "lot_min": 28,
+      "lot_max": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_023",
+      "ressource": "SALLE_REVEIL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_023",
+      "ressource": "SALLE_REVEIL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_023",
+      "ressource": "SALLE_REVEIL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_023",
+      "ressource": "SALLE_REVEIL_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ADMISSION_022",
+      "apres": "REVEIL_023"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_024",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "SOINS_POSTOP_024",
+      "lot_min": 151,
+      "lot_max": 225
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_024",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_024",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_024",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_024",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REVEIL_023",
+      "apres": "SOINS_POSTOP_024"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_POSTOP_025",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_025",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_025",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_025",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_025",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_026",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_026",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_026",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_026",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_026",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_POSTOP_025",
+      "apres": "PREPARATION_PATIENT_026"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_027",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "SOINS_POSTOP_027",
+      "lot_min": 74,
+      "lot_max": 110
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_027",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_027",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_027",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_027",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_028",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_028",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_028",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_028",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_028",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_029",
+      "competence": "laboratoire_analyses"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EXAMENS_PREOP_029",
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_029",
+      "ressource": "LABORATOIRE_ANALYSES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_029",
+      "ressource": "LABORATOIRE_ANALYSES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_029",
+      "ressource": "LABORATOIRE_ANALYSES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_029",
+      "ressource": "LABORATOIRE_ANALYSES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ADMISSION_028",
+      "apres": "EXAMENS_PREOP_029"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_030",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_030",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_030",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_030",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_030",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_POSTOP_031",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_POSTOP_031",
+      "lot_min": 37,
+      "lot_max": 55
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_031",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_031",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_031",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_031",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "INTERVENTION_032",
+      "competence": "bloc_chirurgie_cardiaque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_032",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_032",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_032",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_032",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_POSTOP_031",
+      "apres": "INTERVENTION_032"
+    },
+    {
+      "type": "echeance",
+      "tache": "INTERVENTION_032",
+      "echeance": 37
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_033",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_033",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_033",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_033",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_033",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_034",
+      "competence": "laboratoire_analyses"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EXAMENS_PREOP_034",
+      "lot_min": 57,
+      "lot_max": 85
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_034",
+      "ressource": "LABORATOIRE_ANALYSES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_034",
+      "ressource": "LABORATOIRE_ANALYSES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_034",
+      "ressource": "LABORATOIRE_ANALYSES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_034",
+      "ressource": "LABORATOIRE_ANALYSES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_PATIENT_033",
+      "apres": "EXAMENS_PREOP_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_035",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "SOINS_POSTOP_035",
+      "lot_min": 122,
+      "lot_max": 182
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_035",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_035",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_035",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_035",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EXAMENS_PREOP_034",
+      "apres": "SOINS_POSTOP_035"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_036",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_036",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_036",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_036",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_036",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOINS_POSTOP_035",
+      "apres": "ADMISSION_036"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_POSTOP_037",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_037",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_037",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_037",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_037",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "INTERVENTION_038",
+      "competence": "bloc_chirurgie_orthopedique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_038",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_038",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_038",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_038",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_POSTOP_037",
+      "apres": "INTERVENTION_038"
+    },
+    {
+      "type": "echeance",
+      "tache": "INTERVENTION_038",
+      "echeance": 38
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_039",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "SOINS_POSTOP_039",
+      "lot_min": 44,
+      "lot_max": 66
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_039",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_039",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_039",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_039",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_040",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ADMISSION_040",
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_040",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_040",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_040",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_040",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_041",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREPARATION_PATIENT_041",
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_041",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_041",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_041",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_041",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ADMISSION_040",
+      "apres": "PREPARATION_PATIENT_041"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REVEIL_042",
+      "competence": "salle_reveil"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_042",
+      "ressource": "SALLE_REVEIL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_042",
+      "ressource": "SALLE_REVEIL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_042",
+      "ressource": "SALLE_REVEIL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_042",
+      "ressource": "SALLE_REVEIL_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_POSTOP_043",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_043",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_043",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_043",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_043",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOINS_POSTOP_044",
+      "competence": "unite_soins_intensifs"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "SOINS_POSTOP_044",
+      "lot_min": 35,
+      "lot_max": 51
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_044",
+      "ressource": "UNITE_SOINS_INTENSIFS_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_044",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_044",
+      "ressource": "UNITE_SOINS_INTENSIFS_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOINS_POSTOP_044",
+      "ressource": "UNITE_SOINS_INTENSIFS_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_045",
+      "competence": "laboratoire_analyses"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "EXAMENS_PREOP_045",
+      "lot_min": 90,
+      "lot_max": 134
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_045",
+      "ressource": "LABORATOIRE_ANALYSES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_045",
+      "ressource": "LABORATOIRE_ANALYSES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_045",
+      "ressource": "LABORATOIRE_ANALYSES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_045",
+      "ressource": "LABORATOIRE_ANALYSES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_046",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREPARATION_PATIENT_046",
+      "lot_min": 84,
+      "lot_max": 124
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_046",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_046",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_046",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_046",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EXAMENS_PREOP_045",
+      "apres": "PREPARATION_PATIENT_046"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "INTERVENTION_047",
+      "competence": "bloc_chirurgie_orthopedique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_047",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_047",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_047",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_047",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREPARATION_PATIENT_046",
+      "apres": "INTERVENTION_047"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ADMISSION_048",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ADMISSION_048",
+      "lot_min": 92,
+      "lot_max": 136
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_048",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_048",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_048",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ADMISSION_048",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "INTERVENTION_047",
+      "apres": "ADMISSION_048"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_POSTOP_049",
+      "competence": "salle_radiologie"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_049",
+      "ressource": "SALLE_RADIOLOGIE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_049",
+      "ressource": "SALLE_RADIOLOGIE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_049",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_POSTOP_049",
+      "ressource": "SALLE_RADIOLOGIE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REVEIL_050",
+      "competence": "salle_reveil"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_050",
+      "ressource": "SALLE_REVEIL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_050",
+      "ressource": "SALLE_REVEIL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_050",
+      "ressource": "SALLE_REVEIL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_050",
+      "ressource": "SALLE_REVEIL_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "REVEIL_050",
+      "echeance": 41
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REVEIL_051",
+      "competence": "salle_reveil"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_051",
+      "ressource": "SALLE_REVEIL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_051",
+      "ressource": "SALLE_REVEIL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_051",
+      "ressource": "SALLE_REVEIL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REVEIL_051",
+      "ressource": "SALLE_REVEIL_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMENS_PREOP_052",
+      "competence": "laboratoire_analyses"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_052",
+      "ressource": "LABORATOIRE_ANALYSES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_052",
+      "ressource": "LABORATOIRE_ANALYSES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_052",
+      "ressource": "LABORATOIRE_ANALYSES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMENS_PREOP_052",
+      "ressource": "LABORATOIRE_ANALYSES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "INTERVENTION_053",
+      "competence": "bloc_chirurgie_orthopedique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_053",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_053",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_053",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "INTERVENTION_053",
+      "ressource": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREPARATION_PATIENT_054",
+      "competence": "salle_preparation"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PREPARATION_PATIENT_054",
+      "lot_min": 90,
+      "lot_max": 134
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_054",
+      "ressource": "SALLE_PREPARATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_054",
+      "ressource": "SALLE_PREPARATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_054",
+      "ressource": "SALLE_PREPARATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREPARATION_PATIENT_054",
+      "ressource": "SALLE_PREPARATION_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "PREPARATION_PATIENT_054",
+      "echeance": 25
+    },
+    {
+      "type": "capacite",
+      "ressource": "BLOC_URGENCES_2",
+      "capacite": 3
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "SALLE_REVEIL_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "UNITE_SOINS_INTENSIFS_2",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "SALLE_RADIOLOGIE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "LABORATOIRE_ANALYSES_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "BLOC_URGENCES_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

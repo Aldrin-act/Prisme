@@ -1,0 +1,1721 @@
+{
+  "secteur": "assemblage_electronique",
+  "operations": [
+    {
+      "code_operation": "PREP_001",
+      "operations_precedentes": [],
+      "competence_requise": "station_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 60,
+      "lot_min": 48,
+      "lot_max": 72
+    },
+    {
+      "code_operation": "POSE_CMS_B_002",
+      "operations_precedentes": [
+        "PREP_001"
+      ],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 6,
+      "lot_min": 5,
+      "lot_max": 7
+    },
+    {
+      "code_operation": "AOI_A_003",
+      "operations_precedentes": [
+        "POSE_CMS_B_002"
+      ],
+      "competence_requise": "aoi",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AOI_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "COATING_004",
+      "operations_precedentes": [
+        "AOI_A_003"
+      ],
+      "competence_requise": "robot_coating",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_COATING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_3",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REFUSION_A_005",
+      "operations_precedentes": [
+        "COATING_004"
+      ],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REFUSION_B_006",
+      "operations_precedentes": [
+        "REFUSION_A_005"
+      ],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PACKAGE_007",
+      "operations_precedentes": [
+        "REFUSION_B_006"
+      ],
+      "competence_requise": "station_packaging",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_PACKAGING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DEPANEL_008",
+      "operations_precedentes": [
+        "PACKAGE_007"
+      ],
+      "competence_requise": "poste_depannelisation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DEPANNELISATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "echeance_jours": 41
+    },
+    {
+      "code_operation": "AOI_A_009",
+      "operations_precedentes": [],
+      "competence_requise": "aoi",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AOI_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REFUSION_A_010",
+      "operations_precedentes": [
+        "AOI_A_009"
+      ],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 142,
+      "lot_min": 114,
+      "lot_max": 170
+    },
+    {
+      "code_operation": "TEST_FONC_011",
+      "operations_precedentes": [],
+      "competence_requise": "banc_test_fonctionnel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TEST_ICT_012",
+      "operations_precedentes": [
+        "TEST_FONC_011"
+      ],
+      "competence_requise": "banc_test_ict",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_ICT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "POSE_CMS_A_013",
+      "operations_precedentes": [],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "SOUDURE_THT_014",
+      "operations_precedentes": [
+        "POSE_CMS_A_013"
+      ],
+      "competence_requise": "poste_soudure_manuel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PREP_015",
+      "operations_precedentes": [
+        "SOUDURE_THT_014"
+      ],
+      "competence_requise": "station_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REFUSION_B_016",
+      "operations_precedentes": [],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 61,
+      "lot_min": 49,
+      "lot_max": 73
+    },
+    {
+      "code_operation": "COATING_017",
+      "operations_precedentes": [
+        "REFUSION_B_016"
+      ],
+      "competence_requise": "robot_coating",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_COATING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "DEPANEL_018",
+      "operations_precedentes": [],
+      "competence_requise": "poste_depannelisation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DEPANNELISATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 38
+    },
+    {
+      "code_operation": "SOUDURE_THT_019",
+      "operations_precedentes": [],
+      "competence_requise": "poste_soudure_manuel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "REFUSION_B_020",
+      "operations_precedentes": [
+        "SOUDURE_THT_019"
+      ],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "POSE_CMS_A_021",
+      "operations_precedentes": [
+        "REFUSION_B_020"
+      ],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "AOI_A_022",
+      "operations_precedentes": [
+        "POSE_CMS_A_021"
+      ],
+      "competence_requise": "aoi",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AOI_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TEST_FONC_023",
+      "operations_precedentes": [
+        "AOI_A_022"
+      ],
+      "competence_requise": "banc_test_fonctionnel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "COATING_024",
+      "operations_precedentes": [
+        "TEST_FONC_023"
+      ],
+      "competence_requise": "robot_coating",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_COATING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_3",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 157,
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "code_operation": "POSE_CMS_B_025",
+      "operations_precedentes": [
+        "COATING_024"
+      ],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 106,
+      "lot_min": 85,
+      "lot_max": 127
+    },
+    {
+      "code_operation": "TEST_ICT_026",
+      "operations_precedentes": [],
+      "competence_requise": "banc_test_ict",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_ICT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "POSE_CMS_B_027",
+      "operations_precedentes": [],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 39,
+      "lot_min": 32,
+      "lot_max": 46
+    },
+    {
+      "code_operation": "REFUSION_A_028",
+      "operations_precedentes": [],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 167,
+      "lot_min": 134,
+      "lot_max": 200
+    },
+    {
+      "code_operation": "TEST_ICT_029",
+      "operations_precedentes": [
+        "REFUSION_A_028"
+      ],
+      "competence_requise": "banc_test_ict",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_ICT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "TEST_FONC_030",
+      "operations_precedentes": [],
+      "competence_requise": "banc_test_fonctionnel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "PACKAGE_031",
+      "operations_precedentes": [],
+      "competence_requise": "station_packaging",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_PACKAGING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 68,
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "code_operation": "COATING_032",
+      "operations_precedentes": [
+        "PACKAGE_031"
+      ],
+      "competence_requise": "robot_coating",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_COATING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_3",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REFUSION_B_033",
+      "operations_precedentes": [],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "SOUDURE_THT_034",
+      "operations_precedentes": [
+        "REFUSION_B_033"
+      ],
+      "competence_requise": "poste_soudure_manuel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "PREP_035",
+      "operations_precedentes": [
+        "SOUDURE_THT_034"
+      ],
+      "competence_requise": "station_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 169,
+      "lot_min": 136,
+      "lot_max": 202
+    },
+    {
+      "code_operation": "DEPANEL_036",
+      "operations_precedentes": [
+        "PREP_035"
+      ],
+      "competence_requise": "poste_depannelisation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DEPANNELISATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 157,
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "code_operation": "POSE_CMS_B_037",
+      "operations_precedentes": [],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 81,
+      "lot_min": 65,
+      "lot_max": 97
+    },
+    {
+      "code_operation": "PREP_038",
+      "operations_precedentes": [
+        "POSE_CMS_B_037"
+      ],
+      "competence_requise": "station_assemblage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_ASSEMBLAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_ASSEMBLAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "SOUDURE_THT_039",
+      "operations_precedentes": [],
+      "competence_requise": "poste_soudure_manuel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "DEPANEL_040",
+      "operations_precedentes": [
+        "SOUDURE_THT_039"
+      ],
+      "competence_requise": "poste_depannelisation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DEPANNELISATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 174,
+      "lot_min": 140,
+      "lot_max": 208
+    },
+    {
+      "code_operation": "AOI_A_041",
+      "operations_precedentes": [
+        "DEPANEL_040"
+      ],
+      "competence_requise": "aoi",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AOI_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 126,
+      "lot_min": 101,
+      "lot_max": 151
+    },
+    {
+      "code_operation": "REFUSION_A_042",
+      "operations_precedentes": [
+        "AOI_A_041"
+      ],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "TEST_ICT_043",
+      "operations_precedentes": [],
+      "competence_requise": "banc_test_ict",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_ICT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_ICT_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 39,
+      "lot_min": 32,
+      "lot_max": 46
+    },
+    {
+      "code_operation": "TEST_FONC_044",
+      "operations_precedentes": [],
+      "competence_requise": "banc_test_fonctionnel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "COATING_045",
+      "operations_precedentes": [
+        "TEST_FONC_044"
+      ],
+      "competence_requise": "robot_coating",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ROBOT_COATING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ROBOT_COATING_3",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 24,
+      "lot_min": 20,
+      "lot_max": 28,
+      "echeance_jours": 44
+    },
+    {
+      "code_operation": "PACKAGE_046",
+      "operations_precedentes": [],
+      "competence_requise": "station_packaging",
+      "ressources_compatibles": [
+        {
+          "poste_id": "STATION_PACKAGING_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "STATION_PACKAGING_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "AOI_A_047",
+      "operations_precedentes": [
+        "PACKAGE_046"
+      ],
+      "competence_requise": "aoi",
+      "ressources_compatibles": [
+        {
+          "poste_id": "AOI_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "AOI_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "POSE_CMS_A_048",
+      "operations_precedentes": [
+        "AOI_A_047"
+      ],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "SOUDURE_THT_049",
+      "operations_precedentes": [
+        "POSE_CMS_A_048"
+      ],
+      "competence_requise": "poste_soudure_manuel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_SOUDURE_MANUEL_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TEST_FONC_050",
+      "operations_precedentes": [],
+      "competence_requise": "banc_test_fonctionnel",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BANC_TEST_FONCTIONNEL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "REFUSION_A_051",
+      "operations_precedentes": [],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 94,
+      "lot_min": 76,
+      "lot_max": 112
+    },
+    {
+      "code_operation": "POSE_CMS_B_052",
+      "operations_precedentes": [],
+      "competence_requise": "pick_place",
+      "ressources_compatibles": [
+        {
+          "poste_id": "PICK_PLACE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "PICK_PLACE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "DEPANEL_053",
+      "operations_precedentes": [],
+      "competence_requise": "poste_depannelisation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_DEPANNELISATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_DEPANNELISATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "REFUSION_B_054",
+      "operations_precedentes": [
+        "DEPANEL_053"
+      ],
+      "competence_requise": "four_refusion",
+      "ressources_compatibles": [
+        {
+          "poste_id": "FOUR_REFUSION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "FOUR_REFUSION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 181,
+      "lot_min": 145,
+      "lot_max": 217
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "PICK_PLACE_1",
+      "type_poste": "PICK_PLACE",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "code_poste": "PICK_PLACE_2",
+      "type_poste": "PICK_PLACE",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "code_poste": "PICK_PLACE_3",
+      "type_poste": "PICK_PLACE",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "code_poste": "PICK_PLACE_4",
+      "type_poste": "PICK_PLACE",
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "code_poste": "FOUR_REFUSION_1",
+      "type_poste": "FOUR_REFUSION",
+      "competences": [
+        "four_refusion"
+      ]
+    },
+    {
+      "code_poste": "FOUR_REFUSION_2",
+      "type_poste": "FOUR_REFUSION",
+      "competences": [
+        "four_refusion"
+      ]
+    },
+    {
+      "code_poste": "FOUR_REFUSION_3",
+      "type_poste": "FOUR_REFUSION",
+      "competences": [
+        "four_refusion"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "FOUR_REFUSION_4",
+      "type_poste": "FOUR_REFUSION",
+      "competences": [
+        "four_refusion"
+      ]
+    },
+    {
+      "code_poste": "AOI_1",
+      "type_poste": "AOI",
+      "competences": [
+        "aoi"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "AOI_2",
+      "type_poste": "AOI",
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "code_poste": "AOI_3",
+      "type_poste": "AOI",
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "code_poste": "AOI_4",
+      "type_poste": "AOI",
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_MANUEL_1",
+      "type_poste": "POSTE_SOUDURE_MANUEL",
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_MANUEL_2",
+      "type_poste": "POSTE_SOUDURE_MANUEL",
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_MANUEL_3",
+      "type_poste": "POSTE_SOUDURE_MANUEL",
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "code_poste": "POSTE_SOUDURE_MANUEL_4",
+      "type_poste": "POSTE_SOUDURE_MANUEL",
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_ICT_1",
+      "type_poste": "BANC_TEST_ICT",
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_ICT_2",
+      "type_poste": "BANC_TEST_ICT",
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_ICT_3",
+      "type_poste": "BANC_TEST_ICT",
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_ICT_4",
+      "type_poste": "BANC_TEST_ICT",
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_FONCTIONNEL_1",
+      "type_poste": "BANC_TEST_FONCTIONNEL",
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_FONCTIONNEL_2",
+      "type_poste": "BANC_TEST_FONCTIONNEL",
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_FONCTIONNEL_3",
+      "type_poste": "BANC_TEST_FONCTIONNEL",
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "code_poste": "BANC_TEST_FONCTIONNEL_4",
+      "type_poste": "BANC_TEST_FONCTIONNEL",
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_COATING_1",
+      "type_poste": "ROBOT_COATING",
+      "competences": [
+        "robot_coating"
+      ],
+      "capacite_simultanee": 3,
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "code_poste": "ROBOT_COATING_2",
+      "type_poste": "ROBOT_COATING",
+      "competences": [
+        "robot_coating"
+      ]
+    },
+    {
+      "code_poste": "ROBOT_COATING_3",
+      "type_poste": "ROBOT_COATING",
+      "competences": [
+        "robot_coating"
+      ]
+    },
+    {
+      "code_poste": "STATION_ASSEMBLAGE_1",
+      "type_poste": "STATION_ASSEMBLAGE",
+      "competences": [
+        "station_assemblage"
+      ]
+    },
+    {
+      "code_poste": "STATION_ASSEMBLAGE_2",
+      "type_poste": "STATION_ASSEMBLAGE",
+      "competences": [
+        "station_assemblage"
+      ]
+    },
+    {
+      "code_poste": "STATION_ASSEMBLAGE_3",
+      "type_poste": "STATION_ASSEMBLAGE",
+      "competences": [
+        "station_assemblage"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "STATION_ASSEMBLAGE_4",
+      "type_poste": "STATION_ASSEMBLAGE",
+      "competences": [
+        "station_assemblage"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "POSTE_DEPANNELISATION_1",
+      "type_poste": "POSTE_DEPANNELISATION",
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "code_poste": "POSTE_DEPANNELISATION_2",
+      "type_poste": "POSTE_DEPANNELISATION",
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "code_poste": "POSTE_DEPANNELISATION_3",
+      "type_poste": "POSTE_DEPANNELISATION",
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "code_poste": "POSTE_DEPANNELISATION_4",
+      "type_poste": "POSTE_DEPANNELISATION",
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "code_poste": "STATION_PACKAGING_1",
+      "type_poste": "STATION_PACKAGING",
+      "competences": [
+        "station_packaging"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "code_poste": "STATION_PACKAGING_2",
+      "type_poste": "STATION_PACKAGING",
+      "competences": [
+        "station_packaging"
+      ]
+    },
+    {
+      "code_poste": "STATION_PACKAGING_3",
+      "type_poste": "STATION_PACKAGING",
+      "competences": [
+        "station_packaging"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "STATION_PACKAGING_4",
+      "type_poste": "STATION_PACKAGING",
+      "competences": [
+        "station_packaging"
+      ],
+      "capacite_simultanee": 3
+    }
+  ],
+  "changements_serie": [
+    {
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_avant": "REFUSION_A_005",
+      "operation_apres": "REFUSION_B_006",
+      "duree_setup_jours": 2
+    },
+    {
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_avant": "REFUSION_B_006",
+      "operation_apres": "REFUSION_A_010",
+      "duree_setup_jours": 1
+    },
+    {
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_avant": "REFUSION_B_016",
+      "operation_apres": "REFUSION_B_020",
+      "duree_setup_jours": 2
+    },
+    {
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_avant": "REFUSION_B_020",
+      "operation_apres": "REFUSION_A_028",
+      "duree_setup_jours": 1
+    },
+    {
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_avant": "REFUSION_A_028",
+      "operation_apres": "REFUSION_B_033",
+      "duree_setup_jours": 2
+    },
+    {
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_avant": "REFUSION_B_033",
+      "operation_apres": "REFUSION_A_042",
+      "duree_setup_jours": 1
+    },
+    {
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_avant": "REFUSION_A_042",
+      "operation_apres": "REFUSION_A_051",
+      "duree_setup_jours": 1
+    }
+  ],
+  "incompatibilites": [
+    {
+      "operation": "REFUSION_A_005",
+      "operation_incompatible": "REFUSION_A_010"
+    }
+  ]
+}

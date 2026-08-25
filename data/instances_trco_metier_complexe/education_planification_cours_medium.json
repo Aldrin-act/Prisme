@@ -1,0 +1,2543 @@
+{
+  "taches": [
+    {
+      "id": "COURS_MAGISTRAL_001",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONFERENCE_002",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_INFORMATIQUE_003",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_004",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONFERENCE_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "COURS_MAGISTRAL_006",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_007",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 88
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_008",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_SCIENCES_009",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_010",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONFERENCE_011",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_012",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_SCIENCES_013",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_014",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "COURS_MAGISTRAL_015",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_016",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONFERENCE_017",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 22
+    },
+    {
+      "id": "TP_SCIENCES_018",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMEN_019",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_SCIENCES_020",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 171
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_021",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 107
+    },
+    {
+      "id": "TP_INFORMATIQUE_022",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_023",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "COURS_MAGISTRAL_024",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 35
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_025",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 85
+    },
+    {
+      "id": "CONFERENCE_026",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_INFORMATIQUE_027",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_028",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_SCIENCES_029",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMEN_030",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_SCIENCES_031",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 68
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_032",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 46
+    },
+    {
+      "id": "COURS_MAGISTRAL_033",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_INFORMATIQUE_034",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONFERENCE_035",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "COURS_MAGISTRAL_036",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_037",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMEN_038",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_SCIENCES_039",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_040",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_INFORMATIQUE_041",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_SCIENCES_042",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONFERENCE_043",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EXAMEN_044",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_045",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_INFORMATIQUE_046",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_047",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "COURS_MAGISTRAL_048",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 104
+    },
+    {
+      "id": "TRAVAUX_DIRIGES_049",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TP_INFORMATIQUE_050",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 123
+    },
+    {
+      "id": "TP_SCIENCES_051",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 25
+    },
+    {
+      "id": "EXAMEN_052",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "COURS_MAGISTRAL_053",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PROJET_GROUPE_054",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONFERENCE_055",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "SALLE_COURS_STANDARD_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "id": "SALLE_COURS_STANDARD_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "id": "SALLE_COURS_STANDARD_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "id": "SALLE_COURS_STANDARD_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_cours_standard"
+      ]
+    },
+    {
+      "id": "SALLE_TP_INFORMATIQUE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_informatique"
+      ]
+    },
+    {
+      "id": "SALLE_TP_INFORMATIQUE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_informatique"
+      ]
+    },
+    {
+      "id": "SALLE_TP_INFORMATIQUE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_informatique"
+      ]
+    },
+    {
+      "id": "SALLE_TP_INFORMATIQUE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_informatique"
+      ]
+    },
+    {
+      "id": "SALLE_TP_SCIENCES_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "id": "SALLE_TP_SCIENCES_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "id": "SALLE_TP_SCIENCES_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "id": "SALLE_TP_SCIENCES_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_tp_sciences"
+      ]
+    },
+    {
+      "id": "AMPHITHEATRE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "id": "AMPHITHEATRE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "id": "AMPHITHEATRE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "id": "AMPHITHEATRE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "amphitheatre"
+      ]
+    },
+    {
+      "id": "SALLE_EXAMEN_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "id": "SALLE_EXAMEN_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "id": "SALLE_EXAMEN_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "id": "SALLE_EXAMEN_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_examen"
+      ]
+    },
+    {
+      "id": "SALLE_TD_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_td"
+      ]
+    },
+    {
+      "id": "SALLE_TD_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_td"
+      ]
+    },
+    {
+      "id": "SALLE_TD_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_td"
+      ]
+    },
+    {
+      "id": "SALLE_TD_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_td"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire"
+      ]
+    },
+    {
+      "id": "LABORATOIRE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "laboratoire"
+      ]
+    },
+    {
+      "id": "SALLE_CONFERENCE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_conference"
+      ]
+    },
+    {
+      "id": "SALLE_CONFERENCE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_conference"
+      ]
+    },
+    {
+      "id": "SALLE_CONFERENCE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "salle_conference"
+      ]
+    },
+    {
+      "id": "BIBLIOTHEQUE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "id": "BIBLIOTHEQUE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "id": "BIBLIOTHEQUE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bibliotheque"
+      ]
+    },
+    {
+      "id": "BIBLIOTHEQUE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "bibliotheque"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_001",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_001",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_001",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_001",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_001",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_002",
+      "competence": "salle_conference"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_002",
+      "ressource": "SALLE_CONFERENCE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_002",
+      "ressource": "SALLE_CONFERENCE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_002",
+      "ressource": "SALLE_CONFERENCE_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_INFORMATIQUE_003",
+      "competence": "salle_tp_informatique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_003",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_003",
+      "ressource": "SALLE_TP_INFORMATIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_003",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_003",
+      "ressource": "SALLE_TP_INFORMATIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONFERENCE_002",
+      "apres": "TP_INFORMATIQUE_003"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_004",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_004",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_004",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_004",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_004",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_INFORMATIQUE_003",
+      "apres": "TRAVAUX_DIRIGES_004"
+    },
+    {
+      "type": "echeance",
+      "tache": "TRAVAUX_DIRIGES_004",
+      "echeance": 28
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_005",
+      "competence": "salle_conference"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_005",
+      "ressource": "SALLE_CONFERENCE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_005",
+      "ressource": "SALLE_CONFERENCE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_005",
+      "ressource": "SALLE_CONFERENCE_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_006",
+      "competence": "salle_cours_standard"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_006",
+      "ressource": "SALLE_COURS_STANDARD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_006",
+      "ressource": "SALLE_COURS_STANDARD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_006",
+      "ressource": "SALLE_COURS_STANDARD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_006",
+      "ressource": "SALLE_COURS_STANDARD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONFERENCE_005",
+      "apres": "COURS_MAGISTRAL_006"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_007",
+      "competence": "salle_td"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PROJET_GROUPE_007",
+      "lot_min": 71,
+      "lot_max": 105
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_007",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_007",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_007",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_007",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "COURS_MAGISTRAL_006",
+      "apres": "PROJET_GROUPE_007"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_008",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_008",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_008",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_008",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_008",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PROJET_GROUPE_007",
+      "apres": "TRAVAUX_DIRIGES_008"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_009",
+      "competence": "salle_tp_sciences"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_009",
+      "ressource": "SALLE_TP_SCIENCES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_009",
+      "ressource": "SALLE_TP_SCIENCES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_009",
+      "ressource": "SALLE_TP_SCIENCES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_009",
+      "ressource": "SALLE_TP_SCIENCES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAVAUX_DIRIGES_008",
+      "apres": "TP_SCIENCES_009"
+    },
+    {
+      "type": "echeance",
+      "tache": "TP_SCIENCES_009",
+      "echeance": 21
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_010",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_010",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_010",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_010",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_010",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_011",
+      "competence": "salle_conference"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_011",
+      "ressource": "SALLE_CONFERENCE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_011",
+      "ressource": "SALLE_CONFERENCE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_011",
+      "ressource": "SALLE_CONFERENCE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAVAUX_DIRIGES_010",
+      "apres": "CONFERENCE_011"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_012",
+      "competence": "bibliotheque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_012",
+      "ressource": "BIBLIOTHEQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_012",
+      "ressource": "BIBLIOTHEQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_012",
+      "ressource": "BIBLIOTHEQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_012",
+      "ressource": "BIBLIOTHEQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_013",
+      "competence": "salle_tp_sciences"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_013",
+      "ressource": "SALLE_TP_SCIENCES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_013",
+      "ressource": "SALLE_TP_SCIENCES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_013",
+      "ressource": "SALLE_TP_SCIENCES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_013",
+      "ressource": "SALLE_TP_SCIENCES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PROJET_GROUPE_012",
+      "apres": "TP_SCIENCES_013"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_014",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_014",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_014",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_014",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_014",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_015",
+      "competence": "salle_cours_standard"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_015",
+      "ressource": "SALLE_COURS_STANDARD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_015",
+      "ressource": "SALLE_COURS_STANDARD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_015",
+      "ressource": "SALLE_COURS_STANDARD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_015",
+      "ressource": "SALLE_COURS_STANDARD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_016",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_016",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_016",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_016",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_016",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "COURS_MAGISTRAL_015",
+      "apres": "PROJET_GROUPE_016"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_017",
+      "competence": "salle_conference"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONFERENCE_017",
+      "lot_min": 18,
+      "lot_max": 26
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_017",
+      "ressource": "SALLE_CONFERENCE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_017",
+      "ressource": "SALLE_CONFERENCE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_017",
+      "ressource": "SALLE_CONFERENCE_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_018",
+      "competence": "salle_tp_sciences"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_018",
+      "ressource": "SALLE_TP_SCIENCES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_018",
+      "ressource": "SALLE_TP_SCIENCES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_018",
+      "ressource": "SALLE_TP_SCIENCES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_018",
+      "ressource": "SALLE_TP_SCIENCES_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONFERENCE_017",
+      "apres": "TP_SCIENCES_018"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMEN_019",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_019",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_019",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_019",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_019",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_SCIENCES_018",
+      "apres": "EXAMEN_019"
+    },
+    {
+      "type": "echeance",
+      "tache": "EXAMEN_019",
+      "echeance": 37
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_020",
+      "competence": "salle_tp_sciences"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TP_SCIENCES_020",
+      "lot_min": 137,
+      "lot_max": 205
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_020",
+      "ressource": "SALLE_TP_SCIENCES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_020",
+      "ressource": "SALLE_TP_SCIENCES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_020",
+      "ressource": "SALLE_TP_SCIENCES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_020",
+      "ressource": "SALLE_TP_SCIENCES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_021",
+      "competence": "salle_td"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRAVAUX_DIRIGES_021",
+      "lot_min": 86,
+      "lot_max": 128
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_021",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_021",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_021",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_021",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_INFORMATIQUE_022",
+      "competence": "salle_tp_informatique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_022",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_022",
+      "ressource": "SALLE_TP_INFORMATIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_022",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_022",
+      "ressource": "SALLE_TP_INFORMATIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAVAUX_DIRIGES_021",
+      "apres": "TP_INFORMATIQUE_022"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_023",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_023",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_023",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_023",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_023",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_INFORMATIQUE_022",
+      "apres": "PROJET_GROUPE_023"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_024",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "COURS_MAGISTRAL_024",
+      "lot_min": 28,
+      "lot_max": 42
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_024",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_024",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_024",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_024",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PROJET_GROUPE_023",
+      "apres": "COURS_MAGISTRAL_024"
+    },
+    {
+      "type": "echeance",
+      "tache": "COURS_MAGISTRAL_024",
+      "echeance": 30
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_025",
+      "competence": "salle_td"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRAVAUX_DIRIGES_025",
+      "lot_min": 68,
+      "lot_max": 102
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_025",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_025",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_025",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_025",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_026",
+      "competence": "salle_conference"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_026",
+      "ressource": "SALLE_CONFERENCE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_026",
+      "ressource": "SALLE_CONFERENCE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_026",
+      "ressource": "SALLE_CONFERENCE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAVAUX_DIRIGES_025",
+      "apres": "CONFERENCE_026"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_INFORMATIQUE_027",
+      "competence": "salle_tp_informatique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_027",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_027",
+      "ressource": "SALLE_TP_INFORMATIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_027",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_027",
+      "ressource": "SALLE_TP_INFORMATIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_028",
+      "competence": "bibliotheque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_028",
+      "ressource": "BIBLIOTHEQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_028",
+      "ressource": "BIBLIOTHEQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_028",
+      "ressource": "BIBLIOTHEQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_028",
+      "ressource": "BIBLIOTHEQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_029",
+      "competence": "laboratoire"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_029",
+      "ressource": "LABORATOIRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_029",
+      "ressource": "LABORATOIRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_029",
+      "ressource": "LABORATOIRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_029",
+      "ressource": "LABORATOIRE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMEN_030",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_030",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_030",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_030",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_030",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_SCIENCES_029",
+      "apres": "EXAMEN_030"
+    },
+    {
+      "type": "echeance",
+      "tache": "EXAMEN_030",
+      "echeance": 34
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_031",
+      "competence": "salle_tp_sciences"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TP_SCIENCES_031",
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_031",
+      "ressource": "SALLE_TP_SCIENCES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_031",
+      "ressource": "SALLE_TP_SCIENCES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_031",
+      "ressource": "SALLE_TP_SCIENCES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_031",
+      "ressource": "SALLE_TP_SCIENCES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_032",
+      "competence": "salle_td"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TRAVAUX_DIRIGES_032",
+      "lot_min": 37,
+      "lot_max": 55
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_032",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_032",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_032",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_032",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_SCIENCES_031",
+      "apres": "TRAVAUX_DIRIGES_032"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_033",
+      "competence": "salle_cours_standard"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_033",
+      "ressource": "SALLE_COURS_STANDARD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_033",
+      "ressource": "SALLE_COURS_STANDARD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_033",
+      "ressource": "SALLE_COURS_STANDARD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_033",
+      "ressource": "SALLE_COURS_STANDARD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAVAUX_DIRIGES_032",
+      "apres": "COURS_MAGISTRAL_033"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_INFORMATIQUE_034",
+      "competence": "salle_tp_informatique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_034",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_034",
+      "ressource": "SALLE_TP_INFORMATIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_034",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_034",
+      "ressource": "SALLE_TP_INFORMATIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "COURS_MAGISTRAL_033",
+      "apres": "TP_INFORMATIQUE_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_035",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_035",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_035",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_035",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_035",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_INFORMATIQUE_034",
+      "apres": "CONFERENCE_035"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_036",
+      "competence": "salle_cours_standard"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_036",
+      "ressource": "SALLE_COURS_STANDARD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_036",
+      "ressource": "SALLE_COURS_STANDARD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_036",
+      "ressource": "SALLE_COURS_STANDARD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_036",
+      "ressource": "SALLE_COURS_STANDARD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_037",
+      "competence": "bibliotheque"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_037",
+      "ressource": "BIBLIOTHEQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_037",
+      "ressource": "BIBLIOTHEQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_037",
+      "ressource": "BIBLIOTHEQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_037",
+      "ressource": "BIBLIOTHEQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "COURS_MAGISTRAL_036",
+      "apres": "PROJET_GROUPE_037"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMEN_038",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_038",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_038",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_038",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_038",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_039",
+      "competence": "salle_tp_sciences"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_039",
+      "ressource": "SALLE_TP_SCIENCES_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_039",
+      "ressource": "SALLE_TP_SCIENCES_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_039",
+      "ressource": "SALLE_TP_SCIENCES_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_039",
+      "ressource": "SALLE_TP_SCIENCES_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_040",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_040",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_040",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_040",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_040",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_SCIENCES_039",
+      "apres": "TRAVAUX_DIRIGES_040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_INFORMATIQUE_041",
+      "competence": "salle_tp_informatique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_041",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_041",
+      "ressource": "SALLE_TP_INFORMATIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_041",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_041",
+      "ressource": "SALLE_TP_INFORMATIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_042",
+      "competence": "laboratoire"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_042",
+      "ressource": "LABORATOIRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_042",
+      "ressource": "LABORATOIRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_042",
+      "ressource": "LABORATOIRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_042",
+      "ressource": "LABORATOIRE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_043",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_043",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_043",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_043",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_043",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_SCIENCES_042",
+      "apres": "CONFERENCE_043"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMEN_044",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_044",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_044",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_044",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_044",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_045",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_045",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_045",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_045",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_045",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EXAMEN_044",
+      "apres": "TRAVAUX_DIRIGES_045"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_INFORMATIQUE_046",
+      "competence": "salle_tp_informatique"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_046",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_046",
+      "ressource": "SALLE_TP_INFORMATIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_046",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_046",
+      "ressource": "SALLE_TP_INFORMATIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TRAVAUX_DIRIGES_045",
+      "apres": "TP_INFORMATIQUE_046"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_047",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_047",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_047",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_047",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_047",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_048",
+      "competence": "salle_cours_standard"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "COURS_MAGISTRAL_048",
+      "lot_min": 84,
+      "lot_max": 124
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_048",
+      "ressource": "SALLE_COURS_STANDARD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_048",
+      "ressource": "SALLE_COURS_STANDARD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_048",
+      "ressource": "SALLE_COURS_STANDARD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_048",
+      "ressource": "SALLE_COURS_STANDARD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TRAVAUX_DIRIGES_049",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_049",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_049",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_049",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TRAVAUX_DIRIGES_049",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_INFORMATIQUE_050",
+      "competence": "salle_tp_informatique"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TP_INFORMATIQUE_050",
+      "lot_min": 99,
+      "lot_max": 147
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_050",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_050",
+      "ressource": "SALLE_TP_INFORMATIQUE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_050",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_INFORMATIQUE_050",
+      "ressource": "SALLE_TP_INFORMATIQUE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TP_SCIENCES_051",
+      "competence": "laboratoire"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "TP_SCIENCES_051",
+      "lot_min": 20,
+      "lot_max": 30
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_051",
+      "ressource": "LABORATOIRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_051",
+      "ressource": "LABORATOIRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_051",
+      "ressource": "LABORATOIRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TP_SCIENCES_051",
+      "ressource": "LABORATOIRE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EXAMEN_052",
+      "competence": "salle_examen"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_052",
+      "ressource": "SALLE_EXAMEN_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_052",
+      "ressource": "SALLE_EXAMEN_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_052",
+      "ressource": "SALLE_EXAMEN_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EXAMEN_052",
+      "ressource": "SALLE_EXAMEN_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TP_SCIENCES_051",
+      "apres": "EXAMEN_052"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COURS_MAGISTRAL_053",
+      "competence": "amphitheatre"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_053",
+      "ressource": "AMPHITHEATRE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_053",
+      "ressource": "AMPHITHEATRE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_053",
+      "ressource": "AMPHITHEATRE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COURS_MAGISTRAL_053",
+      "ressource": "AMPHITHEATRE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EXAMEN_052",
+      "apres": "COURS_MAGISTRAL_053"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PROJET_GROUPE_054",
+      "competence": "salle_td"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_054",
+      "ressource": "SALLE_TD_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_054",
+      "ressource": "SALLE_TD_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_054",
+      "ressource": "SALLE_TD_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PROJET_GROUPE_054",
+      "ressource": "SALLE_TD_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "COURS_MAGISTRAL_053",
+      "apres": "PROJET_GROUPE_054"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONFERENCE_055",
+      "competence": "salle_conference"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_055",
+      "ressource": "SALLE_CONFERENCE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_055",
+      "ressource": "SALLE_CONFERENCE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONFERENCE_055",
+      "ressource": "SALLE_CONFERENCE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PROJET_GROUPE_054",
+      "apres": "CONFERENCE_055"
+    },
+    {
+      "type": "echeance",
+      "tache": "CONFERENCE_055",
+      "echeance": 28
+    },
+    {
+      "type": "capacite",
+      "ressource": "SALLE_TP_INFORMATIQUE_1",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "SALLE_TD_1",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "LABORATOIRE_2",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "BIBLIOTHEQUE_3",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "BIBLIOTHEQUE_4",
+      "capacite": 3
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "SALLE_TP_INFORMATIQUE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "LABORATOIRE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "SALLE_CONFERENCE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

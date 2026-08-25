@@ -1,0 +1,1676 @@
+{
+  "secteur": "hopital_bloc_operatoire",
+  "operations": [
+    {
+      "code_operation": "ADMISSION_001",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "SOINS_POSTOP_002",
+      "operations_precedentes": [],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 2
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 2
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 2
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 2
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_003",
+      "operations_precedentes": [
+        "SOINS_POSTOP_002"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_004",
+      "operations_precedentes": [
+        "PREPARATION_PATIENT_003"
+      ],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 19
+    },
+    {
+      "code_operation": "SOINS_POSTOP_005",
+      "operations_precedentes": [],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 2
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 2
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 2
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 2
+        }
+      ]
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_006",
+      "operations_precedentes": [
+        "SOINS_POSTOP_005"
+      ],
+      "competence_requise": "laboratoire_analyses",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_007",
+      "operations_precedentes": [
+        "EXAMENS_PREOP_006"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ADMISSION_008",
+      "operations_precedentes": [
+        "PREPARATION_PATIENT_007"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "echeance_jours": 29
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_009",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_010",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REVEIL_011",
+      "operations_precedentes": [],
+      "competence_requise": "salle_reveil",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_REVEIL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 5,
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "code_operation": "INTERVENTION_012",
+      "operations_precedentes": [
+        "REVEIL_011"
+      ],
+      "competence_requise": "bloc_chirurgie_cardiaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 200,
+      "lot_min": 160,
+      "lot_max": 240
+    },
+    {
+      "code_operation": "ADMISSION_013",
+      "operations_precedentes": [
+        "INTERVENTION_012"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_014",
+      "operations_precedentes": [
+        "ADMISSION_013"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_015",
+      "operations_precedentes": [],
+      "competence_requise": "laboratoire_analyses",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 10,
+      "lot_min": 8,
+      "lot_max": 12
+    },
+    {
+      "code_operation": "REVEIL_016",
+      "operations_precedentes": [],
+      "competence_requise": "salle_reveil",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_REVEIL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_017",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_018",
+      "operations_precedentes": [
+        "CONTROLE_POSTOP_017"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "SOINS_POSTOP_019",
+      "operations_precedentes": [],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 68,
+      "lot_min": 55,
+      "lot_max": 81
+    },
+    {
+      "code_operation": "INTERVENTION_020",
+      "operations_precedentes": [
+        "SOINS_POSTOP_019"
+      ],
+      "competence_requise": "bloc_chirurgie_generale",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "ADMISSION_021",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 121,
+      "lot_min": 97,
+      "lot_max": 145,
+      "echeance_jours": 35
+    },
+    {
+      "code_operation": "ADMISSION_022",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "REVEIL_023",
+      "operations_precedentes": [
+        "ADMISSION_022"
+      ],
+      "competence_requise": "salle_reveil",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_REVEIL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 35,
+      "lot_min": 28,
+      "lot_max": 42
+    },
+    {
+      "code_operation": "SOINS_POSTOP_024",
+      "operations_precedentes": [
+        "REVEIL_023"
+      ],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 188,
+      "lot_min": 151,
+      "lot_max": 225
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_025",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_026",
+      "operations_precedentes": [
+        "CONTROLE_POSTOP_025"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "SOINS_POSTOP_027",
+      "operations_precedentes": [],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 92,
+      "lot_min": 74,
+      "lot_max": 110
+    },
+    {
+      "code_operation": "ADMISSION_028",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_029",
+      "operations_precedentes": [
+        "ADMISSION_028"
+      ],
+      "competence_requise": "laboratoire_analyses",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 181,
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_030",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_031",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 46,
+      "lot_min": 37,
+      "lot_max": 55
+    },
+    {
+      "code_operation": "INTERVENTION_032",
+      "operations_precedentes": [
+        "CONTROLE_POSTOP_031"
+      ],
+      "competence_requise": "bloc_chirurgie_cardiaque",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 37
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_033",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_034",
+      "operations_precedentes": [
+        "PREPARATION_PATIENT_033"
+      ],
+      "competence_requise": "laboratoire_analyses",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 71,
+      "lot_min": 57,
+      "lot_max": 85
+    },
+    {
+      "code_operation": "SOINS_POSTOP_035",
+      "operations_precedentes": [
+        "EXAMENS_PREOP_034"
+      ],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 152,
+      "lot_min": 122,
+      "lot_max": 182
+    },
+    {
+      "code_operation": "ADMISSION_036",
+      "operations_precedentes": [
+        "SOINS_POSTOP_035"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_037",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "INTERVENTION_038",
+      "operations_precedentes": [
+        "CONTROLE_POSTOP_037"
+      ],
+      "competence_requise": "bloc_chirurgie_orthopedique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "echeance_jours": 38
+    },
+    {
+      "code_operation": "SOINS_POSTOP_039",
+      "operations_precedentes": [],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 55,
+      "lot_min": 44,
+      "lot_max": 66
+    },
+    {
+      "code_operation": "ADMISSION_040",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 183,
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_041",
+      "operations_precedentes": [
+        "ADMISSION_040"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 183,
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "code_operation": "REVEIL_042",
+      "operations_precedentes": [],
+      "competence_requise": "salle_reveil",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_REVEIL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_043",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "SOINS_POSTOP_044",
+      "operations_precedentes": [],
+      "competence_requise": "unite_soins_intensifs",
+      "ressources_compatibles": [
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "UNITE_SOINS_INTENSIFS_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 43,
+      "lot_min": 35,
+      "lot_max": 51
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_045",
+      "operations_precedentes": [],
+      "competence_requise": "laboratoire_analyses",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 112,
+      "lot_min": 90,
+      "lot_max": 134
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_046",
+      "operations_precedentes": [
+        "EXAMENS_PREOP_045"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 104,
+      "lot_min": 84,
+      "lot_max": 124
+    },
+    {
+      "code_operation": "INTERVENTION_047",
+      "operations_precedentes": [
+        "PREPARATION_PATIENT_046"
+      ],
+      "competence_requise": "bloc_chirurgie_orthopedique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "ADMISSION_048",
+      "operations_precedentes": [
+        "INTERVENTION_047"
+      ],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 114,
+      "lot_min": 92,
+      "lot_max": 136
+    },
+    {
+      "code_operation": "CONTROLE_POSTOP_049",
+      "operations_precedentes": [],
+      "competence_requise": "salle_radiologie",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_RADIOLOGIE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_RADIOLOGIE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "REVEIL_050",
+      "operations_precedentes": [],
+      "competence_requise": "salle_reveil",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_REVEIL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "echeance_jours": 41
+    },
+    {
+      "code_operation": "REVEIL_051",
+      "operations_precedentes": [],
+      "competence_requise": "salle_reveil",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_REVEIL_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_REVEIL_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "EXAMENS_PREOP_052",
+      "operations_precedentes": [],
+      "competence_requise": "laboratoire_analyses",
+      "ressources_compatibles": [
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "LABORATOIRE_ANALYSES_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "INTERVENTION_053",
+      "operations_precedentes": [],
+      "competence_requise": "bloc_chirurgie_orthopedique",
+      "ressources_compatibles": [
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PREPARATION_PATIENT_054",
+      "operations_precedentes": [],
+      "competence_requise": "salle_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "SALLE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "SALLE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 112,
+      "lot_min": 90,
+      "lot_max": 134,
+      "echeance_jours": 25
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_1",
+      "type_poste": "BLOC_CHIRURGIE_GENERALE",
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_2",
+      "type_poste": "BLOC_CHIRURGIE_GENERALE",
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_3",
+      "type_poste": "BLOC_CHIRURGIE_GENERALE",
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_GENERALE_4",
+      "type_poste": "BLOC_CHIRURGIE_GENERALE",
+      "competences": [
+        "bloc_chirurgie_generale"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
+      "type_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE",
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
+      "type_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE",
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
+      "type_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE",
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
+      "type_poste": "BLOC_CHIRURGIE_ORTHOPEDIQUE",
+      "competences": [
+        "bloc_chirurgie_orthopedique"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_1",
+      "type_poste": "BLOC_CHIRURGIE_CARDIAQUE",
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_2",
+      "type_poste": "BLOC_CHIRURGIE_CARDIAQUE",
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_3",
+      "type_poste": "BLOC_CHIRURGIE_CARDIAQUE",
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "BLOC_CHIRURGIE_CARDIAQUE_4",
+      "type_poste": "BLOC_CHIRURGIE_CARDIAQUE",
+      "competences": [
+        "bloc_chirurgie_cardiaque"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_1",
+      "type_poste": "SALLE_REVEIL",
+      "competences": [
+        "salle_reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_2",
+      "type_poste": "SALLE_REVEIL",
+      "competences": [
+        "salle_reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_3",
+      "type_poste": "SALLE_REVEIL",
+      "competences": [
+        "salle_reveil"
+      ]
+    },
+    {
+      "code_poste": "SALLE_REVEIL_4",
+      "type_poste": "SALLE_REVEIL",
+      "competences": [
+        "salle_reveil"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_1",
+      "type_poste": "SALLE_PREPARATION",
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_2",
+      "type_poste": "SALLE_PREPARATION",
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_3",
+      "type_poste": "SALLE_PREPARATION",
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "code_poste": "SALLE_PREPARATION_4",
+      "type_poste": "SALLE_PREPARATION",
+      "competences": [
+        "salle_preparation"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_1",
+      "type_poste": "UNITE_SOINS_INTENSIFS",
+      "competences": [
+        "unite_soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_2",
+      "type_poste": "UNITE_SOINS_INTENSIFS",
+      "competences": [
+        "unite_soins_intensifs"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_3",
+      "type_poste": "UNITE_SOINS_INTENSIFS",
+      "competences": [
+        "unite_soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "UNITE_SOINS_INTENSIFS_4",
+      "type_poste": "UNITE_SOINS_INTENSIFS",
+      "competences": [
+        "unite_soins_intensifs"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_1",
+      "type_poste": "SALLE_RADIOLOGIE",
+      "competences": [
+        "salle_radiologie"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_2",
+      "type_poste": "SALLE_RADIOLOGIE",
+      "competences": [
+        "salle_radiologie"
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_3",
+      "type_poste": "SALLE_RADIOLOGIE",
+      "competences": [
+        "salle_radiologie"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "code_poste": "SALLE_RADIOLOGIE_4",
+      "type_poste": "SALLE_RADIOLOGIE",
+      "competences": [
+        "salle_radiologie"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_1",
+      "type_poste": "LABORATOIRE_ANALYSES",
+      "competences": [
+        "laboratoire_analyses"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_2",
+      "type_poste": "LABORATOIRE_ANALYSES",
+      "competences": [
+        "laboratoire_analyses"
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_3",
+      "type_poste": "LABORATOIRE_ANALYSES",
+      "competences": [
+        "laboratoire_analyses"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "code_poste": "LABORATOIRE_ANALYSES_4",
+      "type_poste": "LABORATOIRE_ANALYSES",
+      "competences": [
+        "laboratoire_analyses"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_1",
+      "type_poste": "BLOC_URGENCES",
+      "competences": [
+        "bloc_urgences"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_2",
+      "type_poste": "BLOC_URGENCES",
+      "competences": [
+        "bloc_urgences"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "BLOC_URGENCES_3",
+      "type_poste": "BLOC_URGENCES",
+      "competences": [
+        "bloc_urgences"
+      ]
+    },
+    {
+      "code_poste": "BLOC_URGENCES_4",
+      "type_poste": "BLOC_URGENCES",
+      "competences": [
+        "bloc_urgences"
+      ]
+    }
+  ],
+  "changements_serie": [],
+  "incompatibilites": []
+}

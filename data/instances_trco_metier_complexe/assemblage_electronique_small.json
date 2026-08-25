@@ -1,0 +1,1302 @@
+{
+  "taches": [
+    {
+      "id": "COATING_001",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POSE_CMS_A_002",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POSE_CMS_B_003",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DEPANEL_004",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TEST_ICT_005",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "SOUDURE_THT_006",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "AOI_A_007",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 174
+    },
+    {
+      "id": "REFUSION_B_008",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PACKAGE_009",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFUSION_A_010",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TEST_FONC_011",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DEPANEL_012",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "AOI_A_013",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 184
+    },
+    {
+      "id": "SOUDURE_THT_014",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PREP_015",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "COATING_016",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PACKAGE_017",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POSE_CMS_A_018",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "POSE_CMS_B_019",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 151
+    },
+    {
+      "id": "REFUSION_B_020",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "TEST_ICT_021",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    }
+  ],
+  "ressources": [
+    {
+      "id": "PICK_PLACE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "PICK_PLACE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "PICK_PLACE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "PICK_PLACE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "pick_place"
+      ]
+    },
+    {
+      "id": "FOUR_REFUSION_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "four_refusion"
+      ]
+    },
+    {
+      "id": "FOUR_REFUSION_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "four_refusion"
+      ]
+    },
+    {
+      "id": "FOUR_REFUSION_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "four_refusion"
+      ]
+    },
+    {
+      "id": "FOUR_REFUSION_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "four_refusion"
+      ]
+    },
+    {
+      "id": "AOI_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "id": "AOI_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "id": "AOI_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "id": "AOI_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "aoi"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "id": "POSTE_SOUDURE_MANUEL_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_soudure_manuel"
+      ]
+    },
+    {
+      "id": "BANC_TEST_ICT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "id": "BANC_TEST_ICT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "id": "BANC_TEST_ICT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "id": "BANC_TEST_ICT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_ict"
+      ]
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "id": "BANC_TEST_FONCTIONNEL_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "banc_test_fonctionnel"
+      ]
+    },
+    {
+      "id": "ROBOT_COATING_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_coating"
+      ]
+    },
+    {
+      "id": "ROBOT_COATING_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_coating"
+      ]
+    },
+    {
+      "id": "ROBOT_COATING_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_coating"
+      ]
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_assemblage"
+      ]
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_assemblage"
+      ]
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_assemblage"
+      ]
+    },
+    {
+      "id": "STATION_ASSEMBLAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_assemblage"
+      ]
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "id": "POSTE_DEPANNELISATION_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_depannelisation"
+      ]
+    },
+    {
+      "id": "STATION_PACKAGING_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_packaging"
+      ]
+    },
+    {
+      "id": "STATION_PACKAGING_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_packaging"
+      ]
+    },
+    {
+      "id": "STATION_PACKAGING_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_packaging"
+      ]
+    },
+    {
+      "id": "STATION_PACKAGING_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "station_packaging"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "COATING_001",
+      "competence": "robot_coating"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COATING_001",
+      "ressource": "ROBOT_COATING_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COATING_001",
+      "ressource": "ROBOT_COATING_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COATING_001",
+      "ressource": "ROBOT_COATING_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POSE_CMS_A_002",
+      "competence": "pick_place"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_002",
+      "ressource": "PICK_PLACE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_002",
+      "ressource": "PICK_PLACE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_002",
+      "ressource": "PICK_PLACE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_002",
+      "ressource": "PICK_PLACE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POSE_CMS_B_003",
+      "competence": "pick_place"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_003",
+      "ressource": "PICK_PLACE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_003",
+      "ressource": "PICK_PLACE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_003",
+      "ressource": "PICK_PLACE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_003",
+      "ressource": "PICK_PLACE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "POSE_CMS_A_002",
+      "apres": "POSE_CMS_B_003"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DEPANEL_004",
+      "competence": "poste_depannelisation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_004",
+      "ressource": "POSTE_DEPANNELISATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_004",
+      "ressource": "POSTE_DEPANNELISATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_004",
+      "ressource": "POSTE_DEPANNELISATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_004",
+      "ressource": "POSTE_DEPANNELISATION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TEST_ICT_005",
+      "competence": "banc_test_ict"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_005",
+      "ressource": "BANC_TEST_ICT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_005",
+      "ressource": "BANC_TEST_ICT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_005",
+      "ressource": "BANC_TEST_ICT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_005",
+      "ressource": "BANC_TEST_ICT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DEPANEL_004",
+      "apres": "TEST_ICT_005"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_THT_006",
+      "competence": "poste_soudure_manuel"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_006",
+      "ressource": "POSTE_SOUDURE_MANUEL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_006",
+      "ressource": "POSTE_SOUDURE_MANUEL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_006",
+      "ressource": "POSTE_SOUDURE_MANUEL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_006",
+      "ressource": "POSTE_SOUDURE_MANUEL_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AOI_A_007",
+      "competence": "aoi"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "AOI_A_007",
+      "lot_min": 140,
+      "lot_max": 208
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_007",
+      "ressource": "AOI_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_007",
+      "ressource": "AOI_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_007",
+      "ressource": "AOI_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_007",
+      "ressource": "AOI_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_THT_006",
+      "apres": "AOI_A_007"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFUSION_B_008",
+      "competence": "four_refusion"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_008",
+      "ressource": "FOUR_REFUSION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_008",
+      "ressource": "FOUR_REFUSION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_008",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_008",
+      "ressource": "FOUR_REFUSION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "AOI_A_007",
+      "apres": "REFUSION_B_008"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PACKAGE_009",
+      "competence": "station_packaging"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_009",
+      "ressource": "STATION_PACKAGING_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_009",
+      "ressource": "STATION_PACKAGING_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_009",
+      "ressource": "STATION_PACKAGING_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_009",
+      "ressource": "STATION_PACKAGING_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFUSION_B_008",
+      "apres": "PACKAGE_009"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFUSION_A_010",
+      "competence": "four_refusion"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_A_010",
+      "ressource": "FOUR_REFUSION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_A_010",
+      "ressource": "FOUR_REFUSION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_A_010",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_A_010",
+      "ressource": "FOUR_REFUSION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TEST_FONC_011",
+      "competence": "banc_test_fonctionnel"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_FONC_011",
+      "ressource": "BANC_TEST_FONCTIONNEL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_FONC_011",
+      "ressource": "BANC_TEST_FONCTIONNEL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_FONC_011",
+      "ressource": "BANC_TEST_FONCTIONNEL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_FONC_011",
+      "ressource": "BANC_TEST_FONCTIONNEL_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFUSION_A_010",
+      "apres": "TEST_FONC_011"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DEPANEL_012",
+      "competence": "poste_depannelisation"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_012",
+      "ressource": "POSTE_DEPANNELISATION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_012",
+      "ressource": "POSTE_DEPANNELISATION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_012",
+      "ressource": "POSTE_DEPANNELISATION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DEPANEL_012",
+      "ressource": "POSTE_DEPANNELISATION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "TEST_FONC_011",
+      "apres": "DEPANEL_012"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "AOI_A_013",
+      "competence": "aoi"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "AOI_A_013",
+      "lot_min": 148,
+      "lot_max": 220
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_013",
+      "ressource": "AOI_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_013",
+      "ressource": "AOI_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_013",
+      "ressource": "AOI_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "AOI_A_013",
+      "ressource": "AOI_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "SOUDURE_THT_014",
+      "competence": "poste_soudure_manuel"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_014",
+      "ressource": "POSTE_SOUDURE_MANUEL_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_014",
+      "ressource": "POSTE_SOUDURE_MANUEL_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_014",
+      "ressource": "POSTE_SOUDURE_MANUEL_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "SOUDURE_THT_014",
+      "ressource": "POSTE_SOUDURE_MANUEL_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "AOI_A_013",
+      "apres": "SOUDURE_THT_014"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PREP_015",
+      "competence": "station_assemblage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_015",
+      "ressource": "STATION_ASSEMBLAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_015",
+      "ressource": "STATION_ASSEMBLAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_015",
+      "ressource": "STATION_ASSEMBLAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PREP_015",
+      "ressource": "STATION_ASSEMBLAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "SOUDURE_THT_014",
+      "apres": "PREP_015"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "COATING_016",
+      "competence": "robot_coating"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COATING_016",
+      "ressource": "ROBOT_COATING_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COATING_016",
+      "ressource": "ROBOT_COATING_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "COATING_016",
+      "ressource": "ROBOT_COATING_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PREP_015",
+      "apres": "COATING_016"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PACKAGE_017",
+      "competence": "station_packaging"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_017",
+      "ressource": "STATION_PACKAGING_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_017",
+      "ressource": "STATION_PACKAGING_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_017",
+      "ressource": "STATION_PACKAGING_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PACKAGE_017",
+      "ressource": "STATION_PACKAGING_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POSE_CMS_A_018",
+      "competence": "pick_place"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_018",
+      "ressource": "PICK_PLACE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_018",
+      "ressource": "PICK_PLACE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_018",
+      "ressource": "PICK_PLACE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_A_018",
+      "ressource": "PICK_PLACE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "POSE_CMS_B_019",
+      "competence": "pick_place"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "POSE_CMS_B_019",
+      "lot_min": 121,
+      "lot_max": 181
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_019",
+      "ressource": "PICK_PLACE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_019",
+      "ressource": "PICK_PLACE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_019",
+      "ressource": "PICK_PLACE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "POSE_CMS_B_019",
+      "ressource": "PICK_PLACE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "POSE_CMS_A_018",
+      "apres": "POSE_CMS_B_019"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFUSION_B_020",
+      "competence": "four_refusion"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_020",
+      "ressource": "FOUR_REFUSION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_020",
+      "ressource": "FOUR_REFUSION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_020",
+      "ressource": "FOUR_REFUSION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFUSION_B_020",
+      "ressource": "FOUR_REFUSION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "TEST_ICT_021",
+      "competence": "banc_test_ict"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_021",
+      "ressource": "BANC_TEST_ICT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_021",
+      "ressource": "BANC_TEST_ICT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_021",
+      "ressource": "BANC_TEST_ICT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "TEST_ICT_021",
+      "ressource": "BANC_TEST_ICT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFUSION_B_020",
+      "apres": "TEST_ICT_021"
+    },
+    {
+      "type": "capacite",
+      "ressource": "PICK_PLACE_3",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "AOI_3",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_SOUDURE_MANUEL_4",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "BANC_TEST_FONCTIONNEL_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "STATION_ASSEMBLAGE_1",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_DEPANNELISATION_1",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_DEPANNELISATION_2",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_DEPANNELISATION_4",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "STATION_PACKAGING_1",
+      "capacite": 2
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "PICK_PLACE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "PICK_PLACE_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "FOUR_REFUSION_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "FOUR_REFUSION_2",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_SOUDURE_MANUEL_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "BANC_TEST_FONCTIONNEL_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        2
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "BANC_TEST_FONCTIONNEL_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "STATION_ASSEMBLAGE_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_DEPANNELISATION_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        2
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_DEPANNELISATION_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "FOUR_REFUSION_1",
+      "tache_avant": "REFUSION_B_008",
+      "tache_apres": "REFUSION_A_010",
+      "duree_setup": 2
+    },
+    {
+      "type": "changement_serie",
+      "ressource": "FOUR_REFUSION_1",
+      "tache_avant": "REFUSION_A_010",
+      "tache_apres": "REFUSION_B_020",
+      "duree_setup": 1
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

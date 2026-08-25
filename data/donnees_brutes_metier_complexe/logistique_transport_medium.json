@@ -1,0 +1,1832 @@
+{
+  "secteur": "logistique_transport",
+  "operations": [
+    {
+      "code_operation": "CONTROLE_ENTREE_001",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 60,
+      "lot_min": 48,
+      "lot_max": 72
+    },
+    {
+      "code_operation": "RECEPTION_002",
+      "operations_precedentes": [
+        "CONTROLE_ENTREE_001"
+      ],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "quantite": 6,
+      "lot_min": 5,
+      "lot_max": 7
+    },
+    {
+      "code_operation": "CHARGEMENT_003",
+      "operations_precedentes": [
+        "RECEPTION_002"
+      ],
+      "competence_requise": "quai_chargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_CHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "STOCKAGE_004",
+      "operations_precedentes": [],
+      "competence_requise": "zone_stockage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_STOCKAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "LIVRAISON_005",
+      "operations_precedentes": [
+        "STOCKAGE_004"
+      ],
+      "competence_requise": "camion_20t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_20T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "TRANSPORT_006",
+      "operations_precedentes": [
+        "LIVRAISON_005"
+      ],
+      "competence_requise": "camion_10t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_10T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "EMBALLAGE_007",
+      "operations_precedentes": [
+        "TRANSPORT_006"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "PREPARATION_COMMANDE_008",
+      "operations_precedentes": [
+        "EMBALLAGE_007"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "echeance_jours": 41
+    },
+    {
+      "code_operation": "PREPARATION_COMMANDE_009",
+      "operations_precedentes": [],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_010",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "EMBALLAGE_011",
+      "operations_precedentes": [],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 5,
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "code_operation": "LIVRAISON_012",
+      "operations_precedentes": [],
+      "competence_requise": "camionnette",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMIONNETTE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "RECEPTION_013",
+      "operations_precedentes": [],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "CHARGEMENT_014",
+      "operations_precedentes": [],
+      "competence_requise": "quai_chargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_CHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "STOCKAGE_015",
+      "operations_precedentes": [],
+      "competence_requise": "zone_stockage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_STOCKAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 40
+    },
+    {
+      "code_operation": "PREPARATION_COMMANDE_016",
+      "operations_precedentes": [],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 166,
+      "lot_min": 133,
+      "lot_max": 199
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_017",
+      "operations_precedentes": [
+        "PREPARATION_COMMANDE_016"
+      ],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 38,
+      "lot_min": 31,
+      "lot_max": 45
+    },
+    {
+      "code_operation": "RECEPTION_018",
+      "operations_precedentes": [
+        "CONTROLE_ENTREE_017"
+      ],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "STOCKAGE_019",
+      "operations_precedentes": [
+        "RECEPTION_018"
+      ],
+      "competence_requise": "chariot_elevateur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CHARGEMENT_020",
+      "operations_precedentes": [
+        "STOCKAGE_019"
+      ],
+      "competence_requise": "quai_chargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_CHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "EMBALLAGE_021",
+      "operations_precedentes": [],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 5,
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "code_operation": "LIVRAISON_022",
+      "operations_precedentes": [],
+      "competence_requise": "camion_20t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_20T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_023",
+      "operations_precedentes": [
+        "LIVRAISON_022"
+      ],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 35,
+      "lot_min": 28,
+      "lot_max": 42
+    },
+    {
+      "code_operation": "TRANSPORT_024",
+      "operations_precedentes": [
+        "CONTROLE_ENTREE_023"
+      ],
+      "competence_requise": "camionnette",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMIONNETTE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 188,
+      "lot_min": 151,
+      "lot_max": 225
+    },
+    {
+      "code_operation": "STOCKAGE_025",
+      "operations_precedentes": [],
+      "competence_requise": "chariot_elevateur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CHARGEMENT_026",
+      "operations_precedentes": [
+        "STOCKAGE_025"
+      ],
+      "competence_requise": "quai_chargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_CHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "RECEPTION_027",
+      "operations_precedentes": [],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 39,
+      "lot_min": 32,
+      "lot_max": 46
+    },
+    {
+      "code_operation": "EMBALLAGE_028",
+      "operations_precedentes": [
+        "RECEPTION_027"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "PREPARATION_COMMANDE_029",
+      "operations_precedentes": [
+        "EMBALLAGE_028"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "STOCKAGE_030",
+      "operations_precedentes": [],
+      "competence_requise": "zone_stockage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_STOCKAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1
+    },
+    {
+      "code_operation": "EMBALLAGE_031",
+      "operations_precedentes": [
+        "STOCKAGE_030"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "RECEPTION_032",
+      "operations_precedentes": [],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "LIVRAISON_033",
+      "operations_precedentes": [
+        "RECEPTION_032"
+      ],
+      "competence_requise": "camion_20t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_20T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_034",
+      "operations_precedentes": [
+        "LIVRAISON_033"
+      ],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 169,
+      "lot_min": 136,
+      "lot_max": 202
+    },
+    {
+      "code_operation": "PREPARATION_COMMANDE_035",
+      "operations_precedentes": [
+        "CONTROLE_ENTREE_034"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 157,
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "code_operation": "CHARGEMENT_036",
+      "operations_precedentes": [
+        "PREPARATION_COMMANDE_035"
+      ],
+      "competence_requise": "quai_chargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_CHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_CHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 142,
+      "lot_min": 114,
+      "lot_max": 170
+    },
+    {
+      "code_operation": "TRANSPORT_037",
+      "operations_precedentes": [
+        "CHARGEMENT_036"
+      ],
+      "competence_requise": "camion_20t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_20T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_4",
+          "duree_jours": 1
+        }
+      ],
+      "echeance_jours": 41
+    },
+    {
+      "code_operation": "STOCKAGE_038",
+      "operations_precedentes": [],
+      "competence_requise": "zone_stockage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_STOCKAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "EMBALLAGE_039",
+      "operations_precedentes": [
+        "STOCKAGE_038"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 174,
+      "lot_min": 140,
+      "lot_max": 208
+    },
+    {
+      "code_operation": "TRANSPORT_040",
+      "operations_precedentes": [
+        "EMBALLAGE_039"
+      ],
+      "competence_requise": "camion_20t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_20T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_20T_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 1,
+      "quantite": 126,
+      "lot_min": 101,
+      "lot_max": 151
+    },
+    {
+      "code_operation": "LIVRAISON_041",
+      "operations_precedentes": [
+        "TRANSPORT_040"
+      ],
+      "competence_requise": "camionnette",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMIONNETTE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 172,
+      "lot_min": 138,
+      "lot_max": 206
+    },
+    {
+      "code_operation": "PREPARATION_COMMANDE_042",
+      "operations_precedentes": [
+        "LIVRAISON_041"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CHARGEMENT_043",
+      "operations_precedentes": [],
+      "competence_requise": "chariot_elevateur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "RECEPTION_044",
+      "operations_precedentes": [
+        "CHARGEMENT_043"
+      ],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_045",
+      "operations_precedentes": [
+        "RECEPTION_044"
+      ],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "echeance_jours": 39
+    },
+    {
+      "code_operation": "LIVRAISON_046",
+      "operations_precedentes": [],
+      "competence_requise": "camion_10t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_10T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3,
+      "quantite": 104,
+      "lot_min": 84,
+      "lot_max": 124
+    },
+    {
+      "code_operation": "PREPARATION_COMMANDE_047",
+      "operations_precedentes": [
+        "LIVRAISON_046"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "RECEPTION_048",
+      "operations_precedentes": [],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_049",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4
+    },
+    {
+      "code_operation": "TRANSPORT_050",
+      "operations_precedentes": [],
+      "competence_requise": "camion_10t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_10T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "EMBALLAGE_051",
+      "operations_precedentes": [
+        "TRANSPORT_050"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 10,
+      "lot_min": 8,
+      "lot_max": 12
+    },
+    {
+      "code_operation": "CHARGEMENT_052",
+      "operations_precedentes": [],
+      "competence_requise": "chariot_elevateur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "quantite": 160,
+      "lot_min": 128,
+      "lot_max": 192
+    },
+    {
+      "code_operation": "STOCKAGE_053",
+      "operations_precedentes": [],
+      "competence_requise": "zone_stockage",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_STOCKAGE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_STOCKAGE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 2,
+      "quantite": 181,
+      "lot_min": 145,
+      "lot_max": 217,
+      "echeance_jours": 30
+    },
+    {
+      "code_operation": "TRANSPORT_054",
+      "operations_precedentes": [],
+      "competence_requise": "camion_10t",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMION_10T_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMION_10T_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 3
+    },
+    {
+      "code_operation": "CHARGEMENT_055",
+      "operations_precedentes": [
+        "TRANSPORT_054"
+      ],
+      "competence_requise": "chariot_elevateur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "STOCKAGE_056",
+      "operations_precedentes": [
+        "CHARGEMENT_055"
+      ],
+      "competence_requise": "chariot_elevateur",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CHARIOT_ELEVATEUR_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 4,
+      "quantite": 123,
+      "lot_min": 99,
+      "lot_max": 147
+    },
+    {
+      "code_operation": "RECEPTION_057",
+      "operations_precedentes": [
+        "STOCKAGE_056"
+      ],
+      "competence_requise": "quai_dechargement",
+      "ressources_compatibles": [
+        {
+          "poste_id": "QUAI_DECHARGEMENT_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "QUAI_DECHARGEMENT_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "LIVRAISON_058",
+      "operations_precedentes": [
+        "RECEPTION_057"
+      ],
+      "competence_requise": "camionnette",
+      "ressources_compatibles": [
+        {
+          "poste_id": "CAMIONNETTE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "CAMIONNETTE_4",
+          "duree_jours": 1
+        }
+      ]
+    },
+    {
+      "code_operation": "EMBALLAGE_059",
+      "operations_precedentes": [
+        "LIVRAISON_058"
+      ],
+      "competence_requise": "zone_preparation",
+      "ressources_compatibles": [
+        {
+          "poste_id": "ZONE_PREPARATION_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "ZONE_PREPARATION_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5
+    },
+    {
+      "code_operation": "CONTROLE_ENTREE_060",
+      "operations_precedentes": [],
+      "competence_requise": "poste_controle",
+      "ressources_compatibles": [
+        {
+          "poste_id": "POSTE_CONTROLE_1",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_2",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_3",
+          "duree_jours": 1
+        },
+        {
+          "poste_id": "POSTE_CONTROLE_4",
+          "duree_jours": 1
+        }
+      ],
+      "priorite": 5,
+      "echeance_jours": 29
+    }
+  ],
+  "postes": [
+    {
+      "code_poste": "CAMION_20T_1",
+      "type_poste": "CAMION_20T",
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "code_poste": "CAMION_20T_2",
+      "type_poste": "CAMION_20T",
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "code_poste": "CAMION_20T_3",
+      "type_poste": "CAMION_20T",
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "code_poste": "CAMION_20T_4",
+      "type_poste": "CAMION_20T",
+      "competences": [
+        "camion_20t"
+      ]
+    },
+    {
+      "code_poste": "CAMION_10T_1",
+      "type_poste": "CAMION_10T",
+      "competences": [
+        "camion_10t"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "CAMION_10T_2",
+      "type_poste": "CAMION_10T",
+      "competences": [
+        "camion_10t"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "CAMION_10T_3",
+      "type_poste": "CAMION_10T",
+      "competences": [
+        "camion_10t"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    },
+    {
+      "code_poste": "CAMION_10T_4",
+      "type_poste": "CAMION_10T",
+      "competences": [
+        "camion_10t"
+      ]
+    },
+    {
+      "code_poste": "CAMIONNETTE_1",
+      "type_poste": "CAMIONNETTE",
+      "competences": [
+        "camionnette"
+      ]
+    },
+    {
+      "code_poste": "CAMIONNETTE_2",
+      "type_poste": "CAMIONNETTE",
+      "competences": [
+        "camionnette"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "CAMIONNETTE_3",
+      "type_poste": "CAMIONNETTE",
+      "competences": [
+        "camionnette"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "CAMIONNETTE_4",
+      "type_poste": "CAMIONNETTE",
+      "competences": [
+        "camionnette"
+      ]
+    },
+    {
+      "code_poste": "CHARIOT_ELEVATEUR_1",
+      "type_poste": "CHARIOT_ELEVATEUR",
+      "competences": [
+        "chariot_elevateur"
+      ]
+    },
+    {
+      "code_poste": "CHARIOT_ELEVATEUR_2",
+      "type_poste": "CHARIOT_ELEVATEUR",
+      "competences": [
+        "chariot_elevateur"
+      ]
+    },
+    {
+      "code_poste": "CHARIOT_ELEVATEUR_3",
+      "type_poste": "CHARIOT_ELEVATEUR",
+      "competences": [
+        "chariot_elevateur"
+      ]
+    },
+    {
+      "code_poste": "CHARIOT_ELEVATEUR_4",
+      "type_poste": "CHARIOT_ELEVATEUR",
+      "competences": [
+        "chariot_elevateur"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "QUAI_CHARGEMENT_1",
+      "type_poste": "QUAI_CHARGEMENT",
+      "competences": [
+        "quai_chargement"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "QUAI_CHARGEMENT_2",
+      "type_poste": "QUAI_CHARGEMENT",
+      "competences": [
+        "quai_chargement"
+      ]
+    },
+    {
+      "code_poste": "QUAI_CHARGEMENT_3",
+      "type_poste": "QUAI_CHARGEMENT",
+      "competences": [
+        "quai_chargement"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "QUAI_CHARGEMENT_4",
+      "type_poste": "QUAI_CHARGEMENT",
+      "competences": [
+        "quai_chargement"
+      ]
+    },
+    {
+      "code_poste": "QUAI_DECHARGEMENT_1",
+      "type_poste": "QUAI_DECHARGEMENT",
+      "competences": [
+        "quai_dechargement"
+      ]
+    },
+    {
+      "code_poste": "QUAI_DECHARGEMENT_2",
+      "type_poste": "QUAI_DECHARGEMENT",
+      "competences": [
+        "quai_dechargement"
+      ]
+    },
+    {
+      "code_poste": "QUAI_DECHARGEMENT_3",
+      "type_poste": "QUAI_DECHARGEMENT",
+      "competences": [
+        "quai_dechargement"
+      ],
+      "capacite_simultanee": 2
+    },
+    {
+      "code_poste": "QUAI_DECHARGEMENT_4",
+      "type_poste": "QUAI_DECHARGEMENT",
+      "competences": [
+        "quai_dechargement"
+      ],
+      "capacite_simultanee": 3
+    },
+    {
+      "code_poste": "ZONE_PREPARATION_1",
+      "type_poste": "ZONE_PREPARATION",
+      "competences": [
+        "zone_preparation"
+      ]
+    },
+    {
+      "code_poste": "ZONE_PREPARATION_2",
+      "type_poste": "ZONE_PREPARATION",
+      "competences": [
+        "zone_preparation"
+      ],
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "code_poste": "ZONE_PREPARATION_3",
+      "type_poste": "ZONE_PREPARATION",
+      "competences": [
+        "zone_preparation"
+      ]
+    },
+    {
+      "code_poste": "ZONE_PREPARATION_4",
+      "type_poste": "ZONE_PREPARATION",
+      "competences": [
+        "zone_preparation"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_1",
+      "type_poste": "POSTE_CONTROLE",
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_2",
+      "type_poste": "POSTE_CONTROLE",
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_3",
+      "type_poste": "POSTE_CONTROLE",
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "code_poste": "POSTE_CONTROLE_4",
+      "type_poste": "POSTE_CONTROLE",
+      "competences": [
+        "poste_controle"
+      ]
+    },
+    {
+      "code_poste": "ZONE_STOCKAGE_1",
+      "type_poste": "ZONE_STOCKAGE",
+      "competences": [
+        "zone_stockage"
+      ]
+    },
+    {
+      "code_poste": "ZONE_STOCKAGE_2",
+      "type_poste": "ZONE_STOCKAGE",
+      "competences": [
+        "zone_stockage"
+      ]
+    },
+    {
+      "code_poste": "ZONE_STOCKAGE_3",
+      "type_poste": "ZONE_STOCKAGE",
+      "competences": [
+        "zone_stockage"
+      ]
+    },
+    {
+      "code_poste": "ZONE_STOCKAGE_4",
+      "type_poste": "ZONE_STOCKAGE",
+      "competences": [
+        "zone_stockage"
+      ]
+    }
+  ],
+  "changements_serie": [],
+  "incompatibilites": []
+}

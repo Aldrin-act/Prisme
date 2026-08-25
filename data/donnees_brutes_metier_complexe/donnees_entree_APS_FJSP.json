@@ -1,0 +1,313 @@
+{
+  "parametres": {
+    "unite_temps": "heures",
+    "horizon_planification": {
+      "date_debut": "2026-09-01",
+      "date_fin": "2026-09-15"
+    },
+    "objectif": "minimiser_makespan"
+  },
+  "ordres_fabrication": [
+    {
+      "of_id": "OF001",
+      "produit_id": "PROD_A",
+      "quantite": 100,
+      "date_lancement": "2026-09-01",
+      "date_livraison": "2026-09-05",
+      "priorite": 1,
+      "statut": "planifie"
+    },
+    {
+      "of_id": "OF002",
+      "produit_id": "PROD_B",
+      "quantite": 200,
+      "date_lancement": "2026-09-01",
+      "date_livraison": "2026-09-08",
+      "priorite": 2,
+      "statut": "planifie"
+    }
+  ],
+  "produits": [
+    {
+      "produit_id": "PROD_A",
+      "nom": "Produit A",
+      "unite": "piece"
+    },
+    {
+      "produit_id": "PROD_B",
+      "nom": "Produit B",
+      "unite": "piece"
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "OP001",
+      "of_id": "OF001",
+      "sequence": 1,
+      "nom": "Decoupe",
+      "duree": 2,
+      "unite_duree": "heures",
+      "precedences": []
+    },
+    {
+      "operation_id": "OP002",
+      "of_id": "OF001",
+      "sequence": 2,
+      "nom": "Usinage",
+      "duree": 4,
+      "unite_duree": "heures",
+      "precedences": [
+        "OP001"
+      ]
+    },
+    {
+      "operation_id": "OP003",
+      "of_id": "OF001",
+      "sequence": 3,
+      "nom": "Assemblage",
+      "duree": 3,
+      "unite_duree": "heures",
+      "precedences": [
+        "OP002"
+      ]
+    },
+    {
+      "operation_id": "OP004",
+      "of_id": "OF002",
+      "sequence": 1,
+      "nom": "Decoupe",
+      "duree": 3,
+      "unite_duree": "heures",
+      "precedences": []
+    },
+    {
+      "operation_id": "OP005",
+      "of_id": "OF002",
+      "sequence": 2,
+      "nom": "Usinage",
+      "duree": 5,
+      "unite_duree": "heures",
+      "precedences": [
+        "OP004"
+      ]
+    },
+    {
+      "operation_id": "OP006",
+      "of_id": "OF002",
+      "sequence": 3,
+      "nom": "Assemblage",
+      "duree": 2,
+      "unite_duree": "heures",
+      "precedences": [
+        "OP005"
+      ]
+    }
+  ],
+  "ressources": [
+    {
+      "ressource_id": "M01",
+      "nom": "Machine Decoupe 01",
+      "type": "machine",
+      "capacite": 1,
+      "calendrier_id": "CAL01"
+    },
+    {
+      "ressource_id": "M02",
+      "nom": "Machine Decoupe 02",
+      "type": "machine",
+      "capacite": 1,
+      "calendrier_id": "CAL01"
+    },
+    {
+      "ressource_id": "M03",
+      "nom": "Centre Usinage 01",
+      "type": "machine",
+      "capacite": 1,
+      "calendrier_id": "CAL01"
+    },
+    {
+      "ressource_id": "M04",
+      "nom": "Centre Usinage 02",
+      "type": "machine",
+      "capacite": 1,
+      "calendrier_id": "CAL01"
+    },
+    {
+      "ressource_id": "M05",
+      "nom": "Poste Assemblage 01",
+      "type": "poste",
+      "capacite": 1,
+      "calendrier_id": "CAL01"
+    }
+  ],
+  "compatibilites": [
+    {
+      "operation_id": "OP001",
+      "ressources": [
+        {
+          "ressource_id": "M01",
+          "duree": 2
+        },
+        {
+          "ressource_id": "M02",
+          "duree": 2.5
+        }
+      ]
+    },
+    {
+      "operation_id": "OP002",
+      "ressources": [
+        {
+          "ressource_id": "M03",
+          "duree": 4
+        },
+        {
+          "ressource_id": "M04",
+          "duree": 5
+        }
+      ]
+    },
+    {
+      "operation_id": "OP003",
+      "ressources": [
+        {
+          "ressource_id": "M05",
+          "duree": 3
+        }
+      ]
+    },
+    {
+      "operation_id": "OP004",
+      "ressources": [
+        {
+          "ressource_id": "M01",
+          "duree": 3
+        },
+        {
+          "ressource_id": "M02",
+          "duree": 3.5
+        }
+      ]
+    },
+    {
+      "operation_id": "OP005",
+      "ressources": [
+        {
+          "ressource_id": "M03",
+          "duree": 5
+        },
+        {
+          "ressource_id": "M04",
+          "duree": 4.5
+        }
+      ]
+    },
+    {
+      "operation_id": "OP006",
+      "ressources": [
+        {
+          "ressource_id": "M05",
+          "duree": 2
+        }
+      ]
+    }
+  ],
+  "calendriers": [
+    {
+      "calendrier_id": "CAL01",
+      "nom": "Calendrier Standard",
+      "jours_travailles": [
+        "lundi",
+        "mardi",
+        "mercredi",
+        "jeudi",
+        "vendredi"
+      ],
+      "heures_par_jour": 8,
+      "heure_debut": "08:00",
+      "heure_fin": "17:00",
+      "pause": {
+        "debut": "12:00",
+        "fin": "13:00"
+      }
+    }
+  ],
+  "indisponibilites": [
+    {
+      "ressource_id": "M01",
+      "date": "2026-09-03",
+      "heure_debut": "14:00",
+      "heure_fin": "17:00",
+      "motif": "maintenance"
+    },
+    {
+      "ressource_id": "M03",
+      "date": "2026-09-04",
+      "heure_debut": "08:00",
+      "heure_fin": "12:00",
+      "motif": "maintenance"
+    }
+  ],
+  "matieres": [
+    {
+      "matiere_id": "MAT001",
+      "nom": "Acier",
+      "unite": "kg",
+      "stock_disponible": 1000,
+      "stock_securite": 100
+    },
+    {
+      "matiere_id": "MAT002",
+      "nom": "Aluminium",
+      "unite": "kg",
+      "stock_disponible": 500,
+      "stock_securite": 50
+    }
+  ],
+  "nomenclatures": [
+    {
+      "produit_id": "PROD_A",
+      "composants": [
+        {
+          "matiere_id": "MAT001",
+          "quantite_par_unite": 2
+        }
+      ]
+    },
+    {
+      "produit_id": "PROD_B",
+      "composants": [
+        {
+          "matiere_id": "MAT002",
+          "quantite_par_unite": 1.5
+        }
+      ]
+    }
+  ],
+  "contraintes": {
+    "precedence": true,
+    "capacite_ressource": true,
+    "ressource_unique_par_operation": true,
+    "non_chevauchement": true,
+    "respect_date_livraison": true,
+    "respect_calendrier": true,
+    "respect_indisponibilites": true
+  },
+  "objectifs_optimisation": [
+    {
+      "objectif": "minimiser_makespan",
+      "priorite": 1,
+      "poids": 1.0
+    },
+    {
+      "objectif": "minimiser_retard",
+      "priorite": 2,
+      "poids": 0.8
+    },
+    {
+      "objectif": "maximiser_utilisation_ressources",
+      "priorite": 3,
+      "poids": 0.5
+    }
+  ]
+}

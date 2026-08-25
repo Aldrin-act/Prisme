@@ -1,0 +1,2785 @@
+{
+  "taches": [
+    {
+      "id": "RECEPTION_001",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 134
+    },
+    {
+      "id": "CUISSON_002",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DECOUPE_003",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 93
+    },
+    {
+      "id": "LAVAGE_004",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_005",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PALETTISATION_006",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_007",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DECOUPE_008",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ETIQUETAGE_009",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_010",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_011",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 5
+    },
+    {
+      "id": "PALETTISATION_012",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_013",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 97
+    },
+    {
+      "id": "EPLUCHAGE_014",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "RECEPTION_015",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_016",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_017",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "RECEPTION_018",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_019",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_020",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 145
+    },
+    {
+      "id": "CUISSON_021",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PALETTISATION_022",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EPLUCHAGE_023",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DECOUPE_024",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 157
+    },
+    {
+      "id": "CUISSON_025",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_026",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EPLUCHAGE_027",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_028",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_029",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ETIQUETAGE_030",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 181
+    },
+    {
+      "id": "DECOUPE_031",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_032",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 46
+    },
+    {
+      "id": "CUISSON_033",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 173
+    },
+    {
+      "id": "EPLUCHAGE_034",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_035",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "DECOUPE_036",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 142
+    },
+    {
+      "id": "RECEPTION_037",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_038",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ETIQUETAGE_039",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_040",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 174
+    },
+    {
+      "id": "RECEPTION_041",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "PALETTISATION_042",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 183
+    },
+    {
+      "id": "DECOUPE_043",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ETIQUETAGE_044",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CUISSON_045",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 24
+    },
+    {
+      "id": "CONTROLE_046",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONDITIONNEMENT_047",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "LAVAGE_048",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "ETIQUETAGE_049",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": 114
+    },
+    {
+      "id": "RECEPTION_050",
+      "nom": null,
+      "priorite": 4,
+      "statut": null,
+      "quantite": 112
+    },
+    {
+      "id": "CONDITIONNEMENT_051",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "EPLUCHAGE_052",
+      "nom": null,
+      "priorite": 1,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "REFROIDISSEMENT_053",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 84
+    },
+    {
+      "id": "DECOUPE_054",
+      "nom": null,
+      "priorite": 2,
+      "statut": null,
+      "quantite": 82
+    },
+    {
+      "id": "LAVAGE_055",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": 170
+    },
+    {
+      "id": "CUISSON_056",
+      "nom": null,
+      "priorite": null,
+      "statut": null,
+      "quantite": null
+    },
+    {
+      "id": "CONTROLE_057",
+      "nom": null,
+      "priorite": 5,
+      "statut": null,
+      "quantite": 67
+    },
+    {
+      "id": "PALETTISATION_058",
+      "nom": null,
+      "priorite": 3,
+      "statut": null,
+      "quantite": 59
+    }
+  ],
+  "ressources": [
+    {
+      "id": "QUAI_RECEPTION_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_reception"
+      ]
+    },
+    {
+      "id": "QUAI_RECEPTION_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_reception"
+      ]
+    },
+    {
+      "id": "QUAI_RECEPTION_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_reception"
+      ]
+    },
+    {
+      "id": "QUAI_RECEPTION_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "quai_reception"
+      ]
+    },
+    {
+      "id": "TUNNEL_LAVAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_lavage"
+      ]
+    },
+    {
+      "id": "TUNNEL_LAVAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_lavage"
+      ]
+    },
+    {
+      "id": "TUNNEL_LAVAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_lavage"
+      ]
+    },
+    {
+      "id": "LIGNE_EPLUCHAGE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_epluchage"
+      ]
+    },
+    {
+      "id": "LIGNE_EPLUCHAGE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_epluchage"
+      ]
+    },
+    {
+      "id": "LIGNE_EPLUCHAGE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_epluchage"
+      ]
+    },
+    {
+      "id": "LIGNE_EPLUCHAGE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_epluchage"
+      ]
+    },
+    {
+      "id": "ROBOT_DECOUPE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_decoupe"
+      ]
+    },
+    {
+      "id": "ROBOT_DECOUPE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_decoupe"
+      ]
+    },
+    {
+      "id": "ROBOT_DECOUPE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_decoupe"
+      ]
+    },
+    {
+      "id": "ROBOT_DECOUPE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_decoupe"
+      ]
+    },
+    {
+      "id": "AUTOCLAVE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "id": "AUTOCLAVE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "id": "AUTOCLAVE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "id": "AUTOCLAVE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "autoclave"
+      ]
+    },
+    {
+      "id": "TUNNEL_REFROIDISSEMENT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_refroidissement"
+      ]
+    },
+    {
+      "id": "TUNNEL_REFROIDISSEMENT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_refroidissement"
+      ]
+    },
+    {
+      "id": "TUNNEL_REFROIDISSEMENT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_refroidissement"
+      ]
+    },
+    {
+      "id": "TUNNEL_REFROIDISSEMENT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "tunnel_refroidissement"
+      ]
+    },
+    {
+      "id": "LIGNE_CONDITIONNEMENT_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "id": "LIGNE_CONDITIONNEMENT_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "id": "LIGNE_CONDITIONNEMENT_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "id": "LIGNE_CONDITIONNEMENT_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "ligne_conditionnement"
+      ]
+    },
+    {
+      "id": "ETIQUETEUSE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "etiqueteuse"
+      ]
+    },
+    {
+      "id": "ETIQUETEUSE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "etiqueteuse"
+      ]
+    },
+    {
+      "id": "ETIQUETEUSE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "etiqueteuse"
+      ]
+    },
+    {
+      "id": "ETIQUETEUSE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "etiqueteuse"
+      ]
+    },
+    {
+      "id": "ROBOT_PALETTISEUR_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_palettiseur"
+      ]
+    },
+    {
+      "id": "ROBOT_PALETTISEUR_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_palettiseur"
+      ]
+    },
+    {
+      "id": "ROBOT_PALETTISEUR_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_palettiseur"
+      ]
+    },
+    {
+      "id": "ROBOT_PALETTISEUR_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "robot_palettiseur"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_1",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_2",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_3",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    },
+    {
+      "id": "POSTE_CONTROLE_QUALITE_4",
+      "nom": null,
+      "type": null,
+      "competences": [
+        "poste_controle_qualite"
+      ]
+    }
+  ],
+  "contraintes": [
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_001",
+      "competence": "quai_reception"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "RECEPTION_001",
+      "lot_min": 108,
+      "lot_max": 160
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_001",
+      "ressource": "QUAI_RECEPTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_001",
+      "ressource": "QUAI_RECEPTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_001",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_001",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_002",
+      "competence": "autoclave"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_002",
+      "ressource": "AUTOCLAVE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_002",
+      "ressource": "AUTOCLAVE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_002",
+      "ressource": "AUTOCLAVE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_002",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_001",
+      "apres": "CUISSON_002"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECOUPE_003",
+      "competence": "robot_decoupe"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECOUPE_003",
+      "lot_min": 75,
+      "lot_max": 111
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_003",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_003",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_003",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_003",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_004",
+      "competence": "tunnel_lavage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_004",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_004",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_004",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DECOUPE_003",
+      "apres": "LAVAGE_004"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_005",
+      "competence": "ligne_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_005",
+      "ressource": "LIGNE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_005",
+      "ressource": "LIGNE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_005",
+      "ressource": "LIGNE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_005",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LAVAGE_004",
+      "apres": "CONDITIONNEMENT_005"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PALETTISATION_006",
+      "competence": "robot_palettiseur"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_006",
+      "ressource": "ROBOT_PALETTISEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_006",
+      "ressource": "ROBOT_PALETTISEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_006",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_006",
+      "ressource": "ROBOT_PALETTISEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONDITIONNEMENT_005",
+      "apres": "PALETTISATION_006"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_007",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_007",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PALETTISATION_006",
+      "apres": "CONTROLE_007"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECOUPE_008",
+      "competence": "robot_decoupe"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_008",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_008",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_008",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_008",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ETIQUETAGE_009",
+      "competence": "etiqueteuse"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_009",
+      "ressource": "ETIQUETEUSE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_009",
+      "ressource": "ETIQUETEUSE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_009",
+      "ressource": "ETIQUETEUSE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_009",
+      "ressource": "ETIQUETEUSE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DECOUPE_008",
+      "apres": "ETIQUETAGE_009"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_010",
+      "competence": "ligne_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_010",
+      "ressource": "LIGNE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_010",
+      "ressource": "LIGNE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_010",
+      "ressource": "LIGNE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_010",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_011",
+      "competence": "tunnel_refroidissement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REFROIDISSEMENT_011",
+      "lot_min": 4,
+      "lot_max": 6
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_011",
+      "ressource": "TUNNEL_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_011",
+      "ressource": "TUNNEL_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_011",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_011",
+      "ressource": "TUNNEL_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PALETTISATION_012",
+      "competence": "robot_palettiseur"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_012",
+      "ressource": "ROBOT_PALETTISEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_012",
+      "ressource": "ROBOT_PALETTISEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_012",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_012",
+      "ressource": "ROBOT_PALETTISEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT_011",
+      "apres": "PALETTISATION_012"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_013",
+      "competence": "tunnel_lavage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "LAVAGE_013",
+      "lot_min": 78,
+      "lot_max": 116
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_013",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_013",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_013",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PALETTISATION_012",
+      "apres": "LAVAGE_013"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EPLUCHAGE_014",
+      "competence": "ligne_epluchage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_014",
+      "ressource": "LIGNE_EPLUCHAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_014",
+      "ressource": "LIGNE_EPLUCHAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_014",
+      "ressource": "LIGNE_EPLUCHAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_014",
+      "ressource": "LIGNE_EPLUCHAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LAVAGE_013",
+      "apres": "EPLUCHAGE_014"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_015",
+      "competence": "quai_reception"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_015",
+      "ressource": "QUAI_RECEPTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_015",
+      "ressource": "QUAI_RECEPTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_015",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_015",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_016",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_016",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_016",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_016",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_016",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_015",
+      "apres": "CONTROLE_016"
+    },
+    {
+      "type": "echeance",
+      "tache": "CONTROLE_016",
+      "echeance": 33
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_017",
+      "competence": "tunnel_lavage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_017",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_017",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_017",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_018",
+      "competence": "quai_reception"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_RECEPTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_RECEPTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_018",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_019",
+      "competence": "tunnel_refroidissement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_019",
+      "ressource": "TUNNEL_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_019",
+      "ressource": "TUNNEL_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_019",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_019",
+      "ressource": "TUNNEL_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_018",
+      "apres": "REFROIDISSEMENT_019"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_020",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_020",
+      "lot_min": 116,
+      "lot_max": 174
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_020",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_020",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_020",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_020",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_021",
+      "competence": "autoclave"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_021",
+      "ressource": "AUTOCLAVE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_021",
+      "ressource": "AUTOCLAVE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_021",
+      "ressource": "AUTOCLAVE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_021",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PALETTISATION_022",
+      "competence": "robot_palettiseur"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_022",
+      "ressource": "ROBOT_PALETTISEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_022",
+      "ressource": "ROBOT_PALETTISEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_022",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_022",
+      "ressource": "ROBOT_PALETTISEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_021",
+      "apres": "PALETTISATION_022"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EPLUCHAGE_023",
+      "competence": "ligne_epluchage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_023",
+      "ressource": "LIGNE_EPLUCHAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_023",
+      "ressource": "LIGNE_EPLUCHAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_023",
+      "ressource": "LIGNE_EPLUCHAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_023",
+      "ressource": "LIGNE_EPLUCHAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "PALETTISATION_022",
+      "apres": "EPLUCHAGE_023"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECOUPE_024",
+      "competence": "robot_decoupe"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECOUPE_024",
+      "lot_min": 126,
+      "lot_max": 188
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_024",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_024",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_024",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_024",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "DECOUPE_024",
+      "echeance": 39
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_025",
+      "competence": "autoclave"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_025",
+      "ressource": "AUTOCLAVE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_025",
+      "ressource": "AUTOCLAVE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_025",
+      "ressource": "AUTOCLAVE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_025",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_026",
+      "competence": "ligne_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_026",
+      "ressource": "LIGNE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_026",
+      "ressource": "LIGNE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_026",
+      "ressource": "LIGNE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_026",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EPLUCHAGE_027",
+      "competence": "ligne_epluchage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_027",
+      "ressource": "LIGNE_EPLUCHAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_027",
+      "ressource": "LIGNE_EPLUCHAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_027",
+      "ressource": "LIGNE_EPLUCHAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_027",
+      "ressource": "LIGNE_EPLUCHAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONDITIONNEMENT_026",
+      "apres": "EPLUCHAGE_027"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_028",
+      "competence": "tunnel_refroidissement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_028",
+      "ressource": "TUNNEL_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_028",
+      "ressource": "TUNNEL_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_028",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_028",
+      "ressource": "TUNNEL_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_029",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_029",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ETIQUETAGE_030",
+      "competence": "etiqueteuse"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ETIQUETAGE_030",
+      "lot_min": 145,
+      "lot_max": 217
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_030",
+      "ressource": "ETIQUETEUSE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_030",
+      "ressource": "ETIQUETEUSE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_030",
+      "ressource": "ETIQUETEUSE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_030",
+      "ressource": "ETIQUETEUSE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_029",
+      "apres": "ETIQUETAGE_030"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECOUPE_031",
+      "competence": "robot_decoupe"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_031",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_031",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_031",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_031",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_032",
+      "competence": "tunnel_lavage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "LAVAGE_032",
+      "lot_min": 37,
+      "lot_max": 55
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_032",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_032",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_032",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LAVAGE_032",
+      "echeance": 42
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_033",
+      "competence": "autoclave"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CUISSON_033",
+      "lot_min": 139,
+      "lot_max": 207
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_033",
+      "ressource": "AUTOCLAVE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_033",
+      "ressource": "AUTOCLAVE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_033",
+      "ressource": "AUTOCLAVE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_033",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EPLUCHAGE_034",
+      "competence": "ligne_epluchage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_034",
+      "ressource": "LIGNE_EPLUCHAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_034",
+      "ressource": "LIGNE_EPLUCHAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_034",
+      "ressource": "LIGNE_EPLUCHAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_034",
+      "ressource": "LIGNE_EPLUCHAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CUISSON_033",
+      "apres": "EPLUCHAGE_034"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_035",
+      "competence": "tunnel_lavage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_035",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_035",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_035",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EPLUCHAGE_034",
+      "apres": "LAVAGE_035"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECOUPE_036",
+      "competence": "robot_decoupe"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECOUPE_036",
+      "lot_min": 114,
+      "lot_max": 170
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_036",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_036",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_036",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_036",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "LAVAGE_035",
+      "apres": "DECOUPE_036"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_037",
+      "competence": "quai_reception"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_037",
+      "ressource": "QUAI_RECEPTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_037",
+      "ressource": "QUAI_RECEPTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_037",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_037",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DECOUPE_036",
+      "apres": "RECEPTION_037"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_038",
+      "competence": "ligne_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_038",
+      "ressource": "LIGNE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_038",
+      "ressource": "LIGNE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_038",
+      "ressource": "LIGNE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_038",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_037",
+      "apres": "CONDITIONNEMENT_038"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ETIQUETAGE_039",
+      "competence": "etiqueteuse"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_039",
+      "ressource": "ETIQUETEUSE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_039",
+      "ressource": "ETIQUETEUSE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_039",
+      "ressource": "ETIQUETEUSE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_039",
+      "ressource": "ETIQUETEUSE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONDITIONNEMENT_038",
+      "apres": "ETIQUETAGE_039"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_040",
+      "competence": "tunnel_refroidissement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REFROIDISSEMENT_040",
+      "lot_min": 140,
+      "lot_max": 208
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_040",
+      "ressource": "TUNNEL_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_040",
+      "ressource": "TUNNEL_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_040",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_040",
+      "ressource": "TUNNEL_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ETIQUETAGE_039",
+      "apres": "REFROIDISSEMENT_040"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_041",
+      "competence": "quai_reception"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_041",
+      "ressource": "QUAI_RECEPTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_041",
+      "ressource": "QUAI_RECEPTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_041",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_041",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PALETTISATION_042",
+      "competence": "robot_palettiseur"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PALETTISATION_042",
+      "lot_min": 147,
+      "lot_max": 219
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_042",
+      "ressource": "ROBOT_PALETTISEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_042",
+      "ressource": "ROBOT_PALETTISEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_042",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_042",
+      "ressource": "ROBOT_PALETTISEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_041",
+      "apres": "PALETTISATION_042"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECOUPE_043",
+      "competence": "robot_decoupe"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_043",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_043",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_043",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_043",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ETIQUETAGE_044",
+      "competence": "etiqueteuse"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_044",
+      "ressource": "ETIQUETEUSE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_044",
+      "ressource": "ETIQUETEUSE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_044",
+      "ressource": "ETIQUETEUSE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_044",
+      "ressource": "ETIQUETEUSE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_045",
+      "competence": "autoclave"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CUISSON_045",
+      "lot_min": 20,
+      "lot_max": 28
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_045",
+      "ressource": "AUTOCLAVE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_045",
+      "ressource": "AUTOCLAVE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_045",
+      "ressource": "AUTOCLAVE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_045",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "ETIQUETAGE_044",
+      "apres": "CUISSON_045"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_046",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_046",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_047",
+      "competence": "ligne_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_047",
+      "ressource": "LIGNE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_047",
+      "ressource": "LIGNE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_047",
+      "ressource": "LIGNE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_047",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_046",
+      "apres": "CONDITIONNEMENT_047"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_048",
+      "competence": "tunnel_lavage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_048",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_048",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_048",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "echeance",
+      "tache": "LAVAGE_048",
+      "echeance": 37
+    },
+    {
+      "type": "competence_requise",
+      "tache": "ETIQUETAGE_049",
+      "competence": "etiqueteuse"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "ETIQUETAGE_049",
+      "lot_min": 92,
+      "lot_max": 136
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_049",
+      "ressource": "ETIQUETEUSE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_049",
+      "ressource": "ETIQUETEUSE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_049",
+      "ressource": "ETIQUETEUSE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "ETIQUETAGE_049",
+      "ressource": "ETIQUETEUSE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "RECEPTION_050",
+      "competence": "quai_reception"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "RECEPTION_050",
+      "lot_min": 90,
+      "lot_max": 134
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_050",
+      "ressource": "QUAI_RECEPTION_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_050",
+      "ressource": "QUAI_RECEPTION_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_050",
+      "ressource": "QUAI_RECEPTION_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "RECEPTION_050",
+      "ressource": "QUAI_RECEPTION_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONDITIONNEMENT_051",
+      "competence": "ligne_conditionnement"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_051",
+      "ressource": "LIGNE_CONDITIONNEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_051",
+      "ressource": "LIGNE_CONDITIONNEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_051",
+      "ressource": "LIGNE_CONDITIONNEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONDITIONNEMENT_051",
+      "ressource": "LIGNE_CONDITIONNEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "RECEPTION_050",
+      "apres": "CONDITIONNEMENT_051"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "EPLUCHAGE_052",
+      "competence": "ligne_epluchage"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_052",
+      "ressource": "LIGNE_EPLUCHAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_052",
+      "ressource": "LIGNE_EPLUCHAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_052",
+      "ressource": "LIGNE_EPLUCHAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "EPLUCHAGE_052",
+      "ressource": "LIGNE_EPLUCHAGE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "REFROIDISSEMENT_053",
+      "competence": "tunnel_refroidissement"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "REFROIDISSEMENT_053",
+      "lot_min": 68,
+      "lot_max": 100
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_053",
+      "ressource": "TUNNEL_REFROIDISSEMENT_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_053",
+      "ressource": "TUNNEL_REFROIDISSEMENT_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_053",
+      "ressource": "TUNNEL_REFROIDISSEMENT_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "REFROIDISSEMENT_053",
+      "ressource": "TUNNEL_REFROIDISSEMENT_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "EPLUCHAGE_052",
+      "apres": "REFROIDISSEMENT_053"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "DECOUPE_054",
+      "competence": "robot_decoupe"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "DECOUPE_054",
+      "lot_min": 66,
+      "lot_max": 98
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_054",
+      "ressource": "ROBOT_DECOUPE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_054",
+      "ressource": "ROBOT_DECOUPE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_054",
+      "ressource": "ROBOT_DECOUPE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "DECOUPE_054",
+      "ressource": "ROBOT_DECOUPE_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "REFROIDISSEMENT_053",
+      "apres": "DECOUPE_054"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "LAVAGE_055",
+      "competence": "tunnel_lavage"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "LAVAGE_055",
+      "lot_min": 136,
+      "lot_max": 204
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_055",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_055",
+      "ressource": "TUNNEL_LAVAGE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "LAVAGE_055",
+      "ressource": "TUNNEL_LAVAGE_3",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "DECOUPE_054",
+      "apres": "LAVAGE_055"
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CUISSON_056",
+      "competence": "autoclave"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_056",
+      "ressource": "AUTOCLAVE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_056",
+      "ressource": "AUTOCLAVE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_056",
+      "ressource": "AUTOCLAVE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CUISSON_056",
+      "ressource": "AUTOCLAVE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "CONTROLE_057",
+      "competence": "poste_controle_qualite"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "CONTROLE_057",
+      "lot_min": 54,
+      "lot_max": 80
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_057",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_057",
+      "ressource": "POSTE_CONTROLE_QUALITE_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_057",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "CONTROLE_057",
+      "ressource": "POSTE_CONTROLE_QUALITE_4",
+      "duree": 1
+    },
+    {
+      "type": "competence_requise",
+      "tache": "PALETTISATION_058",
+      "competence": "robot_palettiseur"
+    },
+    {
+      "type": "taille_lot",
+      "tache": "PALETTISATION_058",
+      "lot_min": 48,
+      "lot_max": 70
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_058",
+      "ressource": "ROBOT_PALETTISEUR_1",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_058",
+      "ressource": "ROBOT_PALETTISEUR_2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_058",
+      "ressource": "ROBOT_PALETTISEUR_3",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "PALETTISATION_058",
+      "ressource": "ROBOT_PALETTISEUR_4",
+      "duree": 1
+    },
+    {
+      "type": "precedence",
+      "avant": "CONTROLE_057",
+      "apres": "PALETTISATION_058"
+    },
+    {
+      "type": "echeance",
+      "tache": "PALETTISATION_058",
+      "echeance": 41
+    },
+    {
+      "type": "capacite",
+      "ressource": "QUAI_RECEPTION_1",
+      "capacite": 3
+    },
+    {
+      "type": "capacite",
+      "ressource": "LIGNE_EPLUCHAGE_1",
+      "capacite": 2
+    },
+    {
+      "type": "capacite",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "capacite": 2
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "QUAI_RECEPTION_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "TUNNEL_LAVAGE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "LIGNE_EPLUCHAGE_2",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "ROBOT_DECOUPE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        0
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "ROBOT_DECOUPE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "AUTOCLAVE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "TUNNEL_REFROIDISSEMENT_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "ETIQUETEUSE_4",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        5
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "ROBOT_PALETTISEUR_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        6
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_CONTROLE_QUALITE_1",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        1
+      ]
+    },
+    {
+      "type": "disponibilite_ressource",
+      "ressource": "POSTE_CONTROLE_QUALITE_3",
+      "jours_indisponibles": [],
+      "jours_semaine_indisponibles": [
+        3
+      ]
+    }
+  ],
+  "objectifs": [
+    {
+      "type": "minimiser_makespan",
+      "poids": 1.0,
+      "makespan_cible": null,
+      "penalite_depassement": 1.0
+    },
+    {
+      "type": "minimiser_retards",
+      "poids": 1.0,
+      "fonction_penalite": "lineaire",
+      "priorite_par_tache": {},
+      "seuil_grace": 1
+    },
+    {
+      "type": "equilibrer_charge",
+      "poids": 1.0,
+      "methode": "ecart_max",
+      "ressources_cibles": null
+    }
+  ]
+}

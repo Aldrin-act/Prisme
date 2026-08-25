@@ -20,7 +20,7 @@ instance silencieusement tronquée.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import httpx
 import psycopg
@@ -41,9 +41,25 @@ from api.routes.auth import obtenir_utilisateur_courant
 from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.client_llm import construire_modele_comprehension
 
+if TYPE_CHECKING:
+    from estimation import EstimateurDuree
+
 CLIENT_ID_GREENSIG = "greensig"
 
 router = APIRouter(prefix="/adapters", tags=["adapters"])
+
+
+def _estimateur_duree_optionnel() -> EstimateurDuree | None:
+    """`estimation` (scikit-learn) est un extra optionnel (`uv sync --extra
+    estimation`) — import paresseux, même motif que `docker` dans
+    `sandbox/runner.py`. Absent, l'ingestion se comporte comme avant : une
+    durée manquante reste une erreur explicite (`CompetenceSansDureeEstimee`),
+    jamais devinée silencieusement."""
+    try:
+        from estimation import estimateur_par_defaut
+    except ImportError:
+        return None
+    return estimateur_par_defaut()
 
 
 @router.post("/greensig/ingerer")
@@ -98,7 +114,13 @@ async def ingerer_depuis_csv(
     )
     commandes_octets = await commandes.read() if commandes is not None else None
     try:
-        resultat = traduire_csv(taches_octets, ressources_octets, contraintes_octets, commandes_octets)
+        resultat = traduire_csv(
+            taches_octets,
+            ressources_octets,
+            contraintes_octets,
+            commandes_octets,
+            estimateur_duree=_estimateur_duree_optionnel(),
+        )
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:
@@ -131,7 +153,7 @@ def ingerer_depuis_json_avec_competences(
     ingéré tel quel, sans transformation."""
     verifier_acces_client(utilisateur, client_id)
     try:
-        resultat = traduire_json(payload)
+        resultat = traduire_json(payload, estimateur_duree=_estimateur_duree_optionnel())
     except ErreurPayloadJsonInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:
@@ -263,7 +285,9 @@ def ingerer_depuis_csv_local(
 
     # Traduire en instance TRCO
     try:
-        resultat = traduire_csv(taches_octets, ressources_octets, contraintes_octets)
+        resultat = traduire_csv(
+            taches_octets, ressources_octets, contraintes_octets, estimateur_duree=_estimateur_duree_optionnel()
+        )
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     except ValidationError as erreur:

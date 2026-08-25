@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 import re
+from typing import TYPE_CHECKING
 
 from fastapi import APIRouter, Depends, HTTPException
 from langchain_core.language_models.chat_models import BaseChatModel
@@ -43,7 +44,23 @@ from api.routes.auth import obtenir_utilisateur_courant
 from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.client_llm import construire_modele_comprehension
 
+if TYPE_CHECKING:
+    from estimation import EstimateurDuree
+
 router = APIRouter(prefix="/sources", tags=["sources"])
+
+
+def _estimateur_duree_optionnel() -> EstimateurDuree | None:
+    """`estimation` (scikit-learn) est un extra optionnel (`uv sync --extra
+    estimation`) — import paresseux, même motif que `docker` dans
+    `sandbox/runner.py`. Absent, l'ingestion se comporte comme avant : une
+    durée manquante reste une erreur explicite (`CompetenceSansDureeEstimee`),
+    jamais devinée silencieusement."""
+    try:
+        from estimation import estimateur_par_defaut
+    except ImportError:
+        return None
+    return estimateur_par_defaut()
 
 
 class ErreurStructureNonReconnue(Exception):
@@ -136,15 +153,16 @@ def _traduire_deterministe(donnees_brutes: str) -> ResultatTraduction:
     `ErreurFichierCsvInvalide`/`ErreurPayloadJsonInvalide`/`ValidationError`
     quand la structure est identifiée mais son contenu invalide."""
     texte = donnees_brutes.strip()
+    estimateur_duree = _estimateur_duree_optionnel()
     try:
         payload = json.loads(texte)
     except (json.JSONDecodeError, ValueError):
         payload = None
     if isinstance(payload, dict):
-        return traduire_json(payload)
+        return traduire_json(payload, estimateur_duree=estimateur_duree)
 
     taches_csv, ressources_csv, contraintes_csv = _reconstruire_fichiers_csv(texte)
-    return traduire_csv(taches_csv, ressources_csv, contraintes_csv)
+    return traduire_csv(taches_csv, ressources_csv, contraintes_csv, estimateur_duree=estimateur_duree)
 
 
 class RequeteCreationSource(BaseModel):
