@@ -134,6 +134,71 @@ def invoquer_agent_structure(
     ) from derniere_erreur
 
 
+def invoquer_agent_avec_outils(
+    modele: BaseChatModel,
+    schema: type[BaseModel],
+    outils: list,
+    messages: list[BaseMessage],
+    *,
+    max_appels_outils: int = 3,
+    tentatives_max: int = _TENTATIVES_MAX_SORTIE_STRUCTUREE,
+) -> tuple[BaseModel, str, list[str]]:
+    """Variante d'`invoquer_agent_structure` qui laisse le modèle appeler des
+    outils Python (`langchain_core.tools`, décorés `@tool`) avant de produire
+    sa réponse structurée finale — premier mécanisme de ce type dans le
+    projet, jusqu'ici tous les agents étaient de purs appels sans outil (voir
+    `generation/agents/analyste.py`/`benchmarker.py` pour les deux premiers
+    outils réels).
+
+    Deux phases distinctes, jamais combinées en un seul appel : la boucle
+    d'outils tourne sur `modele.bind_tools(outils)` en sortie libre (le
+    tool-calling natif et la sortie structurée stricte ne sont pas garantis
+    compatibles selon le fournisseur) ; une fois la boucle terminée (plus
+    d'appel d'outil demandé, ou `max_appels_outils` atteint), un dernier
+    appel classique via `invoquer_agent_structure` extrait la réponse finale
+    conforme au schéma, à partir de la conversation enrichie des résultats
+    d'outils déjà obtenus.
+
+    `outils` vide : équivalent strict à `invoquer_agent_structure` (aucune
+    étape supplémentaire), pour que les agents existants n'aient rien à
+    changer tant qu'aucun outil ne leur est fourni.
+
+    Renvoie `(donnees_validees, reponse_brute_finale, appels_effectues)` —
+    `appels_effectues` (ex. `["rechercher_instances_similaires({})"]`) sert
+    de trace, jamais relue par le pipeline, utile pour le diagnostic humain."""
+    if not outils:
+        donnees, reponse_brute = invoquer_agent_structure(modele, schema, messages, tentatives_max=tentatives_max)
+        return donnees, reponse_brute, []
+
+    from langchain_core.messages import HumanMessage, ToolMessage
+
+    outils_par_nom = {outil.name: outil for outil in outils}
+    modele_avec_outils = modele.bind_tools(outils)
+    conversation = list(messages)
+    appels_effectues: list[str] = []
+
+    for _ in range(max_appels_outils):
+        reponse = _avec_retry(modele_avec_outils.invoke)(conversation)
+        conversation.append(reponse)
+        if not reponse.tool_calls:
+            break
+        for appel in reponse.tool_calls:
+            outil = outils_par_nom.get(appel["name"])
+            resultat = outil.invoke(appel["args"]) if outil is not None else f"outil inconnu : {appel['name']!r}"
+            appels_effectues.append(f"{appel['name']}({appel['args']})")
+            conversation.append(ToolMessage(content=str(resultat), tool_call_id=appel["id"]))
+    else:
+        conversation.append(
+            HumanMessage(
+                content="Nombre maximal d'appels d'outils atteint — réponds maintenant "
+                "directement avec le JSON demandé, sans outil supplémentaire."
+            )
+        )
+
+    donnees, reponse_brute = invoquer_agent_structure(modele, schema, conversation, tentatives_max=tentatives_max)
+    return donnees, reponse_brute, appels_effectues
+
+
 _MODELES_PAR_DEFAUT = {
     "mistral": "mistral-large-latest",
     "qwen": "Qwen/Qwen2.5-72B-Instruct",

@@ -231,7 +231,7 @@ def _executer_job(
     produit."""
     resultat_pipeline: ResultatPipelineAvecBoucle | None = None
     try:
-        for item in tenter_generation_avec_boucle_stream(instance_dict):
+        for item in tenter_generation_avec_boucle_stream(instance_dict, client_id=client_id):
             if isinstance(item, ResultatPipelineAvecBoucle):
                 resultat_pipeline = item
                 job.resultat = _construire_reponse(item, registre, client_id, structure, signature_obj)
@@ -310,7 +310,7 @@ def generer_solveur(
     job_id = str(uuid.uuid4())
     etat.enregistrer_job_generation(job_id, instance_id, client_id)
 
-    resultat = tenter_generation_avec_boucle(instance_exemple=instance_dict)
+    resultat = tenter_generation_avec_boucle(instance_exemple=instance_dict, client_id=client_id)
     reponse = _construire_reponse(resultat, registre, client_id, structure, signature_obj)
 
     for tentative in resultat.boucle_reparation.tentatives:

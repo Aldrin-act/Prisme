@@ -245,6 +245,9 @@ def _message_echec_tests_sandbox(rapport: RapportTestsSandbox) -> str:
 
 class EtatGeneration(TypedDict, total=False):
     instance_exemple: dict | None
+    # Pour l'outil `rechercher_instances_similaires` de l'Analyste (voir
+    # `generation/agents/analyste.py`) — jamais lu ailleurs dans le graphe.
+    client_id: str | None
 
     analyse: ResultatAnalyse
 
@@ -306,7 +309,7 @@ def _noeud_analyste(etat: EtatGeneration, config: RunnableConfig) -> dict:
     writer = get_stream_writer()
     writer(etape("analyste", "en_cours", "Analyse de la mission..."))
     instance = etat.get("instance_exemple") or benchmarker.creer_instance_exemple_defaut()
-    resultat = analyste.analyser_mission(_modele(config, "analyste"), instance)
+    resultat = analyste.analyser_mission(_modele(config, "analyste"), instance, client_id=etat.get("client_id"))
     writer(etape("analyste", "termine", "Spécification technique produite"))
     return {"analyse": resultat}
 
@@ -750,6 +753,8 @@ def _partiels_nouveaux(ancien: dict, nouveau: dict) -> Iterator[ResultatPartiel]
 
 def tenter_generation_avec_boucle_stream(
     instance_exemple: dict | None = None,
+    *,
+    client_id: str | None = None,
 ) -> Iterator[EvenementEtape | ResultatPartiel | ResultatPipelineAvecBoucle]:
     """Version streaming du pipeline complet — yield un `EvenementEtape`
     après chaque agent (et chaque sous-étape de la boucle de réparation) ;
@@ -777,9 +782,14 @@ def tenter_generation_avec_boucle_stream(
     `construire_modele_pour_agent(nom)` (§5.6, `config_fournisseurs.py`) —
     le fournisseur optimal par agent, jamais un client partagé imposé par
     l'appelant.
+
+    `client_id` : transmis tel quel à l'agent Analyste (voir
+    `generation/agents/analyste.py::analyser_mission`), pour son outil
+    `rechercher_instances_similaires` — ne pèse sur aucun autre nœud du
+    graphe.
     """
     graphe = _obtenir_graphe_compile()
-    etat_initial: EtatGeneration = {"instance_exemple": instance_exemple}
+    etat_initial: EtatGeneration = {"instance_exemple": instance_exemple, "client_id": client_id}
     resultat_final: ResultatPipelineAvecBoucle | None = None
     dernier_etat: dict = {}
 
@@ -803,13 +813,15 @@ def tenter_generation_avec_boucle_stream(
 
 def tenter_generation_avec_boucle(
     instance_exemple: dict | None = None,
+    *,
+    client_id: str | None = None,
 ) -> ResultatPipelineAvecBoucle:
     """Version bloquante — ne renvoie que le résultat final, sans les
-    évènements intermédiaires. `instance_exemple` : voir
+    évènements intermédiaires. `instance_exemple`/`client_id` : voir
     `tenter_generation_avec_boucle_stream`. Voir cette dernière pour le
     streaming SSE (`api/routes/generation.py`)."""
     resultat: ResultatPipelineAvecBoucle | None = None
-    for item in tenter_generation_avec_boucle_stream(instance_exemple):
+    for item in tenter_generation_avec_boucle_stream(instance_exemple, client_id=client_id):
         if isinstance(item, ResultatPipelineAvecBoucle):
             resultat = item
     assert resultat is not None  # tenter_generation_avec_boucle_stream yield toujours un résultat final

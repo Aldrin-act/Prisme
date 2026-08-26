@@ -127,12 +127,24 @@ class TestConstructeursModeleParite:
 
 
 def test_construire_modele_pour_agent_respecte_la_surcharge_de_modele(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("NVIDIA_API_KEY", "cle-test")
+    """Fournisseur unique pour tous les agents (`FOURNISSEURS_PAR_AGENT` vide,
+    voir `config_fournisseurs.py`) — inspecte l'argument passé au
+    constructeur plutôt qu'un attribut nommé différemment selon le SDK
+    (`ChatOpenAI.model_name` vs `ChatMistralAI.model`), pour ne pas dépendre
+    de quel fournisseur est le défaut du moment."""
+    from generation.agents.config_fournisseurs import obtenir_fournisseur_pour_agent
+
     monkeypatch.setenv("PRISME_LLM_MODEL_DOCUMENTATION", "un-modele-precis")
+    modeles_construits: list[str] = []
+    monkeypatch.setitem(
+        client_llm._CONSTRUCTEURS_MODELE,
+        obtenir_fournisseur_pour_agent("documentation"),
+        lambda modele, timeout: modeles_construits.append(modele),
+    )
 
-    modele = client_llm.construire_modele_pour_agent("documentation")
+    client_llm.construire_modele_pour_agent("documentation")
 
-    assert modele.model_name == "un-modele-precis"
+    assert modeles_construits == ["un-modele-precis"]
 
 
 class _ErreurAvecStatut(Exception):
@@ -143,11 +155,11 @@ class _ErreurAvecStatut(Exception):
 
 class TestErreurTransitoire:
     """429 (quota/débit dépassé) doit être retenté comme un 5xx — vu en
-    pratique : la répartition par défaut envoie la majorité des agents
-    (`config_fournisseurs.FOURNISSEURS_PAR_AGENT`) vers un seul fournisseur
-    (Nemotron-3, via NVIDIA), ce qui peut suffire à dépasser son débit
-    pendant la boucle de réparation. Les autres 4xx (clé invalide...)
-    restent définitifs."""
+    pratique : un seul fournisseur pour tous les agents
+    (`config_fournisseurs.FOURNISSEURS_PAR_AGENT` vide, tous sur Mistral par
+    défaut) peut suffire à dépasser son débit pendant la boucle de
+    réparation, plusieurs agents y appelant coup sur coup. Les autres 4xx
+    (clé invalide...) restent définitifs."""
 
     @pytest.mark.parametrize("code_statut", [500, 502, 503, 504, 429])
     def test_erreurs_retentables(self, code_statut: int) -> None:
@@ -283,3 +295,117 @@ class TestInvoquerAgentStructure:
             )
 
         assert appels["n"] == 2
+
+
+class _ModeleLieFactice:
+    """Modèle « lié » renvoyé par `_ModeleAvecOutilsFactice.bind_tools` — rejoue
+    une séquence de réponses (`AIMessage`, avec ou sans `tool_calls`)."""
+
+    def __init__(self, sequence: list[AIMessage]) -> None:
+        self._sequence = iter(sequence)
+
+    def invoke(self, conversation: object) -> AIMessage:
+        return next(self._sequence)
+
+
+class _ModeleAvecOutilsFactice:
+    """`bind_tools` renvoie un modèle lié qui rejoue `sequence_liee` ;
+    `with_structured_output` (phase finale, appelée sur le modèle d'origine,
+    jamais le modèle lié — voir `invoquer_agent_avec_outils`) renvoie
+    directement `sortie_finale`."""
+
+    def __init__(self, sequence_liee: list[AIMessage], sortie_finale: dict) -> None:
+        self._sequence_liee = sequence_liee
+        self._sortie_finale = sortie_finale
+
+    def bind_tools(self, outils: list) -> _ModeleLieFactice:
+        return _ModeleLieFactice(self._sequence_liee)
+
+    def with_structured_output(
+        self, schema: type, include_raw: bool = True, method: str | None = None
+    ) -> _RunnableStructureFactice:
+        return _RunnableStructureFactice([self._sortie_finale])
+
+
+class TestInvoquerAgentAvecOutils:
+    """`invoquer_agent_avec_outils` (premier mécanisme de tool-calling du
+    projet, voir `generation/agents/analyste.py`/`benchmarker.py`) : boucle
+    d'outils en sortie libre, puis un dernier appel `invoquer_agent_structure`
+    classique sur le modèle d'origine pour la réponse conforme au schéma."""
+
+    def test_sans_outils_equivaut_a_invoquer_agent_structure(self) -> None:
+        parsed = _SchemaFactice(valeur="ok")
+        modele = _ModeleFactice([_sortie("ok", parsed)])
+
+        donnees, reponse_brute, appels = client_llm.invoquer_agent_avec_outils(
+            modele, _SchemaFactice, [], [HumanMessage(content="x")]
+        )
+
+        assert donnees is parsed
+        assert reponse_brute == "ok"
+        assert appels == []
+
+    def test_appelle_l_outil_puis_produit_la_reponse_structuree(self) -> None:
+        from langchain_core.tools import tool
+
+        @tool
+        def mon_outil(x: int) -> str:
+            """Un outil factice."""
+            return f"resultat:{x}"
+
+        appel_ia = AIMessage(content="", tool_calls=[{"name": "mon_outil", "args": {"x": 1}, "id": "call1"}])
+        reponse_finale_ia = AIMessage(content="")
+        parsed = _SchemaFactice(valeur="ok")
+        modele = _ModeleAvecOutilsFactice(
+            sequence_liee=[appel_ia, reponse_finale_ia], sortie_finale=_sortie("ok", parsed)
+        )
+
+        donnees, reponse_brute, appels = client_llm.invoquer_agent_avec_outils(
+            modele, _SchemaFactice, [mon_outil], [HumanMessage(content="x")]
+        )
+
+        assert donnees is parsed
+        assert appels == ["mon_outil({'x': 1})"]
+
+    def test_arrete_apres_max_appels_outils_et_repond_quand_meme(self) -> None:
+        from langchain_core.tools import tool
+
+        @tool
+        def mon_outil(x: int) -> str:
+            """Un outil factice."""
+            return f"resultat:{x}"
+
+        appel_ia = AIMessage(content="", tool_calls=[{"name": "mon_outil", "args": {"x": 1}, "id": "call1"}])
+        parsed = _SchemaFactice(valeur="ok")
+        modele = _ModeleAvecOutilsFactice(
+            sequence_liee=[appel_ia, appel_ia, appel_ia], sortie_finale=_sortie("ok", parsed)
+        )
+
+        donnees, reponse_brute, appels = client_llm.invoquer_agent_avec_outils(
+            modele, _SchemaFactice, [mon_outil], [HumanMessage(content="x")], max_appels_outils=3
+        )
+
+        assert donnees is parsed
+        assert appels == ["mon_outil({'x': 1})"] * 3
+
+    def test_outil_inconnu_ne_bloque_pas_la_boucle(self) -> None:
+        from langchain_core.tools import tool
+
+        @tool
+        def mon_outil(x: int) -> str:
+            """Un outil factice."""
+            return f"resultat:{x}"
+
+        appel_inconnu = AIMessage(content="", tool_calls=[{"name": "outil_fantome", "args": {}, "id": "call1"}])
+        reponse_finale_ia = AIMessage(content="")
+        parsed = _SchemaFactice(valeur="ok")
+        modele = _ModeleAvecOutilsFactice(
+            sequence_liee=[appel_inconnu, reponse_finale_ia], sortie_finale=_sortie("ok", parsed)
+        )
+
+        donnees, reponse_brute, appels = client_llm.invoquer_agent_avec_outils(
+            modele, _SchemaFactice, [mon_outil], [HumanMessage(content="x")]
+        )
+
+        assert donnees is parsed
+        assert appels == ["outil_fantome({})"]

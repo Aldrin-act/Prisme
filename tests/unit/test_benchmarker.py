@@ -15,6 +15,7 @@ from generation.agents.benchmarker import (
     analyser_caracteristiques_instance,
     creer_instance_exemple_defaut,
     parametres_cascade_pour_algorithme,
+    rechercher_heuristiques_sur_le_web,
 )
 from tests.unit.aides_test_agents import ModeleFactice
 
@@ -132,3 +133,96 @@ def test_benchmarker_algorithmes_leve_une_erreur_explicite_sur_reponse_non_confo
 
     with pytest.raises(ErreurReponseAgentInvalide, match="pas du JSON valide"):
         benchmarker.benchmarker_algorithmes(modele, creer_instance_exemple_defaut())
+
+
+def test_benchmarker_algorithmes_sans_appel_d_outil_a_une_trace_vide() -> None:
+    """Le faux modèle (`bind_tools` simulé, voir `aides_test_agents.py`) ne
+    demande jamais d'outil — `appels_outils` doit refléter cette absence,
+    pas planter ni inventer un appel."""
+    schema = benchmarker._SchemaBenchmark(
+        recommandation=benchmarker._SchemaRecommandation(
+            algorithme="cp_sat",
+            raison="Petite instance.",
+            parametres={},
+            temps_estime="secondes",
+            qualite_attendue="optimale",
+            alternatives=[],
+        ),
+        comparaison="",
+    )
+    modele = ModeleFactice(raw_content=json.dumps(schema.model_dump()), parsed=schema)
+
+    resultat = benchmarker.benchmarker_algorithmes(modele, creer_instance_exemple_defaut())
+
+    assert resultat.appels_outils == ()
+
+
+def test_benchmarker_algorithmes_sans_outils_fonctionne_toujours() -> None:
+    """`avec_outils=False` : comportement d'avant cette fonctionnalité,
+    aucun outil construit ni proposé au modèle."""
+    schema = benchmarker._SchemaBenchmark(
+        recommandation=benchmarker._SchemaRecommandation(
+            algorithme="cp_sat",
+            raison="Petite instance.",
+            parametres={},
+            temps_estime="secondes",
+            qualite_attendue="optimale",
+            alternatives=[],
+        ),
+        comparaison="",
+    )
+    modele = ModeleFactice(raw_content=json.dumps(schema.model_dump()), parsed=schema)
+
+    resultat = benchmarker.benchmarker_algorithmes(modele, creer_instance_exemple_defaut(), avec_outils=False)
+
+    assert resultat.appels_outils == ()
+    assert resultat.recommandation.algorithme == "cp_sat"
+
+
+class TestRechercheHeuristiquesWeb:
+    """`rechercher_heuristiques_sur_le_web` — recherche web réelle
+    (DuckDuckGo, `langchain_community.tools.DuckDuckGoSearchRun`), jamais un
+    catalogue figé dans le code (voir docstring du module). Le backend est
+    mocké ici : `tests/unit` ne doit jamais dépendre du réseau."""
+
+    def test_renvoie_le_resultat_de_la_recherche(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        import langchain_community.tools as lc_tools_module
+
+        class _RechercheFactice:
+            def run(self, requete: str) -> str:
+                assert requete == "genetic algorithm FJSP large instances"
+                return "résultats de recherche factices"
+
+        monkeypatch.setattr(lc_tools_module, "DuckDuckGoSearchRun", lambda: _RechercheFactice())
+
+        resultat = rechercher_heuristiques_sur_le_web("genetic algorithm FJSP large instances")
+
+        assert resultat == "résultats de recherche factices"
+
+    def test_degrade_en_message_explicite_si_la_recherche_echoue(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        import langchain_community.tools as lc_tools_module
+
+        class _RechercheQuiLeve:
+            def run(self, requete: str) -> str:
+                raise RuntimeError("panne réseau simulée")
+
+        monkeypatch.setattr(lc_tools_module, "DuckDuckGoSearchRun", lambda: _RechercheQuiLeve())
+
+        resultat = rechercher_heuristiques_sur_le_web("genetic algorithm FJSP")
+
+        assert "indisponible" in resultat
+        assert "panne réseau simulée" in resultat
+
+
+class TestOutilRechercheHeuristiques:
+    """`_construire_outil_recherche_heuristiques` — l'outil LangChain lui-même,
+    jamais construit au niveau module (voir sa docstring)."""
+
+    def test_l_outil_delegue_a_rechercher_heuristiques_sur_le_web(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        appels: list[str] = []
+        monkeypatch.setattr(benchmarker, "rechercher_heuristiques_sur_le_web", appels.append)
+
+        outil = benchmarker._construire_outil_recherche_heuristiques()
+        outil.invoke({"requete": "tabu search FJSP"})
+
+        assert appels == ["tabu search FJSP"]

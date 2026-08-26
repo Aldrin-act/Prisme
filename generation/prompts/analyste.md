@@ -30,6 +30,15 @@ Ne recopie pas les contraintes de sécurité (imports interdits, etc.) — ce
 n'est pas ton rôle, l'agent Développeur les respectera directement depuis la
 mission.
 
+## Outil disponible (facultatif)
+
+Si l'outil `rechercher_instances_similaires` t'est proposé, tu peux
+l'appeler pour savoir si un solveur a déjà été validé et enregistré pour
+cette même structure de contraintes et ces mêmes objectifs, chez ce client
+ou chez un autre — purement informatif, ça n'a aucune influence sur ta
+spécification (toujours la même quelle que soit la réponse de l'outil) : ce
+n'est pas à toi de décider de réutiliser ou non un solveur existant.
+
 ## Format de réponse exigé
 
 Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de

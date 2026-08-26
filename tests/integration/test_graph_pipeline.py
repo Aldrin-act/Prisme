@@ -100,6 +100,23 @@ def resoudre(instance):
 CODE_INVALIDE = "import os\n\n\ndef resoudre(instance):\n    return None\n"
 
 
+@pytest.fixture(autouse=True)
+def _registre_analyste_indisponible(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Ce fichier ne teste que le câblage du graphe et l'exécution CP-SAT
+    réelle (voir docstring de module) — jamais la persistance. Sans ce
+    fixture, l'outil `rechercher_instances_similaires` de l'Analyste (voir
+    `generation/agents/analyste.py`) toucherait pour de vrai le schéma
+    `public` de Postgres dès qu'il est joignable sur la machine de test ;
+    `registre_test` (`conftest.py`, schéma isolé + nettoyage) est réservé
+    aux tests qui testent le registre lui-même."""
+    import solver_store.registry as registry_module
+
+    def _leve(*args: object, **kwargs: object) -> None:
+        raise ConnectionError("registre non disponible dans ce fichier de test (intentionnel)")
+
+    monkeypatch.setattr(registry_module, "Registre", _leve)
+
+
 def _reponses_communes() -> dict[str, object]:
     """Une réponse par agent, suffisante pour amener le pipeline jusqu'à la
     Validation sans jamais échouer avant (Reviewer désactivé, voir

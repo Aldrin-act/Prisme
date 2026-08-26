@@ -29,6 +29,8 @@ llm = [
     "langchain-openai>=0.3",
     "langchain-mistralai>=0.2",
     "langgraph>=0.6",
+    "langchain-community>=0.3",  # DuckDuckGoSearchRun (outil web du Benchmarker, sans clé API)
+    "ddgs>=9.0",  # backend de DuckDuckGoSearchRun (successeur de duckduckgo-search)
 ]
 sandbox = [
     "docker>=7.0",

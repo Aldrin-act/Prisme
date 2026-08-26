@@ -1,68 +1,45 @@
 """Configuration centralisée des fournisseurs LLM par agent (§5.6).
 
-Chaque agent du pipeline multi-agents utilise le fournisseur le mieux adapté
-à sa tâche spécifique, optimisant ainsi le rapport qualité/coût/performance.
+**Un seul fournisseur pour tous les agents : Mistral.** `FOURNISSEURS_PAR_AGENT`
+reste volontairement vide — chaque agent retombe donc sur le repli générique
+d'`obtenir_fournisseur_pour_agent` (`PRISME_LLM_PROVIDER`, "mistral" si même
+cette variable est absente), sans distinction par agent.
 
-Répartition justifiée :
-- **nemotron** (8 agents) : 16K tokens pour raisonnement complexe → Développeur,
-  Debugger, Architecte, Analyste, Reviewer, Testeur, Agent ERP. Remplace
-  deepseek (`deepseek-ai/deepseek-v4-pro`) — `nvidia/nemotron-3-super-120b-a12b`
-  (voir `client_llm.py::_MODELES_PAR_DEFAUT` : la variante nano, choisie
-  d'abord pour sa latence, produit une sortie JSON structurée incohérente en
-  pratique, vérifié par appel réel — super est la plus petite variante
-  nemotron-3 qui reste fiable sur cette tâche).
-- **minimax** (2 agents) : Créativité maximale (temp=1.0) pour exploration
-  → Benchmarker, Optimiseur
-- **nvidia** (1 agent) : Déterministe (temp=0.6) pour tâches simples/structurées
-  → Documentation
-
-Le fournisseur peut toujours être surchargé par variable d'environnement
-`PRISME_LLM_PROVIDER_<AGENT>` (ex: `PRISME_LLM_PROVIDER_GENERATEUR=mistral`) —
-`deepseek` reste un fournisseur valide pour un retour en arrière ponctuel,
-juste plus la valeur par défaut d'aucun agent.
+Historique : ce module routait auparavant chaque agent vers un fournisseur
+différent selon sa tâche (nemotron pour le raisonnement long, minimax pour
+l'exploration créative, nvidia pour les tâches simples) — une complexité de
+configuration jugée non nécessaire au profit d'un fournisseur unique, plus
+simple à opérer et à auditer. Les fonctions de construction pour les autres
+fournisseurs (`nemotron`, `minimax`, `nvidia`, `deepseek`, `together`, `qwen`)
+restent intactes dans `client_llm.py` — un retour en arrière ponctuel reste
+possible via `PRISME_LLM_PROVIDER_<AGENT>` (ex:
+`PRISME_LLM_PROVIDER_GENERATEUR=nemotron`), sans qu'aucun code ne soit à
+modifier pour ça.
 """
 
 from __future__ import annotations
 
 import os
 
-# Répartition optimale des fournisseurs par agent
-FOURNISSEURS_PAR_AGENT: dict[str, str] = {
-    # Agents critiques (génération/débogage de code) — Nemotron-3
-    "generateur": "nemotron",  # 16K tokens
-    "developpeur": "nemotron",  # Alias de generateur
-    "debugger": "nemotron",  # Analyse d'erreurs
-    "architecte": "nemotron",  # Raisonnement structurel complexe
-    # Agents d'analyse — Nemotron-3
-    "analyste": "nemotron",  # Compréhension profonde
-    "reviewer": "nemotron",  # Revue critique approfondie
-    # Agents créatifs — MiniMax
-    "benchmarker": "minimax",  # Exploration d'algorithmes alternatifs
-    "optimiseur": "minimax",  # Optimisations non évidentes
-    # Agents utilitaires simples — NVIDIA
-    "documentation": "nvidia",  # Tâche simple, peu de tokens
-    # Agents équilibrés — Nemotron-3
-    "testeur": "nemotron",  # Équilibre créativité/structure (16K tokens)
-    # Agent ERP — Nemotron-3
-    "comprehension": "nemotron",  # 16K tokens pour grandes données ERP
-    "erp": "nemotron",  # Alias de comprehension
-    # Agent de supervision (MT7) — Mistral
-    "supervision": "mistral",  # Synthèse JSON courte, pas de génération de code
-}
+# Volontairement vide — un seul fournisseur pour tous les agents (voir
+# docstring module). Conservé comme point d'extension si un agent doit un
+# jour redevenir une exception au fournisseur unique.
+FOURNISSEURS_PAR_AGENT: dict[str, str] = {}
 
 
 def obtenir_fournisseur_pour_agent(nom_agent: str) -> str:
-    """Renvoie le fournisseur optimal pour un agent donné.
+    """Renvoie le fournisseur LLM pour un agent donné — "mistral" pour tous
+    par défaut (`FOURNISSEURS_PAR_AGENT` vide, voir docstring module), sauf
+    variable d'environnement `PRISME_LLM_PROVIDER_<AGENT>` explicite pour cet
+    agent précis.
 
     Args:
         nom_agent: Nom de l'agent (ex: "generateur", "debugger", etc.)
 
     Returns:
-        Nom du fournisseur LLM (ex: "deepseek", "minimax", etc.)
+        Nom du fournisseur LLM à utiliser pour cet agent.
 
     Le nom de l'agent est normalisé (minuscules, sans accents) avant lookup.
-    Une variable d'environnement `PRISME_LLM_PROVIDER_<AGENT>` surcharge
-    toujours la configuration par défaut.
     """
     # Normalisation : minuscules, retrait de caractères non-ASCII de base
     nom_normalise = nom_agent.lower().strip()

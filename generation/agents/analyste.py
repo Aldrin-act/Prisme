@@ -23,7 +23,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
 from generation.agents.base import ErreurReponseAgentInvalide, charger_mission  # noqa: F401 — réexporté (tests)
-from generation.agents.client_llm import invoquer_agent_structure
+from generation.agents.client_llm import invoquer_agent_avec_outils
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -68,12 +68,80 @@ def extraire_structure_instance(instance_json: dict) -> StructureInstance:
     )
 
 
+def _structure_contraintes_str(instance_json: dict) -> str:
+    """Même format exact que `api/etat.py::structure_contraintes` (clé de
+    matching du registre) — recalculé ici sur le `dict` brut plutôt
+    qu'importé, `generation/agents/` restant indépendant de `api/`."""
+    types = sorted({c["type"] for c in instance_json.get("contraintes", [])})
+    return ",".join(types) if types else "aucune"
+
+
+def _signature_objectifs_str(instance_json: dict) -> str:
+    """Même format exact que `api/etat.py::signature_objectifs`."""
+    types = sorted({o["type"] for o in instance_json.get("objectifs", [])})
+    return ",".join(types)
+
+
+def _resumer_solveurs_similaires(solveurs: list, client_id: str | None) -> str:
+    """Fonction pure derrière l'outil LLM — testable sans registre réel."""
+    if not solveurs:
+        return "Aucun solveur déjà enregistré pour cette structure de contraintes et ces objectifs."
+    memes_client = sum(1 for s in solveurs if client_id is not None and s.client_id == client_id)
+    return (
+        f"{len(solveurs)} solveur(s) déjà validé(s) et enregistré(s) pour cette structure de "
+        f"contraintes et ces objectifs ({memes_client} pour ce client précis, "
+        f"{len(solveurs) - memes_client} pour d'autres clients)."
+    )
+
+
+def construire_outil_instances_similaires(
+    structure_contraintes: str, signature_objectifs: str, client_id: str | None
+):
+    """Construit l'outil de recherche d'instances similaires, connecté au
+    registre de solveurs (`solver_store/registry.py`) — `None` si la base
+    est injoignable, jamais bloquant (même philosophie que `test_sandbox`,
+    `generation/graph.py` : l'infrastructure indisponible dégrade en
+    silence, ne bloque jamais une tentative de génération).
+
+    `structure_contraintes`/`signature_objectifs`/`client_id` sont figés à
+    la construction (fermeture), pas des paramètres du modèle : l'agent
+    décide seulement s'il consulte l'outil, jamais avec quels arguments —
+    la question posée à cet outil, « existe-t-il déjà un solveur pour CETTE
+    instance ? », n'a par nature qu'une seule réponse possible."""
+    try:
+        from solver_store.registry import Registre
+
+        registre = Registre()
+    except Exception:  # noqa: BLE001 — base injoignable/mal configurée, jamais bloquant ici
+        return None
+
+    from langchain_core.tools import tool
+
+    @tool
+    def rechercher_instances_similaires() -> str:
+        """Recherche, parmi les solveurs déjà validés et enregistrés dans le
+        registre, ceux qui partagent exactement la même structure de
+        contraintes et les mêmes objectifs que l'instance en cours
+        d'analyse — utile pour savoir si ce type de problème a déjà été
+        résolu par le passé, pour ce client ou pour un autre."""
+        solveurs = registre.rechercher_solveurs(
+            client_id=None, structure_contraintes=structure_contraintes, signature_objectifs=signature_objectifs
+        )
+        return _resumer_solveurs_similaires(solveurs, client_id)
+
+    return rechercher_instances_similaires
+
+
 @dataclass(frozen=True)
 class ResultatAnalyse:
     reponse_brute: str
     entrees: str
     sorties: str
     contraintes_a_couvrir: tuple[str, ...]
+    # Trace des appels à rechercher_instances_similaires — jamais relue par
+    # le pipeline, utile pour le diagnostic humain (voir
+    # client_llm.invoquer_agent_avec_outils).
+    appels_outils: tuple[str, ...] = ()
 
     def en_texte(self) -> str:
         """Rendu lisible, pour l'injecter dans le prompt de l'agent Architecte."""
@@ -85,12 +153,24 @@ class ResultatAnalyse:
         )
 
 
-def analyser_mission(modele: BaseChatModel, instance_json: dict | None = None) -> ResultatAnalyse:
+def analyser_mission(
+    modele: BaseChatModel,
+    instance_json: dict | None = None,
+    *,
+    client_id: str | None = None,
+    avec_outils: bool = True,
+) -> ResultatAnalyse:
     """`instance_json` : instance T-R-C-O de l'instance en cours de génération (dict JSON) —
     optionnel pour les appelants historiques sans instance sous la main (scripts, tests) ; seule
     sa structure (types de contraintes/objectifs présents, compteurs) atteint le prompt, jamais
-    ses valeurs (voir `extraire_structure_instance` et la docstring du module)."""
-    structure_instance = extraire_structure_instance(instance_json or {})
+    ses valeurs (voir `extraire_structure_instance` et la docstring du module).
+
+    `avec_outils` : si vrai (défaut) et `instance_json` fourni, l'agent reçoit l'outil
+    `rechercher_instances_similaires` (voir `construire_outil_instances_similaires`) —
+    dégradé en silence à aucun outil si le registre est injoignable ou si aucune
+    instance n'est fournie (scripts/tests historiques)."""
+    instance_json = instance_json or {}
+    structure_instance = extraire_structure_instance(instance_json)
     prompt = CHEMIN_PROMPT.read_text(encoding="utf-8").format(
         mission=charger_mission(),
         types_contraintes=", ".join(structure_instance.types_contraintes) or "aucune",
@@ -99,12 +179,24 @@ def analyser_mission(modele: BaseChatModel, instance_json: dict | None = None) -
         nb_ressources=structure_instance.nb_ressources,
     )
 
-    donnees, reponse_brute = invoquer_agent_structure(
-        modele, _SchemaAnalyse, [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
+    outils = []
+    if avec_outils and instance_json:
+        outil = construire_outil_instances_similaires(
+            _structure_contraintes_str(instance_json), _signature_objectifs_str(instance_json), client_id
+        )
+        if outil is not None:
+            outils = [outil]
+
+    donnees, reponse_brute, appels_outils = invoquer_agent_avec_outils(
+        modele,
+        _SchemaAnalyse,
+        outils,
+        [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)],
     )
     return ResultatAnalyse(
         reponse_brute=reponse_brute,
         entrees=donnees.entrees,
         sorties=donnees.sorties,
         contraintes_a_couvrir=tuple(donnees.contraintes_a_couvrir),
+        appels_outils=tuple(appels_outils),
     )

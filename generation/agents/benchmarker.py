@@ -28,7 +28,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
 from generation.agents.base import ErreurReponseAgentInvalide  # noqa: F401 — réexporté (tests)
-from generation.agents.client_llm import invoquer_agent_structure
+from generation.agents.client_llm import invoquer_agent_avec_outils
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -95,6 +95,12 @@ class ResultatBenchmark:
     caracteristiques: CaracteristiquesInstance
     recommandation: RecommandationAlgorithme
     comparaison: str  # Tableau comparatif des algorithmes
+    # Trace des appels à rechercher_heuristiques_ordonnancement (ex.
+    # "rechercher_heuristiques_ordonnancement({'requete': 'genetic algorithm FJSP large instances'})")
+    # — jamais relue par le pipeline, utile pour le diagnostic humain (voir
+    # client_llm.invoquer_agent_avec_outils). Vide si l'outil n'a pas été
+    # appelé, ou si les outils sont désactivés pour cet appel.
+    appels_outils: tuple[str, ...] = ()
 
 
 # Seul CP-SAT est jugé à l'identique (exactitude requise) ; tout autre
@@ -105,6 +111,40 @@ class ResultatBenchmark:
 # c'est ce module qui produit les chaînes `algorithme`.
 _ALGORITHMES_EXACTS = frozenset({"cp_sat"})
 TOLERANCE_MAKESPAN_ALGORITHME_APPROCHE = 0.10  # 10 % au-dessus de l'optimum/de la référence
+
+
+def rechercher_heuristiques_sur_le_web(requete: str) -> str:
+    """Fonction pure (au sens : sans état module) derrière l'outil LLM —
+    recherche web réelle (DuckDuckGo, aucune clé API requise), jamais un
+    catalogue figé dans le code : les heuristiques d'ordonnancement et leurs
+    performances rapportées évoluent plus vite que ce fichier. Ne lève
+    jamais — un échec réseau/de recherche dégrade en un message explicite,
+    jamais bloquant pour la recommandation de l'agent (même philosophie que
+    `test_sandbox`, `generation/graph.py`)."""
+    from langchain_community.tools import DuckDuckGoSearchRun
+
+    try:
+        return DuckDuckGoSearchRun().run(requete)
+    except Exception as erreur:  # noqa: BLE001 — service externe, jamais bloquant ici
+        return f"Recherche web indisponible ({erreur}) — réponds à partir de tes propres connaissances."
+
+
+def _construire_outil_recherche_heuristiques():
+    """Outil lié à ce module, jamais construit au niveau module (import
+    paresseux de `langchain_community.tools`, comme le reste des dépendances
+    LangChain de ce projet — voir `client_llm.py`)."""
+    from langchain_core.tools import tool
+
+    @tool
+    def rechercher_heuristiques_ordonnancement(requete: str) -> str:
+        """Recherche sur le web des informations sur les algorithmes/heuristiques
+        d'ordonnancement (FJSP et problèmes proches) — utile pour comparer des
+        approches, vérifier des performances rapportées dans la littérature
+        récente, ou découvrir une heuristique non couverte par ce prompt.
+        `requete` : la recherche à effectuer (français ou anglais)."""
+        return rechercher_heuristiques_sur_le_web(requete)
+
+    return rechercher_heuristiques_ordonnancement
 
 
 def parametres_cascade_pour_algorithme(algorithme: str) -> tuple[float, bool]:
@@ -193,12 +233,19 @@ def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesI
     )
 
 
-def benchmarker_algorithmes(modele: BaseChatModel, instance_json: dict) -> ResultatBenchmark:
+def benchmarker_algorithmes(
+    modele: BaseChatModel, instance_json: dict, *, avec_outils: bool = True
+) -> ResultatBenchmark:
     """Benchmark plusieurs algorithmes et recommande le meilleur.
 
     Args:
         modele: `BaseChatModel` LangChain (voir `client_llm.construire_modele_pour_agent`).
         instance_json: Instance T-R-C-O au format dict (pour analyse)
+        avec_outils: Si vrai (défaut), l'agent peut effectuer une recherche
+            web (`rechercher_heuristiques_ordonnancement`, voir plus haut)
+            avant de répondre — jamais requis, purement consultatif. `False`
+            retombe sur un appel structuré simple, sans outil (tests,
+            comparaison avant/après).
 
     Returns:
         Recommandation d'algorithme avec justification
@@ -222,8 +269,9 @@ def benchmarker_algorithmes(modele: BaseChatModel, instance_json: dict) -> Resul
         equilibrage_methode_approchee_en_cpsat="Oui" if carac.equilibrage_methode_approchee_en_cpsat else "Non",
     )
 
-    donnees, reponse_brute = invoquer_agent_structure(
-        modele, _SchemaBenchmark, [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
+    outils = [_construire_outil_recherche_heuristiques()] if avec_outils else []
+    donnees, reponse_brute, appels_outils = invoquer_agent_avec_outils(
+        modele, _SchemaBenchmark, outils, [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
     )
     recommandation = RecommandationAlgorithme(
         algorithme=donnees.recommandation.algorithme,
@@ -239,4 +287,5 @@ def benchmarker_algorithmes(modele: BaseChatModel, instance_json: dict) -> Resul
         caracteristiques=carac,
         recommandation=recommandation,
         comparaison=donnees.comparaison,
+        appels_outils=tuple(appels_outils),
     )

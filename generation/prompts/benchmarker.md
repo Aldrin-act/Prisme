@@ -168,6 +168,16 @@ Analyser les caractéristiques d'une instance FJSP et recommander le **meilleur 
      explicitement dans `raison` et envisage une alternative non-CP-SAT ou une variante hybride
      (CP-SAT pour une solution initiale, puis affinage local sur la métrique exacte).
 
+## Outil disponible (facultatif)
+
+Si l'outil `rechercher_heuristiques_ordonnancement` t'est proposé, tu peux
+l'appeler avec une requête de recherche web pour vérifier ou compléter tes
+connaissances sur une heuristique (performances rapportées dans la
+littérature récente, variantes, comparaisons) — un complément à la section
+« Algorithmes candidats » ci-dessus, jamais une source de vérité qui la
+remplacerait ; ta recommandation finale doit toujours s'appuyer sur les
+caractéristiques réelles de l'instance et les critères de décision.
+
 ## Format de réponse (JSON strict)
 
 ```json
