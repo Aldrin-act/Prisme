@@ -38,18 +38,18 @@ fois les tests sandbox exécutés réellement (§6.6bis) — deux vrais arbitres
 prêts à être recâblés (voir historique git de ce fichier pour l'état câblé).
 
 Pas d'Optimiseur : agent retiré du pipeline (réponse JSON trop fragile — il
-embarque un code Python multi-lignes complet comme valeur de chaîne JSON, un
-format que les LLM échouent régulièrement à échapper correctement — et
+embarquait un code Python multi-lignes complet comme valeur de chaîne JSON,
+un format que les LLM échouent régulièrement à échapper correctement — et
 l'enjeu n'en valait pas la fragilité : le code est déjà validé par la
-cascade à ce stade). `generation/agents/optimiseur.py` existe toujours mais
-n'est plus appelé nulle part (orphelin).
+cascade à ce stade). `generation/agents/optimiseur.py` a été supprimé,
+resté orphelin trop longtemps sans jamais être recâblé.
 
 Pas d'Orchestrateur non plus : il ne faisait jamais que produire un plan JSON
 jamais lu par personne — l'ordre d'exécution a toujours été câblé en Python
 ici (voir `_construire_graphe`), jamais décidé dynamiquement par sa réponse,
 et son plan n'était même pas renvoyé par `api/routes/generation.py`.
-`generation/agents/orchestrateur.py` a été supprimé (contrairement à
-l'Optimiseur, laissé orphelin) — aucun code ne dépendait de sa sortie.
+`generation/agents/orchestrateur.py` a été supprimé (comme l'Optimiseur) —
+aucun code ne dépendait de sa sortie.
 
 §6.6 : La boucle reste **bornée** (10 tentatives max), **offline** (génération),
 et **diagnostique** (feedback précis de la validation).

@@ -13,8 +13,8 @@
   **boucle de réparation bornée** (Reviewer ⇄ Debugger, max 10 tentatives,
   `MAX_TENTATIVES_REPARATION`) → Documentation. Pas d'Orchestrateur (jamais
   utile — voir la docstring du module, il ne pilotait rien) ni d'Optimiseur
-  (retiré, réponse JSON trop fragile pour embarquer du code) dans ce
-  pipeline ; `agents/optimiseur.py` reste comme fichier orphelin.
+  (réponse JSON trop fragile pour embarquer du code) dans ce pipeline ; les
+  deux fichiers ont été supprimés du dépôt.
 
 Les deux chemins convergent sur la même chaîne de garde-fous procéduraux —
 jamais des agents, volontairement :

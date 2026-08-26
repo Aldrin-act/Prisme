@@ -5,8 +5,7 @@ réponse d'un agent. Les 9 agents du pipeline actif
 LangChain (`with_structured_output`, Pydantic) — `extraire_texte_brut`
 reconstruit le texte brut depuis cette réponse pour `reponse_brute`.
 `extraire_json` reste utilisé par l'agent de compréhension
-(`adapters/agent_comprehension/`) et l'agent Optimiseur orphelin
-(`generation/agents/optimiseur.py`), pas encore migrés. Le mode simple à un
+(`adapters/agent_comprehension/`), pas encore migré. Le mode simple à un
 seul agent (Étape 4, `tentative_unique.py`) garde son format historique, un
 bloc de code Python nu — `extraire_bloc_code`.
 """

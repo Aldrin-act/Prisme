@@ -4,8 +4,9 @@ Ce document présente l'architecture détaillée des agents du pipeline multi-ag
 réellement câblés dans `generation/graph.py`** (Analyste, Benchmarker, Architecte, Développeur,
 Testeur, Debugger, Documentation) ; **Reviewer** existe et fonctionne mais n'est **pas** appelé par
 le pipeline (§6.6bis — `test_sandbox`, l'exécution réelle des tests du Testeur en Docker, rend son
-avis consultatif redondant) ; **Optimiseur** est orphelin pour une raison différente (réponse JSON
-trop fragile pour embarquer du code Python complet). Les deux restent réactivables sans refonte.
+avis consultatif redondant) — reste réactivable sans refonte. **Optimiseur** a été supprimé
+(`generation/agents/optimiseur.py`) pour une raison différente : réponse JSON trop fragile pour
+embarquer du code Python complet, resté orphelin trop longtemps sans jamais être recâblé.
 
 ---
 
@@ -25,8 +26,7 @@ generation/
 │   ├── testeur.py                    # Agent 5 : Tests
 │   ├── reviewer.py                   # Agent 6 : Revue de code
 │   ├── debugger.py                   # Agent 7 : Correction
-│   ├── documentation.py              # Agent 8 : Documentation
-│   └── optimiseur.py                 # Orphelin, plus appelé par le pipeline
+│   └── documentation.py              # Agent 8 : Documentation
 │
 ├── prompts/                          # Prompts des agents (Markdown)
 │   ├── generation_solveur.md         # Mission commune (contrat T-R-C-O)
@@ -37,7 +37,6 @@ generation/
 │   ├── testeur.md                    # Prompt Testeur
 │   ├── reviewer.md                   # Prompt Reviewer
 │   ├── debugger.md                   # Prompt Debugger
-│   ├── optimiseur.md                 # Prompt Optimiseur
 │   └── documentation.md              # Prompt Documentation
 │
 ├── graph.py                           # Pipeline + boucle de réparation (StateGraph LangGraph, Étape 6, max 10 tentatives)
@@ -386,50 +385,7 @@ réponds toujours en JSON strict, jamais en texte libre."
 
 ---
 
-### 8️⃣ OPTIMISEUR (orphelin, plus appelé par le pipeline)
-
-**Fichier** : `generation/agents/optimiseur.py`  
-**Prompt** : `generation/prompts/optimiseur.md`
-
-**Fonction** :
-```python
-def optimiser_code(modele: BaseChatModel, code_source: str, verdict: str = "") -> ResultatOptimisation
-```
-
-**Input** :
-- Code source validé
-- Verdict cascade (métriques, optionnel)
-
-**Output** : `ResultatOptimisation`
-```python
-@dataclass
-class ResultatOptimisation:
-    reponse_brute: str
-    proposee: bool               # True si optimisation proposée
-    code_source: str | None      # Code optimisé (si proposee=True)
-    justification: str           # Explications
-```
-
-**Prompt système** (orphelin — agent non appelé par `generation/graph.py`, prompt jamais mis à
-jour pour être algorithme-agnostique comme les autres) :
-```
-"Tu es un expert en optimisation CP-SAT. Tu réponds toujours en JSON strict."
-```
-
-**Format JSON attendu** :
-```json
-{
-  "proposee": true,
-  "code_optimise": "...",
-  "justification": "Ajout de hints pour accélérer la recherche (reduction 30% temps)"
-}
-```
-
-**⚠️ Sécurité** : Le code optimisé est **re-validé** (cascade complète). Si échec, on garde le code non-optimisé.
-
----
-
-### 9️⃣ DOCUMENTATION
+### 8️⃣ DOCUMENTATION
 
 **Fichier** : `generation/agents/documentation.py`  
 **Prompt** : `generation/prompts/documentation.md`
@@ -527,7 +483,7 @@ pas un fournisseur unique pour tout le pipeline :
 | Agent(s) | Fournisseur | Modèle |
 |---|---|---|
 | Analyste, Architecte, Développeur, Testeur, Debugger, Reviewer (inactif), Compréhension ERP | `nemotron` | `nvidia/nemotron-3-super-120b-a12b` |
-| Benchmarker, Optimiseur (inactif) | `minimax` | `minimaxai/minimax-m3` |
+| Benchmarker | `minimax` | `minimaxai/minimax-m3` |
 | Documentation | `nvidia` | `meta/llama-3.3-70b-instruct` |
 | Supervision (MT7, hors pipeline de génération) | `mistral` | `mistral-large-latest` |
 
@@ -595,8 +551,8 @@ TEST_SANDBOX (§6.6bis, pas un agent LLM — exécution réelle du module pytest
 ```
 
 Le Reviewer n'apparaît pas dans ce flux : présent dans le code (`generation/agents/reviewer.py`),
-mais jamais câblé dans `_construire_graphe` (voir section 6️⃣ plus haut). Optimiseur non plus :
-orphelin, plus appelé (réponse JSON jugée trop fragile pour embarquer du code Python complet).
+mais jamais câblé dans `_construire_graphe` (voir section 6️⃣ plus haut). Optimiseur non plus : il a
+été supprimé (réponse JSON jugée trop fragile pour embarquer du code Python complet).
 
 ---
 
@@ -647,7 +603,6 @@ IMPORTANT : Tu réponds UNIQUEMENT en JSON strict, format :
 - `testeur.md` : Tests pytest
 - `reviewer.md` : Revue de code (approuve/commentaires)
 - `debugger.md` : Correction bugs
-- `optimiseur.md` : Optimisations performance (orphelin, plus appelé)
 - `documentation.md` : Documentation Markdown
 
 ---
@@ -763,8 +718,8 @@ répartition par défaut plus haut, pas un seul modèle pour tout le pipeline) :
 | Documentation | 8 | 900 | 400 | 0.048 |
 
 *Conditionnel — seulement si `test_sandbox` ou `validation` échoue à une tentative donnée.
-Reviewer et Optimiseur absents de ce tableau : aucun des deux n'est appelé par le pipeline actuel
-(voir sections dédiées plus haut).
+Reviewer absent de ce tableau : jamais appelé par le pipeline actuel (voir section dédiée plus
+haut). Optimiseur aussi absent, pour une raison différente : supprimé, il n'existe plus du tout.
 
 **Total pipeline complet (cas nominal, une seule tentative)** : ~95s, ~$0.35-0.50 selon fournisseurs
 
@@ -814,7 +769,7 @@ Version streaming (un `EvenementEtape` par agent/sous-étape, consommée par
 
 ## 📚 Fichiers Liés
 
-- **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,reviewer,debugger,documentation}.py` (`optimiseur.py` orphelin)
+- **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,reviewer,debugger,documentation}.py`
 - **Prompts** : `generation/prompts/*.md`
 - **Pipeline + boucle** : `generation/graph.py` (StateGraph LangGraph, remplace les anciens `pipeline_multi_agents.py`/`pipeline_avec_boucle.py`/`loop.py`, supprimés)
 - **Documentation** : `docs/agents_fonctionnement_detaille.md`, `docs/boucle_reparation.md`

@@ -24,7 +24,6 @@ Utilisé pour les tâches nécessitant un raisonnement complexe et de grands con
 Utilisé pour les tâches nécessitant créativité et exploration :
 
 - **Benchmarker** : Exploration créative d'algorithmes alternatifs (CP-SAT, GA, ACO, etc.)
-- **Optimiseur** : Optimisations non évidentes, approches créatives
 
 ### NVIDIA Llama-3.3-70B (1 agent) 🎯
 **Caractéristiques** : Déterministe (temp=0.6), 4K tokens
@@ -101,7 +100,6 @@ FOURNISSEURS_PAR_AGENT = {
     "analyste": "deepseek",
     "reviewer": "deepseek",
     "benchmarker": "minimax",
-    "optimiseur": "minimax",
     "documentation": "nvidia",
     "testeur": "together",
     "comprehension": "deepseek",  # Agent ERP
@@ -118,7 +116,7 @@ FOURNISSEURS_PAR_AGENT = {
 ### Pourquoi MiniMax pour l'exploration ?
 - **Température 1.0** : Créativité maximale
 - **Top-p 0.95** : Large exploration de l'espace des solutions
-- Idéal pour le Benchmarker (explorer algorithmes) et l'Optimiseur (optimisations non évidentes)
+- Idéal pour le Benchmarker (explorer algorithmes)
 
 ### Pourquoi NVIDIA pour les tâches simples ?
 - **Température 0.6** : Plus déterministe, cohérent

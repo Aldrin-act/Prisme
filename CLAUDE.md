@@ -100,8 +100,8 @@ found and fixed then.
   channels: blocking `POST /{instance_id}`, or `POST /{instance_id}/demarrer` + SSE
   `GET /jobs/{job_id}/stream` (background thread, state in `_JOBS`/`api/etat.py`, survives client
   disconnects). Replaced the earlier `loop.py`/`pipeline_avec_boucle.py`/`pipeline_multi_agents.py`;
-  no Orchestrateur (deleted, never routed anything) or Optimiseur (`optimiseur.py` orphaned,
-  unreliable JSON-string code) either.
+  no Orchestrateur (deleted, never routed anything) or Optimiseur either — both deleted, the latter
+  after being orphaned too long (unreliable JSON-string code, never re-wired).
 - **Étape 7 — store + ephemeral sandbox** (`solver_store/`, `sandbox/`). `Registre` is
   PostgreSQL-backed (`DATABASE_URL`, migrated from the original SQLite PoC per PH8-T1) — one schema
   per instance; artifacts stay on disk, never duplicated in the DB. **Refuses to register** any

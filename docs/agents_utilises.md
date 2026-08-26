@@ -94,8 +94,9 @@ Pas d'Orchestrateur ni d'Optimiseur dans ce pipeline : le premier ne faisait
 que produire un plan JSON jamais lu par personne (l'ordre d'exécution a
 toujours été câblé en Python), le second a été retiré car sa réponse JSON
 (code Python complet en valeur de chaîne) était trop fragile à faire produire
-par un LLM de façon fiable. Les deux fichiers ont été supprimés (`orchestrateur.py`)
-ou laissés orphelins (`optimiseur.py`, toujours présent mais plus appelé).
+par un LLM de façon fiable. Les deux fichiers ont été supprimés
+(`orchestrateur.py`, puis `optimiseur.py` après être resté orphelin trop
+longtemps sans jamais être recâblé).
 
 **Le Reviewer aussi est orphelin**, pour une troisième raison différente :
 `generation/agents/reviewer.py` fonctionne et reste appelable isolément, mais
@@ -278,9 +279,9 @@ operations.append(OperationPlanifiee(
 ))
 ```
 
-`optimiseur.py` existe toujours mais n'est plus appelé par le pipeline
-(réponse JSON trop fragile pour embarquer du code Python complet) — orphelin,
-comme `orchestrateur.py` avant sa suppression.
+`optimiseur.py` a été supprimé (réponse JSON trop fragile pour embarquer du
+code Python complet, jamais appelé par le pipeline) — comme
+`orchestrateur.py` avant lui.
 
 ### 8. Documentation (`documentation.py`)
 

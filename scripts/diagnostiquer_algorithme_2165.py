@@ -3,7 +3,7 @@ cascade sans repayer les ~9-10 appels LLM du pipeline complet.
 
 N'appelle que la chaine qui produit le code (Analyste -> Benchmarker ->
 Architecte -> Developpeur), saute les agents de securite/qualite (Testeur,
-Reviewer, Debugger, Optimiseur, Documentation), puis valide le code produit
+Reviewer, Debugger, Documentation), puis valide le code produit
 (statique -> execution -> cascade) et affiche le detail complet du verdict :
 quelle brique echoue, sur quelle instance, pourquoi. But : comprendre POURQUOI
 la cascade echoue sur l'instance GreenSig 2165 taches, pas produire un

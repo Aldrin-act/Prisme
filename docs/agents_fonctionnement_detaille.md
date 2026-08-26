@@ -73,8 +73,9 @@ Le **Reviewer** (revue de code par un second LLM) n'apparaît **pas** dans ce fl
 jamais câblé dans `_construire_graphe` — son avis consultatif est devenu redondant une fois que
 `test_sandbox` exécute réellement les tests du Testeur et que la cascade déterministe tranche derrière.
 Réactivable en deux lignes si besoin (voir CLAUDE.md, Étape 6). Pas d'Optimiseur non plus : agent retiré
-(réponse JSON trop fragile pour embarquer du code Python complet). `generation/agents/optimiseur.py`
-existe toujours mais n'est plus appelé — orphelin, comme `reviewer.py`, mais pour une raison différente.
+(réponse JSON trop fragile pour embarquer du code Python complet). `generation/agents/optimiseur.py` a
+été supprimé, resté orphelin trop longtemps sans jamais être recâblé — contrairement à `reviewer.py`,
+gardé intentionnellement pour une réactivation potentielle.
 
 ---
 
@@ -373,18 +374,7 @@ tentatives s'épuisent sans validation réussie, c'est un échec final honnête 
 **Fichier** : `generation/graph.py` (fonction `_valider_completement`, nœud `validation`)
 
 **Point clé** : Appelée à chaque tentative de la boucle (jusqu'à 10 fois), seulement après un succès
-de `test_sandbox` — jamais sur du code d'Optimiseur, cet agent n'est plus dans le pipeline (voir
-ci-dessous).
-
----
-
-### OPTIMISEUR — orphelin, plus appelé par le pipeline
-
-`generation/agents/optimiseur.py` existe toujours mais n'est plus invoqué
-depuis `generation/graph.py` : sa réponse JSON devait embarquer un code
-Python complet comme valeur de chaîne, un format que les LLM échouent
-régulièrement à échapper correctement — et l'enjeu n'en valait pas la
-fragilité, le code est déjà validé par la cascade à ce stade.
+de `test_sandbox` — jamais sur du code d'Optimiseur, cet agent ayant été supprimé du dépôt.
 
 ---
 
@@ -500,8 +490,9 @@ Sur une instance de **12 tâches, 5 ressources, 10 contraintes** :
 | Documentation | 8.0 | 900 | 400 | 0.048 |
 
 *Conditionnel — seulement si `test_sandbox` ou `validation` échoue à une tentative donnée.
-Reviewer et Optimiseur absents de ce tableau : ni l'un ni l'autre n'est appelé par le pipeline actuel
-(voir sections dédiées ci-dessus). Les coûts réels dépendent aussi du fournisseur LLM effectivement
+Reviewer absent de ce tableau : jamais appelé par le pipeline actuel (voir section dédiée
+ci-dessus). Optimiseur aussi absent, pour une raison différente : supprimé, il n'existe plus du
+tout. Les coûts réels dépendent aussi du fournisseur LLM effectivement
 utilisé par agent (voir §Configuration ci-dessous) — nettement plus disparate qu'un fournisseur
 unique pour tous les agents.
 
@@ -561,7 +552,7 @@ le pipeline (`generation/agents/config_fournisseurs.py`) :
 | Agent(s) | Fournisseur par défaut | Modèle |
 |---|---|---|
 | Analyste, Architecte, Développeur, Testeur, Debugger, Reviewer (inactif), Compréhension ERP | `nemotron` | `nvidia/nemotron-3-super-120b-a12b` |
-| Benchmarker, Optimiseur (inactif) | `minimax` | `minimaxai/minimax-m3` |
+| Benchmarker | `minimax` | `minimaxai/minimax-m3` |
 | Documentation | `nvidia` | `meta/llama-3.3-70b-instruct` |
 | Supervision (MT7) | `mistral` | `mistral-large-latest` |
 
@@ -590,7 +581,7 @@ Ou via l'API, déjà câblée dessus : `POST /generation/{instance_id}` (bloquan
 
 - **Pipeline + boucle** : `generation/graph.py` (StateGraph LangGraph, Étape 6, §6.6bis pour `test_sandbox`)
 - **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,debugger,documentation}.py`
-  (`reviewer.py` présent, jamais câblé ; `optimiseur.py` orphelin, plus appelé)
+  (`reviewer.py` présent, jamais câblé)
 - **Client LLM** : `generation/agents/client_llm.py`, `generation/agents/config_fournisseurs.py` (routage par agent)
 - **Validation** : `generation/validation_statique.py`, `generation/executer.py`, `validation_engine/cascade.py`
 - **Sandbox** : `sandbox/runner.py` (`executer_tests_dans_sandbox`, exécution réelle du Testeur ; Étape 7 pour la production)
