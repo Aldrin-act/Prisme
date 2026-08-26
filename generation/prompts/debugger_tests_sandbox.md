@@ -16,7 +16,14 @@
 
 {probleme}
 
+## Tentatives précédentes dans cette génération
+
+{historique}
+
 ## Ton rôle : Agent Debugger — diagnostic à deux suspects
+
+Si des tentatives précédentes sont listées ci-dessus, ne rejoue jamais un
+correctif déjà tenté et déjà resté en échec — cherche une autre cause.
 
 Contrairement à un échec de la cascade de validation (`validation_engine/cascade.py`,
 toujours contre une vérité terrain déterministe — le solveur a alors toujours tort),

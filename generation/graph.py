@@ -66,7 +66,7 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.config import get_stream_writer
 from langgraph.graph import END, START, StateGraph
 
-from generation.agents import analyste, architecte, benchmarker, documentation, reviewer, testeur
+from generation.agents import analyste, architecte, benchmarker, documentation, memory, reviewer, testeur
 from generation.agents.analyste import ResultatAnalyse
 from generation.agents.architecte import ResultatConception
 from generation.agents.client_llm import construire_modele_pour_agent
@@ -280,6 +280,11 @@ class EtatGeneration(TypedDict, total=False):
     # `generation/agents/debugger.py`).
     origine_probleme: Literal["reviewer", "validation", "test_sandbox"] | None
     boucle_reussie: bool
+    # Mémoire du Debugger bornée à CETTE boucle de réparation (voir
+    # `generation/agents/debugger.py::corriger_code`) — remise à `[]` par
+    # `_noeud_testeur` au tout début de chaque nouvelle tentative de
+    # génération, jamais persistée au-delà.
+    historique_debugger: Annotated[list[str], operator.add]
 
     rapport_tests_sandbox: RapportTestsSandbox | None
 
@@ -371,7 +376,12 @@ def _noeud_testeur(etat: EtatGeneration, config: RunnableConfig) -> dict:
     writer(etape("testeur", "en_cours", "Génération des tests..."))
     tests = testeur.generer_tests(_modele(config, "testeur"), etat["code_candidat"])
     writer(etape("testeur", "termine", "Tests générés"))
-    return {"tests_generes": tests.code_tests, "numero_tentative": 1, "tentatives": []}
+    return {
+        "tests_generes": tests.code_tests,
+        "numero_tentative": 1,
+        "tentatives": [],
+        "historique_debugger": [],
+    }
 
 
 # --- Boucle de réparation ----------------------------------------------
@@ -534,25 +544,34 @@ def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
     nom = f"debugger (tentative {n}/{MAX_TENTATIVES_REPARATION})"
     writer(etape(nom, "en_cours", "Correction du code d'après le diagnostic..."))
 
+    probleme = etat["message_pour_debugger"] or ""
+    historique = "\n".join(etat.get("historique_debugger") or [])
+
     if etat.get("origine_probleme") == "test_sandbox":
         correction_tests = corriger_solveur_ou_tests(
             _modele(config, "debugger"),
             etat["code_candidat"],
             etat["tests_generes"],
-            etat["message_pour_debugger"] or "",
+            probleme,
+            historique=historique,
         )
         writer(etape(nom, "termine", f"{correction_tests.cible.capitalize()} corrigé — {correction_tests.cause}"))
+        entree = memory.formater_entree(n, probleme, correction_tests.cause, cible=correction_tests.cible)
         return {
             "code_candidat": correction_tests.code_source,
             "tests_generes": correction_tests.tests_source,
             "numero_tentative": n + 1,
+            "historique_debugger": [entree],
         }
 
-    correction = corriger_code(
-        _modele(config, "debugger"), etat["code_candidat"], etat["message_pour_debugger"] or ""
-    )
+    correction = corriger_code(_modele(config, "debugger"), etat["code_candidat"], probleme, historique=historique)
     writer(etape(nom, "termine", "Code corrigé"))
-    return {"code_candidat": correction.code_source, "numero_tentative": n + 1}
+    entree = memory.formater_entree(n, probleme, correction.cause)
+    return {
+        "code_candidat": correction.code_source,
+        "numero_tentative": n + 1,
+        "historique_debugger": [entree],
+    }
 
 
 # --- Nœuds terminaux ---------------------------------------------------

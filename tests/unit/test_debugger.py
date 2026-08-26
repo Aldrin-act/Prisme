@@ -86,3 +86,53 @@ def test_corriger_solveur_ou_tests_leve_une_erreur_explicite_sur_reponse_non_con
 
     with pytest.raises(debugger.ErreurReponseAgentInvalide, match="pas du JSON valide"):
         debugger.corriger_solveur_ou_tests(modele, "code", "tests", "problème")
+
+
+class _ModeleFacticeCapturant(ModeleFactice):
+    """Capture le dernier prompt envoyé, pour vérifier son contenu sans dépendre d'un vrai appel LLM."""
+
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)
+        self.dernier_prompt: str | None = None
+
+    def with_structured_output(self, schema: type, include_raw: bool = True, method: str | None = None):
+        runnable = super().with_structured_output(schema, include_raw, method)
+        invoke_original = runnable.invoke
+
+        def invoke_capturant(messages):
+            self.dernier_prompt = messages[-1].content
+            return invoke_original(messages)
+
+        runnable.invoke = invoke_capturant
+        return runnable
+
+
+def test_corriger_code_sans_historique_indique_aucune_tentative_precedente() -> None:
+    schema = debugger._SchemaCorrection(code="c", cause="cause")
+    modele = _ModeleFacticeCapturant(raw_content=json.dumps(schema.model_dump()), parsed=schema)
+
+    debugger.corriger_code(modele, "code cassé", "problème")
+
+    assert "Aucune tentative précédente dans cette génération." in modele.dernier_prompt
+
+
+def test_corriger_code_avec_historique_l_injecte_dans_le_prompt() -> None:
+    schema = debugger._SchemaCorrection(code="c", cause="cause")
+    modele = _ModeleFacticeCapturant(raw_content=json.dumps(schema.model_dump()), parsed=schema)
+
+    debugger.corriger_code(
+        modele, "code cassé", "problème", historique="Tentative 1 : problème = X → cause identifiée = Y"
+    )
+
+    assert "Tentative 1 : problème = X → cause identifiée = Y" in modele.dernier_prompt
+
+
+def test_corriger_solveur_ou_tests_avec_historique_l_injecte_dans_le_prompt() -> None:
+    schema = debugger._SchemaCorrectionTestsSandbox(cible="solveur", code="c", tests="t", cause="cause")
+    modele = _ModeleFacticeCapturant(raw_content=json.dumps(schema.model_dump()), parsed=schema)
+
+    debugger.corriger_solveur_ou_tests(
+        modele, "code", "tests", "problème", historique="Tentative 1 : déjà tenté et échoué"
+    )
+
+    assert "Tentative 1 : déjà tenté et échoué" in modele.dernier_prompt

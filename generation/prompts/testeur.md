@@ -34,6 +34,15 @@ Couvre notamment :
 - une instance avec plusieurs ressources compatibles pour une même tâche,
   chacune avec une durée différente.
 
+## Outil disponible (facultatif)
+
+Si l'outil `consulter_cas_limites_banc_synthetique` t'est proposé, tu peux
+l'appeler pour obtenir des cas d'instance T-R-C-O à makespan optimal **connu
+par construction** — utile pour écrire un test qui vérifie une vraie valeur
+attendue plutôt qu'un seuil ou un scénario inventé. Reste un complément,
+jamais une obligation : les cas déjà listés ci-dessus restent la base
+attendue de tes tests.
+
 ## Format de réponse exigé
 
 Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de

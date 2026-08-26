@@ -10,11 +10,20 @@
 
 {probleme}
 
+## Tentatives précédentes dans cette génération
+
+{historique}
+
 ## Ton rôle : Agent Debugger
 
 Corrige le code ci-dessus pour résoudre précisément le problème constaté,
 en respectant toujours le contrat et les contraintes de sécurité de la
 mission. Ne réécris pas ce qui n'a pas besoin de changer.
+
+Si des tentatives précédentes sont listées ci-dessus, ne rejoue jamais un
+correctif déjà tenté et déjà resté en échec — un même symptôme après un
+même correctif signale que la cause identifiée alors était fausse,
+cherche-en une autre.
 
 ## Format de réponse exigé
 

@@ -310,6 +310,53 @@ def test_pipeline_echoue_apres_epuisement_des_tentatives() -> None:
     assert resultat.documentation is None  # sautée en cas d'échec
 
 
+class _ModeleFacticeCapturantSequence(ModeleFactice):
+    """Contrairement à `_ModeleFacticeCapturant` (plus bas dans ce fichier),
+    qui n'écrase qu'un seul `dernier_prompt`, celui-ci accumule le prompt de
+    chaque appel — nécessaire pour vérifier qu'un historique grandit d'un
+    appel à l'autre plutôt que de rejouer le même contenu."""
+
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)
+        self.prompts: list[str] = []
+
+    def with_structured_output(self, schema: type, include_raw: bool = True, method: str | None = None):
+        runnable = super().with_structured_output(schema, include_raw, method)
+        invoke_original = runnable.invoke
+
+        def invoke_capturant(messages):
+            self.prompts.append(messages[-1].content)
+            return invoke_original(messages)
+
+        runnable.invoke = invoke_capturant
+        return runnable
+
+
+def test_debugger_recoit_l_historique_des_tentatives_precedentes_de_cette_generation() -> None:
+    """L'historique intra-boucle du Debugger (voir
+    `generation/agents/debugger.py::corriger_code`,
+    `generation/graph.py::_noeud_debugger`) doit grandir d'une tentative à
+    l'autre, jamais rejouer le même contenu deux fois — et ne jamais
+    contenir la tentative en cours, qui n'est pas encore connue."""
+    specs = _reponses_communes()
+    specs["generateur"] = ModeleFactice(
+        raw_content="{}", parsed=generateur._SchemaGenerationCode(code=CODE_INVALIDE)
+    )
+    modele_debugger = _ModeleFacticeCapturantSequence(
+        raw_content="{}", parsed=debugger._SchemaCorrection(code=CODE_INVALIDE, cause="tentative infructueuse")
+    )
+    specs["debugger"] = modele_debugger
+
+    _invoquer(specs)
+
+    assert len(modele_debugger.prompts) == g.MAX_TENTATIVES_REPARATION - 1
+    assert "Aucune tentative précédente dans cette génération." in modele_debugger.prompts[0]
+    for indice, prompt in enumerate(modele_debugger.prompts):
+        for numero_deja_vu in range(1, indice + 1):
+            assert f"Tentative {numero_deja_vu} :" in prompt
+        assert f"Tentative {indice + 1} :" not in prompt
+
+
 def test_debugger_jamais_appele_sur_la_derniere_tentative_epuisee() -> None:
     """Le Debugger ne doit jamais être invoqué pour une 11e tentative — le
     contrôle de la borne se fait dans le routeur, avant l'arête vers lui."""

@@ -26,6 +26,7 @@ from pydantic import BaseModel, Field
 
 from generation.agents.base import ErreurReponseAgentInvalide, charger_mission  # noqa: F401 — réexporté (tests)
 from generation.agents.client_llm import invoquer_agent_structure
+from generation.agents.memory import AUCUNE_TENTATIVE
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -54,9 +55,22 @@ class ResultatCorrection:
     cause: str
 
 
-def corriger_code(modele: BaseChatModel, code_source: str, probleme: str) -> ResultatCorrection:
+def corriger_code(
+    modele: BaseChatModel, code_source: str, probleme: str, *, historique: str = ""
+) -> ResultatCorrection:
+    """`historique` : résumé des tentatives de correction précédentes DE
+    CETTE MÊME génération (voir `generation/graph.py::_noeud_debugger`) —
+    mémoire bornée à la boucle de réparation en cours (jamais persistée
+    au-delà, jamais partagée entre deux instances/générations différentes),
+    pour éviter de rejouer un correctif déjà tenté et déjà en échec. Passée
+    directement en contexte de prompt plutôt que via un outil : contrairement
+    au registre de l'Analyste ou à la recherche web du Benchmarker, cette
+    information n'a rien d'externe — `EtatGeneration` la connaît déjà en
+    entier avant même l'appel, aucune requête à faire pour l'obtenir."""
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
-    prompt = gabarit.format(mission=charger_mission(), code=code_source, probleme=probleme)
+    prompt = gabarit.format(
+        mission=charger_mission(), code=code_source, probleme=probleme, historique=historique or AUCUNE_TENTATIVE
+    )
 
     donnees, reponse_brute = invoquer_agent_structure(
         modele, _SchemaCorrection, [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
@@ -87,15 +101,21 @@ class ResultatCorrectionTestsSandbox:
 
 
 def corriger_solveur_ou_tests(
-    modele: BaseChatModel, code_source: str, code_tests: str, probleme: str
+    modele: BaseChatModel, code_source: str, code_tests: str, probleme: str, *, historique: str = ""
 ) -> ResultatCorrectionTestsSandbox:
     """Chemin dédié aux échecs de tests sandbox (§6.6bis, voir docstring
     module) : contrairement à `corriger_code`, le Debugger reçoit aussi le
     module de tests et doit désigner lequel des deux est réellement fautif —
     jamais les deux à la fois sauf certitude (voir
-    `prompts/debugger_tests_sandbox.md`)."""
+    `prompts/debugger_tests_sandbox.md`). `historique` : voir `corriger_code`."""
     gabarit = CHEMIN_PROMPT_TESTS_SANDBOX.read_text(encoding="utf-8")
-    prompt = gabarit.format(mission=charger_mission(), code=code_source, tests=code_tests, probleme=probleme)
+    prompt = gabarit.format(
+        mission=charger_mission(),
+        code=code_source,
+        tests=code_tests,
+        probleme=probleme,
+        historique=historique or AUCUNE_TENTATIVE,
+    )
 
     messages = [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
     donnees, reponse_brute = invoquer_agent_structure(modele, _SchemaCorrectionTestsSandbox, messages)
