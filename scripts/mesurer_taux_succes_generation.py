@@ -16,6 +16,18 @@ Usage : python scripts/mesurer_taux_succes_generation.py [n_essais]
 from __future__ import annotations
 
 import sys
+from pathlib import Path
+
+# Même motif que les autres scripts (`generer_avec_boucle.py`, `tester_analyste.py`) : sans ceci,
+# les clés d'API déclarées dans `.env` restent invisibles à `os.environ`, et le fournisseur
+# reçoit une clé absente/vide plutôt que la vraie (401 côté fournisseur, pas une erreur explicite
+# côté script — constaté en conditions réelles).
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+except ImportError:
+    pass
 
 from generation.agents.client_llm import construire_modele
 from generation.tentative_unique import tenter_generation_unique

@@ -11,8 +11,8 @@ from typing import TYPE_CHECKING
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
-from generation.agents.base import ErreurReponseAgentInvalide, charger_mission, extraire_texte_brut
-from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+from generation.agents.base import ErreurReponseAgentInvalide, charger_mission  # noqa: F401 — réexporté (tests)
+from generation.agents.client_llm import invoquer_agent_structure
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -44,17 +44,9 @@ def documenter_code(modele: BaseChatModel, code_source: str) -> ResultatDocument
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     prompt = gabarit.format(mission=charger_mission(), code=code_source)
 
-    structure = modele.with_structured_output(
-        _SchemaDocumentation, include_raw=True, method=methode_sortie_structuree(modele)
+    donnees, reponse_brute = invoquer_agent_structure(
+        modele, _SchemaDocumentation, [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
     )
-    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
-    reponse_brute = extraire_texte_brut(sortie["raw"])
-    if sortie["parsing_error"] is not None:
-        raise ErreurReponseAgentInvalide(
-            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
-        ) from sortie["parsing_error"]
-
-    donnees = sortie["parsed"]
     return ResultatDocumentation(
         reponse_brute=reponse_brute,
         resume=donnees.resume,

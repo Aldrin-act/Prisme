@@ -28,12 +28,13 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
 from generation.agents.base import (
-    ErreurReponseAgentInvalide,
+    ErreurReponseAgentInvalide,  # noqa: F401 — réexporté (tests)
     charger_mission,
     extraire_bloc_code,
     extraire_texte_brut,
 )
-from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+from generation.agents.client_llm import _avec_retry, invoquer_agent_structure
+from generation.agents.outil_documentation import consulter_si_utile
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -79,6 +80,7 @@ def generer_code_depuis_plan(
     plan_technique: str,
     algorithme: str | None = None,
     parametres: dict | None = None,
+    autoriser_documentation: bool = False,
 ) -> ResultatGenerationBrute:
     """Variante utilisée par le pipeline multi-agents : écrit le code en
     suivant le plan produit par l'agent Architecte plutôt que la seule
@@ -89,7 +91,16 @@ def generer_code_depuis_plan(
         plan_technique: Plan de l'agent Architecte
         algorithme: Algorithme recommandé par le Benchmarker (ex: "cp_sat", "genetic")
         parametres: Paramètres suggérés pour l'algorithme
+        autoriser_documentation: si vrai, un petit appel préalable laisse l'agent demander
+            lui-même un sujet de `outil_documentation` avant d'écrire le code — désactivé par
+            défaut (rétrocompatibilité), activé explicitement par
+            `generation/graph.py::_noeud_developpeur`.
     """
+    documentation = (
+        consulter_si_utile(modele, "écrire le code du solveur", algorithme or "cp_sat")
+        if autoriser_documentation
+        else ""
+    )
     gabarit = CHEMIN_PROMPT_DEPUIS_PLAN.read_text(encoding="utf-8")
 
     # Construire la section algorithme si fournie
@@ -110,19 +121,10 @@ def generer_code_depuis_plan(
     prompt = gabarit.format(
         mission=charger_mission(),
         plan_technique=plan_technique + section_algorithme,
+        documentation=documentation or "aucune",
     )
 
-    structure = modele.with_structured_output(
-        _SchemaGenerationCode, include_raw=True, method=methode_sortie_structuree(modele)
+    donnees, reponse_brute = invoquer_agent_structure(
+        modele, _SchemaGenerationCode, [SystemMessage(content=_PROMPT_SYSTEME_JSON), HumanMessage(content=prompt)]
     )
-    sortie = _avec_retry(structure.invoke)(
-        [SystemMessage(content=_PROMPT_SYSTEME_JSON), HumanMessage(content=prompt)]
-    )
-    reponse_brute = extraire_texte_brut(sortie["raw"])
-    if sortie["parsing_error"] is not None:
-        raise ErreurReponseAgentInvalide(
-            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
-        ) from sortie["parsing_error"]
-
-    donnees = sortie["parsed"]
     return ResultatGenerationBrute(reponse_brute=reponse_brute, code_source=donnees.code)

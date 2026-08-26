@@ -24,8 +24,8 @@ from typing import TYPE_CHECKING, Literal
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
-from generation.agents.base import ErreurReponseAgentInvalide, charger_mission, extraire_texte_brut
-from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+from generation.agents.base import ErreurReponseAgentInvalide, charger_mission  # noqa: F401 — réexporté (tests)
+from generation.agents.client_llm import invoquer_agent_structure
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -58,17 +58,9 @@ def corriger_code(modele: BaseChatModel, code_source: str, probleme: str) -> Res
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     prompt = gabarit.format(mission=charger_mission(), code=code_source, probleme=probleme)
 
-    structure = modele.with_structured_output(
-        _SchemaCorrection, include_raw=True, method=methode_sortie_structuree(modele)
+    donnees, reponse_brute = invoquer_agent_structure(
+        modele, _SchemaCorrection, [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
     )
-    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
-    reponse_brute = extraire_texte_brut(sortie["raw"])
-    if sortie["parsing_error"] is not None:
-        raise ErreurReponseAgentInvalide(
-            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
-        ) from sortie["parsing_error"]
-
-    donnees = sortie["parsed"]
     return ResultatCorrection(
         reponse_brute=reponse_brute,
         code_source=donnees.code,
@@ -105,17 +97,8 @@ def corriger_solveur_ou_tests(
     gabarit = CHEMIN_PROMPT_TESTS_SANDBOX.read_text(encoding="utf-8")
     prompt = gabarit.format(mission=charger_mission(), code=code_source, tests=code_tests, probleme=probleme)
 
-    structure = modele.with_structured_output(
-        _SchemaCorrectionTestsSandbox, include_raw=True, method=methode_sortie_structuree(modele)
-    )
-    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
-    reponse_brute = extraire_texte_brut(sortie["raw"])
-    if sortie["parsing_error"] is not None:
-        raise ErreurReponseAgentInvalide(
-            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
-        ) from sortie["parsing_error"]
-
-    donnees = sortie["parsed"]
+    messages = [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
+    donnees, reponse_brute = invoquer_agent_structure(modele, _SchemaCorrectionTestsSandbox, messages)
     return ResultatCorrectionTestsSandbox(
         reponse_brute=reponse_brute,
         cible=donnees.cible,

@@ -27,8 +27,8 @@ from typing import TYPE_CHECKING
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
-from generation.agents.base import ErreurReponseAgentInvalide, extraire_texte_brut
-from generation.agents.client_llm import _avec_retry, methode_sortie_structuree
+from generation.agents.base import ErreurReponseAgentInvalide  # noqa: F401 — réexporté (tests)
+from generation.agents.client_llm import invoquer_agent_structure
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -222,17 +222,9 @@ def benchmarker_algorithmes(modele: BaseChatModel, instance_json: dict) -> Resul
         equilibrage_methode_approchee_en_cpsat="Oui" if carac.equilibrage_methode_approchee_en_cpsat else "Non",
     )
 
-    structure = modele.with_structured_output(
-        _SchemaBenchmark, include_raw=True, method=methode_sortie_structuree(modele)
+    donnees, reponse_brute = invoquer_agent_structure(
+        modele, _SchemaBenchmark, [SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)]
     )
-    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
-    reponse_brute = extraire_texte_brut(sortie["raw"])
-    if sortie["parsing_error"] is not None:
-        raise ErreurReponseAgentInvalide(
-            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
-        ) from sortie["parsing_error"]
-
-    donnees = sortie["parsed"]
     recommandation = RecommandationAlgorithme(
         algorithme=donnees.recommandation.algorithme,
         raison=donnees.recommandation.raison,

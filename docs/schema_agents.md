@@ -1,8 +1,11 @@
 # Schéma Complet des Agents PRISME
 
-Ce document présente l'architecture détaillée des 8 agents actifs du pipeline multi-agents
-(Analyste, Benchmarker, Architecte, Développeur, Testeur, Reviewer, Debugger, Documentation —
-Optimiseur existe mais est orphelin, plus appelé par `generation/graph.py`).
+Ce document présente l'architecture détaillée des agents du pipeline multi-agents. **7 sont
+réellement câblés dans `generation/graph.py`** (Analyste, Benchmarker, Architecte, Développeur,
+Testeur, Debugger, Documentation) ; **Reviewer** existe et fonctionne mais n'est **pas** appelé par
+le pipeline (§6.6bis — `test_sandbox`, l'exécution réelle des tests du Testeur en Docker, rend son
+avis consultatif redondant) ; **Optimiseur** est orphelin pour une raison différente (réponse JSON
+trop fragile pour embarquer du code Python complet). Les deux restent réactivables sans refonte.
 
 ---
 
@@ -295,11 +298,18 @@ avec un champ 'tests' contenant le code pytest."
 }
 ```
 
-**⚠️ Note** : Ces tests ne sont **jamais exécutés** par le pipeline (livrable documentaire uniquement).
+**⚠️ Note** : Ces tests **sont bien exécutés** pour de vrai, à chaque tentative — voir `test_sandbox`
+(§6.6bis) dans le flux de données ci-dessous. Ce n'est plus un simple livrable documentaire.
 
 ---
 
-### 6️⃣ REVIEWER
+### 6️⃣ REVIEWER — présent dans le code, **pas câblé dans le pipeline**
+
+> Fonctionne (testable isolément), mais `_construire_graphe` (`generation/graph.py`) ne
+> l'enregistre jamais comme nœud du `StateGraph` — `test_sandbox` (exécution réelle des tests du
+> Testeur en conteneur Docker, §6.6bis) et la cascade déterministe suffisent, son avis LLM
+> consultatif étant devenu redondant. Réactivable en deux lignes (`_noeud_reviewer`/
+> `_route_apres_reviewer` restent intacts) si un besoin réapparaît.
 
 **Fichier** : `generation/agents/reviewer.py`  
 **Prompt** : `generation/prompts/reviewer.md`
@@ -500,16 +510,30 @@ def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel
 ```
 
 **Providers supportés** :
-- `mistral` (défaut, via `MISTRAL_API_KEY`)
+- `mistral` (via `MISTRAL_API_KEY`, API native — fallback générique du mode single-shot)
+- `nemotron` (via `NVIDIA_API_KEY`, catalogue NVIDIA NIM — modèle `nvidia/nemotron-3-super-120b-a12b`,
+  défaut de la majorité des agents du pipeline multi-agents)
+- `nvidia` (via `NVIDIA_API_KEY`, même catalogue — modèle `meta/llama-3.3-70b-instruct`)
+- `minimax` (via `MINIMAX_API_KEY`, hébergé sur le catalogue NVIDIA — modèle `minimaxai/minimax-m3`)
+- `deepseek` (via `DEEPSEEK_API_KEY`, hébergé sur le catalogue NVIDIA — plus le défaut d'aucun agent,
+  reste un choix de repli valide)
 - `qwen` / `together` (via `TOGETHER_API_KEY`, Qwen hébergé sur Together)
-- `nvidia` (via `NVIDIA_API_KEY`)
-- `minimax` (via `MINIMAX_API_KEY`, hébergé via NVIDIA)
-- `deepseek` (via `DEEPSEEK_API_KEY`, hébergé via NVIDIA)
 
-**Sélection** : `PRISME_LLM_PROVIDER`/`PRISME_LLM_MODEL` (fallback générique), ou par agent via
-`PRISME_LLM_PROVIDER_<AGENT>`/`PRISME_LLM_MODEL_<AGENT>`/`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>` —
-voir `generation/agents/config_fournisseurs.py` et `README_FOURNISSEURS.md` pour la répartition
-par défaut. Anthropic/OpenAI ne sont pas des fournisseurs supportés par ce module.
+Anthropic/OpenAI ne sont **pas** des fournisseurs supportés par ce module.
+
+**Répartition par défaut** (`generation/agents/config_fournisseurs.py::FOURNISSEURS_PAR_AGENT`) —
+pas un fournisseur unique pour tout le pipeline :
+
+| Agent(s) | Fournisseur | Modèle |
+|---|---|---|
+| Analyste, Architecte, Développeur, Testeur, Debugger, Reviewer (inactif), Compréhension ERP | `nemotron` | `nvidia/nemotron-3-super-120b-a12b` |
+| Benchmarker, Optimiseur (inactif) | `minimax` | `minimaxai/minimax-m3` |
+| Documentation | `nvidia` | `meta/llama-3.3-70b-instruct` |
+| Supervision (MT7, hors pipeline de génération) | `mistral` | `mistral-large-latest` |
+
+**Sélection** : `PRISME_LLM_PROVIDER`/`PRISME_LLM_MODEL` (fallback générique, mode single-shot
+uniquement), ou par agent via `PRISME_LLM_PROVIDER_<AGENT>`/`PRISME_LLM_MODEL_<AGENT>`/
+`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>` — voir `generation/agents/config_fournisseurs.py`.
 
 ---
 
@@ -539,33 +563,40 @@ DÉVELOPPEUR
     │
     ▼ CodeGenere (code_source)
     │
-    ├────► TESTEUR ────► CodeTests (code_tests)
+    ▼
+TESTEUR ────► CodeTests (code_tests, un module pytest)
     │
-    └────► REVIEWER
-               │
-               ▼ ResultatRevue (approuve, commentaires)
-               │
-               ├─── APPROUVÉ ────► VALIDATION (statique → exécution → cascade)
-               │                       │
-               │                       ├─ SUCCÈS ───┐
-               │                       │            │
-               │                       └─ ÉCHEC ────┼─► DEBUGGER (max 10 tentatives,
-               │                                    │      MAX_TENTATIVES_REPARATION)
-               └─── REJETÉ ─────────────────────────┘      │
-                                                            ▼ ResultatCorrection
-                                                            │
-                                                            └─► retour REVIEWER
-                                                                   │
-                                                                   ▼ (tentatives épuisées → échec honnête, STOP)
-                                                                   ▼ (succès)
-                                                            DOCUMENTATION (best-effort)
-                                                                   │
-                                                                   ▼
-                                                            ResultatPipelineAvecBoucle
+    ▼
+TEST_SANDBOX (§6.6bis, pas un agent LLM — exécution réelle du module pytest
+    │          du Testeur, dans le conteneur Docker éphémère de production)
+    │
+    ├─── ÉCHEC ──────────────────────────────────────────────┐
+    │                                                          │
+    └─── SUCCÈS ────► VALIDATION (statique → exécution → cascade déterministe)
+                              │                                │
+                              ├─ SUCCÈS ──► DOCUMENTATION       │
+                              │             (best-effort)       │
+                              │                                 │
+                              └─ ÉCHEC ─────────────────────────┤
+                                                                 ▼
+                                                          DEBUGGER (max 10 tentatives,
+                                                          MAX_TENTATIVES_REPARATION)
+                                                                 │
+                                                                 ▼ ResultatCorrection
+                                                                 │
+                                                                 └─► retour TEST_SANDBOX
+                                                                        │
+                                                                        ▼ (tentatives épuisées → échec honnête, STOP)
+                                                                        ▼ (succès)
+                                                                 DOCUMENTATION (best-effort)
+                                                                        │
+                                                                        ▼
+                                                                 ResultatPipelineAvecBoucle
 ```
 
-Optimiseur n'apparaît pas dans ce flux : agent orphelin, plus appelé par `generation/graph.py`
-(réponse JSON jugée trop fragile pour embarquer du code Python complet).
+Le Reviewer n'apparaît pas dans ce flux : présent dans le code (`generation/agents/reviewer.py`),
+mais jamais câblé dans `_construire_graphe` (voir section 6️⃣ plus haut). Optimiseur non plus :
+orphelin, plus appelé (réponse JSON jugée trop fragile pour embarquer du code Python complet).
 
 ---
 
@@ -717,22 +748,25 @@ Voir `sandbox/runner.py` (Étape 7).
 
 ## 📊 Métriques par Agent
 
-Estimation (instance 12 tâches, Mistral Large) :
+Estimation (instance 12 tâches, illustrative — le fournisseur réel varie par agent, voir la
+répartition par défaut plus haut, pas un seul modèle pour tout le pipeline) :
 
-| Agent | Durée (s) | Tokens In | Tokens Out | Coût ($) |
+| Agent / étape | Durée (s) | Tokens In | Tokens Out | Coût ($) |
 |-------|-----------|-----------|------------|----------|
 | Analyste | 11 | 600 | 300 | 0.038 |
+| Benchmarker | variable | 700 | 300 | 0.040 |
 | Architecte | 15 | 900 | 400 | 0.051 |
 | Développeur | 21 | 1200 | 800 | 0.075 |
 | Testeur | 18 | 1000 | 500 | 0.058 |
-| Reviewer | 10 | 1100 | 150 | 0.042 |
+| Test_sandbox (Docker, pas un appel LLM) | variable | 0 | 0 | 0.000 |
 | Debugger* | 15 | 1300 | 700 | 0.068 |
-| Optimiseur* | 12 | 1000 | 600 | 0.055 |
 | Documentation | 8 | 900 | 400 | 0.048 |
 
-*Conditionnel (pas toujours exécuté)
+*Conditionnel — seulement si `test_sandbox` ou `validation` échoue à une tentative donnée.
+Reviewer et Optimiseur absents de ce tableau : aucun des deux n'est appelé par le pipeline actuel
+(voir sections dédiées plus haut).
 
-**Total pipeline complet** : ~95s, ~$0.48
+**Total pipeline complet (cas nominal, une seule tentative)** : ~95s, ~$0.35-0.50 selon fournisseurs
 
 ---
 

@@ -14,6 +14,8 @@ attributs de l'objet construit, jamais une réponse réelle.
 from __future__ import annotations
 
 import pytest
+from langchain_core.messages import AIMessage, HumanMessage
+from pydantic import BaseModel
 
 from generation.agents import client_llm
 
@@ -187,3 +189,97 @@ class TestAvecRetry:
 
         with pytest.raises(_ErreurAvecStatut):
             client_llm._avec_retry(appel)()
+
+
+class _SchemaFactice(BaseModel):
+    valeur: str
+
+
+class _RunnableStructureFactice:
+    """Contrairement à `tests/unit/aides_test_agents.py::ModeleFactice`
+    (stateless — renvoie toujours la même sortie), celui-ci consomme une
+    séquence : nécessaire pour tester qu'`invoquer_agent_structure` retente
+    bien un *nouvel* appel LLM plutôt que de rejouer indéfiniment la même
+    réponse."""
+
+    def __init__(self, sequence: list[dict]) -> None:
+        self._sequence = iter(sequence)
+
+    def invoke(self, messages: object) -> dict:
+        return next(self._sequence)
+
+
+class _ModeleFactice:
+    def __init__(self, sequence: list[dict]) -> None:
+        self._sequence = sequence
+
+    def with_structured_output(
+        self, schema: type, include_raw: bool = True, method: str | None = None
+    ) -> _RunnableStructureFactice:
+        return _RunnableStructureFactice(self._sequence)
+
+
+def _sortie(contenu: str, parsed: _SchemaFactice | None, parsing_error: Exception | None = None) -> dict:
+    return {"raw": AIMessage(content=contenu), "parsed": parsed, "parsing_error": parsing_error}
+
+
+class TestInvoquerAgentStructure:
+    """`invoquer_agent_structure` (bug reproduit sur l'agent Architecte,
+    `fonctions_internes` renvoyé comme un objet imbriqué au lieu d'une
+    chaîne) : retente un nouvel appel LLM complet — jamais couvert par
+    `_avec_retry`, qui ne réagit qu'à une exception réseau transitoire,
+    jamais à un JSON syntaxiquement valide mais non conforme au schéma."""
+
+    def test_reussit_du_premier_coup_sans_second_appel(self) -> None:
+        parsed = _SchemaFactice(valeur="ok")
+        modele = _ModeleFactice([_sortie("ok", parsed)])
+
+        donnees, reponse_brute = client_llm.invoquer_agent_structure(
+            modele, _SchemaFactice, [HumanMessage(content="x")]
+        )
+
+        assert donnees is parsed
+        assert reponse_brute == "ok"
+
+    def test_reessaie_puis_reussit_sur_sortie_non_conforme(self) -> None:
+        parsed = _SchemaFactice(valeur="ok")
+        modele = _ModeleFactice(
+            [
+                _sortie("mal formé", None, ValueError("mal formé")),
+                _sortie("ok", parsed),
+            ]
+        )
+
+        donnees, reponse_brute = client_llm.invoquer_agent_structure(
+            modele, _SchemaFactice, [HumanMessage(content="x")]
+        )
+
+        assert donnees is parsed
+        assert reponse_brute == "ok"
+
+    def test_leve_apres_epuisement_des_tentatives(self) -> None:
+        modele = _ModeleFactice([_sortie(f"mal formé {i}", None, ValueError("x")) for i in range(3)])
+
+        with pytest.raises(client_llm.ErreurReponseAgentInvalide, match="mal formé 2"):
+            client_llm.invoquer_agent_structure(
+                modele, _SchemaFactice, [HumanMessage(content="x")], tentatives_max=3
+            )
+
+    def test_respecte_tentatives_max_personnalise(self) -> None:
+        appels = {"n": 0}
+
+        class _RunnableCompteur:
+            def invoke(self, messages: object) -> dict:
+                appels["n"] += 1
+                return _sortie("mal formé", None, ValueError("x"))
+
+        class _ModeleCompteur:
+            def with_structured_output(self, schema: type, include_raw: bool = True, method=None):
+                return _RunnableCompteur()
+
+        with pytest.raises(client_llm.ErreurReponseAgentInvalide):
+            client_llm.invoquer_agent_structure(
+                _ModeleCompteur(), _SchemaFactice, [HumanMessage(content="x")], tentatives_max=2
+            )
+
+        assert appels["n"] == 2

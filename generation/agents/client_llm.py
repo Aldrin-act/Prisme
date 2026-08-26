@@ -31,10 +31,15 @@ import time
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
+from generation.agents.base import ErreurReponseAgentInvalide, extraire_texte_brut
+
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
+    from langchain_core.messages import BaseMessage
+    from pydantic import BaseModel
 
 _TENTATIVES_MAX = 5
+_TENTATIVES_MAX_SORTIE_STRUCTUREE = 3
 _DELAI_BASE_SECONDES = 2.0
 _DELAI_MAX_SECONDES = 30.0
 
@@ -85,6 +90,48 @@ def _avec_retry(appel: Callable) -> Callable:
         raise AssertionError("inatteignable")  # la boucle retourne ou lève à chaque itération
 
     return appel_avec_retry
+
+
+def invoquer_agent_structure(
+    modele: BaseChatModel,
+    schema: type[BaseModel],
+    messages: list[BaseMessage],
+    *,
+    tentatives_max: int = _TENTATIVES_MAX_SORTIE_STRUCTUREE,
+) -> tuple[BaseModel, str]:
+    """Invoque `modele` en sortie structurée (`with_structured_output`) et valide la réponse
+    contre `schema`, avec jusqu'à `tentatives_max` appels LLM indépendants si le modèle renvoie
+    un JSON syntaxiquement valide mais non conforme au schéma (vu en pratique sur l'agent
+    Architecte : `fonctions_internes` structuré comme un objet imbriqué au lieu de la chaîne de
+    texte attendue, avec `finish_reason="stop"` — pas une troncature, le modèle produit juste
+    autre chose que demandé).
+
+    Distinct de `_avec_retry`, appliqué ici à chaque tentative : celui-ci retente le *même* appel
+    réseau sur une erreur transitoire (5xx/429/timeout) sans jamais avoir reçu de réponse ;
+    celui-ci retente un *nouvel* appel LLM complet quand une réponse a bien été reçue mais ne
+    respecte pas le schéma — `include_raw=True` fait que LangChain ne lève jamais dans ce cas,
+    l'erreur revient dans `sortie["parsing_error"]`, jamais retentée par ailleurs.
+
+    Lève `ErreurReponseAgentInvalide` seulement si `tentatives_max` tentatives échouent toutes —
+    laisser la tentative de génération échouer à ce stade reste le comportement voulu du pipeline
+    (voir `generation/graph.py`, chaque nœud sauf Documentation) : un agent qui ne produit jamais
+    de sortie conforme après plusieurs essais indépendants est un vrai problème (fournisseur
+    cassé, prompt qui a dérivé), pas un aléa à absorber silencieusement.
+
+    Renvoie `(donnees_validees, reponse_brute_de_la_derniere_tentative)`."""
+    structure = modele.with_structured_output(schema, include_raw=True, method=methode_sortie_structuree(modele))
+    derniere_erreur: Exception | None = None
+    reponse_brute = ""
+    for _ in range(tentatives_max):
+        sortie = _avec_retry(structure.invoke)(messages)
+        reponse_brute = extraire_texte_brut(sortie["raw"])
+        if sortie["parsing_error"] is None:
+            return sortie["parsed"], reponse_brute
+        derniere_erreur = sortie["parsing_error"]
+    raise ErreurReponseAgentInvalide(
+        f"réponse non conforme au schéma reçue de l'agent après {tentatives_max} tentative(s) : "
+        f"{reponse_brute[:200]!r}"
+    ) from derniere_erreur
 
 
 _MODELES_PAR_DEFAUT = {
@@ -269,10 +316,11 @@ def construire_modele() -> BaseChatModel:
 
 def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel:
     """Construit le `BaseChatModel` LangChain optimal pour un agent
-    spécifique. Le retry (`_avec_retry`) reste à la charge de l'appelant, qui
-    l'applique au point d'appel réel (`.invoke(...)` sur le `Runnable`
-    structuré ou brut), puisque le modèle renvoyé ici n'est pas encore
-    l'objet invoqué.
+    spécifique. Le retry (`_avec_retry` pour les erreurs réseau transitoires,
+    `invoquer_agent_structure` pour une sortie structurée non conforme)
+    reste à la charge de l'appelant, qui l'applique au point d'appel réel
+    (`.invoke(...)` sur le `Runnable` structuré ou brut), puisque le modèle
+    renvoyé ici n'est pas encore l'objet invoqué.
 
     Utilise la configuration centralisée (`config_fournisseurs.py`) pour
     sélectionner le fournisseur le mieux adapté à cet agent. Permet une

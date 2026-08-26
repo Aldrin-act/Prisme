@@ -41,32 +41,40 @@ Instance T-R-C-O  ──┐
                 │ Code source (~100-200 lignes)
                 ▼
     ┌───────────────────────────┐
-    │ 5. TESTEUR                │  Génère les tests unitaires
+    │ 5. TESTEUR                │  Génère les tests pytest (exécutés pour de vrai, voir ci-dessous)
     │    Durée : ~17s           │
     └───────────┬───────────────┘
                 │ Code candidat + tests
                 ▼
     ┌─────────────────────────────────────────────────────────────┐
-    │ BOUCLE DE RÉPARATION BORNÉE (max 10 tentatives)              │
+    │ BOUCLE DE RÉPARATION BORNÉE (max 10 tentatives, §6.6bis)     │
     │                                                               │
-    │  6. REVIEWER relit le code                                   │
-    │      │ Rejeté ──────────► 7. DEBUGGER corrige, retour Reviewer│
-    │      │ Approuvé                                              │
-    │      ▼                                                       │
-    │  VALIDATION (statique → exécution → cascade)                 │
-    │      │ Échec ────────────► 7. DEBUGGER corrige, retour Reviewer│
-    │      │ Succès                                                │
+    │  TEST_SANDBOX : exécute pour de vrai le module pytest        │
+    │  généré par le Testeur, dans le conteneur Docker éphémère    │
+    │      │ Échec ─────────────────────► DEBUGGER corrige         │
+    │      │ Succès                             │                  │
+    │      ▼                                    │                  │
+    │  VALIDATION (statique → exécution → cascade déterministe)    │
+    │      │ Échec ─────────────────────► DEBUGGER corrige         │
+    │      │ Succès                             │                  │
+    │      │                     DEBUGGER ──► retour à TEST_SANDBOX│
     └──────┼────────────────────────────────────────────────────────┘
            │                (tentatives épuisées → échec honnête, STOP)
            ▼
     ┌───────────────────────────┐
-    │ 8. DOCUMENTATION          │  Best-effort, ne fait jamais échouer un solveur validé
+    │ 6. DOCUMENTATION          │  Best-effort, ne fait jamais échouer un solveur validé
     └───────────┬───────────────┘
                 ▼
            RÉSULTAT FINAL
 ```
 
-Pas d'Optimiseur non plus dans ce pipeline : agent retiré (réponse JSON trop fragile pour embarquer du code Python complet). `generation/agents/optimiseur.py` existe toujours mais n'est plus appelé — orphelin.
+Le **Reviewer** (revue de code par un second LLM) n'apparaît **pas** dans ce flux : présent dans le code
+(`generation/agents/reviewer.py`, `_noeud_reviewer`/`_route_apres_reviewer` dans `generation/graph.py`) mais
+jamais câblé dans `_construire_graphe` — son avis consultatif est devenu redondant une fois que
+`test_sandbox` exécute réellement les tests du Testeur et que la cascade déterministe tranche derrière.
+Réactivable en deux lignes si besoin (voir CLAUDE.md, Étape 6). Pas d'Optimiseur non plus : agent retiré
+(réponse JSON trop fragile pour embarquer du code Python complet). `generation/agents/optimiseur.py`
+existe toujours mais n'est plus appelé — orphelin, comme `reviewer.py`, mais pour une raison différente.
 
 ---
 
@@ -263,92 +271,78 @@ Génère des tests pytest pour ce solveur :
 
 **Fichier** : `generation/agents/testeur.py`
 
-**Note** : Ces tests ne sont **jamais exécutés** par le pipeline. Seule la validation cascade fait autorité. Les tests sont un livrable documentaire.
+**Note** : Contrairement à une version antérieure de ce document, ces tests **sont bien exécutés**
+pour de vrai — voir TEST_SANDBOX ci-dessous (§6.6bis). Le Testeur ne fait que les *générer* ; c'est
+`test_sandbox` qui les fait tourner dans le conteneur Docker éphémère à chaque tentative.
 
 ---
 
-### 6️⃣ REVIEWER
+### TEST_SANDBOX (pas un agent LLM — exécution réelle, §6.6bis)
 
-**Rôle** : Relire le code et détecter les bugs potentiels.
+**Rôle** : Exécuter pour de vrai le module pytest généré par le Testeur, dans le même conteneur
+Docker éphémère durci que celui utilisé en production (`sandbox/runner.py::executer_tests_dans_sandbox`)
+— premier vrai filtre de chaque tentative, avant même la cascade déterministe.
 
-**Input** :
-- Code source (output du Développeur)
+**Input** : Code source candidat (du Développeur ou du Debugger) + module de tests (du Testeur)
 
-**Prompt** :
-```
-Relis ce code solveur OR-Tools. Détecte les bugs potentiels :
-- Variables mal nommées
-- Contraintes manquantes
-- Utilisation incorrecte de l'API OR-Tools
-- Incompatibilité avec le DSL (OperationPlanifiee, Planning)
-- Erreurs de logique
+**Comportement** : Un échec route directement vers le Debugger, sans passer par la validation
+cascade — inutile de faire tourner une cascade sur un code dont on sait déjà, par exécution réelle,
+qu'il ne passe pas ses propres tests. Si le sandbox lui-même est injoignable, ça ne bloque jamais le
+pipeline (traité comme un échec de cette tentative, pas une panne fatale).
 
-Si le code est parfait : approuve.
-Sinon : liste les bugs précisément.
-```
+**Fichier** : `generation/graph.py` (`_noeud_test_sandbox`/`_route_apres_test_sandbox`), `sandbox/runner.py`
 
-**Output** : `ResultatRevue`
-- `approuve: bool`
-- `commentaires: str` (liste de bugs si rejeté)
-- Exemple (approbation) :
-  ```
-  approuve = True
-  commentaires = "Code propre, bien structuré, respect du DSL."
-  ```
-- Exemple (rejet) :
-  ```
-  approuve = False
-  commentaires = """
-  Bug 1 : Ligne 42, vous passez l'objet `tache` au lieu de `tache.id`
-  Bug 2 : Ligne 87, le champ `fin` manque dans OperationPlanifiee
-  Bug 3 : Contrainte de no-overlap non implémentée
-  """
-  ```
+---
 
-**Durée moyenne** : ~10s
+### 6️⃣ REVIEWER — présent dans le code, **jamais appelé** par le pipeline
+
+**Rôle prévu** : Relire le code et détecter les bugs potentiels avant validation — un second avis
+LLM en plus de la validation déterministe.
+
+**État réel** : `generation/agents/reviewer.py`, `_noeud_reviewer` et `_route_apres_reviewer`
+(`generation/graph.py`) existent et fonctionnent, mais ne sont **pas** enregistrés dans
+`_construire_graphe` — son avis consultatif est devenu redondant une fois que `test_sandbox`
+exécute réellement les tests du Testeur et que la cascade déterministe tranche derrière. Réactivable
+en deux lignes (`graphe.add_node("reviewer", ...)` + reprise des arêtes) si un besoin réapparaît —
+voir CLAUDE.md, Étape 6.
 
 **Fichier** : `generation/agents/reviewer.py`
 
-**Point clé** : Si `approuve = True`, on passe direct à la validation. Si `False`, on passe au Debugger.
-
 ---
 
-### 7️⃣ DEBUGGER (Conditionnel)
+### 7️⃣ DEBUGGER
 
-**Rôle** : Corriger les bugs identifiés par le Reviewer.
+**Rôle** : Corriger le code après un échec de `test_sandbox` ou de la validation cascade — jamais
+après un rejet du Reviewer (désactivé, voir ci-dessus).
 
-**Condition d'exécution** : Seulement si `revue.approuve == False`
+**Condition d'exécution** : Après un échec de `test_sandbox` (tests réels en échec) ou de
+`validation` (cascade déterministe en échec).
 
 **Input** :
-- Code source bugué (output du Développeur)
-- Commentaires du Reviewer (liste des bugs)
+- Code source bugué (output du Développeur ou d'une tentative précédente)
+- Message d'erreur : sortie des tests réels en sandbox, ou verdict de la cascade
 
-**Prompt** :
-```
-Le reviewer a détecté ces bugs dans le code :
-
-{commentaires}
-
-Corrige ces bugs et retourne le code corrigé complet.
-```
-
-**Output** : `CodeCorrige`
+**Output** : `ResultatCorrection`
 - Code source Python corrigé
+- `cause: str | None` — cause identifiée (aide au diagnostic, jamais bloquant si absente)
 
 **Durée moyenne** : ~15s
 
 **Fichier** : `generation/agents/debugger.py`
 
-**Note importante** : Le Debugger peut intervenir **jusqu'à 10 fois** (`MAX_TENTATIVES_REPARATION`, §6.6) — boucle bornée Reviewer ⇄ Debugger, pas un essai unique. Si les tentatives s'épuisent sans validation réussie, c'est un échec final honnête (jamais masqué).
+**Note importante** : Le Debugger peut intervenir **jusqu'à 10 fois** (`MAX_TENTATIVES_REPARATION`,
+§6.6bis) — boucle bornée `test_sandbox` ⇄ `debugger`, avec passage par `validation` entre les deux.
+Toute correction repasse par `test_sandbox` en premier (jamais directement par `validation`). Si les
+tentatives s'épuisent sans validation réussie, c'est un échec final honnête (jamais masqué).
 
 ---
 
-### VALIDATION (pas un agent LLM, mais une fonction — appelée à chaque tentative de la boucle)
+### VALIDATION (pas un agent LLM, mais une fonction — appelée à chaque tentative, après un succès de test_sandbox)
 
-**Rôle** : Valider le code en 3 passes.
+**Rôle** : Valider le code en 3 passes déterministes, une fois `test_sandbox` déjà passé.
 
 **Input** :
-- Code source (du Développeur ou du Debugger)
+- Code source (du Développeur ou du Debugger), déjà vert sur `test_sandbox`
 
 **Pipeline de validation** :
 
@@ -374,11 +368,13 @@ Corrige ces bugs et retourne le code corrigé complet.
 - `verdict_cascade: VerdictCascade | None`
 - `reussi: bool` (True seulement si les 3 passes OK)
 
-**Durée totale** : ~0.5s par tentative
+**Durée totale** : ~0.5s par tentative (hors temps de `test_sandbox`, qui tourne un vrai conteneur Docker)
 
-**Fichier** : `generation/graph.py` (fonction `_valider_completement`)
+**Fichier** : `generation/graph.py` (fonction `_valider_completement`, nœud `validation`)
 
-**Point clé** : Appelée à chaque tentative de la boucle (jusqu'à 10 fois) — jamais sur du code d'Optimiseur, cet agent n'est plus dans le pipeline (voir ci-dessous).
+**Point clé** : Appelée à chaque tentative de la boucle (jusqu'à 10 fois), seulement après un succès
+de `test_sandbox` — jamais sur du code d'Optimiseur, cet agent n'est plus dans le pipeline (voir
+ci-dessous).
 
 ---
 
@@ -460,18 +456,18 @@ Instance T-R-C-O
          DÉVELOPPEUR ───► Code candidat
               │
               ▼
-         TESTEUR ───► Tests pytest générés (jamais exécutés automatiquement)
+         TESTEUR ───► Module pytest généré
               │
               ▼
-    ┌─── BOUCLE (max 10 tentatives) ──────────────────────────────┐
+    ┌─── BOUCLE (max 10 tentatives, §6.6bis) ─────────────────────┐
     │                                                              │
-    │   REVIEWER ───► Approuvé (bool) + Commentaires (str)        │
+    │   TEST_SANDBOX ───► exécution réelle des tests, en Docker   │
     │       │                                                      │
-    │       ├─ REJETÉ ──► DEBUGGER ──► Code corrigé ──► retour Reviewer
+    │       ├─ ÉCHEC ──► DEBUGGER ──► Code corrigé ──► retour TEST_SANDBOX
     │       │                                                      │
-    │       └─ APPROUVÉ ──► VALIDATION (statique → exécution → cascade)
+    │       └─ SUCCÈS ──► VALIDATION (statique → exécution → cascade)
     │                             │                                │
-    │                             ├─ ÉCHEC ──► DEBUGGER ──► retour Reviewer
+    │                             ├─ ÉCHEC ──► DEBUGGER ──► retour TEST_SANDBOX
     │                             └─ SUCCÈS ──► sort de la boucle  │
     └──────────────────────────────────────────────────────────────┘
               │ (tentatives épuisées → échec honnête, STOP)
@@ -482,26 +478,32 @@ Instance T-R-C-O
        RÉSULTAT FINAL
 ```
 
+Le Reviewer n'apparaît pas dans ce flux (présent dans le code, jamais câblé — voir la section 6️⃣
+ci-dessus).
+
 ---
 
 ## 📊 Métriques Typiques
 
 Sur une instance de **12 tâches, 5 ressources, 10 contraintes** :
 
-| Agent | Durée (s) | Tokens Input | Tokens Output | Coût ($) |
+| Agent / étape | Durée (s) | Tokens Input | Tokens Output | Coût ($) |
 |-------|-----------|--------------|---------------|----------|
 | Analyste | 10.6 | 600 | 300 | 0.038 |
+| Benchmarker | variable | 700 | 300 | 0.040 |
 | Architecte | 14.9 | 900 | 400 | 0.051 |
 | Développeur | 21.0 | 1200 | 800 | 0.075 |
 | Testeur | 17.5 | 1000 | 500 | 0.058 |
-| Reviewer | 9.8 | 1100 | 150 | 0.042 |
-| Debugger | 15.0 | 1300 | 700 | 0.068 |
+| Test_sandbox (Docker) | variable, ~qq secondes | 0 | 0 | 0.000 |
+| Debugger* | 15.0 | 1300 | 700 | 0.068 |
 | Validation | 0.5 | 0 | 0 | 0.000 |
-| Optimiseur | 12.0 | 1000 | 600 | 0.055 |
 | Documentation | 8.0 | 900 | 400 | 0.048 |
-| **TOTAL** | **95.3s** | **9,800** | **4,050** | **$0.48** |
 
-*Estimation basée sur Mistral Large @ $3 input / $15 output par 1M tokens*
+*Conditionnel — seulement si `test_sandbox` ou `validation` échoue à une tentative donnée.
+Reviewer et Optimiseur absents de ce tableau : ni l'un ni l'autre n'est appelé par le pipeline actuel
+(voir sections dédiées ci-dessus). Les coûts réels dépendent aussi du fournisseur LLM effectivement
+utilisé par agent (voir §Configuration ci-dessous) — nettement plus disparate qu'un fournisseur
+unique pour tous les agents.
 
 ---
 
@@ -510,17 +512,18 @@ Sur une instance de **12 tâches, 5 ressources, 10 contraintes** :
 ### ✅ Avantages Multi-Agents
 
 1. **Séparation des préoccupations** : Chaque agent a un rôle clair
-2. **Qualité accrue** : Reviewer détecte 70-80% des bugs avant exécution
-3. **Correction automatique** : Debugger corrige les bugs identifiés
-4. **Optimisation sûre** : L'optimiseur peut améliorer sans risquer la validité
-5. **Documentation automatique** : Livrable prêt à l'emploi
+2. **Qualité accrue** : les tests du Testeur sont réellement exécutés en sandbox (§6.6bis) avant
+   toute cascade déterministe, pas juste générés comme livrable documentaire
+3. **Correction automatique et bornée** : Debugger corrige jusqu'à 10 tentatives, jamais indéfiniment
+4. **Documentation automatique** : Livrable prêt à l'emploi
 
 ### ⚠️ Limites
 
-1. **Coût** : ~10x plus cher que le mode simple (1 agent)
-2. **Durée** : ~3-5x plus lent (95s vs 30s)
-3. **Pas de boucle** : Le Debugger n'intervient qu'une fois (§6.6, Étape 6 non construite)
-4. **Tests non exécutés** : Le Testeur génère du code pytest mais il n'est jamais lancé
+1. **Coût** : nettement plus cher que le mode simple (1 agent, `tentative_unique.py`)
+2. **Durée** : plusieurs appels LLM + jusqu'à 10 tentatives de réparation, contre un seul appel en mode simple
+3. **Complexité des instances riches en contraintes** : plus de contraintes à justifier peut
+   consommer davantage le budget de tokens de sortie du fournisseur choisi (voir §Configuration) —
+   pas de plafond dur documenté ici, dépend du modèle
 
 ### 🔒 Garanties de Sécurité
 
@@ -546,25 +549,49 @@ Sur une instance de **12 tâches, 5 ressources, 10 contraintes** :
 
 ## 🔧 Configuration
 
-Provider recommandé : **Anthropic Claude > Mistral Large > OpenAI GPT-4**
+**Anthropic et OpenAI ne sont pas des fournisseurs supportés par ce module** —
+`generation/agents/client_llm.py::_CONSTRUCTEURS_MODELE` ne connaît que `mistral`, `together`,
+`qwen` (alias de `together`), `nvidia`, `minimax`, `deepseek` et `nemotron` (tous deux hébergés via
+le catalogue API NVIDIA NIM, `https://integrate.api.nvidia.com/v1`, sauf `mistral`/`together` qui
+appellent leur API native).
 
-Fichier `.env` :
-```bash
-PRISME_LLM_PROVIDER=anthropic  # ou mistral, openai
-ANTHROPIC_API_KEY=sk-ant-...
-```
+Chaque agent est routé vers un fournisseur par défaut différent, pas un fournisseur unique pour tout
+le pipeline (`generation/agents/config_fournisseurs.py`) :
 
-Script de génération :
+| Agent(s) | Fournisseur par défaut | Modèle |
+|---|---|---|
+| Analyste, Architecte, Développeur, Testeur, Debugger, Reviewer (inactif), Compréhension ERP | `nemotron` | `nvidia/nemotron-3-super-120b-a12b` |
+| Benchmarker, Optimiseur (inactif) | `minimax` | `minimaxai/minimax-m3` |
+| Documentation | `nvidia` | `meta/llama-3.3-70b-instruct` |
+| Supervision (MT7) | `mistral` | `mistral-large-latest` |
+
+Surchargeable par variable d'environnement, agent par agent :
 ```bash
-uv run python scripts/generer_solveur.py        # Multi-agents (défaut)
+PRISME_LLM_PROVIDER_<AGENT>=mistral       # ex. PRISME_LLM_PROVIDER_DEVELOPPEUR=deepseek
+PRISME_LLM_MODEL_<AGENT>=...
+PRISME_LLM_TIMEOUT_SECONDES_<AGENT>=...
 ```
+`PRISME_LLM_PROVIDER`/`PRISME_LLM_MODEL` (sans suffixe d'agent) restent le repli générique du mode
+single-shot (`tentative_unique.py`), pas celui du pipeline multi-agents.
+
+Appel direct du pipeline (pas de script `generer_solveur.py` — n'existe pas) :
+```python
+from generation.graph import tenter_generation_avec_boucle
+
+resultat = tenter_generation_avec_boucle(instance_exemple=instance.model_dump(mode="json"))
+```
+Ou via l'API, déjà câblée dessus : `POST /generation/{instance_id}` (bloquant) ou
+`POST /generation/{instance_id}/demarrer` + SSE `GET /generation/jobs/{job_id}/stream`
+(`api/routes/generation.py`).
 
 ---
 
 ## 📚 Fichiers Liés
 
-- **Pipeline + boucle** : `generation/graph.py` (StateGraph LangGraph, Étape 6)
-- **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,reviewer,debugger,documentation}.py` (`optimiseur.py` orphelin)
-- **Client LLM** : `generation/agents/client_llm.py`
+- **Pipeline + boucle** : `generation/graph.py` (StateGraph LangGraph, Étape 6, §6.6bis pour `test_sandbox`)
+- **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,debugger,documentation}.py`
+  (`reviewer.py` présent, jamais câblé ; `optimiseur.py` orphelin, plus appelé)
+- **Client LLM** : `generation/agents/client_llm.py`, `generation/agents/config_fournisseurs.py` (routage par agent)
 - **Validation** : `generation/validation_statique.py`, `generation/executer.py`, `validation_engine/cascade.py`
+- **Sandbox** : `sandbox/runner.py` (`executer_tests_dans_sandbox`, exécution réelle du Testeur ; Étape 7 pour la production)
 - **Observabilité** : LangSmith (tracing natif LangChain/LangGraph, aucune instrumentation maison)

@@ -8,6 +8,10 @@ ci-dessus (auquel cas les règles de sécurité priment) :
 
 {plan_technique}
 
+## Documentation de référence consultée
+
+{documentation}
+
 ## Format de réponse exigé
 
 Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de

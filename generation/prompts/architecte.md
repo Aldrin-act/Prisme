@@ -11,6 +11,10 @@
 Paramètres suggérés :
 {parametres}
 
+## Documentation de référence consultée
+
+{documentation}
+
 ## Ton rôle : Agent Architecte
 
 Tu n'écris aucun code à cette étape. Le contrat impose **un seul module,
@@ -117,7 +121,12 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
 ## Format de réponse exigé
 
 Réponds avec un unique objet JSON, rien d'autre avant ni après (pas de
-texte, pas de bloc markdown autour) :
+texte, pas de bloc markdown autour). **Chaque champ ci-dessous est une
+chaîne de texte en prose (ou `null` pour `fonctions_internes` si aucune
+décomposition n'est utile) — jamais un objet JSON imbriqué, ni une liste.**
+Décris la décomposition en fonctions internes en une seule chaîne (ex.
+`"_preprocess(instance) -> tables précalculées ; _decoder(...) -> Planning"`),
+pas comme un objet `{{"nom_fonction": "description", ...}}` :
 
 ```json
 {{

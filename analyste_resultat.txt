@@ -3,3 +3,58 @@ SPÉCIFICATION GÉNÉRÉE PAR L'ANALYSTE
 
 📥 ENTRÉES
 ──────────────────────────────────────────────────────────────────────
+InstanceTRCO contenant les listes taches, ressources, contraintes (polymorphes) et objectifs; depuis contraintes on extrait les précédences, les compatibilités ressource‑tâche avec leurs durées, les éventuelles échéances, capacités, incompatibilités, indisponibilités, changements de série; les objectifs sont parcourus pour identifier MinimiserMakespan et/ou EquilibrerCharge avec leurs poids, méthodes et ressources cibles; le paramètre planning_precedent (optionnel) fournit un planning déjà exécuté et horizon_gele_jours indique le nombre de jours à figer dès le début de l'horizon.
+
+📤 SORTIES
+──────────────────────────────────────────────────────────────────────
+Si une solution réalisable existe, resoudre renvoie un objet Planning constitué d'une liste d'OperationPlanifiee, chacune spécifiant la tâche, la ressource compatible choisi et le temps de début (en jours) telles que toutes les contraintes dures soient respectées et la fonction objectif (makespan, éventuellement combinaison avec équilibrage de charge) soit optimisée (ou la meilleure trouvée si l'algorithme est approximatif); si aucune solution réalisable n'existe, la fonction renvoie None.
+
+🔒 CONTRAINTES À COUVRIR
+──────────────────────────────────────────────────────────────────────
+1. Chaque tâche doit être assignée à exactement une ressource parmi celles listées dans une CompatibiliteRessourceTache valide pour cette tâche.
+2. Pour toute précédence (avant → apres), la fin de la tâche avant doit être inférieur ou égal au début de la tâche apres.
+3. Une ressource ne peut pas être utilisée par plus d'opérations simultanées que sa capacité (capacité 1 par défaut, ou valeur spécifiée dans ContrainteCapacite).
+4. Deux tâches liées par une ContrainteIncompatibilite ne peuvent jamais être affectées à la même ressource, indépendamment du temps.
+5. Une tâche ne peut pas s'exécuter pendant un jour où sa ressource est marquée indisponible (jours explicites ou récurrents via ContrainteDisponibiliteRessource).
+6. Si une tâche possède une Echeance, son instant de fin doit être inférieur ou égal à cette échéance.
+7. Si une ContrainteChangementSerie (ressource, tache_avant, tache_apres, duree_setup) est présente et que les deux tâches sont assignées à cette ressource avec tache_avant finissant avant tache_apres, alors le début de tache_apres doit être au moins duree_setup après la fin de tache_avant.
+8. Lorsque horizon_gele_jours > 0 et qu'un planning_precedent est fourni, toute opération dont le début est inférieur à horizon_gele_jours doit être conservée identique (même tâche, même ressource, même début) dans le nouveau planning, à condition que le couple (tache, ressource) reste compatible dans l'instance courante.
+
+======================================================================
+RENDU EN TEXTE
+======================================================================
+
+### Entrées
+InstanceTRCO contenant les listes taches, ressources, contraintes (polymorphes) et objectifs; depuis contraintes on extrait les précédences, les compatibilités ressource‑tâche avec leurs durées, les éventuelles échéances, capacités, incompatibilités, indisponibilités, changements de série; les objectifs sont parcourus pour identifier MinimiserMakespan et/ou EquilibrerCharge avec leurs poids, méthodes et ressources cibles; le paramètre planning_precedent (optionnel) fournit un planning déjà exécuté et horizon_gele_jours indique le nombre de jours à figer dès le début de l'horizon.
+
+### Sorties
+Si une solution réalisable existe, resoudre renvoie un objet Planning constitué d'une liste d'OperationPlanifiee, chacune spécifiant la tâche, la ressource compatible choisi et le temps de début (en jours) telles que toutes les contraintes dures soient respectées et la fonction objectif (makespan, éventuellement combinaison avec équilibrage de charge) soit optimisée (ou la meilleure trouvée si l'algorithme est approximatif); si aucune solution réalisable n'existe, la fonction renvoie None.
+
+### Contraintes à couvrir
+- Chaque tâche doit être assignée à exactement une ressource parmi celles listées dans une CompatibiliteRessourceTache valide pour cette tâche.
+- Pour toute précédence (avant → apres), la fin de la tâche avant doit être inférieur ou égal au début de la tâche apres.
+- Une ressource ne peut pas être utilisée par plus d'opérations simultanées que sa capacité (capacité 1 par défaut, ou valeur spécifiée dans ContrainteCapacite).
+- Deux tâches liées par une ContrainteIncompatibilite ne peuvent jamais être affectées à la même ressource, indépendamment du temps.
+- Une tâche ne peut pas s'exécuter pendant un jour où sa ressource est marquée indisponible (jours explicites ou récurrents via ContrainteDisponibiliteRessource).
+- Si une tâche possède une Echeance, son instant de fin doit être inférieur ou égal à cette échéance.
+- Si une ContrainteChangementSerie (ressource, tache_avant, tache_apres, duree_setup) est présente et que les deux tâches sont assignées à cette ressource avec tache_avant finissant avant tache_apres, alors le début de tache_apres doit être au moins duree_setup après la fin de tache_avant.
+- Lorsque horizon_gele_jours > 0 et qu'un planning_precedent est fourni, toute opération dont le début est inférieur à horizon_gele_jours doit être conservée identique (même tâche, même ressource, même début) dans le nouveau planning, à condition que le couple (tache, ressource) reste compatible dans l'instance courante.
+
+======================================================================
+RÉPONSE BRUTE (JSON)
+======================================================================
+
+{
+  "entrees": "InstanceTRCO contenant les listes taches, ressources, contraintes (polymorphes) et objectifs; depuis contraintes on extrait les précédences, les compatibilités ressource‑tâche avec leurs durées, les éventuelles échéances, capacités, incompatibilités, indisponibilités, changements de série; les objectifs sont parcourus pour identifier MinimiserMakespan et/ou EquilibrerCharge avec leurs poids, méthodes et ressources cibles; le paramètre planning_precedent (optionnel) fournit un planning déjà exécuté et horizon_gele_jours indique le nombre de jours à figer dès le début de l'horizon.",
+  "sorties": "Si une solution réalisable existe, resoudre renvoie un objet Planning constitué d'une liste d'OperationPlanifiee, chacune spécifiant la tâche, la ressource compatible choisi et le temps de début (en jours) telles que toutes les contraintes dures soient respectées et la fonction objectif (makespan, éventuellement combinaison avec équilibrage de charge) soit optimisée (ou la meilleure trouvée si l'algorithme est approximatif); si aucune solution réalisable n'existe, la fonction renvoie None.",
+  "contraintes_a_couvrir": [
+    "Chaque tâche doit être assignée à exactement une ressource parmi celles listées dans une CompatibiliteRessourceTache valide pour cette tâche.",
+    "Pour toute précédence (avant → apres), la fin de la tâche avant doit être inférieur ou égal au début de la tâche apres.",
+    "Une ressource ne peut pas être utilisée par plus d'opérations simultanées que sa capacité (capacité 1 par défaut, ou valeur spécifiée dans ContrainteCapacite).",
+    "Deux tâches liées par une ContrainteIncompatibilite ne peuvent jamais être affectées à la même ressource, indépendamment du temps.",
+    "Une tâche ne peut pas s'exécuter pendant un jour où sa ressource est marquée indisponible (jours explicites ou récurrents via ContrainteDisponibiliteRessource).",
+    "Si une tâche possède une Echeance, son instant de fin doit être inférieur ou égal à cette échéance.",
+    "Si une ContrainteChangementSerie (ressource, tache_avant, tache_apres, duree_setup) est présente et que les deux tâches sont assignées à cette ressource avec tache_avant finissant avant tache_apres, alors le début de tache_apres doit être au moins duree_setup après la fin de tache_avant.",
+    "Lorsque horizon_gele_jours > 0 et qu'un planning_precedent est fourni, toute opération dont le début est inférieur à horizon_gele_jours doit être conservée identique (même tâche, même ressource, même début) dans le nouveau planning, à condition que le couple (tache, ressource) reste compatible dans l'instance courante."
+  ]
+}

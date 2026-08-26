@@ -333,7 +333,11 @@ def _noeud_architecte(etat: EtatGeneration, config: RunnableConfig) -> dict:
     writer = get_stream_writer()
     writer(etape("architecte", "en_cours", "Conception du modèle..."))
     conception = architecte.concevoir_modele(
-        _modele(config, "architecte"), etat["analyse"], algorithme=etat["algo"], parametres=etat["parametres_algo"]
+        _modele(config, "architecte"),
+        etat["analyse"],
+        algorithme=etat["algo"],
+        parametres=etat["parametres_algo"],
+        autoriser_documentation=True,
     )
     writer(etape("architecte", "termine", "Plan technique produit"))
     return {"conception": conception}
@@ -347,6 +351,7 @@ def _noeud_developpeur(etat: EtatGeneration, config: RunnableConfig) -> dict:
         etat["conception"].en_texte(),
         algorithme=etat["algo"],
         parametres=etat["parametres_algo"],
+        autoriser_documentation=True,
     )
     writer(etape("developpeur", "termine", f"{len(brut.code_source.splitlines())} ligne(s) de code générées"))
     tolerance_relative, comparer_affectation = benchmarker.parametres_cascade_pour_algorithme(etat["algo"])
