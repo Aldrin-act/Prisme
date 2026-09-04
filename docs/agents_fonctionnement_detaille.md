@@ -385,49 +385,31 @@ de `test_sandbox` — jamais sur du code d'Optimiseur, cet agent ayant été sup
 **Input** :
 - Code source final (validé, potentiellement optimisé)
 
-**Prompt** :
+**Prompt réel** (`generation/prompts/documentation.md`) — un unique objet JSON à deux champs,
+jamais du Markdown à sections multiples :
+```json
+{
+  "resume": "ce que le module résout et comment (l'essentiel de l'approche utilisée), en français",
+  "limites_connues": "toute limite ou hypothèse simplificatrice, ou explicitement \"aucune\" s'il n'y en a pas"
+}
 ```
-Génère une documentation Markdown pour ce solveur :
-- Description générale
-- Fonction principale (signature, paramètres, retour)
-- Algorithme (étapes)
-- Exemple d'utilisation
+
+**Output** : `ResultatDocumentation` (`generation/agents/documentation.py`) — deux champs texte
+(`resume`, `limites_connues`), pas un document structuré en sections (description / signature /
+étapes de l'algorithme / exemple d'utilisation) : cette version antérieure de la section décrivait
+un prompt à quatre sections en Markdown qui n'a jamais été celui implémenté. Exemple réel, tiré
+mot pour mot du prompt (`documentation.md`, section « Exemple de réponse valide ») :
+```json
+{
+  "resume": "Résout le FJSP par un modèle CP-SAT : une variable d'intervalle optionnelle par (tâche, ressource compatible), une contrainte de non-chevauchement par ressource, minimisation du makespan.",
+  "limites_connues": "aucune"
+}
 ```
+`ResultatDocumentation.en_texte()` concatène les deux champs (`f"{resume}\n\nLimites connues : {limites_connues}"`)
+pour l'affichage côté canal d'audit (`/audit/{execution_id}`) — toujours consultée sur demande
+humaine explicite, jamais mêlée à la réponse opérationnelle (§5.1).
 
-**Output** : `Documentation`
-- Markdown (~500-1000 mots)
-- Exemple :
-  ````markdown
-  # Solveur FJSP OR-Tools
-
-  ## Description
-  Ce solveur résout le problème FJSP (Flexible Job-Shop Scheduling Problem) 
-  en utilisant OR-Tools CP-SAT.
-
-  ## Fonction principale
-  ```python
-  def resoudre(instance: InstanceTRCO) -> Planning | None
-  ```
-
-  ## Algorithme
-  1. Crée les variables `start_times` et `assigned_resources`
-  2. Ajoute les contraintes de précédence
-  3. Ajoute les contraintes de no-overlap
-  4. Minimise le makespan
-  5. Résout avec CP-SAT
-  6. Construit le Planning de sortie
-
-  ## Exemple
-  ```python
-  from dsl.schema import *
-  instance = InstanceTRCO(...)
-  planning = resoudre(instance)
-  ```
-  ````
-
-**Durée moyenne** : ~8s
-
-**Fichier** : `generation/agents/documentation.py`
+**Fichier** : `generation/agents/documentation.py`, `generation/prompts/documentation.md`
 
 ---
 

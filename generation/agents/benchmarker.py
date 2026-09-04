@@ -38,7 +38,8 @@ CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "benchmarker.m
 _PROMPT_SYSTEME = (
     "Tu es un expert en algorithmes d'ordonnancement et en benchmarking. "
     "Tu analyses des problèmes FJSP et recommandes le meilleur algorithme selon "
-    "les caractéristiques de l'instance. Tu réponds toujours en JSON strict."
+    "les caractéristiques de l'instance. Si un outil de recherche t'est proposé, tu peux t'en "
+    "servir avant de répondre. Ta réponse finale est toujours en JSON strict, jamais en texte libre."
 )
 
 
