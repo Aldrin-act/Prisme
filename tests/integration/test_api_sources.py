@@ -6,15 +6,25 @@ de Postgres).
 
 from __future__ import annotations
 
+import httpx
+import pytest
 from fastapi.testclient import TestClient
 
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
 
 
-def _creer_source(client: TestClient, donnees_brutes: str, nom: str | None = None) -> str:
+def _creer_source(
+    client: TestClient, donnees_brutes: str, nom: str | None = None, unite_duree: str | None = None
+) -> str:
     reponse = client.post(
-        "/sources", json={"donnees_brutes": donnees_brutes, "client_id": "client_test", "nom": nom}
+        "/sources",
+        json={
+            "donnees_brutes": donnees_brutes,
+            "client_id": "client_test",
+            "nom": nom,
+            "unite_duree": unite_duree,
+        },
     )
     assert reponse.status_code == 200, reponse.json()
     return reponse.json()["source_id"]
@@ -170,5 +180,169 @@ def test_generer_instance_deterministe_sans_nom_de_source_reste_sans_nom_projet(
         assert reponse.status_code == 200, reponse.json()
         instance_id = reponse.json()["instance_id"]
         assert etat_test.recuperer_nom_projet(instance_id) is None
+    finally:
+        app.dependency_overrides.clear()
+
+
+def _page_factice(corps: str, code: int = 200) -> httpx.Response:
+    return httpx.Response(code, text=corps, request=httpx.Request("GET", "http://exemple.test"))
+
+
+def test_appeler_api_get_simple_renvoie_le_corps() -> None:
+    """`_appeler_api` (fonction pure) — pas de connexion réseau réelle en
+    test, même principe que `extraire_payload_api` (`adapters/greensig/
+    extraction_api.py`)."""
+    from api.routes.sources import RequeteExplorationAPI, _appeler_api
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url == "http://exemple.test/taches"
+        return httpx.Response(200, text='{"taches": [{"id": 1}]}')
+
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    corps = _appeler_api(RequeteExplorationAPI(url="http://exemple.test/taches"), client=client)
+
+    assert corps == '{"taches": [{"id": 1}]}'
+
+
+def test_appeler_api_cle_api_ajoute_len_tete() -> None:
+    from api.routes.sources import AuthentificationAPI, RequeteExplorationAPI, _appeler_api
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["X-Api-Key"] == "secret123"
+        return httpx.Response(200, text="ok")
+
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    requete = RequeteExplorationAPI(
+        url="http://exemple.test/taches",
+        authentification=AuthentificationAPI(type="cle_api", en_tete="X-Api-Key", valeur="secret123"),
+    )
+    assert _appeler_api(requete, client=client) == "ok"
+
+
+def test_appeler_api_porteur_ajoute_authorization_bearer() -> None:
+    from api.routes.sources import AuthentificationAPI, RequeteExplorationAPI, _appeler_api
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["Authorization"] == "Bearer jeton-abc"
+        return httpx.Response(200, text="ok")
+
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    requete = RequeteExplorationAPI(
+        url="http://exemple.test/taches",
+        authentification=AuthentificationAPI(type="porteur", jeton="jeton-abc"),
+    )
+    assert _appeler_api(requete, client=client) == "ok"
+
+
+def test_appeler_api_reponse_en_erreur_leve() -> None:
+    from api.routes.sources import RequeteExplorationAPI, _appeler_api
+
+    client = httpx.Client(transport=httpx.MockTransport(lambda _r: httpx.Response(404, text="introuvable")))
+
+    with pytest.raises(httpx.HTTPStatusError):
+        _appeler_api(RequeteExplorationAPI(url="http://exemple.test/inconnu"), client=client)
+
+
+_REQUETE_EXPLORATION_API = {"url": "http://exemple.test/taches"}
+
+
+def test_explorer_api_retourne_le_corps_de_la_reponse(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Couche 1 (§6.1) : la route ne fait que relayer `_appeler_api`
+    (déjà testé en isolation ci-dessus) — remplacé ici par un faux résultat,
+    aucune vraie connexion réseau."""
+    monkeypatch.setattr("api.routes.sources._appeler_api", lambda *_a, **_k: '{"taches": [{"id": 1}]}')
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-api", json=_REQUETE_EXPLORATION_API)
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["donnees_brutes"] == '{"taches": [{"id": 1}]}'
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_api_erreur_http_renvoie_422(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _echec(*_a: object, **_k: object) -> None:
+        raise httpx.HTTPStatusError(
+            "404", request=httpx.Request("GET", "http://exemple.test"), response=_page_factice("introuvable", 404)
+        )
+
+    monkeypatch.setattr("api.routes.sources._appeler_api", _echec)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-api", json=_REQUETE_EXPLORATION_API)
+
+        assert reponse.status_code == 422
+        assert "réponse en erreur (404)" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_api_connexion_impossible_renvoie_422(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _echec(*_a: object, **_k: object) -> None:
+        raise httpx.ConnectError("connexion refusée")
+
+    monkeypatch.setattr("api.routes.sources._appeler_api", _echec)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-api", json=_REQUETE_EXPLORATION_API)
+
+        assert reponse.status_code == 422
+        assert "appel API impossible" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_unite_duree_declaree_sur_la_source_est_exposee() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, "peu importe", unite_duree="semaines")
+
+        reponse = client.get(f"/sources/{source_id}")
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["unite_duree"] == "semaines"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_unite_duree_se_propage_de_la_source_a_linstance_generee() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        donnees = (
+            '{"taches": [{"id": "T1"}], "ressources": [{"id": "R1"}], '
+            '"contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", '
+            '"ressource": "R1", "duree": 10}]}'
+        )
+        source_id = _creer_source(client, donnees, unite_duree="mois")
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe")
+        assert reponse.status_code == 200, reponse.json()
+        instance_id = reponse.json()["instance_id"]
+
+        reponse_instance = client.get(f"/ingestion/{instance_id}")
+        assert reponse_instance.status_code == 200, reponse_instance.json()
+        assert reponse_instance.json()["unite_duree"] == "mois"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_source_sans_unite_duree_declaree_reste_none() -> None:
+    """Défaut implicite "jours" côté affichage — jamais une chaîne littérale
+    "jours" stockée, `None` partout où l'unité n'a jamais été précisée."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, "peu importe")
+
+        reponse = client.get(f"/sources/{source_id}")
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["unite_duree"] is None
     finally:
         app.dependency_overrides.clear()

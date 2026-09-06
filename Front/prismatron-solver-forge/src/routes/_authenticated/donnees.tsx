@@ -11,6 +11,7 @@ import {
   FolderOpen,
   Lightbulb,
   Loader2,
+  Plug,
   Plus,
   Trash2,
   Zap,
@@ -51,6 +52,7 @@ import { PageHeader, EmptyState } from "@/components/app-page";
 import {
   prismeKeys,
   useCreerSource,
+  useExplorerAPI,
   useGenererInstanceDepuisSource,
   useGenererInstanceDeterministeDepuisSource,
   useSource,
@@ -60,10 +62,13 @@ import {
   useNomsProjet,
   PrismeAPIError,
   LABELS_SECTEUR_ACTIVITE,
+  type AuthentificationAPI,
   type Justification,
   type SecteurActivite,
+  type TypeAuthentificationAPI,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
+import { LABELS_UNITE_DUREE, type UniteDuree } from "@/lib/unite-duree";
 
 const searchSchema = z.object({
   source: z.string().optional(),
@@ -132,6 +137,7 @@ function DonneesPage() {
 }
 
 type FormatFichierBrut = "csv" | "json";
+type FormatDonnees = FormatFichierBrut | "api";
 
 const ACCEPT_PAR_FORMAT: Record<FormatFichierBrut, string> = {
   csv: ".csv,text/csv",
@@ -216,8 +222,9 @@ function FormulaireNouvelleSource({
     secteurActivite === "_autre"
       ? secteurActiviteAutre.trim() || undefined
       : secteurActivite || undefined;
+  const [uniteDuree, setUniteDuree] = useState<UniteDuree>("jours");
   const [donneesBrutes, setDonneesBrutes] = useState("");
-  const [formatFichier, setFormatFichier] = useState<FormatFichierBrut>("csv");
+  const [formatFichier, setFormatFichier] = useState<FormatDonnees>("csv");
   const [fichiers, setFichiers] = useState<(File | null)[]>([null, null, null]);
   const [detectionsFichiers, setDetectionsFichiers] = useState<(string | null)[]>([
     null,
@@ -229,7 +236,7 @@ function FormulaireNouvelleSource({
 
   const erreur = creer.error as PrismeAPIError | null;
 
-  function changerFormat(format: FormatFichierBrut) {
+  function changerFormat(format: FormatDonnees) {
     setFormatFichier(format);
     setFichiers([null, null, null]);
     setDetectionsFichiers([null, null, null]);
@@ -288,6 +295,7 @@ function FormulaireNouvelleSource({
         nom: nom.trim() || undefined,
         clientId: estAdmin ? clientId : undefined,
         secteurActivite: secteurActiviteEffectif,
+        uniteDuree: uniteDuree !== "jours" ? uniteDuree : undefined,
       },
       { onSuccess: (data) => onCree(data.source_id, nomProjet.trim() || undefined) },
     );
@@ -370,9 +378,31 @@ function FormulaireNouvelleSource({
         </div>
       </div>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="unite_duree_donnees">Unité d'affichage des durées</Label>
+          <Select value={uniteDuree} onValueChange={(v) => setUniteDuree(v as UniteDuree)}>
+            <SelectTrigger id="unite_duree_donnees">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(LABELS_UNITE_DUREE) as UniteDuree[]).map((u) => (
+                <SelectItem key={u} value={u}>
+                  {LABELS_UNITE_DUREE[u]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            Ne change jamais l'interprétation des données (toujours en jours en interne) — juste
+            l'unité dans laquelle Gantt et échéances s'affichent.
+          </p>
+        </div>
+      </div>
+
       <div className="space-y-1.5">
         <Label htmlFor="fichier_brut">Fichier de données brutes (optionnel)</Label>
-        <Tabs value={formatFichier} onValueChange={(v) => changerFormat(v as FormatFichierBrut)}>
+        <Tabs value={formatFichier} onValueChange={(v) => changerFormat(v as FormatDonnees)}>
           <TabsList className="h-8">
             <TabsTrigger value="csv" className="text-xs">
               CSV
@@ -380,87 +410,97 @@ function FormulaireNouvelleSource({
             <TabsTrigger value="json" className="text-xs">
               JSON
             </TabsTrigger>
+            <TabsTrigger value="api" className="text-xs">
+              API
+            </TabsTrigger>
           </TabsList>
         </Tabs>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <span className="text-muted-foreground">Gabarit d'exemple :</span>
-          {GABARITS_PAR_FORMAT[formatFichier].map((gabarit) => (
-            <a
-              key={gabarit.href}
-              href={gabarit.href}
-              download
-              className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
-            >
-              <Download className="h-3 w-3" /> {gabarit.nom}
-            </a>
-          ))}
-        </div>
-        <div className="space-y-3">
-          {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => {
-            const idChamp = index === 0 ? "fichier_brut" : `fichier_brut_${index}`;
-            const fichier = fichiers[index];
-            const typeDetecte = detectionsFichiers[index];
-            const libelle =
-              formatFichier === "csv" && fichier
-                ? (typeDetecte ?? "Format non reconnu")
-                : LABELS_FICHIER_PAR_FORMAT[formatFichier][index];
-            return (
-              <div key={index} className="space-y-1">
-                <Label htmlFor={idChamp} className="text-xs text-muted-foreground">
-                  <span className={typeDetecte ? "font-medium text-primary" : undefined}>
-                    {libelle}
-                  </span>
-                </Label>
-                <input
-                  id={idChamp}
-                  ref={inputFichierRefs[index]}
-                  type="file"
-                  accept={ACCEPT_PAR_FORMAT[formatFichier]}
-                  className="hidden"
-                  onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
-                />
-                {fichier ? (
-                  <div className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm">
-                    <span className="flex items-center gap-1.5 truncate text-primary">
-                      <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">{fichier.name}</span>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => retirerFichier(index)}
-                      className="shrink-0 text-muted-foreground hover:text-destructive"
-                      aria-label={`Retirer ${fichier.name}`}
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
+
+        {formatFichier === "api" ? (
+          <FormulaireConnexionAPI onExtrait={setDonneesBrutes} />
+        ) : (
+          <>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+              <span className="text-muted-foreground">Gabarit d'exemple :</span>
+              {GABARITS_PAR_FORMAT[formatFichier].map((gabarit) => (
+                <a
+                  key={gabarit.href}
+                  href={gabarit.href}
+                  download
+                  className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
+                >
+                  <Download className="h-3 w-3" /> {gabarit.nom}
+                </a>
+              ))}
+            </div>
+            <div className="space-y-3">
+              {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => {
+                const idChamp = index === 0 ? "fichier_brut" : `fichier_brut_${index}`;
+                const fichier = fichiers[index];
+                const typeDetecte = detectionsFichiers[index];
+                const libelle =
+                  formatFichier === "csv" && fichier
+                    ? (typeDetecte ?? "Format non reconnu")
+                    : LABELS_FICHIER_PAR_FORMAT[formatFichier][index];
+                return (
+                  <div key={index} className="space-y-1">
+                    <Label htmlFor={idChamp} className="text-xs text-muted-foreground">
+                      <span className={typeDetecte ? "font-medium text-primary" : undefined}>
+                        {libelle}
+                      </span>
+                    </Label>
+                    <input
+                      id={idChamp}
+                      ref={inputFichierRefs[index]}
+                      type="file"
+                      accept={ACCEPT_PAR_FORMAT[formatFichier]}
+                      className="hidden"
+                      onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
+                    />
+                    {fichier ? (
+                      <div className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm">
+                        <span className="flex items-center gap-1.5 truncate text-primary">
+                          <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                          <span className="truncate">{fichier.name}</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => retirerFichier(index)}
+                          className="shrink-0 text-muted-foreground hover:text-destructive"
+                          aria-label={`Retirer ${fichier.name}`}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => inputFichierRefs[index].current?.click()}
+                        className="flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                      >
+                        Choisir un fichier...
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => inputFichierRefs[index].current?.click()}
-                    className="flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-                  >
-                    Choisir un fichier...
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-        {chargementFichier && (
-          <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>
+                );
+              })}
+            </div>
+            {chargementFichier && (
+              <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>
+            )}
+            {erreurFichier && (
+              <p className="flex items-center gap-1.5 text-xs text-destructive">
+                <AlertCircle className="h-3.5 w-3.5" /> {erreurFichier}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {NB_FICHIERS_PAR_FORMAT[formatFichier] > 1
+                ? "Jusqu'à 3 fichiers — un par table si votre export en a plusieurs (tâches, ressources, contraintes...), leur contenu est concaténé ci-dessous."
+                : "Charge le contenu du fichier dans le champ ci-dessous."}{" "}
+              Vous pouvez aussi coller le texte directement (export CSV, JSON, tableau collé...).
+            </p>
+          </>
         )}
-        {erreurFichier && (
-          <p className="flex items-center gap-1.5 text-xs text-destructive">
-            <AlertCircle className="h-3.5 w-3.5" /> {erreurFichier}
-          </p>
-        )}
-        <p className="text-xs text-muted-foreground">
-          {NB_FICHIERS_PAR_FORMAT[formatFichier] > 1
-            ? "Jusqu'à 3 fichiers — un par table si votre export en a plusieurs (tâches, ressources, contraintes...), leur contenu est concaténé ci-dessous."
-            : "Charge le contenu du fichier dans le champ ci-dessous."}{" "}
-          Vous pouvez aussi coller le texte directement (export CSV, JSON, tableau collé...).
-        </p>
       </div>
 
       <div className="space-y-1.5">
@@ -491,6 +531,230 @@ function FormulaireNouvelleSource({
         >
           <Plus className="mr-2 h-4 w-4" />
           {creer.isPending ? "Enregistrement..." : "Enregistrer la source"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// Connexion à une API HTTP quelconque (POST /sources/explorer-api) — un seul
+// appel, jamais les identifiants saisis ici, qui ne servent qu'à cet appel.
+// Ne crée jamais de source elle-même : remplit seulement le champ "Données
+// brutes" du formulaire parent, pour relecture avant "Enregistrer la source".
+function FormulaireConnexionAPI({ onExtrait }: { onExtrait: (donneesBrutes: string) => void }) {
+  const explorer = useExplorerAPI();
+  const [url, setUrl] = useState("");
+  const [methode, setMethode] = useState<"GET" | "POST">("GET");
+  const [typeAuth, setTypeAuth] = useState<TypeAuthentificationAPI>("aucune");
+  const [enTeteCle, setEnTeteCle] = useState("X-API-Key");
+  const [valeurCle, setValeurCle] = useState("");
+  const [jeton, setJeton] = useState("");
+  const [utilisateurApi, setUtilisateurApi] = useState("");
+  const [motDePasseApi, setMotDePasseApi] = useState("");
+  const [corps, setCorps] = useState("");
+
+  const erreur = explorer.error as PrismeAPIError | null;
+
+  function extraire() {
+    const authentification: AuthentificationAPI =
+      typeAuth === "cle_api"
+        ? {
+            type: "cle_api",
+            en_tete: enTeteCle.trim() || undefined,
+            valeur: valeurCle || undefined,
+          }
+        : typeAuth === "porteur"
+          ? { type: "porteur", jeton: jeton || undefined }
+          : typeAuth === "basique"
+            ? {
+                type: "basique",
+                utilisateur: utilisateurApi.trim() || undefined,
+                mot_de_passe: motDePasseApi || undefined,
+              }
+            : { type: "aucune" };
+
+    explorer.mutate(
+      {
+        url: url.trim(),
+        methode,
+        authentification,
+        corps: methode === "POST" && corps.trim() ? corps : undefined,
+      },
+      { onSuccess: (data) => onExtrait(data.donnees_brutes) },
+    );
+  }
+
+  return (
+    <div className="space-y-3 rounded-lg border border-border/50 p-3">
+      <p className="text-xs text-muted-foreground">
+        Un seul appel HTTP — l'URL et les identifiants ne sont jamais enregistrés, seule la réponse
+        remplit le champ « Données brutes » ci-dessous, pour relecture avant d'enregistrer la
+        source. Une réponse paginée ne renvoie que sa première page.
+      </p>
+
+      <div className="grid gap-3 sm:grid-cols-4">
+        <div className="space-y-1 sm:col-span-3">
+          <Label htmlFor="api_url" className="text-xs text-muted-foreground">
+            URL
+          </Label>
+          <Input
+            id="api_url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://erp.exemple.com/api/taches"
+            className="h-9 text-sm"
+          />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="api_methode" className="text-xs text-muted-foreground">
+            Méthode
+          </Label>
+          <Select value={methode} onValueChange={(v) => setMethode(v as "GET" | "POST")}>
+            <SelectTrigger id="api_methode" className="h-9 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="GET">GET</SelectItem>
+              <SelectItem value="POST">POST</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-1 sm:col-span-4">
+          <Label htmlFor="api_auth" className="text-xs text-muted-foreground">
+            Authentification
+          </Label>
+          <Select value={typeAuth} onValueChange={(v) => setTypeAuth(v as TypeAuthentificationAPI)}>
+            <SelectTrigger id="api_auth" className="h-9 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="aucune">Aucune</SelectItem>
+              <SelectItem value="cle_api">Clé API (en-tête)</SelectItem>
+              <SelectItem value="porteur">Jeton porteur (Bearer)</SelectItem>
+              <SelectItem value="basique">Utilisateur / mot de passe</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {typeAuth === "cle_api" && (
+          <>
+            <div className="space-y-1 sm:col-span-2">
+              <Label htmlFor="api_en_tete" className="text-xs text-muted-foreground">
+                Nom de l'en-tête
+              </Label>
+              <Input
+                id="api_en_tete"
+                value={enTeteCle}
+                onChange={(e) => setEnTeteCle(e.target.value)}
+                className="h-9 text-sm"
+              />
+            </div>
+            <div className="space-y-1 sm:col-span-2">
+              <Label htmlFor="api_valeur_cle" className="text-xs text-muted-foreground">
+                Valeur
+              </Label>
+              <Input
+                id="api_valeur_cle"
+                type="password"
+                value={valeurCle}
+                onChange={(e) => setValeurCle(e.target.value)}
+                className="h-9 text-sm"
+                autoComplete="off"
+              />
+            </div>
+          </>
+        )}
+
+        {typeAuth === "porteur" && (
+          <div className="space-y-1 sm:col-span-4">
+            <Label htmlFor="api_jeton" className="text-xs text-muted-foreground">
+              Jeton
+            </Label>
+            <Input
+              id="api_jeton"
+              type="password"
+              value={jeton}
+              onChange={(e) => setJeton(e.target.value)}
+              className="h-9 text-sm"
+              autoComplete="off"
+            />
+          </div>
+        )}
+
+        {typeAuth === "basique" && (
+          <>
+            <div className="space-y-1 sm:col-span-2">
+              <Label htmlFor="api_utilisateur" className="text-xs text-muted-foreground">
+                Utilisateur
+              </Label>
+              <Input
+                id="api_utilisateur"
+                value={utilisateurApi}
+                onChange={(e) => setUtilisateurApi(e.target.value)}
+                className="h-9 text-sm"
+                autoComplete="off"
+              />
+            </div>
+            <div className="space-y-1 sm:col-span-2">
+              <Label htmlFor="api_mot_de_passe" className="text-xs text-muted-foreground">
+                Mot de passe
+              </Label>
+              <Input
+                id="api_mot_de_passe"
+                type="password"
+                value={motDePasseApi}
+                onChange={(e) => setMotDePasseApi(e.target.value)}
+                className="h-9 text-sm"
+                autoComplete="off"
+              />
+            </div>
+          </>
+        )}
+
+        {methode === "POST" && (
+          <div className="space-y-1 sm:col-span-4">
+            <Label htmlFor="api_corps" className="text-xs text-muted-foreground">
+              Corps de la requête (optionnel)
+            </Label>
+            <Textarea
+              id="api_corps"
+              value={corps}
+              onChange={(e) => setCorps(e.target.value)}
+              placeholder='{"depuis": "2026-01-01"}'
+              className="min-h-20 font-mono text-xs"
+            />
+          </div>
+        )}
+      </div>
+
+      {erreur && (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 font-medium">
+            <AlertCircle className="h-4 w-4" /> Échec de l'appel
+          </div>
+          <p className="mt-1">{erreur.message}</p>
+        </div>
+      )}
+
+      {explorer.isSuccess && (
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-xs">
+          <div className="flex items-center gap-2 font-medium text-primary">
+            <CheckCircle2 className="h-3.5 w-3.5" /> Données récupérées ci-dessous — relisez-les
+            avant d'enregistrer la source.
+          </div>
+        </div>
+      )}
+
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          size="sm"
+          onClick={extraire}
+          disabled={!url.trim() || explorer.isPending}
+        >
+          <Plug className="mr-2 h-3.5 w-3.5" />
+          {explorer.isPending ? "Appel en cours..." : "Appeler l'API"}
         </Button>
       </div>
     </div>

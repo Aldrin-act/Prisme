@@ -423,7 +423,13 @@ export const prismeClient = {
   // volonté. Le client_id est dérivé du compte authentifié côté serveur ;
   // `clientId` n'est envoyé (et n'a d'effet) que pour un compte admin
   // ciblant un autre client (voir `api/routes/sources.py`).
-  creerSource: (donneesBrutes: string, nom?: string, clientId?: string, secteurActivite?: string) =>
+  creerSource: (
+    donneesBrutes: string,
+    nom?: string,
+    clientId?: string,
+    secteurActivite?: string,
+    uniteDuree?: string,
+  ) =>
     apiFetch<Types.ReponseCreationSource>(PRISME_CONFIG.routes.sources, {
       method: "POST",
       body: JSON.stringify({
@@ -431,6 +437,7 @@ export const prismeClient = {
         nom: nom ?? null,
         client_id: clientId ?? null,
         secteur_activite: secteurActivite ?? null,
+        unite_duree: uniteDuree ?? null,
       }),
     }),
 
@@ -443,6 +450,17 @@ export const prismeClient = {
   // déjà générées à partir d'elle.
   supprimerSource: (sourceId: string) =>
     apiFetch<void>(`${PRISME_CONFIG.routes.sources}/${sourceId}`, { method: "DELETE" }),
+
+  // Extraction depuis une API HTTP quelconque — URL/authentification
+  // fournies ici, jamais enregistrées côté serveur ni renvoyées dans une
+  // source. Ne crée rien : le texte renvoyé est destiné à remplir le champ
+  // "Données brutes" du formulaire, pour relecture humaine avant
+  // "Enregistrer la source".
+  explorerAPI: (requete: Types.RequeteExplorationAPI) =>
+    apiFetch<Types.ReponseExplorationAPI>(`${PRISME_CONFIG.routes.sources}/explorer-api`, {
+      method: "POST",
+      body: JSON.stringify(requete),
+    }),
 
   // Pas de timeout (null) : demande explicite — une conversion sur un gros
   // volume de données brutes peut prendre plusieurs minutes, on laisse

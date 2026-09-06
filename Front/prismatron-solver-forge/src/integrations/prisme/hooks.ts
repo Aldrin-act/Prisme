@@ -692,12 +692,25 @@ export function useCreerSource() {
       nom,
       clientId,
       secteurActivite,
+      uniteDuree,
     }: {
       donneesBrutes: string;
       nom?: string;
       clientId?: string;
       secteurActivite?: string;
-    }) => prismeClient.creerSource(donneesBrutes, nom, clientId, secteurActivite),
+      uniteDuree?: string;
+    }) => prismeClient.creerSource(donneesBrutes, nom, clientId, secteurActivite, uniteDuree),
+  });
+}
+
+/**
+ * Mutation pour extraire des données depuis une API HTTP quelconque — ne crée
+ * rien : le texte renvoyé remplit le champ "Données brutes" du formulaire,
+ * pour relecture humaine avant "Enregistrer la source".
+ */
+export function useExplorerAPI() {
+  return useMutation({
+    mutationFn: (requete: Types.RequeteExplorationAPI) => prismeClient.explorerAPI(requete),
   });
 }
 

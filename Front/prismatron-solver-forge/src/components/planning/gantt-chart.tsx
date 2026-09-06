@@ -9,6 +9,8 @@ import {
   type OperationPlanifiee,
   type PlanningAvecDurees,
 } from "@/integrations/prisme";
+import { tachesEnRetard, tauxUtilisationRessource } from "@/lib/charge-ressources";
+import { formatDureeCourte } from "@/lib/unite-duree";
 
 function cle(op: { tache: string; ressource: string }): string {
   return `${op.tache}|${op.ressource}`;
@@ -18,36 +20,6 @@ function cle(op: { tache: string; ressource: string }): string {
 // volontairement permissif) — `fin` se déduit de `debut + durees["tache|ressource"]`.
 function operationsAvecFin(operations: OperationPlanifiee[], durees: Record<string, number>) {
   return operations.map((op) => ({ ...op, fin: op.debut + (durees[cle(op)] ?? 0) }));
-}
-
-// Taux d'utilisation conscient de la capacité et de la disponibilité — pas
-// une simple charge/makespan, qui sous-estimerait une ressource à capacité
-// > 1 et surestimerait une ressource avec des jours indisponibles déclarés.
-function tauxUtilisation(
-  ressource: string,
-  operations: { debut: number; fin: number }[],
-  makespan: number,
-  contraintes: Contrainte[],
-): number {
-  const capacite =
-    contraintes.find(
-      (c): c is Contrainte & { type: "capacite" } =>
-        c.type === "capacite" && c.ressource === ressource,
-    )?.capacite ?? 1;
-  const joursIndisponibles = new Set(
-    contraintes.find(
-      (c): c is Contrainte & { type: "disponibilite_ressource" } =>
-        c.type === "disponibilite_ressource" && c.ressource === ressource,
-    )?.jours_indisponibles ?? [],
-  );
-  let joursDisponibles = 0;
-  for (let jour = 0; jour < makespan; jour++) {
-    if (!joursIndisponibles.has(jour)) joursDisponibles++;
-  }
-  const capaciteTotale = capacite * joursDisponibles;
-  if (capaciteTotale === 0) return 0;
-  const charge = operations.reduce((somme, op) => somme + (op.fin - op.debut), 0);
-  return Math.min(100, (charge / capaciteTotale) * 100);
 }
 
 interface EtatDrag {
@@ -64,6 +36,7 @@ export function GanttChart({
   editable = false,
   executionId,
   onAjustementReussi,
+  uniteDuree,
 }: {
   planning: PlanningAvecDurees;
   // Optionnelle : sans elle, la colonne taux d'utilisation ne s'affiche
@@ -75,6 +48,10 @@ export function GanttChart({
   editable?: boolean;
   executionId?: string;
   onAjustementReussi?: (planning: PlanningAvecDurees) => void;
+  // Unité d'affichage (voir src/lib/unite-duree.ts) — "jours" implicite si
+  // absent. Ne change jamais le positionnement des barres (calculé en jours
+  // bruts), seulement le texte affiché (graduations, tooltips).
+  uniteDuree?: string | null;
 }) {
   const queryClient = useQueryClient();
   const ajuster = useAjusterPlanning();
@@ -96,6 +73,12 @@ export function GanttChart({
   const peutEditer = editable && !!executionId;
   const operations = operationsAvecFin(operationsLocales, planning.durees);
   const makespan = operations.length > 0 ? Math.max(...operations.map((op) => op.fin)) : 0;
+  // Recalculé sur `operationsLocales` (pas `planning.operations`) : glisser une barre au-delà de
+  // son échéance la fait passer au rouge immédiatement, avant même d'enregistrer l'ajustement —
+  // "voir tout de suite l'effet d'un changement".
+  const tachesEnRetardIds = new Set(
+    (contraintes ? tachesEnRetard(operations, contraintes) : []).map((r) => r.tache),
+  );
   const estModifie = JSON.stringify(operationsLocales) !== JSON.stringify(planning.operations);
   const clesModifiees = new Set(
     operationsLocales
@@ -219,7 +202,7 @@ export function GanttChart({
           <div className="mb-1 flex pl-36 text-xs text-muted-foreground">
             {graduations.map((g, i) => (
               <span key={i} className="flex-1 text-center first:text-left last:text-right">
-                {g}
+                {formatDureeCourte(g, uniteDuree)}
               </span>
             ))}
           </div>
@@ -227,7 +210,7 @@ export function GanttChart({
             {ressources.map((ressource) => {
               const operationsRessource = parRessource.get(ressource) ?? [];
               const taux = contraintes
-                ? tauxUtilisation(ressource, operationsRessource, makespan, contraintes)
+                ? tauxUtilisationRessource(ressource, operationsRessource, makespan, contraintes)
                 : null;
               return (
                 <div key={ressource} className="flex items-center gap-3">
@@ -242,16 +225,22 @@ export function GanttChart({
                       const gauche = (op.debut / makespan) * 100;
                       const largeur = ((op.fin - op.debut) / makespan) * 100;
                       const cleOp = cle(op);
+                      const enRetard = tachesEnRetardIds.has(op.tache);
                       return (
                         <div
                           key={cleOp}
-                          title={`${op.tache} : ${op.debut} → ${op.fin}`}
+                          title={`${op.tache} : ${formatDureeCourte(op.debut, uniteDuree)} → ${formatDureeCourte(
+                            op.fin,
+                            uniteDuree,
+                          )}${enRetard ? " (en retard)" : ""}`}
                           onPointerDown={(e) => onPointerDownBarre(e, cleOp, op.debut)}
                           onPointerMove={onPointerMoveBarre}
                           onPointerUp={onPointerUpBarre}
-                          className={`absolute top-0 flex h-full items-center justify-center overflow-hidden rounded bg-gradient-to-r from-primary to-accent px-1.5 text-xs font-medium text-primary-foreground ${
-                            peutEditer ? "cursor-grab touch-none active:cursor-grabbing" : ""
-                          } ${clesModifiees.has(cleOp) ? "ring-2 ring-yellow-400" : ""}`}
+                          className={`absolute top-0 flex h-full items-center justify-center overflow-hidden rounded px-1.5 text-xs font-medium text-primary-foreground ${
+                            enRetard ? "bg-destructive" : "bg-gradient-to-r from-primary to-accent"
+                          } ${peutEditer ? "cursor-grab touch-none active:cursor-grabbing" : ""} ${
+                            clesModifiees.has(cleOp) ? "ring-2 ring-yellow-400" : ""
+                          }`}
                           style={{ left: `${gauche}%`, width: `${largeur}%` }}
                         >
                           <span className="truncate">{op.tache}</span>

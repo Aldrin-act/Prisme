@@ -87,7 +87,7 @@ function AppShell() {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="hidden w-64 shrink-0 border-r border-border/50 p-4 md:flex md:flex-col">
+      <aside className="hidden w-64 shrink-0 self-start border-r border-border/50 p-4 md:sticky md:top-0 md:flex md:h-screen md:flex-col">
         <Link to="/" className="flex items-center gap-2 px-2 py-2">
           <PrismeLogo className="h-8 w-8" />
           <span className="font-bold tracking-tight">PRISME</span>

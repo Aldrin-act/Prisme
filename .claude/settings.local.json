@@ -19,7 +19,13 @@
       "Bash(set PRISME_AUTH_DESACTIVEE=1)",
       "Bash(npm run dev:*)",
       "Bash(tasklist:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(npx eslint *)",
+      "Bash(uv run *)",
+      "Bash(node \"C:\\\\Users\\\\ASUS\\\\.claude\\\\skills\\\\browser-automation\\\\browser.mjs\" http://localhost:5186/ --script \"C:\\\\Users\\\\ASUS\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-ASUS-Desktop-PFE-Prisme-Prisme\\\\d98dbc77-1675-4834-914f-c19c6d2210c7\\\\scratchpad\\\\check_analytics.mjs\")",
+      "Bash(curl -s http://localhost:8000/supervision/instances)",
+      "Bash(curl -s http://localhost:8000/supervision/instances -o /tmp/instances.json)",
+      "Read(//tmp/**)"
     ],
     "deny": [],
     "ask": [],

@@ -145,6 +145,15 @@ class EtatPostgres:
                     table=self._table("sources_donnees")
                 )
             )
+            # Migration idempotente : unité choisie pour l'affichage des
+            # durées/échéances ("jours" implicite si NULL, "semaines", "mois")
+            # — purement cosmétique, jamais lue par le DSL/solveur/faisabilité,
+            # voir `SourceDonnees.unite_duree`.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS unite_duree TEXT").format(
+                    table=self._table("sources_donnees")
+                )
+            )
             # Ancienne table Projet (portait un pointeur "instance courante" +
             # son propre historique d'exécution) — retirée, remplacée par
             # `sources_donnees` (ci-dessus, ne porte que des données brutes
@@ -208,6 +217,13 @@ class EtatPostgres:
             # nom_projet ci-dessus.
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS secteur_activite TEXT").format(
+                    table=self._table("instances_trco")
+                )
+            )
+            # Migration idempotente : même métadonnée que sur sources_donnees
+            # ci-dessus, copiée à la génération (voir enregistrer_instance).
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS unite_duree TEXT").format(
                     table=self._table("instances_trco")
                 )
             )
@@ -562,6 +578,7 @@ class EtatPostgres:
         donnees_brutes: str,
         nom: str | None = None,
         secteur_activite: str | None = None,
+        unite_duree: str | None = None,
     ) -> str:
         source_id = str(uuid.uuid4())
         with closing(self._connexion()) as connexion:
@@ -573,10 +590,18 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation, secteur_activite) "
-                    "VALUES (%s, %s, %s, %s, %s, %s)"
+                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation, secteur_activite, "
+                    "unite_duree) VALUES (%s, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("sources_donnees")),
-                (source_id, client_id, nom, donnees_brutes, datetime.now(UTC).isoformat(), secteur_activite),
+                (
+                    source_id,
+                    client_id,
+                    nom,
+                    donnees_brutes,
+                    datetime.now(UTC).isoformat(),
+                    secteur_activite,
+                    unite_duree,
+                ),
             )
             connexion.commit()
         return source_id
@@ -585,14 +610,14 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT id, client_id, nom, donnees_brutes, date_creation, secteur_activite FROM {} "
-                    "WHERE id = %s"
+                    "SELECT id, client_id, nom, donnees_brutes, date_creation, secteur_activite, "
+                    "unite_duree FROM {} WHERE id = %s"
                 ).format(self._table("sources_donnees")),
                 (source_id,),
             ).fetchone()
         if ligne is None:
             raise KeyError(source_id)
-        id_, client_id, nom, donnees_brutes, date_creation, secteur_activite = ligne
+        id_, client_id, nom, donnees_brutes, date_creation, secteur_activite, unite_duree = ligne
         return SourceDonnees(
             id=id_,
             client_id=client_id,
@@ -600,6 +625,7 @@ class EtatPostgres:
             donnees_brutes=donnees_brutes,
             date_creation=date_creation,
             secteur_activite=secteur_activite,
+            unite_duree=unite_duree,
         )
 
     def lister_sources(self, client_id: str | None = None) -> list[dict[str, object]]:
@@ -608,7 +634,7 @@ class EtatPostgres:
         requete = sql.SQL(
             "SELECT s.id, s.client_id, s.nom, s.date_creation, "
             "(SELECT COUNT(*) FROM {instances} i WHERE i.source_id = s.id) AS nb_instances, "
-            "s.secteur_activite "
+            "s.secteur_activite, s.unite_duree "
             "FROM {sources} s WHERE 1 = 1"
         ).format(sources=self._table("sources_donnees"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -627,8 +653,9 @@ class EtatPostgres:
                 "date_creation": date_creation,
                 "nb_instances": nb,
                 "secteur_activite": secteur_activite,
+                "unite_duree": unite_duree,
             }
-            for id_, client_id, nom, date_creation, nb, secteur_activite in lignes
+            for id_, client_id, nom, date_creation, nb, secteur_activite, unite_duree in lignes
         ]
 
     def lister_instances_pour_source(self, source_id: str) -> list[dict[str, object]]:
@@ -673,6 +700,7 @@ class EtatPostgres:
         description_metier: str | None = None,
         nom_projet: str | None = None,
         secteur_activite: str | None = None,
+        unite_duree: str | None = None,
         groupe_scenario_id: str | None = None,
     ) -> str:
         instance_id = str(uuid.uuid4())
@@ -689,8 +717,9 @@ class EtatPostgres:
                 sql.SQL(
                     "INSERT INTO {} "
                     "(id, client_id, payload, structure_contraintes, date_ingestion, source_id, "
-                    "description_metier, nom_projet, secteur_activite, date_modification, groupe_scenario_id) "
-                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    "description_metier, nom_projet, secteur_activite, unite_duree, date_modification, "
+                    "groupe_scenario_id) "
+                    "VALUES (%s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("instances_trco")),
                 (
                     instance_id,
@@ -702,6 +731,7 @@ class EtatPostgres:
                     description_metier,
                     nom_projet,
                     secteur_activite,
+                    unite_duree,
                     maintenant,
                     groupe_scenario_id,
                 ),
@@ -770,6 +800,16 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL("SELECT secteur_activite FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(instance_id)
+        return ligne[0]
+
+    def recuperer_unite_duree(self, instance_id: str) -> str | None:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT unite_duree FROM {} WHERE id = %s").format(self._table("instances_trco")),
                 (instance_id,),
             ).fetchone()
         if ligne is None:
@@ -947,7 +987,7 @@ class EtatPostgres:
         requete = sql.SQL(
             "SELECT i.id, i.client_id, i.structure_contraintes, "
             "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee, "
-            "i.nom_projet, i.secteur_activite, i.date_modification "
+            "i.nom_projet, i.secteur_activite, i.unite_duree, i.date_modification "
             "FROM {instances} i WHERE 1 = 1"
         ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -971,7 +1011,8 @@ class EtatPostgres:
                 "executee": ligne[3],
                 "nom_projet": ligne[4],
                 "secteur_activite": ligne[5],
-                "date_modification": ligne[6],
+                "unite_duree": ligne[6],
+                "date_modification": ligne[7],
             }
             for ligne in lignes
         ]

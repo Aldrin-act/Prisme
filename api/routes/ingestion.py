@@ -66,6 +66,7 @@ def obtenir_instance(
         "description_metier": etat.recuperer_description_metier(instance_id),
         "nom_projet": etat.recuperer_nom_projet(instance_id),
         "secteur_activite": etat.recuperer_secteur_activite(instance_id),
+        "unite_duree": etat.recuperer_unite_duree(instance_id),
         **instance.model_dump(mode="json"),
     }
 

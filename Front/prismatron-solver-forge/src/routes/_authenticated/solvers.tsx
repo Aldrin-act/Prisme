@@ -32,6 +32,7 @@ import { PageHeader, EmptyState } from "@/components/app-page";
 import { GanttChart } from "@/components/planning/gantt-chart";
 import {
   useSolveurs,
+  useInstance,
   useInstances,
   useLabelsInstances,
   useCodeSourceSolveur,
@@ -126,6 +127,9 @@ function DialogSolveur({
   const { data: instances } = useInstances();
   const labels = useLabelsInstances();
   const [instanceId, setInstanceId] = useState("");
+  // Uniquement pour son `unite_duree` (affichage du Gantt) — le reste de ce
+  // dialogue s'appuie déjà sur `InstanceInfo` (liste ci-dessus).
+  const { data: instanceChoisie } = useInstance(instanceId || null);
   const [horizonGeleJours, setHorizonGeleJours] = useState("");
   const [executionId, setExecutionId] = useState<string | null>(null);
   const [voirOriginal, setVoirOriginal] = useState(false);
@@ -322,6 +326,7 @@ function DialogSolveur({
                     planning={!voirOriginal && planningAjuste ? planningAjuste : planning}
                     editable={!voirOriginal}
                     executionId={executionId ?? undefined}
+                    uniteDuree={instanceChoisie?.unite_duree}
                   />
                 </div>
               ) : (

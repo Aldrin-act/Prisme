@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, EmptyState } from "@/components/app-page";
-import { BarChart3, CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { AlertTriangle, BarChart3, Boxes, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -11,12 +12,33 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  useExecutions,
+  useInstance,
+  useInstances,
   useJobsGeneration,
-  useSolveurs,
   useLabelsInstances,
+  usePlanning,
+  useSolveurs,
   useStatistiquesGeneration,
+  type InstanceDetail,
   type JobGenerationInfo,
+  type PlanningAvecDurees,
 } from "@/integrations/prisme";
+import { chargeParJour, chargeParRessource, tachesEnRetard } from "@/lib/charge-ressources";
+import { formatDuree, formatDureeCourte } from "@/lib/unite-duree";
+
+// Une ressource à ce taux de charge ou plus, sur tout le makespan, compte
+// comme un goulot d'étranglement — seuil pragmatique, pas une valeur du DSL.
+const SEUIL_GOULOT = 85;
 
 const TOUS_LES_AGENTS = "tous";
 
@@ -73,6 +95,32 @@ function KpiTile({ label, valeur, detail }: { label: string; valeur: string; det
 }
 
 function AnalyticsPage() {
+  return (
+    <>
+      <PageHeader
+        title="Analytique"
+        desc="Santé du pipeline de génération de solveurs et charge des ressources de planification — deux sujets distincts, chacun sur son onglet."
+      />
+
+      <Tabs defaultValue="pipeline">
+        <TabsList>
+          <TabsTrigger value="pipeline">Pipeline de génération</TabsTrigger>
+          <TabsTrigger value="charge">Charge des ressources</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="pipeline" className="mt-6">
+          <OngletPipeline />
+        </TabsContent>
+
+        <TabsContent value="charge" className="mt-6">
+          <OngletChargeRessources />
+        </TabsContent>
+      </Tabs>
+    </>
+  );
+}
+
+function OngletPipeline() {
   const [agentSelectionne, setAgentSelectionne] = useState<string>(TOUS_LES_AGENTS);
   const { data: jobs, isLoading } = useJobsGeneration();
   const { data: solveurs } = useSolveurs();
@@ -108,10 +156,11 @@ function AnalyticsPage() {
 
   return (
     <>
-      <PageHeader
-        title="Analytique"
-        desc="Activité réelle du pipeline multi-agents de génération de solveurs — quels agents tournent, lesquels échouent, et à quelle fréquence, sur toutes les générations lancées depuis le dernier redémarrage du serveur."
-      />
+      <p className="mb-4 text-sm text-muted-foreground">
+        Activité réelle du pipeline multi-agents de génération de solveurs — quels agents tournent,
+        lesquels échouent, et à quelle fréquence, sur toutes les générations lancées depuis le
+        dernier redémarrage du serveur.
+      </p>
 
       <div className="grid gap-4 md:grid-cols-4">
         <div className="glass rounded-2xl p-5">
@@ -316,6 +365,301 @@ function AnalyticsPage() {
             ))}
           </ul>
         )}
+      </div>
+    </>
+  );
+}
+
+const TOUTES_RESSOURCES = "_toutes";
+
+// Charge des ressources d'une instance, sur son dernier planning réussi —
+// PRISME n'a pas de calendrier d'atelier unique partagé entre instances (les
+// jours d'un planning sont relatifs à l'instance, jamais des dates
+// calendaires), donc une instance à la fois plutôt qu'une vue agrégée.
+function OngletChargeRessources() {
+  const { data: instances, isLoading: instancesLoading } = useInstances();
+  const { data: executions } = useExecutions();
+  const labelParInstance = useLabelsInstances();
+  const [instanceId, setInstanceId] = useState("");
+  const [ressourceFiltre, setRessourceFiltre] = useState(TOUTES_RESSOURCES);
+  const { data: instance, isLoading: instanceLoading } = useInstance(instanceId || null);
+
+  const derniereExecution = [...(executions ?? [])]
+    .filter((e) => e.instance_id === instanceId && e.reussi)
+    .sort((a, b) => (b.date_execution ?? "").localeCompare(a.date_execution ?? ""))[0];
+
+  const { data: planning, isLoading: planningLoading } = usePlanning(
+    derniereExecution?.execution_id ?? null,
+  );
+
+  const instancesTriees = [...(instances ?? [])].sort((a, b) =>
+    (labelParInstance.get(a.instance_id)?.label ?? a.instance_id).localeCompare(
+      labelParInstance.get(b.instance_id)?.label ?? b.instance_id,
+    ),
+  );
+
+  function changerInstance(id: string) {
+    setInstanceId(id);
+    setRessourceFiltre(TOUTES_RESSOURCES);
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="glass flex flex-wrap items-end gap-4 rounded-2xl p-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="charge_instance" className="text-xs text-muted-foreground">
+            Instance
+          </Label>
+          <Select value={instanceId} onValueChange={changerInstance}>
+            <SelectTrigger id="charge_instance" className="w-72">
+              <SelectValue
+                placeholder={instancesLoading ? "Chargement..." : "Choisir une instance..."}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {instancesTriees.map((i) => (
+                <SelectItem key={i.instance_id} value={i.instance_id}>
+                  {labelParInstance.get(i.instance_id)?.label ?? i.instance_id}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        {instance && instance.ressources.length > 0 && (
+          <div className="space-y-1.5">
+            <Label htmlFor="charge_ressource" className="text-xs text-muted-foreground">
+              Ressource
+            </Label>
+            <Select value={ressourceFiltre} onValueChange={setRessourceFiltre}>
+              <SelectTrigger id="charge_ressource" className="w-56">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={TOUTES_RESSOURCES}>Toutes les ressources</SelectItem>
+                {instance.ressources.map((r) => (
+                  <SelectItem key={r.id} value={r.id}>
+                    {r.id}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+      </div>
+
+      {!instanceId ? (
+        <EmptyState
+          icon={Boxes}
+          title="Choisissez une instance"
+          desc="La charge des ressources se calcule sur le dernier planning exécuté d'une instance, une à la fois — PRISME n'a pas de calendrier d'atelier unique partagé entre instances."
+        />
+      ) : instanceLoading || planningLoading ? (
+        <p className="text-sm text-muted-foreground">Chargement...</p>
+      ) : !derniereExecution ? (
+        <EmptyState
+          icon={Boxes}
+          title="Aucun planning exécuté"
+          desc="Cette instance n'a pas encore d'exécution réussie — lance-en une depuis Solveurs générés ou Données pour voir sa charge ici."
+        />
+      ) : instance && planning ? (
+        <ContenuChargeRessources
+          instance={instance}
+          planning={planning}
+          ressourceFiltre={ressourceFiltre}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function ContenuChargeRessources({
+  instance,
+  planning,
+  ressourceFiltre,
+}: {
+  instance: InstanceDetail;
+  planning: PlanningAvecDurees;
+  ressourceFiltre: string;
+}) {
+  const operations = planning.operations.map((op) => ({
+    ...op,
+    fin: op.debut + (planning.durees[`${op.tache}|${op.ressource}`] ?? 0),
+  }));
+  const makespan = operations.length > 0 ? Math.max(...operations.map((op) => op.fin)) : 0;
+
+  if (makespan === 0) {
+    return (
+      <EmptyState
+        icon={Boxes}
+        title="Aucune opération planifiée"
+        desc="Le dernier planning de cette instance ne contient aucune opération."
+      />
+    );
+  }
+
+  const ressourcesInstance = instance.ressources.map((r) => r.id);
+  const ressourcesIncluses =
+    ressourceFiltre === TOUTES_RESSOURCES ? ressourcesInstance : [ressourceFiltre];
+
+  const parJour = chargeParJour(ressourcesIncluses, operations, instance.contraintes, makespan);
+  const capaciteTotale = parJour.reduce((s, j) => s + j.capacite, 0);
+  const chargeTotale = parJour.reduce((s, j) => s + j.charge, 0);
+  const tauxCharge = capaciteTotale > 0 ? (chargeTotale / capaciteTotale) * 100 : 0;
+  const ressourcesActives = new Set(operations.map((op) => op.ressource)).size;
+  const maxBarre = Math.max(1, ...parJour.map((j) => Math.max(j.capacite, j.charge)));
+
+  // Toujours sur l'instance entière, indépendamment du filtre ressource — le
+  // filtre sert à zoomer sur une station dans les tuiles/le graphe ci-dessus,
+  // ces deux sections comparent au contraire les stations entre elles.
+  const retards = tachesEnRetard(operations, instance.contraintes);
+  const detailRessources = chargeParRessource(
+    ressourcesInstance,
+    operations,
+    instance.contraintes,
+    makespan,
+  ).sort((a, b) => b.taux - a.taux);
+
+  return (
+    <>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <KpiTile
+          label="Capacité"
+          valeur={formatDuree(capaciteTotale, instance.unite_duree)}
+          detail={ressourceFiltre === TOUTES_RESSOURCES ? "toutes ressources" : ressourceFiltre}
+        />
+        <KpiTile
+          label="Charge"
+          valeur={formatDuree(chargeTotale, instance.unite_duree)}
+          detail={ressourceFiltre === TOUTES_RESSOURCES ? "toutes ressources" : ressourceFiltre}
+        />
+        <KpiTile
+          label="Taux de charge"
+          valeur={`${tauxCharge.toFixed(0)}%`}
+          detail={ressourceFiltre === TOUTES_RESSOURCES ? "toutes ressources" : ressourceFiltre}
+        />
+        <KpiTile
+          label="Tâches planifiées"
+          valeur={`${planning.operations.length}/${instance.taches.length}`}
+          detail="sur cette instance"
+        />
+        <KpiTile
+          label="Ressources actives"
+          valeur={`${ressourcesActives}/${instance.ressources.length}`}
+          detail="avec ≥1 opération"
+        />
+      </div>
+
+      <div className="glass mt-6 rounded-2xl p-6">
+        <div className="mb-4 text-sm font-semibold">
+          Charge par jour{ressourceFiltre !== TOUTES_RESSOURCES ? ` — ${ressourceFiltre}` : ""}
+        </div>
+        <div className="flex items-end gap-2 overflow-x-auto pb-2">
+          {parJour.map((j) => (
+            <div key={j.jour} className="flex shrink-0 flex-col items-center gap-1.5">
+              <div className="flex h-36 items-end gap-1">
+                <div
+                  className="w-4 rounded-t bg-muted"
+                  style={{ height: `${(j.capacite / maxBarre) * 100}%` }}
+                  title={`Capacité : ${formatDuree(j.capacite, instance.unite_duree)}`}
+                />
+                <div
+                  className="w-4 rounded-t bg-gradient-to-t from-primary to-accent"
+                  style={{ height: `${(j.charge / maxBarre) * 100}%` }}
+                  title={`Charge : ${formatDuree(j.charge, instance.unite_duree)}`}
+                />
+              </div>
+              <span className="text-[10px] text-muted-foreground">
+                {formatDureeCourte(j.jour, instance.unite_duree)}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-sm bg-muted" /> Capacité
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-sm bg-gradient-to-r from-primary to-accent" />{" "}
+            Charge
+          </span>
+        </div>
+      </div>
+
+      <div className="glass mt-6 rounded-2xl p-6">
+        <div className="mb-4 text-sm font-semibold">Tâches en retard</div>
+        {retards.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            Aucune tâche en retard — toutes les échéances déclarées sont respectées par ce planning.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {retards.map((r) => (
+              <li
+                key={r.tache}
+                className="flex items-center justify-between rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm"
+              >
+                <span className="flex items-center gap-2 font-medium text-destructive">
+                  <AlertTriangle className="h-4 w-4 shrink-0" /> {r.tache}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  fin dans {formatDuree(r.fin, instance.unite_duree)} · échéance{" "}
+                  {formatDuree(r.echeance, instance.unite_duree)} · retard de{" "}
+                  {formatDuree(r.retard, instance.unite_duree)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="glass mt-6 overflow-hidden rounded-2xl">
+        <div className="border-b border-border/50 px-5 py-3 text-sm font-semibold">
+          Détail par ressource — goulots d'étranglement &amp; capacité disponible
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Ressource</TableHead>
+              <TableHead>Capacité</TableHead>
+              <TableHead>Charge</TableHead>
+              <TableHead>Disponible</TableHead>
+              <TableHead>Taux de charge</TableHead>
+              <TableHead />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {detailRessources.map((r) => (
+              <TableRow key={r.ressource}>
+                <TableCell className="font-mono text-xs">{r.ressource}</TableCell>
+                <TableCell>{formatDuree(r.capacite, instance.unite_duree)}</TableCell>
+                <TableCell>{formatDuree(r.charge, instance.unite_duree)}</TableCell>
+                <TableCell>{formatDuree(r.disponible, instance.unite_duree)}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1.5 w-24 rounded bg-muted/30">
+                      <div
+                        className={`h-full rounded ${
+                          r.taux >= SEUIL_GOULOT
+                            ? "bg-destructive"
+                            : "bg-gradient-to-r from-primary to-accent"
+                        }`}
+                        style={{ width: `${r.taux}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground">{r.taux.toFixed(0)}%</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {r.taux >= SEUIL_GOULOT && (
+                    <Badge variant="destructive" className="gap-1">
+                      <AlertTriangle className="h-3 w-3" /> Goulot
+                    </Badge>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </>
   );

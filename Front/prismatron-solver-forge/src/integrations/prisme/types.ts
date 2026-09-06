@@ -248,6 +248,9 @@ export interface InstanceDetail extends InstanceTRCO {
   // Un des 6 secteurs de SecteurActivite, ou un secteur personnalisé saisi
   // via "Autre" — jamais restreint au vocabulaire fermé côté stockage.
   secteur_activite: string | null;
+  // Unité d'affichage des durées/échéances — "jours" implicite si `null`
+  // (voir src/lib/unite-duree.ts). Purement cosmétique, jamais lu par le DSL.
+  unite_duree: string | null;
 }
 
 // ============================================================================
@@ -339,6 +342,7 @@ export interface InstanceInfo {
   // atelier), ou modifiée depuis lors via "Modifier".
   nom_projet: string | null;
   secteur_activite: string | null;
+  unite_duree: string | null;
 }
 
 export interface NomProjetInfo {
@@ -649,6 +653,7 @@ export interface SourceDonnees {
   date_creation: string;
   nb_instances: number;
   secteur_activite: string | null;
+  unite_duree: string | null;
 }
 
 export interface InstanceDeSource {
@@ -664,6 +669,34 @@ export interface SourceDetail extends SourceDonnees {
 
 export interface ReponseCreationSource {
   source_id: string;
+}
+
+// Extraction depuis une API HTTP quelconque (URL/authentification fournies à
+// l'appel, jamais persistées côté serveur) — voir POST /sources/explorer-api.
+// Un seul appel ; le corps de la réponse est renvoyé tel quel pour remplir le
+// champ « Données brutes », pour relecture humaine avant tout enregistrement,
+// jamais enregistré directement ici.
+export type TypeAuthentificationAPI = "aucune" | "cle_api" | "porteur" | "basique";
+
+export interface AuthentificationAPI {
+  type: TypeAuthentificationAPI;
+  en_tete?: string; // cle_api : nom de l'en-tête (ex. "X-API-Key")
+  valeur?: string; // cle_api : valeur de la clé
+  jeton?: string; // porteur : Authorization: Bearer <jeton>
+  utilisateur?: string; // basique
+  mot_de_passe?: string; // basique
+}
+
+export interface RequeteExplorationAPI {
+  url: string;
+  methode?: "GET" | "POST";
+  authentification?: AuthentificationAPI;
+  corps?: string; // POST uniquement
+  en_tetes?: Record<string, string>;
+}
+
+export interface ReponseExplorationAPI {
+  donnees_brutes: string;
 }
 
 // ============================================================================

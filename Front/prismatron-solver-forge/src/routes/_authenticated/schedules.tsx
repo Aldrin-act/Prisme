@@ -190,6 +190,7 @@ function DialogPlanning({
               contraintes={instance?.contraintes}
               editable={!voirOriginal}
               executionId={execution?.execution_id}
+              uniteDuree={instance?.unite_duree}
             />
           </div>
         ) : null}

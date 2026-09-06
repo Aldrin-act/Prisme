@@ -79,6 +79,7 @@ import {
   type Objectif,
   type SecteurActivite,
 } from "@/integrations/prisme";
+import { formatDuree, formatDureeCourte } from "@/lib/unite-duree";
 
 export const Route = createFileRoute("/_authenticated/instances")({
   head: () => ({ meta: [{ title: "Instances — PRISME" }] }),
@@ -287,8 +288,14 @@ function InstancesPage() {
                           )}
                         </TableCell>
                         <TableCell>{instance.client_id}</TableCell>
-                        <TableCell>
-                          {instance.nom_projet ?? <span className="text-muted-foreground">—</span>}
+                        <TableCell className="max-w-55">
+                          {instance.nom_projet ? (
+                            <span className="block truncate" title={instance.nom_projet}>
+                              {instance.nom_projet}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
                         </TableCell>
                         <TableCell>
                           {instance.secteur_activite ? (
@@ -414,14 +421,15 @@ const LABELS_TYPE_CONTRAINTE: Record<Contrainte["type"], string> = {
 
 // Phrases complètes, destinées à un lecteur métier — distinct du badge
 // compact `structure_contraintes` (liste de types bruts) affiché ailleurs.
-function decrireContrainte(c: Contrainte): string {
+function decrireContrainte(c: Contrainte, uniteDuree?: string | null): string {
+  const enJours = !uniteDuree || uniteDuree === "jours";
   switch (c.type) {
     case "precedence":
       return `La tâche ${c.avant} doit être terminée avant que ${c.apres} commence.`;
     case "compatibilite_ressource_tache":
-      return `${c.tache} peut être réalisée sur ${c.ressource} (durée : ${c.duree} jour${c.duree > 1 ? "s" : ""}).`;
+      return `${c.tache} peut être réalisée sur ${c.ressource} (durée : ${formatDuree(c.duree, uniteDuree)}).`;
     case "echeance":
-      return `${c.tache} doit être terminée au plus tard au jour ${c.echeance}.`;
+      return `${c.tache} doit être terminée au plus tard dans ${formatDuree(c.echeance, uniteDuree)}.`;
     case "competence_requise":
       return `${c.tache} exige la compétence « ${c.competence} ».`;
     case "capacite":
@@ -429,10 +437,13 @@ function decrireContrainte(c: Contrainte): string {
     case "disponibilite_ressource": {
       const parties: string[] = [];
       if (c.jours_indisponibles.length > 0) {
+        const pluriel = c.jours_indisponibles.length > 1;
         parties.push(
-          `le${c.jours_indisponibles.length > 1 ? "s" : ""} jour${
-            c.jours_indisponibles.length > 1 ? "s" : ""
-          } ${c.jours_indisponibles.join(", ")}`,
+          enJours
+            ? `le${pluriel ? "s" : ""} jour${pluriel ? "s" : ""} ${c.jours_indisponibles.join(", ")}`
+            : `${pluriel ? "aux dates" : "à la date"} ${c.jours_indisponibles
+                .map((j) => formatDureeCourte(j, uniteDuree))
+                .join(", ")}`,
         );
       }
       if (c.jours_semaine_indisponibles && c.jours_semaine_indisponibles.length > 0) {
@@ -440,14 +451,18 @@ function decrireContrainte(c: Contrainte): string {
           `chaque semaine aux positions ${c.jours_semaine_indisponibles.join(", ")} (motif récurrent)`,
         );
       }
-      return `${c.ressource} est indisponible ${parties.join(" et ")}.`;
+      // Évite un ".." si `parties` se termine déjà par l'abréviation pointée
+      // d'une unité courte ("j.", "sem.") — jamais avec l'unité "jours" par
+      // défaut, qui n'utilise pas `formatDureeCourte` ci-dessus.
+      const phrase = `${c.ressource} est indisponible ${parties.join(" et ")}`;
+      return phrase.endsWith(".") ? phrase : `${phrase}.`;
     }
     case "incompatibilite":
       return `${c.tache} et ${c.tache_incompatible} ne peuvent jamais partager la même ressource.`;
     case "taille_lot":
       return `${c.tache} doit produire entre ${c.lot_min} et ${c.lot_max} unités.`;
     case "changement_serie":
-      return `Sur ${c.ressource}, faire suivre ${c.tache_avant} par ${c.tache_apres} exige un changement de série de ${c.duree_setup} jour${c.duree_setup > 1 ? "s" : ""}.`;
+      return `Sur ${c.ressource}, faire suivre ${c.tache_avant} par ${c.tache_apres} exige un changement de série de ${formatDuree(c.duree_setup, uniteDuree)}.`;
   }
 }
 
@@ -465,7 +480,13 @@ const ORDRE_TYPE_CONTRAINTE: Contrainte["type"][] = [
   "changement_serie",
 ];
 
-function SectionContraintes({ contraintes }: { contraintes: Contrainte[] }) {
+function SectionContraintes({
+  contraintes,
+  uniteDuree,
+}: {
+  contraintes: Contrainte[];
+  uniteDuree?: string | null;
+}) {
   if (contraintes.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
@@ -491,7 +512,7 @@ function SectionContraintes({ contraintes }: { contraintes: Contrainte[] }) {
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
               {groupe.map((c, i) => (
-                <li key={i}>{decrireContrainte(c)}</li>
+                <li key={i}>{decrireContrainte(c, uniteDuree)}</li>
               ))}
             </ul>
           </div>
@@ -660,7 +681,15 @@ function SectionScenarios({
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell>{s.nom_projet ?? "—"}</TableCell>
+                  <TableCell className="max-w-55">
+                    {s.nom_projet ? (
+                      <span className="block truncate" title={s.nom_projet}>
+                        {s.nom_projet}
+                      </span>
+                    ) : (
+                      "—"
+                    )}
+                  </TableCell>
                   <TableCell>{s.metriques ? s.metriques.makespan : "—"}</TableCell>
                   <TableCell>{moyenne !== null ? `${moyenne.toFixed(0)}%` : "—"}</TableCell>
                   <TableCell>{s.metriques ? s.metriques.taches_en_retard.length : "—"}</TableCell>
@@ -847,7 +876,10 @@ function DialogDetailInstance({
             </TabsContent>
 
             <TabsContent value="contraintes">
-              <SectionContraintes contraintes={instance.contraintes} />
+              <SectionContraintes
+                contraintes={instance.contraintes}
+                uniteDuree={instance.unite_duree}
+              />
             </TabsContent>
 
             <TabsContent value="solveurs">

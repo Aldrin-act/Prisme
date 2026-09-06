@@ -25,8 +25,9 @@ from __future__ import annotations
 
 import json
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
+import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import BaseModel, ValidationError
@@ -173,6 +174,12 @@ class RequeteCreationSource(BaseModel):
     # generer_instance_deterministe) — oriente le prompt de l'agent de
     # compréhension sans devoir être re-saisi à chaque tentative.
     secteur_activite: str | None = None
+    # Unité d'affichage des durées/échéances pour cette source et les
+    # instances qu'elle génère — "jours" (implicite si absent), "semaines"
+    # ou "mois". Ne change jamais l'interprétation des données brutes ni le
+    # DSL produit (toujours en jours) : purement l'unité dans laquelle
+    # l'interface convertit ces jours pour l'affichage.
+    unite_duree: str | None = None
 
 
 def _client_id_effectif(requete_client_id: str | None, utilisateur: dict) -> str:
@@ -191,7 +198,9 @@ def creer_source(
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     client_id = _client_id_effectif(requete.client_id, utilisateur)
-    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom, requete.secteur_activite)
+    source_id = etat.enregistrer_source(
+        client_id, requete.donnees_brutes, requete.nom, requete.secteur_activite, requete.unite_duree
+    )
     return {"source_id": source_id}
 
 
@@ -223,6 +232,7 @@ def obtenir_source(
         "donnees_brutes": source.donnees_brutes,
         "date_creation": source.date_creation,
         "secteur_activite": source.secteur_activite,
+        "unite_duree": source.unite_duree,
         "instances": etat.lister_instances_pour_source(source_id),
     }
 
@@ -283,6 +293,7 @@ def generer_instance(
         description_metier=resultat.description_metier,
         nom_projet=nom_projet if nom_projet is not None else source.nom,
         secteur_activite=source.secteur_activite,
+        unite_duree=source.unite_duree,
     )
     return {
         "instance_id": instance_id,
@@ -333,9 +344,114 @@ def generer_instance_deterministe(
         source_id=source_id,
         nom_projet=nom_projet if nom_projet is not None else source.nom,
         secteur_activite=source.secteur_activite,
+        unite_duree=source.unite_duree,
     )
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(resultat.instance),
         "avertissements": list(resultat.avertissements),
     }
+
+
+_TIMEOUT_EXPLORATION_API_SECONDES = 15.0
+# Garde-fou taille — évite qu'une réponse gigantesque (mauvaise URL, endpoint
+# non paginé sur un gros jeu de données) ne remonte telle quelle jusqu'au
+# textarea "Données brutes" du navigateur.
+_TAILLE_MAX_REPONSE_API_OCTETS = 5_000_000
+
+
+class AuthentificationAPI(BaseModel):
+    type: Literal["aucune", "cle_api", "porteur", "basique"] = "aucune"
+    en_tete: str | None = None  # cle_api : nom de l'en-tête (ex. "X-API-Key")
+    valeur: str | None = None  # cle_api : valeur de la clé
+    jeton: str | None = None  # porteur : Authorization: Bearer <jeton>
+    utilisateur: str | None = None  # basique
+    mot_de_passe: str | None = None  # basique
+
+
+class RequeteExplorationAPI(BaseModel):
+    url: str
+    methode: Literal["GET", "POST"] = "GET"
+    authentification: AuthentificationAPI = AuthentificationAPI()
+    corps: str | None = None  # POST uniquement ; ignoré en GET
+    en_tetes: dict[str, str] | None = None
+
+
+class ErreurReponseAPITropVolumineuse(Exception):
+    def __init__(self, taille_octets: int) -> None:
+        super().__init__(
+            f"réponse trop volumineuse ({taille_octets} octets, max {_TAILLE_MAX_REPONSE_API_OCTETS})"
+        )
+
+
+def _appeler_api(requete: RequeteExplorationAPI, client: httpx.Client | None = None) -> str:
+    """Un seul appel HTTP — identifiants (clé/jeton/mot de passe) jamais
+    persistés ni journalisés, utilisés une fois pour cet appel puis oubliés,
+    même principe que la connexion BDD à la volée qu'on remplace ici. Le
+    corps de la réponse est renvoyé tel quel, texte ou JSON, sans
+    interprétation : c'est `comprendre_donnees_erp` (l'agent de
+    compréhension), en aval, une fois la source enregistrée, qui en fera
+    quelque chose. `client` injectable (même motif que
+    `adapters/greensig/extraction_api.py::extraire_payload_api`) pour les
+    tests, jamais de connexion réseau réelle en test."""
+    en_tetes = dict(requete.en_tetes or {})
+    auth = requete.authentification
+    if auth.type == "cle_api" and auth.en_tete and auth.valeur:
+        en_tetes[auth.en_tete] = auth.valeur
+    elif auth.type == "porteur" and auth.jeton:
+        en_tetes["Authorization"] = f"Bearer {auth.jeton}"
+    auth_basique = (
+        (auth.utilisateur, auth.mot_de_passe or "") if auth.type == "basique" and auth.utilisateur else None
+    )
+
+    client_reel = client or httpx.Client(timeout=_TIMEOUT_EXPLORATION_API_SECONDES)
+    try:
+        reponse = client_reel.request(
+            requete.methode,
+            requete.url,
+            headers=en_tetes or None,
+            content=requete.corps.encode("utf-8") if requete.corps else None,
+            auth=auth_basique,
+        )
+        reponse.raise_for_status()
+    finally:
+        if client is None:
+            client_reel.close()
+
+    corps_octets = len(reponse.content)
+    if corps_octets > _TAILLE_MAX_REPONSE_API_OCTETS:
+        raise ErreurReponseAPITropVolumineuse(corps_octets)
+    return reponse.text
+
+
+@router.post("/explorer-api")
+def explorer_api(
+    requete: RequeteExplorationAPI,
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Interroge une API HTTP quelconque (URL/authentification fournies par
+    la requête, jamais enregistrées) pour un ERP sans adaptateur dédié —
+    généralise le principe de `adapters/greensig/extraction_api.py`
+    (spécifique à GreenSIG, 5 ressources fixes, jamais utilisé ici) à
+    n'importe quelle API dont on ne connaît pas la forme à l'avance : un seul
+    appel, le corps de la réponse est renvoyé tel quel.
+
+    Ne persiste rien : le texte renvoyé est destiné à remplir le champ
+    « Données brutes » du formulaire de création de source, pour relecture
+    humaine avant tout enregistrement — exactement comme le contenu d'un
+    fichier CSV/JSON déposé à la main. Une réponse paginée ne renvoie que sa
+    première page ; visez directement l'URL/les paramètres qui renvoient tout
+    en un seul appel si l'API le permet."""
+    try:
+        corps = _appeler_api(requete)
+    except httpx.HTTPStatusError as erreur:
+        detail = erreur.response.text[:300]
+        raise HTTPException(
+            status_code=422, detail=f"réponse en erreur ({erreur.response.status_code}) : {detail}"
+        ) from erreur
+    except httpx.HTTPError as erreur:
+        raise HTTPException(status_code=422, detail=f"appel API impossible : {erreur}") from erreur
+    except ErreurReponseAPITropVolumineuse as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+
+    return {"donnees_brutes": corps}
