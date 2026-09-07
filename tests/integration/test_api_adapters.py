@@ -141,6 +141,65 @@ def test_ingestion_depuis_csv_accepte_trois_fichiers_valides() -> None:
         app.dependency_overrides.clear()
 
 
+def test_ingestion_depuis_csv_avec_delimiteur_point_virgule() -> None:
+    """Export Excel FR typique (`;`) — jamais deviné, le client le déclare
+    explicitement via le paramètre de requête `delimiteur`."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            params={"delimiteur": ";"},
+            files={
+                "taches": ("taches.csv", b"id;nom\nT1;Decoupe\nT2;Assemblage\n", "text/csv"),
+                "ressources": ("ressources.csv", b"id;nom\nR1;Decoupeuse\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type;tache_avant;tache_apres;tache;ressource;duree_jours\n"
+                    b"precedence;T1;T2;;;\n"
+                    b"compatibilite_ressource_tache;;;T1;R1;10\n"
+                    b"compatibilite_ressource_tache;;;T2;R1;15\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["structure_contraintes"] == "compatibilite_ressource_tache,precedence"
+        assert corps["instance_id"] in etat_test.instances
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_csv_rejette_un_delimiteur_multi_caracteres() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            params={"delimiteur": "::"},
+            files={
+                "taches": ("taches.csv", b"id,nom\nT1,Decoupe\n", "text/csv"),
+                "ressources": ("ressources.csv", b"id,nom\nR1,Decoupeuse\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type,tache,ressource,duree_jours\ncompatibilite_ressource_tache,T1,R1,10\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 422
+        assert etat_test.instances == {}
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
     """Bout en bout (§5.4) : plutôt que de saisir tache/ressource/duree à la
     main, une ressource déclare une compétence et une tâche l'exige — la

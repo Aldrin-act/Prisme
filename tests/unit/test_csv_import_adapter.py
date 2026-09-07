@@ -264,3 +264,31 @@ def test_sans_estimateur_duree_manquante_leve_toujours_erreur() -> None:
 
     with pytest.raises(ErreurFichierInvalide, match="durée estimée manquante"):
         _traduire_resultat(taches_csv, ressources_csv, contraintes_csv)
+
+
+# --- Délimiteur (page Données, import CSV direct) ---
+
+
+def test_delimiteur_point_virgule_lit_les_quatre_fichiers() -> None:
+    """Export Excel FR typique : `;` partout, la virgule étant déjà le
+    séparateur décimal — jamais deviné, toujours déclaré explicitement."""
+    taches_csv = b"id;nom;duree_estimee_jours\nT1;Decoupe;25\n"
+    ressources_csv = b"id;competences\nR1;decoupe\n"
+    contraintes_csv = b"type;tache;competence\ncompetence_requise;T1;decoupe\n"
+    commandes_csv = b"id;taches;client;date_limite\nCMD1;T1;Client A;20\n"
+
+    resultat = _traduire_resultat(
+        taches_csv, ressources_csv, contraintes_csv, commandes_csv, delimiteur=";"
+    )
+
+    assert [t.id for t in resultat.instance.taches] == ["T1"]
+    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
+    assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
+    echeances = {c.tache: c.echeance for c in resultat.instance.contraintes if c.type == "echeance"}
+    assert echeances == {"T1": 20}
+
+
+def test_delimiteur_par_defaut_reste_la_virgule() -> None:
+    """Comportement inchangé pour tout appelant existant qui ne déclare rien."""
+    instance = traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV)
+    assert [t.id for t in instance.taches] == ["T1", "T2"]

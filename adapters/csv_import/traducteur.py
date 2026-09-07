@@ -95,6 +95,7 @@ def _lire_lignes(
     nom_fichier: str,
     colonnes_requises: tuple[str, ...],
     colonnes_optionnelles: tuple[str, ...] = (),
+    delimiteur: str = ",",
 ) -> list[dict[str, str]]:
     """Décode et parse un CSV en liste de lignes (dict par en-tête de colonne).
     `utf-8-sig` tolère le BOM ajouté par certains tableurs à l'export, sans rien
@@ -103,13 +104,16 @@ def _lire_lignes(
     en fin de fichier...). Les colonnes optionnelles absentes du fichier valent
     simplement "" partout plutôt que de faire échouer la lecture — ex.
     `competences`/`duree_estimee_jours`, inutiles tant qu'aucune compatibilité
-    n'est dérivée par compétence."""
+    n'est dérivée par compétence. `delimiteur` (un seul caractère, `,` par
+    défaut) : certains exports européens (Excel FR notamment) utilisent `;`,
+    la virgule étant déjà le séparateur décimal — jamais deviné automatiquement,
+    l'appelant (ex. la page Données) le déclare explicitement."""
     try:
         texte = contenu.decode("utf-8-sig")
     except UnicodeDecodeError as erreur:
         raise ErreurFichierInvalide(f"{nom_fichier} : fichier illisible, encodage attendu UTF-8") from erreur
 
-    lecteur = csv.DictReader(StringIO(texte))
+    lecteur = csv.DictReader(StringIO(texte), delimiter=delimiteur)
     if lecteur.fieldnames is None:
         raise ErreurFichierInvalide(f"{nom_fichier} : fichier vide")
 
@@ -129,12 +133,14 @@ def _lire_lignes(
     ]
 
 
-def _lire_taches(contenu: bytes) -> tuple[list[Tache], dict[str, int | None]]:
+def _lire_taches(contenu: bytes, delimiteur: str = ",") -> tuple[list[Tache], dict[str, int | None]]:
     """Renvoie les tâches ainsi que, par id, leur durée estimée (colonne
     `duree_estimee_jours`) — `None` si absente, seulement nécessaire pour
     les tâches dont la compatibilité est dérivée par compétence. Même
     structure que dans les autres adaptateurs pour cohérence."""
-    lignes = _lire_lignes(contenu, "taches.csv", COLONNES_TACHES_REQUISES, COLONNES_TACHES_OPTIONNELLES)
+    lignes = _lire_lignes(
+        contenu, "taches.csv", COLONNES_TACHES_REQUISES, COLONNES_TACHES_OPTIONNELLES, delimiteur
+    )
     taches = [Tache(id=ligne["id"], **({"nom": ligne["nom"]} if ligne["nom"] else {})) for ligne in lignes]
     durees_estimees: dict[str, int | None] = {}
     for ligne in lignes:
@@ -150,12 +156,12 @@ def _lire_taches(contenu: bytes) -> tuple[list[Tache], dict[str, int | None]]:
     return taches, durees_estimees
 
 
-def _lire_ressources(contenu: bytes) -> list[Ressource]:
+def _lire_ressources(contenu: bytes, delimiteur: str = ",") -> list[Ressource]:
     """`competences` (séparées par `;`) va directement sur `Ressource` — c'est
     déjà un champ réel du DSL, utilisé tel quel par la dérivation partagée
     (`adapters/competence_derivation.py`)."""
     lignes = _lire_lignes(
-        contenu, "ressources.csv", COLONNES_RESSOURCES_REQUISES, COLONNES_RESSOURCES_OPTIONNELLES
+        contenu, "ressources.csv", COLONNES_RESSOURCES_REQUISES, COLONNES_RESSOURCES_OPTIONNELLES, delimiteur
     )
     return [
         Ressource(
@@ -169,13 +175,13 @@ def _lire_ressources(contenu: bytes) -> list[Ressource]:
     ]
 
 
-def _lire_contraintes(contenu: bytes) -> list[Contrainte]:
+def _lire_contraintes(contenu: bytes, delimiteur: str = ",") -> list[Contrainte]:
     """Renvoie les contraintes explicites (precedence, compatibilite_ressource_tache
     et competence_requise, ces dernières incluses telles quelles — la
     dérivation partagée les relit directement depuis cette liste, voir
     `traduire`)."""
     lignes = _lire_lignes(
-        contenu, "contraintes.csv", COLONNES_CONTRAINTES_REQUISES, COLONNES_CONTRAINTES_OPTIONNELLES
+        contenu, "contraintes.csv", COLONNES_CONTRAINTES_REQUISES, COLONNES_CONTRAINTES_OPTIONNELLES, delimiteur
     )
     contraintes: list[Contrainte] = []
     for ligne in lignes:
@@ -203,10 +209,12 @@ def _lire_contraintes(contenu: bytes) -> list[Contrainte]:
     return contraintes
 
 
-def _lire_commandes(contenu: bytes) -> list[Commande]:
+def _lire_commandes(contenu: bytes, delimiteur: str = ",") -> list[Commande]:
     """`taches` (séparées par `;`, même convention que `competences` sur
     ressources.csv) — voir `adapters/commande_derivation.py::Commande`."""
-    lignes = _lire_lignes(contenu, "commandes.csv", COLONNES_COMMANDES_REQUISES, COLONNES_COMMANDES_OPTIONNELLES)
+    lignes = _lire_lignes(
+        contenu, "commandes.csv", COLONNES_COMMANDES_REQUISES, COLONNES_COMMANDES_OPTIONNELLES, delimiteur
+    )
     commandes: list[Commande] = []
     for ligne in lignes:
         taches_liees = tuple(t.strip() for t in ligne["taches"].split(SEPARATEUR_TACHES) if t.strip())
@@ -232,6 +240,7 @@ def traduire(
     contraintes_csv: bytes,
     commandes_csv: bytes | None = None,
     estimateur_duree: EstimateurDuree | None = None,
+    delimiteur: str = ",",
 ) -> ResultatTraduction:
     """Traduit trois fichiers CSV (Tâches, Ressources, Contraintes), plus un quatrième optionnel
     (Commandes), en une instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est
@@ -243,10 +252,13 @@ def traduire(
     `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
     automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
     aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
-    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée)."""
-    taches, durees_estimees = _lire_taches(taches_csv)
-    ressources = _lire_ressources(ressources_csv)
-    contraintes = _lire_contraintes(contraintes_csv)
+    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée).
+
+    `delimiteur` (un seul caractère, `,` par défaut) s'applique identiquement aux quatre
+    fichiers — un export cohérent utilise toujours le même séparateur partout."""
+    taches, durees_estimees = _lire_taches(taches_csv, delimiteur)
+    ressources = _lire_ressources(ressources_csv, delimiteur)
+    contraintes = _lire_contraintes(contraintes_csv, delimiteur)
     durees_estimees_connues = {t: d for t, d in durees_estimees.items() if d is not None}
 
     avertissements: list[str] = []
@@ -262,7 +274,7 @@ def traduire(
     except CompetenceSansDureeEstimee as erreur:
         raise ErreurFichierInvalide(f"taches.csv : {erreur} (colonne duree_estimee_jours)") from erreur
 
-    commandes = _lire_commandes(commandes_csv) if commandes_csv is not None else []
+    commandes = _lire_commandes(commandes_csv, delimiteur) if commandes_csv is not None else []
     echeances_derivees = deriver_echeances_par_commande(commandes, contraintes)
 
     instance = InstanceTRCO(

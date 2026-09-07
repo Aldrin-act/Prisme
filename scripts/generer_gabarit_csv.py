@@ -58,6 +58,15 @@ def construire(dossier_sortie: Path) -> None:
         ecrivain.writerow(["competence_requise", "", "", "T1", "", "", "decoupe"])
         ecrivain.writerow(["competence_requise", "", "", "T2", "", "", "assemblage"])
 
+    # `taches` : liste de tâches liées séparée par `;`, même convention que
+    # `competences` sur ressources.csv. `date_limite` en jours relatifs (jamais
+    # une date calendaire, voir CLAUDE.md) — dérive une Echeance par tâche
+    # liée, sauf si déjà explicite dans contraintes.csv pour cette tâche.
+    with (dossier_sortie / "commandes.csv").open("w", newline="", encoding="utf-8") as f:
+        ecrivain = csv.writer(f)
+        ecrivain.writerow(["id", "taches", "client", "date_limite"])
+        ecrivain.writerow(["CMD1", "T1;T2", "Client A", "10"])
+
 
 def main() -> None:
     construire(DOSSIER_SORTIE)

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
@@ -14,6 +14,7 @@ import {
   Plug,
   Plus,
   Trash2,
+  Upload,
   Zap,
 } from "lucide-react";
 
@@ -55,6 +56,7 @@ import {
   useExplorerAPI,
   useGenererInstanceDepuisSource,
   useGenererInstanceDeterministeDepuisSource,
+  useImporterFichiersCsv,
   useSource,
   useSources,
   useSupprimerSource,
@@ -82,7 +84,7 @@ export const Route = createFileRoute("/_authenticated/donnees")({
 
 function DonneesPage() {
   const { source } = Route.useSearch();
-  const [tab, setTab] = useState<"actif" | "historique">("actif");
+  const [tab, setTab] = useState<"actif" | "historique" | "import_csv">("actif");
   // Pré-rempli depuis l'URL (?source=<id>) — permet un lien direct depuis la
   // page Instances vers le détail de la source qui a généré une instance donnée.
   const [sourceActiveId, setSourceActiveId] = useState<string | null>(source ?? null);
@@ -114,6 +116,7 @@ function DonneesPage() {
         <TabsList>
           <TabsTrigger value="actif">Source en cours</TabsTrigger>
           <TabsTrigger value="historique">Historique</TabsTrigger>
+          <TabsTrigger value="import_csv">Import CSV</TabsTrigger>
         </TabsList>
 
         <TabsContent value="actif" className="max-w-3xl">
@@ -131,66 +134,216 @@ function DonneesPage() {
         <TabsContent value="historique">
           <ListeSources onOuvrir={ouvrirSource} />
         </TabsContent>
+
+        <TabsContent value="import_csv" className="max-w-3xl">
+          <ImporteurCsvDirect />
+        </TabsContent>
       </Tabs>
     </>
   );
 }
 
-type FormatFichierBrut = "csv" | "json";
-type FormatDonnees = FormatFichierBrut | "api";
+// CSV a son propre flux dédié (onglet "Import CSV", voir ImporteurCsvDirect
+// plus bas — un import direct multi-fichiers, sans passer par une Source) —
+// ce formulaire-ci ne gère plus qu'un fichier de données brutes JSON, ou une
+// connexion API. Une instance déjà structurée en JSON n'a pas besoin d'être
+// scindée en plusieurs fichiers, contrairement à un export CSV.
+type FormatDonnees = "json" | "api";
 
-const ACCEPT_PAR_FORMAT: Record<FormatFichierBrut, string> = {
-  csv: ".csv,text/csv",
-  json: ".json,application/json",
-};
+const ACCEPT_FICHIER_JSON = ".json,application/json";
 
-// CSV : un export ERP tient rarement en un seul fichier (tâches, ressources,
-// contraintes sont souvent des tables séparées) — JSON reste à un seul
-// fichier, une instance déjà structurée n'a pas besoin d'être scindée.
-const NB_FICHIERS_PAR_FORMAT: Record<FormatFichierBrut, number> = { csv: 3, json: 1 };
+// Gabarit d'exemple téléchargeable (Front/prismatron-solver-forge/public/gabarits/,
+// voir scripts/generer_gabarit_ingestion.py pour la source de vérité régénérée
+// côté backend — copie manuelle après changement).
+const GABARIT_JSON = { nom: "instance_exemple.json", href: "/gabarits/instance_exemple.json" };
 
-// Gabarits d'exemple téléchargeables (Front/prismatron-solver-forge/public/gabarits/,
-// voir scripts/generer_gabarit_csv.py et scripts/generer_gabarit_ingestion.py pour
-// la source de vérité régénérée côté backend — copie manuelle après changement).
-const GABARITS_PAR_FORMAT: Record<FormatFichierBrut, { nom: string; href: string }[]> = {
-  csv: [
-    { nom: "taches.csv", href: "/gabarits/taches.csv" },
-    { nom: "ressources.csv", href: "/gabarits/ressources.csv" },
-    { nom: "contraintes.csv", href: "/gabarits/contraintes.csv" },
-  ],
-  json: [{ nom: "instance_exemple.json", href: "/gabarits/instance_exemple.json" }],
-};
+// Champs partagés entre FormulaireNouvelleSource (crée une Source réenre-
+// gistrable) et ImporteurCsvDirect (crée une instance immédiatement, sans
+// Source) — Client/Projet/Secteur/Unité sont identiques dans les deux flux,
+// seul "Nom de la source" reste propre au premier (aucune Source n'existe
+// côté import CSV direct). Contrôlé par le parent (comme
+// FormulaireConnexionAPI plus bas) plutôt qu'un objet valeur unique : évite
+// de reconstruire le sentinel "_autre" du secteur d'activité à partir d'une
+// valeur déjà résolue.
+function ChampsContexteIngestion({
+  idPrefix,
+  estAdmin,
+  clientId,
+  onClientIdChange,
+  nomProjet,
+  onNomProjetChange,
+  nomsProjetConnus,
+  secteurActivite,
+  onSecteurActiviteChange,
+  secteurActiviteAutre,
+  onSecteurActiviteAutreChange,
+  uniteDuree,
+  onUniteDureeChange,
+}: {
+  idPrefix: string;
+  estAdmin: boolean;
+  clientId: string;
+  onClientIdChange: (v: string) => void;
+  nomProjet: string;
+  onNomProjetChange: (v: string) => void;
+  nomsProjetConnus?: { nom_projet: string }[];
+  secteurActivite: SecteurActivite | "_autre" | "";
+  onSecteurActiviteChange: (v: SecteurActivite | "_autre") => void;
+  secteurActiviteAutre: string;
+  onSecteurActiviteAutreChange: (v: string) => void;
+  uniteDuree: UniteDuree;
+  onUniteDureeChange: (v: UniteDuree) => void;
+}) {
+  return (
+    <>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor={`${idPrefix}_client`}>Client</Label>
+          <Input
+            id={`${idPrefix}_client`}
+            value={clientId}
+            onChange={(e) => onClientIdChange(e.target.value)}
+            disabled={!estAdmin}
+          />
+          {!estAdmin && (
+            <p className="text-xs text-muted-foreground">Associé automatiquement à votre compte.</p>
+          )}
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor={`${idPrefix}_projet`}>Nom du projet (optionnel)</Label>
+          <Input
+            id={`${idPrefix}_projet`}
+            list={`${idPrefix}-noms-projet-suggestions`}
+            value={nomProjet}
+            onChange={(e) => onNomProjetChange(e.target.value)}
+            placeholder="ex : Atelier mécanique"
+          />
+          <datalist id={`${idPrefix}-noms-projet-suggestions`}>
+            {nomsProjetConnus?.map((n) => (
+              <option key={n.nom_projet} value={n.nom_projet} />
+            ))}
+          </datalist>
+          <p className="text-xs text-muted-foreground">
+            Retrouve/regroupe les instances générées à partir de cette source.
+          </p>
+        </div>
+      </div>
 
-// Étiquette par emplacement de fichier — affichée tant qu'aucun fichier n'est
-// choisi (indication de ce qui est généralement attendu), remplacée par le
-// type réellement détecté une fois un fichier CSV présent (voir
-// `detecterTypeCsv` ci-dessous) — les 3 emplacements ne sont pas un ordre
-// imposé, juste jusqu'à 3 fichiers, dans n'importe quel ordre.
-const LABELS_FICHIER_PAR_FORMAT: Record<FormatFichierBrut, string[]> = {
-  csv: ["Tâches", "Ressources", "Contraintes"],
-  json: ["Instance"],
-};
-
-// Signatures de colonnes des gabarits CSV (voir scripts/generer_gabarit_csv.py /
-// public/gabarits/{taches,ressources,contraintes}.csv) — détecte quel type de
-// table un fichier CSV contient d'après l'en-tête, sans dépendre de l'ordre
-// dans lequel les fichiers ont été déposés. Un fichier CSV d'un autre format
-// (ex. export ERP propriétaire) ne correspondra à aucune signature — reste
-// accepté tel quel, juste sans type détecté (l'agent de compréhension
-// interprète n'importe quel texte brut, la détection n'est qu'un confort visuel).
-const SIGNATURES_CSV: { type: string; colonnesCles: string[] }[] = [
-  { type: "Tâches", colonnesCles: ["duree_estimee_jours"] },
-  { type: "Ressources", colonnesCles: ["competences"] },
-  { type: "Contraintes", colonnesCles: ["tache_avant", "tache_apres"] },
-];
-
-function detecterTypeCsv(contenu: string): string | null {
-  const premiereLigne = (contenu.split(/\r?\n/, 1)[0] ?? "").toLowerCase();
-  const colonnes = premiereLigne.split(",").map((c) => c.trim());
-  const signature = SIGNATURES_CSV.find(({ colonnesCles }) =>
-    colonnesCles.every((c) => colonnes.includes(c)),
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor={`${idPrefix}_secteur`}>Secteur d'activité (optionnel)</Label>
+          <Select
+            value={secteurActivite}
+            onValueChange={(v) => onSecteurActiviteChange(v as SecteurActivite | "_autre")}
+          >
+            <SelectTrigger id={`${idPrefix}_secteur`}>
+              <SelectValue placeholder="Non renseigné" />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
+                <SelectItem key={s} value={s}>
+                  {LABELS_SECTEUR_ACTIVITE[s]}
+                </SelectItem>
+              ))}
+              <SelectItem value="_autre">Autre (préciser)</SelectItem>
+            </SelectContent>
+          </Select>
+          {secteurActivite === "_autre" && (
+            <Input
+              value={secteurActiviteAutre}
+              onChange={(e) => onSecteurActiviteAutreChange(e.target.value)}
+              placeholder="ex : Textile, Logistique..."
+              className="mt-1.5"
+            />
+          )}
+          <p className="text-xs text-muted-foreground">
+            Aide l'agent de compréhension à interpréter des données ambiguës.
+          </p>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor={`${idPrefix}_unite_duree`}>Unité d'affichage des durées</Label>
+          <Select value={uniteDuree} onValueChange={(v) => onUniteDureeChange(v as UniteDuree)}>
+            <SelectTrigger id={`${idPrefix}_unite_duree`}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(LABELS_UNITE_DUREE) as UniteDuree[]).map((u) => (
+                <SelectItem key={u} value={u}>
+                  {LABELS_UNITE_DUREE[u]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            Ne change jamais l'interprétation des données (toujours en jours en interne) — juste
+            l'unité dans laquelle Gantt et échéances s'affichent.
+          </p>
+        </div>
+      </div>
+    </>
   );
-  return signature?.type ?? null;
+}
+
+// Bouton "Choisir un fichier..." stylé / badge de fichier choisi avec retrait
+// — un seul fichier par emplacement (contrairement à l'ancien onglet CSV,
+// retiré, qui acceptait jusqu'à 3 fichiers dans le même emplacement).
+function ChampFichierUnique({
+  id,
+  label,
+  accept,
+  fichier,
+  onChange,
+  inputRef,
+}: {
+  id: string;
+  label: string;
+  accept: string;
+  fichier: File | null;
+  onChange: (fichier: File | null) => void;
+  inputRef: RefObject<HTMLInputElement | null>;
+}) {
+  return (
+    <div className="space-y-1">
+      <Label htmlFor={id} className="text-xs text-muted-foreground">
+        {label}
+      </Label>
+      <input
+        id={id}
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        className="hidden"
+        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+      />
+      {fichier ? (
+        <div className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm">
+          <span className="flex items-center gap-1.5 truncate text-primary">
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{fichier.name}</span>
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              onChange(null);
+              if (inputRef.current) inputRef.current.value = "";
+            }}
+            className="shrink-0 text-muted-foreground hover:text-destructive"
+            aria-label={`Retirer ${fichier.name}`}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+        >
+          Choisir un fichier...
+        </button>
+      )}
+    </div>
+  );
 }
 
 function FormulaireNouvelleSource({
@@ -200,11 +353,7 @@ function FormulaireNouvelleSource({
 }) {
   const creer = useCreerSource();
   const { data: nomsProjetConnus } = useNomsProjet();
-  const inputFichierRefs = [
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-  ];
+  const inputFichierRef = useRef<HTMLInputElement>(null);
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
@@ -224,13 +373,8 @@ function FormulaireNouvelleSource({
       : secteurActivite || undefined;
   const [uniteDuree, setUniteDuree] = useState<UniteDuree>("jours");
   const [donneesBrutes, setDonneesBrutes] = useState("");
-  const [formatFichier, setFormatFichier] = useState<FormatDonnees>("csv");
-  const [fichiers, setFichiers] = useState<(File | null)[]>([null, null, null]);
-  const [detectionsFichiers, setDetectionsFichiers] = useState<(string | null)[]>([
-    null,
-    null,
-    null,
-  ]);
+  const [formatFichier, setFormatFichier] = useState<FormatDonnees>("json");
+  const [fichier, setFichier] = useState<File | null>(null);
   const [chargementFichier, setChargementFichier] = useState(false);
   const [erreurFichier, setErreurFichier] = useState<string | null>(null);
 
@@ -238,41 +382,18 @@ function FormulaireNouvelleSource({
 
   function changerFormat(format: FormatDonnees) {
     setFormatFichier(format);
-    setFichiers([null, null, null]);
-    setDetectionsFichiers([null, null, null]);
+    setFichier(null);
     setErreurFichier(null);
-    inputFichierRefs.forEach((ref) => {
-      if (ref.current) ref.current.value = "";
-    });
+    if (inputFichierRef.current) inputFichierRef.current.value = "";
   }
 
-  async function definirFichier(index: number, fichier: File | null) {
-    const nouveauxFichiers = fichiers.map((f, i) => (i === index ? fichier : f));
-    setFichiers(nouveauxFichiers);
+  async function definirFichier(nouveauFichier: File | null) {
+    setFichier(nouveauFichier);
     setErreurFichier(null);
+    if (!nouveauFichier) return;
     setChargementFichier(true);
     try {
-      // Un seul passage de lecture par fichier — réutilisé à la fois pour la
-      // concaténation ci-dessous et la détection de type (colonnes CSV),
-      // aligné sur l'index d'origine (null pour un emplacement vide).
-      const contenusParIndex = await Promise.all(
-        nouveauxFichiers.map((f) => (f ? f.text() : Promise.resolve(null))),
-      );
-      const blocs = nouveauxFichiers
-        .map((f, i) =>
-          f && contenusParIndex[i] !== null ? { nom: f.name, contenu: contenusParIndex[i]! } : null,
-        )
-        .filter((b): b is { nom: string; contenu: string } => b !== null);
-      setDonneesBrutes(
-        blocs.length > 1
-          ? blocs.map((b) => `--- ${b.nom} ---\n${b.contenu}`).join("\n\n")
-          : (blocs[0]?.contenu ?? ""),
-      );
-      setDetectionsFichiers(
-        formatFichier === "csv"
-          ? contenusParIndex.map((c) => (c !== null ? detecterTypeCsv(c) : null))
-          : [null, null, null],
-      );
+      setDonneesBrutes(await nouveauFichier.text());
     } catch {
       setErreurFichier(
         "Fichier illisible — vérifiez qu'il correspond bien au format sélectionné ci-dessus.",
@@ -280,12 +401,6 @@ function FormulaireNouvelleSource({
     } finally {
       setChargementFichier(false);
     }
-  }
-
-  function retirerFichier(index: number) {
-    definirFichier(index, null);
-    const ref = inputFichierRefs[index];
-    if (ref.current) ref.current.value = "";
   }
 
   function enregistrer() {
@@ -303,110 +418,37 @@ function FormulaireNouvelleSource({
 
   return (
     <div className="glass space-y-5 rounded-2xl p-6">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="client_id_donnees">Client</Label>
-          <Input
-            id="client_id_donnees"
-            value={clientId}
-            onChange={(e) => setClientId(e.target.value)}
-            disabled={!estAdmin}
-          />
-          {!estAdmin && (
-            <p className="text-xs text-muted-foreground">Associé automatiquement à votre compte.</p>
-          )}
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="nom_source">Nom de la source (optionnel)</Label>
-          <Input
-            id="nom_source"
-            value={nom}
-            onChange={(e) => setNom(e.target.value)}
-            placeholder="ex : Export ERP atelier mécanique"
-          />
-        </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="nom_source">Nom de la source (optionnel)</Label>
+        <Input
+          id="nom_source"
+          value={nom}
+          onChange={(e) => setNom(e.target.value)}
+          placeholder="ex : Export ERP atelier mécanique"
+          className="max-w-sm"
+        />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="nom_projet_donnees">Nom du projet (optionnel)</Label>
-          <Input
-            id="nom_projet_donnees"
-            list="noms-projet-suggestions-donnees"
-            value={nomProjet}
-            onChange={(e) => setNomProjet(e.target.value)}
-            placeholder="ex : Atelier mécanique"
-          />
-          <datalist id="noms-projet-suggestions-donnees">
-            {nomsProjetConnus?.map((n) => (
-              <option key={n.nom_projet} value={n.nom_projet} />
-            ))}
-          </datalist>
-          <p className="text-xs text-muted-foreground">
-            Retrouve/regroupe les instances générées à partir de cette source.
-          </p>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="secteur_activite_donnees">Secteur d'activité (optionnel)</Label>
-          <Select
-            value={secteurActivite}
-            onValueChange={(v) => setSecteurActivite(v as SecteurActivite | "_autre")}
-          >
-            <SelectTrigger id="secteur_activite_donnees">
-              <SelectValue placeholder="Non renseigné" />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
-                <SelectItem key={s} value={s}>
-                  {LABELS_SECTEUR_ACTIVITE[s]}
-                </SelectItem>
-              ))}
-              <SelectItem value="_autre">Autre (préciser)</SelectItem>
-            </SelectContent>
-          </Select>
-          {secteurActivite === "_autre" && (
-            <Input
-              value={secteurActiviteAutre}
-              onChange={(e) => setSecteurActiviteAutre(e.target.value)}
-              placeholder="ex : Textile, Logistique..."
-              className="mt-1.5"
-            />
-          )}
-          <p className="text-xs text-muted-foreground">
-            Aide l'agent de compréhension à interpréter des données ambiguës.
-          </p>
-        </div>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="unite_duree_donnees">Unité d'affichage des durées</Label>
-          <Select value={uniteDuree} onValueChange={(v) => setUniteDuree(v as UniteDuree)}>
-            <SelectTrigger id="unite_duree_donnees">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(LABELS_UNITE_DUREE) as UniteDuree[]).map((u) => (
-                <SelectItem key={u} value={u}>
-                  {LABELS_UNITE_DUREE[u]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <p className="text-xs text-muted-foreground">
-            Ne change jamais l'interprétation des données (toujours en jours en interne) — juste
-            l'unité dans laquelle Gantt et échéances s'affichent.
-          </p>
-        </div>
-      </div>
+      <ChampsContexteIngestion
+        idPrefix="donnees"
+        estAdmin={estAdmin}
+        clientId={clientId}
+        onClientIdChange={setClientId}
+        nomProjet={nomProjet}
+        onNomProjetChange={setNomProjet}
+        nomsProjetConnus={nomsProjetConnus}
+        secteurActivite={secteurActivite}
+        onSecteurActiviteChange={setSecteurActivite}
+        secteurActiviteAutre={secteurActiviteAutre}
+        onSecteurActiviteAutreChange={setSecteurActiviteAutre}
+        uniteDuree={uniteDuree}
+        onUniteDureeChange={setUniteDuree}
+      />
 
       <div className="space-y-1.5">
         <Label htmlFor="fichier_brut">Fichier de données brutes (optionnel)</Label>
         <Tabs value={formatFichier} onValueChange={(v) => changerFormat(v as FormatDonnees)}>
           <TabsList className="h-8">
-            <TabsTrigger value="csv" className="text-xs">
-              CSV
-            </TabsTrigger>
             <TabsTrigger value="json" className="text-xs">
               JSON
             </TabsTrigger>
@@ -422,71 +464,24 @@ function FormulaireNouvelleSource({
           <>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
               <span className="text-muted-foreground">Gabarit d'exemple :</span>
-              {GABARITS_PAR_FORMAT[formatFichier].map((gabarit) => (
-                <a
-                  key={gabarit.href}
-                  href={gabarit.href}
-                  download
-                  className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
-                >
-                  <Download className="h-3 w-3" /> {gabarit.nom}
-                </a>
-              ))}
+              <a
+                href={GABARIT_JSON.href}
+                download
+                className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
+              >
+                <Download className="h-3 w-3" /> {GABARIT_JSON.nom}
+              </a>
             </div>
-            <div className="space-y-3">
-              {Array.from({ length: NB_FICHIERS_PAR_FORMAT[formatFichier] }, (_, index) => {
-                const idChamp = index === 0 ? "fichier_brut" : `fichier_brut_${index}`;
-                const fichier = fichiers[index];
-                const typeDetecte = detectionsFichiers[index];
-                const libelle =
-                  formatFichier === "csv" && fichier
-                    ? (typeDetecte ?? "Format non reconnu")
-                    : LABELS_FICHIER_PAR_FORMAT[formatFichier][index];
-                return (
-                  <div key={index} className="space-y-1">
-                    <Label htmlFor={idChamp} className="text-xs text-muted-foreground">
-                      <span className={typeDetecte ? "font-medium text-primary" : undefined}>
-                        {libelle}
-                      </span>
-                    </Label>
-                    <input
-                      id={idChamp}
-                      ref={inputFichierRefs[index]}
-                      type="file"
-                      accept={ACCEPT_PAR_FORMAT[formatFichier]}
-                      className="hidden"
-                      onChange={(e) => definirFichier(index, e.target.files?.[0] ?? null)}
-                    />
-                    {fichier ? (
-                      <div className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm">
-                        <span className="flex items-center gap-1.5 truncate text-primary">
-                          <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-                          <span className="truncate">{fichier.name}</span>
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => retirerFichier(index)}
-                          className="shrink-0 text-muted-foreground hover:text-destructive"
-                          aria-label={`Retirer ${fichier.name}`}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => inputFichierRefs[index].current?.click()}
-                        className="flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-                      >
-                        Choisir un fichier...
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <ChampFichierUnique
+              id="fichier_brut"
+              label="Instance"
+              accept={ACCEPT_FICHIER_JSON}
+              fichier={fichier}
+              onChange={definirFichier}
+              inputRef={inputFichierRef}
+            />
             {chargementFichier && (
-              <p className="text-xs text-muted-foreground">Lecture du/des fichier(s)...</p>
+              <p className="text-xs text-muted-foreground">Lecture du fichier...</p>
             )}
             {erreurFichier && (
               <p className="flex items-center gap-1.5 text-xs text-destructive">
@@ -494,10 +489,9 @@ function FormulaireNouvelleSource({
               </p>
             )}
             <p className="text-xs text-muted-foreground">
-              {NB_FICHIERS_PAR_FORMAT[formatFichier] > 1
-                ? "Jusqu'à 3 fichiers — un par table si votre export en a plusieurs (tâches, ressources, contraintes...), leur contenu est concaténé ci-dessous."
-                : "Charge le contenu du fichier dans le champ ci-dessous."}{" "}
-              Vous pouvez aussi coller le texte directement (export CSV, JSON, tableau collé...).
+              Charge le contenu du fichier dans le champ ci-dessous. Vous pouvez aussi coller le
+              texte directement (export JSON, tableau collé...). Pour un export CSV
+              Tâches/Ressources/Contraintes, voir l'onglet « Import CSV ».
             </p>
           </>
         )}
@@ -787,6 +781,408 @@ function FormulaireConnexionAPI({ onExtrait }: { onExtrait: (donneesBrutes: stri
   );
 }
 
+// Bloc de statut de l'exécution automatique déclenchée après conversion —
+// partagé entre SourceActivePanel (après "Générer une instance"/"Convertir
+// sans IA") et ImporteurCsvDirect (après "Importer") : même geste "generate
+// once" dans les deux flux, un seul endroit qui sait comment l'afficher.
+function ResultatExecutionAuto({
+  executer,
+}: {
+  executer: ReturnType<typeof useDeclencherExecution>;
+}) {
+  if (executer.isPending) {
+    return <p className="text-sm text-muted-foreground">Exécution automatique en cours...</p>;
+  }
+  if (executer.isSuccess) {
+    return (
+      <div
+        className={`rounded-lg border p-3 text-sm ${
+          executer.data.reussi
+            ? "border-primary/40 bg-primary/10 text-primary"
+            : "border-destructive/40 bg-destructive/10 text-destructive"
+        }`}
+      >
+        <div className="flex items-center gap-2 font-medium">
+          {executer.data.reussi ? (
+            <CheckCircle2 className="h-4 w-4" />
+          ) : (
+            <AlertCircle className="h-4 w-4" />
+          )}
+          {executer.data.reussi ? "Planning généré automatiquement" : "Exécution en échec"}
+        </div>
+        {!executer.data.reussi && executer.data.erreur && (
+          <p className="mt-1 text-muted-foreground">{executer.data.erreur}</p>
+        )}
+      </div>
+    );
+  }
+  if (executer.isError) {
+    return (
+      <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
+        <div className="flex items-center gap-2 font-medium text-amber-600 dark:text-amber-400">
+          <AlertCircle className="h-4 w-4" /> Instance générée, mais pas encore exécutée
+        </div>
+        <p className="mt-1 text-muted-foreground">{(executer.error as PrismeAPIError).message}</p>
+      </div>
+    );
+  }
+  return null;
+}
+
+type EntiteCsv = "taches" | "ressources" | "contraintes" | "commandes";
+
+const ENTITES_CSV: EntiteCsv[] = ["taches", "ressources", "contraintes", "commandes"];
+const ENTITES_CSV_REQUISES: EntiteCsv[] = ["taches", "ressources", "contraintes"];
+
+const LABELS_ENTITE_CSV: Record<EntiteCsv, string> = {
+  taches: "Tâches",
+  ressources: "Ressources",
+  contraintes: "Contraintes",
+  commandes: "Commandes",
+};
+
+const GABARITS_ENTITE_CSV: Record<EntiteCsv, string> = {
+  taches: "/gabarits/taches.csv",
+  ressources: "/gabarits/ressources.csv",
+  contraintes: "/gabarits/contraintes.csv",
+  commandes: "/gabarits/commandes.csv",
+};
+
+// Documentation des colonnes attendues par fichier — reflète exactement
+// adapters/csv_import/traducteur.py (COLONNES_*_REQUISES/OPTIONNELLES,
+// TYPES_CONTRAINTE_SUPPORTES) : une deuxième source de vérité délibérée côté
+// frontend, comme GABARITS_ENTITE_CSV ci-dessus — à relire si le schéma
+// backend change.
+interface ChampDocCsv {
+  champ: string;
+  requis: boolean;
+  type: string;
+  valeursAttendues: string;
+}
+
+const DOC_CHAMPS_CSV: Record<EntiteCsv, ChampDocCsv[]> = {
+  taches: [
+    {
+      champ: "id",
+      requis: true,
+      type: "Texte",
+      valeursAttendues: "Identifiant unique de la tâche",
+    },
+    { champ: "nom", requis: false, type: "Texte", valeursAttendues: "Libellé affiché" },
+    {
+      champ: "duree_estimee_jours",
+      requis: false,
+      type: "Entier",
+      valeursAttendues:
+        "Requis seulement si compatibilité dérivée par compétence (voir Contraintes)",
+    },
+  ],
+  ressources: [
+    {
+      champ: "id",
+      requis: true,
+      type: "Texte",
+      valeursAttendues: "Identifiant unique de la ressource",
+    },
+    { champ: "nom", requis: false, type: "Texte", valeursAttendues: "Libellé affiché" },
+    {
+      champ: "competences",
+      requis: false,
+      type: "Liste",
+      valeursAttendues: "Séparées par ; (ex. decoupe;assemblage)",
+    },
+  ],
+  contraintes: [
+    {
+      champ: "type",
+      requis: true,
+      type: "Texte",
+      valeursAttendues: "precedence | compatibilite_ressource_tache | competence_requise",
+    },
+    {
+      champ: "tache_avant, tache_apres",
+      requis: false,
+      type: "Texte",
+      valeursAttendues: "Requis si type = precedence",
+    },
+    {
+      champ: "tache, ressource, duree_jours",
+      requis: false,
+      type: "Texte / Texte / Entier",
+      valeursAttendues: "Requis si type = compatibilite_ressource_tache",
+    },
+    {
+      champ: "tache, competence",
+      requis: false,
+      type: "Texte",
+      valeursAttendues: "Requis si type = competence_requise",
+    },
+  ],
+  commandes: [
+    {
+      champ: "id",
+      requis: true,
+      type: "Texte",
+      valeursAttendues: "Identifiant unique de la commande",
+    },
+    {
+      champ: "taches",
+      requis: true,
+      type: "Liste",
+      valeursAttendues: "Séparées par ; (ex. T1;T2)",
+    },
+    { champ: "client", requis: false, type: "Texte", valeursAttendues: "Nom du client" },
+    {
+      champ: "date_limite",
+      requis: false,
+      type: "Entier",
+      valeursAttendues:
+        "Jours relatifs — dérive une échéance par tâche liée, jamais une date calendaire",
+    },
+  ],
+};
+
+const OPTIONS_DELIMITEUR_CSV: { valeur: string; label: string }[] = [
+  { valeur: ",", label: "Virgule (,)" },
+  { valeur: ";", label: "Point-virgule (;)" },
+  { valeur: "\t", label: "Tabulation" },
+  { valeur: "|", label: "Pipe (|)" },
+];
+
+// Import CSV direct — POST /adapters/csv/{client_id} (multipart), déjà câblé
+// côté client (prismeClient.importerFichiersCsv / useImporterFichiersCsv)
+// mais jamais branché à une UI avant cette page. Contrairement à
+// FormulaireNouvelleSource, ne crée aucune Source : l'instance est créée
+// immédiatement (comme GreenSIG ou l'import tableur), source_id=NULL. Les
+// 3 fichiers requis (Tâches/Ressources/Contraintes) sont combinés en une
+// seule instance en un seul appel — un bouton "Importer" partagé, pas un
+// par section (contrairement à la référence visuelle qui a inspiré cette
+// page, où chaque entité est une table indépendante).
+function ImporteurCsvDirect() {
+  const { utilisateur } = useAuth();
+  const estAdmin = utilisateur?.role === "admin";
+  const { data: nomsProjetConnus } = useNomsProjet();
+  const importer = useImporterFichiersCsv();
+  const executer = useDeclencherExecution();
+
+  const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
+  const [nomProjet, setNomProjet] = useState("");
+  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "_autre" | "">("");
+  const [secteurActiviteAutre, setSecteurActiviteAutre] = useState("");
+  const secteurActiviteEffectif =
+    secteurActivite === "_autre"
+      ? secteurActiviteAutre.trim() || undefined
+      : secteurActivite || undefined;
+  const [uniteDuree, setUniteDuree] = useState<UniteDuree>("jours");
+  const [delimiteur, setDelimiteur] = useState(",");
+  const [fichiers, setFichiers] = useState<Partial<Record<EntiteCsv, File>>>({});
+  const inputRefs: Record<EntiteCsv, RefObject<HTMLInputElement | null>> = {
+    taches: useRef<HTMLInputElement>(null),
+    ressources: useRef<HTMLInputElement>(null),
+    contraintes: useRef<HTMLInputElement>(null),
+    commandes: useRef<HTMLInputElement>(null),
+  };
+  const [resultat, setResultat] = useState<{
+    instance_id: string;
+    structure_contraintes: string;
+    avertissements: string[];
+  } | null>(null);
+
+  const erreur = importer.error as PrismeAPIError | null;
+  const pretPourImport =
+    ENTITES_CSV_REQUISES.every((e) => fichiers[e]) && clientId.trim().length > 0;
+
+  function definirFichierEntite(entite: EntiteCsv, fichier: File | null) {
+    setFichiers((precedent) => {
+      const suivant = { ...precedent };
+      if (fichier) suivant[entite] = fichier;
+      else delete suivant[entite];
+      return suivant;
+    });
+  }
+
+  function importerFichiers() {
+    if (!fichiers.taches || !fichiers.ressources || !fichiers.contraintes) return;
+    executer.reset();
+    setResultat(null);
+    importer.mutate(
+      {
+        clientId,
+        fichiers: {
+          taches: fichiers.taches,
+          ressources: fichiers.ressources,
+          contraintes: fichiers.contraintes,
+          commandes: fichiers.commandes,
+        },
+        nomProjet: nomProjet.trim() || undefined,
+        secteurActivite: secteurActiviteEffectif,
+        delimiteur,
+      },
+      {
+        onSuccess: (data) => {
+          setResultat(data);
+          executer.mutate({ instanceId: data.instance_id });
+        },
+      },
+    );
+  }
+
+  return (
+    <div className="glass space-y-5 rounded-2xl p-6">
+      <p className="text-sm text-muted-foreground">
+        Import direct depuis des fichiers CSV séparés (un par table) — crée une instance
+        immédiatement, sans passer par une Source réenregistrable. Pour un export ERP non structuré
+        (une seule pièce jointe, un format libre), utilisez plutôt l'onglet « Source en cours ».
+      </p>
+
+      <ChampsContexteIngestion
+        idPrefix="import_csv"
+        estAdmin={estAdmin}
+        clientId={clientId}
+        onClientIdChange={setClientId}
+        nomProjet={nomProjet}
+        onNomProjetChange={setNomProjet}
+        nomsProjetConnus={nomsProjetConnus}
+        secteurActivite={secteurActivite}
+        onSecteurActiviteChange={setSecteurActivite}
+        secteurActiviteAutre={secteurActiviteAutre}
+        onSecteurActiviteAutreChange={setSecteurActiviteAutre}
+        uniteDuree={uniteDuree}
+        onUniteDureeChange={setUniteDuree}
+      />
+
+      <div className="space-y-1.5">
+        <Label htmlFor="import_csv_delimiteur">Délimiteur CSV</Label>
+        <Select value={delimiteur} onValueChange={setDelimiteur}>
+          <SelectTrigger id="import_csv_delimiteur" className="max-w-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {OPTIONS_DELIMITEUR_CSV.map((o) => (
+              <SelectItem key={o.valeur} value={o.valeur}>
+                {o.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-muted-foreground">
+          S'applique identiquement aux quatre fichiers — jamais deviné automatiquement.
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {ENTITES_CSV.map((entite) => {
+          const requis = ENTITES_CSV_REQUISES.includes(entite);
+          return (
+            <details key={entite} className="rounded-lg border border-border/50 p-3" open={requis}>
+              <summary className="flex cursor-pointer items-center gap-2 text-sm font-medium">
+                {LABELS_ENTITE_CSV[entite]}
+                <Badge variant={requis ? "default" : "outline"} className="text-[10px]">
+                  {requis ? "Requis" : "Optionnel"}
+                </Badge>
+                {fichiers[entite] && <CheckCircle2 className="h-3.5 w-3.5 text-primary" />}
+              </summary>
+
+              <div className="mt-3 space-y-3">
+                <div className="overflow-x-auto rounded-md border border-border/50">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-xs">Champ</TableHead>
+                        <TableHead className="text-xs">Requis</TableHead>
+                        <TableHead className="text-xs">Type</TableHead>
+                        <TableHead className="text-xs">Valeurs attendues</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {DOC_CHAMPS_CSV[entite].map((c) => (
+                        <TableRow key={c.champ}>
+                          <TableCell className="font-mono text-xs">{c.champ}</TableCell>
+                          <TableCell className="text-xs">{c.requis ? "X" : ""}</TableCell>
+                          <TableCell className="text-xs">{c.type}</TableCell>
+                          <TableCell className="text-xs text-muted-foreground">
+                            {c.valeursAttendues}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                <a
+                  href={GABARITS_ENTITE_CSV[entite]}
+                  download
+                  className="inline-flex items-center gap-1 text-xs text-primary underline-offset-2 hover:underline"
+                >
+                  <Download className="h-3 w-3" /> Télécharger le gabarit {entite}.csv
+                </a>
+
+                <ChampFichierUnique
+                  id={`import_csv_fichier_${entite}`}
+                  label={`Fichier ${entite}.csv`}
+                  accept=".csv,text/csv"
+                  fichier={fichiers[entite] ?? null}
+                  onChange={(f) => definirFichierEntite(entite, f)}
+                  inputRef={inputRefs[entite]}
+                />
+              </div>
+            </details>
+          );
+        })}
+      </div>
+
+      {erreur && (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 font-medium">
+            <AlertCircle className="h-4 w-4" /> Échec de l'import
+          </div>
+          <p className="mt-1">{erreur.message}</p>
+        </div>
+      )}
+
+      {resultat && (
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+          <div className="flex flex-wrap items-center gap-2 font-medium text-primary">
+            <CheckCircle2 className="h-4 w-4" /> Instance créée
+            <Badge variant="secondary" className="font-mono text-xs">
+              {resultat.instance_id}
+            </Badge>
+            <Badge variant="outline" className="font-mono text-xs">
+              {resultat.structure_contraintes}
+            </Badge>
+          </div>
+          {resultat.avertissements.length > 0 && (
+            <div className="mt-2 rounded-lg border border-amber-500/40 bg-amber-500/10 p-2 text-xs">
+              <div className="flex items-center gap-1.5 font-medium text-amber-600 dark:text-amber-400">
+                <AlertTriangle className="h-3.5 w-3.5" /> Avertissements
+              </div>
+              <ul className="mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
+                {resultat.avertissements.map((a, i) => (
+                  <li key={i}>{a}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="mt-2">
+            <ResultatExecutionAuto executer={executer} />
+          </div>
+        </div>
+      )}
+
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs text-muted-foreground">
+          Les fichiers Tâches/Ressources/Contraintes sont combinés en une seule instance — importés
+          ensemble, pas fichier par fichier.
+        </p>
+        <Button onClick={importerFichiers} disabled={!pretPourImport || importer.isPending}>
+          <Upload className="mr-2 h-4 w-4" />
+          {importer.isPending ? "Import en cours..." : "Importer"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function SourceActivePanel({
   sourceId,
   onNouveau,
@@ -972,40 +1368,7 @@ function SourceActivePanel({
           </div>
         )}
 
-        {executer.isPending && (
-          <p className="text-sm text-muted-foreground">Exécution automatique en cours...</p>
-        )}
-        {executer.isSuccess && (
-          <div
-            className={`rounded-lg border p-3 text-sm ${
-              executer.data.reussi
-                ? "border-primary/40 bg-primary/10 text-primary"
-                : "border-destructive/40 bg-destructive/10 text-destructive"
-            }`}
-          >
-            <div className="flex items-center gap-2 font-medium">
-              {executer.data.reussi ? (
-                <CheckCircle2 className="h-4 w-4" />
-              ) : (
-                <AlertCircle className="h-4 w-4" />
-              )}
-              {executer.data.reussi ? "Planning généré automatiquement" : "Exécution en échec"}
-            </div>
-            {!executer.data.reussi && executer.data.erreur && (
-              <p className="mt-1 text-muted-foreground">{executer.data.erreur}</p>
-            )}
-          </div>
-        )}
-        {executer.isError && (
-          <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
-            <div className="flex items-center gap-2 font-medium text-amber-600 dark:text-amber-400">
-              <AlertCircle className="h-4 w-4" /> Instance générée, mais pas encore exécutée
-            </div>
-            <p className="mt-1 text-muted-foreground">
-              {(executer.error as PrismeAPIError).message}
-            </p>
-          </div>
-        )}
+        <ResultatExecutionAuto executer={executer} />
 
         <div className="space-y-1.5">
           <Label htmlFor="nom_projet_source_active" className="text-xs text-muted-foreground">

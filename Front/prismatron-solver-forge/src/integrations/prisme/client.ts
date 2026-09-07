@@ -346,12 +346,14 @@ export const prismeClient = {
   // Import depuis trois fichiers CSV séparés — Tâches, Ressources, Contraintes,
   // plus un 4ᵉ optionnel Commandes (POST /adapters/csv/{client_id}, multipart,
   // voir adapters/csv_import/) — dérive des échéances par tâche, une échéance
-  // déjà explicite l'emporte toujours sur une dérivée.
+  // déjà explicite l'emporte toujours sur une dérivée. `delimiteur` (un seul
+  // caractère, "," par défaut) s'applique identiquement aux quatre fichiers.
   importerFichiersCsv: (
     clientId: string,
     fichiers: { taches: File; ressources: File; contraintes: File; commandes?: File },
     nomProjet?: string,
     secteurActivite?: string,
+    delimiteur?: string,
   ) => {
     const corps = new FormData();
     corps.append("taches", fichiers.taches);
@@ -361,8 +363,9 @@ export const prismeClient = {
     const params = new URLSearchParams();
     if (nomProjet) params.set("nom_projet", nomProjet);
     if (secteurActivite) params.set("secteur_activite", secteurActivite);
+    if (delimiteur) params.set("delimiteur", delimiteur);
     const requete = params.toString();
-    return apiFetch<Types.ReponseImportAdaptateur>(
+    return apiFetch<Types.ReponseImportCsv>(
       `${PRISME_CONFIG.routes.adapters}/csv/${clientId}${requete ? `?${requete}` : ""}`,
       { method: "POST", body: corps },
     );

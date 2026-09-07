@@ -459,6 +459,13 @@ export interface ReponseValidation {
 // à l'identique de POST /ingestion/{client_id}.
 export type ReponseImportAdaptateur = ReponseIngestion;
 
+// POST /adapters/csv/{client_id} renvoie aussi `avertissements` (ex. une
+// durée comblée par estimation ML, §FC4) — absent de ReponseImportAdaptateur
+// ci-dessus, qui reste inchangé pour ses autres appelants (tableur, adaptateur ERP).
+export interface ReponseImportCsv extends ReponseIngestion {
+  avertissements: string[];
+}
+
 export interface ReponseImportCsvLocal {
   instance_id: string;
   structure_contraintes: string;

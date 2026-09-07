@@ -590,12 +590,15 @@ export function useImporterFichiersCsv() {
       fichiers,
       nomProjet,
       secteurActivite,
+      delimiteur,
     }: {
       clientId: string;
       fichiers: { taches: File; ressources: File; contraintes: File; commandes?: File };
       nomProjet?: string;
       secteurActivite?: string;
-    }) => prismeClient.importerFichiersCsv(clientId, fichiers, nomProjet, secteurActivite),
+      delimiteur?: string;
+    }) =>
+      prismeClient.importerFichiersCsv(clientId, fichiers, nomProjet, secteurActivite, delimiteur),
   });
 }
 

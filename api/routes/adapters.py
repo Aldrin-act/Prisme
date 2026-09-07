@@ -82,6 +82,13 @@ def ingerer_depuis_greensig(
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 
+def _valider_delimiteur(delimiteur: str) -> None:
+    if len(delimiteur) != 1:
+        raise HTTPException(
+            status_code=422, detail=f"delimiteur doit être un seul caractère, reçu {delimiteur!r}"
+        )
+
+
 @router.post("/csv/{client_id}")
 async def ingerer_depuis_csv(
     client_id: str,
@@ -91,6 +98,7 @@ async def ingerer_depuis_csv(
     commandes: UploadFile | None = File(None),
     nom_projet: str | None = None,
     secteur_activite: str | None = None,
+    delimiteur: str = ",",
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -99,8 +107,10 @@ async def ingerer_depuis_csv(
     de données tabulaires. `commandes` (optionnel, quatrième fichier) relie
     des tâches à une commande cliente et une date limite — dérive une
     échéance par tâche liée (`adapters/commande_derivation.py`), jamais
-    transmis au solveur tel quel."""
+    transmis au solveur tel quel. `delimiteur` (un seul caractère, `,` par
+    défaut) s'applique aux quatre fichiers identiquement."""
     verifier_acces_client(utilisateur, client_id)
+    _valider_delimiteur(delimiteur)
     fichiers_requis = (taches, ressources, contraintes)
     for fichier in (*fichiers_requis, *((commandes,) if commandes is not None else ())):
         if not (fichier.filename or "").lower().endswith(".csv"):
@@ -120,6 +130,7 @@ async def ingerer_depuis_csv(
             contraintes_octets,
             commandes_octets,
             estimateur_duree=_estimateur_duree_optionnel(),
+            delimiteur=delimiteur,
         )
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
@@ -216,6 +227,7 @@ class RequeteCsvLocal(BaseModel):
     client_id: str
     nom_projet: str | None = None
     secteur_activite: str | None = None
+    delimiteur: str = ","
 
 
 @router.post("/csv-local/ingerer")
@@ -245,6 +257,7 @@ def ingerer_depuis_csv_local(
     from pathlib import Path
 
     verifier_acces_client(utilisateur, requete.client_id)
+    _valider_delimiteur(requete.delimiteur)
 
     # Vérifier que le dossier existe
     dossier = Path(requete.chemin_dossier)
@@ -286,7 +299,11 @@ def ingerer_depuis_csv_local(
     # Traduire en instance TRCO
     try:
         resultat = traduire_csv(
-            taches_octets, ressources_octets, contraintes_octets, estimateur_duree=_estimateur_duree_optionnel()
+            taches_octets,
+            ressources_octets,
+            contraintes_octets,
+            estimateur_duree=_estimateur_duree_optionnel(),
+            delimiteur=requete.delimiteur,
         )
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
