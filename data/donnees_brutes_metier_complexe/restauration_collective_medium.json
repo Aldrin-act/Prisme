@@ -3,24 +3,22 @@
   "operations": [
     {
       "code_operation": "PREP_INGREDIENTS_001",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_preparation_legumes",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_1"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_2"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_3"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_4"
         }
       ],
       "priorite": 1,
@@ -30,26 +28,24 @@
     },
     {
       "code_operation": "REFROIDISSEMENT_002",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PREP_INGREDIENTS_001"
       ],
       "competence_requise": "cellule_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_4"
         }
       ],
       "priorite": 5,
@@ -59,224 +55,206 @@
     },
     {
       "code_operation": "CUISSON_PRINCIPALE_003",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_cuisson_four",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_FOUR_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "CONDITIONNEMENT_004",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CUISSON_PRINCIPALE_003"
       ],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "DRESSAGE_005",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "CONDITIONNEMENT_004"
       ],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ]
     },
     {
       "code_operation": "NETTOYAGE_006",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "DRESSAGE_005"
       ],
       "competence_requise": "zone_laverie",
       "ressources_compatibles": [
         {
-          "poste_id": "ZONE_LAVERIE_1",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_1"
         },
         {
-          "poste_id": "ZONE_LAVERIE_2",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_2"
         },
         {
-          "poste_id": "ZONE_LAVERIE_3",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_3"
         },
         {
-          "poste_id": "ZONE_LAVERIE_4",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_4"
         }
       ]
     },
     {
       "code_operation": "DRESSAGE_007",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "PREP_INGREDIENTS_008",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "DRESSAGE_007"
       ],
       "competence_requise": "poste_preparation_legumes",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_1"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_2"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_3"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "CUISSON_PRINCIPALE_009",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "PREP_INGREDIENTS_008"
       ],
       "competence_requise": "poste_cuisson_four",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_FOUR_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONTROLE_010",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CUISSON_MINUTE_011",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_cuisson_plaque",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_4"
         }
       ],
       "priorite": 4,
@@ -286,50 +264,46 @@
     },
     {
       "code_operation": "PATISSERIE_012",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CUISSON_MINUTE_011"
       ],
       "competence_requise": "poste_patisserie",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PATISSERIE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_1"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_2"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_3"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "CONDITIONNEMENT_013",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 2,
@@ -337,50 +311,46 @@
     },
     {
       "code_operation": "REFROIDISSEMENT_014",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "cellule_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CONDITIONNEMENT_015",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "REFROIDISSEMENT_014"
       ],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 1,
@@ -390,73 +360,67 @@
     },
     {
       "code_operation": "CUISSON_PRINCIPALE_016",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_cuisson_marmite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "NETTOYAGE_017",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CUISSON_PRINCIPALE_016"
       ],
       "competence_requise": "zone_laverie",
       "ressources_compatibles": [
         {
-          "poste_id": "ZONE_LAVERIE_1",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_1"
         },
         {
-          "poste_id": "ZONE_LAVERIE_2",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_2"
         },
         {
-          "poste_id": "ZONE_LAVERIE_3",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_3"
         },
         {
-          "poste_id": "ZONE_LAVERIE_4",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_018",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 2,
@@ -466,49 +430,45 @@
     },
     {
       "code_operation": "CUISSON_MINUTE_019",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_018"
       ],
       "competence_requise": "poste_cuisson_plaque",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_4"
         }
       ]
     },
     {
       "code_operation": "DRESSAGE_020",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ],
       "priorite": 4,
@@ -519,24 +479,22 @@
     },
     {
       "code_operation": "PREP_INGREDIENTS_021",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_preparation_viandes",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_1"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_2"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_3"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_4"
         }
       ],
       "priorite": 5,
@@ -546,24 +504,22 @@
     },
     {
       "code_operation": "NETTOYAGE_022",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "zone_laverie",
       "ressources_compatibles": [
         {
-          "poste_id": "ZONE_LAVERIE_1",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_1"
         },
         {
-          "poste_id": "ZONE_LAVERIE_2",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_2"
         },
         {
-          "poste_id": "ZONE_LAVERIE_3",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_3"
         },
         {
-          "poste_id": "ZONE_LAVERIE_4",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_4"
         }
       ],
       "priorite": 5,
@@ -573,97 +529,89 @@
     },
     {
       "code_operation": "DRESSAGE_023",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ]
     },
     {
       "code_operation": "CUISSON_MINUTE_024",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_cuisson_plaque",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CONTROLE_025",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CUISSON_MINUTE_024"
       ],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "REFROIDISSEMENT_026",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "cellule_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_4"
         }
       ],
       "quantite": 39,
@@ -672,26 +620,24 @@
     },
     {
       "code_operation": "CONDITIONNEMENT_027",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "REFROIDISSEMENT_026"
       ],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 3,
@@ -699,48 +645,44 @@
     },
     {
       "code_operation": "CUISSON_MINUTE_028",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_cuisson_plaque",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "CONTROLE_029",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "quantite": 68,
@@ -749,101 +691,93 @@
     },
     {
       "code_operation": "REFROIDISSEMENT_030",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "cellule_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_4"
         }
       ]
     },
     {
       "code_operation": "DRESSAGE_031",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "REFROIDISSEMENT_030"
       ],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "PATISSERIE_032",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "DRESSAGE_031"
       ],
       "competence_requise": "poste_patisserie",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PATISSERIE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_1"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_2"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_3"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "PREP_INGREDIENTS_033",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "PATISSERIE_032"
       ],
       "competence_requise": "poste_preparation_viandes",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_1"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_2"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_3"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_4"
         }
       ],
       "quantite": 71,
@@ -852,26 +786,24 @@
     },
     {
       "code_operation": "CONDITIONNEMENT_034",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "PREP_INGREDIENTS_033"
       ],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 5,
@@ -881,26 +813,24 @@
     },
     {
       "code_operation": "NETTOYAGE_035",
+      "date_debut": "2026-09-06T08:00:00",
+      "date_fin": "2026-09-06T16:00:00",
       "operations_precedentes": [
         "CONDITIONNEMENT_034"
       ],
       "competence_requise": "zone_laverie",
       "ressources_compatibles": [
         {
-          "poste_id": "ZONE_LAVERIE_1",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_1"
         },
         {
-          "poste_id": "ZONE_LAVERIE_2",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_2"
         },
         {
-          "poste_id": "ZONE_LAVERIE_3",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_3"
         },
         {
-          "poste_id": "ZONE_LAVERIE_4",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_4"
         }
       ],
       "priorite": 1,
@@ -908,75 +838,69 @@
     },
     {
       "code_operation": "REFROIDISSEMENT_036",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "cellule_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "CUISSON_MINUTE_037",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "REFROIDISSEMENT_036"
       ],
       "competence_requise": "poste_cuisson_plaque",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_4"
         }
       ]
     },
     {
       "code_operation": "CUISSON_PRINCIPALE_038",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "CUISSON_MINUTE_037"
       ],
       "competence_requise": "poste_cuisson_four",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_FOUR_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_FOUR_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_FOUR_4"
         }
       ],
       "quantite": 55,
@@ -985,49 +909,45 @@
     },
     {
       "code_operation": "PATISSERIE_039",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_patisserie",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PATISSERIE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_1"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_2"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_3"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_4"
         }
       ]
     },
     {
       "code_operation": "DRESSAGE_040",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PATISSERIE_039"
       ],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ],
       "quantite": 183,
@@ -1036,74 +956,68 @@
     },
     {
       "code_operation": "CONDITIONNEMENT_041",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "DRESSAGE_040"
       ],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_042",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ]
     },
     {
       "code_operation": "NETTOYAGE_043",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_042"
       ],
       "competence_requise": "zone_laverie",
       "ressources_compatibles": [
         {
-          "poste_id": "ZONE_LAVERIE_1",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_1"
         },
         {
-          "poste_id": "ZONE_LAVERIE_2",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_2"
         },
         {
-          "poste_id": "ZONE_LAVERIE_3",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_3"
         },
         {
-          "poste_id": "ZONE_LAVERIE_4",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_4"
         }
       ],
       "quantite": 24,
@@ -1112,48 +1026,44 @@
     },
     {
       "code_operation": "PREP_INGREDIENTS_044",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_preparation_viandes",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_1"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_2"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_3"
         },
         {
-          "poste_id": "POSTE_PREPARATION_VIANDES_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_VIANDES_4"
         }
       ],
       "echeance_jours": 32
     },
     {
       "code_operation": "CONTROLE_045",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 4,
@@ -1163,102 +1073,94 @@
     },
     {
       "code_operation": "PREP_INGREDIENTS_046",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_045"
       ],
       "competence_requise": "poste_preparation_legumes",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_1"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_2"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_3"
         },
         {
-          "poste_id": "POSTE_PREPARATION_LEGUMES_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PREPARATION_LEGUMES_4"
         }
       ]
     },
     {
       "code_operation": "CUISSON_MINUTE_047",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "PREP_INGREDIENTS_046"
       ],
       "competence_requise": "poste_cuisson_plaque",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "CONDITIONNEMENT_048",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "CUISSON_MINUTE_047"
       ],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ]
     },
     {
       "code_operation": "PATISSERIE_049",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "CONDITIONNEMENT_048"
       ],
       "competence_requise": "poste_patisserie",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PATISSERIE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_1"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_2"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_3"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_4"
         }
       ],
       "quantite": 126,
@@ -1267,26 +1169,24 @@
     },
     {
       "code_operation": "REFROIDISSEMENT_050",
+      "date_debut": "2026-09-06T08:00:00",
+      "date_fin": "2026-09-06T16:00:00",
       "operations_precedentes": [
         "PATISSERIE_049"
       ],
       "competence_requise": "cellule_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "CELLULE_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "CELLULE_REFROIDISSEMENT_4"
         }
       ],
       "quantite": 84,
@@ -1295,26 +1195,24 @@
     },
     {
       "code_operation": "DRESSAGE_051",
+      "date_debut": "2026-09-07T08:00:00",
+      "date_fin": "2026-09-07T16:00:00",
       "operations_precedentes": [
         "REFROIDISSEMENT_050"
       ],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ],
       "priorite": 2,
@@ -1324,26 +1222,24 @@
     },
     {
       "code_operation": "NETTOYAGE_052",
+      "date_debut": "2026-09-08T08:00:00",
+      "date_fin": "2026-09-08T16:00:00",
       "operations_precedentes": [
         "DRESSAGE_051"
       ],
       "competence_requise": "zone_laverie",
       "ressources_compatibles": [
         {
-          "poste_id": "ZONE_LAVERIE_1",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_1"
         },
         {
-          "poste_id": "ZONE_LAVERIE_2",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_2"
         },
         {
-          "poste_id": "ZONE_LAVERIE_3",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_3"
         },
         {
-          "poste_id": "ZONE_LAVERIE_4",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_4"
         }
       ],
       "quantite": 170,
@@ -1352,48 +1248,44 @@
     },
     {
       "code_operation": "CUISSON_PRINCIPALE_053",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_cuisson_marmite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_4"
         }
       ],
       "echeance_jours": 40
     },
     {
       "code_operation": "PATISSERIE_054",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_patisserie",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_PATISSERIE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_1"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_2"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_3"
         },
         {
-          "poste_id": "POSTE_PATISSERIE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_PATISSERIE_4"
         }
       ],
       "priorite": 3,
@@ -1403,52 +1295,48 @@
     },
     {
       "code_operation": "CUISSON_PRINCIPALE_055",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PATISSERIE_054"
       ],
       "competence_requise": "poste_cuisson_marmite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_MARMITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_MARMITE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CUISSON_MINUTE_056",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "CUISSON_PRINCIPALE_055"
       ],
       "competence_requise": "poste_cuisson_plaque",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_1"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_2"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_3"
         },
         {
-          "poste_id": "POSTE_CUISSON_PLAQUE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CUISSON_PLAQUE_4"
         }
       ],
       "priorite": 1,
@@ -1458,99 +1346,91 @@
     },
     {
       "code_operation": "NETTOYAGE_057",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "CUISSON_MINUTE_056"
       ],
       "competence_requise": "zone_laverie",
       "ressources_compatibles": [
         {
-          "poste_id": "ZONE_LAVERIE_1",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_1"
         },
         {
-          "poste_id": "ZONE_LAVERIE_2",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_2"
         },
         {
-          "poste_id": "ZONE_LAVERIE_3",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_3"
         },
         {
-          "poste_id": "ZONE_LAVERIE_4",
-          "duree_jours": 1
+          "poste_id": "ZONE_LAVERIE_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_058",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ]
     },
     {
       "code_operation": "DRESSAGE_059",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_058"
       ],
       "competence_requise": "poste_dressage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_DRESSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_1"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_2"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_3"
         },
         {
-          "poste_id": "POSTE_DRESSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_DRESSAGE_4"
         }
       ]
     },
     {
       "code_operation": "CONDITIONNEMENT_060",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "DRESSAGE_059"
       ],
       "competence_requise": "poste_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "POSTE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 2

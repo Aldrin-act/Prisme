@@ -3,199 +3,183 @@
   "operations": [
     {
       "code_operation": "ADMISSION_001",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "SOINS_POSTOP_002",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "PREPARATION_PATIENT_003",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "SOINS_POSTOP_002"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "EXAMENS_PREOP_004",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "PREPARATION_PATIENT_003"
       ],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ],
       "echeance_jours": 19
     },
     {
       "code_operation": "SOINS_POSTOP_005",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 2
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ]
     },
     {
       "code_operation": "EXAMENS_PREOP_006",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "SOINS_POSTOP_005"
       ],
       "competence_requise": "laboratoire_analyses",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_ANALYSES_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_1"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_2"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_3"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_4"
         }
       ]
     },
     {
       "code_operation": "PREPARATION_PATIENT_007",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "EXAMENS_PREOP_006"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ]
     },
     {
       "code_operation": "ADMISSION_008",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "PREPARATION_PATIENT_007"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 4,
@@ -203,71 +187,65 @@
     },
     {
       "code_operation": "EXAMENS_PREOP_009",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "CONTROLE_POSTOP_010",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ]
     },
     {
       "code_operation": "REVEIL_011",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_reveil",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_REVEIL_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_1"
         },
         {
-          "poste_id": "SALLE_REVEIL_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_2"
         },
         {
-          "poste_id": "SALLE_REVEIL_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_3"
         },
         {
-          "poste_id": "SALLE_REVEIL_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_4"
         }
       ],
       "priorite": 4,
@@ -277,26 +255,24 @@
     },
     {
       "code_operation": "INTERVENTION_012",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "REVEIL_011"
       ],
       "competence_requise": "bloc_chirurgie_cardiaque",
       "ressources_compatibles": [
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_2",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_2"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_4",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_4"
         }
       ],
       "priorite": 2,
@@ -306,75 +282,69 @@
     },
     {
       "code_operation": "ADMISSION_013",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "INTERVENTION_012"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "PREPARATION_PATIENT_014",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "ADMISSION_013"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ]
     },
     {
       "code_operation": "EXAMENS_PREOP_015",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "laboratoire_analyses",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_ANALYSES_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_1"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_2"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_3"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_4"
         }
       ],
       "priorite": 2,
@@ -384,97 +354,89 @@
     },
     {
       "code_operation": "REVEIL_016",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_reveil",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_REVEIL_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_1"
         },
         {
-          "poste_id": "SALLE_REVEIL_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_2"
         },
         {
-          "poste_id": "SALLE_REVEIL_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_3"
         },
         {
-          "poste_id": "SALLE_REVEIL_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONTROLE_POSTOP_017",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "PREPARATION_PATIENT_018",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_POSTOP_017"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ]
     },
     {
       "code_operation": "SOINS_POSTOP_019",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ],
       "priorite": 2,
@@ -484,49 +446,45 @@
     },
     {
       "code_operation": "INTERVENTION_020",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "SOINS_POSTOP_019"
       ],
       "competence_requise": "bloc_chirurgie_generale",
       "ressources_compatibles": [
         {
-          "poste_id": "BLOC_CHIRURGIE_GENERALE_1",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_1"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_GENERALE_2",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_2"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_GENERALE_3",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_3"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_GENERALE_4",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_GENERALE_4"
         }
       ]
     },
     {
       "code_operation": "ADMISSION_021",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 4,
@@ -537,50 +495,46 @@
     },
     {
       "code_operation": "ADMISSION_022",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "REVEIL_023",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "ADMISSION_022"
       ],
       "competence_requise": "salle_reveil",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_REVEIL_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_1"
         },
         {
-          "poste_id": "SALLE_REVEIL_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_2"
         },
         {
-          "poste_id": "SALLE_REVEIL_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_3"
         },
         {
-          "poste_id": "SALLE_REVEIL_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_4"
         }
       ],
       "quantite": 35,
@@ -589,26 +543,24 @@
     },
     {
       "code_operation": "SOINS_POSTOP_024",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "REVEIL_023"
       ],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ],
       "quantite": 188,
@@ -617,74 +569,68 @@
     },
     {
       "code_operation": "CONTROLE_POSTOP_025",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "PREPARATION_PATIENT_026",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_POSTOP_025"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "SOINS_POSTOP_027",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ],
       "priorite": 5,
@@ -694,50 +640,46 @@
     },
     {
       "code_operation": "ADMISSION_028",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "EXAMENS_PREOP_029",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "ADMISSION_028"
       ],
       "competence_requise": "laboratoire_analyses",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_ANALYSES_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_1"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_2"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_3"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_4"
         }
       ],
       "priorite": 1,
@@ -747,48 +689,44 @@
     },
     {
       "code_operation": "PREPARATION_PATIENT_030",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONTROLE_POSTOP_031",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ],
       "quantite": 46,
@@ -797,76 +735,70 @@
     },
     {
       "code_operation": "INTERVENTION_032",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_POSTOP_031"
       ],
       "competence_requise": "bloc_chirurgie_cardiaque",
       "ressources_compatibles": [
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_1"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_2",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_2"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_3"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_4",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_CARDIAQUE_4"
         }
       ],
       "echeance_jours": 37
     },
     {
       "code_operation": "PREPARATION_PATIENT_033",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "EXAMENS_PREOP_034",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PREPARATION_PATIENT_033"
       ],
       "competence_requise": "laboratoire_analyses",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_ANALYSES_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_1"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_2"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_3"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_4"
         }
       ],
       "quantite": 71,
@@ -875,26 +807,24 @@
     },
     {
       "code_operation": "SOINS_POSTOP_035",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "EXAMENS_PREOP_034"
       ],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ],
       "priorite": 5,
@@ -904,76 +834,70 @@
     },
     {
       "code_operation": "ADMISSION_036",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "SOINS_POSTOP_035"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONTROLE_POSTOP_037",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "INTERVENTION_038",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_POSTOP_037"
       ],
       "competence_requise": "bloc_chirurgie_orthopedique",
       "ressources_compatibles": [
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4"
         }
       ],
       "priorite": 1,
@@ -981,24 +905,22 @@
     },
     {
       "code_operation": "SOINS_POSTOP_039",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ],
       "quantite": 55,
@@ -1007,24 +929,22 @@
     },
     {
       "code_operation": "ADMISSION_040",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 5,
@@ -1034,26 +954,24 @@
     },
     {
       "code_operation": "PREPARATION_PATIENT_041",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "ADMISSION_040"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "quantite": 183,
@@ -1062,70 +980,64 @@
     },
     {
       "code_operation": "REVEIL_042",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_reveil",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_REVEIL_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_1"
         },
         {
-          "poste_id": "SALLE_REVEIL_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_2"
         },
         {
-          "poste_id": "SALLE_REVEIL_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_3"
         },
         {
-          "poste_id": "SALLE_REVEIL_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_POSTOP_043",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ]
     },
     {
       "code_operation": "SOINS_POSTOP_044",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "unite_soins_intensifs",
       "ressources_compatibles": [
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_1",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_1"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_2",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_2"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_3",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_3"
         },
         {
-          "poste_id": "UNITE_SOINS_INTENSIFS_4",
-          "duree_jours": 1
+          "poste_id": "UNITE_SOINS_INTENSIFS_4"
         }
       ],
       "priorite": 5,
@@ -1135,24 +1047,22 @@
     },
     {
       "code_operation": "EXAMENS_PREOP_045",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "laboratoire_analyses",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_ANALYSES_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_1"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_2"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_3"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_4"
         }
       ],
       "priorite": 4,
@@ -1162,26 +1072,24 @@
     },
     {
       "code_operation": "PREPARATION_PATIENT_046",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "EXAMENS_PREOP_045"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 3,
@@ -1191,52 +1099,48 @@
     },
     {
       "code_operation": "INTERVENTION_047",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "PREPARATION_PATIENT_046"
       ],
       "competence_requise": "bloc_chirurgie_orthopedique",
       "ressources_compatibles": [
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "ADMISSION_048",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "INTERVENTION_047"
       ],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 1,
@@ -1246,47 +1150,43 @@
     },
     {
       "code_operation": "CONTROLE_POSTOP_049",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_radiologie",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_RADIOLOGIE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_1"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_2"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_3"
         },
         {
-          "poste_id": "SALLE_RADIOLOGIE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_RADIOLOGIE_4"
         }
       ]
     },
     {
       "code_operation": "REVEIL_050",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_reveil",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_REVEIL_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_1"
         },
         {
-          "poste_id": "SALLE_REVEIL_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_2"
         },
         {
-          "poste_id": "SALLE_REVEIL_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_3"
         },
         {
-          "poste_id": "SALLE_REVEIL_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_4"
         }
       ],
       "priorite": 1,
@@ -1294,95 +1194,87 @@
     },
     {
       "code_operation": "REVEIL_051",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_reveil",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_REVEIL_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_1"
         },
         {
-          "poste_id": "SALLE_REVEIL_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_2"
         },
         {
-          "poste_id": "SALLE_REVEIL_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_3"
         },
         {
-          "poste_id": "SALLE_REVEIL_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_REVEIL_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "EXAMENS_PREOP_052",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "laboratoire_analyses",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_ANALYSES_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_1"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_2"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_3"
         },
         {
-          "poste_id": "LABORATOIRE_ANALYSES_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_ANALYSES_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "INTERVENTION_053",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "bloc_chirurgie_orthopedique",
       "ressources_compatibles": [
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_1"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_2"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_3"
         },
         {
-          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4",
-          "duree_jours": 1
+          "poste_id": "BLOC_CHIRURGIE_ORTHOPEDIQUE_4"
         }
       ]
     },
     {
       "code_operation": "PREPARATION_PATIENT_054",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_preparation",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_PREPARATION_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_1"
         },
         {
-          "poste_id": "SALLE_PREPARATION_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_2"
         },
         {
-          "poste_id": "SALLE_PREPARATION_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_3"
         },
         {
-          "poste_id": "SALLE_PREPARATION_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_PREPARATION_4"
         }
       ],
       "priorite": 3,

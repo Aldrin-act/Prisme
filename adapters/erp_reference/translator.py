@@ -18,7 +18,21 @@ from dsl.schema import (
     Tache,
 )
 
-from .schema_erp import PayloadERP
+from .schema_erp import OperationERP, PayloadERP
+
+_DUREE_MINIMALE_JOURS = 1  # CompatibiliteRessourceTache.duree exige > 0 ; jamais 0 si les dates coïncident
+
+
+def duree_jours_pour(operation: OperationERP) -> int:
+    """Résout la durée d'une opération vers le référentiel jours relatifs du DSL — directement si
+    `duree_jours` est déclaré, sinon par différence calendaire `date_fin - date_debut` (les deux
+    modes sont mutuellement exclusifs, déjà vérifié par `OperationERP`, §5.4). Même motif que
+    `adapters/greensig/translator.py::duree_jours_pour` : la conversion reste dans l'adaptateur,
+    jamais une notion que le DSL connaît."""
+    if operation.duree_jours is not None:
+        return operation.duree_jours
+    assert operation.date_debut is not None and operation.date_fin is not None
+    return max((operation.date_fin - operation.date_debut).days, _DUREE_MINIMALE_JOURS)
 
 
 def traduire(payload: PayloadERP) -> InstanceTRCO:
@@ -30,7 +44,7 @@ def traduire(payload: PayloadERP) -> InstanceTRCO:
     for operation in payload.operations:
         contraintes.append(
             CompatibiliteRessourceTache(
-                tache=operation.code_operation, ressource=operation.poste_id, duree=operation.duree_jours
+                tache=operation.code_operation, ressource=operation.poste_id, duree=duree_jours_pour(operation)
             )
         )
         if operation.operation_precedente is not None:

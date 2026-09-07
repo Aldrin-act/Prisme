@@ -2,134 +2,154 @@
   "operations": [
     {
       "code_operation": "POSE_CMS_A_001",
-      "duree_jours": 1,
       "poste_id": "PICK_PLACE",
-      "competence_requise": "pick_place"
+      "competence_requise": "pick_place",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "REFUSION_B_002",
-      "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
       "competence_requise": "four_refusion",
-      "operation_precedente": "POSE_CMS_A_001"
+      "operation_precedente": "POSE_CMS_A_001",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DEPANEL_003",
-      "duree_jours": 1,
       "poste_id": "POSTE_DEPANNELISATION",
       "competence_requise": "poste_depannelisation",
-      "operation_precedente": "REFUSION_B_002"
+      "operation_precedente": "REFUSION_B_002",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "REFUSION_A_004",
-      "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
       "competence_requise": "four_refusion",
-      "operation_precedente": "DEPANEL_003"
+      "operation_precedente": "DEPANEL_003",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COATING_005",
-      "duree_jours": 1,
       "poste_id": "ROBOT_COATING",
-      "competence_requise": "robot_coating"
+      "competence_requise": "robot_coating",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "SOUDURE_THT_006",
-      "duree_jours": 1,
       "poste_id": "POSTE_SOUDURE_MANUEL",
-      "competence_requise": "poste_soudure_manuel"
+      "competence_requise": "poste_soudure_manuel",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TEST_ICT_007",
-      "duree_jours": 1,
       "poste_id": "BANC_TEST_ICT",
       "competence_requise": "banc_test_ict",
-      "operation_precedente": "SOUDURE_THT_006"
+      "operation_precedente": "SOUDURE_THT_006",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TEST_FONC_008",
-      "duree_jours": 1,
       "poste_id": "BANC_TEST_FONCTIONNEL",
       "competence_requise": "banc_test_fonctionnel",
-      "operation_precedente": "TEST_ICT_007"
+      "operation_precedente": "TEST_ICT_007",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PREP_009",
-      "duree_jours": 1,
       "poste_id": "STATION_ASSEMBLAGE",
       "competence_requise": "station_assemblage",
-      "operation_precedente": "TEST_FONC_008"
+      "operation_precedente": "TEST_FONC_008",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "POSE_CMS_B_010",
-      "duree_jours": 1,
       "poste_id": "PICK_PLACE",
-      "competence_requise": "pick_place"
+      "competence_requise": "pick_place",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "AOI_A_011",
-      "duree_jours": 1,
       "poste_id": "AOI",
       "competence_requise": "aoi",
-      "operation_precedente": "POSE_CMS_B_010"
+      "operation_precedente": "POSE_CMS_B_010",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PACKAGE_012",
-      "duree_jours": 1,
       "poste_id": "STATION_PACKAGING",
-      "competence_requise": "station_packaging"
+      "competence_requise": "station_packaging",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "SOUDURE_THT_013",
-      "duree_jours": 1,
       "poste_id": "POSTE_SOUDURE_MANUEL",
-      "competence_requise": "poste_soudure_manuel"
+      "competence_requise": "poste_soudure_manuel",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "REFUSION_A_014",
-      "duree_jours": 1,
       "poste_id": "FOUR_REFUSION",
       "competence_requise": "four_refusion",
-      "operation_precedente": "SOUDURE_THT_013"
+      "operation_precedente": "SOUDURE_THT_013",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "AOI_A_015",
-      "duree_jours": 1,
       "poste_id": "AOI",
-      "competence_requise": "aoi"
+      "competence_requise": "aoi",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TEST_FONC_016",
-      "duree_jours": 1,
       "poste_id": "BANC_TEST_FONCTIONNEL",
-      "competence_requise": "banc_test_fonctionnel"
+      "competence_requise": "banc_test_fonctionnel",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PACKAGE_017",
-      "duree_jours": 1,
       "poste_id": "STATION_PACKAGING",
       "competence_requise": "station_packaging",
-      "operation_precedente": "TEST_FONC_016"
+      "operation_precedente": "TEST_FONC_016",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COATING_018",
-      "duree_jours": 1,
       "poste_id": "ROBOT_COATING",
       "competence_requise": "robot_coating",
-      "operation_precedente": "PACKAGE_017"
+      "operation_precedente": "PACKAGE_017",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "POSE_CMS_B_019",
-      "duree_jours": 1,
       "poste_id": "PICK_PLACE",
-      "competence_requise": "pick_place"
+      "competence_requise": "pick_place",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "POSE_CMS_A_020",
-      "duree_jours": 1,
       "poste_id": "PICK_PLACE",
       "competence_requise": "pick_place",
-      "operation_precedente": "POSE_CMS_B_019"
+      "operation_precedente": "POSE_CMS_B_019",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

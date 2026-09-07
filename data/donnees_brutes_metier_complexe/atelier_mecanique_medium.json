@@ -3,24 +3,22 @@
   "operations": [
     {
       "code_operation": "PREPARATION_001",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "perceuse_cnc",
       "ressources_compatibles": [
         {
-          "poste_id": "PERCEUSE_CNC_1",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_1"
         },
         {
-          "poste_id": "PERCEUSE_CNC_2",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_2"
         },
         {
-          "poste_id": "PERCEUSE_CNC_3",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_3"
         },
         {
-          "poste_id": "PERCEUSE_CNC_4",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_4"
         }
       ],
       "priorite": 1,
@@ -30,20 +28,19 @@
     },
     {
       "code_operation": "PEINTURE_002",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "tunnel_peinture",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_PEINTURE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_1"
         },
         {
-          "poste_id": "TUNNEL_PEINTURE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_2"
         },
         {
-          "poste_id": "TUNNEL_PEINTURE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_3"
         }
       ],
       "priorite": 5,
@@ -53,22 +50,21 @@
     },
     {
       "code_operation": "FORMAGE_003",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PEINTURE_002"
       ],
       "competence_requise": "presse_emboutissage",
       "ressources_compatibles": [
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_1"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_2"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_3"
         }
       ],
       "priorite": 4,
@@ -78,123 +74,113 @@
     },
     {
       "code_operation": "USINAGE_004",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "centre_usinage",
       "ressources_compatibles": [
         {
-          "poste_id": "CENTRE_USINAGE_1",
-          "duree_jours": 1
+          "poste_id": "CENTRE_USINAGE_1"
         },
         {
-          "poste_id": "CENTRE_USINAGE_2",
-          "duree_jours": 1
+          "poste_id": "CENTRE_USINAGE_2"
         },
         {
-          "poste_id": "CENTRE_USINAGE_3",
-          "duree_jours": 1
+          "poste_id": "CENTRE_USINAGE_3"
         },
         {
-          "poste_id": "CENTRE_USINAGE_4",
-          "duree_jours": 1
+          "poste_id": "CENTRE_USINAGE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "FINITION_005",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "USINAGE_004"
       ],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_006",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "FINITION_005"
       ],
       "competence_requise": "station_controle",
       "ressources_compatibles": [
         {
-          "poste_id": "STATION_CONTROLE_1",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_1"
         },
         {
-          "poste_id": "STATION_CONTROLE_2",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_2"
         },
         {
-          "poste_id": "STATION_CONTROLE_3",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_3"
         },
         {
-          "poste_id": "STATION_CONTROLE_4",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_4"
         }
       ]
     },
     {
       "code_operation": "ASSEMBLAGE_007",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "CONTROLE_006"
       ],
       "competence_requise": "poste_assemblage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_ASSEMBLAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_1"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_2"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_3"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_4"
         }
       ]
     },
     {
       "code_operation": "SOUDURE_008",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "robot_soudure",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_SOUDURE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_1"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_2"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_3"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_4"
         }
       ],
       "priorite": 4,
@@ -202,49 +188,45 @@
     },
     {
       "code_operation": "SOUDURE_009",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_soudure",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_SOUDURE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_1"
         },
         {
-          "poste_id": "POSTE_SOUDURE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_2"
         },
         {
-          "poste_id": "POSTE_SOUDURE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_3"
         },
         {
-          "poste_id": "POSTE_SOUDURE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_4"
         }
       ]
     },
     {
       "code_operation": "USINAGE_010",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "SOUDURE_009"
       ],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "quantite": 189,
@@ -253,73 +235,67 @@
     },
     {
       "code_operation": "FINITION_011",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONTROLE_012",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "FINITION_011"
       ],
       "competence_requise": "station_controle",
       "ressources_compatibles": [
         {
-          "poste_id": "STATION_CONTROLE_1",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_1"
         },
         {
-          "poste_id": "STATION_CONTROLE_2",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_2"
         },
         {
-          "poste_id": "STATION_CONTROLE_3",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_3"
         },
         {
-          "poste_id": "STATION_CONTROLE_4",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_4"
         }
       ]
     },
     {
       "code_operation": "PREPARATION_013",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "decoupeuse_laser",
       "ressources_compatibles": [
         {
-          "poste_id": "DECOUPEUSE_LASER_1",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_LASER_1"
         },
         {
-          "poste_id": "DECOUPEUSE_LASER_2",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_LASER_2"
         },
         {
-          "poste_id": "DECOUPEUSE_LASER_3",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_LASER_3"
         },
         {
-          "poste_id": "DECOUPEUSE_LASER_4",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_LASER_4"
         }
       ],
       "priorite": 4,
@@ -329,68 +305,63 @@
     },
     {
       "code_operation": "PEINTURE_014",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "cabine_peinture",
       "ressources_compatibles": [
         {
-          "poste_id": "CABINE_PEINTURE_1",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_1"
         },
         {
-          "poste_id": "CABINE_PEINTURE_2",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_2"
         },
         {
-          "poste_id": "CABINE_PEINTURE_3",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_3"
         },
         {
-          "poste_id": "CABINE_PEINTURE_4",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_4"
         }
       ]
     },
     {
       "code_operation": "FORMAGE_015",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "presse_emboutissage",
       "ressources_compatibles": [
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_1"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_2"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_3"
         }
       ]
     },
     {
       "code_operation": "ASSEMBLAGE_016",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "FORMAGE_015"
       ],
       "competence_requise": "poste_assemblage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_ASSEMBLAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_1"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_2"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_3"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_4"
         }
       ],
       "priorite": 5,
@@ -398,68 +369,64 @@
     },
     {
       "code_operation": "USINAGE_017",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "PREPARATION_018",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "USINAGE_017"
       ],
       "competence_requise": "decoupeuse_plasma",
       "ressources_compatibles": [
         {
-          "poste_id": "DECOUPEUSE_PLASMA_1",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_1"
         },
         {
-          "poste_id": "DECOUPEUSE_PLASMA_2",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_2"
         },
         {
-          "poste_id": "DECOUPEUSE_PLASMA_3",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_3"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "FORMAGE_019",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "PREPARATION_018"
       ],
       "competence_requise": "presse_emboutissage",
       "ressources_compatibles": [
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_1"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_2"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_3"
         }
       ],
       "quantite": 54,
@@ -468,26 +435,24 @@
     },
     {
       "code_operation": "ASSEMBLAGE_020",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "FORMAGE_019"
       ],
       "competence_requise": "poste_assemblage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_ASSEMBLAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_1"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_2"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_3"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_4"
         }
       ],
       "priorite": 5,
@@ -497,99 +462,92 @@
     },
     {
       "code_operation": "CONTROLE_021",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "ASSEMBLAGE_020"
       ],
       "competence_requise": "station_controle",
       "ressources_compatibles": [
         {
-          "poste_id": "STATION_CONTROLE_1",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_1"
         },
         {
-          "poste_id": "STATION_CONTROLE_2",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_2"
         },
         {
-          "poste_id": "STATION_CONTROLE_3",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_3"
         },
         {
-          "poste_id": "STATION_CONTROLE_4",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "SOUDURE_022",
+      "date_debut": "2026-09-06T08:00:00",
+      "date_fin": "2026-09-06T16:00:00",
       "operations_precedentes": [
         "CONTROLE_021"
       ],
       "competence_requise": "robot_soudure",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_SOUDURE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_1"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_2"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_3"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_4"
         }
       ]
     },
     {
       "code_operation": "PEINTURE_023",
+      "date_debut": "2026-09-07T08:00:00",
+      "date_fin": "2026-09-07T16:00:00",
       "operations_precedentes": [
         "SOUDURE_022"
       ],
       "competence_requise": "tunnel_peinture",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_PEINTURE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_1"
         },
         {
-          "poste_id": "TUNNEL_PEINTURE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_2"
         },
         {
-          "poste_id": "TUNNEL_PEINTURE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_3"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "FINITION_024",
+      "date_debut": "2026-09-08T08:00:00",
+      "date_fin": "2026-09-08T16:00:00",
       "operations_precedentes": [
         "PEINTURE_023"
       ],
       "competence_requise": "poste_polissage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_POLISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_POLISSAGE_1"
         },
         {
-          "poste_id": "POSTE_POLISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_POLISSAGE_2"
         },
         {
-          "poste_id": "POSTE_POLISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_POLISSAGE_3"
         },
         {
-          "poste_id": "POSTE_POLISSAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_POLISSAGE_4"
         }
       ],
       "quantite": 35,
@@ -599,24 +557,22 @@
     },
     {
       "code_operation": "SOUDURE_025",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "robot_soudure",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_SOUDURE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_1"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_2"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_3"
         },
         {
-          "poste_id": "ROBOT_SOUDURE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_SOUDURE_4"
         }
       ],
       "priorite": 1,
@@ -626,120 +582,111 @@
     },
     {
       "code_operation": "PEINTURE_026",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "cabine_peinture",
       "ressources_compatibles": [
         {
-          "poste_id": "CABINE_PEINTURE_1",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_1"
         },
         {
-          "poste_id": "CABINE_PEINTURE_2",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_2"
         },
         {
-          "poste_id": "CABINE_PEINTURE_3",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_3"
         },
         {
-          "poste_id": "CABINE_PEINTURE_4",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_4"
         }
       ]
     },
     {
       "code_operation": "ASSEMBLAGE_027",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PEINTURE_026"
       ],
       "competence_requise": "poste_assemblage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_ASSEMBLAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_1"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_2"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_3"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_4"
         }
       ]
     },
     {
       "code_operation": "FORMAGE_028",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "ASSEMBLAGE_027"
       ],
       "competence_requise": "presse_emboutissage",
       "ressources_compatibles": [
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_1"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_2"
         },
         {
-          "poste_id": "PRESSE_EMBOUTISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "PRESSE_EMBOUTISSAGE_3"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "USINAGE_029",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "fraiseuse_cnc",
       "ressources_compatibles": [
         {
-          "poste_id": "FRAISEUSE_CNC_1",
-          "duree_jours": 1
+          "poste_id": "FRAISEUSE_CNC_1"
         },
         {
-          "poste_id": "FRAISEUSE_CNC_2",
-          "duree_jours": 1
+          "poste_id": "FRAISEUSE_CNC_2"
         },
         {
-          "poste_id": "FRAISEUSE_CNC_3",
-          "duree_jours": 1
+          "poste_id": "FRAISEUSE_CNC_3"
         },
         {
-          "poste_id": "FRAISEUSE_CNC_4",
-          "duree_jours": 1
+          "poste_id": "FRAISEUSE_CNC_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "CONTROLE_030",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "USINAGE_029"
       ],
       "competence_requise": "station_controle",
       "ressources_compatibles": [
         {
-          "poste_id": "STATION_CONTROLE_1",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_1"
         },
         {
-          "poste_id": "STATION_CONTROLE_2",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_2"
         },
         {
-          "poste_id": "STATION_CONTROLE_3",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_3"
         },
         {
-          "poste_id": "STATION_CONTROLE_4",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_4"
         }
       ],
       "priorite": 1,
@@ -749,73 +696,67 @@
     },
     {
       "code_operation": "FINITION_031",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "PREPARATION_032",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "FINITION_031"
       ],
       "competence_requise": "perceuse_cnc",
       "ressources_compatibles": [
         {
-          "poste_id": "PERCEUSE_CNC_1",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_1"
         },
         {
-          "poste_id": "PERCEUSE_CNC_2",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_2"
         },
         {
-          "poste_id": "PERCEUSE_CNC_3",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_3"
         },
         {
-          "poste_id": "PERCEUSE_CNC_4",
-          "duree_jours": 1
+          "poste_id": "PERCEUSE_CNC_4"
         }
       ]
     },
     {
       "code_operation": "ASSEMBLAGE_033",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_assemblage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_ASSEMBLAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_1"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_2"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_3"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_4"
         }
       ],
       "quantite": 122,
@@ -824,50 +765,46 @@
     },
     {
       "code_operation": "CONTROLE_034",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "ASSEMBLAGE_033"
       ],
       "competence_requise": "station_controle",
       "ressources_compatibles": [
         {
-          "poste_id": "STATION_CONTROLE_1",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_1"
         },
         {
-          "poste_id": "STATION_CONTROLE_2",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_2"
         },
         {
-          "poste_id": "STATION_CONTROLE_3",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_3"
         },
         {
-          "poste_id": "STATION_CONTROLE_4",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "PEINTURE_035",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "cabine_peinture",
       "ressources_compatibles": [
         {
-          "poste_id": "CABINE_PEINTURE_1",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_1"
         },
         {
-          "poste_id": "CABINE_PEINTURE_2",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_2"
         },
         {
-          "poste_id": "CABINE_PEINTURE_3",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_3"
         },
         {
-          "poste_id": "CABINE_PEINTURE_4",
-          "duree_jours": 1
+          "poste_id": "CABINE_PEINTURE_4"
         }
       ],
       "priorite": 3,
@@ -877,24 +814,22 @@
     },
     {
       "code_operation": "USINAGE_036",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "priorite": 5,
@@ -904,94 +839,87 @@
     },
     {
       "code_operation": "FORMAGE_037",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "USINAGE_036"
       ],
       "competence_requise": "presse_pliage",
       "ressources_compatibles": [
         {
-          "poste_id": "PRESSE_PLIAGE_1",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_1"
         },
         {
-          "poste_id": "PRESSE_PLIAGE_2",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_2"
         },
         {
-          "poste_id": "PRESSE_PLIAGE_3",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_3"
         },
         {
-          "poste_id": "PRESSE_PLIAGE_4",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "PREPARATION_038",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "decoupeuse_plasma",
       "ressources_compatibles": [
         {
-          "poste_id": "DECOUPEUSE_PLASMA_1",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_1"
         },
         {
-          "poste_id": "DECOUPEUSE_PLASMA_2",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_2"
         },
         {
-          "poste_id": "DECOUPEUSE_PLASMA_3",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_3"
         }
       ]
     },
     {
       "code_operation": "SOUDURE_039",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_soudure",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_SOUDURE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_1"
         },
         {
-          "poste_id": "POSTE_SOUDURE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_2"
         },
         {
-          "poste_id": "POSTE_SOUDURE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_3"
         },
         {
-          "poste_id": "POSTE_SOUDURE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_4"
         }
       ]
     },
     {
       "code_operation": "FINITION_040",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "SOUDURE_039"
       ],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "priorite": 4,
@@ -999,43 +927,40 @@
     },
     {
       "code_operation": "SOUDURE_041",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_soudure",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_SOUDURE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_1"
         },
         {
-          "poste_id": "POSTE_SOUDURE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_2"
         },
         {
-          "poste_id": "POSTE_SOUDURE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_3"
         },
         {
-          "poste_id": "POSTE_SOUDURE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_SOUDURE_4"
         }
       ]
     },
     {
       "code_operation": "PEINTURE_042",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "tunnel_peinture",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_PEINTURE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_1"
         },
         {
-          "poste_id": "TUNNEL_PEINTURE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_2"
         },
         {
-          "poste_id": "TUNNEL_PEINTURE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_PEINTURE_3"
         }
       ],
       "priorite": 2,
@@ -1045,148 +970,137 @@
     },
     {
       "code_operation": "FORMAGE_043",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "presse_pliage",
       "ressources_compatibles": [
         {
-          "poste_id": "PRESSE_PLIAGE_1",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_1"
         },
         {
-          "poste_id": "PRESSE_PLIAGE_2",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_2"
         },
         {
-          "poste_id": "PRESSE_PLIAGE_3",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_3"
         },
         {
-          "poste_id": "PRESSE_PLIAGE_4",
-          "duree_jours": 1
+          "poste_id": "PRESSE_PLIAGE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "USINAGE_044",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "FORMAGE_043"
       ],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "FINITION_045",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "USINAGE_044"
       ],
       "competence_requise": "poste_ebavurage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_EBAVURAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_1"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_2"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_3"
         },
         {
-          "poste_id": "POSTE_EBAVURAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_EBAVURAGE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "PREPARATION_046",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "FINITION_045"
       ],
       "competence_requise": "decoupeuse_plasma",
       "ressources_compatibles": [
         {
-          "poste_id": "DECOUPEUSE_PLASMA_1",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_1"
         },
         {
-          "poste_id": "DECOUPEUSE_PLASMA_2",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_2"
         },
         {
-          "poste_id": "DECOUPEUSE_PLASMA_3",
-          "duree_jours": 1
+          "poste_id": "DECOUPEUSE_PLASMA_3"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "ASSEMBLAGE_047",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "PREPARATION_046"
       ],
       "competence_requise": "poste_assemblage",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_ASSEMBLAGE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_1"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_2"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_3"
         },
         {
-          "poste_id": "POSTE_ASSEMBLAGE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_ASSEMBLAGE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "CONTROLE_048",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "station_controle",
       "ressources_compatibles": [
         {
-          "poste_id": "STATION_CONTROLE_1",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_1"
         },
         {
-          "poste_id": "STATION_CONTROLE_2",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_2"
         },
         {
-          "poste_id": "STATION_CONTROLE_3",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_3"
         },
         {
-          "poste_id": "STATION_CONTROLE_4",
-          "duree_jours": 1
+          "poste_id": "STATION_CONTROLE_4"
         }
       ]
     }

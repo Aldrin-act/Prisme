@@ -2,111 +2,127 @@
   "operations": [
     {
       "code_operation": "FINITION_001",
-      "duree_jours": 1,
       "poste_id": "POSTE_POLISSAGE",
-      "competence_requise": "poste_polissage"
+      "competence_requise": "poste_polissage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_002",
-      "duree_jours": 1,
       "poste_id": "STATION_CONTROLE",
       "competence_requise": "station_controle",
-      "operation_precedente": "FINITION_001"
+      "operation_precedente": "FINITION_001",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PREPARATION_003",
-      "duree_jours": 1,
       "poste_id": "DECOUPEUSE_PLASMA",
-      "competence_requise": "decoupeuse_plasma"
+      "competence_requise": "decoupeuse_plasma",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "FORMAGE_004",
-      "duree_jours": 1,
       "poste_id": "PRESSE_EMBOUTISSAGE",
       "competence_requise": "presse_emboutissage",
-      "operation_precedente": "PREPARATION_003"
+      "operation_precedente": "PREPARATION_003",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ASSEMBLAGE_005",
-      "duree_jours": 1,
       "poste_id": "POSTE_ASSEMBLAGE",
       "competence_requise": "poste_assemblage",
-      "operation_precedente": "FORMAGE_004"
+      "operation_precedente": "FORMAGE_004",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PEINTURE_006",
-      "duree_jours": 1,
       "poste_id": "CABINE_PEINTURE",
       "competence_requise": "cabine_peinture",
-      "operation_precedente": "ASSEMBLAGE_005"
+      "operation_precedente": "ASSEMBLAGE_005",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "SOUDURE_007",
-      "duree_jours": 1,
       "poste_id": "POSTE_SOUDURE",
       "competence_requise": "poste_soudure",
-      "operation_precedente": "PEINTURE_006"
+      "operation_precedente": "PEINTURE_006",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "USINAGE_008",
-      "duree_jours": 1,
       "poste_id": "POSTE_EBAVURAGE",
       "competence_requise": "poste_ebavurage",
-      "operation_precedente": "SOUDURE_007"
+      "operation_precedente": "SOUDURE_007",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ASSEMBLAGE_009",
-      "duree_jours": 1,
       "poste_id": "POSTE_ASSEMBLAGE",
-      "competence_requise": "poste_assemblage"
+      "competence_requise": "poste_assemblage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_010",
-      "duree_jours": 1,
       "poste_id": "STATION_CONTROLE",
       "competence_requise": "station_controle",
-      "operation_precedente": "ASSEMBLAGE_009"
+      "operation_precedente": "ASSEMBLAGE_009",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "USINAGE_011",
-      "duree_jours": 1,
       "poste_id": "FRAISEUSE_CNC",
       "competence_requise": "fraiseuse_cnc",
-      "operation_precedente": "CONTROLE_010"
+      "operation_precedente": "CONTROLE_010",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "SOUDURE_012",
-      "duree_jours": 1,
       "poste_id": "POSTE_SOUDURE",
       "competence_requise": "poste_soudure",
-      "operation_precedente": "USINAGE_011"
+      "operation_precedente": "USINAGE_011",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "FINITION_013",
-      "duree_jours": 1,
       "poste_id": "POSTE_POLISSAGE",
       "competence_requise": "poste_polissage",
-      "operation_precedente": "SOUDURE_012"
+      "operation_precedente": "SOUDURE_012",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PEINTURE_014",
-      "duree_jours": 1,
       "poste_id": "TUNNEL_PEINTURE",
-      "competence_requise": "tunnel_peinture"
+      "competence_requise": "tunnel_peinture",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PREPARATION_015",
-      "duree_jours": 1,
       "poste_id": "DECOUPEUSE_LASER",
       "competence_requise": "decoupeuse_laser",
-      "operation_precedente": "PEINTURE_014"
+      "operation_precedente": "PEINTURE_014",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "FORMAGE_016",
-      "duree_jours": 1,
       "poste_id": "PRESSE_PLIAGE",
       "competence_requise": "presse_pliage",
-      "operation_precedente": "PREPARATION_015"
+      "operation_precedente": "PREPARATION_015",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

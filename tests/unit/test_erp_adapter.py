@@ -4,6 +4,11 @@ Docker)."""
 
 from __future__ import annotations
 
+from datetime import date
+
+import pytest
+from pydantic import ValidationError
+
 from adapters.erp_reference import OperationERP, PayloadERP, PosteERP, traduire
 from dsl.schema import CompatibiliteRessourceTache, CompetenceRequise, InstanceTRCO, Precedence
 
@@ -123,6 +128,75 @@ def test_traduction_reporte_les_competences_du_poste_sur_la_ressource() -> None:
     instance = traduire(payload)
 
     assert instance.ressources[0].competences == ["soudure", "controle_qualite"]
+
+
+def test_traduction_derive_la_duree_dun_intervalle_de_dates() -> None:
+    payload = PayloadERP(
+        operations=[
+            OperationERP(
+                code_operation="OP10",
+                date_debut=date(2026, 3, 2),
+                date_fin=date(2026, 3, 5),
+                poste_id="POSTE_A",
+            )
+        ],
+        postes=[PosteERP(code_poste="POSTE_A")],
+    )
+
+    instance = traduire(payload)
+
+    compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
+    assert compatibilites[0].duree == 3
+
+
+def test_traduction_duree_par_dates_jamais_zero_meme_si_meme_jour() -> None:
+    payload = PayloadERP(
+        operations=[
+            OperationERP(
+                code_operation="OP10",
+                date_debut=date(2026, 3, 2),
+                date_fin=date(2026, 3, 2),
+                poste_id="POSTE_A",
+            )
+        ],
+        postes=[PosteERP(code_poste="POSTE_A")],
+    )
+
+    instance = traduire(payload)
+
+    compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
+    assert compatibilites[0].duree == 1
+
+
+def test_operation_erp_refuse_duree_jours_et_dates_ensemble() -> None:
+    with pytest.raises(ValidationError):
+        OperationERP(
+            code_operation="OP10",
+            duree_jours=2,
+            date_debut=date(2026, 3, 2),
+            date_fin=date(2026, 3, 5),
+            poste_id="POSTE_A",
+        )
+
+
+def test_operation_erp_refuse_absence_totale_de_duree() -> None:
+    with pytest.raises(ValidationError):
+        OperationERP(code_operation="OP10", poste_id="POSTE_A")
+
+
+def test_operation_erp_refuse_une_seule_date_sur_deux() -> None:
+    with pytest.raises(ValidationError):
+        OperationERP(code_operation="OP10", date_debut=date(2026, 3, 2), poste_id="POSTE_A")
+
+
+def test_operation_erp_refuse_date_fin_avant_date_debut() -> None:
+    with pytest.raises(ValidationError):
+        OperationERP(
+            code_operation="OP10",
+            date_debut=date(2026, 3, 5),
+            date_fin=date(2026, 3, 2),
+            poste_id="POSTE_A",
+        )
 
 
 def test_instance_produite_est_valide_par_construction() -> None:

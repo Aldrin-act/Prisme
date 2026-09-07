@@ -3,24 +3,22 @@
   "operations": [
     {
       "code_operation": "RECEPTION_001",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "quai_reception",
       "ressources_compatibles": [
         {
-          "poste_id": "QUAI_RECEPTION_1",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_1"
         },
         {
-          "poste_id": "QUAI_RECEPTION_2",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_2"
         },
         {
-          "poste_id": "QUAI_RECEPTION_3",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_3"
         },
         {
-          "poste_id": "QUAI_RECEPTION_4",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_4"
         }
       ],
       "priorite": 1,
@@ -30,50 +28,46 @@
     },
     {
       "code_operation": "CUISSON_002",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "RECEPTION_001"
       ],
       "competence_requise": "autoclave",
       "ressources_compatibles": [
         {
-          "poste_id": "AUTOCLAVE_1",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_1"
         },
         {
-          "poste_id": "AUTOCLAVE_2",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_2"
         },
         {
-          "poste_id": "AUTOCLAVE_3",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_3"
         },
         {
-          "poste_id": "AUTOCLAVE_4",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "DECOUPE_003",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "robot_decoupe",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_DECOUPE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_1"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_2"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_3"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_4"
         }
       ],
       "priorite": 4,
@@ -83,193 +77,178 @@
     },
     {
       "code_operation": "LAVAGE_004",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "DECOUPE_003"
       ],
       "competence_requise": "tunnel_lavage",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_LAVAGE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_1"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_2"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_3"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CONDITIONNEMENT_005",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "LAVAGE_004"
       ],
       "competence_requise": "ligne_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_4"
         }
       ]
     },
     {
       "code_operation": "PALETTISATION_006",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "CONDITIONNEMENT_005"
       ],
       "competence_requise": "robot_palettiseur",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_PALETTISEUR_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_1"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_2"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_3"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_007",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "PALETTISATION_006"
       ],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ]
     },
     {
       "code_operation": "DECOUPE_008",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "robot_decoupe",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_DECOUPE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_1"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_2"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_3"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_4"
         }
       ]
     },
     {
       "code_operation": "ETIQUETAGE_009",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "DECOUPE_008"
       ],
       "competence_requise": "etiqueteuse",
       "ressources_compatibles": [
         {
-          "poste_id": "ETIQUETEUSE_1",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_1"
         },
         {
-          "poste_id": "ETIQUETEUSE_2",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_2"
         },
         {
-          "poste_id": "ETIQUETEUSE_3",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_3"
         },
         {
-          "poste_id": "ETIQUETEUSE_4",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_4"
         }
       ]
     },
     {
       "code_operation": "CONDITIONNEMENT_010",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "ligne_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "REFROIDISSEMENT_011",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "tunnel_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4"
         }
       ],
       "priorite": 4,
@@ -279,47 +258,44 @@
     },
     {
       "code_operation": "PALETTISATION_012",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "REFROIDISSEMENT_011"
       ],
       "competence_requise": "robot_palettiseur",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_PALETTISEUR_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_1"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_2"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_3"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_4"
         }
       ]
     },
     {
       "code_operation": "LAVAGE_013",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "PALETTISATION_012"
       ],
       "competence_requise": "tunnel_lavage",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_LAVAGE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_1"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_2"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_3"
         }
       ],
       "priorite": 4,
@@ -329,169 +305,156 @@
     },
     {
       "code_operation": "EPLUCHAGE_014",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "LAVAGE_013"
       ],
       "competence_requise": "ligne_epluchage",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_EPLUCHAGE_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_1"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_2"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_3"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "RECEPTION_015",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "quai_reception",
       "ressources_compatibles": [
         {
-          "poste_id": "QUAI_RECEPTION_1",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_1"
         },
         {
-          "poste_id": "QUAI_RECEPTION_2",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_2"
         },
         {
-          "poste_id": "QUAI_RECEPTION_3",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_3"
         },
         {
-          "poste_id": "QUAI_RECEPTION_4",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_016",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "RECEPTION_015"
       ],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "echeance_jours": 33
     },
     {
       "code_operation": "LAVAGE_017",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "tunnel_lavage",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_LAVAGE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_1"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_2"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_3"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "RECEPTION_018",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "quai_reception",
       "ressources_compatibles": [
         {
-          "poste_id": "QUAI_RECEPTION_1",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_1"
         },
         {
-          "poste_id": "QUAI_RECEPTION_2",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_2"
         },
         {
-          "poste_id": "QUAI_RECEPTION_3",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_3"
         },
         {
-          "poste_id": "QUAI_RECEPTION_4",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "REFROIDISSEMENT_019",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "RECEPTION_018"
       ],
       "competence_requise": "tunnel_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "CONTROLE_020",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "quantite": 145,
@@ -500,100 +463,92 @@
     },
     {
       "code_operation": "CUISSON_021",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "autoclave",
       "ressources_compatibles": [
         {
-          "poste_id": "AUTOCLAVE_1",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_1"
         },
         {
-          "poste_id": "AUTOCLAVE_2",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_2"
         },
         {
-          "poste_id": "AUTOCLAVE_3",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_3"
         },
         {
-          "poste_id": "AUTOCLAVE_4",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "PALETTISATION_022",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CUISSON_021"
       ],
       "competence_requise": "robot_palettiseur",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_PALETTISEUR_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_1"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_2"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_3"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "EPLUCHAGE_023",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "PALETTISATION_022"
       ],
       "competence_requise": "ligne_epluchage",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_EPLUCHAGE_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_1"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_2"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_3"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "DECOUPE_024",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "robot_decoupe",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_DECOUPE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_1"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_2"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_3"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_4"
         }
       ],
       "priorite": 5,
@@ -604,146 +559,134 @@
     },
     {
       "code_operation": "CUISSON_025",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "autoclave",
       "ressources_compatibles": [
         {
-          "poste_id": "AUTOCLAVE_1",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_1"
         },
         {
-          "poste_id": "AUTOCLAVE_2",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_2"
         },
         {
-          "poste_id": "AUTOCLAVE_3",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_3"
         },
         {
-          "poste_id": "AUTOCLAVE_4",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CONDITIONNEMENT_026",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "ligne_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_4"
         }
       ]
     },
     {
       "code_operation": "EPLUCHAGE_027",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONDITIONNEMENT_026"
       ],
       "competence_requise": "ligne_epluchage",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_EPLUCHAGE_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_1"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_2"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_3"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_4"
         }
       ]
     },
     {
       "code_operation": "REFROIDISSEMENT_028",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "tunnel_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "CONTROLE_029",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "ETIQUETAGE_030",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_029"
       ],
       "competence_requise": "etiqueteuse",
       "ressources_compatibles": [
         {
-          "poste_id": "ETIQUETEUSE_1",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_1"
         },
         {
-          "poste_id": "ETIQUETEUSE_2",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_2"
         },
         {
-          "poste_id": "ETIQUETEUSE_3",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_3"
         },
         {
-          "poste_id": "ETIQUETEUSE_4",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_4"
         }
       ],
       "priorite": 1,
@@ -753,44 +696,41 @@
     },
     {
       "code_operation": "DECOUPE_031",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "robot_decoupe",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_DECOUPE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_1"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_2"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_3"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "LAVAGE_032",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "tunnel_lavage",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_LAVAGE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_1"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_2"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_3"
         }
       ],
       "quantite": 46,
@@ -800,24 +740,22 @@
     },
     {
       "code_operation": "CUISSON_033",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "autoclave",
       "ressources_compatibles": [
         {
-          "poste_id": "AUTOCLAVE_1",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_1"
         },
         {
-          "poste_id": "AUTOCLAVE_2",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_2"
         },
         {
-          "poste_id": "AUTOCLAVE_3",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_3"
         },
         {
-          "poste_id": "AUTOCLAVE_4",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_4"
         }
       ],
       "priorite": 2,
@@ -827,73 +765,68 @@
     },
     {
       "code_operation": "EPLUCHAGE_034",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CUISSON_033"
       ],
       "competence_requise": "ligne_epluchage",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_EPLUCHAGE_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_1"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_2"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_3"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_4"
         }
       ]
     },
     {
       "code_operation": "LAVAGE_035",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "EPLUCHAGE_034"
       ],
       "competence_requise": "tunnel_lavage",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_LAVAGE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_1"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_2"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_3"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "DECOUPE_036",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "LAVAGE_035"
       ],
       "competence_requise": "robot_decoupe",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_DECOUPE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_1"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_2"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_3"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_4"
         }
       ],
       "priorite": 4,
@@ -903,103 +836,95 @@
     },
     {
       "code_operation": "RECEPTION_037",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "DECOUPE_036"
       ],
       "competence_requise": "quai_reception",
       "ressources_compatibles": [
         {
-          "poste_id": "QUAI_RECEPTION_1",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_1"
         },
         {
-          "poste_id": "QUAI_RECEPTION_2",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_2"
         },
         {
-          "poste_id": "QUAI_RECEPTION_3",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_3"
         },
         {
-          "poste_id": "QUAI_RECEPTION_4",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_4"
         }
       ]
     },
     {
       "code_operation": "CONDITIONNEMENT_038",
+      "date_debut": "2026-09-06T08:00:00",
+      "date_fin": "2026-09-06T16:00:00",
       "operations_precedentes": [
         "RECEPTION_037"
       ],
       "competence_requise": "ligne_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "ETIQUETAGE_039",
+      "date_debut": "2026-09-07T08:00:00",
+      "date_fin": "2026-09-07T16:00:00",
       "operations_precedentes": [
         "CONDITIONNEMENT_038"
       ],
       "competence_requise": "etiqueteuse",
       "ressources_compatibles": [
         {
-          "poste_id": "ETIQUETEUSE_1",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_1"
         },
         {
-          "poste_id": "ETIQUETEUSE_2",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_2"
         },
         {
-          "poste_id": "ETIQUETEUSE_3",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_3"
         },
         {
-          "poste_id": "ETIQUETEUSE_4",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "REFROIDISSEMENT_040",
+      "date_debut": "2026-09-08T08:00:00",
+      "date_fin": "2026-09-08T16:00:00",
       "operations_precedentes": [
         "ETIQUETAGE_039"
       ],
       "competence_requise": "tunnel_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4"
         }
       ],
       "quantite": 174,
@@ -1008,49 +933,45 @@
     },
     {
       "code_operation": "RECEPTION_041",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "quai_reception",
       "ressources_compatibles": [
         {
-          "poste_id": "QUAI_RECEPTION_1",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_1"
         },
         {
-          "poste_id": "QUAI_RECEPTION_2",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_2"
         },
         {
-          "poste_id": "QUAI_RECEPTION_3",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_3"
         },
         {
-          "poste_id": "QUAI_RECEPTION_4",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_4"
         }
       ]
     },
     {
       "code_operation": "PALETTISATION_042",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "RECEPTION_041"
       ],
       "competence_requise": "robot_palettiseur",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_PALETTISEUR_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_1"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_2"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_3"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_4"
         }
       ],
       "quantite": 183,
@@ -1059,72 +980,66 @@
     },
     {
       "code_operation": "DECOUPE_043",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "robot_decoupe",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_DECOUPE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_1"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_2"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_3"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_4"
         }
       ]
     },
     {
       "code_operation": "ETIQUETAGE_044",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "etiqueteuse",
       "ressources_compatibles": [
         {
-          "poste_id": "ETIQUETEUSE_1",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_1"
         },
         {
-          "poste_id": "ETIQUETEUSE_2",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_2"
         },
         {
-          "poste_id": "ETIQUETEUSE_3",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_3"
         },
         {
-          "poste_id": "ETIQUETEUSE_4",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_4"
         }
       ]
     },
     {
       "code_operation": "CUISSON_045",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "ETIQUETAGE_044"
       ],
       "competence_requise": "autoclave",
       "ressources_compatibles": [
         {
-          "poste_id": "AUTOCLAVE_1",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_1"
         },
         {
-          "poste_id": "AUTOCLAVE_2",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_2"
         },
         {
-          "poste_id": "AUTOCLAVE_3",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_3"
         },
         {
-          "poste_id": "AUTOCLAVE_4",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_4"
         }
       ],
       "quantite": 24,
@@ -1133,92 +1048,85 @@
     },
     {
       "code_operation": "CONTROLE_046",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ]
     },
     {
       "code_operation": "CONDITIONNEMENT_047",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_046"
       ],
       "competence_requise": "ligne_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_4"
         }
       ]
     },
     {
       "code_operation": "LAVAGE_048",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "tunnel_lavage",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_LAVAGE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_1"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_2"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_3"
         }
       ],
       "echeance_jours": 37
     },
     {
       "code_operation": "ETIQUETAGE_049",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "etiqueteuse",
       "ressources_compatibles": [
         {
-          "poste_id": "ETIQUETEUSE_1",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_1"
         },
         {
-          "poste_id": "ETIQUETEUSE_2",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_2"
         },
         {
-          "poste_id": "ETIQUETEUSE_3",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_3"
         },
         {
-          "poste_id": "ETIQUETEUSE_4",
-          "duree_jours": 1
+          "poste_id": "ETIQUETEUSE_4"
         }
       ],
       "priorite": 1,
@@ -1228,24 +1136,22 @@
     },
     {
       "code_operation": "RECEPTION_050",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "quai_reception",
       "ressources_compatibles": [
         {
-          "poste_id": "QUAI_RECEPTION_1",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_1"
         },
         {
-          "poste_id": "QUAI_RECEPTION_2",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_2"
         },
         {
-          "poste_id": "QUAI_RECEPTION_3",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_3"
         },
         {
-          "poste_id": "QUAI_RECEPTION_4",
-          "duree_jours": 1
+          "poste_id": "QUAI_RECEPTION_4"
         }
       ],
       "priorite": 4,
@@ -1255,75 +1161,69 @@
     },
     {
       "code_operation": "CONDITIONNEMENT_051",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "RECEPTION_050"
       ],
       "competence_requise": "ligne_conditionnement",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_1"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_2"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_3"
         },
         {
-          "poste_id": "LIGNE_CONDITIONNEMENT_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_CONDITIONNEMENT_4"
         }
       ]
     },
     {
       "code_operation": "EPLUCHAGE_052",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "ligne_epluchage",
       "ressources_compatibles": [
         {
-          "poste_id": "LIGNE_EPLUCHAGE_1",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_1"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_2",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_2"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_3",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_3"
         },
         {
-          "poste_id": "LIGNE_EPLUCHAGE_4",
-          "duree_jours": 1
+          "poste_id": "LIGNE_EPLUCHAGE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "REFROIDISSEMENT_053",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "EPLUCHAGE_052"
       ],
       "competence_requise": "tunnel_refroidissement",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_1"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_2"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_3"
         },
         {
-          "poste_id": "TUNNEL_REFROIDISSEMENT_4",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_REFROIDISSEMENT_4"
         }
       ],
       "quantite": 84,
@@ -1332,26 +1232,24 @@
     },
     {
       "code_operation": "DECOUPE_054",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "REFROIDISSEMENT_053"
       ],
       "competence_requise": "robot_decoupe",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_DECOUPE_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_1"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_2"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_3"
         },
         {
-          "poste_id": "ROBOT_DECOUPE_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_DECOUPE_4"
         }
       ],
       "priorite": 2,
@@ -1361,22 +1259,21 @@
     },
     {
       "code_operation": "LAVAGE_055",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "DECOUPE_054"
       ],
       "competence_requise": "tunnel_lavage",
       "ressources_compatibles": [
         {
-          "poste_id": "TUNNEL_LAVAGE_1",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_1"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_2",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_2"
         },
         {
-          "poste_id": "TUNNEL_LAVAGE_3",
-          "duree_jours": 1
+          "poste_id": "TUNNEL_LAVAGE_3"
         }
       ],
       "quantite": 170,
@@ -1385,47 +1282,43 @@
     },
     {
       "code_operation": "CUISSON_056",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "autoclave",
       "ressources_compatibles": [
         {
-          "poste_id": "AUTOCLAVE_1",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_1"
         },
         {
-          "poste_id": "AUTOCLAVE_2",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_2"
         },
         {
-          "poste_id": "AUTOCLAVE_3",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_3"
         },
         {
-          "poste_id": "AUTOCLAVE_4",
-          "duree_jours": 1
+          "poste_id": "AUTOCLAVE_4"
         }
       ]
     },
     {
       "code_operation": "CONTROLE_057",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "poste_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "POSTE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "POSTE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 5,
@@ -1435,26 +1328,24 @@
     },
     {
       "code_operation": "PALETTISATION_058",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_057"
       ],
       "competence_requise": "robot_palettiseur",
       "ressources_compatibles": [
         {
-          "poste_id": "ROBOT_PALETTISEUR_1",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_1"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_2",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_2"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_3",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_3"
         },
         {
-          "poste_id": "ROBOT_PALETTISEUR_4",
-          "duree_jours": 1
+          "poste_id": "ROBOT_PALETTISEUR_4"
         }
       ],
       "priorite": 3,

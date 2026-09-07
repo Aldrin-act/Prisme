@@ -2,101 +2,116 @@
   "operations": [
     {
       "code_operation": "REFROIDISSEMENT_001",
-      "duree_jours": 1,
       "poste_id": "CELLULE_REFROIDISSEMENT",
-      "competence_requise": "cellule_refroidissement"
+      "competence_requise": "cellule_refroidissement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "NETTOYAGE_002",
-      "duree_jours": 1,
       "poste_id": "ZONE_LAVERIE",
-      "competence_requise": "zone_laverie"
+      "competence_requise": "zone_laverie",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PREP_INGREDIENTS_003",
-      "duree_jours": 1,
       "poste_id": "POSTE_PREPARATION_VIANDES",
       "competence_requise": "poste_preparation_viandes",
-      "operation_precedente": "NETTOYAGE_002"
+      "operation_precedente": "NETTOYAGE_002",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONDITIONNEMENT_004",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONDITIONNEMENT",
-      "competence_requise": "poste_conditionnement"
+      "competence_requise": "poste_conditionnement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PATISSERIE_005",
-      "duree_jours": 1,
       "poste_id": "POSTE_PATISSERIE",
-      "competence_requise": "poste_patisserie"
+      "competence_requise": "poste_patisserie",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DRESSAGE_006",
-      "duree_jours": 1,
       "poste_id": "POSTE_DRESSAGE",
       "competence_requise": "poste_dressage",
-      "operation_precedente": "PATISSERIE_005"
+      "operation_precedente": "PATISSERIE_005",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CUISSON_PRINCIPALE_007",
-      "duree_jours": 1,
       "poste_id": "POSTE_CUISSON_FOUR",
-      "competence_requise": "poste_cuisson_four"
+      "competence_requise": "poste_cuisson_four",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_008",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_QUALITE",
       "competence_requise": "poste_controle_qualite",
-      "operation_precedente": "CUISSON_PRINCIPALE_007"
+      "operation_precedente": "CUISSON_PRINCIPALE_007",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CUISSON_MINUTE_009",
-      "duree_jours": 1,
       "poste_id": "POSTE_CUISSON_PLAQUE",
       "competence_requise": "poste_cuisson_plaque",
-      "operation_precedente": "CONTROLE_008"
+      "operation_precedente": "CONTROLE_008",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "NETTOYAGE_010",
-      "duree_jours": 1,
       "poste_id": "ZONE_LAVERIE",
-      "competence_requise": "zone_laverie"
+      "competence_requise": "zone_laverie",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DRESSAGE_011",
-      "duree_jours": 1,
       "poste_id": "POSTE_DRESSAGE",
       "competence_requise": "poste_dressage",
-      "operation_precedente": "NETTOYAGE_010"
+      "operation_precedente": "NETTOYAGE_010",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONDITIONNEMENT_012",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONDITIONNEMENT",
       "competence_requise": "poste_conditionnement",
-      "operation_precedente": "DRESSAGE_011"
+      "operation_precedente": "DRESSAGE_011",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_013",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_QUALITE",
       "competence_requise": "poste_controle_qualite",
-      "operation_precedente": "CONDITIONNEMENT_012"
+      "operation_precedente": "CONDITIONNEMENT_012",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PREP_INGREDIENTS_014",
-      "duree_jours": 1,
       "poste_id": "POSTE_PREPARATION_VIANDES",
-      "competence_requise": "poste_preparation_viandes"
+      "competence_requise": "poste_preparation_viandes",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CUISSON_MINUTE_015",
-      "duree_jours": 1,
       "poste_id": "POSTE_CUISSON_PLAQUE",
       "competence_requise": "poste_cuisson_plaque",
-      "operation_precedente": "PREP_INGREDIENTS_014"
+      "operation_precedente": "PREP_INGREDIENTS_014",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

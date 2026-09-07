@@ -2,106 +2,122 @@
   "operations": [
     {
       "code_operation": "CONFERENCE_001",
-      "duree_jours": 1,
       "poste_id": "SALLE_CONFERENCE",
-      "competence_requise": "salle_conference"
+      "competence_requise": "salle_conference",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PROJET_GROUPE_002",
-      "duree_jours": 1,
       "poste_id": "SALLE_TD",
-      "competence_requise": "salle_td"
+      "competence_requise": "salle_td",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "EXAMEN_003",
-      "duree_jours": 1,
       "poste_id": "AMPHITHEATRE",
-      "competence_requise": "amphitheatre"
+      "competence_requise": "amphitheatre",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_004",
-      "duree_jours": 1,
       "poste_id": "SALLE_TD",
       "competence_requise": "salle_td",
-      "operation_precedente": "EXAMEN_003"
+      "operation_precedente": "EXAMEN_003",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TP_INFORMATIQUE_005",
-      "duree_jours": 1,
       "poste_id": "SALLE_TP_INFORMATIQUE",
-      "competence_requise": "salle_tp_informatique"
+      "competence_requise": "salle_tp_informatique",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COURS_MAGISTRAL_006",
-      "duree_jours": 1,
       "poste_id": "SALLE_COURS_STANDARD",
-      "competence_requise": "salle_cours_standard"
+      "competence_requise": "salle_cours_standard",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COURS_MAGISTRAL_007",
-      "duree_jours": 1,
       "poste_id": "AMPHITHEATRE",
-      "competence_requise": "amphitheatre"
+      "competence_requise": "amphitheatre",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONFERENCE_008",
-      "duree_jours": 1,
       "poste_id": "AMPHITHEATRE",
       "competence_requise": "amphitheatre",
-      "operation_precedente": "COURS_MAGISTRAL_007"
+      "operation_precedente": "COURS_MAGISTRAL_007",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PROJET_GROUPE_009",
-      "duree_jours": 1,
       "poste_id": "SALLE_TD",
       "competence_requise": "salle_td",
-      "operation_precedente": "CONFERENCE_008"
+      "operation_precedente": "CONFERENCE_008",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TP_INFORMATIQUE_010",
-      "duree_jours": 1,
       "poste_id": "SALLE_TP_INFORMATIQUE",
-      "competence_requise": "salle_tp_informatique"
+      "competence_requise": "salle_tp_informatique",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_011",
-      "duree_jours": 1,
       "poste_id": "SALLE_TD",
       "competence_requise": "salle_td",
-      "operation_precedente": "TP_INFORMATIQUE_010"
+      "operation_precedente": "TP_INFORMATIQUE_010",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TP_SCIENCES_012",
-      "duree_jours": 1,
       "poste_id": "SALLE_TP_SCIENCES",
       "competence_requise": "salle_tp_sciences",
-      "operation_precedente": "TRAVAUX_DIRIGES_011"
+      "operation_precedente": "TRAVAUX_DIRIGES_011",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TP_INFORMATIQUE_013",
-      "duree_jours": 1,
       "poste_id": "SALLE_TP_INFORMATIQUE",
-      "competence_requise": "salle_tp_informatique"
+      "competence_requise": "salle_tp_informatique",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_014",
-      "duree_jours": 1,
       "poste_id": "SALLE_TD",
       "competence_requise": "salle_td",
-      "operation_precedente": "TP_INFORMATIQUE_013"
+      "operation_precedente": "TP_INFORMATIQUE_013",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "EXAMEN_015",
-      "duree_jours": 1,
       "poste_id": "AMPHITHEATRE",
       "competence_requise": "amphitheatre",
-      "operation_precedente": "TRAVAUX_DIRIGES_014"
+      "operation_precedente": "TRAVAUX_DIRIGES_014",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COURS_MAGISTRAL_016",
-      "duree_jours": 1,
       "poste_id": "AMPHITHEATRE",
-      "competence_requise": "amphitheatre"
+      "competence_requise": "amphitheatre",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

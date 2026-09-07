@@ -1,0 +1,50 @@
+{
+  "taches": [
+    { "id": "DECOUPE_001", "nom": "Découpe planches lot A", "priorite": 3, "duree_estimee_jours": 1 },
+    { "id": "RABOTAGE_001", "nom": "Rabotage lot A", "priorite": 3 },
+    { "id": "ASSEMBLAGE_001", "nom": "Assemblage caisson lot A", "priorite": 3, "duree_estimee_jours": 2 },
+    { "id": "PONCAGE_001", "nom": "Ponçage caisson lot A", "priorite": 2 },
+    { "id": "VERNISSAGE_001", "nom": "Vernissage caisson lot A", "priorite": 2 },
+    { "id": "CONTROLE_001", "nom": "Contrôle qualité lot A", "priorite": 4, "duree_estimee_jours": 1 },
+    { "id": "DECOUPE_002", "nom": "Découpe planches lot B", "priorite": 1 },
+    { "id": "ASSEMBLAGE_002", "nom": "Assemblage caisson lot B", "priorite": 1 }
+  ],
+  "ressources": [
+    { "id": "SCIE_CIRCULAIRE", "nom": "Scie circulaire", "competences": ["decoupe"] },
+    { "id": "RABOTEUSE", "nom": "Raboteuse", "competences": ["rabotage"] },
+    { "id": "POSTE_ASSEMBLAGE", "nom": "Poste d'assemblage", "competences": ["assemblage"] },
+    { "id": "PONCEUSE", "nom": "Ponceuse à bande", "competences": ["poncage"] },
+    { "id": "CABINE_VERNIS", "nom": "Cabine de vernissage", "competences": ["vernissage"] },
+    { "id": "CONTROLEUR_QUALITE", "nom": "Poste de contrôle qualité", "competences": ["controle"] }
+  ],
+  "contraintes": [
+    { "type": "compatibilite_ressource_tache", "tache": "DECOUPE_001", "ressource": "SCIE_CIRCULAIRE", "duree": 1 },
+    { "type": "compatibilite_ressource_tache", "tache": "RABOTAGE_001", "ressource": "RABOTEUSE", "duree": 1 },
+    { "type": "compatibilite_ressource_tache", "tache": "ASSEMBLAGE_001", "ressource": "POSTE_ASSEMBLAGE", "duree": 2 },
+    { "type": "compatibilite_ressource_tache", "tache": "PONCAGE_001", "ressource": "PONCEUSE", "duree": 1 },
+    { "type": "compatibilite_ressource_tache", "tache": "VERNISSAGE_001", "ressource": "CABINE_VERNIS", "duree": 2 },
+    { "type": "compatibilite_ressource_tache", "tache": "CONTROLE_001", "ressource": "CONTROLEUR_QUALITE", "duree": 1 },
+    { "type": "compatibilite_ressource_tache", "tache": "DECOUPE_002", "ressource": "SCIE_CIRCULAIRE", "duree": 1 },
+    { "type": "compatibilite_ressource_tache", "tache": "ASSEMBLAGE_002", "ressource": "POSTE_ASSEMBLAGE", "duree": 2 },
+
+    { "type": "precedence", "avant": "DECOUPE_001", "apres": "RABOTAGE_001" },
+    { "type": "precedence", "avant": "RABOTAGE_001", "apres": "ASSEMBLAGE_001" },
+    { "type": "precedence", "avant": "ASSEMBLAGE_001", "apres": "PONCAGE_001" },
+    { "type": "precedence", "avant": "PONCAGE_001", "apres": "VERNISSAGE_001" },
+    { "type": "precedence", "avant": "VERNISSAGE_001", "apres": "CONTROLE_001" },
+    { "type": "precedence", "avant": "DECOUPE_002", "apres": "ASSEMBLAGE_002" },
+
+    { "type": "competence_requise", "tache": "DECOUPE_001", "competence": "decoupe" },
+    { "type": "competence_requise", "tache": "ASSEMBLAGE_001", "competence": "assemblage" },
+    { "type": "competence_requise", "tache": "CONTROLE_001", "competence": "controle" },
+
+    { "type": "echeance", "tache": "CONTROLE_001", "echeance": 10 },
+
+    { "type": "capacite", "ressource": "POSTE_ASSEMBLAGE", "capacite": 2 },
+
+    { "type": "disponibilite_ressource", "ressource": "CABINE_VERNIS", "jours_indisponibles": [2] }
+  ],
+  "objectifs": [
+    { "type": "minimiser_makespan" }
+  ]
+}

@@ -4,6 +4,7 @@
 |-----------------------------------------|-------------------------------------------------------------------|
 | `OperationERP.code_operation`            | `Tache.id`                                                        |
 | `OperationERP.duree_jours`                | `CompatibiliteRessourceTache.duree` (déjà en jours, aucune conversion)  |
+| `OperationERP.date_debut`/`date_fin`      | `CompatibiliteRessourceTache.duree` (calculée : `date_fin - date_debut`, mutuellement exclusif avec `duree_jours` — voir `translator.py::duree_jours_pour`) |
 | `OperationERP.poste_id`                  | `CompatibiliteRessourceTache.ressource` (une seule, forcée)          |
 | `OperationERP.operation_precedente`      | `Precedence.avant` (si non nul) → `Precedence.apres = code_operation` |
 | `OperationERP.competence_requise`         | `CompetenceRequise.competence` (si non nul, une contrainte par opération) |

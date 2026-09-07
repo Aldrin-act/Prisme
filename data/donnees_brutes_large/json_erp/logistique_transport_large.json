@@ -2,1354 +2,1547 @@
   "operations": [
     {
       "code_operation": "LIV_TOURS_EMBALLAGE_0001",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_3",
       "operation_precedente": null,
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_TOURS_TRANSPORT_0002",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_19",
       "operation_precedente": "LIV_TOURS_EMBALLAGE_0001",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "LIV_TOURS_CHARGEMENT_0003",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_4",
       "operation_precedente": "LIV_TOURS_TRANSPORT_0002",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_RECEPTION_0004",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_1",
       "operation_precedente": "LIV_TOURS_CHARGEMENT_0003",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_TOURS_CONTROLE_ENTREE_0005",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_4",
       "operation_precedente": "LIV_TOURS_RECEPTION_0004",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_PREPARATION_COMMANDE_0006",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_2",
       "operation_precedente": "LIV_TOURS_CONTROLE_ENTREE_0005",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_CONTROLE_ENTREE_0007",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_4",
       "operation_precedente": null,
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_STOCKAGE_0008",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_7",
       "operation_precedente": "LIV_TOURS_CONTROLE_ENTREE_0007",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_RECEPTION_0009",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_1",
       "operation_precedente": "LIV_TOURS_STOCKAGE_0008",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_TOURS_CHARGEMENT_0010",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_12",
       "operation_precedente": "LIV_TOURS_RECEPTION_0009",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_EMBALLAGE_0011",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_9",
       "operation_precedente": "LIV_TOURS_CHARGEMENT_0010",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_PREPARATION_COMMANDE_0012",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_2",
       "operation_precedente": "LIV_TOURS_EMBALLAGE_0011",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_TOURS_TRANSPORT_0013",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_6",
       "operation_precedente": "LIV_TOURS_PREPARATION_COMMANDE_0012",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "FRET_VALENCE_CONTROLE_ENTREE_0014",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_2",
       "operation_precedente": null,
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "FRET_VALENCE_TRANSPORT_0015",
-      "duree_jours": 1,
       "poste_id": "CAMIONNETTE_25",
       "operation_precedente": "FRET_VALENCE_CONTROLE_ENTREE_0014",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "FRET_VALENCE_LIVRAISON_0016",
-      "duree_jours": 8,
       "poste_id": "CAMION_20T_9",
       "operation_precedente": "FRET_VALENCE_TRANSPORT_0015",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-13"
     },
     {
       "code_operation": "FRET_VALENCE_EMBALLAGE_0017",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_8",
       "operation_precedente": "FRET_VALENCE_LIVRAISON_0016",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "FRET_VALENCE_STOCKAGE_0018",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_1",
       "operation_precedente": "FRET_VALENCE_EMBALLAGE_0017",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "FRET_VALENCE_RECEPTION_0019",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_6",
       "operation_precedente": "FRET_VALENCE_STOCKAGE_0018",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "FRET_VALENCE_CHARGEMENT_0020",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_3",
       "operation_precedente": "FRET_VALENCE_RECEPTION_0019",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "FRET_VALENCE_PREPARATION_COMMANDE_0021",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_9",
       "operation_precedente": "FRET_VALENCE_CHARGEMENT_0020",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "COLIS_ROUEN_LIVRAISON_0022",
-      "duree_jours": 1,
       "poste_id": "CAMIONNETTE_18",
       "operation_precedente": null,
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_ROUEN_CHARGEMENT_0023",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_1",
       "operation_precedente": "COLIS_ROUEN_LIVRAISON_0022",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "COLIS_ROUEN_CONTROLE_ENTREE_0024",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_6",
       "operation_precedente": "COLIS_ROUEN_CHARGEMENT_0023",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_ROUEN_PREPARATION_COMMANDE_0025",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_8",
       "operation_precedente": "COLIS_ROUEN_CONTROLE_ENTREE_0024",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "COLIS_ROUEN_STOCKAGE_0026",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_3",
       "operation_precedente": "COLIS_ROUEN_PREPARATION_COMMANDE_0025",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_ROUEN_RECEPTION_0027",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_8",
       "operation_precedente": "COLIS_ROUEN_STOCKAGE_0026",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_ROUEN_TRANSPORT_0028",
-      "duree_jours": 5,
       "poste_id": "CAMION_10T_13",
       "operation_precedente": "COLIS_ROUEN_RECEPTION_0027",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-10"
     },
     {
       "code_operation": "ENVOI_ORLEANS_CHARGEMENT_0029",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_7",
       "operation_precedente": null,
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "ENVOI_ORLEANS_PREPARATION_COMMANDE_0030",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_10",
       "operation_precedente": "ENVOI_ORLEANS_CHARGEMENT_0029",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "ENVOI_ORLEANS_CONTROLE_ENTREE_0031",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_6",
       "operation_precedente": "ENVOI_ORLEANS_PREPARATION_COMMANDE_0030",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_ORLEANS_STOCKAGE_0032",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_3",
       "operation_precedente": "ENVOI_ORLEANS_CONTROLE_ENTREE_0031",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_ORLEANS_RECEPTION_0033",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_3",
       "operation_precedente": "ENVOI_ORLEANS_STOCKAGE_0032",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_ORLEANS_EMBALLAGE_0034",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_4",
       "operation_precedente": "ENVOI_ORLEANS_RECEPTION_0033",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_LILLE_EMBALLAGE_0035",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_10",
       "operation_precedente": null,
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_STOCKAGE_0036",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_9",
       "operation_precedente": "CMD_LILLE_EMBALLAGE_0035",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_TRANSPORT_0037",
-      "duree_jours": 2,
       "poste_id": "CAMIONNETTE_24",
       "operation_precedente": "CMD_LILLE_STOCKAGE_0036",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_LILLE_PREPARATION_COMMANDE_0038",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_9",
       "operation_precedente": "CMD_LILLE_TRANSPORT_0037",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_LILLE_CHARGEMENT_0039",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_6",
       "operation_precedente": "CMD_LILLE_PREPARATION_COMMANDE_0038",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_LIVRAISON_0040",
-      "duree_jours": 1,
       "poste_id": "CAMION_10T_16",
       "operation_precedente": "CMD_LILLE_CHARGEMENT_0039",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_NICE_CHARGEMENT_0041",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_5",
       "operation_precedente": null,
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_NICE_RECEPTION_0042",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_4",
       "operation_precedente": "CMD_NICE_CHARGEMENT_0041",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_NICE_EMBALLAGE_0043",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_3",
       "operation_precedente": "CMD_NICE_RECEPTION_0042",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_NICE_CONTROLE_ENTREE_0044",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_2",
       "operation_precedente": "CMD_NICE_EMBALLAGE_0043",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_NICE_LIVRAISON_0045",
-      "duree_jours": 2,
       "poste_id": "CAMIONNETTE_7",
       "operation_precedente": "CMD_NICE_CONTROLE_ENTREE_0044",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_NICE_TRANSPORT_0046",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_3",
       "operation_precedente": "CMD_NICE_LIVRAISON_0045",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "COLIS_CAEN_LIVRAISON_0047",
-      "duree_jours": 1,
       "poste_id": "CAMIONNETTE_4",
       "operation_precedente": null,
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_CHARGEMENT_0048",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_3",
       "operation_precedente": "COLIS_CAEN_LIVRAISON_0047",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_EMBALLAGE_0049",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "COLIS_CAEN_CHARGEMENT_0048",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "COLIS_CAEN_STOCKAGE_0050",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_4",
       "operation_precedente": "COLIS_CAEN_EMBALLAGE_0049",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_PREPARATION_COMMANDE_0051",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_4",
       "operation_precedente": "COLIS_CAEN_STOCKAGE_0050",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "COLIS_CAEN_CONTROLE_ENTREE_0052",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_5",
       "operation_precedente": "COLIS_CAEN_PREPARATION_COMMANDE_0051",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_CHARGEMENT_0053",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_3",
       "operation_precedente": null,
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_TRANSPORT_0054",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_5",
       "operation_precedente": "LIV_GRENOBLE_CHARGEMENT_0053",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "LIV_GRENOBLE_RECEPTION_0055",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_1",
       "operation_precedente": "LIV_GRENOBLE_TRANSPORT_0054",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_CONTROLE_ENTREE_0056",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_3",
       "operation_precedente": "LIV_GRENOBLE_RECEPTION_0055",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_STOCKAGE_0057",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_1",
       "operation_precedente": "LIV_GRENOBLE_CONTROLE_ENTREE_0056",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_LIVRAISON_0058",
-      "duree_jours": 4,
       "poste_id": "CAMION_10T_7",
       "operation_precedente": "LIV_GRENOBLE_STOCKAGE_0057",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     },
     {
       "code_operation": "LIV_GRENOBLE_PREPARATION_COMMANDE_0059",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_4",
       "operation_precedente": "LIV_GRENOBLE_LIVRAISON_0058",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_DIJON_RECEPTION_0060",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_4",
       "operation_precedente": null,
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_CONTROLE_ENTREE_0061",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_2",
       "operation_precedente": "LIV_DIJON_RECEPTION_0060",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_STOCKAGE_0062",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_1",
       "operation_precedente": "LIV_DIJON_CONTROLE_ENTREE_0061",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_PREPARATION_COMMANDE_0063",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_8",
       "operation_precedente": "LIV_DIJON_STOCKAGE_0062",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_CHARGEMENT_0064",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_6",
       "operation_precedente": "LIV_DIJON_PREPARATION_COMMANDE_0063",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_LIVRAISON_0065",
-      "duree_jours": 4,
       "poste_id": "CAMION_10T_11",
       "operation_precedente": "LIV_DIJON_CHARGEMENT_0064",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     },
     {
       "code_operation": "LIV_DIJON_EMBALLAGE_0066",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_9",
       "operation_precedente": "LIV_DIJON_LIVRAISON_0065",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_TRANSPORT_0067",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_15",
       "operation_precedente": null,
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "LIV_TOURS_CHARGEMENT_0068",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_8",
       "operation_precedente": "LIV_TOURS_TRANSPORT_0067",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_LIVRAISON_0069",
-      "duree_jours": 5,
       "poste_id": "CAMION_10T_5",
       "operation_precedente": "LIV_TOURS_CHARGEMENT_0068",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-10"
     },
     {
       "code_operation": "LIV_TOURS_CONTROLE_ENTREE_0070",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_6",
       "operation_precedente": "LIV_TOURS_LIVRAISON_0069",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_RECEPTION_0071",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_4",
       "operation_precedente": "LIV_TOURS_CONTROLE_ENTREE_0070",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_PREPARATION_COMMANDE_0072",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_3",
       "operation_precedente": "LIV_TOURS_RECEPTION_0071",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_TOURS_STOCKAGE_0073",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_9",
       "operation_precedente": "LIV_TOURS_PREPARATION_COMMANDE_0072",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_EMBALLAGE_0074",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_6",
       "operation_precedente": "LIV_TOURS_STOCKAGE_0073",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_PARIS_TRANSPORT_0075",
-      "duree_jours": 5,
       "poste_id": "CAMION_10T_8",
       "operation_precedente": null,
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-10"
     },
     {
       "code_operation": "CMD_PARIS_CONTROLE_ENTREE_0076",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_2",
       "operation_precedente": "CMD_PARIS_TRANSPORT_0075",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_LIVRAISON_0077",
-      "duree_jours": 7,
       "poste_id": "CAMION_20T_4",
       "operation_precedente": "CMD_PARIS_CONTROLE_ENTREE_0076",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-12"
     },
     {
       "code_operation": "CMD_PARIS_PREPARATION_COMMANDE_0078",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_2",
       "operation_precedente": "CMD_PARIS_LIVRAISON_0077",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_CHARGEMENT_0079",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_4",
       "operation_precedente": "CMD_PARIS_PREPARATION_COMMANDE_0078",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_PARIS_STOCKAGE_0080",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_17",
       "operation_precedente": "CMD_PARIS_CHARGEMENT_0079",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_EMBALLAGE_0081",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_2",
       "operation_precedente": "CMD_PARIS_STOCKAGE_0080",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_RECEPTION_0082",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_1",
       "operation_precedente": "CMD_PARIS_EMBALLAGE_0081",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_TOURS_RECEPTION_0083",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_6",
       "operation_precedente": null,
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_CONTROLE_ENTREE_0084",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_1",
       "operation_precedente": "LIV_TOURS_RECEPTION_0083",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_TRANSPORT_0085",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_5",
       "operation_precedente": "LIV_TOURS_CONTROLE_ENTREE_0084",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "LIV_TOURS_PREPARATION_COMMANDE_0086",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_6",
       "operation_precedente": "LIV_TOURS_TRANSPORT_0085",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_EMBALLAGE_0087",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_1",
       "operation_precedente": "LIV_TOURS_PREPARATION_COMMANDE_0086",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_LIVRAISON_0088",
-      "duree_jours": 1,
       "poste_id": "CAMION_10T_7",
       "operation_precedente": "LIV_TOURS_EMBALLAGE_0087",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_CHARGEMENT_0089",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_6",
       "operation_precedente": "LIV_TOURS_LIVRAISON_0088",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_TOURS_STOCKAGE_0090",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_16",
       "operation_precedente": "LIV_TOURS_CHARGEMENT_0089",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_CHARGEMENT_0091",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_5",
       "operation_precedente": null,
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_LIVRAISON_0092",
-      "duree_jours": 1,
       "poste_id": "CAMION_10T_7",
       "operation_precedente": "COLIS_CAEN_CHARGEMENT_0091",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_EMBALLAGE_0093",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_6",
       "operation_precedente": "COLIS_CAEN_LIVRAISON_0092",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_PREPARATION_COMMANDE_0094",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "COLIS_CAEN_EMBALLAGE_0093",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "COLIS_CAEN_STOCKAGE_0095",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_3",
       "operation_precedente": "COLIS_CAEN_PREPARATION_COMMANDE_0094",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_RECEPTION_0096",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_2",
       "operation_precedente": "COLIS_CAEN_STOCKAGE_0095",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "COLIS_CAEN_CONTROLE_ENTREE_0097",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_2",
       "operation_precedente": "COLIS_CAEN_RECEPTION_0096",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_MARSEILLE_CHARGEMENT_0098",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_5",
       "operation_precedente": null,
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_MARSEILLE_LIVRAISON_0099",
-      "duree_jours": 6,
       "poste_id": "CAMION_20T_1",
       "operation_precedente": "CMD_MARSEILLE_CHARGEMENT_0098",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-11"
     },
     {
       "code_operation": "CMD_MARSEILLE_PREPARATION_COMMANDE_0100",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_10",
       "operation_precedente": "CMD_MARSEILLE_LIVRAISON_0099",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_MARSEILLE_RECEPTION_0101",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_5",
       "operation_precedente": "CMD_MARSEILLE_PREPARATION_COMMANDE_0100",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_MARSEILLE_EMBALLAGE_0102",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "CMD_MARSEILLE_RECEPTION_0101",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_MARSEILLE_CONTROLE_ENTREE_0103",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_5",
       "operation_precedente": "CMD_MARSEILLE_EMBALLAGE_0102",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_MARSEILLE_TRANSPORT_0104",
-      "duree_jours": 5,
       "poste_id": "CAMION_10T_8",
       "operation_precedente": "CMD_MARSEILLE_CONTROLE_ENTREE_0103",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-10"
     },
     {
       "code_operation": "CMD_MARSEILLE_STOCKAGE_0105",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_5",
       "operation_precedente": "CMD_MARSEILLE_TRANSPORT_0104",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_STOCKAGE_0106",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_17",
       "operation_precedente": null,
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_CHARGEMENT_0107",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_11",
       "operation_precedente": "CMD_LILLE_STOCKAGE_0106",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_PREPARATION_COMMANDE_0108",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_2",
       "operation_precedente": "CMD_LILLE_CHARGEMENT_0107",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_RECEPTION_0109",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_5",
       "operation_precedente": "CMD_LILLE_PREPARATION_COMMANDE_0108",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_LILLE_CONTROLE_ENTREE_0110",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_3",
       "operation_precedente": "CMD_LILLE_RECEPTION_0109",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_LIVRAISON_0111",
-      "duree_jours": 4,
       "poste_id": "CAMION_20T_15",
       "operation_precedente": "CMD_LILLE_CONTROLE_ENTREE_0110",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     },
     {
       "code_operation": "CMD_LILLE_TRANSPORT_0112",
-      "duree_jours": 1,
       "poste_id": "CAMIONNETTE_5",
       "operation_precedente": "CMD_LILLE_LIVRAISON_0111",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LILLE_EMBALLAGE_0113",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "CMD_LILLE_TRANSPORT_0112",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_GRENOBLE_CONTROLE_ENTREE_0114",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_6",
       "operation_precedente": null,
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_EMBALLAGE_0115",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_6",
       "operation_precedente": "LIV_GRENOBLE_CONTROLE_ENTREE_0114",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_GRENOBLE_STOCKAGE_0116",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_8",
       "operation_precedente": "LIV_GRENOBLE_EMBALLAGE_0115",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_RECEPTION_0117",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_1",
       "operation_precedente": "LIV_GRENOBLE_STOCKAGE_0116",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_LIVRAISON_0118",
-      "duree_jours": 4,
       "poste_id": "CAMION_20T_14",
       "operation_precedente": "LIV_GRENOBLE_RECEPTION_0117",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     },
     {
       "code_operation": "LIV_GRENOBLE_TRANSPORT_0119",
-      "duree_jours": 8,
       "poste_id": "CAMION_20T_1",
       "operation_precedente": "LIV_GRENOBLE_LIVRAISON_0118",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-13"
     },
     {
       "code_operation": "ENVOI_CLERMONT_STOCKAGE_0120",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_18",
       "operation_precedente": null,
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_CLERMONT_PREPARATION_COMMANDE_0121",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_8",
       "operation_precedente": "ENVOI_CLERMONT_STOCKAGE_0120",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_CLERMONT_CHARGEMENT_0122",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_2",
       "operation_precedente": "ENVOI_CLERMONT_PREPARATION_COMMANDE_0121",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_CLERMONT_CONTROLE_ENTREE_0123",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_2",
       "operation_precedente": "ENVOI_CLERMONT_CHARGEMENT_0122",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_CLERMONT_LIVRAISON_0124",
-      "duree_jours": 5,
       "poste_id": "CAMION_20T_1",
       "operation_precedente": "ENVOI_CLERMONT_CONTROLE_ENTREE_0123",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-10"
     },
     {
       "code_operation": "ENVOI_CLERMONT_EMBALLAGE_0125",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_4",
       "operation_precedente": "ENVOI_CLERMONT_LIVRAISON_0124",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_CLERMONT_TRANSPORT_0126",
-      "duree_jours": 3,
       "poste_id": "CAMION_20T_9",
       "operation_precedente": "ENVOI_CLERMONT_EMBALLAGE_0125",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "CMD_LYON_TRANSPORT_0127",
-      "duree_jours": 2,
       "poste_id": "CAMIONNETTE_13",
       "operation_precedente": null,
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_LYON_STOCKAGE_0128",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_2",
       "operation_precedente": "CMD_LYON_TRANSPORT_0127",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_CONTROLE_ENTREE_0129",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_6",
       "operation_precedente": "CMD_LYON_STOCKAGE_0128",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_CHARGEMENT_0130",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_7",
       "operation_precedente": "CMD_LYON_CONTROLE_ENTREE_0129",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_LYON_PREPARATION_COMMANDE_0131",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_1",
       "operation_precedente": "CMD_LYON_CHARGEMENT_0130",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_LIVRAISON_0132",
-      "duree_jours": 1,
       "poste_id": "CAMIONNETTE_7",
       "operation_precedente": "CMD_LYON_PREPARATION_COMMANDE_0131",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_RECEPTION_0133",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_4",
       "operation_precedente": "CMD_LYON_LIVRAISON_0132",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_EMBALLAGE_0134",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_10",
       "operation_precedente": "CMD_LYON_RECEPTION_0133",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_CLERMONT_EMBALLAGE_0135",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_1",
       "operation_precedente": null,
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "ENVOI_CLERMONT_LIVRAISON_0136",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_2",
       "operation_precedente": "ENVOI_CLERMONT_EMBALLAGE_0135",
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "ENVOI_CLERMONT_RECEPTION_0137",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_7",
       "operation_precedente": "ENVOI_CLERMONT_LIVRAISON_0136",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "ENVOI_CLERMONT_STOCKAGE_0138",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_17",
       "operation_precedente": "ENVOI_CLERMONT_RECEPTION_0137",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ENVOI_CLERMONT_PREPARATION_COMMANDE_0139",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_9",
       "operation_precedente": "ENVOI_CLERMONT_STOCKAGE_0138",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "ENVOI_CLERMONT_CONTROLE_ENTREE_0140",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_1",
       "operation_precedente": "ENVOI_CLERMONT_PREPARATION_COMMANDE_0139",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_CONTROLE_ENTREE_0141",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_6",
       "operation_precedente": null,
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_EMBALLAGE_0142",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_3",
       "operation_precedente": "PALETTE_LIMOGES_CONTROLE_ENTREE_0141",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "PALETTE_LIMOGES_RECEPTION_0143",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_6",
       "operation_precedente": "PALETTE_LIMOGES_EMBALLAGE_0142",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_LIVRAISON_0144",
-      "duree_jours": 6,
       "poste_id": "CAMION_20T_9",
       "operation_precedente": "PALETTE_LIMOGES_RECEPTION_0143",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-11"
     },
     {
       "code_operation": "PALETTE_LIMOGES_TRANSPORT_0145",
-      "duree_jours": 7,
       "poste_id": "CAMION_20T_10",
       "operation_precedente": "PALETTE_LIMOGES_LIVRAISON_0144",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-12"
     },
     {
       "code_operation": "PALETTE_LIMOGES_CHARGEMENT_0146",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_2",
       "operation_precedente": "PALETTE_LIMOGES_TRANSPORT_0145",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_MARSEILLE_PREPARATION_COMMANDE_0147",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_7",
       "operation_precedente": null,
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_MARSEILLE_TRANSPORT_0148",
-      "duree_jours": 5,
       "poste_id": "CAMION_10T_10",
       "operation_precedente": "CMD_MARSEILLE_PREPARATION_COMMANDE_0147",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-10"
     },
     {
       "code_operation": "CMD_MARSEILLE_LIVRAISON_0149",
-      "duree_jours": 4,
       "poste_id": "CAMION_20T_3",
       "operation_precedente": "CMD_MARSEILLE_TRANSPORT_0148",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     },
     {
       "code_operation": "CMD_MARSEILLE_CONTROLE_ENTREE_0150",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_4",
       "operation_precedente": "CMD_MARSEILLE_LIVRAISON_0149",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_MARSEILLE_STOCKAGE_0151",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_1",
       "operation_precedente": "CMD_MARSEILLE_CONTROLE_ENTREE_0150",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_MARSEILLE_RECEPTION_0152",
-      "duree_jours": 2,
       "poste_id": "QUAI_DECHARGEMENT_1",
       "operation_precedente": "CMD_MARSEILLE_STOCKAGE_0151",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_MARSEILLE_CHARGEMENT_0153",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_5",
       "operation_precedente": "CMD_MARSEILLE_RECEPTION_0152",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_LIVRAISON_0154",
-      "duree_jours": 4,
       "poste_id": "CAMION_10T_15",
       "operation_precedente": null,
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     },
     {
       "code_operation": "CMD_LYON_EMBALLAGE_0155",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "CMD_LYON_LIVRAISON_0154",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_PREPARATION_COMMANDE_0156",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_8",
       "operation_precedente": "CMD_LYON_EMBALLAGE_0155",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_STOCKAGE_0157",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_10",
       "operation_precedente": "CMD_LYON_PREPARATION_COMMANDE_0156",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_CONTROLE_ENTREE_0158",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_1",
       "operation_precedente": "CMD_LYON_STOCKAGE_0157",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_LYON_CHARGEMENT_0159",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_1",
       "operation_precedente": "CMD_LYON_CONTROLE_ENTREE_0158",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_TRANSPORT_0160",
-      "duree_jours": 3,
       "poste_id": "CAMIONNETTE_2",
       "operation_precedente": null,
-      "competence_requise": "camionnette"
+      "competence_requise": "camionnette",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-08"
     },
     {
       "code_operation": "CMD_PARIS_CONTROLE_ENTREE_0161",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_5",
       "operation_precedente": "CMD_PARIS_TRANSPORT_0160",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_PREPARATION_COMMANDE_0162",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "CMD_PARIS_CONTROLE_ENTREE_0161",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_EMBALLAGE_0163",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_4",
       "operation_precedente": "CMD_PARIS_PREPARATION_COMMANDE_0162",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_RECEPTION_0164",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_2",
       "operation_precedente": "CMD_PARIS_EMBALLAGE_0163",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_LIVRAISON_0165",
-      "duree_jours": 2,
       "poste_id": "CAMION_20T_2",
       "operation_precedente": "CMD_PARIS_RECEPTION_0164",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_PARIS_STOCKAGE_0166",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_8",
       "operation_precedente": "CMD_PARIS_LIVRAISON_0165",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_CHARGEMENT_0167",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_5",
       "operation_precedente": "CMD_PARIS_STOCKAGE_0166",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_EMBALLAGE_0168",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_9",
       "operation_precedente": null,
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "PALETTE_LIMOGES_PREPARATION_COMMANDE_0169",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "PALETTE_LIMOGES_EMBALLAGE_0168",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_TRANSPORT_0170",
-      "duree_jours": 1,
       "poste_id": "CAMION_20T_12",
       "operation_precedente": "PALETTE_LIMOGES_PREPARATION_COMMANDE_0169",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_CONTROLE_ENTREE_0171",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_1",
       "operation_precedente": "PALETTE_LIMOGES_TRANSPORT_0170",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_STOCKAGE_0172",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_3",
       "operation_precedente": "PALETTE_LIMOGES_CONTROLE_ENTREE_0171",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTE_LIMOGES_CHARGEMENT_0173",
-      "duree_jours": 2,
       "poste_id": "QUAI_CHARGEMENT_4",
       "operation_precedente": "PALETTE_LIMOGES_STOCKAGE_0172",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "PALETTE_LIMOGES_RECEPTION_0174",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_1",
       "operation_precedente": "PALETTE_LIMOGES_CHARGEMENT_0173",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_RECEPTION_0175",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_2",
       "operation_precedente": null,
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_CONTROLE_ENTREE_0176",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_1",
       "operation_precedente": "LIV_DIJON_RECEPTION_0175",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_TRANSPORT_0177",
-      "duree_jours": 4,
       "poste_id": "CAMION_10T_1",
       "operation_precedente": "LIV_DIJON_CONTROLE_ENTREE_0176",
-      "competence_requise": "camion_10t"
+      "competence_requise": "camion_10t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     },
     {
       "code_operation": "LIV_DIJON_CHARGEMENT_0178",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_4",
       "operation_precedente": "LIV_DIJON_TRANSPORT_0177",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_STOCKAGE_0179",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_10",
       "operation_precedente": "LIV_DIJON_CHARGEMENT_0178",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_DIJON_PREPARATION_COMMANDE_0180",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_1",
       "operation_precedente": "LIV_DIJON_STOCKAGE_0179",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_PARIS_CHARGEMENT_0181",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_10",
       "operation_precedente": null,
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_LIVRAISON_0182",
-      "duree_jours": 5,
       "poste_id": "CAMION_20T_7",
       "operation_precedente": "CMD_PARIS_CHARGEMENT_0181",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-10"
     },
     {
       "code_operation": "CMD_PARIS_EMBALLAGE_0183",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_6",
       "operation_precedente": "CMD_PARIS_LIVRAISON_0182",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "CMD_PARIS_CONTROLE_ENTREE_0184",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_1",
       "operation_precedente": "CMD_PARIS_EMBALLAGE_0183",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_STOCKAGE_0185",
-      "duree_jours": 1,
       "poste_id": "ZONE_STOCKAGE_18",
       "operation_precedente": "CMD_PARIS_CONTROLE_ENTREE_0184",
-      "competence_requise": "zone_stockage"
+      "competence_requise": "zone_stockage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CMD_PARIS_TRANSPORT_0186",
-      "duree_jours": 7,
       "poste_id": "CAMION_20T_9",
       "operation_precedente": "CMD_PARIS_STOCKAGE_0185",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-12"
     },
     {
       "code_operation": "CMD_PARIS_PREPARATION_COMMANDE_0187",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_5",
       "operation_precedente": "CMD_PARIS_TRANSPORT_0186",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_GRENOBLE_RECEPTION_0188",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT_8",
       "operation_precedente": null,
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_PREPARATION_COMMANDE_0189",
-      "duree_jours": 2,
       "poste_id": "ZONE_PREPARATION_2",
       "operation_precedente": "LIV_GRENOBLE_RECEPTION_0188",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-07"
     },
     {
       "code_operation": "LIV_GRENOBLE_CHARGEMENT_0190",
-      "duree_jours": 1,
       "poste_id": "QUAI_CHARGEMENT_8",
       "operation_precedente": "LIV_GRENOBLE_PREPARATION_COMMANDE_0189",
-      "competence_requise": "quai_chargement"
+      "competence_requise": "quai_chargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_EMBALLAGE_0191",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_3",
       "operation_precedente": "LIV_GRENOBLE_CHARGEMENT_0190",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_STOCKAGE_0192",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR_12",
       "operation_precedente": "LIV_GRENOBLE_EMBALLAGE_0191",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIV_GRENOBLE_TRANSPORT_0193",
-      "duree_jours": 4,
       "poste_id": "CAMION_20T_3",
       "operation_precedente": "LIV_GRENOBLE_STOCKAGE_0192",
-      "competence_requise": "camion_20t"
+      "competence_requise": "camion_20t",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-09"
     }
   ],
   "postes": [

@@ -552,10 +552,33 @@ function FormulaireConnexionAPI({ onExtrait }: { onExtrait: (donneesBrutes: stri
   const [utilisateurApi, setUtilisateurApi] = useState("");
   const [motDePasseApi, setMotDePasseApi] = useState("");
   const [corps, setCorps] = useState("");
+  // Validée côté client avant tout appel réseau — sinon une URL incomplète
+  // (protocole manquant, oubli fréquent) ne remonte qu'un message d'erreur
+  // brut de la librairie HTTP serveur, en anglais, une fois l'appel déjà
+  // parti pour rien.
+  const [erreurUrl, setErreurUrl] = useState<string | null>(null);
 
   const erreur = explorer.error as PrismeAPIError | null;
 
+  function urlValide(valeur: string): boolean {
+    try {
+      const analysee = new URL(valeur);
+      return analysee.protocol === "http:" || analysee.protocol === "https:";
+    } catch {
+      return false;
+    }
+  }
+
   function extraire() {
+    const urlSaisie = url.trim();
+    if (!urlValide(urlSaisie)) {
+      setErreurUrl(
+        "L'URL doit être complète et commencer par http:// ou https:// (ex. https://erp.exemple.com/api/taches).",
+      );
+      return;
+    }
+    setErreurUrl(null);
+
     const authentification: AuthentificationAPI =
       typeAuth === "cle_api"
         ? {
@@ -575,7 +598,7 @@ function FormulaireConnexionAPI({ onExtrait }: { onExtrait: (donneesBrutes: stri
 
     explorer.mutate(
       {
-        url: url.trim(),
+        url: urlSaisie,
         methode,
         authentification,
         corps: methode === "POST" && corps.trim() ? corps : undefined,
@@ -600,7 +623,10 @@ function FormulaireConnexionAPI({ onExtrait }: { onExtrait: (donneesBrutes: stri
           <Input
             id="api_url"
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            onChange={(e) => {
+              setUrl(e.target.value);
+              setErreurUrl(null);
+            }}
             placeholder="https://erp.exemple.com/api/taches"
             className="h-9 text-sm"
           />
@@ -728,12 +754,12 @@ function FormulaireConnexionAPI({ onExtrait }: { onExtrait: (donneesBrutes: stri
         )}
       </div>
 
-      {erreur && (
+      {(erreurUrl || erreur) && (
         <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
           <div className="flex items-center gap-2 font-medium">
-            <AlertCircle className="h-4 w-4" /> Échec de l'appel
+            <AlertCircle className="h-4 w-4" /> {erreurUrl ? "URL invalide" : "Échec de l'appel"}
           </div>
-          <p className="mt-1">{erreur.message}</p>
+          <p className="mt-1">{erreurUrl ?? erreur?.message}</p>
         </div>
       )}
 

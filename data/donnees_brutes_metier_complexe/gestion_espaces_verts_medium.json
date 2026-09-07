@@ -3,120 +3,111 @@
   "operations": [
     {
       "code_operation": "TONTE_GAZON_001",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_tonte",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TONTE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_1"
         },
         {
-          "poste_id": "EQUIPE_TONTE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_2"
         },
         {
-          "poste_id": "EQUIPE_TONTE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_3"
         },
         {
-          "poste_id": "EQUIPE_TONTE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_4"
         }
       ]
     },
     {
       "code_operation": "ARROSAGE_002",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_arrosage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ARROSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "TAILLE_HAIES_003",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "ARROSAGE_002"
       ],
       "competence_requise": "equipe_taille",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TAILLE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_1"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_2"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_3"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "PLANTATION_004",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TAILLE_HAIES_003"
       ],
       "competence_requise": "equipe_plantation",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_PLANTATION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_1"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_2"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_3"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_4"
         }
       ]
     },
     {
       "code_operation": "TRAITEMENT_005",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "PLANTATION_004"
       ],
       "competence_requise": "equipe_traitement_phyto",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3"
         }
       ],
       "quantite": 63,
@@ -126,20 +117,19 @@
     },
     {
       "code_operation": "TRAITEMENT_006",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_traitement_phyto",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3"
         }
       ],
       "priorite": 2,
@@ -149,121 +139,111 @@
     },
     {
       "code_operation": "NETTOYAGE_007",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_4"
         }
       ]
     },
     {
       "code_operation": "TAILLE_HAIES_008",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_taille",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TAILLE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_1"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_2"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_3"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "AMENAGEMENT_009",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_amenagement",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_1"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_2"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_3"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_4"
         }
       ]
     },
     {
       "code_operation": "ELAGAGE_ARBRES_010",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "AMENAGEMENT_009"
       ],
       "competence_requise": "equipe_elagage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ELAGAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_4"
         }
       ]
     },
     {
       "code_operation": "TONTE_GAZON_011",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "ELAGAGE_ARBRES_010"
       ],
       "competence_requise": "equipe_tonte",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TONTE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_1"
         },
         {
-          "poste_id": "EQUIPE_TONTE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_2"
         },
         {
-          "poste_id": "EQUIPE_TONTE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_3"
         },
         {
-          "poste_id": "EQUIPE_TONTE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_4"
         }
       ],
       "quantite": 142,
@@ -272,120 +252,110 @@
     },
     {
       "code_operation": "NETTOYAGE_012",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_4"
         }
       ]
     },
     {
       "code_operation": "ELAGAGE_ARBRES_013",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_elagage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ELAGAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_4"
         }
       ]
     },
     {
       "code_operation": "ARROSAGE_014",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_arrosage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ARROSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_4"
         }
       ]
     },
     {
       "code_operation": "TONTE_GAZON_015",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "ARROSAGE_014"
       ],
       "competence_requise": "equipe_tonte",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TONTE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_1"
         },
         {
-          "poste_id": "EQUIPE_TONTE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_2"
         },
         {
-          "poste_id": "EQUIPE_TONTE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_3"
         },
         {
-          "poste_id": "EQUIPE_TONTE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_4"
         }
       ]
     },
     {
       "code_operation": "AMENAGEMENT_016",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TONTE_GAZON_015"
       ],
       "competence_requise": "equipe_amenagement",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_1"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_2"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_3"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_4"
         }
       ],
       "priorite": 2,
@@ -395,166 +365,154 @@
     },
     {
       "code_operation": "TAILLE_HAIES_017",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_taille",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TAILLE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_1"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_2"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_3"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_4"
         }
       ]
     },
     {
       "code_operation": "TRAITEMENT_018",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TAILLE_HAIES_017"
       ],
       "competence_requise": "equipe_traitement_phyto",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "TAILLE_HAIES_019",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_taille",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TAILLE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_1"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_2"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_3"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "TONTE_GAZON_020",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_tonte",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TONTE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_1"
         },
         {
-          "poste_id": "EQUIPE_TONTE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_2"
         },
         {
-          "poste_id": "EQUIPE_TONTE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_3"
         },
         {
-          "poste_id": "EQUIPE_TONTE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_4"
         }
       ]
     },
     {
       "code_operation": "DESHERBAGE_021",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TONTE_GAZON_020"
       ],
       "competence_requise": "equipe_desherbage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESHERBAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "TRAITEMENT_022",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "DESHERBAGE_021"
       ],
       "competence_requise": "equipe_traitement_phyto",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "ELAGAGE_ARBRES_023",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "TRAITEMENT_022"
       ],
       "competence_requise": "equipe_elagage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ELAGAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_4"
         }
       ],
       "quantite": 154,
@@ -564,121 +522,111 @@
     },
     {
       "code_operation": "PLANTATION_024",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_plantation",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_PLANTATION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_1"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_2"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_3"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "TAILLE_HAIES_025",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PLANTATION_024"
       ],
       "competence_requise": "equipe_taille",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TAILLE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_1"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_2"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_3"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "ARROSAGE_026",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_arrosage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ARROSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "AMENAGEMENT_027",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_amenagement",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_1"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_2"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_3"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_4"
         }
       ]
     },
     {
       "code_operation": "NETTOYAGE_028",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_4"
         }
       ],
       "priorite": 5,
@@ -688,24 +636,22 @@
     },
     {
       "code_operation": "TONTE_GAZON_029",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_tonte",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TONTE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_1"
         },
         {
-          "poste_id": "EQUIPE_TONTE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_2"
         },
         {
-          "poste_id": "EQUIPE_TONTE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_3"
         },
         {
-          "poste_id": "EQUIPE_TONTE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_4"
         }
       ],
       "priorite": 4,
@@ -713,120 +659,111 @@
     },
     {
       "code_operation": "TONTE_GAZON_030",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_tonte",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TONTE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_1"
         },
         {
-          "poste_id": "EQUIPE_TONTE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_2"
         },
         {
-          "poste_id": "EQUIPE_TONTE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_3"
         },
         {
-          "poste_id": "EQUIPE_TONTE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "TAILLE_HAIES_031",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TONTE_GAZON_030"
       ],
       "competence_requise": "equipe_taille",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TAILLE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_1"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_2"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_3"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_4"
         }
       ]
     },
     {
       "code_operation": "NETTOYAGE_032",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_4"
         }
       ]
     },
     {
       "code_operation": "TRAITEMENT_033",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "NETTOYAGE_032"
       ],
       "competence_requise": "equipe_traitement_phyto",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "AMENAGEMENT_034",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TRAITEMENT_033"
       ],
       "competence_requise": "equipe_amenagement",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_1"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_2"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_3"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_4"
         }
       ],
       "quantite": 169,
@@ -835,26 +772,24 @@
     },
     {
       "code_operation": "PLANTATION_035",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "AMENAGEMENT_034"
       ],
       "competence_requise": "equipe_plantation",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_PLANTATION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_1"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_2"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_3"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_4"
         }
       ],
       "priorite": 3,
@@ -864,26 +799,24 @@
     },
     {
       "code_operation": "ARROSAGE_036",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "PLANTATION_035"
       ],
       "competence_requise": "equipe_arrosage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ARROSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_4"
         }
       ],
       "priorite": 4,
@@ -893,271 +826,250 @@
     },
     {
       "code_operation": "DESHERBAGE_037",
+      "date_debut": "2026-09-06T08:00:00",
+      "date_fin": "2026-09-06T16:00:00",
       "operations_precedentes": [
         "ARROSAGE_036"
       ],
       "competence_requise": "equipe_desherbage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESHERBAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_4"
         }
       ]
     },
     {
       "code_operation": "ELAGAGE_ARBRES_038",
+      "date_debut": "2026-09-07T08:00:00",
+      "date_fin": "2026-09-07T16:00:00",
       "operations_precedentes": [
         "DESHERBAGE_037"
       ],
       "competence_requise": "equipe_elagage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ELAGAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_4"
         }
       ]
     },
     {
       "code_operation": "TRAITEMENT_039",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_traitement_phyto",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "AMENAGEMENT_040",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TRAITEMENT_039"
       ],
       "competence_requise": "equipe_amenagement",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_1"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_2"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_3"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "DESHERBAGE_041",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_desherbage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESHERBAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "PLANTATION_042",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "DESHERBAGE_041"
       ],
       "competence_requise": "equipe_plantation",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_PLANTATION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_1"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_2"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_3"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "TAILLE_HAIES_043",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_taille",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TAILLE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_1"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_2"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_3"
         },
         {
-          "poste_id": "EQUIPE_TAILLE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TAILLE_4"
         }
       ]
     },
     {
       "code_operation": "NETTOYAGE_044",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TAILLE_HAIES_043"
       ],
       "competence_requise": "equipe_nettoyage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "ELAGAGE_ARBRES_045",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "NETTOYAGE_044"
       ],
       "competence_requise": "equipe_elagage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ELAGAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ELAGAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ELAGAGE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "TONTE_GAZON_046",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_tonte",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TONTE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_1"
         },
         {
-          "poste_id": "EQUIPE_TONTE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_2"
         },
         {
-          "poste_id": "EQUIPE_TONTE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_3"
         },
         {
-          "poste_id": "EQUIPE_TONTE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TONTE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "ARROSAGE_047",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TONTE_GAZON_046"
       ],
       "competence_requise": "equipe_arrosage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_ARROSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_ARROSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_ARROSAGE_4"
         }
       ],
       "priorite": 3,
@@ -1168,45 +1080,42 @@
     },
     {
       "code_operation": "PLANTATION_048",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_plantation",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_PLANTATION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_1"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_2"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_3"
         },
         {
-          "poste_id": "EQUIPE_PLANTATION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_PLANTATION_4"
         }
       ]
     },
     {
       "code_operation": "TRAITEMENT_049",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PLANTATION_048"
       ],
       "competence_requise": "equipe_traitement_phyto",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_1"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_2"
         },
         {
-          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_TRAITEMENT_PHYTO_3"
         }
       ],
       "quantite": 123,
@@ -1215,24 +1124,22 @@
     },
     {
       "code_operation": "AMENAGEMENT_050",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_amenagement",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_1"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_2"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_3"
         },
         {
-          "poste_id": "EQUIPE_AMENAGEMENT_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_AMENAGEMENT_4"
         }
       ],
       "priorite": 4,
@@ -1242,51 +1149,47 @@
     },
     {
       "code_operation": "NETTOYAGE_051",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "AMENAGEMENT_050"
       ],
       "competence_requise": "equipe_nettoyage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_4"
         }
       ]
     },
     {
       "code_operation": "DESHERBAGE_052",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "NETTOYAGE_051"
       ],
       "competence_requise": "equipe_desherbage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESHERBAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DESHERBAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESHERBAGE_4"
         }
       ],
       "priorite": 3,

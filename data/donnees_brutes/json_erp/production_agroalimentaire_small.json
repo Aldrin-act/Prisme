@@ -2,129 +2,148 @@
   "operations": [
     {
       "code_operation": "EPLUCHAGE_001",
-      "duree_jours": 1,
       "poste_id": "LIGNE_EPLUCHAGE",
-      "competence_requise": "ligne_epluchage"
+      "competence_requise": "ligne_epluchage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ETIQUETAGE_002",
-      "duree_jours": 1,
       "poste_id": "ETIQUETEUSE",
       "competence_requise": "etiqueteuse",
-      "operation_precedente": "EPLUCHAGE_001"
+      "operation_precedente": "EPLUCHAGE_001",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONDITIONNEMENT_003",
-      "duree_jours": 1,
       "poste_id": "LIGNE_CONDITIONNEMENT",
       "competence_requise": "ligne_conditionnement",
-      "operation_precedente": "ETIQUETAGE_002"
+      "operation_precedente": "ETIQUETAGE_002",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DECOUPE_004",
-      "duree_jours": 1,
       "poste_id": "ROBOT_DECOUPE",
-      "competence_requise": "robot_decoupe"
+      "competence_requise": "robot_decoupe",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CUISSON_005",
-      "duree_jours": 1,
       "poste_id": "AUTOCLAVE",
-      "competence_requise": "autoclave"
+      "competence_requise": "autoclave",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_006",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_QUALITE",
       "competence_requise": "poste_controle_qualite",
-      "operation_precedente": "CUISSON_005"
+      "operation_precedente": "CUISSON_005",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "RECEPTION_007",
-      "duree_jours": 1,
       "poste_id": "QUAI_RECEPTION",
-      "competence_requise": "quai_reception"
+      "competence_requise": "quai_reception",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "REFROIDISSEMENT_008",
-      "duree_jours": 1,
       "poste_id": "TUNNEL_REFROIDISSEMENT",
-      "competence_requise": "tunnel_refroidissement"
+      "competence_requise": "tunnel_refroidissement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PALETTISATION_009",
-      "duree_jours": 1,
       "poste_id": "ROBOT_PALETTISEUR",
       "competence_requise": "robot_palettiseur",
-      "operation_precedente": "REFROIDISSEMENT_008"
+      "operation_precedente": "REFROIDISSEMENT_008",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LAVAGE_010",
-      "duree_jours": 1,
       "poste_id": "TUNNEL_LAVAGE",
-      "competence_requise": "tunnel_lavage"
+      "competence_requise": "tunnel_lavage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ETIQUETAGE_011",
-      "duree_jours": 1,
       "poste_id": "ETIQUETEUSE",
-      "competence_requise": "etiqueteuse"
+      "competence_requise": "etiqueteuse",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DECOUPE_012",
-      "duree_jours": 1,
       "poste_id": "ROBOT_DECOUPE",
       "competence_requise": "robot_decoupe",
-      "operation_precedente": "ETIQUETAGE_011"
+      "operation_precedente": "ETIQUETAGE_011",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_013",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_QUALITE",
       "competence_requise": "poste_controle_qualite",
-      "operation_precedente": "DECOUPE_012"
+      "operation_precedente": "DECOUPE_012",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "RECEPTION_014",
-      "duree_jours": 1,
       "poste_id": "QUAI_RECEPTION",
       "competence_requise": "quai_reception",
-      "operation_precedente": "CONTROLE_013"
+      "operation_precedente": "CONTROLE_013",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONDITIONNEMENT_015",
-      "duree_jours": 1,
       "poste_id": "LIGNE_CONDITIONNEMENT",
       "competence_requise": "ligne_conditionnement",
-      "operation_precedente": "RECEPTION_014"
+      "operation_precedente": "RECEPTION_014",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "REFROIDISSEMENT_016",
-      "duree_jours": 1,
       "poste_id": "TUNNEL_REFROIDISSEMENT",
       "competence_requise": "tunnel_refroidissement",
-      "operation_precedente": "CONDITIONNEMENT_015"
+      "operation_precedente": "CONDITIONNEMENT_015",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "EPLUCHAGE_017",
-      "duree_jours": 1,
       "poste_id": "LIGNE_EPLUCHAGE",
       "competence_requise": "ligne_epluchage",
-      "operation_precedente": "REFROIDISSEMENT_016"
+      "operation_precedente": "REFROIDISSEMENT_016",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CUISSON_018",
-      "duree_jours": 1,
       "poste_id": "AUTOCLAVE",
       "competence_requise": "autoclave",
-      "operation_precedente": "EPLUCHAGE_017"
+      "operation_precedente": "EPLUCHAGE_017",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LAVAGE_019",
-      "duree_jours": 1,
       "poste_id": "TUNNEL_LAVAGE",
       "competence_requise": "tunnel_lavage",
-      "operation_precedente": "CUISSON_018"
+      "operation_precedente": "CUISSON_018",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

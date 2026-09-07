@@ -2,102 +2,117 @@
   "operations": [
     {
       "code_operation": "CHARGEMENT_001",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR",
-      "competence_requise": "chariot_elevateur"
+      "competence_requise": "chariot_elevateur",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIVRAISON_002",
-      "duree_jours": 1,
       "poste_id": "CAMION_10T",
       "competence_requise": "camion_10t",
-      "operation_precedente": "CHARGEMENT_001"
+      "operation_precedente": "CHARGEMENT_001",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "RECEPTION_003",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT",
-      "competence_requise": "quai_dechargement"
+      "competence_requise": "quai_dechargement",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PREPARATION_COMMANDE_004",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "STOCKAGE_005",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR",
       "competence_requise": "chariot_elevateur",
-      "operation_precedente": "PREPARATION_COMMANDE_004"
+      "operation_precedente": "PREPARATION_COMMANDE_004",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_ENTREE_006",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TRANSPORT_007",
-      "duree_jours": 1,
       "poste_id": "CAMIONNETTE",
       "competence_requise": "camionnette",
-      "operation_precedente": "CONTROLE_ENTREE_006"
+      "operation_precedente": "CONTROLE_ENTREE_006",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "EMBALLAGE_008",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION",
       "competence_requise": "zone_preparation",
-      "operation_precedente": "TRANSPORT_007"
+      "operation_precedente": "TRANSPORT_007",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "EMBALLAGE_009",
-      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION",
-      "competence_requise": "zone_preparation"
+      "competence_requise": "zone_preparation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "RECEPTION_010",
-      "duree_jours": 1,
       "poste_id": "QUAI_DECHARGEMENT",
       "competence_requise": "quai_dechargement",
-      "operation_precedente": "EMBALLAGE_009"
+      "operation_precedente": "EMBALLAGE_009",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CONTROLE_ENTREE_011",
-      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE",
-      "competence_requise": "poste_controle"
+      "competence_requise": "poste_controle",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LIVRAISON_012",
-      "duree_jours": 1,
       "poste_id": "CAMION_10T",
       "competence_requise": "camion_10t",
-      "operation_precedente": "CONTROLE_ENTREE_011"
+      "operation_precedente": "CONTROLE_ENTREE_011",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "CHARGEMENT_013",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR",
       "competence_requise": "chariot_elevateur",
-      "operation_precedente": "LIVRAISON_012"
+      "operation_precedente": "LIVRAISON_012",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "STOCKAGE_014",
-      "duree_jours": 1,
       "poste_id": "CHARIOT_ELEVATEUR",
       "competence_requise": "chariot_elevateur",
-      "operation_precedente": "CHARGEMENT_013"
+      "operation_precedente": "CHARGEMENT_013",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TRANSPORT_015",
-      "duree_jours": 1,
       "poste_id": "CAMION_10T",
       "competence_requise": "camion_10t",
-      "operation_precedente": "STOCKAGE_014"
+      "operation_precedente": "STOCKAGE_014",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

@@ -2,88 +2,101 @@
   "operations": [
     {
       "code_operation": "POLISSAGE_001",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_POLISSAGE",
-      "competence_requise": "equipe_polissage"
+      "competence_requise": "equipe_polissage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "VITRES_002",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_VITRES",
-      "competence_requise": "equipe_vitres"
+      "competence_requise": "equipe_vitres",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DESINFECTION_003",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_DESINFECTION",
-      "competence_requise": "equipe_desinfection"
+      "competence_requise": "equipe_desinfection",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "EVACUATION_DECHETS_004",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_DECHETS",
-      "competence_requise": "equipe_dechets"
+      "competence_requise": "equipe_dechets",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "SANITAIRES_005",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_SANITAIRES",
       "competence_requise": "equipe_sanitaires",
-      "operation_precedente": "EVACUATION_DECHETS_004"
+      "operation_precedente": "EVACUATION_DECHETS_004",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DECAPAGE_006",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_DECAPAGE",
       "competence_requise": "equipe_decapage",
-      "operation_precedente": "SANITAIRES_005"
+      "operation_precedente": "SANITAIRES_005",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "VITRES_007",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_VITRES",
-      "competence_requise": "equipe_vitres"
+      "competence_requise": "equipe_vitres",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DESINFECTION_008",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_DESINFECTION",
-      "competence_requise": "equipe_desinfection"
+      "competence_requise": "equipe_desinfection",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "POLISSAGE_009",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_POLISSAGE",
       "competence_requise": "equipe_polissage",
-      "operation_precedente": "DESINFECTION_008"
+      "operation_precedente": "DESINFECTION_008",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "EVACUATION_DECHETS_010",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_DECHETS",
       "competence_requise": "equipe_dechets",
-      "operation_precedente": "POLISSAGE_009"
+      "operation_precedente": "POLISSAGE_009",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "SANITAIRES_011",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_SANITAIRES",
       "competence_requise": "equipe_sanitaires",
-      "operation_precedente": "EVACUATION_DECHETS_010"
+      "operation_precedente": "EVACUATION_DECHETS_010",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "LAVAGE_SOLS_012",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_SOL_SPECIALISE",
       "competence_requise": "equipe_sol_specialise",
-      "operation_precedente": "SANITAIRES_011"
+      "operation_precedente": "SANITAIRES_011",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ASPIRATION_013",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL",
       "competence_requise": "equipe_nettoyage_industriel",
-      "operation_precedente": "LAVAGE_SOLS_012"
+      "operation_precedente": "LAVAGE_SOLS_012",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

@@ -324,6 +324,7 @@ function DialogSolveur({
                   )}
                   <GanttChart
                     planning={!voirOriginal && planningAjuste ? planningAjuste : planning}
+                    contraintes={instanceChoisie?.contraintes}
                     editable={!voirOriginal}
                     executionId={executionId ?? undefined}
                     uniteDuree={instanceChoisie?.unite_duree}

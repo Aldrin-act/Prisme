@@ -2,94 +2,108 @@
   "operations": [
     {
       "code_operation": "DESHERBAGE_001",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_DESHERBAGE",
-      "competence_requise": "equipe_desherbage"
+      "competence_requise": "equipe_desherbage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TRAITEMENT_002",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_TRAITEMENT_PHYTO",
       "competence_requise": "equipe_traitement_phyto",
-      "operation_precedente": "DESHERBAGE_001"
+      "operation_precedente": "DESHERBAGE_001",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TONTE_GAZON_003",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_TONTE",
-      "competence_requise": "equipe_tonte"
+      "competence_requise": "equipe_tonte",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "NETTOYAGE_004",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_NETTOYAGE",
-      "competence_requise": "equipe_nettoyage"
+      "competence_requise": "equipe_nettoyage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "AMENAGEMENT_005",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_AMENAGEMENT",
       "competence_requise": "equipe_amenagement",
-      "operation_precedente": "NETTOYAGE_004"
+      "operation_precedente": "NETTOYAGE_004",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PLANTATION_006",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_PLANTATION",
-      "competence_requise": "equipe_plantation"
+      "competence_requise": "equipe_plantation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TAILLE_HAIES_007",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_TAILLE",
       "competence_requise": "equipe_taille",
-      "operation_precedente": "PLANTATION_006"
+      "operation_precedente": "PLANTATION_006",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ARROSAGE_008",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_ARROSAGE",
-      "competence_requise": "equipe_arrosage"
+      "competence_requise": "equipe_arrosage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "ELAGAGE_ARBRES_009",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_ELAGAGE",
       "competence_requise": "equipe_elagage",
-      "operation_precedente": "ARROSAGE_008"
+      "operation_precedente": "ARROSAGE_008",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "PLANTATION_010",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_PLANTATION",
-      "competence_requise": "equipe_plantation"
+      "competence_requise": "equipe_plantation",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "AMENAGEMENT_011",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_AMENAGEMENT",
       "competence_requise": "equipe_amenagement",
-      "operation_precedente": "PLANTATION_010"
+      "operation_precedente": "PLANTATION_010",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "NETTOYAGE_012",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_NETTOYAGE",
-      "competence_requise": "equipe_nettoyage"
+      "competence_requise": "equipe_nettoyage",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "TAILLE_HAIES_013",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_TAILLE",
       "competence_requise": "equipe_taille",
-      "operation_precedente": "NETTOYAGE_012"
+      "operation_precedente": "NETTOYAGE_012",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     },
     {
       "code_operation": "DESHERBAGE_014",
-      "duree_jours": 1,
       "poste_id": "EQUIPE_DESHERBAGE",
       "competence_requise": "equipe_desherbage",
-      "operation_precedente": "TAILLE_HAIES_013"
+      "operation_precedente": "TAILLE_HAIES_013",
+      "date_debut": "2026-01-05",
+      "date_fin": "2026-01-06"
     }
   ],
   "postes": [

@@ -3,122 +3,112 @@
   "operations": [
     {
       "code_operation": "ASPIRATION_001",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage_bureaux",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4"
         }
       ]
     },
     {
       "code_operation": "SANITAIRES_002",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_sanitaires",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_SANITAIRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_1"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_2"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_3"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "LAVAGE_SOLS_003",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "SANITAIRES_002"
       ],
       "competence_requise": "equipe_sol_specialise",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_1"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_2"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_3"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "POLISSAGE_004",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_polissage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_POLISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_4"
         }
       ]
     },
     {
       "code_operation": "DECAPAGE_005",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "POLISSAGE_004"
       ],
       "competence_requise": "equipe_decapage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECAPAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_4"
         }
       ],
       "quantite": 63,
@@ -127,24 +117,22 @@
     },
     {
       "code_operation": "DECAPAGE_006",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_decapage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECAPAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_4"
         }
       ],
       "priorite": 2,
@@ -154,52 +142,48 @@
     },
     {
       "code_operation": "CONTROLE_007",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "DECAPAGE_006"
       ],
       "competence_requise": "equipe_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "LAVAGE_SOLS_008",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "CONTROLE_007"
       ],
       "competence_requise": "equipe_sol_specialise",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_1"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_2"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_3"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_4"
         }
       ],
       "priorite": 4,
@@ -209,100 +193,92 @@
     },
     {
       "code_operation": "EVACUATION_DECHETS_009",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_dechets",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECHETS_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_1"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_2"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_3"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "DESINFECTION_010",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "EVACUATION_DECHETS_009"
       ],
       "competence_requise": "equipe_desinfection",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESINFECTION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_1"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_2"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_3"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "ASPIRATION_011",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "DESINFECTION_010"
       ],
       "competence_requise": "equipe_nettoyage_industriel",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4"
         }
       ],
       "echeance_jours": 28
     },
     {
       "code_operation": "LAVAGE_SOLS_012",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage_bureaux",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4"
         }
       ],
       "priorite": 4,
@@ -312,99 +288,91 @@
     },
     {
       "code_operation": "SANITAIRES_013",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "LAVAGE_SOLS_012"
       ],
       "competence_requise": "equipe_sanitaires",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_SANITAIRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_1"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_2"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_3"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_4"
         }
       ]
     },
     {
       "code_operation": "POLISSAGE_014",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_polissage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_POLISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_4"
         }
       ]
     },
     {
       "code_operation": "DECAPAGE_015",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "POLISSAGE_014"
       ],
       "competence_requise": "equipe_decapage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECAPAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_4"
         }
       ]
     },
     {
       "code_operation": "EVACUATION_DECHETS_016",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "DECAPAGE_015"
       ],
       "competence_requise": "equipe_dechets",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECHETS_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_1"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_2"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_3"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_4"
         }
       ],
       "quantite": 22,
@@ -413,101 +381,93 @@
     },
     {
       "code_operation": "CONTROLE_017",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_4"
         }
       ]
     },
     {
       "code_operation": "ASPIRATION_018",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_017"
       ],
       "competence_requise": "equipe_nettoyage_industriel",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "VITRES_019",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "ASPIRATION_018"
       ],
       "competence_requise": "equipe_vitres",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_VITRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_1"
         },
         {
-          "poste_id": "EQUIPE_VITRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_2"
         },
         {
-          "poste_id": "EQUIPE_VITRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_3"
         },
         {
-          "poste_id": "EQUIPE_VITRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "DESINFECTION_020",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "VITRES_019"
       ],
       "competence_requise": "equipe_desinfection",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESINFECTION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_1"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_2"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_3"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_4"
         }
       ],
       "priorite": 5,
@@ -515,49 +475,45 @@
     },
     {
       "code_operation": "POLISSAGE_021",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_polissage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_POLISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_4"
         }
       ]
     },
     {
       "code_operation": "ASPIRATION_022",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "POLISSAGE_021"
       ],
       "competence_requise": "equipe_nettoyage_bureaux",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4"
         }
       ],
       "priorite": 5,
@@ -567,26 +523,24 @@
     },
     {
       "code_operation": "VITRES_023",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "ASPIRATION_022"
       ],
       "competence_requise": "equipe_vitres",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_VITRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_1"
         },
         {
-          "poste_id": "EQUIPE_VITRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_2"
         },
         {
-          "poste_id": "EQUIPE_VITRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_3"
         },
         {
-          "poste_id": "EQUIPE_VITRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_4"
         }
       ],
       "quantite": 22,
@@ -595,50 +549,46 @@
     },
     {
       "code_operation": "DESINFECTION_024",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "VITRES_023"
       ],
       "competence_requise": "equipe_desinfection",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESINFECTION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_1"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_2"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_3"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CONTROLE_025",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 1,
@@ -648,24 +598,22 @@
     },
     {
       "code_operation": "DECAPAGE_026",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_decapage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECAPAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_4"
         }
       ],
       "priorite": 2,
@@ -673,74 +621,68 @@
     },
     {
       "code_operation": "SANITAIRES_027",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_sanitaires",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_SANITAIRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_1"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_2"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_3"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "LAVAGE_SOLS_028",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage_bureaux",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "ASPIRATION_029",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "LAVAGE_SOLS_028"
       ],
       "competence_requise": "equipe_nettoyage_industriel",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4"
         }
       ],
       "priorite": 1,
@@ -750,48 +692,44 @@
     },
     {
       "code_operation": "DECAPAGE_030",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_decapage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECAPAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONTROLE_031",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_4"
         }
       ],
       "quantite": 46,
@@ -800,75 +738,69 @@
     },
     {
       "code_operation": "EVACUATION_DECHETS_032",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_031"
       ],
       "competence_requise": "equipe_dechets",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECHETS_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_1"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_2"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_3"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "VITRES_033",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_vitres",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_VITRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_1"
         },
         {
-          "poste_id": "EQUIPE_VITRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_2"
         },
         {
-          "poste_id": "EQUIPE_VITRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_3"
         },
         {
-          "poste_id": "EQUIPE_VITRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_4"
         }
       ]
     },
     {
       "code_operation": "ASPIRATION_034",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "VITRES_033"
       ],
       "competence_requise": "equipe_nettoyage_industriel",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_INDUSTRIEL_4"
         }
       ],
       "quantite": 71,
@@ -877,26 +809,24 @@
     },
     {
       "code_operation": "DECAPAGE_035",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "ASPIRATION_034"
       ],
       "competence_requise": "equipe_decapage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECAPAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_4"
         }
       ],
       "priorite": 5,
@@ -906,76 +836,70 @@
     },
     {
       "code_operation": "LAVAGE_SOLS_036",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "DECAPAGE_035"
       ],
       "competence_requise": "equipe_nettoyage_bureaux",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONTROLE_037",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "DESINFECTION_038",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONTROLE_037"
       ],
       "competence_requise": "equipe_desinfection",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESINFECTION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_1"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_2"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_3"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_4"
         }
       ],
       "priorite": 1,
@@ -983,98 +907,90 @@
     },
     {
       "code_operation": "LAVAGE_SOLS_039",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_nettoyage_bureaux",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_1"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_2"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_3"
         },
         {
-          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_NETTOYAGE_BUREAUX_4"
         }
       ]
     },
     {
       "code_operation": "SANITAIRES_040",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "LAVAGE_SOLS_039"
       ],
       "competence_requise": "equipe_sanitaires",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_SANITAIRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_1"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_2"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_3"
         },
         {
-          "poste_id": "EQUIPE_SANITAIRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SANITAIRES_4"
         }
       ]
     },
     {
       "code_operation": "EVACUATION_DECHETS_041",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "SANITAIRES_040"
       ],
       "competence_requise": "equipe_dechets",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECHETS_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_1"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_2"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_3"
         },
         {
-          "poste_id": "EQUIPE_DECHETS_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECHETS_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "DECAPAGE_042",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_decapage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DECAPAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_1"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_2"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_3"
         },
         {
-          "poste_id": "EQUIPE_DECAPAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DECAPAGE_4"
         }
       ],
       "quantite": 39,
@@ -1083,166 +999,152 @@
     },
     {
       "code_operation": "POLISSAGE_043",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_polissage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_POLISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_4"
         }
       ]
     },
     {
       "code_operation": "DESINFECTION_044",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "POLISSAGE_043"
       ],
       "competence_requise": "equipe_desinfection",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESINFECTION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_1"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_2"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_3"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_4"
         }
       ]
     },
     {
       "code_operation": "DESINFECTION_045",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_desinfection",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_DESINFECTION_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_1"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_2"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_3"
         },
         {
-          "poste_id": "EQUIPE_DESINFECTION_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_DESINFECTION_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "CONTROLE_046",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_controle_qualite",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_1"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_2"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_3"
         },
         {
-          "poste_id": "EQUIPE_CONTROLE_QUALITE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_CONTROLE_QUALITE_4"
         }
       ]
     },
     {
       "code_operation": "LAVAGE_SOLS_047",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_sol_specialise",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_1"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_2"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_3"
         },
         {
-          "poste_id": "EQUIPE_SOL_SPECIALISE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_SOL_SPECIALISE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "VITRES_048",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_vitres",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_VITRES_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_1"
         },
         {
-          "poste_id": "EQUIPE_VITRES_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_2"
         },
         {
-          "poste_id": "EQUIPE_VITRES_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_3"
         },
         {
-          "poste_id": "EQUIPE_VITRES_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_VITRES_4"
         }
       ]
     },
     {
       "code_operation": "POLISSAGE_049",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "equipe_polissage",
       "ressources_compatibles": [
         {
-          "poste_id": "EQUIPE_POLISSAGE_1",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_1"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_2",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_2"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_3",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_3"
         },
         {
-          "poste_id": "EQUIPE_POLISSAGE_4",
-          "duree_jours": 1
+          "poste_id": "EQUIPE_POLISSAGE_4"
         }
       ],
       "quantite": 123,

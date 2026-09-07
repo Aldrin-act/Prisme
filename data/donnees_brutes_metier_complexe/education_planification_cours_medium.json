@@ -3,166 +3,154 @@
   "operations": [
     {
       "code_operation": "COURS_MAGISTRAL_001",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONFERENCE_002",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_conference",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_CONFERENCE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_1"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_2"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_3"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "TP_INFORMATIQUE_003",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONFERENCE_002"
       ],
       "competence_requise": "salle_tp_informatique",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_1"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_2"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_3"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_4"
         }
       ]
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_004",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TP_INFORMATIQUE_003"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "echeance_jours": 28
     },
     {
       "code_operation": "CONFERENCE_005",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_conference",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_CONFERENCE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_1"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_2"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_3"
         }
       ]
     },
     {
       "code_operation": "COURS_MAGISTRAL_006",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONFERENCE_005"
       ],
       "competence_requise": "salle_cours_standard",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_COURS_STANDARD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_1"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_2"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_3"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "PROJET_GROUPE_007",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "COURS_MAGISTRAL_006"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 5,
@@ -172,52 +160,48 @@
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_008",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "PROJET_GROUPE_007"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "TP_SCIENCES_009",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "TRAVAUX_DIRIGES_008"
       ],
       "competence_requise": "salle_tp_sciences",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_SCIENCES_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_1"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_2"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_3"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_4"
         }
       ],
       "priorite": 5,
@@ -225,185 +209,171 @@
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_010",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "CONFERENCE_011",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TRAVAUX_DIRIGES_010"
       ],
       "competence_requise": "salle_conference",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_CONFERENCE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_1"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_2"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_3"
         }
       ]
     },
     {
       "code_operation": "PROJET_GROUPE_012",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "bibliotheque",
       "ressources_compatibles": [
         {
-          "poste_id": "BIBLIOTHEQUE_1",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_1"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_2",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_2"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_3",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_3"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_4",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_4"
         }
       ]
     },
     {
       "code_operation": "TP_SCIENCES_013",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "PROJET_GROUPE_012"
       ],
       "competence_requise": "salle_tp_sciences",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_SCIENCES_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_1"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_2"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_3"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_014",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ]
     },
     {
       "code_operation": "COURS_MAGISTRAL_015",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_cours_standard",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_COURS_STANDARD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_1"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_2"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_3"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_4"
         }
       ]
     },
     {
       "code_operation": "PROJET_GROUPE_016",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "COURS_MAGISTRAL_015"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ]
     },
     {
       "code_operation": "CONFERENCE_017",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_conference",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_CONFERENCE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_1"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_2"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_3"
         }
       ],
       "quantite": 22,
@@ -412,52 +382,48 @@
     },
     {
       "code_operation": "TP_SCIENCES_018",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "CONFERENCE_017"
       ],
       "competence_requise": "salle_tp_sciences",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_SCIENCES_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_1"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_2"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_3"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "EXAMEN_019",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TP_SCIENCES_018"
       ],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ],
       "priorite": 1,
@@ -465,24 +431,22 @@
     },
     {
       "code_operation": "TP_SCIENCES_020",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_tp_sciences",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_SCIENCES_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_1"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_2"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_3"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_4"
         }
       ],
       "priorite": 5,
@@ -492,24 +456,22 @@
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_021",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 4,
@@ -519,78 +481,72 @@
     },
     {
       "code_operation": "TP_INFORMATIQUE_022",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TRAVAUX_DIRIGES_021"
       ],
       "competence_requise": "salle_tp_informatique",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_1"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_2"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_3"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "PROJET_GROUPE_023",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TP_INFORMATIQUE_022"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "COURS_MAGISTRAL_024",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "PROJET_GROUPE_023"
       ],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ],
       "quantite": 35,
@@ -600,24 +556,22 @@
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_025",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "quantite": 85,
@@ -626,120 +580,111 @@
     },
     {
       "code_operation": "CONFERENCE_026",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TRAVAUX_DIRIGES_025"
       ],
       "competence_requise": "salle_conference",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_CONFERENCE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_1"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_2"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_3"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "TP_INFORMATIQUE_027",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_tp_informatique",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_1"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_2"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_3"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "PROJET_GROUPE_028",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "bibliotheque",
       "ressources_compatibles": [
         {
-          "poste_id": "BIBLIOTHEQUE_1",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_1"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_2",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_2"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_3",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_3"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_4",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "TP_SCIENCES_029",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "laboratoire",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_1"
         },
         {
-          "poste_id": "LABORATOIRE_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_2"
         },
         {
-          "poste_id": "LABORATOIRE_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_3"
         },
         {
-          "poste_id": "LABORATOIRE_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "EXAMEN_030",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TP_SCIENCES_029"
       ],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ],
       "priorite": 4,
@@ -747,24 +692,22 @@
     },
     {
       "code_operation": "TP_SCIENCES_031",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_tp_sciences",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_SCIENCES_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_1"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_2"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_3"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_4"
         }
       ],
       "quantite": 68,
@@ -773,26 +716,24 @@
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_032",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TP_SCIENCES_031"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "quantite": 46,
@@ -801,395 +742,363 @@
     },
     {
       "code_operation": "COURS_MAGISTRAL_033",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TRAVAUX_DIRIGES_032"
       ],
       "competence_requise": "salle_cours_standard",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_COURS_STANDARD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_1"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_2"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_3"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_4"
         }
       ]
     },
     {
       "code_operation": "TP_INFORMATIQUE_034",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "COURS_MAGISTRAL_033"
       ],
       "competence_requise": "salle_tp_informatique",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_1"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_2"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_3"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "CONFERENCE_035",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "TP_INFORMATIQUE_034"
       ],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "COURS_MAGISTRAL_036",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_cours_standard",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_COURS_STANDARD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_1"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_2"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_3"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_4"
         }
       ]
     },
     {
       "code_operation": "PROJET_GROUPE_037",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "COURS_MAGISTRAL_036"
       ],
       "competence_requise": "bibliotheque",
       "ressources_compatibles": [
         {
-          "poste_id": "BIBLIOTHEQUE_1",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_1"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_2",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_2"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_3",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_3"
         },
         {
-          "poste_id": "BIBLIOTHEQUE_4",
-          "duree_jours": 1
+          "poste_id": "BIBLIOTHEQUE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "EXAMEN_038",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ]
     },
     {
       "code_operation": "TP_SCIENCES_039",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_tp_sciences",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_SCIENCES_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_1"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_2"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_3"
         },
         {
-          "poste_id": "SALLE_TP_SCIENCES_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_SCIENCES_4"
         }
       ]
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_040",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TP_SCIENCES_039"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 4
     },
     {
       "code_operation": "TP_INFORMATIQUE_041",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_tp_informatique",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_1"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_2"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_3"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "TP_SCIENCES_042",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "laboratoire",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_1"
         },
         {
-          "poste_id": "LABORATOIRE_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_2"
         },
         {
-          "poste_id": "LABORATOIRE_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_3"
         },
         {
-          "poste_id": "LABORATOIRE_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONFERENCE_043",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TP_SCIENCES_042"
       ],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "EXAMEN_044",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ]
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_045",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "EXAMEN_044"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 2
     },
     {
       "code_operation": "TP_INFORMATIQUE_046",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "TRAVAUX_DIRIGES_045"
       ],
       "competence_requise": "salle_tp_informatique",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_1"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_2"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_3"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "PROJET_GROUPE_047",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 5
     },
     {
       "code_operation": "COURS_MAGISTRAL_048",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_cours_standard",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_COURS_STANDARD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_1"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_2"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_3"
         },
         {
-          "poste_id": "SALLE_COURS_STANDARD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_COURS_STANDARD_4"
         }
       ],
       "priorite": 3,
@@ -1199,47 +1108,43 @@
     },
     {
       "code_operation": "TRAVAUX_DIRIGES_049",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ]
     },
     {
       "code_operation": "TP_INFORMATIQUE_050",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "salle_tp_informatique",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_1"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_2"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_3"
         },
         {
-          "poste_id": "SALLE_TP_INFORMATIQUE_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TP_INFORMATIQUE_4"
         }
       ],
       "priorite": 4,
@@ -1249,24 +1154,22 @@
     },
     {
       "code_operation": "TP_SCIENCES_051",
+      "date_debut": "2026-09-01T08:00:00",
+      "date_fin": "2026-09-01T16:00:00",
       "operations_precedentes": [],
       "competence_requise": "laboratoire",
       "ressources_compatibles": [
         {
-          "poste_id": "LABORATOIRE_1",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_1"
         },
         {
-          "poste_id": "LABORATOIRE_2",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_2"
         },
         {
-          "poste_id": "LABORATOIRE_3",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_3"
         },
         {
-          "poste_id": "LABORATOIRE_4",
-          "duree_jours": 1
+          "poste_id": "LABORATOIRE_4"
         }
       ],
       "priorite": 4,
@@ -1276,99 +1179,92 @@
     },
     {
       "code_operation": "EXAMEN_052",
+      "date_debut": "2026-09-02T08:00:00",
+      "date_fin": "2026-09-02T16:00:00",
       "operations_precedentes": [
         "TP_SCIENCES_051"
       ],
       "competence_requise": "salle_examen",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_EXAMEN_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_EXAMEN_1"
         },
         {
-          "poste_id": "SALLE_EXAMEN_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_EXAMEN_2"
         },
         {
-          "poste_id": "SALLE_EXAMEN_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_EXAMEN_3"
         },
         {
-          "poste_id": "SALLE_EXAMEN_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_EXAMEN_4"
         }
       ]
     },
     {
       "code_operation": "COURS_MAGISTRAL_053",
+      "date_debut": "2026-09-03T08:00:00",
+      "date_fin": "2026-09-03T16:00:00",
       "operations_precedentes": [
         "EXAMEN_052"
       ],
       "competence_requise": "amphitheatre",
       "ressources_compatibles": [
         {
-          "poste_id": "AMPHITHEATRE_1",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_1"
         },
         {
-          "poste_id": "AMPHITHEATRE_2",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_2"
         },
         {
-          "poste_id": "AMPHITHEATRE_3",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_3"
         },
         {
-          "poste_id": "AMPHITHEATRE_4",
-          "duree_jours": 1
+          "poste_id": "AMPHITHEATRE_4"
         }
       ],
       "priorite": 3
     },
     {
       "code_operation": "PROJET_GROUPE_054",
+      "date_debut": "2026-09-04T08:00:00",
+      "date_fin": "2026-09-04T16:00:00",
       "operations_precedentes": [
         "COURS_MAGISTRAL_053"
       ],
       "competence_requise": "salle_td",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_TD_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_1"
         },
         {
-          "poste_id": "SALLE_TD_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_2"
         },
         {
-          "poste_id": "SALLE_TD_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_3"
         },
         {
-          "poste_id": "SALLE_TD_4",
-          "duree_jours": 1
+          "poste_id": "SALLE_TD_4"
         }
       ],
       "priorite": 1
     },
     {
       "code_operation": "CONFERENCE_055",
+      "date_debut": "2026-09-05T08:00:00",
+      "date_fin": "2026-09-05T16:00:00",
       "operations_precedentes": [
         "PROJET_GROUPE_054"
       ],
       "competence_requise": "salle_conference",
       "ressources_compatibles": [
         {
-          "poste_id": "SALLE_CONFERENCE_1",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_1"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_2",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_2"
         },
         {
-          "poste_id": "SALLE_CONFERENCE_3",
-          "duree_jours": 1
+          "poste_id": "SALLE_CONFERENCE_3"
         }
       ],
       "priorite": 3,
