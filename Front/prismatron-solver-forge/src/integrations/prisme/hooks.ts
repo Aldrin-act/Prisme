@@ -43,6 +43,8 @@ export const prismeKeys = {
   clesApi: () => [...prismeKeys.all, "clesApi"] as const,
   comparaisonScenarios: (instanceId: string) =>
     [...prismeKeys.all, "comparaisonScenarios", instanceId] as const,
+  gammes: () => [...prismeKeys.all, "gammes"] as const,
+  gamme: (gammeId: string) => [...prismeKeys.all, "gammes", gammeId] as const,
 } as const;
 
 // ============================================================================
@@ -285,6 +287,35 @@ export function useClesApi(
   return useQuery({
     queryKey: prismeKeys.clesApi(),
     queryFn: () => prismeClient.listerClesApi(),
+    ...options,
+  });
+}
+
+/**
+ * Liste les gammes opératoires réutilisables (par produit) d'un client — voir
+ * `Types.GammeProduit`, explosées en tâches concrètes par useAjouterCommande.
+ */
+export function useGammes(
+  options?: Omit<UseQueryOptions<Types.GammeProduit[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.gammes(),
+    queryFn: () => prismeClient.listerGammes(),
+    ...options,
+  });
+}
+
+/**
+ * Détail d'une gamme (étapes, compétences, précédences).
+ */
+export function useGamme(
+  gammeId: string | null,
+  options?: Omit<UseQueryOptions<Types.GammeProduit>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.gamme(gammeId || ""),
+    queryFn: () => prismeClient.obtenirGamme(gammeId!),
+    enabled: !!gammeId,
     ...options,
   });
 }
@@ -759,5 +790,72 @@ export function useGenererSolveur() {
 export function useSupprimerSource() {
   return useMutation({
     mutationFn: (sourceId: string) => prismeClient.supprimerSource(sourceId),
+  });
+}
+
+/**
+ * Mutation pour créer une gamme opératoire réutilisable (produit + étapes) —
+ * voir `Types.GammeProduit`.
+ */
+export function useCreerGamme() {
+  return useMutation({
+    mutationFn: ({
+      produit,
+      etapes,
+      nom,
+      clientId,
+    }: {
+      produit: string;
+      etapes: Types.EtapeGamme[];
+      nom?: string;
+      clientId?: string;
+    }) => prismeClient.creerGamme(produit, etapes, nom, clientId),
+  });
+}
+
+/**
+ * Mutation pour remplacer en place le contenu d'une gamme déjà créée — même
+ * gamme_id, même patron que useModifierInstance.
+ */
+export function useModifierGamme() {
+  return useMutation({
+    mutationFn: ({
+      gammeId,
+      produit,
+      etapes,
+      nom,
+    }: {
+      gammeId: string;
+      produit: string;
+      etapes: Types.EtapeGamme[];
+      nom?: string;
+    }) => prismeClient.modifierGamme(gammeId, produit, etapes, nom),
+  });
+}
+
+/**
+ * Mutation pour supprimer une gamme — n'affecte jamais les tâches déjà
+ * explosées à partir d'elle (elles vivent dans les instances, indépendantes).
+ */
+export function useSupprimerGamme() {
+  return useMutation({
+    mutationFn: (gammeId: string) => prismeClient.supprimerGamme(gammeId),
+  });
+}
+
+/**
+ * Mutation pour exploser une gamme (produit + quantité + échéance) et
+ * fusionner les tâches produites dans une instance déjà ingérée — projection
+ * commande → atelier (voir `adapters/gamme_derivation.py`).
+ */
+export function useAjouterCommande() {
+  return useMutation({
+    mutationFn: ({
+      instanceId,
+      requete,
+    }: {
+      instanceId: string;
+      requete: Types.RequeteNouvelleCommande;
+    }) => prismeClient.ajouterCommande(instanceId, requete),
   });
 }

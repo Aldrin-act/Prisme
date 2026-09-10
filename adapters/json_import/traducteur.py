@@ -105,7 +105,8 @@ def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None =
         raise ErreurPayloadInvalide(str(erreur)) from erreur
 
     taches = [
-        Tache(id=t.id, nom=t.nom, priorite=t.priorite, statut=t.statut, quantite=t.quantite) for t in brute.taches
+        Tache(id=t.id, nom=t.nom, priorite=t.priorite, statut=t.statut, quantite=t.quantite, produit=t.produit)
+        for t in brute.taches
     ]
     durees_estimees = {t.id: t.duree_estimee_jours for t in brute.taches if t.duree_estimee_jours is not None}
 

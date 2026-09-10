@@ -93,7 +93,12 @@ found and fixed then.
   tentatives** (`MAX_TENTATIVES_REPARATION`) → documentation (best-effort). Each attempt runs the
   Testeur's generated pytest module for real inside the Docker sandbox first (§6.6bis,
   `sandbox/runner.py::executer_tests_dans_sandbox`) — a failure routes straight to the Debugger,
-  never blocking if the sandbox itself is unreachable — then the deterministic cascade. Reviewer
+  never blocking if the sandbox itself is unreachable — then the deterministic cascade. The
+  Debugger gets a running history of its own prior attempts *within that same generation*
+  (`generation/agents/memory.py`, `EtatGeneration.historique_debugger`, reset per generation by
+  `_noeud_testeur`) — plain formatted text, never a module-level or cross-instance store, so it
+  doesn't break the project's no-memory-between-executions agent rule (an "execution" there means
+  one full generation attempt, not a single LLM call). Reviewer
   (LLM code critique) is **disabled**: not wired into `_construire_graphe`, its signal being
   redundant once tests run for real in sandbox; `_noeud_reviewer`/`_route_apres_reviewer`/
   `generation/agents/reviewer.py` are untouched and re-wirable in two lines if ever needed. 3
@@ -193,8 +198,9 @@ precedes `tache_apres` in time on the resource at all, not only when strictly ad
 against exact `AddCircuit`-based sequencing for LLM-generation reliability). `Tache.priorite`
 (1–5) is consumed by generated code as a **tie-break only** — never a weight on the primary
 objective, never a constraint — see "Priorité des tâches" in `generation_solveur.md`.
-`Tache.statut`/`Ressource.type` remain purely informative fields (no constraint or objective reads
-them).
+`Tache.statut`/`Tache.produit`/`Ressource.type` remain purely informative fields (no constraint or
+objective reads them) — `produit` groups tasks for display (e.g. the routing/gammes graph editor,
+`Front/.../components/planning/flow-graph-editor.tsx`), never read by the solver.
 
 Order intake also feeds the DSL indirectly: `adapters/commande_derivation.py` derives `Echeance`
 constraints from `Commande` (id, tasks, client, deadline) objects — explicit `Echeance` always

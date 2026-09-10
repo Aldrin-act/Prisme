@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertCircle,
+  AlertTriangle,
   Code2,
   Cpu,
   Eye,
@@ -11,6 +12,7 @@ import {
   Loader2,
   Pencil,
   Plus,
+  ShoppingCart,
   Trash2,
   X,
 } from "lucide-react";
@@ -52,7 +54,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
-import { FlowGraph } from "@/components/planning/flow-graph";
+import { FlowGraphEditor } from "@/components/planning/flow-graph-editor";
 import {
   IngestionDialog,
   SectionObjectifs,
@@ -72,6 +74,8 @@ import {
   useJobsGeneration,
   useNomsProjet,
   useComparaisonScenarios,
+  useGammes,
+  useAjouterCommande,
   PrismeAPIError,
   LABELS_SECTEUR_ACTIVITE,
   type Contrainte,
@@ -706,6 +710,146 @@ function SectionScenarios({
   );
 }
 
+// Explose une gamme (produit + quantité + échéance) et fusionne les tâches produites dans
+// l'instance courante — projection commande → atelier (voir adapters/gamme_derivation.py).
+// N'apparaît que si le client de cette instance a au moins une gamme : sinon rien à proposer
+// ici, direction la page Gammes pour en créer une.
+function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
+  const queryClient = useQueryClient();
+  const { data: gammes } = useGammes();
+  const ajouter = useAjouterCommande();
+  const [ouvert, setOuvert] = useState(false);
+  const [gammeId, setGammeId] = useState("");
+  const [quantite, setQuantite] = useState("");
+  const [dateLimite, setDateLimite] = useState("");
+  const [dernierResultat, setDernierResultat] = useState<{ avertissements: string[] } | null>(null);
+
+  const gammesDuClient = (gammes ?? []).filter((g) => g.client_id === instance.client_id);
+  const erreur = ajouter.error as PrismeAPIError | null;
+
+  function ouvrir() {
+    setGammeId("");
+    setQuantite("");
+    setDateLimite("");
+    setDernierResultat(null);
+    ajouter.reset();
+    setOuvert(true);
+  }
+
+  function soumettre() {
+    ajouter.mutate(
+      {
+        instanceId: instance.instance_id,
+        requete: {
+          gamme_id: gammeId,
+          quantite: quantite ? Number(quantite) : undefined,
+          date_limite: dateLimite ? Number(dateLimite) : undefined,
+        },
+      },
+      {
+        onSuccess: (resultat) => {
+          queryClient.invalidateQueries({ queryKey: prismeKeys.instance(instance.instance_id) });
+          queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+          setDernierResultat({ avertissements: resultat.avertissements });
+          setOuvert(false);
+        },
+      },
+    );
+  }
+
+  if (gammesDuClient.length === 0) return null;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <h4 className="text-sm font-semibold">Commandes</h4>
+        {!ouvert && (
+          <Button size="sm" variant="outline" onClick={ouvrir}>
+            <ShoppingCart className="mr-1.5 h-3.5 w-3.5" /> Nouvelle commande
+          </Button>
+        )}
+      </div>
+
+      {ouvert && (
+        <div className="space-y-3 rounded-lg border border-border/50 p-3">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="space-y-1">
+              <Label>Produit (gamme)</Label>
+              <Select value={gammeId} onValueChange={setGammeId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="choisir" />
+                </SelectTrigger>
+                <SelectContent>
+                  {gammesDuClient.map((g) => (
+                    <SelectItem key={g.gamme_id} value={g.gamme_id}>
+                      {g.produit}
+                      {g.nom ? ` — ${g.nom}` : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1">
+              <Label>Quantité</Label>
+              <Input
+                type="number"
+                min={1}
+                value={quantite}
+                onChange={(e) => setQuantite(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label>Échéance (jours)</Label>
+              <Input
+                type="number"
+                min={0}
+                value={dateLimite}
+                onChange={(e) => setDateLimite(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {erreur && (
+            <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="flex items-center gap-2 font-medium">
+                <AlertCircle className="h-4 w-4" /> Échec de l'ajout
+              </div>
+              <p className="mt-1">{erreur.message}</p>
+            </div>
+          )}
+
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setOuvert(false)}
+              disabled={ajouter.isPending}
+            >
+              Annuler
+            </Button>
+            <Button size="sm" onClick={soumettre} disabled={!gammeId || ajouter.isPending}>
+              {ajouter.isPending ? "Ajout..." : "Ajouter la commande"}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {dernierResultat && dernierResultat.avertissements.length > 0 && (
+        <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-2 text-xs">
+          <div className="flex items-center gap-1.5 font-medium text-amber-600 dark:text-amber-400">
+            <AlertTriangle className="h-3.5 w-3.5" /> Avertissements
+          </div>
+          <ul className="mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
+            {dernierResultat.avertissements.map((a, i) => (
+              <li key={i}>{a}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DialogDetailInstance({
   instanceId,
   onOpenChange,
@@ -871,8 +1015,9 @@ function DialogDetailInstance({
               </div>
             </TabsContent>
 
-            <TabsContent value="flux">
-              <FlowGraph taches={instance.taches} contraintes={instance.contraintes} />
+            <TabsContent value="flux" className="space-y-4">
+              <SectionNouvelleCommande instance={instance} />
+              <FlowGraphEditor instance={instance} />
             </TabsContent>
 
             <TabsContent value="contraintes">

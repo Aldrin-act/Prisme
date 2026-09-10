@@ -11,13 +11,10 @@ import {
   type Edge,
   type NodeProps,
 } from "@xyflow/react";
-import dagre from "@dagrejs/dagre";
 import "@xyflow/react/dist/style.css";
 import "./flow-graph.css";
 import type { Contrainte, Tache } from "@/integrations/prisme";
-
-const LARGEUR_NOEUD = 180;
-const HAUTEUR_NOEUD = 54;
+import { LARGEUR_NOEUD, calculerPositions } from "./flow-graph-layout";
 
 type NoeudTache = Node<{ label: string; ressources: string[] }, "tache">;
 
@@ -54,37 +51,26 @@ function NoeudTache({ data }: NodeProps<NoeudTache>) {
 const TYPES_NOEUD = { tache: NoeudTache };
 
 // Mise en page une seule fois par rendu (pas de recalcul dans une boucle) —
-// dagre gère les cycles en interne (inversion temporaire pour la mise en
-// page, restauration ensuite), aucun garde-fou anti-cycle nécessaire ici.
+// voir flow-graph-layout.ts pour le calcul dagre partagé avec l'éditeur.
 function disposer(
   taches: Tache[],
   aretes: { source: string; target: string }[],
   ressourcesParTache: Map<string, string[]>,
 ) {
-  const graphe = new dagre.graphlib.Graph();
-  graphe.setDefaultEdgeLabel(() => ({}));
-  graphe.setGraph({ rankdir: "LR", nodesep: 30, ranksep: 80 });
+  const positions = calculerPositions(
+    taches.map((t) => t.id),
+    aretes,
+  );
 
-  for (const t of taches) {
-    graphe.setNode(t.id, { width: LARGEUR_NOEUD, height: HAUTEUR_NOEUD });
-  }
-  for (const a of aretes) {
-    graphe.setEdge(a.source, a.target);
-  }
-  dagre.layout(graphe);
-
-  const noeuds: NoeudTache[] = taches.map((t) => {
-    const position = graphe.node(t.id);
-    return {
-      id: t.id,
-      type: "tache",
-      position: { x: position.x - LARGEUR_NOEUD / 2, y: position.y - HAUTEUR_NOEUD / 2 },
-      data: {
-        label: t.nom ? `${t.id} — ${t.nom}` : t.id,
-        ressources: ressourcesParTache.get(t.id) ?? [],
-      },
-    };
-  });
+  const noeuds: NoeudTache[] = taches.map((t) => ({
+    id: t.id,
+    type: "tache",
+    position: positions.get(t.id) ?? { x: 0, y: 0 },
+    data: {
+      label: t.nom ? `${t.id} — ${t.nom}` : t.id,
+      ressources: ressourcesParTache.get(t.id) ?? [],
+    },
+  }));
 
   const arcs: Edge[] = aretes.map((a, i) => ({
     id: `${a.source}->${a.target}-${i}`,

@@ -24,6 +24,7 @@ import {
   Search,
   Building2,
   Loader2,
+  Workflow,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,6 +46,7 @@ export const Route = createFileRoute("/_authenticated")({
 const NAV = [
   { to: "/app", icon: LayoutDashboard, label: "Tableau de bord" },
   { to: "/donnees", icon: Database, label: "Données" },
+  { to: "/gammes", icon: Workflow, label: "Gammes" },
   { to: "/instances", icon: FolderKanban, label: "Instances" },
   { to: "/solver-generator", icon: Cpu, label: "Générateur de solveurs" },
   { to: "/solvers", icon: FileCode2, label: "Solveurs générés" },

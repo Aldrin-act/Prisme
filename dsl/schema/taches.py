@@ -49,3 +49,9 @@ class Tache(BaseModel):
         "uniquement par `ContrainteTailleLot` pour une validation statique de lot min/max, "
         "jamais lue par le solveur ni un objectif.",
     )
+    produit: str | None = Field(
+        default=None,
+        description="Étiquette de regroupement produit/sous-produit (ex. affichage de gammes) — "
+        "optionnel, purement informatif : ni le solveur ni le vérificateur de faisabilité n'en "
+        "dépendent.",
+    )

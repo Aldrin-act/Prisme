@@ -216,6 +216,17 @@ def test_statut_hors_enum_rejete() -> None:
         charger_instance(payload)
 
 
+def test_produit_valeur_conservee() -> None:
+    payload = _instance_minimale(taches=[{"id": "T1", "produit": "Sous-produit A"}])
+    instance = charger_instance(payload)
+    assert instance.taches[0].produit == "Sous-produit A"
+
+
+def test_produit_absent_par_defaut_none() -> None:
+    instance = charger_instance(_instance_minimale())
+    assert instance.taches[0].produit is None
+
+
 def test_type_ressource_valide_accepte() -> None:
     payload = _instance_minimale(ressources=[{"id": "R1", "type": "machine"}])
     instance = charger_instance(payload)

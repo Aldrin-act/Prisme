@@ -274,7 +274,7 @@ function construireInstance(
   };
 }
 
-function ErreursAPI({ erreur }: { erreur: PrismeAPIError }) {
+export function ErreursAPI({ erreur }: { erreur: PrismeAPIError }) {
   const champs = erreur.champs;
   return (
     <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">

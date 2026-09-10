@@ -46,6 +46,7 @@ export interface Tache {
   id: string;
   nom?: string;
   priorite?: number; // 1-5, informatif seulement
+  produit?: string; // étiquette de regroupement produit/sous-produit, informatif seulement
 }
 
 export interface Ressource {
@@ -251,6 +252,43 @@ export interface InstanceDetail extends InstanceTRCO {
   // Unité d'affichage des durées/échéances — "jours" implicite si `null`
   // (voir src/lib/unite-duree.ts). Purement cosmétique, jamais lu par le DSL.
   unite_duree: string | null;
+}
+
+// ============================================================================
+// GAMMES OPÉRATOIRES RÉUTILISABLES
+// ============================================================================
+
+// Une étape d'une gamme — jamais vue par le solveur, explosée en Tache/Precedence/
+// CompetenceRequise concrètes à l'arrivée d'une commande (voir api/routes/ingestion.py,
+// POST /ingestion/{instance_id}/commandes). `predecesseurs` référence d'autres `id`
+// d'étapes de la MÊME gamme ; plusieurs prédécesseurs pour une étape = fusion (plusieurs
+// sous-produits qui convergent).
+export interface EtapeGamme {
+  id: string;
+  competences: string[];
+  predecesseurs: string[];
+  duree_nominale: number | null;
+}
+
+export interface GammeProduit {
+  gamme_id: string;
+  client_id: string;
+  produit: string;
+  nom: string | null;
+  etapes: EtapeGamme[];
+}
+
+export interface RequeteNouvelleCommande {
+  gamme_id: string;
+  quantite?: number;
+  date_limite?: number;
+}
+
+export interface ResultatNouvelleCommande {
+  instance_id: string;
+  commande_id: string;
+  structure_contraintes: string;
+  avertissements: string[];
 }
 
 // ============================================================================
