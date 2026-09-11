@@ -70,7 +70,6 @@ import {
   type TypeAuthentificationAPI,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
-import { LABELS_UNITE_DUREE, type UniteDuree } from "@/lib/unite-duree";
 
 const searchSchema = z.object({
   source: z.string().optional(),
@@ -159,12 +158,15 @@ const GABARIT_JSON = { nom: "instance_exemple.json", href: "/gabarits/instance_e
 
 // Champs partagés entre FormulaireNouvelleSource (crée une Source réenre-
 // gistrable) et ImporteurCsvDirect (crée une instance immédiatement, sans
-// Source) — Client/Projet/Secteur/Unité sont identiques dans les deux flux,
-// seul "Nom de la source" reste propre au premier (aucune Source n'existe
-// côté import CSV direct). Contrôlé par le parent (comme
-// FormulaireConnexionAPI plus bas) plutôt qu'un objet valeur unique : évite
-// de reconstruire le sentinel "_autre" du secteur d'activité à partir d'une
-// valeur déjà résolue.
+// Source) — Client/Projet/Secteur sont identiques dans les deux flux, seul
+// "Nom de la source" reste propre au premier (aucune Source n'existe côté
+// import CSV direct). L'unité d'affichage des durées n'est plus saisie ici :
+// calculée côté backend à partir des durées réelles de l'instance générée
+// (voir `api/unite_duree.py::detecter_unite_duree`, lue via
+// `instance.unite_duree`/`src/lib/unite-duree.ts` partout où elle s'affiche).
+// Contrôlé par le parent (comme FormulaireConnexionAPI plus bas) plutôt
+// qu'un objet valeur unique : évite de reconstruire le sentinel "_autre" du
+// secteur d'activité à partir d'une valeur déjà résolue.
 function ChampsContexteIngestion({
   idPrefix,
   estAdmin,
@@ -177,8 +179,6 @@ function ChampsContexteIngestion({
   onSecteurActiviteChange,
   secteurActiviteAutre,
   onSecteurActiviteAutreChange,
-  uniteDuree,
-  onUniteDureeChange,
 }: {
   idPrefix: string;
   estAdmin: boolean;
@@ -191,8 +191,6 @@ function ChampsContexteIngestion({
   onSecteurActiviteChange: (v: SecteurActivite | "_autre") => void;
   secteurActiviteAutre: string;
   onSecteurActiviteAutreChange: (v: string) => void;
-  uniteDuree: UniteDuree;
-  onUniteDureeChange: (v: UniteDuree) => void;
 }) {
   return (
     <>
@@ -229,56 +227,35 @@ function ChampsContexteIngestion({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor={`${idPrefix}_secteur`}>Secteur d'activité (optionnel)</Label>
-          <Select
-            value={secteurActivite}
-            onValueChange={(v) => onSecteurActiviteChange(v as SecteurActivite | "_autre")}
-          >
-            <SelectTrigger id={`${idPrefix}_secteur`}>
-              <SelectValue placeholder="Non renseigné" />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
-                <SelectItem key={s} value={s}>
-                  {LABELS_SECTEUR_ACTIVITE[s]}
-                </SelectItem>
-              ))}
-              <SelectItem value="_autre">Autre (préciser)</SelectItem>
-            </SelectContent>
-          </Select>
-          {secteurActivite === "_autre" && (
-            <Input
-              value={secteurActiviteAutre}
-              onChange={(e) => onSecteurActiviteAutreChange(e.target.value)}
-              placeholder="ex : Textile, Logistique..."
-              className="mt-1.5"
-            />
-          )}
-          <p className="text-xs text-muted-foreground">
-            Aide l'agent de compréhension à interpréter des données ambiguës.
-          </p>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor={`${idPrefix}_unite_duree`}>Unité d'affichage des durées</Label>
-          <Select value={uniteDuree} onValueChange={(v) => onUniteDureeChange(v as UniteDuree)}>
-            <SelectTrigger id={`${idPrefix}_unite_duree`}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(LABELS_UNITE_DUREE) as UniteDuree[]).map((u) => (
-                <SelectItem key={u} value={u}>
-                  {LABELS_UNITE_DUREE[u]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <p className="text-xs text-muted-foreground">
-            Ne change jamais l'interprétation des données (toujours en jours en interne) — juste
-            l'unité dans laquelle Gantt et échéances s'affichent.
-          </p>
-        </div>
+      <div className="space-y-1.5 sm:max-w-[calc(50%-0.5rem)]">
+        <Label htmlFor={`${idPrefix}_secteur`}>Secteur d'activité (optionnel)</Label>
+        <Select
+          value={secteurActivite}
+          onValueChange={(v) => onSecteurActiviteChange(v as SecteurActivite | "_autre")}
+        >
+          <SelectTrigger id={`${idPrefix}_secteur`}>
+            <SelectValue placeholder="Non renseigné" />
+          </SelectTrigger>
+          <SelectContent>
+            {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
+              <SelectItem key={s} value={s}>
+                {LABELS_SECTEUR_ACTIVITE[s]}
+              </SelectItem>
+            ))}
+            <SelectItem value="_autre">Autre (préciser)</SelectItem>
+          </SelectContent>
+        </Select>
+        {secteurActivite === "_autre" && (
+          <Input
+            value={secteurActiviteAutre}
+            onChange={(e) => onSecteurActiviteAutreChange(e.target.value)}
+            placeholder="ex : Textile, Logistique..."
+            className="mt-1.5"
+          />
+        )}
+        <p className="text-xs text-muted-foreground">
+          Aide l'agent de compréhension à interpréter des données ambiguës.
+        </p>
       </div>
     </>
   );
@@ -371,7 +348,6 @@ function FormulaireNouvelleSource({
     secteurActivite === "_autre"
       ? secteurActiviteAutre.trim() || undefined
       : secteurActivite || undefined;
-  const [uniteDuree, setUniteDuree] = useState<UniteDuree>("jours");
   const [donneesBrutes, setDonneesBrutes] = useState("");
   const [formatFichier, setFormatFichier] = useState<FormatDonnees>("json");
   const [fichier, setFichier] = useState<File | null>(null);
@@ -410,7 +386,6 @@ function FormulaireNouvelleSource({
         nom: nom.trim() || undefined,
         clientId: estAdmin ? clientId : undefined,
         secteurActivite: secteurActiviteEffectif,
-        uniteDuree: uniteDuree !== "jours" ? uniteDuree : undefined,
       },
       { onSuccess: (data) => onCree(data.source_id, nomProjet.trim() || undefined) },
     );
@@ -441,8 +416,6 @@ function FormulaireNouvelleSource({
         onSecteurActiviteChange={setSecteurActivite}
         secteurActiviteAutre={secteurActiviteAutre}
         onSecteurActiviteAutreChange={setSecteurActiviteAutre}
-        uniteDuree={uniteDuree}
-        onUniteDureeChange={setUniteDuree}
       />
 
       <div className="space-y-1.5">
@@ -973,7 +946,6 @@ function ImporteurCsvDirect() {
     secteurActivite === "_autre"
       ? secteurActiviteAutre.trim() || undefined
       : secteurActivite || undefined;
-  const [uniteDuree, setUniteDuree] = useState<UniteDuree>("jours");
   const [delimiteur, setDelimiteur] = useState(",");
   const [fichiers, setFichiers] = useState<Partial<Record<EntiteCsv, File>>>({});
   const inputRefs: Record<EntiteCsv, RefObject<HTMLInputElement | null>> = {
@@ -1047,8 +1019,6 @@ function ImporteurCsvDirect() {
         onSecteurActiviteChange={setSecteurActivite}
         secteurActiviteAutre={secteurActiviteAutre}
         onSecteurActiviteAutreChange={setSecteurActiviteAutre}
-        uniteDuree={uniteDuree}
-        onUniteDureeChange={setUniteDuree}
       />
 
       <div className="space-y-1.5">

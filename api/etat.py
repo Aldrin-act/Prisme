@@ -22,6 +22,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal
 
+from api.unite_duree import detecter_unite_duree
 from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif, Planning
 from sandbox.runner import ResultatExecution
 
@@ -165,12 +166,6 @@ class SourceDonnees:
     # `LABELS_SECTEUR_ACTIVITE` reste la source des suggestions/du menu,
     # mais n'est jamais une contrainte de validation sur la valeur stockée.
     secteur_activite: str | None = None
-    # Unité dans laquelle l'interface affiche les durées/échéances de cette
-    # source et des instances qu'elle génère — "jours" (défaut si absent),
-    # "semaines" ou "mois". Purement cosmétique : le DSL, le solveur généré,
-    # le vérificateur de faisabilité et le banc synthétique continuent de
-    # raisonner en jours entiers, inchangés ; seule la présentation convertit.
-    unite_duree: str | None = None
 
 
 @dataclass(frozen=True)
@@ -287,8 +282,10 @@ class EtatAPI:
     # ou fourni directement pour les canaux sans SourceDonnees (CSV/JSON/
     # GreenSIG/T-R-C-O manuel). Même statut de métadonnée pure que noms_projet.
     secteurs_activite: dict[str, str | None] = field(default_factory=dict)
-    # Même statut que secteurs_activite (métadonnée pure, purement cosmétique
-    # côté affichage) — voir `SourceDonnees.unite_duree`.
+    # Métadonnée pure, purement cosmétique côté affichage — contrairement à
+    # secteurs_activite/noms_projet, jamais saisie à la main : calculée une
+    # fois à `enregistrer_instance` par `api.unite_duree.detecter_unite_duree`
+    # à partir des durées réelles de l'instance (voir cette fonction).
     unites_duree: dict[str, str | None] = field(default_factory=dict)
     # Dernière modification du contenu T-R-C-O d'une instance (création,
     # `modifier_instance` ou `modifier_objectifs`) — comparée à la date de sa
@@ -340,7 +337,6 @@ class EtatAPI:
         description_metier: str | None = None,
         nom_projet: str | None = None,
         secteur_activite: str | None = None,
-        unite_duree: str | None = None,
         groupe_scenario_id: str | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
@@ -351,7 +347,7 @@ class EtatAPI:
         self.descriptions_metier[instance_id] = description_metier
         self.noms_projet[instance_id] = nom_projet
         self.secteurs_activite[instance_id] = secteur_activite
-        self.unites_duree[instance_id] = unite_duree
+        self.unites_duree[instance_id] = detecter_unite_duree(instance)
         self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
         if groupe_scenario_id is not None:
             self.groupes_scenario[instance_id] = groupe_scenario_id
@@ -374,7 +370,6 @@ class EtatAPI:
         donnees_brutes: str,
         nom: str | None = None,
         secteur_activite: str | None = None,
-        unite_duree: str | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
         source_id = str(uuid.uuid4())
@@ -385,7 +380,6 @@ class EtatAPI:
             donnees_brutes=donnees_brutes,
             date_creation=datetime.now(UTC).isoformat(),
             secteur_activite=secteur_activite,
-            unite_duree=unite_duree,
         )
         return source_id
 
@@ -409,7 +403,6 @@ class EtatAPI:
                 "date_creation": s.date_creation,
                 "nb_instances": compteurs.get(s.id, 0),
                 "secteur_activite": s.secteur_activite,
-                "unite_duree": s.unite_duree,
             }
             for s in self.sources.values()
             if client_id is None or s.client_id == client_id
@@ -494,8 +487,9 @@ class EtatAPI:
         return self.secteurs_activite.get(instance_id)
 
     def recuperer_unite_duree(self, instance_id: str) -> str | None:
-        """`None` pour toute instance sans unité déclarée (jours implicite) —
-        même convention que `recuperer_secteur_activite`."""
+        """Toujours calculée par `enregistrer_instance` (jamais `None` pour une
+        instance créée depuis ce changement) — reste `str | None` pour rester
+        compatible avec d'éventuelles instances antérieures à ce champ."""
         if instance_id not in self.instances:
             raise KeyError(instance_id)
         return self.unites_duree.get(instance_id)

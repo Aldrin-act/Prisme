@@ -179,12 +179,6 @@ class RequeteCreationSource(BaseModel):
     # generer_instance_deterministe) — oriente le prompt de l'agent de
     # compréhension sans devoir être re-saisi à chaque tentative.
     secteur_activite: str | None = None
-    # Unité d'affichage des durées/échéances pour cette source et les
-    # instances qu'elle génère — "jours" (implicite si absent), "semaines"
-    # ou "mois". Ne change jamais l'interprétation des données brutes ni le
-    # DSL produit (toujours en jours) : purement l'unité dans laquelle
-    # l'interface convertit ces jours pour l'affichage.
-    unite_duree: str | None = None
 
 
 def _client_id_effectif(requete_client_id: str | None, utilisateur: dict) -> str:
@@ -203,9 +197,7 @@ def creer_source(
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     client_id = _client_id_effectif(requete.client_id, utilisateur)
-    source_id = etat.enregistrer_source(
-        client_id, requete.donnees_brutes, requete.nom, requete.secteur_activite, requete.unite_duree
-    )
+    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom, requete.secteur_activite)
     return {"source_id": source_id}
 
 
@@ -237,7 +229,6 @@ def obtenir_source(
         "donnees_brutes": source.donnees_brutes,
         "date_creation": source.date_creation,
         "secteur_activite": source.secteur_activite,
-        "unite_duree": source.unite_duree,
         "instances": etat.lister_instances_pour_source(source_id),
     }
 
@@ -298,7 +289,6 @@ def generer_instance(
         description_metier=resultat.description_metier,
         nom_projet=nom_projet if nom_projet is not None else source.nom,
         secteur_activite=source.secteur_activite,
-        unite_duree=source.unite_duree,
     )
     return {
         "instance_id": instance_id,
@@ -349,7 +339,6 @@ def generer_instance_deterministe(
         source_id=source_id,
         nom_projet=nom_projet if nom_projet is not None else source.nom,
         secteur_activite=source.secteur_activite,
-        unite_duree=source.unite_duree,
     )
     return {
         "instance_id": instance_id,

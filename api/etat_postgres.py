@@ -63,6 +63,7 @@ from api.etat import (
     TypeSignal,
     structure_contraintes,
 )
+from api.unite_duree import detecter_unite_duree
 from dsl.schema import InstanceTRCO, Objectif, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from solver_store.registry import SCHEMA_PAR_DEFAUT, dsn_par_defaut
@@ -146,12 +147,14 @@ class EtatPostgres:
                     table=self._table("sources_donnees")
                 )
             )
-            # Migration idempotente : unité choisie pour l'affichage des
-            # durées/échéances ("jours" implicite si NULL, "semaines", "mois")
-            # — purement cosmétique, jamais lue par le DSL/solveur/faisabilité,
-            # voir `SourceDonnees.unite_duree`.
+            # Migration idempotente : `unite_duree` choisie à la main n'a plus
+            # de sens sur une source (données brutes, pas encore de durées
+            # analysables) depuis que l'unité d'affichage est calculée par
+            # instance à partir de ses propres contraintes (voir
+            # `api/unite_duree.py::detecter_unite_duree`, colonne équivalente
+            # sur `instances_trco` ci-dessous, conservée).
             connexion.execute(
-                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS unite_duree TEXT").format(
+                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS unite_duree").format(
                     table=self._table("sources_donnees")
                 )
             )
@@ -254,8 +257,11 @@ class EtatPostgres:
                     table=self._table("instances_trco")
                 )
             )
-            # Migration idempotente : même métadonnée que sur sources_donnees
-            # ci-dessus, copiée à la génération (voir enregistrer_instance).
+            # Migration idempotente : unité d'affichage des durées/échéances
+            # ("jours" implicite si NULL, "semaines", "mois") — purement
+            # cosmétique, jamais lue par le DSL/solveur/faisabilité, calculée
+            # une fois à `enregistrer_instance` à partir des durées réelles de
+            # l'instance (voir `api/unite_duree.py::detecter_unite_duree`).
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS unite_duree TEXT").format(
                     table=self._table("instances_trco")
@@ -612,7 +618,6 @@ class EtatPostgres:
         donnees_brutes: str,
         nom: str | None = None,
         secteur_activite: str | None = None,
-        unite_duree: str | None = None,
     ) -> str:
         source_id = str(uuid.uuid4())
         with closing(self._connexion()) as connexion:
@@ -624,8 +629,8 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation, secteur_activite, "
-                    "unite_duree) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation, secteur_activite) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)"
                 ).format(self._table("sources_donnees")),
                 (
                     source_id,
@@ -634,7 +639,6 @@ class EtatPostgres:
                     donnees_brutes,
                     datetime.now(UTC).isoformat(),
                     secteur_activite,
-                    unite_duree,
                 ),
             )
             connexion.commit()
@@ -644,14 +648,14 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT id, client_id, nom, donnees_brutes, date_creation, secteur_activite, "
-                    "unite_duree FROM {} WHERE id = %s"
+                    "SELECT id, client_id, nom, donnees_brutes, date_creation, secteur_activite "
+                    "FROM {} WHERE id = %s"
                 ).format(self._table("sources_donnees")),
                 (source_id,),
             ).fetchone()
         if ligne is None:
             raise KeyError(source_id)
-        id_, client_id, nom, donnees_brutes, date_creation, secteur_activite, unite_duree = ligne
+        id_, client_id, nom, donnees_brutes, date_creation, secteur_activite = ligne
         return SourceDonnees(
             id=id_,
             client_id=client_id,
@@ -659,7 +663,6 @@ class EtatPostgres:
             donnees_brutes=donnees_brutes,
             date_creation=date_creation,
             secteur_activite=secteur_activite,
-            unite_duree=unite_duree,
         )
 
     def lister_sources(self, client_id: str | None = None) -> list[dict[str, object]]:
@@ -668,7 +671,7 @@ class EtatPostgres:
         requete = sql.SQL(
             "SELECT s.id, s.client_id, s.nom, s.date_creation, "
             "(SELECT COUNT(*) FROM {instances} i WHERE i.source_id = s.id) AS nb_instances, "
-            "s.secteur_activite, s.unite_duree "
+            "s.secteur_activite "
             "FROM {sources} s WHERE 1 = 1"
         ).format(sources=self._table("sources_donnees"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -687,9 +690,8 @@ class EtatPostgres:
                 "date_creation": date_creation,
                 "nb_instances": nb,
                 "secteur_activite": secteur_activite,
-                "unite_duree": unite_duree,
             }
-            for id_, client_id, nom, date_creation, nb, secteur_activite, unite_duree in lignes
+            for id_, client_id, nom, date_creation, nb, secteur_activite in lignes
         ]
 
     def lister_instances_pour_source(self, source_id: str) -> list[dict[str, object]]:
@@ -810,12 +812,12 @@ class EtatPostgres:
         description_metier: str | None = None,
         nom_projet: str | None = None,
         secteur_activite: str | None = None,
-        unite_duree: str | None = None,
         groupe_scenario_id: str | None = None,
     ) -> str:
         instance_id = str(uuid.uuid4())
         structure = structure_contraintes(instance)
         maintenant = datetime.now(UTC).isoformat()
+        unite_duree = detecter_unite_duree(instance)
         with closing(self._connexion()) as connexion:
             connexion.execute(
                 sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(

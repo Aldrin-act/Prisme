@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   Plus,
@@ -11,6 +12,7 @@ import {
   CheckCircle2,
   AlertCircle,
   FolderOpen,
+  CalendarOff,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -675,6 +677,13 @@ export function IngestionDialog({
                 <p className="mt-1 text-muted-foreground">
                   {(executer.error as PrismeAPIError).message}
                 </p>
+                {succes && (
+                  <Button asChild size="sm" variant="outline" className="mt-2">
+                    <Link to="/solver-generator" search={{ instanceId: succes.instance_id }}>
+                      Générer un solveur pour cette instance
+                    </Link>
+                  </Button>
+                )}
               </div>
             )}
 
@@ -759,6 +768,7 @@ export function IngestionDialog({
                 <SectionRessources
                   ressources={ressources}
                   setRessources={setRessources}
+                  setContraintes={setContraintes}
                   secteurActivite={secteurActiviteConnu}
                 />
                 <SectionContraintes
@@ -813,6 +823,7 @@ export function IngestionDialog({
                   <SectionRessources
                     ressources={ressources}
                     setRessources={setRessources}
+                    setContraintes={setContraintes}
                     secteurActivite={secteurActiviteConnu}
                   />
                   <SectionContraintes
@@ -1241,10 +1252,15 @@ function SectionTaches({
 function SectionRessources({
   ressources,
   setRessources,
+  setContraintes,
   secteurActivite,
 }: {
   ressources: RessourceLigne[];
   setRessources: React.Dispatch<React.SetStateAction<RessourceLigne[]>>;
+  // Optionnel : présent seulement là où le formulaire édite aussi les contraintes
+  // (les deux call sites actuels de ce composant le passent toujours) — permet le
+  // bouton "Marquer indisponible" ci-dessous sans dupliquer SectionContraintes.
+  setContraintes?: React.Dispatch<React.SetStateAction<ContrainteLigne[]>>;
   secteurActivite?: SecteurActivite;
 }) {
   const suggestions = secteurActivite ? RESSOURCES_SUGGEREES_PAR_SECTEUR[secteurActivite] : [];
@@ -1323,6 +1339,23 @@ function SectionRessources({
                 )
               }
             />
+            {setContraintes && (
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                title="Marquer indisponible (panne, congé...) — sans supprimer la ressource ni ses compatibilités"
+                onClick={() =>
+                  setContraintes((c) => [
+                    ...c,
+                    { ...nouvelleContrainte(), type: "disponibilite_ressource", ressource: r.id },
+                  ])
+                }
+                disabled={!r.id.trim()}
+              >
+                <CalendarOff className="h-4 w-4" />
+              </Button>
+            )}
             <Button
               type="button"
               size="icon"

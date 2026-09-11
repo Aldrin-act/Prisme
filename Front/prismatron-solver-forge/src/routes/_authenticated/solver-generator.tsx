@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 import {
   AlertCircle,
   CheckCircle2,
@@ -106,8 +107,16 @@ function ecrireOngletsStockes(onglets: OngletGeneration[]): void {
   }
 }
 
+// Permet un lien direct vers cette page avec une instance déjà sélectionnée
+// (ex. depuis la boîte "aucun solveur validé" de IngestionDialog) — même
+// patron que ?source= sur la page Données.
+const searchSchema = z.object({
+  instanceId: z.string().optional(),
+});
+
 export const Route = createFileRoute("/_authenticated/solver-generator")({
   head: () => ({ meta: [{ title: "Générateur de solveurs — PRISME" }] }),
+  validateSearch: searchSchema,
   component: SolverGeneratorPage,
 });
 
@@ -181,6 +190,7 @@ function fusionnerEvenements<T extends { agent: string }>(bruts: T[]): T[] {
 }
 
 function SolverGeneratorPage() {
+  const { instanceId: instanceIdDepuisUrl } = Route.useSearch();
   const { data: instances, isLoading } = useInstances();
   const { data: solveurs } = useSolveurs();
   const { data: jobsGeneration } = useJobsGeneration();
@@ -297,6 +307,18 @@ function SolverGeneratorPage() {
     setOnglets((prev) => [...prev, nouveau]);
     setOngletActifId(nouveau.id);
   }
+
+  // Lien direct depuis l'extérieur (?instanceId=...) : ouvre l'onglet une
+  // seule fois au montage — une ref plutôt qu'un simple `useEffect([])` pour
+  // survivre au double-montage React 18 StrictMode en dev sans ouvrir
+  // l'onglet deux fois (même motif que `dejaRepris` plus haut).
+  const ongletDepuisUrlOuvert = useRef(false);
+  useEffect(() => {
+    if (!instanceIdDepuisUrl || ongletDepuisUrlOuvert.current) return;
+    ongletDepuisUrlOuvert.current = true;
+    ouvrirOngletPourInstance(instanceIdDepuisUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois par montage, voir commentaire
+  }, [instanceIdDepuisUrl]);
 
   function fermerOnglet(id: string) {
     setOnglets((prev) => {

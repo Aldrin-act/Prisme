@@ -426,13 +426,7 @@ export const prismeClient = {
   // volonté. Le client_id est dérivé du compte authentifié côté serveur ;
   // `clientId` n'est envoyé (et n'a d'effet) que pour un compte admin
   // ciblant un autre client (voir `api/routes/sources.py`).
-  creerSource: (
-    donneesBrutes: string,
-    nom?: string,
-    clientId?: string,
-    secteurActivite?: string,
-    uniteDuree?: string,
-  ) =>
+  creerSource: (donneesBrutes: string, nom?: string, clientId?: string, secteurActivite?: string) =>
     apiFetch<Types.ReponseCreationSource>(PRISME_CONFIG.routes.sources, {
       method: "POST",
       body: JSON.stringify({
@@ -440,7 +434,6 @@ export const prismeClient = {
         nom: nom ?? null,
         client_id: clientId ?? null,
         secteur_activite: secteurActivite ?? null,
-        unite_duree: uniteDuree ?? null,
       }),
     }),
 

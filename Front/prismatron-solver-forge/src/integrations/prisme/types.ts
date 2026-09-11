@@ -699,7 +699,6 @@ export interface SourceDonnees {
   date_creation: string;
   nb_instances: number;
   secteur_activite: string | null;
-  unite_duree: string | null;
 }
 
 export interface InstanceDeSource {

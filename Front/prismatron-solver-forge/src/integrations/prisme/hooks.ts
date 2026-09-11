@@ -712,14 +712,12 @@ export function useCreerSource() {
       nom,
       clientId,
       secteurActivite,
-      uniteDuree,
     }: {
       donneesBrutes: string;
       nom?: string;
       clientId?: string;
       secteurActivite?: string;
-      uniteDuree?: string;
-    }) => prismeClient.creerSource(donneesBrutes, nom, clientId, secteurActivite, uniteDuree),
+    }) => prismeClient.creerSource(donneesBrutes, nom, clientId, secteurActivite),
   });
 }
 

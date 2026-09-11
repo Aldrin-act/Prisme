@@ -1,9 +1,11 @@
 // Unité dans laquelle l'interface affiche les durées/échéances d'une
 // instance — purement cosmétique : le DSL, le solveur généré, le
 // vérificateur de faisabilité et le banc synthétique continuent de
-// raisonner en jours entiers, inchangés (voir `api/routes/sources.py::
-// RequeteCreationSource.unite_duree`). "jours" est le défaut implicite
-// (valeur absente/`null` côté API), jamais une valeur stockée explicitement.
+// raisonner en jours entiers, inchangés. Plus une saisie manuelle : calculée
+// une fois côté backend à l'ingestion, à partir des durées réelles de
+// l'instance (voir `api/unite_duree.py::detecter_unite_duree`). "jours" est
+// le défaut implicite (valeur absente/`null` côté API, ex. instance
+// ingérée avant ce calcul).
 export type UniteDuree = "jours" | "semaines" | "mois";
 
 export const LABELS_UNITE_DUREE: Record<UniteDuree, string> = {

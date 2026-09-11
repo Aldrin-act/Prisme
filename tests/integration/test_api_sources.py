@@ -17,16 +17,13 @@ from generation.agents.client_llm import construire_modele_comprehension
 from tests.unit.aides_test_agents import ModeleFactice
 
 
-def _creer_source(
-    client: TestClient, donnees_brutes: str, nom: str | None = None, unite_duree: str | None = None
-) -> str:
+def _creer_source(client: TestClient, donnees_brutes: str, nom: str | None = None) -> str:
     reponse = client.post(
         "/sources",
         json={
             "donnees_brutes": donnees_brutes,
             "client_id": "client_test",
             "nom": nom,
-            "unite_duree": unite_duree,
         },
     )
     assert reponse.status_code == 200, reponse.json()
@@ -296,22 +293,9 @@ def test_explorer_api_connexion_impossible_renvoie_422(monkeypatch: pytest.Monke
         app.dependency_overrides.clear()
 
 
-def test_unite_duree_declaree_sur_la_source_est_exposee() -> None:
-    etat_test = EtatAPI()
-    app.dependency_overrides[obtenir_etat] = lambda: etat_test
-    try:
-        client = TestClient(app)
-        source_id = _creer_source(client, "peu importe", unite_duree="semaines")
-
-        reponse = client.get(f"/sources/{source_id}")
-
-        assert reponse.status_code == 200, reponse.json()
-        assert reponse.json()["unite_duree"] == "semaines"
-    finally:
-        app.dependency_overrides.clear()
-
-
-def test_unite_duree_se_propage_de_la_source_a_linstance_generee() -> None:
+def test_unite_duree_est_calculee_a_partir_des_durees_de_linstance_generee() -> None:
+    """Plus de choix manuel côté source (voir `tests/unit/test_unite_duree.py` pour la logique de
+    détection elle-même) — seule la présence du champ calculé sur l'instance générée compte ici."""
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     try:
@@ -319,9 +303,9 @@ def test_unite_duree_se_propage_de_la_source_a_linstance_generee() -> None:
         donnees = (
             '{"taches": [{"id": "T1"}], "ressources": [{"id": "R1"}], '
             '"contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", '
-            '"ressource": "R1", "duree": 10}]}'
+            '"ressource": "R1", "duree": 90}]}'
         )
-        source_id = _creer_source(client, donnees, unite_duree="mois")
+        source_id = _creer_source(client, donnees)
 
         reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe")
         assert reponse.status_code == 200, reponse.json()
@@ -565,22 +549,5 @@ def test_explorer_bdd_non_admin_est_contraint_a_son_propre_client(monkeypatch: p
         client.post("/sources/explorer-bdd", json={"client_id": "acme"})
 
         assert captures["client_id"] == "mon_client"
-    finally:
-        app.dependency_overrides.clear()
-
-
-def test_source_sans_unite_duree_declaree_reste_none() -> None:
-    """Défaut implicite "jours" côté affichage — jamais une chaîne littérale
-    "jours" stockée, `None` partout où l'unité n'a jamais été précisée."""
-    etat_test = EtatAPI()
-    app.dependency_overrides[obtenir_etat] = lambda: etat_test
-    try:
-        client = TestClient(app)
-        source_id = _creer_source(client, "peu importe")
-
-        reponse = client.get(f"/sources/{source_id}")
-
-        assert reponse.status_code == 200, reponse.json()
-        assert reponse.json()["unite_duree"] is None
     finally:
         app.dependency_overrides.clear()
