@@ -18,6 +18,7 @@ from pathlib import Path
 # Charger le fichier .env
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     pass
@@ -28,26 +29,11 @@ from solver_store.registry import Registre
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Génère un solveur IA pour une instance TRCO"
-    )
+    parser = argparse.ArgumentParser(description="Génère un solveur IA pour une instance TRCO")
+    parser.add_argument("--instance", type=Path, required=True, help="Chemin vers l'instance TRCO (JSON)")
+    parser.add_argument("--client-id", type=str, default="agro_client", help="ID du client (défaut: agro_client)")
     parser.add_argument(
-        "--instance",
-        type=Path,
-        required=True,
-        help="Chemin vers l'instance TRCO (JSON)"
-    )
-    parser.add_argument(
-        "--client-id",
-        type=str,
-        default="agro_client",
-        help="ID du client (défaut: agro_client)"
-    )
-    parser.add_argument(
-        "--max-tentatives",
-        type=int,
-        default=3,
-        help="Nombre maximum de tentatives de génération (défaut: 3)"
+        "--max-tentatives", type=int, default=3, help="Nombre maximum de tentatives de génération (défaut: 3)"
     )
 
     args = parser.parse_args()
@@ -68,10 +54,10 @@ def main():
         sys.exit(1)
 
     # Générer le solveur
-    print(f"\n[2/3] Generation du solveur avec IA...")
+    print("\n[2/3] Generation du solveur avec IA...")
     print(f"      Pipeline multi-agents avec boucle (max {args.max_tentatives} tentatives)")
-    print(f"      Duree estimee : 2-5 minutes")
-    print(f"      Cout estime : ~$0.50-1.00")
+    print("      Duree estimee : 2-5 minutes")
+    print("      Cout estime : ~$0.50-1.00")
     print()
 
     try:
@@ -79,19 +65,20 @@ def main():
     except Exception as e:
         print(f"      [ERREUR] Generation echouee : {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
     # Vérifier le succès
     if not resultat.reussi:
-        print(f"\n      [ECHEC] Le solveur n'a pas passe la validation")
+        print("\n      [ECHEC] Le solveur n'a pas passe la validation")
         if resultat.erreur_execution:
             print(f"              Erreur d'execution : {resultat.erreur_execution[:200]}")
         if resultat.verdict_cascade:
             print(f"              Verdict cascade : {resultat.verdict_cascade}")
         sys.exit(1)
 
-    print(f"      [OK] Solveur genere avec succes")
+    print("      [OK] Solveur genere avec succes")
 
     # Sauvegarder le code
     output_dir = Path("data/solveurs_generes")
@@ -103,7 +90,7 @@ def main():
     print(f"           Code sauvegarde : {code_path}")
 
     # Enregistrer dans le store
-    print(f"\n[3/3] Enregistrement dans le solver store...")
+    print("\n[3/3] Enregistrement dans le solver store...")
     try:
         registre = Registre()
 
@@ -113,9 +100,7 @@ def main():
 
         # Enregistrer
         id_solveur = registre.enregistrer(
-            client_id=args.client_id,
-            code_source=resultat.code_final,
-            signature_contraintes=signature
+            client_id=args.client_id, code_source=resultat.code_final, signature_contraintes=signature
         )
 
         print(f"      [OK] Solveur enregistre avec l'ID : {id_solveur}")
@@ -142,7 +127,7 @@ def main():
         boucle = resultat.boucle_reparation
         print(f"Tentatives : {boucle.nb_tentatives}")
         if boucle.nb_tentatives > 1:
-            print(f"  -> Corrections automatiques effectuees")
+            print("  -> Corrections automatiques effectuees")
 
     print("\nProchaines etapes :")
     print(f"  1. Tester le solveur : python -m scripts.tester_solveur_ia --solveur-id {id_solveur}")

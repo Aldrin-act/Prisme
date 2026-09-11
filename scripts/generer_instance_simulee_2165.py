@@ -43,49 +43,44 @@ def generer_instance_simulee():
     for tache in taches:
         # Flexibilité aléatoire (1 à 6 ressources par tâche)
         nb_ressources_compatibles = random.randint(FLEXIBILITE_MIN, FLEXIBILITE_MAX)
-        ressources_compatibles = random.sample(
-            [r["id"] for r in ressources],
-            nb_ressources_compatibles
-        )
+        ressources_compatibles = random.sample([r["id"] for r in ressources], nb_ressources_compatibles)
 
         for ressource in ressources_compatibles:
             duree = random.randint(DUREE_MIN, DUREE_MAX)
-            contraintes.append({
-                "type": "compatibilite_ressource_tache",
-                "tache": tache["id"],
-                "ressource": ressource,
-                "duree": duree
-            })
+            contraintes.append(
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": tache["id"],
+                    "ressource": ressource,
+                    "duree": duree,
+                }
+            )
 
     # Objectifs
     objectifs = [{"type": "minimiser_makespan"}]
 
-    instance = {
-        "taches": taches,
-        "ressources": ressources,
-        "contraintes": contraintes,
-        "objectifs": objectifs
-    }
+    instance = {"taches": taches, "ressources": ressources, "contraintes": contraintes, "objectifs": objectifs}
 
     # Statistiques
     from collections import Counter
+
     comp_par_tache = Counter(c["tache"] for c in contraintes)
     flexibilite_moyenne = sum(comp_par_tache.values()) / len(comp_par_tache)
 
-    print(f"\nInstance generee :")
+    print("\nInstance generee :")
     print(f"   - Taches : {len(taches)}")
     print(f"   - Ressources : {len(ressources)}")
     print(f"   - Contraintes : {len(contraintes)}")
     print(f"   - Flexibilite moyenne : {flexibilite_moyenne:.2f} ressources/tache")
-    print(f"   - Precedences : Non")
+    print("   - Precedences : Non")
 
     return instance
 
 
 def main():
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("  GENERATION INSTANCE SIMULEE 2165 TACHES")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     instance = generer_instance_simulee()
 
@@ -98,9 +93,9 @@ def main():
     print(f"\nInstance sauvegardee : {chemin}")
     print(f"   Taille : {chemin.stat().st_size / 1024:.1f} KB")
 
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("  INSTANCE PRETE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("Prochaine etape : Tester avec le benchmarker")
     print("   uv run python -m scripts.test_benchmarker_2165")

@@ -354,7 +354,6 @@ la structure taches/ressources/contraintes avec compétences.
         for nom, donnee in donnees.items():
             nb_taches = len(donnee["taches"])
             nb_ressources = len(donnee["ressources"])
-            description = donnee["taches"][0]["nom"] if donnee["taches"] else "N/A"
             f.write(f"- **{nom}**: {nb_taches} tâches, {nb_ressources} ressources\n")
 
         f.write(

@@ -110,13 +110,15 @@ def main() -> None:
     print("Execution : OK")
 
     tolerance_relative, comparer_affectation = parametres_cascade_pour_algorithme(algo)
-    print(f"\nParametres cascade pour '{algo}' : tolerance={tolerance_relative:.0%}, "
-          f"comparer_affectation={comparer_affectation}\n")
+    print(
+        f"\nParametres cascade pour '{algo}' : tolerance={tolerance_relative:.0%}, "
+        f"comparer_affectation={comparer_affectation}\n"
+    )
 
     try:
         verdict = evaluer_cascade(solveur, tolerance_relative, comparer_affectation)
     except Exception as erreur:  # le code genere peut lever n'importe quoi a l'execution
-        print(f"Cascade : ECHEC (exception levee par resoudre() sur une instance du banc)")
+        print("Cascade : ECHEC (exception levee par resoudre() sur une instance du banc)")
         print(f"  {type(erreur).__name__}: {erreur}")
         import traceback
 
@@ -152,8 +154,7 @@ def main() -> None:
                 "nb_instances": len(verdict.diagnostics),
                 "nb_echecs": len(verdict.echecs),
                 "echecs": [
-                    {"nom": d.nom, "brique": d.brique_en_echec, "details": list(d.details)}
-                    for d in verdict.echecs
+                    {"nom": d.nom, "brique": d.brique_en_echec, "details": list(d.details)} for d in verdict.echecs
                 ],
             },
             f,

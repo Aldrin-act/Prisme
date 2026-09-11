@@ -1,40 +1,41 @@
 from __future__ import annotations
 
 import random
-from typing import List, Dict, Optional
 
-from dsl.schema import (InstanceTRCO, Planning, OperationPlanifiee, Tache,
-                         Ressource, Precedence, CompatibiliteRessourceTache,
-                         Echeance)
+from dsl.schema import (
+    CompatibiliteRessourceTache,
+    Echeance,
+    InstanceTRCO,
+    OperationPlanifiee,
+    Planning,
+    Precedence,
+)
 
 
 def _decoder(chromosome: list[str], instance: InstanceTRCO) -> list[OperationPlanifiee] | None:
     """Implémente le 'serial schedule generation scheme'."""
-    taches_map: Dict[str, Tache] = {t.id: t for t in instance.taches}
-    ressources_map: Dict[str, Ressource] = {r.id: r for r in instance.ressources}
-
     # Index des compatibilités par tâche
-    compatibilites_par_tache: Dict[str, list[CompatibiliteRessourceTache]] = {}
+    compatibilites_par_tache: dict[str, list[CompatibiliteRessourceTache]] = {}
     for c in instance.contraintes:
         if isinstance(c, CompatibiliteRessourceTache):
             compatibilites_par_tache.setdefault(c.tache, []).append(c)
 
     # Index des précédences
-    precedences_apres: Dict[str, list[Precedence]] = {}
+    precedences_apres: dict[str, list[Precedence]] = {}
     for c in instance.contraintes:
         if isinstance(c, Precedence):
             precedences_apres.setdefault(c.apres, []).append(c)
 
     # Index des échéances
-    echeances_par_tache: Dict[str, int] = {}
+    echeances_par_tache: dict[str, int] = {}
     for c in instance.contraintes:
         if isinstance(c, Echeance):
             echeances_par_tache[c.tache] = c.echeance
 
     # Dictionnaires d'état
-    fin_tache: Dict[str, int] = {}
-    ressource_disponibilite: Dict[str, int] = {r.id: 0 for r in instance.ressources}
-    planning_dict: Dict[str, OperationPlanifiee] = {}
+    fin_tache: dict[str, int] = {}
+    ressource_disponibilite: dict[str, int] = {r.id: 0 for r in instance.ressources}
+    planning_dict: dict[str, OperationPlanifiee] = {}
 
     while len(planning_dict) < len(instance.taches):
         progres = False
@@ -49,12 +50,10 @@ def _decoder(chromosome: list[str], instance: InstanceTRCO) -> list[OperationPla
                 continue
 
             # Calculer le début au plus tôt
-            debut_au_plus_tot = max(
-                (fin_tache[avant] for avant in taches_avant), default=0
-            )
+            debut_au_plus_tot = max((fin_tache[avant] for avant in taches_avant), default=0)
 
-            meilleur_debut = float('inf')
-            meilleure_fin = float('inf')
+            meilleur_debut = float("inf")
+            meilleure_fin = float("inf")
             meilleure_operation = None
 
             compatibilites = compatibilites_par_tache.get(tache_id, [])
@@ -73,14 +72,13 @@ def _decoder(chromosome: list[str], instance: InstanceTRCO) -> list[OperationPla
                     if fin_possible > echeance:
                         continue  # Violation d'échéance, impossible sur cette ressource
 
-                if (debut_possible < meilleur_debut or
-                    (debut_possible == meilleur_debut and fin_possible < meilleure_fin)):
+                if debut_possible < meilleur_debut or (
+                    debut_possible == meilleur_debut and fin_possible < meilleure_fin
+                ):
                     meilleur_debut = debut_possible
                     meilleure_fin = fin_possible
                     meilleure_operation = OperationPlanifiee(
-                        tache=tache_id,
-                        ressource=comp.ressource,
-                        debut=debut_possible
+                        tache=tache_id, ressource=comp.ressource, debut=debut_possible
                     )
 
             if meilleure_operation is None:
@@ -103,7 +101,7 @@ def _decoder(chromosome: list[str], instance: InstanceTRCO) -> list[OperationPla
 def _calculer_fitness(planning: list[OperationPlanifiee], instance: InstanceTRCO) -> int:
     """Retourne le makespan (max des heures de fin) d'un planning décodé."""
     if not planning:
-        return float('inf')
+        return float("inf")
     return max(op.debut + _duree_operation(op, instance) for op in planning)
 
 
@@ -126,7 +124,9 @@ def _generer_population_initiale(taille: int, liste_id_taches: list[str], rng: r
     return population
 
 
-def _selection_tournoi(population: list[list[str]], fitnesses: list[int], taille_tournoi: int, rng: random.Random) -> list[str]:
+def _selection_tournoi(
+    population: list[list[str]], fitnesses: list[int], taille_tournoi: int, rng: random.Random
+) -> list[str]:
     """Sélectionne un chromosome par tournoi."""
     indices = rng.choices(range(len(population)), k=taille_tournoi)
     meilleur_idx = min(indices, key=lambda i: fitnesses[i])
@@ -143,9 +143,9 @@ def _croisement_two_point(parent1: list[str], parent2: list[str], rng: random.Ra
 
     enfant = [None] * taille
     # Conserver le segment central de parent1
-    segment = parent1[point1:point2 + 1]
+    segment = parent1[point1 : point2 + 1]
     segment_set = set(segment)
-    enfant[point1:point2 + 1] = segment
+    enfant[point1 : point2 + 1] = segment
 
     # Remplir le reste avec parent2, en respectant l'ordre
     idx_enfant = (point2 + 1) % taille
@@ -196,13 +196,13 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
     def evaluer(chromosome):
         planning = _decoder(chromosome, instance)
         if planning is None:
-            return float('inf')
+            return float("inf")
         return _calculer_fitness(planning, instance)
 
     fitnesses = [evaluer(ind) for ind in population]
 
     meilleur_chromosome = None
-    meilleure_fitness = float('inf')
+    meilleure_fitness = float("inf")
 
     stagnation_count = 0
     mutation_rate = mutation_rate_base

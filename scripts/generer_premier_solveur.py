@@ -15,6 +15,7 @@ sys.path.insert(0, str(projet_root))
 # Charger le fichier .env
 try:
     from dotenv import load_dotenv
+
     load_dotenv(projet_root / ".env")
     print("✅ Fichier .env chargé")
 except ImportError:
@@ -22,8 +23,9 @@ except ImportError:
 
 # Vérifier que les dépendances LLM sont installées
 try:
-    from generation.tentative_unique import generer_et_valider
     from dsl.validation.charger_instance import charger_instance_depuis_fichier
+
+    from generation.tentative_unique import generer_et_valider
 except ImportError as e:
     print(f"❌ Erreur d'import : {e}")
     print("\nVérifiez que vous êtes dans le bon répertoire et que les modules existent.")
@@ -44,10 +46,7 @@ def main():
     print("📋 Étape 1 : Chargement de l'instance")
     print("   Fichier : dsl/examples/valid/atelier_trois_taches.json")
 
-    chemin_instance = (
-        Path(__file__).parent.parent
-        / "dsl/examples/valid/atelier_trois_taches.json"
-    )
+    chemin_instance = Path(__file__).parent.parent / "dsl/examples/valid/atelier_trois_taches.json"
 
     if not chemin_instance.exists():
         print(f"❌ Fichier introuvable : {chemin_instance}")
@@ -55,7 +54,7 @@ def main():
 
     instance = charger_instance_depuis_fichier(str(chemin_instance))
 
-    print(f"   ✅ Instance chargée :")
+    print("   ✅ Instance chargée :")
     print(f"      - {len(instance.taches)} tâches")
     print(f"      - {len(instance.ressources)} ressources")
     print(f"      - {len(instance.contraintes)} contraintes")
@@ -103,7 +102,7 @@ def main():
 
         # Afficher un extrait
         lignes = resultat.code_genere.split("\n")
-        print(f"\n📄 Extrait (10 premières lignes) :")
+        print("\n📄 Extrait (10 premières lignes) :")
         print("   " + "-" * 66)
         for ligne in lignes[:10]:
             print(f"   {ligne}")
@@ -112,7 +111,7 @@ def main():
 
         # Diagnostic cascade
         if resultat.verdict:
-            print(f"\n🔍 Détails de la validation :")
+            print("\n🔍 Détails de la validation :")
             print(f"   - Faisabilité : {resultat.verdict.faisabilite}")
             print(f"   - Optimalité : {resultat.verdict.optimalite}")
             print(f"   - Fidélité : {resultat.verdict.fidelite}")

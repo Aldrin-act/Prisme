@@ -12,7 +12,7 @@ from pathlib import Path
 
 def analyser_instance(chemin: Path) -> dict:
     """Analyse une instance TRCO et retourne ses statistiques."""
-    with open(chemin, "r", encoding="utf-8") as f:
+    with open(chemin, encoding="utf-8") as f:
         data = json.load(f)
 
     stats = {

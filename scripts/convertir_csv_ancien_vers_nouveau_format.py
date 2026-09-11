@@ -26,66 +26,64 @@ def convertir_secteur(dossier: Path, nom_base: str):
     ancien_postes = dossier / f"{nom_base}_postes.csv"
 
     if not ancien_operations.exists() or not ancien_postes.exists():
-        print(f"  SKIP: Fichiers anciens introuvables")
+        print("  SKIP: Fichiers anciens introuvables")
         return
 
     # Lire operations
-    with open(ancien_operations, encoding='utf-8') as f:
+    with open(ancien_operations, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         operations = list(reader)
 
     # Lire postes
-    with open(ancien_postes, encoding='utf-8') as f:
+    with open(ancien_postes, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         postes = list(reader)
 
     # Créer taches.csv
-    with open(dossier / "taches.csv", 'w', newline='', encoding='utf-8') as f:
+    with open(dossier / "taches.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(['id', 'nom', 'duree_estimee_jours'])
+        writer.writerow(["id", "nom", "duree_estimee_jours"])
         for op in operations:
-            code = op['code_operation']
-            nom = op.get('nom', code.replace('_', ' ').title())
-            duree = op['duree_jours']
+            code = op["code_operation"]
+            nom = op.get("nom", code.replace("_", " ").title())
+            duree = op["duree_jours"]
             writer.writerow([code, nom, duree])
 
     # Créer ressources.csv (avec compétences déduites du nom)
-    with open(dossier / "ressources.csv", 'w', newline='', encoding='utf-8') as f:
+    with open(dossier / "ressources.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(['id', 'nom', 'competences'])
+        writer.writerow(["id", "nom", "competences"])
         for poste in postes:
-            code = poste['code_poste']
+            code = poste["code_poste"]
             # Déduire nom et compétence du code
-            nom = code.replace('_', ' ').title()
+            nom = code.replace("_", " ").title()
             # Compétence = première partie du code en minuscules
-            competence = code.split('_')[0].lower()
+            competence = code.split("_")[0].lower()
             writer.writerow([code, nom, competence])
 
     # Créer contraintes.csv
-    with open(dossier / "contraintes.csv", 'w', newline='', encoding='utf-8') as f:
+    with open(dossier / "contraintes.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(['type', 'tache_avant', 'tache_apres', 'tache', 'ressource', 'duree_jours', 'competence'])
+        writer.writerow(["type", "tache_avant", "tache_apres", "tache", "ressource", "duree_jours", "competence"])
 
         # Contraintes de précédence
         for op in operations:
-            if op['operation_precedente']:
-                writer.writerow([
-                    'precedence',
-                    op['operation_precedente'],
-                    op['code_operation'],
-                    '', '', '', ''
-                ])
+            if op["operation_precedente"]:
+                writer.writerow(["precedence", op["operation_precedente"], op["code_operation"], "", "", "", ""])
 
         # Contraintes de compatibilité
         for op in operations:
-            writer.writerow([
-                'compatibilite_ressource_tache',
-                '', '',
-                op['code_operation'],
-                op['poste_id'],
-                op['duree_jours'],
-                ''
-            ])
+            writer.writerow(
+                [
+                    "compatibilite_ressource_tache",
+                    "",
+                    "",
+                    op["code_operation"],
+                    op["poste_id"],
+                    op["duree_jours"],
+                    "",
+                ]
+            )
 
     # Supprimer anciens fichiers
     ancien_operations.unlink()

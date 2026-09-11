@@ -33,9 +33,7 @@ def exporter(
         instance = InstanceTRCO.model_validate(json.load(f))
 
     duree_map: dict[tuple[str, str], int] = {
-        (c.tache, c.ressource): c.duree
-        for c in instance.contraintes
-        if isinstance(c, CompatibiliteRessourceTache)
+        (c.tache, c.ressource): c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)
     }
 
     with open(chemin_planning, encoding="utf-8") as f:

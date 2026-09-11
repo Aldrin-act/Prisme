@@ -26,16 +26,18 @@ sys.path.insert(0, str(projet_root))
 
 
 def main() -> None:
-    from dsl.schema import CompatibiliteRessourceTache, Echeance, InstanceTRCO, OperationPlanifiee, Precedence
-
     import solveur_genere_avec_benchmarker as sol
+
+    from dsl.schema import CompatibiliteRessourceTache, Echeance, InstanceTRCO, OperationPlanifiee, Precedence
 
     chemin_instance = projet_root / "greensig_instance_trco_simulee.json"
     with open(chemin_instance, encoding="utf-8") as f:
         instance = InstanceTRCO.model_validate(json.load(f))
 
-    print(f"Instance : {len(instance.taches)} taches, {len(instance.ressources)} ressources, "
-          f"{len(instance.contraintes)} contraintes\n")
+    print(
+        f"Instance : {len(instance.taches)} taches, {len(instance.ressources)} ressources, "
+        f"{len(instance.contraintes)} contraintes\n"
+    )
 
     # --- Tables precalculees une seule fois (le bug : le code genere les
     # reconstruit, ou pire rescane les contraintes, a chaque appel) ---
@@ -110,7 +112,7 @@ def main() -> None:
     planning = sol.resoudre(instance)
     duree = time.time() - debut
 
-    print(f"Termine en {duree:.1f}s ({duree/60:.1f} min)\n")
+    print(f"Termine en {duree:.1f}s ({duree / 60:.1f} min)\n")
 
     if planning is None:
         print("AUCUNE SOLUTION TROUVEE (instance jugee infaisable par le solveur).")
@@ -118,7 +120,7 @@ def main() -> None:
 
     makespan = max(op.debut + duree_map[(op.tache, op.ressource)] for op in planning.operations)
     print(f"Operations planifiees : {len(planning.operations)}")
-    print(f"Makespan : {makespan} min ({makespan/60:.1f} h)\n")
+    print(f"Makespan : {makespan} min ({makespan / 60:.1f} h)\n")
 
     utilisation = Counter(op.ressource for op in planning.operations)
     print("Utilisation des ressources (top 10) :")

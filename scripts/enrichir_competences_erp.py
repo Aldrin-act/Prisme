@@ -27,20 +27,37 @@ def extraire_competence_depuis_poste(code_poste: str) -> str:
         BLOC_CHIRURGIE_GENERALE -> chirurgie_generale
     """
     # Retirer les suffixes numériques (_1, _2, etc.)
-    code_sans_numero = re.sub(r'_\d+$', '', code_poste)
+    code_sans_numero = re.sub(r"_\d+$", "", code_poste)
 
     # Mapping de préfixes connus vers compétences
     prefixes_a_retirer = [
-        'POSTE_', 'STATION_', 'LIGNE_', 'ZONE_', 'ROBOT_', 'MACHINE_',
-        'BANC_', 'TUNNEL_', 'CABINE_', 'FOUR_', 'EQUIPE_', 'BLOC_',
-        'SALLE_', 'UNITE_', 'LABORATOIRE_', 'QUAI_', 'CAMION_',
-        'CAMIONNETTE_', 'CHARIOT_', 'CENTRE_', 'ATELIER_'
+        "POSTE_",
+        "STATION_",
+        "LIGNE_",
+        "ZONE_",
+        "ROBOT_",
+        "MACHINE_",
+        "BANC_",
+        "TUNNEL_",
+        "CABINE_",
+        "FOUR_",
+        "EQUIPE_",
+        "BLOC_",
+        "SALLE_",
+        "UNITE_",
+        "LABORATOIRE_",
+        "QUAI_",
+        "CAMION_",
+        "CAMIONNETTE_",
+        "CHARIOT_",
+        "CENTRE_",
+        "ATELIER_",
     ]
 
     competence = code_sans_numero
     for prefix in prefixes_a_retirer:
         if competence.startswith(prefix):
-            competence = competence[len(prefix):]
+            competence = competence[len(prefix) :]
             break
 
     # Convertir en minuscules pour uniformité

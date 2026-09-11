@@ -24,19 +24,13 @@ class MinimiserMakespan(BaseModel):
 
     # NOUVEAUX PARAMÈTRES
     poids: float = Field(
-        default=1.0,
-        ge=0.0,
-        description="Importance relative de cet objectif (pour objectifs multiples pondérés)"
+        default=1.0, ge=0.0, description="Importance relative de cet objectif (pour objectifs multiples pondérés)"
     )
     makespan_cible: int | None = Field(
-        default=None,
-        ge=0,
-        description="Makespan cible optionnel - le solveur peut arrêter dès qu'il l'atteint"
+        default=None, ge=0, description="Makespan cible optionnel - le solveur peut arrêter dès qu'il l'atteint"
     )
     penalite_depassement: float = Field(
-        default=1.0,
-        ge=0.0,
-        description="Pénalité appliquée pour chaque minute au-delà de makespan_cible"
+        default=1.0, ge=0.0, description="Pénalité appliquée pour chaque minute au-delà de makespan_cible"
     )
 
 
@@ -59,12 +53,11 @@ class EquilibrerCharge(BaseModel):
             "- ecart_max: minimise (max_charge - min_charge)\n"
             "- variance: minimise la variance des charges\n"
             "- gini: minimise le coefficient de Gini (0=parfaitement équilibré, 1=totalement déséquilibré)"
-        )
+        ),
     )
 
     ressources_cibles: list[str] | None = Field(
-        default=None,
-        description="Si spécifié, équilibre uniquement ces ressources (sinon toutes)"
+        default=None, description="Si spécifié, équilibre uniquement ces ressources (sinon toutes)"
     )
 
 
@@ -87,19 +80,14 @@ class MinimiserRetards(BaseModel):
             "- lineaire: penalite = retard\n"
             "- quadratique: penalite = retard²\n"
             "- exponentielle: penalite = e^retard - 1"
-        )
+        ),
     )
 
     priorite_par_tache: dict[str, float] = Field(
-        default_factory=dict,
-        description="Poids spécifique par tâche (défaut: 1.0 pour toutes)"
+        default_factory=dict, description="Poids spécifique par tâche (défaut: 1.0 pour toutes)"
     )
 
-    seuil_grace: int = Field(
-        default=0,
-        ge=0,
-        description="Jours de grâce avant que le retard ne soit pénalisé"
-    )
+    seuil_grace: int = Field(default=0, ge=0, description="Jours de grâce avant que le retard ne soit pénalisé")
 
 
 class MaximiserUtilisation(BaseModel):
@@ -115,13 +103,11 @@ class MaximiserUtilisation(BaseModel):
     poids: float = Field(default=1.0, ge=0.0)
 
     ressources_prioritaires: list[str] = Field(
-        default_factory=list,
-        description="Ressources à privilégier (poids plus élevé pour leur utilisation)"
+        default_factory=list, description="Ressources à privilégier (poids plus élevé pour leur utilisation)"
     )
 
     penalite_inactivite_par_ressource: dict[str, float] = Field(
-        default_factory=dict,
-        description="Pénalité d'inactivité par ressource (défaut: 1.0)"
+        default_factory=dict, description="Pénalité d'inactivité par ressource (défaut: 1.0)"
     )
 
 
@@ -138,22 +124,16 @@ class MinimiserChangements(BaseModel):
     poids: float = Field(default=1.0, ge=0.0)
 
     cout_changement_par_ressource: dict[str, float] = Field(
-        default_factory=dict,
-        description="Coût unitaire de changement par ressource (défaut: 1.0)"
+        default_factory=dict, description="Coût unitaire de changement par ressource (défaut: 1.0)"
     )
 
     cout_changement_par_paire: dict[tuple[str, str], float] = Field(
-        default_factory=dict,
-        description="Coût spécifique pour passer de la ressource A à B"
+        default_factory=dict, description="Coût spécifique pour passer de la ressource A à B"
     )
 
 
 # Union discriminée des objectifs (extensible)
 Objectif = Annotated[
-    MinimiserMakespan
-    | EquilibrerCharge
-    | MinimiserRetards
-    | MaximiserUtilisation
-    | MinimiserChangements,
+    MinimiserMakespan | EquilibrerCharge | MinimiserRetards | MaximiserUtilisation | MinimiserChangements,
     Field(discriminator="type"),
 ]

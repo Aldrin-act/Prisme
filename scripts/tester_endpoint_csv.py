@@ -13,8 +13,6 @@ Usage:
 
 from __future__ import annotations
 
-import json
-
 import requests
 
 # Configuration
@@ -47,9 +45,9 @@ def obtenir_token() -> str:
 
 def tester_endpoint_csv_local(chemin_dossier: str, token: str) -> dict | None:
     """Teste l'endpoint CSV local avec un dossier spécifique."""
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
     print(f"Test du dossier: {chemin_dossier}")
-    print(f"{'='*80}")
+    print(f"{'=' * 80}")
 
     headers = {"Authorization": f"Bearer {token}"} if token != "dummy_token" else {}
 
@@ -88,9 +86,9 @@ def tester_endpoint_csv_local(chemin_dossier: str, token: str) -> dict | None:
 
 def tester_recuperation_instance(instance_id: str, token: str) -> None:
     """Teste la récupération d'une instance créée."""
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
     print(f"Test de recuperation de l'instance: {instance_id}")
-    print(f"{'='*80}")
+    print(f"{'=' * 80}")
 
     headers = {"Authorization": f"Bearer {token}"} if token != "dummy_token" else {}
 

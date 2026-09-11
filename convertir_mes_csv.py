@@ -6,7 +6,6 @@ Usage direct:
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from scripts.convertir_csv_vers_instance import csv_vers_instance

@@ -21,16 +21,12 @@ import argparse
 import json
 import random
 from pathlib import Path
-from typing import Any
-
 
 # Définitions des configurations d'objectifs
 CONFIGURATIONS_OBJECTIFS = {
     "makespan": {
         "description": "Minimiser uniquement le makespan",
-        "objectifs": [
-            {"type": "minimiser_makespan", "poids": 1.0}
-        ],
+        "objectifs": [{"type": "minimiser_makespan", "poids": 1.0}],
     },
     "equilibrage": {
         "description": "Équilibrage de charge + makespan",
@@ -83,7 +79,7 @@ CONFIGURATIONS_OBJECTIFS = {
 
 def charger_instance(chemin: Path) -> dict:
     """Charge une instance TRCO depuis JSON."""
-    with open(chemin, "r", encoding="utf-8") as f:
+    with open(chemin, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -127,11 +123,13 @@ def ajouter_echeances(instance: dict, strategie: str = "uniforme") -> dict:
         for i, tache in enumerate(taches_avec_echeance):
             # Échéances distribuées uniformément entre 50% et 100% du makespan estimé
             echeance = int(makespan_estime * (0.5 + 0.5 * (i / n_echeances)))
-            instance["contraintes"].append({
-                "type": "echeance",
-                "tache": tache["id"],
-                "echeance": echeance,
-            })
+            instance["contraintes"].append(
+                {
+                    "type": "echeance",
+                    "tache": tache["id"],
+                    "echeance": echeance,
+                }
+            )
 
     elif strategie == "critique":
         # 20% des tâches avec échéances très serrées
@@ -141,11 +139,13 @@ def ajouter_echeances(instance: dict, strategie: str = "uniforme") -> dict:
         for tache in taches_critiques:
             # Échéances critiques (60-80% du makespan)
             echeance = int(makespan_estime * random.uniform(0.6, 0.8))
-            instance["contraintes"].append({
-                "type": "echeance",
-                "tache": tache["id"],
-                "echeance": echeance,
-            })
+            instance["contraintes"].append(
+                {
+                    "type": "echeance",
+                    "tache": tache["id"],
+                    "echeance": echeance,
+                }
+            )
 
     elif strategie == "progressive":
         # Les échéances deviennent de plus en plus serrées
@@ -156,11 +156,13 @@ def ajouter_echeances(instance: dict, strategie: str = "uniforme") -> dict:
             # Échéances de plus en plus serrées
             facteur = 1.0 - (i / n_echeances) * 0.4  # De 100% à 60%
             echeance = int(makespan_estime * facteur)
-            instance["contraintes"].append({
-                "type": "echeance",
-                "tache": tache["id"],
-                "echeance": echeance,
-            })
+            instance["contraintes"].append(
+                {
+                    "type": "echeance",
+                    "tache": tache["id"],
+                    "echeance": echeance,
+                }
+            )
 
     return instance
 
@@ -198,8 +200,7 @@ def ajouter_competences(instance: dict, taux_specialisation: float = 0.3) -> dic
         # Chaque ressource a 1-3 compétences aléatoires
         n_competences = random.randint(1, 3)
         ressource["competences"] = random.sample(
-            competences_disponibles,
-            min(n_competences, len(competences_disponibles))
+            competences_disponibles, min(n_competences, len(competences_disponibles))
         )
 
     competences_par_ressource = {r["id"]: set(r["competences"]) for r in instance["ressources"]}
@@ -219,9 +220,7 @@ def ajouter_competences(instance: dict, taux_specialisation: float = 0.3) -> dic
 
         # Compétences communes à toutes les ressources compatibles : seules
         # candidates possibles pour une exigence cohérente sur cette tâche.
-        competences_communes = set.intersection(
-            *(competences_par_ressource[r] for r in ressources_compatibles)
-        )
+        competences_communes = set.intersection(*(competences_par_ressource[r] for r in ressources_compatibles))
         if not competences_communes:
             continue
 
@@ -229,11 +228,13 @@ def ajouter_competences(instance: dict, taux_specialisation: float = 0.3) -> dic
         competences_requises = random.sample(sorted(competences_communes), n_competences_requises)
 
         for competence in competences_requises:
-            instance["contraintes"].append({
-                "type": "competence_requise",
-                "tache": tache["id"],
-                "competence": competence,
-            })
+            instance["contraintes"].append(
+                {
+                    "type": "competence_requise",
+                    "tache": tache["id"],
+                    "competence": competence,
+                }
+            )
 
     return instance
 

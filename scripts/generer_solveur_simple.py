@@ -12,6 +12,7 @@ sys.path.insert(0, str(projet_root))
 # Charger le fichier .env
 try:
     from dotenv import load_dotenv
+
     load_dotenv(projet_root / ".env")
     print("✅ Fichier .env chargé")
 except ImportError:
@@ -19,10 +20,11 @@ except ImportError:
 
 # Imports du projet
 try:
-    from generation.tentative_unique import tenter_generation_unique
-    from generation.agents.client_llm import construire_modele
-    from dsl.validation.validator import charger_instance
     import json
+
+    from dsl.validation.validator import charger_instance
+    from generation.agents.client_llm import construire_modele
+    from generation.tentative_unique import tenter_generation_unique
 except ImportError as e:
     print(f"❌ Erreur d'import : {e}")
     print("\nAssurez-vous d'être dans le dossier du projet.")
@@ -49,10 +51,10 @@ def main():
         sys.exit(1)
 
     try:
-        with open(chemin_instance, 'r', encoding='utf-8') as f:
+        with open(chemin_instance, encoding="utf-8") as f:
             instance_data = json.load(f)
         instance = charger_instance(instance_data)
-        print(f"   ✅ Instance chargée :")
+        print("   ✅ Instance chargée :")
         print(f"      - {len(instance.taches)} tâches")
         print(f"      - {len(instance.ressources)} ressources")
         print(f"      - {len(instance.contraintes)} contraintes")
@@ -92,6 +94,7 @@ def main():
     except Exception as e:
         print(f"❌ Erreur lors de la génération : {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
@@ -116,7 +119,7 @@ def main():
 
         # Afficher un extrait
         lignes = resultat.code_source.split("\n")
-        print(f"\n📄 Extrait (15 premières lignes) :")
+        print("\n📄 Extrait (15 premières lignes) :")
         print("   " + "-" * 66)
         for ligne in lignes[:15]:
             print(f"   {ligne}")
@@ -129,16 +132,16 @@ def main():
 
         # Statut exécution
         if resultat.erreur_execution:
-            print(f"\n❌ EXÉCUTION : Échec")
+            print("\n❌ EXÉCUTION : Échec")
             print(f"   Erreur : {resultat.erreur_execution}")
         else:
-            print(f"\n✅ EXÉCUTION : Succès")
+            print("\n✅ EXÉCUTION : Succès")
 
         # Verdict cascade
         if resultat.verdict_cascade:
             print(f"\n📊 Verdict cascade : {resultat.verdict_cascade}")
         else:
-            print(f"\n⚠️  Verdict cascade : Non disponible (cascade pas lancée)")
+            print("\n⚠️  Verdict cascade : Non disponible (cascade pas lancée)")
 
         print("\n🎯 Prochaines étapes :")
         print("   1. Examinez le code : cat solveur_genere.py")

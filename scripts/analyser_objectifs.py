@@ -13,7 +13,7 @@ from pathlib import Path
 
 def analyser_instance_enrichie(chemin: Path) -> dict:
     """Analyse une instance enrichie."""
-    with open(chemin, "r", encoding="utf-8") as f:
+    with open(chemin, encoding="utf-8") as f:
         data = json.load(f)
 
     # Compter les types de contraintes
@@ -24,10 +24,12 @@ def analyser_instance_enrichie(chemin: Path) -> dict:
     # Analyser les objectifs
     objectifs_info = []
     for objectif in data.get("objectifs", []):
-        objectifs_info.append({
-            "type": objectif.get("type"),
-            "poids": objectif.get("poids", 1.0),
-        })
+        objectifs_info.append(
+            {
+                "type": objectif.get("type"),
+                "poids": objectif.get("poids", 1.0),
+            }
+        )
 
     return {
         "nom": chemin.stem,
@@ -97,7 +99,7 @@ def main():
         print(f"  Objectifs par instance: {n_objectifs}")
 
         if instances:
-            print(f"  Types d'objectifs:")
+            print("  Types d'objectifs:")
             for obj in instances[0]["objectifs"]:
                 print(f"    - {obj['type']:<30} (poids: {obj['poids']})")
 
@@ -144,13 +146,15 @@ def main():
     for fichier in fichiers[:3]:
         stats = analyser_instance_enrichie(fichier)
         print(f"\n{stats['nom']}")
-        print(f"  Taches: {stats['taches']}, Ressources: {stats['ressources']}, Contraintes: {stats['contraintes']}")
+        print(
+            f"  Taches: {stats['taches']}, Ressources: {stats['ressources']}, Contraintes: {stats['contraintes']}"
+        )
         print(f"  Objectifs ({len(stats['objectifs'])}):")
-        for obj in stats['objectifs']:
+        for obj in stats["objectifs"]:
             print(f"    - {obj['type']} (poids: {obj['poids']})")
 
-        print(f"  Types de contraintes:")
-        for type_c, count in stats['types_contraintes'].items():
+        print("  Types de contraintes:")
+        for type_c, count in stats["types_contraintes"].items():
             print(f"    - {type_c}: {count}")
 
     print()

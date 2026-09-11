@@ -6,7 +6,8 @@ Pattern similaire au registry des contraintes proposé précédemment.
 
 from __future__ import annotations
 
-from typing import Any, Callable, Type
+from collections.abc import Callable
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -18,7 +19,7 @@ class RegistryObjectifs:
     toucher au code du DSL de base.
     """
 
-    _objectifs: dict[str, Type[BaseModel]] = {}
+    _objectifs: dict[str, type[BaseModel]] = {}
     _validateurs: dict[str, Callable[[BaseModel], list[str]]] = {}
     _metadata: dict[str, dict[str, Any]] = {}
 
@@ -26,7 +27,7 @@ class RegistryObjectifs:
     def enregistrer(
         cls,
         nom: str,
-        modele: Type[BaseModel],
+        modele: type[BaseModel],
         validateur: Callable[[BaseModel], list[str]] | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
@@ -55,13 +56,10 @@ class RegistryObjectifs:
         cls._metadata[nom] = metadata or {}
 
     @classmethod
-    def obtenir(cls, nom: str) -> Type[BaseModel]:
+    def obtenir(cls, nom: str) -> type[BaseModel]:
         """Récupère un type d'objectif enregistré."""
         if nom not in cls._objectifs:
-            raise ValueError(
-                f"Type d'objectif inconnu: {nom!r}. "
-                f"Disponibles: {sorted(cls._objectifs.keys())}"
-            )
+            raise ValueError(f"Type d'objectif inconnu: {nom!r}. Disponibles: {sorted(cls._objectifs.keys())}")
         return cls._objectifs[nom]
 
     @classmethod

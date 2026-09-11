@@ -13,9 +13,9 @@ from scripts.convertir_csv_vers_instance import csv_vers_instance
 
 def exemple_simple():
     """Exemple simple: convertir un dossier CSV en instance TRCO."""
-    print("="*80)
+    print("=" * 80)
     print("Exemple 1: Conversion simple d'un dossier CSV")
-    print("="*80)
+    print("=" * 80)
 
     # Chemin vers le dossier contenant les CSV
     dossier = "data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique"
@@ -54,9 +54,9 @@ def exemple_simple():
 
 def exemple_tous_les_dossiers():
     """Exemple: convertir plusieurs dossiers et comparer."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Exemple 2: Conversion de plusieurs dossiers")
-    print("="*80)
+    print("=" * 80)
 
     dossiers = [
         "data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique",
@@ -69,12 +69,14 @@ def exemple_tous_les_dossiers():
     for dossier in dossiers:
         try:
             instance = csv_vers_instance(dossier)
-            resultats.append({
-                "dossier": dossier.split("/")[-1],
-                "taches": len(instance.taches),
-                "ressources": len(instance.ressources),
-                "contraintes": len(instance.contraintes),
-            })
+            resultats.append(
+                {
+                    "dossier": dossier.split("/")[-1],
+                    "taches": len(instance.taches),
+                    "ressources": len(instance.ressources),
+                    "contraintes": len(instance.contraintes),
+                }
+            )
         except Exception as e:
             print(f"Erreur pour {dossier}: {e}")
 
@@ -88,9 +90,9 @@ def exemple_tous_les_dossiers():
 
 def exemple_export_json():
     """Exemple: exporter une instance en JSON."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Exemple 3: Export JSON")
-    print("="*80)
+    print("=" * 80)
 
     dossier = "data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique"
     instance = csv_vers_instance(dossier)
@@ -100,7 +102,7 @@ def exemple_export_json():
 
     # Afficher le JSON (tronqué pour l'exemple)
     json_str = json.dumps(instance_dict, indent=2, ensure_ascii=False)
-    print(f"\nPremiers 800 caracteres du JSON:")
+    print("\nPremiers 800 caracteres du JSON:")
     print(json_str[:800] + "...")
 
     # Pour sauvegarder dans un fichier:
@@ -114,6 +116,6 @@ if __name__ == "__main__":
     exemple_tous_les_dossiers()
     exemple_export_json()
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Tous les exemples ont ete executes avec succes!")
-    print("="*80)
+    print("=" * 80)

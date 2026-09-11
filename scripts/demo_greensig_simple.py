@@ -11,9 +11,9 @@ from pathlib import Path
 
 
 def main():
-    print("\n" + "🌿"*35)
+    print("\n" + "🌿" * 35)
     print("  STRUCTURE DES DONNÉES GREENSIG")
-    print("🌿"*35 + "\n")
+    print("🌿" * 35 + "\n")
 
     # Exemple de données GreenSig (format JSON)
     payload_greensig = {
@@ -23,13 +23,11 @@ def main():
             {"id": 3, "nom_tache": "Taille d'arbres"},
             {"id": 4, "nom_tache": "Arrosage"},
         ],
-
         "equipes": [
             {"id": 100, "nom_equipe": "Équipe Nord", "actif": True},
             {"id": 200, "nom_equipe": "Équipe Sud", "actif": True},
             {"id": 300, "nom_equipe": "Équipe Est", "actif": True},
         ],
-
         "competences": [
             {"id": 21, "nom_competence": "Binage"},
             {"id": 5, "nom_competence": "Binage des sols"},
@@ -37,73 +35,71 @@ def main():
             {"id": 11, "nom_competence": "Taille"},
             {"id": 12, "nom_competence": "Arrosage"},
         ],
-
         "operateurs": [
             {"id": 1, "equipe_id": 100, "competences_ids": [10, 21]},  # Tonte + Binage
-            {"id": 2, "equipe_id": 100, "competences_ids": [11]},      # Taille
+            {"id": 2, "equipe_id": 100, "competences_ids": [11]},  # Taille
             {"id": 3, "equipe_id": 200, "competences_ids": [21, 12]},  # Binage + Arrosage
-            {"id": 4, "equipe_id": 200, "competences_ids": [10]},      # Tonte
+            {"id": 4, "equipe_id": 200, "competences_ids": [10]},  # Tonte
             {"id": 5, "equipe_id": 300, "competences_ids": [11, 12]},  # Taille + Arrosage
-            {"id": 6, "equipe_id": 300, "competences_ids": [5]},       # Binage (variante)
+            {"id": 6, "equipe_id": 300, "competences_ids": [5]},  # Binage (variante)
         ],
-
         "taches": [
             {
                 "id": 501,
                 "id_type_tache_id": 1,  # Tonte
                 "charge_estimee_heures": 2.5,
                 "equipes_ids": [100, 200],
-                "deleted_at": None
+                "deleted_at": None,
             },
             {
                 "id": 502,
                 "id_type_tache_id": 2,  # Binage
                 "charge_estimee_heures": 1.5,
                 "equipes_ids": [300],
-                "deleted_at": None
+                "deleted_at": None,
             },
             {
                 "id": 503,
                 "id_type_tache_id": 3,  # Taille
                 "charge_estimee_heures": 3.0,
                 "equipes_ids": [100, 300],
-                "deleted_at": None
+                "deleted_at": None,
             },
             {
                 "id": 504,
                 "id_type_tache_id": 4,  # Arrosage
                 "charge_estimee_heures": None,  # Charge manquante
                 "equipes_ids": [200, 300],
-                "deleted_at": None
+                "deleted_at": None,
             },
         ],
     }
 
     # Affichage du payload
-    print("="*70)
+    print("=" * 70)
     print("  DONNÉES GREENSIG (FORMAT ERP)")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("📋 TYPES DE TÂCHES")
-    print("─"*70)
+    print("─" * 70)
     for tt in payload_greensig["types_tache"]:
         print(f"  • [{tt['id']}] {tt['nom_tache']}")
     print()
 
     print("👥 ÉQUIPES (Ressources)")
-    print("─"*70)
+    print("─" * 70)
     for eq in payload_greensig["equipes"]:
         print(f"  • [{eq['id']}] {eq['nom_equipe']} {'✅' if eq['actif'] else '❌'}")
     print()
 
     print("🎓 COMPÉTENCES")
-    print("─"*70)
+    print("─" * 70)
     for comp in payload_greensig["competences"]:
         print(f"  • [{comp['id']}] {comp['nom_competence']}")
     print()
 
     print("👤 OPÉRATEURS (avec compétences)")
-    print("─"*70)
+    print("─" * 70)
     comp_map = {c["id"]: c["nom_competence"] for c in payload_greensig["competences"]}
     eq_map = {e["id"]: e["nom_equipe"] for e in payload_greensig["equipes"]}
 
@@ -115,7 +111,7 @@ def main():
     print()
 
     print("📌 TÂCHES À PLANIFIER")
-    print("─"*70)
+    print("─" * 70)
     type_map = {t["id"]: t["nom_tache"] for t in payload_greensig["types_tache"]}
 
     for tache in payload_greensig["taches"]:
@@ -128,24 +124,24 @@ def main():
     print()
 
     # Conversion vers T-R-C-O (exemple simplifié)
-    print("="*70)
+    print("=" * 70)
     print("  APRÈS CONVERSION → T-R-C-O")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("📌 TÂCHES (format T-R-C-O)")
-    print("─"*70)
+    print("─" * 70)
     for tache in payload_greensig["taches"]:
         print(f"  • T{tache['id']}")
     print()
 
     print("🏭 RESSOURCES (format T-R-C-O)")
-    print("─"*70)
+    print("─" * 70)
     for eq in payload_greensig["equipes"]:
         print(f"  • E{eq['id']} ({eq['nom_equipe']})")
     print()
 
     print("🔗 COMPATIBILITÉS RESSOURCE-TÂCHE (exemple)")
-    print("─"*70)
+    print("─" * 70)
     for tache in payload_greensig["taches"]:
         type_nom = type_map.get(tache["id_type_tache_id"], "?")
         duree_min = int(tache["charge_estimee_heures"] * 60) if tache["charge_estimee_heures"] else 30
@@ -156,9 +152,9 @@ def main():
     print()
 
     # Statistiques
-    print("="*70)
+    print("=" * 70)
     print("  STATISTIQUES")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     total_comps = sum(len(op["competences_ids"]) for op in payload_greensig["operateurs"])
     print(f"📊 Nombre de tâches : {len(payload_greensig['taches'])}")
@@ -169,9 +165,9 @@ def main():
     print()
 
     # Sauvegarder
-    print("="*70)
+    print("=" * 70)
     print("  SAUVEGARDE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     chemin = Path(__file__).parent.parent / "greensig_payload_exemple.json"
     with open(chemin, "w", encoding="utf-8") as f:
@@ -181,9 +177,9 @@ def main():
     print()
 
     # Informations supplémentaires
-    print("="*70)
+    print("=" * 70)
     print("  INFORMATIONS IMPORTANTES")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("🎯 Format GreenSig :")
     print("  • Provient d'un ERP réel de gestion d'espaces verts")

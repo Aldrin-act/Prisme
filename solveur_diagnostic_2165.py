@@ -3,7 +3,6 @@ from __future__ import annotations
 import math
 import random
 from collections import defaultdict
-from typing import Dict, List, Optional, Tuple
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
@@ -12,7 +11,6 @@ from dsl.schema import (
     OperationPlanifiee,
     Planning,
     Precedence,
-    Tache,
 )
 
 # ---------------------------------------------------------------------------
@@ -26,19 +24,19 @@ _BASE_MUTATION_RATE = 0.08
 _TOURNAMENT_SIZE = 5
 _ELITISM_FRAC = 0.1
 _SEED = 42
-_ADAPTIVE_THRESH_STD = 1e-6   # seuil d'écart-type des fitness pour déclencher
+_ADAPTIVE_THRESH_STD = 1e-6  # seuil d'écart-type des fitness pour déclencher
 _ADAPTIVE_MUTATION_RATE = 0.15
-_ADAPTIVE_DURATION = 10       # nombre de générations où la mutation est augmentée
+_ADAPTIVE_DURATION = 10  # nombre de générations où la mutation est augmentée
 
 # Type chromosome : liste de tuples (tache_id, indice_ressource, priorite_float)
-Chromosome = List[Tuple[str, int, float]]
+Chromosome = list[tuple[str, int, float]]
 
 
 def _extraire_compatibilites_par_tache(
     instance: InstanceTRCO,
-) -> Dict[str, List[Tuple[str, int]]]:
+) -> dict[str, list[tuple[str, int]]]:
     """Construit un mapping tache_id -> [(ressource_id, duree), ...] trié déterministe."""
-    compat_map: Dict[str, List[Tuple[str, int]]] = defaultdict(list)
+    compat_map: dict[str, list[tuple[str, int]]] = defaultdict(list)
     for c in instance.contraintes:
         if isinstance(c, CompatibiliteRessourceTache):
             compat_map[c.tache].append((c.ressource, c.duree))
@@ -48,31 +46,23 @@ def _extraire_compatibilites_par_tache(
     return dict(compat_map)
 
 
-def _extraire_precedences(instance: InstanceTRCO) -> List[Tuple[str, str]]:
+def _extraire_precedences(instance: InstanceTRCO) -> list[tuple[str, str]]:
     """Retourne une liste de (avant, apres)."""
-    return [
-        (c.avant, c.apres)
-        for c in instance.contraintes
-        if isinstance(c, Precedence)
-    ]
+    return [(c.avant, c.apres) for c in instance.contraintes if isinstance(c, Precedence)]
 
 
-def _extraire_echeances(instance: InstanceTRCO) -> Dict[str, int]:
+def _extraire_echeances(instance: InstanceTRCO) -> dict[str, int]:
     """Retourne un mapping tache_id -> echeance (int)."""
-    return {
-        c.tache: c.echeance
-        for c in instance.contraintes
-        if isinstance(c, Echeance)
-    }
+    return {c.tache: c.echeance for c in instance.contraintes if isinstance(c, Echeance)}
 
 
 def _decoder(
     chromosome: Chromosome,
     instance: InstanceTRCO,
-    compat_map: Dict[str, List[Tuple[str, int]]],
-    precedences: List[Tuple[str, str]],
-    echeances: Dict[str, int],
-) -> Optional[Planning]:
+    compat_map: dict[str, list[tuple[str, int]]],
+    precedences: list[tuple[str, str]],
+    echeances: dict[str, int],
+) -> Planning | None:
     """
     Serial schedule generation scheme (SSGS) :
     - Trie les tâches du chromosome par priorite_float croissant.
@@ -83,17 +73,14 @@ def _decoder(
     - Retourne un Planning légal ou None.
     """
     # Mapping pour retrouver facilement la durée associée à un tuple (tache, ressource)
-    duree_map: Dict[Tuple[str, str], int] = {}
+    duree_map: dict[tuple[str, str], int] = {}
     for tid, lst in compat_map.items():
         for rid, dur in lst:
             duree_map[(tid, rid)] = dur
 
-    # Index par tache_id pour retrouver le tuple du chromosome
-    chr_by_tache = {t[0]: t for t in chromosome}
-
     # Relations de précédence
-    pred_map: Dict[str, List[str]] = defaultdict(list)  # apres -> [avant]
-    succ_map: Dict[str, List[str]] = defaultdict(list)  # avant -> [apres]
+    pred_map: dict[str, list[str]] = defaultdict(list)  # apres -> [avant]
+    succ_map: dict[str, list[str]] = defaultdict(list)  # avant -> [apres]
     for avant, apres in precedences:
         pred_map[apres].append(avant)
         succ_map[avant].append(apres)
@@ -103,12 +90,12 @@ def _decoder(
     ordered = sorted(chromosome, key=lambda x: x[2])
 
     # Initialisation des structures de planning
-    fin_taches: Dict[str, int] = {}         # tache_id -> fin
-    debuts: Dict[str, int] = {}             # tache_id -> debut
-    ressource_utilisee: Dict[str, str] = {} # tache_id -> ressource_id
+    fin_taches: dict[str, int] = {}  # tache_id -> fin
+    debuts: dict[str, int] = {}  # tache_id -> debut
+    ressource_utilisee: dict[str, str] = {}  # tache_id -> ressource_id
 
     # Disponibilité des ressources : liste de créneaux occupés par ressource
-    occup_res: Dict[str, List[Tuple[int, int]]] = defaultdict(list)
+    occup_res: dict[str, list[tuple[int, int]]] = defaultdict(list)
 
     # Boucle constructive avec repoussage
     remaining = ordered[:]
@@ -182,9 +169,9 @@ def _decoder(
 def _fitness(
     chromosome: Chromosome,
     instance: InstanceTRCO,
-    compat_map: Dict[str, List[Tuple[str, int]]],
-    precedences: List[Tuple[str, str]],
-    echeances: Dict[str, int],
+    compat_map: dict[str, list[tuple[str, int]]],
+    precedences: list[tuple[str, str]],
+    echeances: dict[str, int],
 ) -> int:
     """Retourne le makespan (entier) ou math.inf si chromosome invalide."""
     planning = _decoder(chromosome, instance, compat_map, precedences, echeances)
@@ -194,7 +181,7 @@ def _fitness(
     # On ne stocke pas les fins explicitement dans le planning, on recalcule depuis les opérations.
     makespan = 0
     # On a besoin des durées pour calculer les fins, mais on peut les retrouver via compat_map.
-    duree_map: Dict[Tuple[str, str], int] = {}
+    duree_map: dict[tuple[str, str], int] = {}
     for tid, lst in compat_map.items():
         for rid, dur in lst:
             duree_map[(tid, rid)] = dur
@@ -206,10 +193,10 @@ def _fitness(
 
 
 def _initialiser_population(
-    taches_ids: List[str],
-    compat_map: Dict[str, List[Tuple[str, int]]],
+    taches_ids: list[str],
+    compat_map: dict[str, list[tuple[str, int]]],
     rng: random.Random,
-) -> List[Chromosome]:
+) -> list[Chromosome]:
     """Génère une population aléatoire de taille _POP_SIZE."""
     population = []
     for _ in range(_POP_SIZE):
@@ -224,8 +211,8 @@ def _initialiser_population(
 
 
 def _selection_tournoi(
-    population: List[Chromosome],
-    fitnesses: List[int],
+    population: list[Chromosome],
+    fitnesses: list[int],
     rng: random.Random,
 ) -> Chromosome:
     """Tournoi binaire de taille _TOURNAMENT_SIZE."""
@@ -287,9 +274,7 @@ def _reparer_doublons(
     # Vérification finale (au cas où il y aurait encore des doublons résiduels, on refait)
     if len(set(t[0] for t in enfant)) != len(enfant):
         # Nettoyage agressif : on réindexe
-        mapping = {t[0]: t for t in parent1}
         for i in range(len(enfant)):
-            tid = enfant[i][0]
             if enfant.count(enfant[i]) > 1:  # doublon
                 # Remplacer par un missing restant
                 pass
@@ -310,7 +295,7 @@ def _reparer_doublons(
 
 def _mutation(
     chromosome: Chromosome,
-    compat_map: Dict[str, List[Tuple[str, int]]],
+    compat_map: dict[str, list[tuple[str, int]]],
     rng: random.Random,
     mutation_rate: float,
 ) -> Chromosome:
@@ -330,7 +315,7 @@ def _mutation(
     return nouveau
 
 
-def _std_fitness(fitnesses: List[int]) -> float:
+def _std_fitness(fitnesses: list[int]) -> float:
     """Écart-type de la population (en ignorant les inf)."""
     finite = [f for f in fitnesses if f != math.inf]
     if len(finite) < 2:
@@ -340,7 +325,7 @@ def _std_fitness(fitnesses: List[int]) -> float:
     return math.sqrt(variance)
 
 
-def resoudre(instance: InstanceTRCO) -> Optional[Planning]:
+def resoudre(instance: InstanceTRCO) -> Planning | None:
     """
     Résout le FJSP noyau T-R-C-O par algorithme génétique.
     Retourne un Planning légal avec le meilleur makespan trouvé,
@@ -359,10 +344,7 @@ def resoudre(instance: InstanceTRCO) -> Optional[Planning]:
 
     # Initialisation
     population = _initialiser_population(taches_ids, compat_map, rng)
-    fitnesses = [
-        _fitness(chromo, instance, compat_map, precedences, echeances)
-        for chromo in population
-    ]
+    fitnesses = [_fitness(chromo, instance, compat_map, precedences, echeances) for chromo in population]
 
     meilleur_chromo = None
     meilleur_fitness = math.inf
@@ -401,10 +383,7 @@ def resoudre(instance: InstanceTRCO) -> Optional[Planning]:
             nouvelle_pop.append(enfant)
 
         population = nouvelle_pop
-        fitnesses = [
-            _fitness(chromo, instance, compat_map, precedences, echeances)
-            for chromo in population
-        ]
+        fitnesses = [_fitness(chromo, instance, compat_map, precedences, echeances) for chromo in population]
 
         # Mutation adaptative
         std_dev = _std_fitness(fitnesses)

@@ -67,7 +67,7 @@ def main() -> None:
     print(f"   -> execution_id = {execution_id}, reussi = {reussi}")
 
     if not reussi:
-        print(f"   ERREUR: L'execution a echoue")
+        print("   ERREUR: L'execution a echoue")
         if "erreur" in corps_execution:
             print(f"   Details: {corps_execution['erreur']}")
         return
@@ -108,13 +108,9 @@ def main() -> None:
             # Récupérer le nom de la tâche
             nom_tache = next((t.nom for t in instance.taches if t.id == tache_id), tache_id)
 
-            details_operations.append({
-                "tache": nom_tache,
-                "ressource": ressource_id,
-                "debut": debut,
-                "duree": duree,
-                "fin": fin
-            })
+            details_operations.append(
+                {"tache": nom_tache, "ressource": ressource_id, "debut": debut, "duree": duree, "fin": fin}
+            )
 
         # Afficher le résumé
         print("\n" + "=" * 80)
@@ -132,8 +128,10 @@ def main() -> None:
         details_operations.sort(key=lambda x: x["debut"])
 
         for detail in details_operations:
-            print(f"{detail['tache']:<25} {detail['ressource']:<20} "
-                  f"{detail['debut']:>8} {detail['duree']:>8} {detail['fin']:>8}")
+            print(
+                f"{detail['tache']:<25} {detail['ressource']:<20} "
+                f"{detail['debut']:>8} {detail['duree']:>8} {detail['fin']:>8}"
+            )
 
     # Audit (code source)
     print("\n" + "=" * 80)

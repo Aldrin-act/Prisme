@@ -30,7 +30,7 @@ from dsl.schema import InstanceTRCO
 
 def charger_depuis_json(chemin: Path) -> PayloadERP:
     """Charge un payload ERP depuis un fichier JSON."""
-    with open(chemin, "r", encoding="utf-8") as f:
+    with open(chemin, encoding="utf-8") as f:
         data = json.load(f)
     return PayloadERP(**data)
 
@@ -39,7 +39,7 @@ def charger_depuis_csv(chemin_operations: Path, chemin_postes: Path) -> PayloadE
     """Charge un payload ERP depuis des fichiers CSV."""
     # Lire les opérations
     operations = []
-    with open(chemin_operations, "r", encoding="utf-8") as f:
+    with open(chemin_operations, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             operations.append(
@@ -53,7 +53,7 @@ def charger_depuis_csv(chemin_operations: Path, chemin_postes: Path) -> PayloadE
 
     # Lire les postes
     postes = []
-    with open(chemin_postes, "r", encoding="utf-8") as f:
+    with open(chemin_postes, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             postes.append({"code_poste": row["code_poste"]})
@@ -97,7 +97,9 @@ def transformer_fichier_json(chemin_entree: Path, chemin_sortie: Path | None = N
     print()
 
 
-def transformer_fichiers_csv(chemin_operations: Path, chemin_postes: Path, chemin_sortie: Path | None = None) -> None:
+def transformer_fichiers_csv(
+    chemin_operations: Path, chemin_postes: Path, chemin_sortie: Path | None = None
+) -> None:
     """Transforme une paire de fichiers CSV en instance TRCO."""
     print(f"[TRANSFORMATION CSV] {chemin_operations.name} + {chemin_postes.name}")
 

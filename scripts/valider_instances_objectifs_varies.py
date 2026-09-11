@@ -38,7 +38,7 @@ def valider_instances() -> None:
 
         try:
             # Charger le JSON
-            with open(fichier, "r", encoding="utf-8") as f:
+            with open(fichier, encoding="utf-8") as f:
                 data = json.load(f)
 
             # Vérifications de base
@@ -74,9 +74,7 @@ def valider_instances() -> None:
             if "taches" in data and "contraintes" in data:
                 ids_taches = {t.get("id") for t in data["taches"]}
                 taches_avec_compatibilite = {
-                    c.get("tache")
-                    for c in data["contraintes"]
-                    if c.get("type") == "compatibilite_ressource_tache"
+                    c.get("tache") for c in data["contraintes"] if c.get("type") == "compatibilite_ressource_tache"
                 }
                 taches_sans_compatibilite = ids_taches - taches_avec_compatibilite
                 if taches_sans_compatibilite:

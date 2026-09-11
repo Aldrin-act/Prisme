@@ -44,9 +44,7 @@ def valider_fichier_erp(fichier_path: Path) -> tuple[bool, list[str]]:
             continue
 
         if "poste_id" not in operation:
-            erreurs.append(
-                f"Opération '{operation['code_operation']}' : clé 'poste_id' manquante"
-            )
+            erreurs.append(f"Opération '{operation['code_operation']}' : clé 'poste_id' manquante")
             continue
 
         poste_id = operation["poste_id"]
@@ -59,9 +57,7 @@ def valider_fichier_erp(fichier_path: Path) -> tuple[bool, list[str]]:
             )
 
         if "duree_jours" not in operation:
-            erreurs.append(
-                f"Opération '{operation['code_operation']}' : clé 'duree_jours' manquante"
-            )
+            erreurs.append(f"Opération '{operation['code_operation']}' : clé 'duree_jours' manquante")
 
     # Postes orphelins (déclarés mais jamais utilisés) - juste un warning
     postes_orphelins = postes_declares - postes_references

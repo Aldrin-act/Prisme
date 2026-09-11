@@ -12,8 +12,8 @@ Exemples testés :
 
 from __future__ import annotations
 
-import sys
 import json
+import sys
 from pathlib import Path
 
 projet_root = Path(__file__).parent.parent
@@ -22,23 +22,24 @@ sys.path.insert(0, str(projet_root))
 # Charger .env
 try:
     from dotenv import load_dotenv
+
     load_dotenv(projet_root / ".env")
 except ImportError:
     pass
 
 
 def main():
-    print("\n" + "🔬"*35)
+    print("\n" + "🔬" * 35)
     print("  DÉMONSTRATION AGENT BENCHMARKER")
-    print("🔬"*35 + "\n")
+    print("🔬" * 35 + "\n")
 
     print("🎯 Objectif : Recommander le MEILLEUR algorithme pour une instance")
     print("   au lieu de forcer CP-SAT systématiquement.\n")
 
     # Choisir une instance
-    print("="*70)
+    print("=" * 70)
     print("  SÉLECTION DE L'INSTANCE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("Instances disponibles :\n")
     print("1. Petite (10 tâches, 5 ressources) - DSL exemple")
@@ -72,15 +73,15 @@ def main():
     print(f"\n✅ Instance chargée : {nom_instance}\n")
 
     # Analyser les caractéristiques
-    print("="*70)
+    print("=" * 70)
     print("  ANALYSE DES CARACTÉRISTIQUES")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     from generation.agents.benchmarker import analyser_caracteristiques_instance
 
     carac = analyser_caracteristiques_instance(instance_json)
 
-    print(f"📊 Caractéristiques :")
+    print("📊 Caractéristiques :")
     print(f"   • Tâches : {carac.nb_taches}")
     print(f"   • Ressources : {carac.nb_ressources}")
     print(f"   • Contraintes : {carac.nb_contraintes}")
@@ -91,15 +92,15 @@ def main():
     print()
 
     # Appel de l'agent benchmarker
-    print("="*70)
+    print("=" * 70)
     print("  BENCHMARKING (APPEL LLM)")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("🤖 Appel de l'agent Benchmarker...\n")
 
     try:
-        from generation.agents.client_llm import construire_modele_pour_agent
         from generation.agents.benchmarker import benchmarker_algorithmes
+        from generation.agents.client_llm import construire_modele_pour_agent
 
         modele = construire_modele_pour_agent("benchmarker")
         resultat = benchmarker_algorithmes(modele, instance_json)
@@ -111,80 +112,86 @@ def main():
     except Exception as e:
         print(f"❌ Erreur lors du benchmark : {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
     # Afficher la recommandation
-    print("="*70)
+    print("=" * 70)
     print("  RECOMMANDATION")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     reco = resultat.recommandation
 
     print(f"🎯 Algorithme recommandé : **{reco.algorithme.upper()}**\n")
-    print(f"📝 Raison :")
+    print("📝 Raison :")
     print(f"   {reco.raison}\n")
 
     print(f"⏱️  Temps d'exécution estimé : {reco.temps_execution_estime}")
     print(f"🎯 Qualité attendue : {reco.qualite_attendue}\n")
 
     if reco.parametres_suggeres:
-        print(f"⚙️  Paramètres suggérés :")
+        print("⚙️  Paramètres suggérés :")
         for param, valeur in reco.parametres_suggeres.items():
             print(f"   • {param}: {valeur}")
         print()
 
     if reco.alternatives:
-        print(f"🔄 Alternatives :")
+        print("🔄 Alternatives :")
         for alt in reco.alternatives:
             print(f"   • {alt}")
         print()
 
     # Tableau comparatif
-    print("="*70)
+    print("=" * 70)
     print("  COMPARAISON")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print(resultat.comparaison)
     print()
 
     # Sauvegarder
-    print("="*70)
+    print("=" * 70)
     print("  SAUVEGARDE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     chemin_resultat = projet_root / f"benchmark_resultat_{carac.nb_taches}taches.json"
 
     with open(chemin_resultat, "w", encoding="utf-8") as f:
-        json.dump({
-            "instance": nom_instance,
-            "caracteristiques": {
-                "nb_taches": carac.nb_taches,
-                "nb_ressources": carac.nb_ressources,
-                "nb_contraintes": carac.nb_contraintes,
-                "flexibilite_moyenne": carac.flexibilite_moyenne,
-                "a_precedences": carac.a_precedences,
-                "taille_categorie": carac.taille_categorie,
-                "densite_contraintes": carac.densite_contraintes
+        json.dump(
+            {
+                "instance": nom_instance,
+                "caracteristiques": {
+                    "nb_taches": carac.nb_taches,
+                    "nb_ressources": carac.nb_ressources,
+                    "nb_contraintes": carac.nb_contraintes,
+                    "flexibilite_moyenne": carac.flexibilite_moyenne,
+                    "a_precedences": carac.a_precedences,
+                    "taille_categorie": carac.taille_categorie,
+                    "densite_contraintes": carac.densite_contraintes,
+                },
+                "recommandation": {
+                    "algorithme": reco.algorithme,
+                    "raison": reco.raison,
+                    "parametres": reco.parametres_suggeres,
+                    "temps_estime": reco.temps_execution_estime,
+                    "qualite_attendue": reco.qualite_attendue,
+                    "alternatives": reco.alternatives,
+                },
+                "comparaison": resultat.comparaison,
             },
-            "recommandation": {
-                "algorithme": reco.algorithme,
-                "raison": reco.raison,
-                "parametres": reco.parametres_suggeres,
-                "temps_estime": reco.temps_execution_estime,
-                "qualite_attendue": reco.qualite_attendue,
-                "alternatives": reco.alternatives
-            },
-            "comparaison": resultat.comparaison
-        }, f, indent=2, ensure_ascii=False)
+            f,
+            indent=2,
+            ensure_ascii=False,
+        )
 
     print(f"💾 Résultat sauvegardé : {chemin_resultat}")
     print()
 
     # Résumé
-    print("="*70)
+    print("=" * 70)
     print("  ✅ BENCHMARK TERMINÉ")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print(f"🎉 Recommandation : Utilisez **{reco.algorithme.upper()}** pour cette instance !")
     print(f"   • Instance : {nom_instance}")
@@ -204,18 +211,12 @@ def creer_petite_instance():
                 "type": "compatibilite_ressource_tache",
                 "tache": f"T{i}",
                 "ressource": f"R{(i % 5) + 1}",
-                "duree": 30
+                "duree": 30,
             }
             for i in range(1, 11)
-        ] + [
-            {
-                "type": "precedence",
-                "avant": f"T{i}",
-                "apres": f"T{i+1}"
-            }
-            for i in range(1, 5)
-        ],
-        "objectifs": [{"type": "minimiser_makespan"}]
+        ]
+        + [{"type": "precedence", "avant": f"T{i}", "apres": f"T{i + 1}"} for i in range(1, 5)],
+        "objectifs": [{"type": "minimiser_makespan"}],
     }
 
 
@@ -236,13 +237,13 @@ def charger_subset(nb_taches: int):
     ids_taches = {t["id"] for t in taches}
 
     contraintes = [
-        c for c in instance_complete["contraintes"]
+        c
+        for c in instance_complete["contraintes"]
         if c.get("type") != "compatibilite_ressource_tache" or c["tache"] in ids_taches
     ]
 
     ressources_utilisees = {
-        c["ressource"] for c in contraintes
-        if c.get("type") == "compatibilite_ressource_tache"
+        c["ressource"] for c in contraintes if c.get("type") == "compatibilite_ressource_tache"
     }
 
     ressources = [r for r in instance_complete["ressources"] if r["id"] in ressources_utilisees]
@@ -251,7 +252,7 @@ def charger_subset(nb_taches: int):
         "taches": taches,
         "ressources": ressources,
         "contraintes": contraintes,
-        "objectifs": instance_complete["objectifs"]
+        "objectifs": instance_complete["objectifs"],
     }
 
 

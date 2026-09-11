@@ -38,9 +38,7 @@ class ResultatTest:
     details: dict[str, Any]
 
 
-def comparer_instances(
-    attendue: dict[str, Any], obtenue: dict[str, Any]
-) -> tuple[bool, list[str]]:
+def comparer_instances(attendue: dict[str, Any], obtenue: dict[str, Any]) -> tuple[bool, list[str]]:
     """Compare deux instances T-R-C-O et retourne (identique, differences)."""
     differences = []
 
@@ -56,9 +54,7 @@ def comparer_instances(
     ressources_obt = {r["id"] for r in obtenue.get("ressources", [])}
 
     if ressources_att != ressources_obt:
-        differences.append(
-            f"Ressources: attendu {ressources_att}, obtenu {ressources_obt}"
-        )
+        differences.append(f"Ressources: attendu {ressources_att}, obtenu {ressources_obt}")
 
     # Comparer contraintes (simplifié - juste le nombre et types)
     contraintes_att = attendue.get("contraintes", [])
@@ -74,9 +70,7 @@ def comparer_instances(
         types_obt[c["type"]] += 1
 
     if dict(types_att) != dict(types_obt):
-        differences.append(
-            f"Contraintes par type: attendu {dict(types_att)}, obtenu {dict(types_obt)}"
-        )
+        differences.append(f"Contraintes par type: attendu {dict(types_att)}, obtenu {dict(types_obt)}")
 
     return len(differences) == 0, differences
 
@@ -167,9 +161,7 @@ def afficher_resultats(resultats: list[ResultatTest]) -> None:
     for fmt in sorted(par_format.keys()):
         stats = par_format[fmt]
         taux = (stats["succes"] / stats["total"] * 100) if stats["total"] > 0 else 0
-        print(
-            f"   - {fmt:20s} : {taux:5.1f}% ({stats['succes']:2d}/{stats['total']:2d})"
-        )
+        print(f"   - {fmt:20s} : {taux:5.1f}% ({stats['succes']:2d}/{stats['total']:2d})")
 
     # Par difficulté
     print("\n🎯 PAR DIFFICULTÉ :")
@@ -184,12 +176,8 @@ def afficher_resultats(resultats: list[ResultatTest]) -> None:
     for diff in ordre_difficulte:
         if diff in par_difficulte:
             stats = par_difficulte[diff]
-            taux = (
-                (stats["succes"] / stats["total"] * 100) if stats["total"] > 0 else 0
-            )
-            print(
-                f"   - {diff:20s} : {taux:5.1f}% ({stats['succes']:2d}/{stats['total']:2d})"
-            )
+            taux = (stats["succes"] / stats["total"] * 100) if stats["total"] > 0 else 0
+            print(f"   - {diff:20s} : {taux:5.1f}% ({stats['succes']:2d}/{stats['total']:2d})")
 
     # Échecs
     echecs = [r for r in resultats if not r.succes]
@@ -206,18 +194,12 @@ def afficher_resultats(resultats: list[ResultatTest]) -> None:
     print("\n" + "=" * 70)
 
 
-def sauvegarder_rapport(
-    resultats: list[ResultatTest], chemin_rapport: Path
-) -> None:
+def sauvegarder_rapport(resultats: list[ResultatTest], chemin_rapport: Path) -> None:
     """Sauvegarde un rapport détaillé en JSON."""
     rapport = {
         "total": len(resultats),
         "succes": sum(1 for r in resultats if r.succes),
-        "taux_global": (
-            sum(1 for r in resultats if r.succes) / len(resultats) * 100
-            if resultats
-            else 0
-        ),
+        "taux_global": (sum(1 for r in resultats if r.succes) / len(resultats) * 100 if resultats else 0),
         "resultats": [
             {
                 "id": r.id,
@@ -257,9 +239,7 @@ def main():
     print(f"\n📂 Chargement du catalogue : {chemin_catalogue}")
 
     if not chemin_catalogue.exists():
-        print(
-            f"❌ Catalogue non trouvé. Lancez d'abord : scripts/generer_jeu_donnees_comprehension.py"
-        )
+        print("❌ Catalogue non trouvé. Lancez d'abord : scripts/generer_jeu_donnees_comprehension.py")
         return
 
     with open(chemin_catalogue, encoding="utf-8") as f:
@@ -288,10 +268,7 @@ def main():
 
     # Sauvegarder rapport
     chemin_rapport = (
-        Path(__file__).parent.parent
-        / "validation_engine"
-        / "agent_comprehension_bench"
-        / "rapport_tests.json"
+        Path(__file__).parent.parent / "validation_engine" / "agent_comprehension_bench" / "rapport_tests.json"
     )
     sauvegarder_rapport(resultats, chemin_rapport)
 

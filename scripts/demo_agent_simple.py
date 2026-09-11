@@ -5,7 +5,6 @@ Version standalone qui n'a pas de dépendances externes.
 
 import json
 
-
 # ============================================================================
 # Exemples de données brutes
 # ============================================================================
@@ -23,25 +22,40 @@ EXEMPLES = [
             "taches": [
                 {"id": "Cut_Metal", "nom": "Découpe métal"},
                 {"id": "Weld_Parts", "nom": "Soudure pièces"},
-                {"id": "Paint_Surface", "nom": "Peinture surface"}
+                {"id": "Paint_Surface", "nom": "Peinture surface"},
             ],
             "ressources": [
                 {"id": "Laser_Cutter", "nom": "Découpeuse laser"},
                 {"id": "Welder_Station", "nom": "Poste de soudure"},
-                {"id": "Paint_Booth", "nom": "Cabine de peinture"}
+                {"id": "Paint_Booth", "nom": "Cabine de peinture"},
             ],
             "contraintes": [
-                {"type": "compatibilite_ressource_tache", "tache": "Cut_Metal", "ressource": "Laser_Cutter", "duree": 150},
-                {"type": "compatibilite_ressource_tache", "tache": "Weld_Parts", "ressource": "Welder_Station", "duree": 90},
-                {"type": "compatibilite_ressource_tache", "tache": "Paint_Surface", "ressource": "Paint_Booth", "duree": 180}
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "Cut_Metal",
+                    "ressource": "Laser_Cutter",
+                    "duree": 150,
+                },
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "Weld_Parts",
+                    "ressource": "Welder_Station",
+                    "duree": 90,
+                },
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "Paint_Surface",
+                    "ressource": "Paint_Booth",
+                    "duree": 180,
+                },
             ],
-            "objectifs": [{"type": "minimiser_makespan"}]
+            "objectifs": [{"type": "minimiser_makespan"}],
         },
         "avertissements": [
             "Durées converties de heures en minutes (2.5h → 150min, etc.)",
             "Aucune précédence détectée dans les données CSV",
-            "Une seule ressource compatible par tâche (pas de flexibilité FJSP)"
-        ]
+            "Une seule ressource compatible par tâche (pas de flexibilité FJSP)",
+        ],
     },
     {
         "numero": 2,
@@ -81,26 +95,26 @@ EXEMPLES = [
         "output_json": {
             "taches": [
                 {"id": "WO_1001", "nom": "Assembly", "priorite": 2},
-                {"id": "WO_1002", "nom": "Quality_Check", "priorite": 1}
+                {"id": "WO_1002", "nom": "Quality_Check", "priorite": 1},
             ],
             "ressources": [
                 {"id": "WS_A", "nom": "Assembly Station", "competences": ["mechanical", "electrical"]},
-                {"id": "WS_Q", "nom": "QC Station", "competences": ["quality"]}
+                {"id": "WS_Q", "nom": "QC Station", "competences": ["quality"]},
             ],
             "contraintes": [
                 {"type": "precedence", "avant": "WO_1001", "apres": "WO_1002"},
                 {"type": "competence_requise", "tache": "WO_1001", "competence": "mechanical"},
                 {"type": "competence_requise", "tache": "WO_1002", "competence": "quality"},
                 {"type": "compatibilite_ressource_tache", "tache": "WO_1001", "ressource": "WS_A", "duree": 45},
-                {"type": "compatibilite_ressource_tache", "tache": "WO_1002", "ressource": "WS_Q", "duree": 15}
+                {"type": "compatibilite_ressource_tache", "tache": "WO_1002", "ressource": "WS_Q", "duree": 15},
             ],
-            "objectifs": [{"type": "minimiser_makespan"}]
+            "objectifs": [{"type": "minimiser_makespan"}],
         },
         "avertissements": [
             "Précédence détectée via 'must_finish_before_wo'",
             "Compatibilités déduites des compétences déclarées",
-            "Priorités extraites des work orders"
-        ]
+            "Priorités extraites des work orders",
+        ],
     },
     {
         "numero": 3,
@@ -116,28 +130,43 @@ La découpe doit être terminée avant la soudure.""",
             "taches": [
                 {"id": "T_Decoupe", "nom": "Découpe du métal"},
                 {"id": "T_Soudure", "nom": "Soudure"},
-                {"id": "T_Peinture", "nom": "Peinture"}
+                {"id": "T_Peinture", "nom": "Peinture"},
             ],
             "ressources": [
                 {"id": "R_Laser", "nom": "Machine laser"},
                 {"id": "R_Soudure", "nom": "Poste de soudure"},
-                {"id": "R_Peinture", "nom": "Stand de peinture"}
+                {"id": "R_Peinture", "nom": "Stand de peinture"},
             ],
             "contraintes": [
                 {"type": "precedence", "avant": "T_Decoupe", "apres": "T_Soudure"},
                 {"type": "precedence", "avant": "T_Soudure", "apres": "T_Peinture"},
-                {"type": "compatibilite_ressource_tache", "tache": "T_Decoupe", "ressource": "R_Laser", "duree": 120},
-                {"type": "compatibilite_ressource_tache", "tache": "T_Soudure", "ressource": "R_Soudure", "duree": 90},
-                {"type": "compatibilite_ressource_tache", "tache": "T_Peinture", "ressource": "R_Peinture", "duree": 180}
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "T_Decoupe",
+                    "ressource": "R_Laser",
+                    "duree": 120,
+                },
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "T_Soudure",
+                    "ressource": "R_Soudure",
+                    "duree": 90,
+                },
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "T_Peinture",
+                    "ressource": "R_Peinture",
+                    "duree": 180,
+                },
             ],
-            "objectifs": [{"type": "minimiser_makespan"}]
+            "objectifs": [{"type": "minimiser_makespan"}],
         },
         "avertissements": [
             "Durée de découpe marquée 'environ' - peut être imprécise",
             "IDs générés automatiquement (T_*, R_*) depuis le texte",
             "Chaîne de précédences détectée : Découpe → Soudure → Peinture",
-            "Une seule ressource compatible par tâche déduite du contexte"
-        ]
+            "Une seule ressource compatible par tâche déduite du contexte",
+        ],
     },
     {
         "numero": 4,
@@ -149,26 +178,38 @@ TECH_B peut faire la maintenance aussi.""",
         "output_json": {
             "taches": [
                 {"id": "URGENT_001", "nom": "Réparation urgente"},
-                {"id": "MAINT_002", "nom": "Maintenance"}
+                {"id": "MAINT_002", "nom": "Maintenance"},
             ],
-            "ressources": [
-                {"id": "TECH_A", "nom": "Technicien A"},
-                {"id": "TECH_B", "nom": "Technicien B"}
-            ],
+            "ressources": [{"id": "TECH_A", "nom": "Technicien A"}, {"id": "TECH_B", "nom": "Technicien B"}],
             "contraintes": [
-                {"type": "compatibilite_ressource_tache", "tache": "URGENT_001", "ressource": "TECH_A", "duree": 30},
-                {"type": "compatibilite_ressource_tache", "tache": "MAINT_002", "ressource": "TECH_A", "duree": 45},
-                {"type": "compatibilite_ressource_tache", "tache": "MAINT_002", "ressource": "TECH_B", "duree": 60}
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "URGENT_001",
+                    "ressource": "TECH_A",
+                    "duree": 30,
+                },
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "MAINT_002",
+                    "ressource": "TECH_A",
+                    "duree": 45,
+                },
+                {
+                    "type": "compatibilite_ressource_tache",
+                    "tache": "MAINT_002",
+                    "ressource": "TECH_B",
+                    "duree": 60,
+                },
             ],
-            "objectifs": [{"type": "minimiser_makespan"}]
+            "objectifs": [{"type": "minimiser_makespan"}],
         },
         "avertissements": [
             "⚠️ URGENT_001 sans durée spécifiée - durée estimée à 30 min par défaut",
             "⚠️ URGENT_001 compatible uniquement avec TECH_A - pas de flexibilité",
             "MAINT_002 flexible (2 ressources compatibles) mais durées différentes déduites",
-            "Aucune précédence détectée - tâches peuvent s'exécuter en parallèle"
-        ]
-    }
+            "Aucune précédence détectée - tâches peuvent s'exécuter en parallèle",
+        ],
+    },
 ]
 
 
@@ -188,7 +229,7 @@ def demo_exemple(exemple: dict) -> None:
     # Données brutes
     print("📥 DONNÉES BRUTES (Input)")
     print("-" * 70)
-    print(exemple['donnees_brutes'])
+    print(exemple["donnees_brutes"])
     print()
 
     # Traitement
@@ -200,14 +241,14 @@ def demo_exemple(exemple: dict) -> None:
     # Output JSON
     print("📄 JSON T-R-C-O GÉNÉRÉ (Output de l'agent)")
     print("-" * 70)
-    print(json.dumps(exemple['output_json'], indent=2, ensure_ascii=False))
+    print(json.dumps(exemple["output_json"], indent=2, ensure_ascii=False))
     print()
 
     # Avertissements
-    if exemple['avertissements']:
+    if exemple["avertissements"]:
         print("⚠️  AVERTISSEMENTS")
         print("-" * 70)
-        for i, avert in enumerate(exemple['avertissements'], 1):
+        for i, avert in enumerate(exemple["avertissements"], 1):
             print(f"  {i}. {avert}")
         print()
     else:
@@ -228,7 +269,7 @@ def demo_exemple(exemple: dict) -> None:
     print("-" * 70)
     print("✅ Instance prête pour l'ingestion")
     print("✅ Peut être envoyée au générateur de solveur")
-    if exemple['avertissements']:
+    if exemple["avertissements"]:
         print(f"⚠️  {len(exemple['avertissements'])} avertissement(s) à vérifier par un humain")
     print()
 

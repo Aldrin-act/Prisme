@@ -144,9 +144,12 @@ def evaluer_un_cas_reference(
     ecarts: list[str] = []
     if comparer_affectation:
         affectation_obtenue = {operation.tache: operation.ressource for operation in planning.operations}
-        affectation_attendue = {operation.tache: operation.ressource for operation in cas.planning_attendu.operations}
+        affectation_attendue = {
+            operation.tache: operation.ressource for operation in cas.planning_attendu.operations
+        }
         ecarts.extend(
-            f"tâche {tache!r} : ressource attendue {ressource_attendue!r}, obtenue {affectation_obtenue.get(tache)!r}"
+            f"tâche {tache!r} : ressource attendue {ressource_attendue!r}, "
+            f"obtenue {affectation_obtenue.get(tache)!r}"
             for tache, ressource_attendue in affectation_attendue.items()
             if affectation_obtenue.get(tache) != ressource_attendue
         )

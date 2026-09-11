@@ -23,9 +23,7 @@ def demo_flow():
     print("🔄" * 35 + "\n")
 
     print("📖 Ce script montre ce qui se passe APRÈS avoir ingéré des données ERP.")
-    print(
-        "   On suppose que l'Étape 1 (Ingestion) est déjà terminée avec succès.\n"
-    )
+    print("   On suppose que l'Étape 1 (Ingestion) est déjà terminée avec succès.\n")
 
     # ========================================================================
     # ÉTAPE 1 : Instance T-R-C-O disponible
@@ -36,9 +34,7 @@ def demo_flow():
     print("✅ Nous avons déjà une InstanceTRCO valide depuis l'ingestion.")
     print("   Exemple : atelier_trois_taches.json\n")
 
-    chemin_instance = (
-        Path(__file__).parent.parent / "dsl/examples/valid/atelier_trois_taches.json"
-    )
+    chemin_instance = Path(__file__).parent.parent / "dsl/examples/valid/atelier_trois_taches.json"
 
     with open(chemin_instance, encoding="utf-8") as f:
         instance_data = json.load(f)
@@ -62,13 +58,11 @@ def demo_flow():
     afficher_etape(2, "Lookup / Génération du solveur")
 
     print("🔍 Le système cherche un solveur existant pour cette signature...")
-    print(f"   - client_id : 'client_test_1'")
+    print("   - client_id : 'client_test_1'")
     print(f"   - signature : '{signature}'")
 
     print("\n💡 Deux cas possibles :")
-    print(
-        "   A) Solveur EXISTE déjà → Skip génération, passer à Étape 4 (Exécution)"
-    )
+    print("   A) Solveur EXISTE déjà → Skip génération, passer à Étape 4 (Exécution)")
     print("   B) Solveur N'EXISTE PAS → Génération nécessaire (ci-dessous)\n")
 
     print("⚠️  GÉNÉRATION (si nécessaire) :")
@@ -83,9 +77,7 @@ def demo_flow():
     print("⏱️  Temps génération : ~30-60 secondes")
     print("🎯 Taux de succès attendu : 60-80% (non mesuré en production)")
 
-    print(
-        "\n✅ Pour cette démo, on suppose que le solveur de référence existe déjà."
-    )
+    print("\n✅ Pour cette démo, on suppose que le solveur de référence existe déjà.")
 
     # ========================================================================
     # ÉTAPE 3 : Stockage (si génération a eu lieu)
@@ -94,9 +86,7 @@ def demo_flow():
     afficher_etape(3, "Stockage (si génération)")
 
     print("💾 Si un solveur vient d'être généré, il est enregistré :")
-    print(
-        "   - Fichier : solver_store/artifacts/<sha256>.py (code Python frozen)"
-    )
+    print("   - Fichier : solver_store/artifacts/<sha256>.py (code Python frozen)")
     print("   - Base de données : métadonnées (client_id, signature, verdict)")
     print("   - Index : permet lookup rapide lors des exécutions futures\n")
 
@@ -224,9 +214,7 @@ def demo_flow():
     print("   3. Tester via curl ou Postman")
     print("   4. Explorer le dashboard : cd dashboard && npm run dev")
 
-    print(
-        "\n📚 Documentation complète : docs/flow_complet_prisme.md"
-    )
+    print("\n📚 Documentation complète : docs/flow_complet_prisme.md")
     print()
 
 

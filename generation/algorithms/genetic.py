@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass
-from typing import Callable
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
@@ -166,9 +165,7 @@ def _generer_chromosome_aleatoire(
 ) -> Chromosome:
     """Génère un chromosome aléatoire respectant les précédences."""
     # Assignations aléatoires
-    assignations = {
-        tache.id: random.choice(ressources_par_tache[tache.id]) for tache in instance.taches
-    }
+    assignations = {tache.id: random.choice(ressources_par_tache[tache.id]) for tache in instance.taches}
 
     # Ordre topologique approximatif (respecte précédences)
     ordre = _tri_topologique_approche([t.id for t in instance.taches], graphe_precedences)
@@ -199,9 +196,7 @@ def _selection_tournoi(population: list[Chromosome], k: int) -> Chromosome:
     return min(tournoi, key=lambda c: c.makespan or float("inf"))
 
 
-def _crossover(
-    parent1: Chromosome, parent2: Chromosome, ressources_par_tache: dict[str, list[str]]
-) -> Chromosome:
+def _crossover(parent1: Chromosome, parent2: Chromosome, ressources_par_tache: dict[str, list[str]]) -> Chromosome:
     """Crossover partiel : mélange assignations et ordre."""
     # Assignations : moitié de chaque parent
     taches = list(parent1.assignations.keys())

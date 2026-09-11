@@ -17,8 +17,8 @@ Workflow:
 
 from __future__ import annotations
 
-import sys
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -40,26 +40,25 @@ def charger_instance_complete():
         data = json.load(f)
 
     from dsl.schema import InstanceTRCO
+
     return InstanceTRCO.model_validate(data)
 
 
 def filtrer_top_n_taches(instance, n: int):
     """Garde les N premières tâches (par ordre d'ID)."""
-    from dsl.schema import InstanceTRCO, CompatibiliteRessourceTache
+    from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO
 
     taches_gardees = instance.taches[:n]
     ids_taches = {t.id for t in taches_gardees}
 
     # Filtrer les contraintes
     contraintes_filtrees = [
-        c for c in instance.contraintes
-        if not isinstance(c, CompatibiliteRessourceTache) or c.tache in ids_taches
+        c for c in instance.contraintes if not isinstance(c, CompatibiliteRessourceTache) or c.tache in ids_taches
     ]
 
     # Ressources utilisées
     ressources_utilisees = {
-        c.ressource for c in contraintes_filtrees
-        if isinstance(c, CompatibiliteRessourceTache)
+        c.ressource for c in contraintes_filtrees if isinstance(c, CompatibiliteRessourceTache)
     }
 
     ressources_filtrees = [r for r in instance.ressources if r.id in ressources_utilisees]
@@ -68,13 +67,13 @@ def filtrer_top_n_taches(instance, n: int):
         taches=taches_gardees,
         ressources=ressources_filtrees,
         contraintes=contraintes_filtrees,
-        objectifs=instance.objectifs
+        objectifs=instance.objectifs,
     )
 
 
 def filtrer_taches_courtes(instance, duree_max: int):
     """Garde uniquement les tâches ≤ duree_max minutes."""
-    from dsl.schema import InstanceTRCO, CompatibiliteRessourceTache
+    from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO
 
     # Trouver les tâches courtes
     taches_courtes = set()
@@ -87,14 +86,12 @@ def filtrer_taches_courtes(instance, duree_max: int):
 
     # Filtrer contraintes
     contraintes_filtrees = [
-        c for c in instance.contraintes
-        if not isinstance(c, CompatibiliteRessourceTache) or c.tache in ids_taches
+        c for c in instance.contraintes if not isinstance(c, CompatibiliteRessourceTache) or c.tache in ids_taches
     ]
 
     # Ressources
     ressources_utilisees = {
-        c.ressource for c in contraintes_filtrees
-        if isinstance(c, CompatibiliteRessourceTache)
+        c.ressource for c in contraintes_filtrees if isinstance(c, CompatibiliteRessourceTache)
     }
     ressources_filtrees = [r for r in instance.ressources if r.id in ressources_utilisees]
 
@@ -102,17 +99,18 @@ def filtrer_taches_courtes(instance, duree_max: int):
         taches=taches_filtrees,
         ressources=ressources_filtrees,
         contraintes=contraintes_filtrees,
-        objectifs=instance.objectifs
+        objectifs=instance.objectifs,
     )
 
 
 def filtrer_par_ressource(instance, ressource_id: str):
     """Garde uniquement les tâches compatibles avec une ressource donnée."""
-    from dsl.schema import InstanceTRCO, CompatibiliteRessourceTache
+    from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO
 
     # Tâches compatibles avec cette ressource
     taches_compatibles = {
-        c.tache for c in instance.contraintes
+        c.tache
+        for c in instance.contraintes
         if isinstance(c, CompatibiliteRessourceTache) and c.ressource == ressource_id
     }
 
@@ -121,14 +119,12 @@ def filtrer_par_ressource(instance, ressource_id: str):
 
     # Contraintes
     contraintes_filtrees = [
-        c for c in instance.contraintes
-        if not isinstance(c, CompatibiliteRessourceTache) or c.tache in ids_taches
+        c for c in instance.contraintes if not isinstance(c, CompatibiliteRessourceTache) or c.tache in ids_taches
     ]
 
     # Ressources utilisées
     ressources_utilisees = {
-        c.ressource for c in contraintes_filtrees
-        if isinstance(c, CompatibiliteRessourceTache)
+        c.ressource for c in contraintes_filtrees if isinstance(c, CompatibiliteRessourceTache)
     }
     ressources_filtrees = [r for r in instance.ressources if r.id in ressources_utilisees]
 
@@ -136,7 +132,7 @@ def filtrer_par_ressource(instance, ressource_id: str):
         taches=taches_filtrees,
         ressources=ressources_filtrees,
         contraintes=contraintes_filtrees,
-        objectifs=instance.objectifs
+        objectifs=instance.objectifs,
     )
 
 
@@ -155,39 +151,45 @@ def resoudre_instance(instance, timeout_seconds: int = 120):
 
 def afficher_comparaison(instance_complete, instance_filtree):
     """Affiche la comparaison entre l'instance complète et filtrée."""
-    print("="*70)
+    print("=" * 70)
     print("  COMPARAISON")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
-    print(f"Instance complète → Instance filtrée :")
-    print(f"  • Tâches : {len(instance_complete.taches)} → {len(instance_filtree.taches)} "
-          f"({len(instance_filtree.taches)/len(instance_complete.taches)*100:.1f}%)")
-    print(f"  • Ressources : {len(instance_complete.ressources)} → {len(instance_filtree.ressources)} "
-          f"({len(instance_filtree.ressources)/len(instance_complete.ressources)*100:.1f}%)")
-    print(f"  • Contraintes : {len(instance_complete.contraintes)} → {len(instance_filtree.contraintes)} "
-          f"({len(instance_filtree.contraintes)/len(instance_complete.contraintes)*100:.1f}%)")
+    print("Instance complète → Instance filtrée :")
+    print(
+        f"  • Tâches : {len(instance_complete.taches)} → {len(instance_filtree.taches)} "
+        f"({len(instance_filtree.taches) / len(instance_complete.taches) * 100:.1f}%)"
+    )
+    print(
+        f"  • Ressources : {len(instance_complete.ressources)} → {len(instance_filtree.ressources)} "
+        f"({len(instance_filtree.ressources) / len(instance_complete.ressources) * 100:.1f}%)"
+    )
+    print(
+        f"  • Contraintes : {len(instance_complete.contraintes)} → {len(instance_filtree.contraintes)} "
+        f"({len(instance_filtree.contraintes) / len(instance_complete.contraintes) * 100:.1f}%)"
+    )
     print()
 
 
 def main():
-    print("\n" + "🔬"*35)
+    print("\n" + "🔬" * 35)
     print("  RÉSOLUTION GREENSIG - SOUS-ENSEMBLE")
-    print("🔬"*35 + "\n")
+    print("🔬" * 35 + "\n")
 
     # 1. Charger instance complète
     print("📂 Chargement de l'instance complète...\n")
     instance_complete = charger_instance_complete()
 
-    print(f"✅ Instance chargée :")
+    print("✅ Instance chargée :")
     print(f"   • Tâches : {len(instance_complete.taches)}")
     print(f"   • Ressources : {len(instance_complete.ressources)}")
     print(f"   • Contraintes : {len(instance_complete.contraintes)}")
     print()
 
     # 2. Choisir le filtre
-    print("="*70)
+    print("=" * 70)
     print("  FILTRAGE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("Choisissez un filtre :\n")
     print("1. Top N tâches (ex: 50, 100, 500)")
@@ -211,14 +213,15 @@ def main():
 
     elif choix == "3":
         from dsl.schema import CompatibiliteRessourceTache
-        ressources = sorted(set(
-            c.ressource for c in instance_complete.contraintes
-            if isinstance(c, CompatibiliteRessourceTache)
-        ))
-        print(f"\nRessources disponibles (échantillon) :")
+
+        ressources = sorted(
+            set(c.ressource for c in instance_complete.contraintes if isinstance(c, CompatibiliteRessourceTache))
+        )
+        print("\nRessources disponibles (échantillon) :")
         for r in ressources[:20]:
             nb_taches = sum(
-                1 for c in instance_complete.contraintes
+                1
+                for c in instance_complete.contraintes
                 if isinstance(c, CompatibiliteRessourceTache) and c.ressource == r
             )
             print(f"  • {r} : {nb_taches} tâches compatibles")
@@ -237,16 +240,16 @@ def main():
     afficher_comparaison(instance_complete, instance_filtree)
 
     # 4. Résolution
-    print("="*70)
+    print("=" * 70)
     print("  RÉSOLUTION")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     planning, duree = resoudre_instance(instance_filtree)
 
     # 5. Résultats
-    print("="*70)
+    print("=" * 70)
     print("  RÉSULTATS")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     if planning is None:
         print(f"⚠️  AUCUNE SOLUTION TROUVÉE en {duree:.1f}s\n")
@@ -262,16 +265,15 @@ def main():
     makespan = 0
     for op in planning.operations:
         duree_op = next(
-            c.duree for c in instance_filtree.contraintes
-            if isinstance(c, CompatibiliteRessourceTache)
-            and c.tache == op.tache
-            and c.ressource == op.ressource
+            c.duree
+            for c in instance_filtree.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
         )
         makespan = max(makespan, op.debut + duree_op)
 
     print("📊 STATISTIQUES :")
     print(f"   • Opérations planifiées : {len(planning.operations)}")
-    print(f"   • Makespan : {makespan} min ({makespan/60:.1f}h)")
+    print(f"   • Makespan : {makespan} min ({makespan / 60:.1f}h)")
     print(f"   • Temps de résolution : {duree:.1f}s")
     print()
 
@@ -279,18 +281,17 @@ def main():
     print("📅 TIMELINE (10 premières opérations) :")
     for op in sorted(planning.operations, key=lambda o: o.debut)[:10]:
         duree_op = next(
-            c.duree for c in instance_filtree.contraintes
-            if isinstance(c, CompatibiliteRessourceTache)
-            and c.tache == op.tache
-            and c.ressource == op.ressource
+            c.duree
+            for c in instance_filtree.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
         )
         print(f"   • {op.tache} sur {op.ressource} : {op.debut} → {op.debut + duree_op} min")
     print()
 
     # 6. Sauvegarde
-    print("="*70)
+    print("=" * 70)
     print("  SAUVEGARDE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     chemin_instance = projet_root / "greensig_subset_instance.json"
     chemin_planning = projet_root / "greensig_subset_planning.json"
@@ -299,19 +300,21 @@ def main():
         json.dump(instance_filtree.model_dump(), f, indent=2, ensure_ascii=False)
 
     with open(chemin_planning, "w", encoding="utf-8") as f:
-        json.dump({
-            "duree_resolution_secondes": duree,
-            "planning": planning.model_dump()
-        }, f, indent=2, ensure_ascii=False)
+        json.dump(
+            {"duree_resolution_secondes": duree, "planning": planning.model_dump()},
+            f,
+            indent=2,
+            ensure_ascii=False,
+        )
 
     print(f"💾 Instance filtrée : {chemin_instance}")
     print(f"💾 Planning : {chemin_planning}")
     print()
 
     # 7. Résumé
-    print("="*70)
+    print("=" * 70)
     print("  ✅ RÉSOLUTION RÉUSSIE !")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("🎉 Le sous-ensemble a été résolu avec succès !")
     print(f"   • Tâches résolues : {len(instance_filtree.taches)}/{len(instance_complete.taches)}")

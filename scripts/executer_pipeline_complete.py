@@ -31,7 +31,9 @@ def charger_instance(chemin: Path) -> InstanceTRCO:
     return InstanceTRCO(**data)
 
 
-def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", api_url: str = "http://127.0.0.1:8000"):
+def executer_pipeline(
+    chemin_instance: Path, client_id: str = "pipeline_user", api_url: str = "http://127.0.0.1:8000"
+):
     """Exécute la pipeline complète pour une instance donnée."""
 
     print("=" * 80)
@@ -52,7 +54,7 @@ def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", a
     print(f"\n[2/5] Chargement de l'instance depuis {chemin_instance.name}...")
     try:
         instance = charger_instance(chemin_instance)
-        print(f"      [OK] Instance chargee:")
+        print("      [OK] Instance chargee:")
         print(f"           - {len(instance.taches)} taches")
         print(f"           - {len(instance.ressources)} ressources")
         print(f"           - {len(instance.contraintes)} contraintes")
@@ -65,10 +67,7 @@ def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", a
     print(f"\n[3/5] Ingestion de l'instance via l'API ({api_url})...")
     try:
         with httpx.Client(timeout=30.0) as client:
-            response = client.post(
-                f"{api_url}/ingestion/{client_id}",
-                json=instance.model_dump(mode="json")
-            )
+            response = client.post(f"{api_url}/ingestion/{client_id}", json=instance.model_dump(mode="json"))
             response.raise_for_status()
             result = response.json()
             instance_id = result["instance_id"]
@@ -78,13 +77,10 @@ def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", a
         return
 
     # 4. Exécuter le solveur
-    print(f"\n[4/5] Execution du solveur...")
+    print("\n[4/5] Execution du solveur...")
     try:
         with httpx.Client(timeout=60.0) as client:
-            response = client.post(
-                f"{api_url}/execution/{instance_id}",
-                params={"client_id": client_id}
-            )
+            response = client.post(f"{api_url}/execution/{instance_id}", params={"client_id": client_id})
             response.raise_for_status()
             result = response.json()
             execution_id = result["execution_id"]
@@ -102,14 +98,14 @@ def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", a
         return
 
     # 5. Récupérer le planning
-    print(f"\n[5/5] Recuperation du planning...")
+    print("\n[5/5] Recuperation du planning...")
     try:
         with httpx.Client(timeout=30.0) as client:
             response = client.get(f"{api_url}/planning/{execution_id}")
             response.raise_for_status()
             planning_data = response.json()
 
-            print(f"      [OK] Planning recupere")
+            print("      [OK] Planning recupere")
             print("\n" + "=" * 80)
             print("PLANNING OBTENU")
             print("=" * 80)
@@ -129,9 +125,11 @@ def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", a
                     # Chercher la durée dans les contraintes de l'instance
                     duree = 0
                     for contrainte in instance.contraintes:
-                        if (contrainte.type == "compatibilite_ressource_tache" and
-                            contrainte.tache == tache_id and
-                            contrainte.ressource == ressource_id):
+                        if (
+                            contrainte.type == "compatibilite_ressource_tache"
+                            and contrainte.tache == tache_id
+                            and contrainte.ressource == ressource_id
+                        ):
                             duree = contrainte.duree
                             break
 
@@ -147,7 +145,7 @@ def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", a
         return
 
     # 6. Bonus : récupérer le code source du solveur (audit)
-    print(f"\n[BONUS] Code source du solveur (audit)...")
+    print("\n[BONUS] Code source du solveur (audit)...")
     try:
         with httpx.Client(timeout=30.0) as client:
             response = client.get(f"{api_url}/audit/{execution_id}")
@@ -175,26 +173,16 @@ def executer_pipeline(chemin_instance: Path, client_id: str = "pipeline_user", a
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Execute la pipeline complete PRISME sur une instance TRCO"
-    )
+    parser = argparse.ArgumentParser(description="Execute la pipeline complete PRISME sur une instance TRCO")
+    parser.add_argument("--instance", type=Path, required=True, help="Chemin vers l'instance TRCO enrichie (JSON)")
     parser.add_argument(
-        "--instance",
-        type=Path,
-        required=True,
-        help="Chemin vers l'instance TRCO enrichie (JSON)"
-    )
-    parser.add_argument(
-        "--client-id",
-        type=str,
-        default="pipeline_user",
-        help="Identifiant du client (defaut: pipeline_user)"
+        "--client-id", type=str, default="pipeline_user", help="Identifiant du client (defaut: pipeline_user)"
     )
     parser.add_argument(
         "--api-url",
         type=str,
         default="http://127.0.0.1:8000",
-        help="URL de l'API PRISME (defaut: http://127.0.0.1:8000)"
+        help="URL de l'API PRISME (defaut: http://127.0.0.1:8000)",
     )
 
     args = parser.parse_args()

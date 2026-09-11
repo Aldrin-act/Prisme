@@ -1,10 +1,13 @@
 from __future__ import annotations
+
 from dsl.schema import (
-    InstanceTRCO, Planning, OperationPlanifiee, Tache, Ressource, Contrainte,
-    Precedence, CompatibiliteRessourceTache, Echeance
+    CompatibiliteRessourceTache,
+    Echeance,
+    InstanceTRCO,
+    Precedence,
+    Ressource,
+    Tache,
 )
-from typing import List
-import pytest
 
 
 def test_instance_une_tache_une_ressource():
@@ -13,12 +16,9 @@ def test_instance_une_tache_une_ressource():
     ressource = Ressource(id="R1")
     compatibilites = [CompatibiliteRessourceTache(tache=tache, ressource=ressource, duree=5)]
     instance = InstanceTRCO(
-        taches=[tache],
-        ressources=[ressource],
-        compatibilites_ressource_tache=compatibilites,
-        contraintes=[]
+        taches=[tache], ressources=[ressource], compatibilites_ressource_tache=compatibilites, contraintes=[]
     )
-    
+
     planning = resoudre(instance)
     assert planning is not None
     assert len(planning.operations) == 1
@@ -38,9 +38,9 @@ def test_instance_infaisable():
         taches=[tache1, tache2],
         ressources=[ressource],
         compatibilites_ressource_tache=compatibilites,
-        contraintes=[]
+        contraintes=[],
     )
-    
+
     planning = resoudre(instance)
     assert planning is None
 
@@ -52,15 +52,15 @@ def test_instance_ressources_multiples_durees_differentes():
     ressource2 = Ressource(id="R2")
     compatibilites = [
         CompatibiliteRessourceTache(tache=tache, ressource=ressource1, duree=3),
-        CompatibiliteRessourceTache(tache=tache, ressource=ressource2, duree=5)
+        CompatibiliteRessourceTache(tache=tache, ressource=ressource2, duree=5),
     ]
     instance = InstanceTRCO(
         taches=[tache],
         ressources=[ressource1, ressource2],
         compatibilites_ressource_tache=compatibilites,
-        contraintes=[]
+        contraintes=[],
     )
-    
+
     planning = resoudre(instance)
     assert planning is not None
     assert len(planning.operations) == 1
@@ -82,16 +82,16 @@ def test_instance_avec_precedence():
     ressource = Ressource(id="R1")
     compatibilites = [
         CompatibiliteRessourceTache(tache=tache1, ressource=ressource, duree=2),
-        CompatibiliteRessourceTache(tache=tache2, ressource=ressource, duree=3)
+        CompatibiliteRessourceTache(tache=tache2, ressource=ressource, duree=3),
     ]
     precedence = Precedence(predecesseur=tache1, successeur=tache2)
     instance = InstanceTRCO(
         taches=[tache1, tache2],
         ressources=[ressource],
         compatibilites_ressource_tache=compatibilites,
-        contraintes=[precedence]
+        contraintes=[precedence],
     )
-    
+
     planning = resoudre(instance)
     assert planning is not None
     assert len(planning.operations) == 2
@@ -110,9 +110,9 @@ def test_instance_avec_echeance():
         taches=[tache],
         ressources=[ressource],
         compatibilites_ressource_tache=compatibilites,
-        contraintes=[echeance]
+        contraintes=[echeance],
     )
-    
+
     planning = resoudre(instance)
     assert planning is None  # Infaisable car durée > échéance
 
@@ -127,9 +127,9 @@ def test_instance_avec_echeance_faisable():
         taches=[tache],
         ressources=[ressource],
         compatibilites_ressource_tache=compatibilites,
-        contraintes=[echeance]
+        contraintes=[echeance],
     )
-    
+
     planning = resoudre(instance)
     assert planning is not None
     assert len(planning.operations) == 1
@@ -145,15 +145,15 @@ def test_instance_ressources_disjointes():
     ressource2 = Ressource(id="R2")
     compatibilites = [
         CompatibiliteRessourceTache(tache=tache1, ressource=ressource1, duree=2),
-        CompatibiliteRessourceTache(tache=tache2, ressource=ressource2, duree=3)
+        CompatibiliteRessourceTache(tache=tache2, ressource=ressource2, duree=3),
     ]
     instance = InstanceTRCO(
         taches=[tache1, tache2],
         ressources=[ressource1, ressource2],
         compatibilites_ressource_tache=compatibilites,
-        contraintes=[]
+        contraintes=[],
     )
-    
+
     planning = resoudre(instance)
     assert planning is not None
     assert len(planning.operations) == 2

@@ -48,30 +48,18 @@ def generer_atelier_mecanique_large(nb_lots: int = 20) -> dict[str, Any]:
             tache_id = f"T{tache_id_counter:04d}"
             duree = random.randint(1, 3)
 
-            taches.append({
-                "id": tache_id,
-                "nom": f"Lot{lot_num:03d}_{phase}",
-                "duree_estimee_jours": duree
-            })
+            taches.append({"id": tache_id, "nom": f"Lot{lot_num:03d}_{phase}", "duree_estimee_jours": duree})
 
             # Ajouter compétence requise
             competence = random.choice(competences_par_phase[phase])
-            contraintes.append({
-                "type": "competence_requise",
-                "tache": tache_id,
-                "competence": competence
-            })
+            contraintes.append({"type": "competence_requise", "tache": tache_id, "competence": competence})
 
             taches_lot.append(tache_id)
             tache_id_counter += 1
 
         # Ajouter précédences linéaires pour ce lot
         for i in range(len(taches_lot) - 1):
-            contraintes.append({
-                "type": "precedence",
-                "avant": taches_lot[i],
-                "apres": taches_lot[i + 1]
-            })
+            contraintes.append({"type": "precedence", "avant": taches_lot[i], "apres": taches_lot[i + 1]})
 
     # Générer les ressources (plusieurs par type de compétence)
     ressources = []
@@ -82,18 +70,20 @@ def generer_atelier_mecanique_large(nb_lots: int = 20) -> dict[str, Any]:
             # 2-5 ressources par compétence
             nb_ressources = random.randint(2, 5)
             for i in range(1, nb_ressources + 1):
-                ressources.append({
-                    "id": f"R{ressource_id_counter:04d}",
-                    "nom": f"{competence.replace('_', ' ').title()} #{i}",
-                    "competences": [competence]
-                })
+                ressources.append(
+                    {
+                        "id": f"R{ressource_id_counter:04d}",
+                        "nom": f"{competence.replace('_', ' ').title()} #{i}",
+                        "competences": [competence],
+                    }
+                )
                 ressource_id_counter += 1
 
     return {
         "taches": taches,
         "ressources": ressources,
         "contraintes": contraintes,
-        "objectifs": [{"type": "minimiser_makespan"}]
+        "objectifs": [{"type": "minimiser_makespan"}],
     }
 
 
@@ -103,8 +93,20 @@ def generer_assemblage_electronique_large(nb_cartes: int = 30) -> dict[str, Any]
     Args:
         nb_cartes: Nombre de cartes PCB à produire
     """
-    phases = ["PREP", "POSE_CMS_A", "REFUSION_A", "AOI_A", "POSE_CMS_B",
-              "REFUSION_B", "SOUDURE_THT", "TEST_ICT", "TEST_FONC", "COATING", "DEPANEL", "PACKAGE"]
+    phases = [
+        "PREP",
+        "POSE_CMS_A",
+        "REFUSION_A",
+        "AOI_A",
+        "POSE_CMS_B",
+        "REFUSION_B",
+        "SOUDURE_THT",
+        "TEST_ICT",
+        "TEST_FONC",
+        "COATING",
+        "DEPANEL",
+        "PACKAGE",
+    ]
 
     competences_par_phase = {
         "PREP": ["preparation_pcb"],
@@ -133,30 +135,18 @@ def generer_assemblage_electronique_large(nb_cartes: int = 30) -> dict[str, Any]
             tache_id = f"T{tache_id_counter:04d}"
             duree = random.randint(1, 2)
 
-            taches.append({
-                "id": tache_id,
-                "nom": f"PCB{carte_num:03d}_{phase}",
-                "duree_estimee_jours": duree
-            })
+            taches.append({"id": tache_id, "nom": f"PCB{carte_num:03d}_{phase}", "duree_estimee_jours": duree})
 
             # Ajouter compétence requise
             competence = competences_par_phase[phase][0]
-            contraintes.append({
-                "type": "competence_requise",
-                "tache": tache_id,
-                "competence": competence
-            })
+            contraintes.append({"type": "competence_requise", "tache": tache_id, "competence": competence})
 
             taches_carte.append(tache_id)
             tache_id_counter += 1
 
         # Ajouter précédences linéaires
         for i in range(len(taches_carte) - 1):
-            contraintes.append({
-                "type": "precedence",
-                "avant": taches_carte[i],
-                "apres": taches_carte[i + 1]
-            })
+            contraintes.append({"type": "precedence", "avant": taches_carte[i], "apres": taches_carte[i + 1]})
 
     # Générer les ressources
     ressources = []
@@ -177,18 +167,20 @@ def generer_assemblage_electronique_large(nb_cartes: int = 30) -> dict[str, Any]
 
     for competence, nb in nb_ressources_par_type.items():
         for i in range(1, nb + 1):
-            ressources.append({
-                "id": f"R{ressource_id_counter:04d}",
-                "nom": f"{competence.replace('_', ' ').title()} #{i}",
-                "competences": [competence]
-            })
+            ressources.append(
+                {
+                    "id": f"R{ressource_id_counter:04d}",
+                    "nom": f"{competence.replace('_', ' ').title()} #{i}",
+                    "competences": [competence],
+                }
+            )
             ressource_id_counter += 1
 
     return {
         "taches": taches,
         "ressources": ressources,
         "contraintes": contraintes,
-        "objectifs": [{"type": "minimiser_makespan"}]
+        "objectifs": [{"type": "minimiser_makespan"}],
     }
 
 
@@ -198,8 +190,18 @@ def generer_production_agroalimentaire_large(nb_lots: int = 25) -> dict[str, Any
     Args:
         nb_lots: Nombre de lots à produire
     """
-    phases = ["RECEPTION", "LAVAGE", "TRIAGE", "DECOUPE", "TRAITEMENT",
-              "CUISSON", "REFROIDISSEMENT", "CONDITIONNEMENT", "ETIQUETAGE", "CONTROLE"]
+    phases = [
+        "RECEPTION",
+        "LAVAGE",
+        "TRIAGE",
+        "DECOUPE",
+        "TRAITEMENT",
+        "CUISSON",
+        "REFROIDISSEMENT",
+        "CONDITIONNEMENT",
+        "ETIQUETAGE",
+        "CONTROLE",
+    ]
 
     competences_par_phase = {
         "RECEPTION": ["reception_matieres"],
@@ -226,30 +228,18 @@ def generer_production_agroalimentaire_large(nb_lots: int = 25) -> dict[str, Any
             tache_id = f"T{tache_id_counter:04d}"
             duree = random.randint(1, 4)  # Durées plus variables
 
-            taches.append({
-                "id": tache_id,
-                "nom": f"Lot{lot_num:03d}_{phase}",
-                "duree_estimee_jours": duree
-            })
+            taches.append({"id": tache_id, "nom": f"Lot{lot_num:03d}_{phase}", "duree_estimee_jours": duree})
 
             # Ajouter compétence requise
             competence = random.choice(competences_par_phase[phase])
-            contraintes.append({
-                "type": "competence_requise",
-                "tache": tache_id,
-                "competence": competence
-            })
+            contraintes.append({"type": "competence_requise", "tache": tache_id, "competence": competence})
 
             taches_lot.append(tache_id)
             tache_id_counter += 1
 
         # Précédences linéaires
         for i in range(len(taches_lot) - 1):
-            contraintes.append({
-                "type": "precedence",
-                "avant": taches_lot[i],
-                "apres": taches_lot[i + 1]
-            })
+            contraintes.append({"type": "precedence", "avant": taches_lot[i], "apres": taches_lot[i + 1]})
 
     # Générer les ressources
     ressources = []
@@ -259,18 +249,20 @@ def generer_production_agroalimentaire_large(nb_lots: int = 25) -> dict[str, Any
         for competence in competences:
             nb_ressources = random.randint(2, 6)
             for i in range(1, nb_ressources + 1):
-                ressources.append({
-                    "id": f"R{ressource_id_counter:04d}",
-                    "nom": f"{competence.replace('_', ' ').title()} #{i}",
-                    "competences": [competence]
-                })
+                ressources.append(
+                    {
+                        "id": f"R{ressource_id_counter:04d}",
+                        "nom": f"{competence.replace('_', ' ').title()} #{i}",
+                        "competences": [competence],
+                    }
+                )
                 ressource_id_counter += 1
 
     return {
         "taches": taches,
         "ressources": ressources,
         "contraintes": contraintes,
-        "objectifs": [{"type": "minimiser_makespan"}]
+        "objectifs": [{"type": "minimiser_makespan"}],
     }
 
 
@@ -280,8 +272,20 @@ def generer_imprimerie_large(nb_commandes: int = 15) -> dict[str, Any]:
     Args:
         nb_commandes: Nombre de commandes à produire
     """
-    phases = ["PREPRESSE", "GRAVURE", "CALAGE", "IMPRESSION_1C", "IMPRESSION_2C",
-              "IMPRESSION_3C", "IMPRESSION_4C", "SECHAGE", "DECOUPE", "PLIAGE", "RELIURE", "FINITION"]
+    phases = [
+        "PREPRESSE",
+        "GRAVURE",
+        "CALAGE",
+        "IMPRESSION_1C",
+        "IMPRESSION_2C",
+        "IMPRESSION_3C",
+        "IMPRESSION_4C",
+        "SECHAGE",
+        "DECOUPE",
+        "PLIAGE",
+        "RELIURE",
+        "FINITION",
+    ]
 
     competences_par_phase = {
         "PREPRESSE": ["pao", "montage"],
@@ -312,29 +316,17 @@ def generer_imprimerie_large(nb_commandes: int = 15) -> dict[str, Any]:
             tache_id = f"T{tache_id_counter:04d}"
             duree = random.randint(1, 3)
 
-            taches.append({
-                "id": tache_id,
-                "nom": f"Cmd{cmd_num:03d}_{phase}",
-                "duree_estimee_jours": duree
-            })
+            taches.append({"id": tache_id, "nom": f"Cmd{cmd_num:03d}_{phase}", "duree_estimee_jours": duree})
 
             competence = random.choice(competences_par_phase[phase])
-            contraintes.append({
-                "type": "competence_requise",
-                "tache": tache_id,
-                "competence": competence
-            })
+            contraintes.append({"type": "competence_requise", "tache": tache_id, "competence": competence})
 
             taches_cmd.append(tache_id)
             tache_id_counter += 1
 
         # Précédences linéaires
         for i in range(len(taches_cmd) - 1):
-            contraintes.append({
-                "type": "precedence",
-                "avant": taches_cmd[i],
-                "apres": taches_cmd[i + 1]
-            })
+            contraintes.append({"type": "precedence", "avant": taches_cmd[i], "apres": taches_cmd[i + 1]})
 
     # Ressources
     ressources = []
@@ -344,18 +336,20 @@ def generer_imprimerie_large(nb_commandes: int = 15) -> dict[str, Any]:
         for competence in competences:
             nb_ressources = random.randint(1, 4)
             for i in range(1, nb_ressources + 1):
-                ressources.append({
-                    "id": f"R{ressource_id_counter:04d}",
-                    "nom": f"{competence.replace('_', ' ').title()} #{i}",
-                    "competences": [competence]
-                })
+                ressources.append(
+                    {
+                        "id": f"R{ressource_id_counter:04d}",
+                        "nom": f"{competence.replace('_', ' ').title()} #{i}",
+                        "competences": [competence],
+                    }
+                )
                 ressource_id_counter += 1
 
     return {
         "taches": taches,
         "ressources": ressources,
         "contraintes": contraintes,
-        "objectifs": [{"type": "minimiser_makespan"}]
+        "objectifs": [{"type": "minimiser_makespan"}],
     }
 
 

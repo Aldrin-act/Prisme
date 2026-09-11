@@ -27,11 +27,16 @@ sys.path.insert(0, str(projet_root))
 # Charger .env
 try:
     from dotenv import load_dotenv
+
     load_dotenv(projet_root / ".env")
 except ImportError:
     pass
 
-from generation.graph import MAX_TENTATIVES_REPARATION, TentativeReparation, tenter_generation_avec_boucle
+from generation.graph import (  # noqa: E402 — après sys.path.insert requis
+    MAX_TENTATIVES_REPARATION,
+    TentativeReparation,
+    tenter_generation_avec_boucle,
+)
 
 
 def _resumer_echecs_cascade(verdict) -> str:
@@ -71,9 +76,9 @@ def afficher_tentative(tentative: TentativeReparation, numero: int) -> None:
 
 
 def main():
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print(f"  GÉNÉRATION AVEC BOUCLE DE RÉPARATION (max {MAX_TENTATIVES_REPARATION} tentatives)")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print(f"🔑 KIMI_API_KEY : {os.getenv('KIMI_API_KEY', 'NON DÉFINIE')[:20]}...")
 
@@ -85,13 +90,14 @@ def main():
     except Exception as e:
         print(f"\n❌ Erreur durant génération : {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
     # Affichage des résultats
-    print("\n" + "─"*70)
+    print("\n" + "─" * 70)
     print("  RÉSULTATS BOUCLE DE RÉPARATION")
-    print("─"*70)
+    print("─" * 70)
 
     boucle = resultat.boucle_reparation
     print(f"\n📊 Nombre de tentatives : {boucle.nombre_tentatives} / {MAX_TENTATIVES_REPARATION}")
@@ -103,12 +109,12 @@ def main():
         afficher_tentative(tentative, i)
 
     # Résultat global
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     if resultat.reussi:
         print("  ✅ GÉNÉRATION RÉUSSIE")
     else:
         print(f"  ❌ GÉNÉRATION ÉCHOUÉE (après {boucle.nombre_tentatives} tentatives)")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     # Sauvegarde
     if resultat.reussi or boucle.nombre_tentatives > 0:

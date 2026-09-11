@@ -26,7 +26,7 @@ def main() -> None:
         data = json.load(f)
     instance = InstanceTRCO(**data)
 
-    print(f"   [OK] Instance chargee:")
+    print("   [OK] Instance chargee:")
     print(f"        - {len(instance.taches)} taches")
     print(f"        - {len(instance.ressources)} ressources")
     print(f"        - {len(instance.contraintes)} contraintes")
@@ -37,7 +37,7 @@ def main() -> None:
         print(f"      {i}. {tache.id}")
 
     # Résoudre avec le solveur minimal
-    print(f"\n2. Resolution avec le solveur de reference...")
+    print("\n2. Resolution avec le solveur de reference...")
     try:
         planning = resoudre(instance)
 
@@ -50,6 +50,7 @@ def main() -> None:
     except Exception as e:
         print(f"   [ERREUR] Echec de la resolution: {e}")
         import traceback
+
         traceback.print_exc()
         return
 
@@ -74,13 +75,9 @@ def main() -> None:
         fin = debut + duree
         max_fin = max(max_fin, fin)
 
-        details_operations.append({
-            "tache": tache_id,
-            "ressource": ressource_id,
-            "debut": debut,
-            "duree": duree,
-            "fin": fin
-        })
+        details_operations.append(
+            {"tache": tache_id, "ressource": ressource_id, "debut": debut, "duree": duree, "fin": fin}
+        )
 
     # Afficher le résumé
     print("\n" + "=" * 80)
@@ -98,8 +95,10 @@ def main() -> None:
     details_operations.sort(key=lambda x: x["debut"])
 
     for detail in details_operations:
-        print(f"{detail['tache']:<25} {detail['ressource']:<25} "
-              f"{detail['debut']:>8} {detail['duree']:>8} {detail['fin']:>8}")
+        print(
+            f"{detail['tache']:<25} {detail['ressource']:<25} "
+            f"{detail['debut']:>8} {detail['duree']:>8} {detail['fin']:>8}"
+        )
 
     # Utilisation des ressources
     print("\n" + "-" * 80)
@@ -108,19 +107,15 @@ def main() -> None:
 
     ressources_utilisees = {}
     for detail in details_operations:
-        ressource = detail['ressource']
+        ressource = detail["ressource"]
         if ressource not in ressources_utilisees:
-            ressources_utilisees[ressource] = {
-                'nombre_ops': 0,
-                'temps_total': 0,
-                'operations': []
-            }
-        ressources_utilisees[ressource]['nombre_ops'] += 1
-        ressources_utilisees[ressource]['temps_total'] += detail['duree']
-        ressources_utilisees[ressource]['operations'].append(detail['tache'])
+            ressources_utilisees[ressource] = {"nombre_ops": 0, "temps_total": 0, "operations": []}
+        ressources_utilisees[ressource]["nombre_ops"] += 1
+        ressources_utilisees[ressource]["temps_total"] += detail["duree"]
+        ressources_utilisees[ressource]["operations"].append(detail["tache"])
 
     for ressource, stats in sorted(ressources_utilisees.items()):
-        taux_utilisation = (stats['temps_total'] / max_fin) * 100 if max_fin > 0 else 0
+        taux_utilisation = (stats["temps_total"] / max_fin) * 100 if max_fin > 0 else 0
         print(f"\n{ressource}:")
         print(f"  - Operations: {stats['nombre_ops']}")
         print(f"  - Temps total: {stats['temps_total']} jours")
@@ -141,10 +136,10 @@ def main() -> None:
                 "ressource": detail["ressource"],
                 "debut": detail["debut"],
                 "duree": detail["duree"],
-                "fin": detail["fin"]
+                "fin": detail["fin"],
             }
             for detail in details_operations
-        ]
+        ],
     }
 
     with open(planning_path, "w", encoding="utf-8") as f:

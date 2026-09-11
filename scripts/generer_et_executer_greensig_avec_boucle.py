@@ -7,9 +7,7 @@ pour augmenter les chances de succès.
 from __future__ import annotations
 
 import sys
-import os
 import time
-import json
 from pathlib import Path
 
 # Ajouter le projet au PYTHONPATH
@@ -19,6 +17,7 @@ sys.path.insert(0, str(projet_root))
 # Charger .env
 try:
     from dotenv import load_dotenv
+
     load_dotenv(projet_root / ".env")
 except ImportError:
     pass
@@ -38,9 +37,27 @@ def creer_instance_greensig_test():
         "competences": [],
         "operateurs": [],
         "taches": [
-            {"id": 1, "id_type_tache_id": 1, "charge_estimee_heures": 2.0, "equipes_ids": [100, 200], "deleted_at": None},
-            {"id": 2, "id_type_tache_id": 2, "charge_estimee_heures": 1.5, "equipes_ids": [100], "deleted_at": None},
-            {"id": 3, "id_type_tache_id": 1, "charge_estimee_heures": 1.0, "equipes_ids": [200], "deleted_at": None},
+            {
+                "id": 1,
+                "id_type_tache_id": 1,
+                "charge_estimee_heures": 2.0,
+                "equipes_ids": [100, 200],
+                "deleted_at": None,
+            },
+            {
+                "id": 2,
+                "id_type_tache_id": 2,
+                "charge_estimee_heures": 1.5,
+                "equipes_ids": [100],
+                "deleted_at": None,
+            },
+            {
+                "id": 3,
+                "id_type_tache_id": 1,
+                "charge_estimee_heures": 1.0,
+                "equipes_ids": [200],
+                "deleted_at": None,
+            },
         ],
     }
 
@@ -48,11 +65,11 @@ def creer_instance_greensig_test():
 def convertir_greensig_vers_trco(payload_dict):
     """Convertit un payload GreenSig (dict) en InstanceTRCO."""
     from dsl.schema import (
-        InstanceTRCO,
-        Tache,
-        Ressource,
         CompatibiliteRessourceTache,
+        InstanceTRCO,
         MinimiserMakespan,
+        Ressource,
+        Tache,
     )
 
     taches = [Tache(id=f"T{t['id']}") for t in payload_dict["taches"]]
@@ -71,22 +88,19 @@ def convertir_greensig_vers_trco(payload_dict):
             )
 
     return InstanceTRCO(
-        taches=taches,
-        ressources=ressources,
-        contraintes=contraintes,
-        objectifs=[MinimiserMakespan()]
+        taches=taches, ressources=ressources, contraintes=contraintes, objectifs=[MinimiserMakespan()]
     )
 
 
 def main():
-    print("\n" + "🔄"*35)
+    print("\n" + "🔄" * 35)
     print("  GÉNÉRATION AVEC BOUCLE + EXÉCUTION GREENSIG")
-    print("🔄"*35 + "\n")
+    print("🔄" * 35 + "\n")
 
     # MOMENT 1 : GÉNÉRATION AVEC BOUCLE
-    print("="*70)
+    print("=" * 70)
     print("  MOMENT 1 : GÉNÉRATION AVEC BOUCLE DE RÉPARATION")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("🔄 Pipeline avec boucle (max 3 tentatives de correction)...\n")
 
@@ -100,15 +114,16 @@ def main():
     except Exception as e:
         print(f"❌ Erreur durant la génération : {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
     duree_generation = time.time() - debut_generation
 
     # Afficher tentatives de la boucle
-    print("\n" + "─"*70)
+    print("\n" + "─" * 70)
     print("  BOUCLE DE RÉPARATION")
-    print("─"*70 + "\n")
+    print("─" * 70 + "\n")
 
     boucle = resultat.boucle_reparation
     print(f"Nombre de tentatives : {boucle.nombre_tentatives} / 3\n")
@@ -117,9 +132,9 @@ def main():
         print(f"Tentative #{i} :")
         print(f"  Reviewer : {'✅ APPROUVÉ' if tentative.revue.approuve else '❌ REJETÉ'}")
         if tentative.reussi:
-            print(f"  Résultat : 🎉 SUCCÈS")
+            print("  Résultat : 🎉 SUCCÈS")
         else:
-            print(f"  Résultat : 🔄 RETRY")
+            print("  Résultat : 🔄 RETRY")
         print()
 
     if not resultat.reussi:
@@ -138,9 +153,9 @@ def main():
     print(f"💾 Solveur sauvegardé : {chemin_solveur}\n")
 
     # MOMENT 2 : EXÉCUTION
-    print("="*70)
+    print("=" * 70)
     print("  MOMENT 2 : EXÉCUTION AVEC DONNÉES GREENSIG")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     # Créer instance
     print("📥 Chargement des données GreenSig...\n")
@@ -152,6 +167,7 @@ def main():
     # Charger solveur
     print("📦 Chargement du solveur...\n")
     from generation.executer import executer_code_genere
+
     solveur = executer_code_genere(resultat.code_final)
 
     # Exécuter
@@ -161,9 +177,9 @@ def main():
     duree_resolution = time.time() - debut_resolution
 
     # Résultat
-    print("="*70)
+    print("=" * 70)
     print("  RÉSULTAT")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     if planning is None:
         print("❌ INSTANCE INFAISABLE")
@@ -173,23 +189,31 @@ def main():
     print(f"Opérations planifiées : {len(planning.operations)}\n")
 
     from dsl.schema import CompatibiliteRessourceTache
+
     for op in sorted(planning.operations, key=lambda o: o.debut):
-        duree = next(c.duree for c in instance_trco.contraintes
-                     if isinstance(c, CompatibiliteRessourceTache)
-                     and c.tache == op.tache and c.ressource == op.ressource)
+        duree = next(
+            c.duree
+            for c in instance_trco.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
+        )
         print(f"  • {op.tache} sur {op.ressource} : début={op.debut} min, durée={duree} min")
 
-    makespan = max(op.debut + next(c.duree for c in instance_trco.contraintes
-                                    if isinstance(c, CompatibiliteRessourceTache)
-                                    and c.tache == op.tache and c.ressource == op.ressource)
-                   for op in planning.operations)
+    makespan = max(
+        op.debut
+        + next(
+            c.duree
+            for c in instance_trco.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
+        )
+        for op in planning.operations
+    )
 
-    print(f"\n🎯 MAKESPAN : {makespan} minutes ({makespan/60:.1f}h)\n")
+    print(f"\n🎯 MAKESPAN : {makespan} minutes ({makespan / 60:.1f}h)\n")
 
     # Statistiques
-    print("="*70)
+    print("=" * 70)
     print("  STATISTIQUES")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print(f"⏱️  Génération : {duree_generation:.1f}s (avec {boucle.nombre_tentatives} tentative(s))")
     print(f"⏱️  Résolution : {duree_resolution:.3f}s")

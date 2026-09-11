@@ -16,8 +16,8 @@ Prérequis:
 
 from __future__ import annotations
 
-import sys
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -44,7 +44,7 @@ def charger_instance_reelle():
 
     instance = InstanceTRCO.model_validate(data)
 
-    print(f"✅ Instance chargée")
+    print("✅ Instance chargée")
     print(f"   • Tâches : {len(instance.taches)}")
     print(f"   • Ressources : {len(instance.ressources)}")
     print(f"   • Contraintes : {len(instance.contraintes)}")
@@ -66,9 +66,9 @@ def analyser_instance(instance):
 
     nb_compatibilites = [len(ressources) for ressources in comp_par_tache.values()]
 
-    print("="*70)
+    print("=" * 70)
     print("  ANALYSE DE COMPLEXITÉ")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("📊 Tailles :")
     print(f"   • Variables : ~{len(instance.taches) * len(instance.ressources)} (tâche × ressource)")
@@ -85,7 +85,7 @@ def analyser_instance(instance):
     taches_contraintes = [(t, nb) for t, nb in zip(comp_par_tache.keys(), nb_compatibilites) if nb == 1]
     if taches_contraintes:
         print(f"⚠️  Tâches FIXES (1 seule équipe) : {len(taches_contraintes)}")
-        print(f"   → Simplifient le problème (pas de choix)")
+        print("   → Simplifient le problème (pas de choix)")
         print()
 
     # Estimation de difficulté
@@ -99,11 +99,11 @@ def analyser_instance(instance):
 
 def resoudre_avec_timeout(instance, timeout_seconds: int = 300):
     """Résout l'instance avec un timeout."""
-    print("="*70)
+    print("=" * 70)
     print("  RÉSOLUTION CP-SAT")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
-    print(f"⏱️  Timeout configuré : {timeout_seconds}s ({timeout_seconds/60:.1f} min)\n")
+    print(f"⏱️  Timeout configuré : {timeout_seconds}s ({timeout_seconds / 60:.1f} min)\n")
 
     try:
         # Import du solveur minimal avec timeout intégré
@@ -128,6 +128,7 @@ def resoudre_avec_timeout(instance, timeout_seconds: int = 300):
         duree = time.time() - debut
         print(f"\n❌ ERREUR durant la résolution ({duree:.1f}s) : {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
@@ -136,9 +137,9 @@ def resoudre_avec_timeout(instance, timeout_seconds: int = 300):
 
 def afficher_resultats(instance, planning, duree):
     """Affiche les résultats de la résolution."""
-    print("="*70)
+    print("=" * 70)
     print("  RÉSULTATS")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     if planning is None:
         print(f"⚠️  AUCUNE SOLUTION TROUVÉE en {duree:.1f}s\n")
@@ -154,7 +155,7 @@ def afficher_resultats(instance, planning, duree):
         print()
         return False
 
-    print(f"✅ SOLUTION TROUVÉE en {duree:.1f}s ({duree/60:.1f} min)\n")
+    print(f"✅ SOLUTION TROUVÉE en {duree:.1f}s ({duree / 60:.1f} min)\n")
 
     from dsl.schema import CompatibiliteRessourceTache
 
@@ -162,22 +163,22 @@ def afficher_resultats(instance, planning, duree):
     makespan = 0
     for op in planning.operations:
         duree_op = next(
-            c.duree for c in instance.contraintes
-            if isinstance(c, CompatibiliteRessourceTache)
-            and c.tache == op.tache
-            and c.ressource == op.ressource
+            c.duree
+            for c in instance.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
         )
         fin = op.debut + duree_op
         makespan = max(makespan, fin)
 
     print("📊 STATISTIQUES :")
     print(f"   • Opérations planifiées : {len(planning.operations)}")
-    print(f"   • Makespan total : {makespan} min ({makespan/60:.1f}h)")
+    print(f"   • Makespan total : {makespan} min ({makespan / 60:.1f}h)")
     print(f"   • Temps de résolution : {duree:.1f}s")
     print()
 
     # Utilisation des ressources
     from collections import Counter
+
     utilisation = Counter(op.ressource for op in planning.operations)
 
     print("🏭 UTILISATION DES RESSOURCES (top 10) :")
@@ -191,10 +192,9 @@ def afficher_resultats(instance, planning, duree):
 
     for op in operations_triees:
         duree_op = next(
-            c.duree for c in instance.contraintes
-            if isinstance(c, CompatibiliteRessourceTache)
-            and c.tache == op.tache
-            and c.ressource == op.ressource
+            c.duree
+            for c in instance.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
         )
         fin = op.debut + duree_op
         print(f"   • {op.tache} sur {op.ressource} : {op.debut} → {fin} min ({duree_op} min)")
@@ -208,16 +208,13 @@ def afficher_resultats(instance, planning, duree):
 
 def sauvegarder_planning(planning, duree):
     """Sauvegarde le planning dans un fichier JSON."""
-    print("="*70)
+    print("=" * 70)
     print("  SAUVEGARDE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     chemin = projet_root / "greensig_planning_reel.json"
 
-    resultat = {
-        "duree_resolution_secondes": duree,
-        "planning": planning.model_dump() if planning else None
-    }
+    resultat = {"duree_resolution_secondes": duree, "planning": planning.model_dump() if planning else None}
 
     with open(chemin, "w", encoding="utf-8") as f:
         json.dump(resultat, f, indent=2, ensure_ascii=False)
@@ -227,14 +224,14 @@ def sauvegarder_planning(planning, duree):
 
 
 def main():
-    print("\n" + "🚀"*35)
+    print("\n" + "🚀" * 35)
     print("  RÉSOLUTION GREENSIG - 2165 TÂCHES RÉELLES")
-    print("🚀"*35 + "\n")
+    print("🚀" * 35 + "\n")
 
     # 1. Charger instance
-    print("="*70)
+    print("=" * 70)
     print("  CHARGEMENT DE L'INSTANCE")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     instance = charger_instance_reelle()
 
@@ -242,15 +239,15 @@ def main():
     analyser_instance(instance)
 
     # 3. Demander confirmation
-    print("="*70)
+    print("=" * 70)
     print("  CONFIRMATION")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("⚠️  Vous allez résoudre une instance de production avec CP-SAT.")
     print("   Cela peut prendre du temps selon la complexité.\n")
 
     reponse = input("Continuer ? [o/N] : ").strip().lower()
-    if reponse not in ('o', 'oui', 'y', 'yes'):
+    if reponse not in ("o", "oui", "y", "yes"):
         print("\n❌ Annulé par l'utilisateur.\n")
         sys.exit(0)
 
@@ -266,12 +263,12 @@ def main():
     sauvegarder_planning(planning, duree)
 
     # 7. Résumé
-    print("="*70)
+    print("=" * 70)
     if succes:
         print("  ✅ RÉSOLUTION RÉUSSIE !")
     else:
         print("  ⚠️  RÉSOLUTION SANS SOLUTION")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     if succes:
         print("🎉 Le planning a été généré avec succès !")

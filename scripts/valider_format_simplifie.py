@@ -172,7 +172,9 @@ def valider_contraintes_competence(data: dict[str, Any], nom_fichier: str) -> bo
             return False
 
         if competence not in competences_disponibles:
-            print(f"ERREUR {nom_fichier}: Competence '{competence}' requise pour {tache} mais absente des ressources")
+            print(
+                f"ERREUR {nom_fichier}: Competence '{competence}' requise pour {tache} mais absente des ressources"
+            )
             return False
 
     return True
@@ -258,10 +260,7 @@ def main() -> int:
         return 1
 
     # Lister tous les fichiers JSON (sauf README et CATALOGUE)
-    fichiers = sorted(
-        [f for f in repertoire.glob("*.json")],
-        key=lambda x: x.name
-    )
+    fichiers = sorted([f for f in repertoire.glob("*.json")], key=lambda x: x.name)
 
     if not fichiers:
         print(f"WARNING: Aucun fichier JSON trouve dans {repertoire}")
@@ -277,7 +276,7 @@ def main() -> int:
     nb_ok = sum(resultats)
     nb_ko = len(resultats) - nb_ok
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"OK: Fichiers valides: {nb_ok}/{len(resultats)}")
     if nb_ko > 0:
         print(f"ERREUR: Fichiers invalides: {nb_ko}/{len(resultats)}")

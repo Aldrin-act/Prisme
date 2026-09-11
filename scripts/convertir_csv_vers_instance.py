@@ -11,7 +11,8 @@ Usage:
 
 Exemples:
     # Convertir un dossier spécifique
-    uv run python -m scripts.convertir_csv_vers_instance data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique
+    uv run python -m scripts.convertir_csv_vers_instance \
+        data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique
 
     # Convertir tous les dossiers CSV
     uv run python -m scripts.convertir_csv_vers_instance --tous
@@ -87,7 +88,8 @@ def csv_vers_instance(chemin_dossier: str | Path) -> InstanceTRCO:
 
     Exemple:
         >>> from scripts.convertir_csv_vers_instance import csv_vers_instance
-        >>> instance = csv_vers_instance("data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique")
+        >>> dossier = "data/donnees_brutes/csv/industrie_manufacturiere/assemblage_electronique"
+        >>> instance = csv_vers_instance(dossier)
         >>> print(f"Taches: {len(instance.taches)}, Ressources: {len(instance.ressources)}")
     """
     dossier = Path(chemin_dossier).resolve()
@@ -104,9 +106,7 @@ def csv_vers_instance(chemin_dossier: str | Path) -> InstanceTRCO:
     fichiers_manquants = [f for f in fichiers_requis if not (dossier / f).exists()]
 
     if fichiers_manquants:
-        raise FileNotFoundError(
-            f"Fichier(s) manquant(s) dans '{dossier}': {', '.join(fichiers_manquants)}"
-        )
+        raise FileNotFoundError(f"Fichier(s) manquant(s) dans '{dossier}': {', '.join(fichiers_manquants)}")
 
     # Charger et convertir
     taches_csv, ressources_csv, contraintes_csv = _charger_fichiers_csv(dossier)
@@ -115,7 +115,9 @@ def csv_vers_instance(chemin_dossier: str | Path) -> InstanceTRCO:
     return instance
 
 
-def convertir_dossier(dossier: Path, afficher_json: bool = True, afficher_stats: bool = True) -> InstanceTRCO | None:
+def convertir_dossier(
+    dossier: Path, afficher_json: bool = True, afficher_stats: bool = True
+) -> InstanceTRCO | None:
     """Convertit un dossier CSV en instance TRCO.
 
     Args:
@@ -127,9 +129,9 @@ def convertir_dossier(dossier: Path, afficher_json: bool = True, afficher_stats:
         L'instance TRCO générée, ou None en cas d'erreur
     """
     try:
-        print(f"\n{'='*80}")
+        print(f"\n{'=' * 80}")
         print(f"[DOSSIER] Conversion: {dossier.relative_to(_repertoire_racine_csv())}")
-        print(f"{'='*80}\n")
+        print(f"{'=' * 80}\n")
 
         # Charger les fichiers CSV
         taches_csv, ressources_csv, contraintes_csv = _charger_fichiers_csv(dossier)
@@ -150,7 +152,7 @@ def convertir_dossier(dossier: Path, afficher_json: bool = True, afficher_stats:
                 type_contrainte = contrainte.__class__.__name__
                 types_contraintes[type_contrainte] = types_contraintes.get(type_contrainte, 0) + 1
 
-            print(f"  - Types de contraintes:")
+            print("  - Types de contraintes:")
             for type_c, count in sorted(types_contraintes.items()):
                 print(f"      {type_c}: {count}")
 
@@ -174,6 +176,7 @@ def convertir_dossier(dossier: Path, afficher_json: bool = True, afficher_stats:
     except Exception as e:
         print(f"\n[ERREUR] Erreur lors de la conversion: {e}", file=sys.stderr)
         import traceback
+
         traceback.print_exc()
         return None
 

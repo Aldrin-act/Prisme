@@ -20,13 +20,12 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import shutil
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Callable
 
 
 @dataclass
@@ -132,29 +131,29 @@ REGLES_CHAMPS_JSON = [
 REGLES_PYTHON = [
     RegleMigration(
         nom="variable_machines",
-        pattern=re.compile(r'\bmachines\b(?=\s*[=:\[]|\s*in\s)'),
+        pattern=re.compile(r"\bmachines\b(?=\s*[=:\[]|\s*in\s)"),
         remplacement="ressources",
         description='Variable "machines" → "ressources"',
         categories=["python", "variables"],
     ),
     RegleMigration(
         nom="variable_machine_id",
-        pattern=re.compile(r'\bmachine_id\b'),
+        pattern=re.compile(r"\bmachine_id\b"),
         remplacement="ressource_id",
         description='Variable "ressource_id" → "ressource_id"',
         categories=["python", "variables"],
     ),
     RegleMigration(
         nom="type_Machine",
-        pattern=re.compile(r'\bMachine\b(?=\s*[:\(])'),
+        pattern=re.compile(r"\bMachine\b(?=\s*[:\(])"),
         remplacement="Ressource",
         description='Type "Machine" → "Ressource"',
         categories=["python", "types"],
     ),
     RegleMigration(
         nom="param_par_ressource",
-        pattern=re.compile(r'\b(\w+)_par_machine\b'),
-        remplacement=r'\1_par_ressource',
+        pattern=re.compile(r"\b(\w+)_par_machine\b"),
+        remplacement=r"\1_par_ressource",
         description='Paramètre "*_par_machine" → "*_par_ressource"',
         categories=["python", "parametres"],
     ),
@@ -170,9 +169,7 @@ REGLES_COMMENTAIRES = [
     ),
 ]
 
-TOUTES_LES_REGLES = (
-    REGLES_IDENTIFIANTS + REGLES_CHAMPS_JSON + REGLES_PYTHON + REGLES_COMMENTAIRES
-)
+TOUTES_LES_REGLES = REGLES_IDENTIFIANTS + REGLES_CHAMPS_JSON + REGLES_PYTHON + REGLES_COMMENTAIRES
 
 
 # ============================================================================
@@ -240,9 +237,7 @@ class MigrateurNomenclature:
 
         return self.rapports
 
-    def _collecter_fichiers(
-        self, patterns: list[str], exclure: list[str]
-    ) -> list[Path]:
+    def _collecter_fichiers(self, patterns: list[str], exclure: list[str]) -> list[Path]:
         """Collecte tous les fichiers à migrer."""
         fichiers = set()
 
@@ -265,7 +260,7 @@ class MigrateurNomenclature:
         """Migre un fichier unique."""
         try:
             # Lire le contenu
-            with open(fichier, "r", encoding="utf-8") as f:
+            with open(fichier, encoding="utf-8") as f:
                 contenu_original = f.read()
 
             # Détecter les corrections
@@ -275,9 +270,7 @@ class MigrateurNomenclature:
                 return None  # Rien à corriger
 
             # Appliquer les corrections
-            contenu_nouveau = self._appliquer_corrections(
-                contenu_original, corrections
-            )
+            contenu_nouveau = self._appliquer_corrections(contenu_original, corrections)
 
             # Créer le rapport
             rapport = RapportMigration(fichier=fichier, corrections=corrections)
@@ -305,9 +298,7 @@ class MigrateurNomenclature:
                 erreur=str(e),
             )
 
-    def _detecter_corrections(
-        self, fichier: Path, contenu: str
-    ) -> list[Correction]:
+    def _detecter_corrections(self, fichier: Path, contenu: str) -> list[Correction]:
         """Détecte toutes les corrections nécessaires."""
         corrections = []
         lignes = contenu.split("\n")
@@ -350,9 +341,7 @@ class MigrateurNomenclature:
         else:
             return REGLES_IDENTIFIANTS  # Par défaut
 
-    def _appliquer_corrections(
-        self, contenu: str, corrections: list[Correction]
-    ) -> str:
+    def _appliquer_corrections(self, contenu: str, corrections: list[Correction]) -> str:
         """Applique toutes les corrections au contenu."""
         lignes = contenu.split("\n")
 
@@ -375,9 +364,7 @@ class MigrateurNomenclature:
                 key=lambda c: ligne_originale.find(c.ancien),
                 reverse=True,
             ):
-                ligne_nouvelle = ligne_nouvelle.replace(
-                    correction.ancien, correction.nouveau, 1
-                )
+                ligne_nouvelle = ligne_nouvelle.replace(correction.ancien, correction.nouveau, 1)
 
             lignes[numero_ligne - 1] = ligne_nouvelle
 
@@ -432,9 +419,7 @@ class MigrateurNomenclature:
         corrections_par_regle: dict[str, int] = {}
         for rapport in self.rapports:
             for correction in rapport.corrections:
-                corrections_par_regle[correction.regle] = (
-                    corrections_par_regle.get(correction.regle, 0) + 1
-                )
+                corrections_par_regle[correction.regle] = corrections_par_regle.get(correction.regle, 0) + 1
 
         if corrections_par_regle:
             lignes.extend(
@@ -443,9 +428,7 @@ class MigrateurNomenclature:
                     "",
                 ]
             )
-            for regle, count in sorted(
-                corrections_par_regle.items(), key=lambda x: x[1], reverse=True
-            ):
+            for regle, count in sorted(corrections_par_regle.items(), key=lambda x: x[1], reverse=True):
                 lignes.append(f"- `{regle}` : {count} occurrence(s)")
             lignes.append("")
 
@@ -459,9 +442,7 @@ class MigrateurNomenclature:
             )
 
             for rapport in self.rapports:
-                lignes.append(
-                    f"### {rapport.fichier.relative_to(self.racine)}"
-                )
+                lignes.append(f"### {rapport.fichier.relative_to(self.racine)}")
                 lignes.append("")
 
                 if rapport.erreur:
@@ -473,9 +454,7 @@ class MigrateurNomenclature:
                 lignes.append("")
 
                 for correction in rapport.corrections:
-                    lignes.append(
-                        f"- L{correction.ligne}: `{correction.ancien}` → `{correction.nouveau}`"
-                    )
+                    lignes.append(f"- L{correction.ligne}: `{correction.ancien}` → `{correction.nouveau}`")
 
                 lignes.append("")
 
@@ -573,9 +552,7 @@ Exemples:
     print("\n" + "=" * 60)
     print("✅ Migration terminée !")
     print(f"📊 {len(rapports)} fichier(s) modifié(s)")
-    print(
-        f"🔧 {sum(len(r.corrections) for r in rapports)} correction(s) au total"
-    )
+    print(f"🔧 {sum(len(r.corrections) for r in rapports)} correction(s) au total")
 
     if args.dry_run:
         print("\n⚠️  Mode DRY-RUN : aucun fichier n'a été modifié")

@@ -13,7 +13,6 @@ Usage:
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import requests
@@ -127,7 +126,7 @@ def exemple_batch():
 
     for dossier in dossiers:
         nom_dossier = Path(dossier).name
-        print(f"\n[{len(instances_creees)+1}/{len(dossiers)}] Traitement: {nom_dossier}")
+        print(f"\n[{len(instances_creees) + 1}/{len(dossiers)}] Traitement: {nom_dossier}")
 
         resultat = ingerer_csv_local(dossier)
 
@@ -141,12 +140,12 @@ def exemple_batch():
             )
             print(f"  [OK] Instance: {resultat['instance_id'][:8]}...")
         else:
-            print(f"  [ERREUR] Echec")
+            print("  [ERREUR] Echec")
 
     # Résumé
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
     print(f"Resume: {len(instances_creees)}/{len(dossiers)} reussies")
-    print(f"{'='*80}")
+    print(f"{'=' * 80}")
 
     if instances_creees:
         print("\nInstances creees:")

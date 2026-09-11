@@ -10,8 +10,8 @@ Vérifie que :
 from __future__ import annotations
 
 import os
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 projet_root = Path(__file__).parent.parent
@@ -20,6 +20,7 @@ sys.path.insert(0, str(projet_root))
 # Charger .env
 try:
     from dotenv import load_dotenv
+
     load_dotenv(projet_root / ".env")
 except ImportError:
     pass
@@ -43,20 +44,17 @@ def verifier_conteneur():
     print("🔍 Vérification du conteneur db_greensig...")
     try:
         result = subprocess.run(
-            ["docker", "compose", "ps", "--format", "json"],
-            capture_output=True,
-            text=True,
-            check=True,
-            timeout=5
+            ["docker", "compose", "ps", "--format", "json"], capture_output=True, text=True, check=True, timeout=5
         )
 
         import json
-        services = [json.loads(line) for line in result.stdout.strip().split('\n') if line]
 
-        greensig_service = next((s for s in services if 'greensig' in s.get('Service', '')), None)
+        services = [json.loads(line) for line in result.stdout.strip().split("\n") if line]
 
-        if greensig_service and greensig_service.get('State') == 'running':
-            health = greensig_service.get('Health', 'unknown')
+        greensig_service = next((s for s in services if "greensig" in s.get("Service", "")), None)
+
+        if greensig_service and greensig_service.get("State") == "running":
+            health = greensig_service.get("Health", "unknown")
             print(f"   ✅ Conteneur actif (health: {health})\n")
             return True
         else:
@@ -76,7 +74,6 @@ def verifier_connexion():
 
     try:
         import psycopg
-        from adapters.greensig.extraction import dsn_par_defaut
 
         # Adapter le DSN pour localhost (depuis l'hôte)
         dsn = os.environ.get("GREENSIG_DATABASE_URL", "")
@@ -129,7 +126,7 @@ def verifier_donnees(conn):
             cur.execute("SELECT COUNT(*) FROM api_users_operateur WHERE statut = 'ACTIF'")
             nb_operateurs = cur.fetchone()[0]
 
-            print(f"   ✅ Données trouvées :")
+            print("   ✅ Données trouvées :")
             print(f"      • Tâches : {nb_taches}")
             print(f"      • Équipes : {nb_equipes}")
             print(f"      • Opérateurs actifs : {nb_operateurs}")
@@ -147,9 +144,9 @@ def verifier_donnees(conn):
 
 
 def main():
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("  VÉRIFICATION GREENSIG")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     checks = []
 
@@ -185,9 +182,9 @@ def main():
 
 def afficher_resultat(checks):
     """Affiche le résultat des vérifications."""
-    print("="*70)
+    print("=" * 70)
     print("  RÉSUMÉ")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     for nom, ok in checks:
         status = "✅" if ok else "❌"

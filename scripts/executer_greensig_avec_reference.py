@@ -29,17 +29,41 @@ def creer_instance_greensig_test():
         "competences": [],
         "operateurs": [],
         "taches": [
-            {"id": 1, "id_type_tache_id": 1, "charge_estimee_heures": 2.0, "equipes_ids": [100, 200], "deleted_at": None},
-            {"id": 2, "id_type_tache_id": 2, "charge_estimee_heures": 1.5, "equipes_ids": [100], "deleted_at": None},
-            {"id": 3, "id_type_tache_id": 1, "charge_estimee_heures": 1.0, "equipes_ids": [200], "deleted_at": None},
-            {"id": 4, "id_type_tache_id": 3, "charge_estimee_heures": 0.5, "equipes_ids": [100, 200], "deleted_at": None},
+            {
+                "id": 1,
+                "id_type_tache_id": 1,
+                "charge_estimee_heures": 2.0,
+                "equipes_ids": [100, 200],
+                "deleted_at": None,
+            },
+            {
+                "id": 2,
+                "id_type_tache_id": 2,
+                "charge_estimee_heures": 1.5,
+                "equipes_ids": [100],
+                "deleted_at": None,
+            },
+            {
+                "id": 3,
+                "id_type_tache_id": 1,
+                "charge_estimee_heures": 1.0,
+                "equipes_ids": [200],
+                "deleted_at": None,
+            },
+            {
+                "id": 4,
+                "id_type_tache_id": 3,
+                "charge_estimee_heures": 0.5,
+                "equipes_ids": [100, 200],
+                "deleted_at": None,
+            },
         ],
     }
 
 
 def convertir_greensig_vers_trco(payload_dict):
     """Convertit GreenSig → T-R-C-O."""
-    from dsl.schema import InstanceTRCO, Tache, Ressource, CompatibiliteRessourceTache, MinimiserMakespan
+    from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Ressource, Tache
 
     taches = [Tache(id=f"T{t['id']}") for t in payload_dict["taches"]]
     ressources = [Ressource(id=f"E{e['id']}") for e in payload_dict["equipes"]]
@@ -51,27 +75,22 @@ def convertir_greensig_vers_trco(payload_dict):
         duree_min = int(charge_h * 60) if charge_h else 30
 
         for eq_id in tache_gs["equipes_ids"]:
-            contraintes.append(
-                CompatibiliteRessourceTache(tache=tache_id, ressource=f"E{eq_id}", duree=duree_min)
-            )
+            contraintes.append(CompatibiliteRessourceTache(tache=tache_id, ressource=f"E{eq_id}", duree=duree_min))
 
     return InstanceTRCO(
-        taches=taches,
-        ressources=ressources,
-        contraintes=contraintes,
-        objectifs=[MinimiserMakespan()]
+        taches=taches, ressources=ressources, contraintes=contraintes, objectifs=[MinimiserMakespan()]
     )
 
 
 def main():
-    print("\n" + "✅"*35)
+    print("\n" + "✅" * 35)
     print("  EXÉCUTION AVEC SOLVEUR DE RÉFÉRENCE + GREENSIG")
-    print("✅"*35 + "\n")
+    print("✅" * 35 + "\n")
 
     # Données GreenSig
-    print("="*70)
+    print("=" * 70)
     print("  DONNÉES GREENSIG (FORMAT ERP)")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     payload = creer_instance_greensig_test()
 
@@ -89,21 +108,21 @@ def main():
     print()
 
     # Conversion
-    print("="*70)
+    print("=" * 70)
     print("  CONVERSION GREENSIG → T-R-C-O")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     instance = convertir_greensig_vers_trco(payload)
-    print(f"✅ Instance T-R-C-O créée")
+    print("✅ Instance T-R-C-O créée")
     print(f"  • Tâches : {[t.id for t in instance.taches]}")
     print(f"  • Ressources : {[r.id for r in instance.ressources]}")
     print(f"  • Contraintes : {len(instance.contraintes)}")
     print()
 
     # Solveur
-    print("="*70)
+    print("=" * 70)
     print("  EXÉCUTION DU SOLVEUR")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("📦 Chargement du solveur de référence...\n")
     from scripts._solveur_minimal import resoudre
@@ -114,9 +133,9 @@ def main():
     duree = time.time() - debut
 
     # Résultat
-    print("="*70)
+    print("=" * 70)
     print("  RÉSULTAT")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     if planning is None:
         print("❌ INSTANCE INFAISABLE")
@@ -129,13 +148,15 @@ def main():
     operations_triees = sorted(planning.operations, key=lambda o: o.debut)
 
     print("📋 PLANNING :")
-    print("─"*70 + "\n")
+    print("─" * 70 + "\n")
 
     for op in operations_triees:
         # Durée
-        duree_op = next(c.duree for c in instance.contraintes
-                        if isinstance(c, CompatibiliteRessourceTache)
-                        and c.tache == op.tache and c.ressource == op.ressource)
+        duree_op = next(
+            c.duree
+            for c in instance.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
+        )
         fin = op.debut + duree_op
 
         # Infos GreenSig
@@ -151,18 +172,23 @@ def main():
         print(f"    Horaire : {op.debut} → {fin} min ({duree_op} min)")
         print()
 
-    makespan = max(op.debut + next(c.duree for c in instance.contraintes
-                                    if isinstance(c, CompatibiliteRessourceTache)
-                                    and c.tache == op.tache and c.ressource == op.ressource)
-                   for op in operations_triees)
+    makespan = max(
+        op.debut
+        + next(
+            c.duree
+            for c in instance.contraintes
+            if isinstance(c, CompatibiliteRessourceTache) and c.tache == op.tache and c.ressource == op.ressource
+        )
+        for op in operations_triees
+    )
 
-    print("─"*70)
-    print(f"\n🎯 MAKESPAN TOTAL : {makespan} minutes ({makespan/60:.2f} heures)\n")
+    print("─" * 70)
+    print(f"\n🎯 MAKESPAN TOTAL : {makespan} minutes ({makespan / 60:.2f} heures)\n")
 
     # Statistiques
-    print("="*70)
+    print("=" * 70)
     print("  STATISTIQUES")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print(f"📊 Tâches GreenSig : {len(payload['taches'])}")
     print(f"📊 Équipes GreenSig : {len(payload['equipes'])}")
@@ -171,9 +197,9 @@ def main():
     print(f"🎯 Makespan : {makespan} minutes")
     print()
 
-    print("="*70)
+    print("=" * 70)
     print("  ✅ EXÉCUTION RÉUSSIE !")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
 
     print("🎉 Vous venez de voir le MOMENT 2 (Exécution) :")
     print("  • Données GreenSig (ERP) → Instance T-R-C-O (standard)")

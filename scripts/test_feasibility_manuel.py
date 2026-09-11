@@ -3,12 +3,12 @@
 Crée des plannings (valides et invalides) manuellement et teste la validation.
 """
 
-from dsl.schema.planning import Planning, OperationPlanifiee
-from dsl.schema.taches import Tache
-from dsl.schema.ressources import Ressource
-from dsl.schema.contraintes import Precedence, CompatibiliteRessourceTache
-from dsl.schema.objectifs import MinimiserMakespan
+from dsl.schema.contraintes import CompatibiliteRessourceTache, Precedence
 from dsl.schema.instance import InstanceTRCO
+from dsl.schema.objectifs import MinimiserMakespan
+from dsl.schema.planning import OperationPlanifiee, Planning
+from dsl.schema.ressources import Ressource
+from dsl.schema.taches import Tache
 from validation_engine.feasibility_checker import verifier_faisabilite
 
 
@@ -148,8 +148,8 @@ def main():
 
     planning_multiple_violations = Planning(
         operations=[
-            OperationPlanifiee(tache="T1", ressource="R1", debut=0, fin=30),     # Durée incorrecte
-            OperationPlanifiee(tache="T3", ressource="R1", debut=20, fin=110),   # Précédence violée + Chevauche T1
+            OperationPlanifiee(tache="T1", ressource="R1", debut=0, fin=30),  # Durée incorrecte
+            OperationPlanifiee(tache="T3", ressource="R1", debut=20, fin=110),  # Précédence violée + Chevauche T1
             OperationPlanifiee(tache="T2", ressource="R2", debut=150, fin=240),  # Après T3 (précédence)
         ]
     )

@@ -13,7 +13,6 @@ import sys
 from pathlib import Path
 
 from dsl.schema import InstanceTRCO
-from solver_store.registry import Registre
 
 
 def lister_solveurs():
@@ -27,36 +26,18 @@ def lister_solveurs():
             if solveur_path.exists():
                 taille = solveur_path.stat().st_size
                 lignes = len(solveur_path.read_text(encoding="utf-8").splitlines())
-                solveurs.append({
-                    "id": dir_path.name,
-                    "path": solveur_path,
-                    "taille": taille,
-                    "lignes": lignes
-                })
+                solveurs.append({"id": dir_path.name, "path": solveur_path, "taille": taille, "lignes": lignes})
 
     return solveurs
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Résout une instance avec un solveur stocké"
-    )
+    parser = argparse.ArgumentParser(description="Résout une instance avec un solveur stocké")
+    parser.add_argument("--instance", type=Path, required=True, help="Chemin vers l'instance TRCO (JSON)")
     parser.add_argument(
-        "--instance",
-        type=Path,
-        required=True,
-        help="Chemin vers l'instance TRCO (JSON)"
+        "--solveur-id", type=str, help="ID du solveur à utiliser (optionnel, utilise le premier disponible sinon)"
     )
-    parser.add_argument(
-        "--solveur-id",
-        type=str,
-        help="ID du solveur à utiliser (optionnel, utilise le premier disponible sinon)"
-    )
-    parser.add_argument(
-        "--lister",
-        action="store_true",
-        help="Lister les solveurs disponibles et quitter"
-    )
+    parser.add_argument("--lister", action="store_true", help="Lister les solveurs disponibles et quitter")
 
     args = parser.parse_args()
 
@@ -88,18 +69,18 @@ def main():
         sys.exit(1)
 
     # Sélectionner un solveur
-    print(f"\n[2/4] Selection du solveur...")
+    print("\n[2/4] Selection du solveur...")
     solveurs = lister_solveurs()
 
     if not solveurs:
-        print(f"      [ERREUR] Aucun solveur trouve dans solver_store/artifacts/")
+        print("      [ERREUR] Aucun solveur trouve dans solver_store/artifacts/")
         sys.exit(1)
 
     if args.solveur_id:
         solveur = next((s for s in solveurs if s["id"] == args.solveur_id), None)
         if not solveur:
             print(f"      [ERREUR] Solveur {args.solveur_id} introuvable")
-            print(f"\n      Solveurs disponibles:")
+            print("\n      Solveurs disponibles:")
             for s in solveurs:
                 print(f"        - {s['id']}")
             sys.exit(1)
@@ -110,17 +91,17 @@ def main():
     print(f"           Taille : {solveur['lignes']} lignes")
 
     # Charger le solveur
-    print(f"\n[3/4] Chargement et execution du solveur...")
+    print("\n[3/4] Chargement et execution du solveur...")
     try:
         # Lire le code
-        code_source = solveur['path'].read_text(encoding="utf-8")
+        code_source = solveur["path"].read_text(encoding="utf-8")
 
         # Executer le code pour obtenir la fonction resoudre
         namespace = {}
         exec(code_source, namespace)
 
         if "resoudre" not in namespace:
-            print(f"      [ERREUR] Le solveur ne contient pas de fonction 'resoudre'")
+            print("      [ERREUR] Le solveur ne contient pas de fonction 'resoudre'")
             sys.exit(1)
 
         fonction_resoudre = namespace["resoudre"]
@@ -129,7 +110,7 @@ def main():
         planning = fonction_resoudre(instance)
 
         if planning is None:
-            print(f"      [ECHEC] Le solveur n'a pas trouve de solution")
+            print("      [ECHEC] Le solveur n'a pas trouve de solution")
             sys.exit(1)
 
         print(f"      [OK] Solution trouvee avec {len(planning.operations)} operations")
@@ -137,11 +118,12 @@ def main():
     except Exception as e:
         print(f"      [ERREUR] Execution echouee : {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
     # Analyser le planning
-    print(f"\n[4/4] Analyse du planning...")
+    print("\n[4/4] Analyse du planning...")
 
     # Créer un dictionnaire pour récupérer les durées
     durees = {}
@@ -161,13 +143,9 @@ def main():
         fin = debut + duree
         max_fin = max(max_fin, fin)
 
-        details_operations.append({
-            "tache": tache_id,
-            "ressource": ressource_id,
-            "debut": debut,
-            "duree": duree,
-            "fin": fin
-        })
+        details_operations.append(
+            {"tache": tache_id, "ressource": ressource_id, "debut": debut, "duree": duree, "fin": fin}
+        )
 
     # Afficher le résumé
     print("\n" + "=" * 80)
@@ -186,8 +164,10 @@ def main():
     details_operations.sort(key=lambda x: x["debut"])
 
     for detail in details_operations:
-        print(f"{detail['tache']:<25} {detail['ressource']:<25} "
-              f"{detail['debut']:>8} {detail['duree']:>8} {detail['fin']:>8}")
+        print(
+            f"{detail['tache']:<25} {detail['ressource']:<25} "
+            f"{detail['debut']:>8} {detail['duree']:>8} {detail['fin']:>8}"
+        )
 
     # Sauvegarder
     output_dir = Path("data/plannings_generes")
@@ -205,10 +185,10 @@ def main():
                 "ressource": detail["ressource"],
                 "debut": detail["debut"],
                 "duree": detail["duree"],
-                "fin": detail["fin"]
+                "fin": detail["fin"],
             }
             for detail in details_operations
-        ]
+        ],
     }
 
     with open(planning_path, "w", encoding="utf-8") as f:

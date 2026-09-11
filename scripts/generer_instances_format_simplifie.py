@@ -233,7 +233,11 @@ def creer_instance_hopital_bloc_operatoire() -> dict[str, Any]:
         ],
         "ressources": [
             {"id": "R1", "nom": "Salle de préparation", "competences": ["preparation_patient"]},
-            {"id": "R2", "nom": "Bloc opératoire 1", "competences": ["installation", "intervention", "desinfection"]},
+            {
+                "id": "R2",
+                "nom": "Bloc opératoire 1",
+                "competences": ["installation", "intervention", "desinfection"],
+            },
             {"id": "R3", "nom": "Salle de réveil", "competences": ["surveillance_post_op"]},
             {"id": "R4", "nom": "Équipe stérilisation", "competences": ["desinfection"]},
         ],

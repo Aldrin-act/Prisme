@@ -9,7 +9,6 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from dsl.schema.registry_objectifs import RegistryObjectifs
 
-
 # ============================================================================
 # Exemple 1 : Client BARAA - Objectif métier spécifique
 # ============================================================================
@@ -31,25 +30,19 @@ class MinimiserCoutTotal(BaseModel):
     poids: float = Field(default=1.0, ge=0.0)
 
     cout_horaire_par_ressource: dict[str, float] = Field(
-        default_factory=dict,
-        description="Coût horaire d'utilisation de chaque ressource (€/h)"
+        default_factory=dict, description="Coût horaire d'utilisation de chaque ressource (€/h)"
     )
 
     cout_setup_par_changement: dict[str, float] = Field(
-        default_factory=dict,
-        description="Coût fixe de changement de série par ressource (€)"
+        default_factory=dict, description="Coût fixe de changement de série par ressource (€)"
     )
 
     penalite_retard_par_jour: float = Field(
-        default=100.0,
-        ge=0.0,
-        description="Pénalité financière par jour de retard (€/jour)"
+        default=100.0, ge=0.0, description="Pénalité financière par jour de retard (€/jour)"
     )
 
     cout_inactivite_par_heure: float = Field(
-        default=10.0,
-        ge=0.0,
-        description="Coût d'inactivité d'une ressource (€/h)"
+        default=10.0, ge=0.0, description="Coût d'inactivité d'une ressource (€/h)"
     )
 
 
@@ -80,19 +73,15 @@ class MinimiserEmpreinteCO2(BaseModel):
     poids: float = Field(default=1.0, ge=0.0)
 
     emission_co2_par_ressource_par_heure: dict[str, float] = Field(
-        default_factory=dict,
-        description="Émissions CO2 par heure d'utilisation (kg CO2/h)"
+        default_factory=dict, description="Émissions CO2 par heure d'utilisation (kg CO2/h)"
     )
 
     emission_co2_par_changement: dict[str, float] = Field(
-        default_factory=dict,
-        description="Émissions CO2 liées au changement de série (kg CO2)"
+        default_factory=dict, description="Émissions CO2 liées au changement de série (kg CO2)"
     )
 
     seuil_alerte_co2: float | None = Field(
-        default=None,
-        ge=0.0,
-        description="Seuil d'alerte CO2 total (kg) - génère un warning si dépassé"
+        default=None, ge=0.0, description="Seuil d'alerte CO2 total (kg) - génère un warning si dépassé"
     )
 
 
@@ -101,9 +90,7 @@ def validateur_co2(objectif: MinimiserEmpreinteCO2) -> list[str]:
     avertissements = []
 
     if not objectif.emission_co2_par_ressource_par_heure:
-        avertissements.append(
-            "Aucune émission CO2 renseignée par ressource - objectif sans effet"
-        )
+        avertissements.append("Aucune émission CO2 renseignée par ressource - objectif sans effet")
 
     return avertissements
 
@@ -141,12 +128,11 @@ class ObjectifMultiCriteres(BaseModel):
             "- somme_ponderee: Σ(poids_i × objectif_i)\n"
             "- produit: Π(objectif_i^poids_i)\n"
             "- lexicographique: optimise par ordre de priorité"
-        )
+        ),
     )
 
     normalisation: bool = Field(
-        default=True,
-        description="Normaliser chaque objectif avant agrégation (recommandé)"
+        default=True, description="Normaliser chaque objectif avant agrégation (recommandé)"
     )
 
 
@@ -184,15 +170,14 @@ class RespectPreferences(BaseModel):
             "Préférences d'affectation par tâche:\n"
             "{'tache_id': {'ressource_id': score_preference}}\n"
             "score > 1.0 = préféré, < 1.0 = éviter, 1.0 = neutre"
-        )
+        ),
     )
 
     preferences_horaires: dict[str, dict[str, tuple[int, int]]] = Field(
         default_factory=dict,
         description=(
-            "Plages horaires préférées par tâche:\n"
-            "{'tache_id': {'préféré': (debut, fin), 'éviter': (debut, fin)}}"
-        )
+            "Plages horaires préférées par tâche:\n{'tache_id': {'préféré': (debut, fin), 'éviter': (debut, fin)}}"
+        ),
     )
 
 

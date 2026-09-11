@@ -277,9 +277,7 @@ def test_delimiteur_point_virgule_lit_les_quatre_fichiers() -> None:
     contraintes_csv = b"type;tache;competence\ncompetence_requise;T1;decoupe\n"
     commandes_csv = b"id;taches;client;date_limite\nCMD1;T1;Client A;20\n"
 
-    resultat = _traduire_resultat(
-        taches_csv, ressources_csv, contraintes_csv, commandes_csv, delimiteur=";"
-    )
+    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, commandes_csv, delimiteur=";")
 
     assert [t.id for t in resultat.instance.taches] == ["T1"]
     compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]

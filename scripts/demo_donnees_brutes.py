@@ -28,7 +28,7 @@ def demo_workflow_complet():
 
     chemin_brut = Path(__file__).parent.parent / "data" / "donnees_brutes" / "json_erp" / "atelier_mecanique.json"
 
-    with open(chemin_brut, "r", encoding="utf-8") as f:
+    with open(chemin_brut, encoding="utf-8") as f:
         data_brute = json.load(f)
 
     print(f"Fichier: {chemin_brut.name}")
@@ -178,7 +178,7 @@ def lister_jeux_donnees():
         fichiers_bruts = sorted(donnees_brutes_dir.glob("*.json"))
         print(f"Donnees brutes (format ERP) : {len(fichiers_bruts)} fichiers")
         for f in fichiers_bruts:
-            with open(f, "r", encoding="utf-8") as file:
+            with open(f, encoding="utf-8") as file:
                 data = json.load(file)
                 print(f"  - {f.name:<35} {len(data['operations']):>3} ops, {len(data['postes']):>3} postes")
         print()
@@ -187,7 +187,7 @@ def lister_jeux_donnees():
         fichiers_trco = sorted(instances_trco_dir.glob("*.json"))
         print(f"Instances TRCO (canoniques)  : {len(fichiers_trco)} fichiers")
         for f in fichiers_trco:
-            with open(f, "r", encoding="utf-8") as file:
+            with open(f, encoding="utf-8") as file:
                 data = json.load(file)
                 print(
                     f"  - {f.name:<35} "

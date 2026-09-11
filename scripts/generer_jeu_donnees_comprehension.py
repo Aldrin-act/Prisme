@@ -35,8 +35,8 @@ def generer_csv_simple(seed: int) -> ExempleTraduction:
     random.seed(seed)
 
     n_taches = random.randint(2, 5)
-    taches = [f"Task_{i+1}" for i in range(n_taches)]
-    ressources = [f"Resource_{chr(65+i)}" for i in range(n_taches)]
+    taches = [f"Task_{i + 1}" for i in range(n_taches)]
+    ressources = [f"Resource_{chr(65 + i)}" for i in range(n_taches)]
     durees_h = [round(random.uniform(0.5, 4.0), 1) for _ in range(n_taches)]
 
     # CSV
@@ -80,7 +80,7 @@ def generer_json_erp_avec_precedences(seed: int) -> ExempleTraduction:
     for i in range(n_wo):
         wo = {
             "wo_id": 1000 + i,
-            "operation": f"Operation_{chr(65+i)}",
+            "operation": f"Operation_{chr(65 + i)}",
             "estimated_time_min": random.randint(15, 120),
             "priority": random.randint(1, 3),
         }
@@ -92,21 +92,17 @@ def generer_json_erp_avec_precedences(seed: int) -> ExempleTraduction:
         work_orders.append(wo)
 
     workstations = [
-        {"station_id": f"WS_{chr(65+i)}", "station_name": f"Workstation {chr(65+i)}"}
-        for i in range(n_wo)
+        {"station_id": f"WS_{chr(65 + i)}", "station_name": f"Workstation {chr(65 + i)}"} for i in range(n_wo)
     ]
 
     donnees_erp = {"work_orders": work_orders, "workstations": workstations}
 
     # T-R-C-O attendu
     taches = [
-        {"id": f"WO_{wo['wo_id']}", "nom": wo["operation"], "priorite": wo["priority"]}
-        for wo in work_orders
+        {"id": f"WO_{wo['wo_id']}", "nom": wo["operation"], "priorite": wo["priority"]} for wo in work_orders
     ]
 
-    ressources = [
-        {"id": ws["station_id"], "nom": ws["station_name"]} for ws in workstations
-    ]
+    ressources = [{"id": ws["station_id"], "nom": ws["station_name"]} for ws in workstations]
 
     contraintes = []
 
@@ -126,7 +122,7 @@ def generer_json_erp_avec_precedences(seed: int) -> ExempleTraduction:
             {
                 "type": "compatibilite_ressource_tache",
                 "tache": f"WO_{wo['wo_id']}",
-                "ressource": f"WS_{chr(65+i)}",
+                "ressource": f"WS_{chr(65 + i)}",
                 "duree": wo["estimated_time_min"],
             }
         )
@@ -171,23 +167,16 @@ def generer_texte_libre_francais(seed: int) -> ExempleTraduction:
     # Ajouter précédences implicites
     if n_ops >= 2:
         lignes.append("")
-        lignes.append(
-            f"IMPORTANT : {ops_choisies[1][0]} ne peut commencer qu'après {ops_choisies[0][0]}."
-        )
+        lignes.append(f"IMPORTANT : {ops_choisies[1][0]} ne peut commencer qu'après {ops_choisies[0][0]}.")
 
     if n_ops >= 3:
-        lignes.append(
-            f"{ops_choisies[2][0]} doit être faite après {ops_choisies[1][0]}."
-        )
+        lignes.append(f"{ops_choisies[2][0]} doit être faite après {ops_choisies[1][0]}.")
 
     # T-R-C-O attendu
-    taches = [
-        {"id": f"T_{op.upper()}", "nom": op} for op, _, _ in ops_choisies
-    ]
+    taches = [{"id": f"T_{op.upper()}", "nom": op} for op, _, _ in ops_choisies]
 
     ressources = [
-        {"id": f"R_{op.upper()[:3]}", "nom": ressource.capitalize()}
-        for op, ressource, _ in ops_choisies
+        {"id": f"R_{op.upper()[:3]}", "nom": ressource.capitalize()} for op, ressource, _ in ops_choisies
     ]
 
     contraintes = []
@@ -208,7 +197,7 @@ def generer_texte_libre_francais(seed: int) -> ExempleTraduction:
         contraintes.append(
             {
                 "type": "precedence",
-                "avant": f"T_{ops_choisies[i-1][0].upper()}",
+                "avant": f"T_{ops_choisies[i - 1][0].upper()}",
                 "apres": f"T_{ops_choisies[i][0].upper()}",
             }
         )
@@ -240,21 +229,15 @@ def generer_json_multi_ressources(seed: int) -> ExempleTraduction:
     taches_data = []
     for i in range(n_taches):
         # Chaque tâche peut être faite sur 2-3 ressources
-        ressources_compatibles = random.sample(
-            range(n_ressources), k=random.randint(2, min(3, n_ressources))
-        )
+        ressources_compatibles = random.sample(range(n_ressources), k=random.randint(2, min(3, n_ressources)))
 
         durees = {}
         for r_idx in ressources_compatibles:
-            durees[f"R{r_idx+1}"] = random.randint(30, 120)
+            durees[f"R{r_idx + 1}"] = random.randint(30, 120)
 
-        taches_data.append(
-            {"id": f"T{i+1}", "nom": f"Task {i+1}", "durations": durees}
-        )
+        taches_data.append({"id": f"T{i + 1}", "nom": f"Task {i + 1}", "durations": durees})
 
-    ressources_data = [
-        {"id": f"R{i+1}", "nom": f"Resource {i+1}"} for i in range(n_ressources)
-    ]
+    ressources_data = [{"id": f"R{i + 1}", "nom": f"Resource {i + 1}"} for i in range(n_ressources)]
 
     # Format JSON simple
     donnees = {"tasks": [], "resources": ressources_data}
@@ -264,8 +247,7 @@ def generer_json_multi_ressources(seed: int) -> ExempleTraduction:
             "task_id": t["id"],
             "task_name": t["nom"],
             "compatible_resources": [
-                {"resource_id": r_id, "duration_min": dur}
-                for r_id, dur in t["durations"].items()
+                {"resource_id": r_id, "duration_min": dur} for r_id, dur in t["durations"].items()
             ],
         }
         donnees["tasks"].append(task_entry)
@@ -333,9 +315,7 @@ def generer_catalogue(n_par_format: int = 10) -> list[ExempleTraduction]:
     return exemples
 
 
-def sauvegarder_catalogue(
-    exemples: list[ExempleTraduction], chemin: Path
-) -> None:
+def sauvegarder_catalogue(exemples: list[ExempleTraduction], chemin: Path) -> None:
     """Sauvegarde le catalogue en JSON."""
     chemin.parent.mkdir(parents=True, exist_ok=True)
 
