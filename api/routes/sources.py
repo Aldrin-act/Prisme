@@ -28,11 +28,16 @@ import re
 from typing import TYPE_CHECKING, Literal
 
 import httpx
+import psycopg
 from fastapi import APIRouter, Depends, HTTPException
 from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import BaseModel, ValidationError
 
-from adapters.agent_comprehension import comprendre_donnees_erp
+from adapters.agent_comprehension import (
+    comprendre_donnees_erp,
+    dsn_lecture_seule_pour_client,
+    explorer_base_de_donnees,
+)
 from adapters.competence_derivation import ResultatTraduction
 from adapters.csv_import import ErreurFichierInvalide as ErreurFichierCsvInvalide
 from adapters.csv_import import traduire as traduire_csv
@@ -455,3 +460,63 @@ def explorer_api(
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
 
     return {"donnees_brutes": corps}
+
+
+_TAILLE_MAX_REPONSE_BDD_OCTETS = 5_000_000  # même garde-fou/raison que _TAILLE_MAX_REPONSE_API_OCTETS
+_SCHEMAS_PAR_DEFAUT: tuple[str, ...] = ("public",)
+
+
+class RequeteExplorationBDD(BaseModel):
+    client_id: str | None = None  # admin uniquement, même convention que RequeteCreationSource
+    schemas: list[str] | None = None
+
+
+@router.post("/explorer-bdd")
+def explorer_bdd(
+    requete: RequeteExplorationBDD,
+    modele: BaseChatModel = Depends(construire_modele_comprehension),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Explore en lecture seule la base d'un client déjà configurée côté
+    serveur (`dsn_lecture_seule_pour_client` — jamais un DSN fourni dans la
+    requête elle-même, contrainte de sécurité anti-SSRF, à la différence
+    d'`explorer_api` ci-dessus qui accepte URL/authentification par appel).
+
+    Ne persiste rien, même principe non-persistant qu'`explorer_api` : le
+    JSON renvoyé est destiné à remplir le champ « Données brutes » du
+    formulaire de création de source, pour relecture humaine avant tout
+    enregistrement (`POST /sources`)."""
+    client_id = _client_id_effectif(requete.client_id, utilisateur)
+
+    dsn = dsn_lecture_seule_pour_client(client_id)
+    if dsn is None:
+        raise HTTPException(
+            status_code=404, detail=f"exploration BDD non configurée pour ce client ({client_id!r})"
+        )
+
+    schemas = tuple(requete.schemas) if requete.schemas else _SCHEMAS_PAR_DEFAUT
+
+    try:
+        resultat = explorer_base_de_donnees(modele, dsn, schemas=schemas)
+    except ErreurReponseAgentInvalide as erreur:
+        raise HTTPException(status_code=502, detail=f"agent d'exploration : {erreur}") from erreur
+    except psycopg.OperationalError as erreur:
+        raise HTTPException(status_code=503, detail="base de données injoignable pour ce client") from erreur
+    except psycopg.Error as erreur:
+        raise HTTPException(status_code=502, detail=f"requête d'exploration a échoué : {erreur}") from erreur
+
+    donnees_brutes = json.dumps(resultat.donnees_json, ensure_ascii=False)
+    taille = len(donnees_brutes.encode("utf-8"))
+    if taille > _TAILLE_MAX_REPONSE_BDD_OCTETS:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"résultat d'exploration trop volumineux ({taille} octets, max {_TAILLE_MAX_REPONSE_BDD_OCTETS})"
+            ),
+        )
+
+    return {
+        "donnees_brutes": donnees_brutes,
+        "avertissements": list(resultat.avertissements),
+        "requetes_executees": list(resultat.requetes_executees),
+    }

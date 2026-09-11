@@ -522,30 +522,20 @@ unique pour tous les agents.
 
 ## 🔧 Configuration
 
-**Anthropic et OpenAI ne sont pas des fournisseurs supportés par ce module** —
-`generation/agents/client_llm.py::_CONSTRUCTEURS_MODELE` ne connaît que `mistral`, `together`,
-`qwen` (alias de `together`), `nvidia`, `minimax`, `deepseek` et `nemotron` (tous deux hébergés via
-le catalogue API NVIDIA NIM, `https://integrate.api.nvidia.com/v1`, sauf `mistral`/`together` qui
-appellent leur API native).
+**Fournisseur unique : Mistral** (`generation/agents/client_llm.py`) — même fournisseur pour tous
+les agents, pas de routage par agent. Les autres fournisseurs que ce module a supportés
+(together/qwen/nvidia/minimax/deepseek/nemotron, plus le routage par agent de
+`config_fournisseurs.py`) ont été retirés, jugés une complexité non nécessaire pour un seul
+fournisseur réellement utilisé. Anthropic/OpenAI n'ont jamais été des fournisseurs supportés.
 
-Chaque agent est routé vers un fournisseur par défaut différent, pas un fournisseur unique pour tout
-le pipeline (`generation/agents/config_fournisseurs.py`) :
-
-| Agent(s) | Fournisseur par défaut | Modèle |
-|---|---|---|
-| Analyste, Architecte, Développeur, Testeur, Debugger, Reviewer (inactif), Compréhension ERP | `nemotron` | `nvidia/nemotron-3-super-120b-a12b` |
-| Benchmarker | `minimax` | `minimaxai/minimax-m3` |
-| Documentation | `nvidia` | `meta/llama-3.3-70b-instruct` |
-| Supervision (MT7) | `mistral` | `mistral-large-latest` |
-
-Surchargeable par variable d'environnement, agent par agent :
+Surchargeable par variable d'environnement, agent par agent (modèle/timeout seulement — pas de
+choix de fournisseur, il n'y en a qu'un) :
 ```bash
-PRISME_LLM_PROVIDER_<AGENT>=mistral       # ex. PRISME_LLM_PROVIDER_DEVELOPPEUR=deepseek
-PRISME_LLM_MODEL_<AGENT>=...
+PRISME_LLM_MODEL_<AGENT>=...              # ex. PRISME_LLM_MODEL_DEVELOPPEUR=mistral-medium-latest
 PRISME_LLM_TIMEOUT_SECONDES_<AGENT>=...
 ```
-`PRISME_LLM_PROVIDER`/`PRISME_LLM_MODEL` (sans suffixe d'agent) restent le repli générique du mode
-single-shot (`tentative_unique.py`), pas celui du pipeline multi-agents.
+`PRISME_LLM_MODEL` (sans suffixe d'agent) reste le repli générique du mode single-shot
+(`tentative_unique.py`), pas celui du pipeline multi-agents.
 
 Appel direct du pipeline (pas de script `generer_solveur.py` — n'existe pas) :
 ```python
@@ -564,7 +554,7 @@ Ou via l'API, déjà câblée dessus : `POST /generation/{instance_id}` (bloquan
 - **Pipeline + boucle** : `generation/graph.py` (StateGraph LangGraph, Étape 6, §6.6bis pour `test_sandbox`)
 - **Agents** : `generation/agents/{analyste,benchmarker,architecte,generateur,testeur,debugger,documentation}.py`
   (`reviewer.py` présent, jamais câblé)
-- **Client LLM** : `generation/agents/client_llm.py`, `generation/agents/config_fournisseurs.py` (routage par agent)
+- **Client LLM** : `generation/agents/client_llm.py` (Mistral, seul fournisseur)
 - **Validation** : `generation/validation_statique.py`, `generation/executer.py`, `validation_engine/cascade.py`
 - **Sandbox** : `sandbox/runner.py` (`executer_tests_dans_sandbox`, exécution réelle du Testeur ; Étape 7 pour la production)
 - **Observabilité** : LangSmith (tracing natif LangChain/LangGraph, aucune instrumentation maison)

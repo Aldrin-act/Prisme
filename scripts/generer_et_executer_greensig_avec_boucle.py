@@ -83,9 +83,6 @@ def main():
     print("  GÉNÉRATION AVEC BOUCLE + EXÉCUTION GREENSIG")
     print("🔄"*35 + "\n")
 
-    provider = os.getenv('PRISME_LLM_PROVIDER', 'mistral')
-    print(f"📡 Provider LLM : {provider}\n")
-
     # MOMENT 1 : GÉNÉRATION AVEC BOUCLE
     print("="*70)
     print("  MOMENT 1 : GÉNÉRATION AVEC BOUCLE DE RÉPARATION")

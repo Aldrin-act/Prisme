@@ -16,11 +16,12 @@ ensuite tel quel — deux étapes indépendantes, pas fusionnées.
 """
 
 from .agent import ResultatComprehension, comprendre_donnees_erp
-from .exploration_bdd import ResultatExplorationBDD, explorer_base_de_donnees
+from .exploration_bdd import ResultatExplorationBDD, dsn_lecture_seule_pour_client, explorer_base_de_donnees
 
 __all__ = [
     "ResultatComprehension",
     "ResultatExplorationBDD",
     "comprendre_donnees_erp",
+    "dsn_lecture_seule_pour_client",
     "explorer_base_de_donnees",
 ]

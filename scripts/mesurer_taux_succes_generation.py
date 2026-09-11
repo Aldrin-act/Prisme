@@ -6,9 +6,8 @@ et le verdict de la cascade complète (Étape 5). Le taux importe peu à ce
 stade — l'objectif est de mesurer le point de départ avant toute boucle
 generate-test-repair (Étape 6).
 
-Nécessite une clé d'API valide pour le fournisseur choisi
-(`PRISME_LLM_PROVIDER`, défaut "anthropic" -> `ANTHROPIC_API_KEY`) et
-l'extra `llm` installé (`pip install -e .[llm]`).
+Nécessite une clé d'API Kimi valide (`KIMI_API_KEY`) et l'extra `llm`
+installé (`uv sync --extra llm`).
 
 Usage : python scripts/mesurer_taux_succes_generation.py [n_essais]
 """

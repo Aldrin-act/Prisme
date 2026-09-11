@@ -12,6 +12,7 @@ import pytest
 from adapters.agent_comprehension.exploration_bdd import (
     ErreurRequeteNonAutorisee,
     _valider_requete_lecture_seule,
+    dsn_lecture_seule_pour_client,
 )
 
 
@@ -75,3 +76,32 @@ def test_mot_interdit_mentionne_dans_un_commentaire_nest_pas_execute_mais_reste_
 def test_requete_vide_rejetee() -> None:
     with pytest.raises(ErreurRequeteNonAutorisee, match="vide"):
         _valider_requete_lecture_seule("   ")
+
+
+def test_dsn_lecture_seule_pour_client_greensig_delegue(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GREENSIG_LECTURE_SEULE_DATABASE_URL", "postgresql://sentinel")
+    assert dsn_lecture_seule_pour_client("greensig") == "postgresql://sentinel"
+
+
+def test_dsn_lecture_seule_pour_client_non_configure_renvoie_none(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("PRISME_DSN_LECTURE_SEULE_ACME", raising=False)
+    assert dsn_lecture_seule_pour_client("acme") is None
+
+
+def test_dsn_lecture_seule_pour_client_lit_la_variable_dediee(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PRISME_DSN_LECTURE_SEULE_ACME", "postgresql://acme")
+    assert dsn_lecture_seule_pour_client("acme") == "postgresql://acme"
+
+
+def test_dsn_lecture_seule_pour_client_normalise_les_caracteres_non_alphanumeriques(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("PRISME_DSN_LECTURE_SEULE_ACME_CORP_FR", "postgresql://acme-corp")
+    assert dsn_lecture_seule_pour_client("acme-corp.fr") == "postgresql://acme-corp"
+
+
+def test_dsn_lecture_seule_pour_client_variable_vide_traitee_comme_absente(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("PRISME_DSN_LECTURE_SEULE_ACME", "")
+    assert dsn_lecture_seule_pour_client("acme") is None

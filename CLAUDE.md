@@ -41,10 +41,14 @@ cd Front/prismatron-solver-forge && npm install && npm run dev  # frontend dev s
 ```
 
 No type-checker configured. Environment variables:
-- `PRISME_LLM_PROVIDER` (`mistral` default, or `qwen`|`together`|`nvidia`|`minimax`|`deepseek`) /
-  `PRISME_LLM_MODEL` — fallback for single-call paths; `generation/graph.py` instead routes each
-  agent to its own provider via `config_fournisseurs.py`, overridable per agent with
-  `PRISME_LLM_PROVIDER_<AGENT>` / `_MODEL_<AGENT>` / `_TIMEOUT_SECONDES_<AGENT>`.
+- `PRISME_LLM_MODEL` (default `kimi-k2.6`) / `KIMI_API_KEY` — Kimi (Moonshot AI, OpenAI-compatible
+  API, via `ChatOpenAI(base_url=...)` — no dedicated LangChain partner package used, same reasoning
+  as the removals below) is the sole LLM provider (`generation/agents/client_llm.py`; the other
+  providers this project used to support — qwen/together/nvidia/minimax/deepseek, plus
+  `config_fournisseurs.py`'s per-agent routing, then Mistral itself — were removed, judged unneeded
+  complexity for a single provider actually run in production). Per-agent overrides:
+  `PRISME_LLM_MODEL_<AGENT>` / `_TIMEOUT_SECONDES_<AGENT>` (e.g. `PRISME_LLM_MODEL_DEBUGGER`) — no
+  per-agent provider choice anymore, there's only one.
 - `DATABASE_URL` — Postgres DSN read by `EtatPostgres`/`Registre`; `obtenir_etat()` always builds
   `EtatPostgres` outside tests, which override it with an in-memory `EtatAPI()` instead.
 - `JWT_SECRET_KEY`/`JWT_ALGORITHM`/`JWT_EXPIRE_MINUTES` (`api/routes/auth.py`, insecure hardcoded

@@ -1,14 +1,13 @@
 """Couche 1 (§6.1) : `construire_modele`/`construire_modele_pour_agent` ne
-doivent jamais transmettre un fournisseur/modèle vide à un SDK — régression
-trouvée en testant l'agent de compréhension en conditions réelles : `.env`
-déclare `PRISME_LLM_MODEL=` (présent, vide), distinct d'une variable absente
-pour `os.environ.get`, Mistral rejetait alors l'appel avec "Missing model
-parameter" sans que l'erreur ne pointe vers la vraie cause.
+doivent jamais transmettre un modèle vide à un SDK — régression trouvée en
+testant l'agent de compréhension en conditions réelles : `.env` déclare
+`PRISME_LLM_MODEL=` (présent, vide), distinct d'une variable absente pour
+`os.environ.get`, le fournisseur rejetait alors l'appel avec une erreur
+"modèle manquant" sans que l'erreur ne pointe vers la vraie cause.
 
-Aucun appel réseau ici : les constructeurs LangChain (`ChatOpenAI`,
-`ChatMistralAI`) ne contactent le fournisseur qu'au premier `.invoke()`, leur
-construction est pure — les tests de parité ci-dessous inspectent donc les
-attributs de l'objet construit, jamais une réponse réelle.
+Aucun appel réseau ici : le constructeur LangChain (`ChatOpenAI`, utilisé en
+mode compatible pour Kimi) ne contacte le fournisseur qu'au premier
+`.invoke()`, sa construction est pure.
 """
 
 from __future__ import annotations
@@ -21,53 +20,27 @@ from generation.agents import client_llm
 
 
 def test_modele_vide_dans_env_retombe_sur_le_defaut(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("PRISME_LLM_PROVIDER", "factice")
     monkeypatch.setenv("PRISME_LLM_MODEL", "")  # présent mais vide, comme dans .env par défaut
-    monkeypatch.setitem(client_llm._MODELES_PAR_DEFAUT, "factice", "modele-par-defaut")
     modeles_construits: list[str] = []
-    monkeypatch.setitem(
-        client_llm._CONSTRUCTEURS_MODELE,
-        "factice",
-        lambda modele, timeout: modeles_construits.append(modele),
+    monkeypatch.setattr(
+        client_llm, "_construire_modele_kimi", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele()
 
-    assert modeles_construits == ["modele-par-defaut"]
+    assert modeles_construits == [client_llm._MODELE_KIMI_PAR_DEFAUT]
 
 
 def test_modele_explicite_dans_env_est_respecte(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("PRISME_LLM_PROVIDER", "factice")
     monkeypatch.setenv("PRISME_LLM_MODEL", "mon-modele-precis")
-    monkeypatch.setitem(client_llm._MODELES_PAR_DEFAUT, "factice", "modele-par-defaut")
     modeles_construits: list[str] = []
-    monkeypatch.setitem(
-        client_llm._CONSTRUCTEURS_MODELE,
-        "factice",
-        lambda modele, timeout: modeles_construits.append(modele),
+    monkeypatch.setattr(
+        client_llm, "_construire_modele_kimi", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele()
 
     assert modeles_construits == ["mon-modele-precis"]
-
-
-def test_fournisseur_vide_dans_env_retombe_sur_mistral(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("PRISME_LLM_PROVIDER", "")
-    monkeypatch.delenv("PRISME_LLM_MODEL", raising=False)
-    appels: list[str] = []
-    monkeypatch.setitem(client_llm._CONSTRUCTEURS_MODELE, "mistral", lambda modele, timeout: appels.append(modele))
-
-    client_llm.construire_modele()
-
-    assert appels  # bien passé par le constructeur "mistral" (défaut du module), pas une KeyError sur ""
-
-
-def test_fournisseur_inconnu_leve_une_erreur_explicite(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("PRISME_LLM_PROVIDER", "fournisseur-qui-n-existe-pas")
-
-    with pytest.raises(ValueError, match="fournisseur LLM inconnu"):
-        client_llm.construire_modele()
 
 
 class TestTimeoutParAgent:
@@ -87,59 +60,25 @@ class TestTimeoutParAgent:
         assert client_llm._timeout_pour_agent("analyste") == 10.0
 
 
-class TestConstructeursModeleParite:
-    """Vérifie que chaque fournisseur construit son `ChatOpenAI`/`ChatMistralAI`
-    avec exactement les mêmes base_url/température/top_p/max_tokens que
-    l'ancien client fait main — aucun appel réseau, seule la construction de
-    l'objet est inspectée."""
+def test_construire_modele_kimi_construit_bien_un_chat_openai(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("KIMI_API_KEY", "cle-test")
+    modele = client_llm._construire_modele_kimi("kimi-k2.6", 120.0)
+    assert modele.model == "kimi-k2.6"
+    assert str(modele.openai_api_base) == "https://api.moonshot.ai/v1"
 
-    def test_nvidia_utilise_le_bon_base_url_et_les_bons_parametres(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setenv("NVIDIA_API_KEY", "cle-test")
-        modele = client_llm._construire_modele_nvidia("meta/llama-3.3-70b-instruct", 120.0)
-        assert modele.openai_api_base == "https://integrate.api.nvidia.com/v1"
-        assert modele.model_name == "meta/llama-3.3-70b-instruct"
-        assert modele.temperature == 0.6
-        assert modele.top_p == 0.7
-        assert modele.request_timeout == 120.0
 
-    def test_deepseek_transmet_extra_body_thinking_desactive(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setenv("DEEPSEEK_API_KEY", "cle-test")
-        modele = client_llm._construire_modele_deepseek("deepseek-ai/deepseek-v4-pro", 120.0)
-        assert modele.extra_body == {"chat_template_kwargs": {"thinking": False}}
-        assert modele.max_tokens == 16384
-
-    def test_nemotron_reutilise_la_cle_nvidia(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setenv("NVIDIA_API_KEY", "cle-test")
-        modele = client_llm._construire_modele_nemotron("nvidia/nemotron-3-super-120b-a12b", 120.0)
-        assert modele.openai_api_base == "https://integrate.api.nvidia.com/v1"
-        assert modele.model_name == "nvidia/nemotron-3-super-120b-a12b"
-        assert modele.max_tokens == 16384
-
-    def test_qwen_est_bien_un_alias_de_together(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setenv("TOGETHER_API_KEY", "cle-test")
-        modele = client_llm._construire_modele_qwen("Qwen/Qwen2.5-72B-Instruct", 120.0)
-        assert modele.openai_api_base == "https://api.together.xyz/v1"
-
-    def test_mistral_utilise_chat_mistral_ai(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setenv("MISTRAL_API_KEY", "cle-test")
-        modele = client_llm._construire_modele_mistral("mistral-large-latest", 120.0)
-        assert modele.model == "mistral-large-latest"
+def test_construire_modele_kimi_respecte_lurl_personnalisee(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("KIMI_API_KEY", "cle-test")
+    monkeypatch.setenv("KIMI_API_BASE_URL", "https://api.moonshot.cn/v1")
+    modele = client_llm._construire_modele_kimi("kimi-k2.6", 120.0)
+    assert str(modele.openai_api_base) == "https://api.moonshot.cn/v1"
 
 
 def test_construire_modele_pour_agent_respecte_la_surcharge_de_modele(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Fournisseur unique pour tous les agents (`FOURNISSEURS_PAR_AGENT` vide,
-    voir `config_fournisseurs.py`) — inspecte l'argument passé au
-    constructeur plutôt qu'un attribut nommé différemment selon le SDK
-    (`ChatOpenAI.model_name` vs `ChatMistralAI.model`), pour ne pas dépendre
-    de quel fournisseur est le défaut du moment."""
-    from generation.agents.config_fournisseurs import obtenir_fournisseur_pour_agent
-
     monkeypatch.setenv("PRISME_LLM_MODEL_DOCUMENTATION", "un-modele-precis")
     modeles_construits: list[str] = []
-    monkeypatch.setitem(
-        client_llm._CONSTRUCTEURS_MODELE,
-        obtenir_fournisseur_pour_agent("documentation"),
-        lambda modele, timeout: modeles_construits.append(modele),
+    monkeypatch.setattr(
+        client_llm, "_construire_modele_kimi", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele_pour_agent("documentation")
@@ -155,11 +94,10 @@ class _ErreurAvecStatut(Exception):
 
 class TestErreurTransitoire:
     """429 (quota/débit dépassé) doit être retenté comme un 5xx — vu en
-    pratique : un seul fournisseur pour tous les agents
-    (`config_fournisseurs.FOURNISSEURS_PAR_AGENT` vide, tous sur Mistral par
-    défaut) peut suffire à dépasser son débit pendant la boucle de
-    réparation, plusieurs agents y appelant coup sur coup. Les autres 4xx
-    (clé invalide...) restent définitifs."""
+    pratique : le fournisseur LLM, unique pour tous les agents, peut
+    suffire à dépasser son débit pendant la boucle de réparation, plusieurs
+    agents y appelant coup sur coup. Les autres 4xx (clé invalide...)
+    restent définitifs."""
 
     @pytest.mark.parametrize("code_statut", [500, 502, 503, 504, 429])
     def test_erreurs_retentables(self, code_statut: int) -> None:

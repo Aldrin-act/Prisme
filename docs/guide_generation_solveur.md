@@ -8,8 +8,13 @@
 
 ## 🎯 Objectif
 
-Faire générer par un LLM (fournisseur configuré via `PRISME_LLM_PROVIDER` — Mistral par défaut,
-voir `generation/agents/client_llm.py`) du code Python utilisant OR-Tools CP-SAT qui résout votre problème de scheduling.
+Faire générer par Mistral (fournisseur unique, `MISTRAL_API_KEY` — voir
+`generation/agents/client_llm.py`) du code Python utilisant OR-Tools CP-SAT qui résout votre problème de scheduling.
+
+> ⚠️ Le reste de ce guide (sections Anthropic/OpenAI ci-dessous) date d'avant que Mistral ne
+> devienne l'unique fournisseur supporté — les instructions `PRISME_LLM_PROVIDER=anthropic`/
+> `openai`/`mistralai` qui suivent sont obsolètes, seul `MISTRAL_API_KEY` est nécessaire
+> aujourd'hui.
 
 **Innovation PRISME** : Le code est généré **UNE FOIS**, puis **ré-exécuté des milliers de fois** sur des données changeantes sans jamais rappeler le LLM.
 

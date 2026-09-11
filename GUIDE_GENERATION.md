@@ -27,10 +27,9 @@ exécution réelle, puis la cascade de validation (faisabilité → optimalité 
 boucle épuise ses tentatives sans succès, l'échec remonte tel quel — jamais de nouvel essai
 silencieux au-delà de la limite.
 
-Fournisseurs LLM disponibles : `mistral` (défaut), `qwen`, `together`, `nvidia`, `minimax`,
-`deepseek` — un par agent, routés automatiquement (`generation/agents/config_fournisseurs.py`),
-surchargeables par variable d'environnement (`PRISME_LLM_PROVIDER_<AGENT>`). Anthropic/OpenAI ne
-sont pas des fournisseurs supportés par ce pipeline.
+Fournisseur LLM unique : Mistral (`MISTRAL_API_KEY`) — modèle surchargeable par variable
+d'environnement, agent par agent (`PRISME_LLM_MODEL_<AGENT>`). Les autres fournisseurs que ce
+pipeline a supportés (qwen/together/nvidia/minimax/deepseek) ont été retirés.
 
 Pour générer un solveur : voir la route API `POST /generation/{instance_id}` (ou son équivalent
 `/demarrer` + SSE), ou `scripts/mesurer_taux_succes_generation.py` pour le mode single-shot legacy

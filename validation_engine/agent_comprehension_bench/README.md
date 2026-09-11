@@ -55,7 +55,7 @@ python -m scripts.generer_jeu_donnees_comprehension
 # Mode simulation (validation structure JSON seulement)
 python -m scripts.tester_agent_comprehension
 
-# Mode réel avec LLM (nécessite PRISME_LLM_PROVIDER et clé API)
+# Mode réel avec LLM (nécessite MISTRAL_API_KEY)
 # TODO: Implémenter l'appel LLM dans tester_exemple_simule()
 ```
 
@@ -87,9 +87,7 @@ python -m scripts.tester_agent_comprehension
 ### Phase 2 : Test avec LLM réel (🚧 à faire)
 
 **Prérequis** :
-- Variable d'environnement `PRISME_LLM_PROVIDER` (`mistral` par défaut, ou `qwen`/`together`/
-  `nvidia`/`minimax`/`deepseek`)
-- Variable d'environnement avec la clé API du fournisseur choisi (ex. `MISTRAL_API_KEY`)
+- Variable d'environnement `MISTRAL_API_KEY` (fournisseur unique)
 - Extra `.[llm]` installé (`uv sync --extra llm`)
 
 **Modifications nécessaires** dans `tester_agent_comprehension.py` :
@@ -127,8 +125,7 @@ def tester_exemple_reel(exemple: dict[str, Any]) -> ResultatTest:
 **Puis lancer** :
 
 ```bash
-export PRISME_LLM_PROVIDER=anthropic
-export ANTHROPIC_API_KEY=sk-...
+export MISTRAL_API_KEY=...
 uv run python -m scripts.tester_agent_comprehension
 ```
 

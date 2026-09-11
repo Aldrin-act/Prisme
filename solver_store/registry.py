@@ -77,6 +77,12 @@ class ArtefactSolveur:
     date_validation: str
     code_source: str
     actif: bool
+    # Choix de l'agent Benchmarker (§6.6, "cp_sat" ou une heuristique du catalogue) et sa
+    # justification — capturés une fois à la génération (`ResultatPipelineAvecBoucle`,
+    # `generation/graph.py`), jamais recalculés ici. `None` pour tout solveur enregistré avant
+    # l'ajout de ces deux colonnes (migration idempotente ci-dessous).
+    algorithme: str | None
+    algorithme_raison: str | None
 
 
 def _empreinte(code: str) -> str:
@@ -138,6 +144,19 @@ class Registre:
                     "NOT NULL DEFAULT 'minimiser_makespan'"
                 ).format(table=_table(self._schema))
             )
+            # Migration idempotente : choix d'algorithme de l'agent Benchmarker + sa
+            # justification, absents des solveurs enregistrés avant cet ajout (NULL, jamais
+            # deviné après coup).
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS algorithme TEXT").format(
+                    table=_table(self._schema)
+                )
+            )
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS algorithme_raison TEXT").format(
+                    table=_table(self._schema)
+                )
+            )
             connexion.commit()
 
     def _connexion(self) -> psycopg.Connection:
@@ -150,12 +169,18 @@ class Registre:
         verdict_cascade: VerdictCascade,
         client_id: str | None = None,
         signature_objectifs: str = "minimiser_makespan",
+        algorithme: str | None = None,
+        algorithme_raison: str | None = None,
     ) -> str:
         """N'enregistre que du code déjà passé au vert par la cascade
         (Étape 5) — le store ne persiste jamais un solveur non validé
         (principe fondateur, §5.2). `signature_objectifs` vaut par défaut
         "minimiser_makespan" pour ne pas casser les appelants existants,
-        tous générés avant l'ajout des objectifs paramétrables."""
+        tous générés avant l'ajout des objectifs paramétrables. `algorithme`/
+        `algorithme_raison` (optionnels, `None` par défaut pour la même
+        raison) : le choix du Benchmarker et sa justification, capturés une
+        fois ici plutôt que perdus après la génération — voir
+        `ArtefactSolveur`."""
         if not verdict_cascade.reussi:
             raise ValueError("refus d'enregistrer un solveur dont la cascade de validation n'est pas au vert")
 
@@ -170,8 +195,8 @@ class Registre:
                 sql.SQL(
                     "INSERT INTO {table} "
                     "(id, client_id, structure_contraintes, signature_objectifs, chemin_code, "
-                    "empreinte_sha256, date_validation) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                    "empreinte_sha256, date_validation, algorithme, algorithme_raison) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 ).format(table=_table(self._schema)),
                 (
                     id_solveur,
@@ -181,6 +206,8 @@ class Registre:
                     str(chemin_code),
                     _empreinte(code_source),
                     datetime.now(UTC).isoformat(),
+                    algorithme,
+                    algorithme_raison,
                 ),
             )
             connexion.commit()
@@ -192,7 +219,7 @@ class Registre:
             ligne = connexion.execute(
                 sql.SQL(
                     "SELECT id, client_id, structure_contraintes, signature_objectifs, chemin_code, "
-                    "empreinte_sha256, date_validation, actif "
+                    "empreinte_sha256, date_validation, actif, algorithme, algorithme_raison "
                     "FROM {table} WHERE id = %s"
                 ).format(table=_table(self._schema)),
                 (id_solveur,),
@@ -201,7 +228,18 @@ class Registre:
         if ligne is None:
             raise KeyError(f"aucun solveur enregistré avec l'id {id_solveur!r}")
 
-        id_, client_id, structure, objectifs_signature, chemin_code, empreinte, date_validation, actif = ligne
+        (
+            id_,
+            client_id,
+            structure,
+            objectifs_signature,
+            chemin_code,
+            empreinte,
+            date_validation,
+            actif,
+            algorithme,
+            algorithme_raison,
+        ) = ligne
         code_source = Path(chemin_code).read_text(encoding="utf-8")
         if _empreinte(code_source) != empreinte:
             raise ErreurIntegriteSolveur(
@@ -218,6 +256,8 @@ class Registre:
             date_validation=date_validation,
             code_source=code_source,
             actif=actif,
+            algorithme=algorithme,
+            algorithme_raison=algorithme_raison,
         )
 
     def rechercher_solveurs(

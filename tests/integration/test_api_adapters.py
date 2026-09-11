@@ -9,12 +9,16 @@ jamais un vrai appel LLM.
 
 from __future__ import annotations
 
+import psycopg
+import pytest
 from fastapi.testclient import TestClient
 
 import api.routes.adapters as routes_adapters
 from adapters.agent_comprehension.agent import _SchemaComprehension
+from adapters.agent_comprehension.exploration_bdd import ResultatExplorationBDD
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
+from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.client_llm import construire_modele_comprehension
 from tests.unit.aides_test_agents import ModeleFactice
 
@@ -450,5 +454,255 @@ def test_ingestion_via_comprehension_signale_une_reponse_llm_non_conforme() -> N
         )
 
         assert reponse.status_code == 502
+    finally:
+        app.dependency_overrides.clear()
+
+
+_REQUETE_INGESTION_BDD = {"client_id": "acme"}
+
+
+def test_ingestion_depuis_bdd_accepte_une_traduction_valide(monkeypatch: pytest.MonkeyPatch) -> None:
+    etat_test = EtatAPI()
+    schema_agent = _SchemaComprehension(
+        instance={
+            "taches": [{"id": "T1"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [
+                {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}
+            ],
+            "objectifs": [{"type": "minimiser_makespan"}],
+        },
+        description_metier="Une tâche T1 exécutée sur la ressource R1.",
+        avertissements=["avertissement de l'agent de compréhension"],
+    )
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=schema_agent
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(
+        routes_adapters,
+        "explorer_base_de_donnees",
+        lambda *_a, **_k: ResultatExplorationBDD(
+            reponse_brute="{}",
+            requetes_executees=("SELECT * FROM taches",),
+            donnees_json={"taches": [{"id": "T1"}]},
+            avertissements=("avertissement de l'exploration",),
+        ),
+    )
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["structure_contraintes"] == "compatibilite_ressource_tache"
+        assert corps["instance_id"] in etat_test.instances
+        assert corps["avertissements"] == [
+            "avertissement de l'exploration",
+            "avertissement de l'agent de compréhension",
+        ]
+        assert corps["requetes_executees"] == ["SELECT * FROM taches"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_client_sans_dsn_configure_renvoie_404(monkeypatch: pytest.MonkeyPatch) -> None:
+    app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: None)
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 404
+        assert "non configurée" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_connexion_impossible_renvoie_503(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _echec(*_a: object, **_k: object) -> None:
+        raise psycopg.OperationalError("connexion refusée")
+
+    app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(routes_adapters, "explorer_base_de_donnees", _echec)
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 503
+        assert "injoignable" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_requete_exploration_echoue_renvoie_502(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _echec(*_a: object, **_k: object) -> None:
+        raise psycopg.Error("relation inconnue")
+
+    app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(routes_adapters, "explorer_base_de_donnees", _echec)
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 502
+        assert "requête d'exploration a échoué" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_agent_exploration_non_conforme_renvoie_502(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _echec(*_a: object, **_k: object) -> None:
+        raise ErreurReponseAgentInvalide("mal formé")
+
+    app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(routes_adapters, "explorer_base_de_donnees", _echec)
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 502
+        assert "agent d'exploration" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_agent_comprehension_non_conforme_renvoie_502(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="désolé, je ne peux pas faire ça.", parsed=None, parsing_error=ValueError("mal formé")
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(
+        routes_adapters,
+        "explorer_base_de_donnees",
+        lambda *_a, **_k: ResultatExplorationBDD(
+            reponse_brute="{}", requetes_executees=(), donnees_json={"taches": []}, avertissements=()
+        ),
+    )
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 502
+        assert "agent de compréhension" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_relaie_le_rejet_du_garde_fou(monkeypatch: pytest.MonkeyPatch) -> None:
+    etat_test = EtatAPI()
+    schema_agent = _SchemaComprehension(
+        instance={
+            "taches": [{"id": "T1"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [],
+            "objectifs": [{"type": "minimiser_makespan"}],
+        },
+        description_metier="Une tâche T1, sans ressource compatible identifiée.",
+    )
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=schema_agent
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(
+        routes_adapters,
+        "explorer_base_de_donnees",
+        lambda *_a, **_k: ResultatExplorationBDD(
+            reponse_brute="{}", requetes_executees=(), donnees_json={"taches": []}, avertissements=()
+        ),
+    )
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 422
+        assert etat_test.instances == {}
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_resultat_trop_volumineux_renvoie_422(monkeypatch: pytest.MonkeyPatch) -> None:
+    app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(
+        routes_adapters,
+        "explorer_base_de_donnees",
+        lambda *_a, **_k: ResultatExplorationBDD(
+            reponse_brute="{}", requetes_executees=(), donnees_json={"x": "y" * 6_000_000}, avertissements=()
+        ),
+    )
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/bdd/ingerer", json=_REQUETE_INGESTION_BDD)
+
+        assert reponse.status_code == 422
+        assert "trop volumineux" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_bdd_schemas_personnalises_sont_transmis(monkeypatch: pytest.MonkeyPatch) -> None:
+    captures: dict[str, object] = {}
+
+    def _capture(_modele: object, _dsn: str, schemas: tuple[str, ...]) -> ResultatExplorationBDD:
+        captures["schemas"] = schemas
+        return ResultatExplorationBDD(
+            reponse_brute="{}", requetes_executees=(), donnees_json={"taches": []}, avertissements=()
+        )
+
+    schema_agent = _SchemaComprehension(
+        instance={
+            "taches": [{"id": "T1"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [
+                {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}
+            ],
+            "objectifs": [{"type": "minimiser_makespan"}],
+        },
+        description_metier="peu importe",
+    )
+    app.dependency_overrides[obtenir_etat] = lambda: EtatAPI()
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=schema_agent
+    )
+    monkeypatch.setattr(routes_adapters, "dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(routes_adapters, "explorer_base_de_donnees", _capture)
+
+    try:
+        client = TestClient(app)
+        client.post("/adapters/bdd/ingerer", json={"client_id": "acme", "schemas": ["public", "vente"]})
+
+        assert captures["schemas"] == ("public", "vente")
     finally:
         app.dependency_overrides.clear()

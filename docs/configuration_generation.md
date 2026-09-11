@@ -23,9 +23,9 @@ L'ancien `generation/tentative_unique.py` (un seul appel LLM, sans boucle de ré
 toujours mais n'est plus ce que l'API appelle — utilisé seulement par des scripts de dev pour de
 l'itération rapide/économique (`scripts/mesurer_taux_succes_generation.py`).
 
-Fournisseurs LLM : `mistral` (défaut), `qwen`, `together`, `nvidia`, `minimax`, `deepseek` — routés
-par agent via `generation/agents/config_fournisseurs.py`, jamais Anthropic/OpenAI directement (voir
-`generation/agents/client_llm.py`).
+Fournisseur LLM unique : Mistral (voir `generation/agents/client_llm.py`) — les autres
+fournisseurs que ce projet a supportés (qwen/together/nvidia/minimax/deepseek, routés par agent
+via `config_fournisseurs.py`) ont été retirés, jugés une complexité non nécessaire.
 
 Voir [`CLAUDE.md`](../CLAUDE.md) (section Étape 6) pour le détail à jour, et
 [`generation/README.md`](../generation/README.md)/[`docs/agents_utilises.md`](agents_utilises.md)

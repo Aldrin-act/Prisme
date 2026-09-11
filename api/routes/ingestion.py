@@ -3,22 +3,18 @@
 from __future__ import annotations
 
 import uuid
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
-from adapters.competence_derivation import CompetenceSansDureeEstimee
-from adapters.gamme_derivation import ErreurExplosionGamme, traiter_nouvelle_commande
+from adapters.commande_derivation import Commande, deriver_echeances_par_commande
 from api.autorisation import verifier_acces_client
-from api.comparaison_scenarios import calculer_metriques
+from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import Objectif
-
-if TYPE_CHECKING:
-    from estimation import EstimateurDuree
 
 router = APIRouter(prefix="/ingestion", tags=["ingestion"])
 
@@ -28,21 +24,8 @@ class RequeteModificationObjectifs(BaseModel):
 
 
 class RequeteNouvelleCommande(BaseModel):
-    gamme_id: str
-    quantite: int | None = Field(default=None, ge=1)
+    taches: list[str] = Field(min_length=1)
     date_limite: int | None = Field(default=None, ge=0)
-
-
-def _estimateur_duree_optionnel() -> EstimateurDuree | None:
-    """Même motif que `sources.py::_estimateur_duree_optionnel` — `estimation` (scikit-learn)
-    est un extra optionnel (`uv sync --extra estimation`) ; absent, une durée manquante non
-    déclarée (`EtapeGamme.duree_nominale`) reste une erreur explicite
-    (`CompetenceSansDureeEstimee`), jamais devinée silencieusement."""
-    try:
-        from estimation import estimateur_par_defaut
-    except ImportError:
-        return None
-    return estimateur_par_defaut()
 
 
 @router.post("/{client_id}")
@@ -246,14 +229,13 @@ def ajouter_commande(
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
-    """Explose la gamme `requete.gamme_id` (produit + quantité + échéance) en tâches concrètes
-    et les fusionne dans l'instance `instance_id` déjà ingérée — projection commande → atelier
-    façon APS (voir `adapters/gamme_derivation.py`). `commande_id` généré ici, jamais fourni par
-    l'appelant : aucun risque de collision entre deux commandes. Repasse par
-    `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact) en
-    renvoyant explicitement `nom_projet`/`secteur_activite` courants (sinon écrasés à `None`,
-    même piège que pour `PUT /{instance_id}`) — aucune primitive de fusion dédiée côté état,
-    `traiter_nouvelle_commande` *est* la fusion."""
+    """Associe des tâches déjà présentes dans l'instance à une commande et en dérive une
+    `Echeance` (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`)
+    — ne crée jamais de tâche, contrairement à l'ancienne explosion de gamme (fonctionnalité
+    retirée). `commande_id` généré ici, jamais fourni par l'appelant : aucun risque de collision.
+    Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact)
+    en renvoyant explicitement `nom_projet`/`secteur_activite` courants (sinon écrasés à `None`,
+    même piège que pour `PUT /{instance_id}`)."""
     try:
         client_id, instance = etat.recuperer_instance(instance_id)
     except KeyError:
@@ -261,40 +243,67 @@ def ajouter_commande(
 
     verifier_acces_client(utilisateur, client_id)
 
-    try:
-        gamme = etat.recuperer_gamme(requete.gamme_id)
-    except KeyError:
-        raise HTTPException(status_code=404, detail="gamme inconnue") from None
-    if gamme.client_id != client_id:
-        raise HTTPException(status_code=400, detail="cette gamme n'appartient pas au client de l'instance")
+    ids_connus = {t.id for t in instance.taches}
+    inconnues = [t for t in requete.taches if t not in ids_connus]
+    if inconnues:
+        raise HTTPException(status_code=422, detail=f"tâche(s) inconnue(s) de cette instance : {inconnues}")
 
     commande_id = f"cmd-{uuid.uuid4().hex[:8]}"
     try:
-        resultat = traiter_nouvelle_commande(
-            instance,
-            gamme,
-            commande_id,
-            requete.quantite,
-            requete.date_limite,
-            estimateur_duree=_estimateur_duree_optionnel(),
+        nouvelles_echeances = deriver_echeances_par_commande(
+            [Commande(id=commande_id, taches=tuple(requete.taches), date_limite=requete.date_limite)],
+            instance.contraintes,
         )
-    except (ErreurExplosionGamme, CompetenceSansDureeEstimee) as erreur:
-        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+        instance_fusionnee_dsl = instance.model_copy(
+            update={"contraintes": [*instance.contraintes, *nouvelles_echeances]}
+        )
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     instance_fusionnee = etat.modifier_instance(
         instance_id,
-        resultat.instance,
+        instance_fusionnee_dsl,
         nom_projet=etat.recuperer_nom_projet(instance_id),
         secteur_activite=etat.recuperer_secteur_activite(instance_id),
     )
+
+    etat.enregistrer_commande(commande_id, instance_id, client_id, requete.date_limite, tuple(requete.taches))
 
     return {
         "instance_id": instance_id,
         "commande_id": commande_id,
         "structure_contraintes": structure_contraintes(instance_fusionnee),
-        "avertissements": list(resultat.avertissements),
+    }
+
+
+@router.get("/commandes/{commande_id}")
+def obtenir_commande(
+    commande_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Statut d'une commande traitée via `POST /{instance_id}/commandes` — recalculé à la volée
+    contre le dernier planning *réussi* de son instance (jamais mis en cache : reflète toujours
+    l'état courant, y compris après une réexécution suite à un aléa, voir `api/etat.py` en-tête).
+    Deux segments après le préfixe `/ingestion` : aucune collision avec `GET /{instance_id}`."""
+    try:
+        commande = etat.recuperer_commande(commande_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="commande inconnue") from None
+
+    verifier_acces_client(utilisateur, commande.client_id)
+
+    _, instance = etat.recuperer_instance(commande.instance_id)
+    planning = etat.dernier_planning_pour_instance(commande.instance_id)
+    statut = calculer_statut_commande(instance, planning, commande.taches, commande.date_limite)
+
+    return {
+        "commande_id": commande.id,
+        "instance_id": commande.instance_id,
+        "date_limite": commande.date_limite,
+        "taches": list(commande.taches),
+        "date_creation": commande.date_creation,
+        **statut.en_dict(),
     }
 
 

@@ -255,32 +255,14 @@ export interface InstanceDetail extends InstanceTRCO {
 }
 
 // ============================================================================
-// GAMMES OPÉRATOIRES RÉUTILISABLES
+// COMMANDES
 // ============================================================================
 
-// Une étape d'une gamme — jamais vue par le solveur, explosée en Tache/Precedence/
-// CompetenceRequise concrètes à l'arrivée d'une commande (voir api/routes/ingestion.py,
-// POST /ingestion/{instance_id}/commandes). `predecesseurs` référence d'autres `id`
-// d'étapes de la MÊME gamme ; plusieurs prédécesseurs pour une étape = fusion (plusieurs
-// sous-produits qui convergent).
-export interface EtapeGamme {
-  id: string;
-  competences: string[];
-  predecesseurs: string[];
-  duree_nominale: number | null;
-}
-
-export interface GammeProduit {
-  gamme_id: string;
-  client_id: string;
-  produit: string;
-  nom: string | null;
-  etapes: EtapeGamme[];
-}
-
+// Une commande référence des tâches déjà présentes dans l'instance et en dérive une
+// Echeance (voir api/routes/ingestion.py, POST /ingestion/{instance_id}/commandes) — ne
+// crée jamais de tâche.
 export interface RequeteNouvelleCommande {
-  gamme_id: string;
-  quantite?: number;
+  taches: string[];
   date_limite?: number;
 }
 
@@ -288,7 +270,20 @@ export interface ResultatNouvelleCommande {
   instance_id: string;
   commande_id: string;
   structure_contraintes: string;
-  avertissements: string[];
+}
+
+// GET /ingestion/commandes/{commande_id} — statut recalculé à la volée contre le dernier
+// planning réussi de l'instance, jamais mis en cache.
+export interface StatutCommande {
+  commande_id: string;
+  instance_id: string;
+  date_limite: number | null;
+  taches: string[];
+  date_creation: string;
+  planifiee: boolean;
+  date_fin_prevue: number | null;
+  en_retard: boolean | null;
+  taches_manquantes: string[];
 }
 
 // ============================================================================
@@ -345,6 +340,10 @@ export interface ResultatExecution {
 export interface CodeSource {
   id_solveur: string;
   code_source: string;
+  // Choix de l'agent Benchmarker (ex. "cp_sat") + sa justification — `null` pour tout solveur
+  // enregistré avant l'ajout de ces deux champs (voir solver_store/registry.py).
+  algorithme: string | null;
+  algorithme_raison: string | null;
 }
 
 // ============================================================================
@@ -412,6 +411,8 @@ export interface SolveurInfo {
   signature_objectifs: string;
   date_validation: string;
   empreinte_sha256: string;
+  algorithme: string | null;
+  algorithme_raison: string | null;
 }
 
 export interface Sante {

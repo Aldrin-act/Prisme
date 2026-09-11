@@ -3,7 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertCircle,
-  AlertTriangle,
   Code2,
   Cpu,
   Eye,
@@ -12,12 +11,12 @@ import {
   Loader2,
   Pencil,
   Plus,
-  ShoppingCart,
   Trash2,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -74,7 +73,6 @@ import {
   useJobsGeneration,
   useNomsProjet,
   useComparaisonScenarios,
-  useGammes,
   useAjouterCommande,
   PrismeAPIError,
   LABELS_SECTEUR_ACTIVITE,
@@ -710,30 +708,32 @@ function SectionScenarios({
   );
 }
 
-// Explose une gamme (produit + quantité + échéance) et fusionne les tâches produites dans
-// l'instance courante — projection commande → atelier (voir adapters/gamme_derivation.py).
-// N'apparaît que si le client de cette instance a au moins une gamme : sinon rien à proposer
-// ici, direction la page Gammes pour en créer une.
+// Associe des tâches déjà présentes dans l'instance à une commande et en dérive une échéance
+// (voir api/routes/ingestion.py, POST /ingestion/{instance_id}/commandes) — ne crée jamais de
+// tâche : contrairement à l'ancienne explosion de gamme, il faut que l'instance ait déjà les
+// tâches concernées (via l'ingestion normale).
 function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
   const queryClient = useQueryClient();
-  const { data: gammes } = useGammes();
   const ajouter = useAjouterCommande();
   const [ouvert, setOuvert] = useState(false);
-  const [gammeId, setGammeId] = useState("");
-  const [quantite, setQuantite] = useState("");
+  const [tachesChoisies, setTachesChoisies] = useState<string[]>([]);
   const [dateLimite, setDateLimite] = useState("");
-  const [dernierResultat, setDernierResultat] = useState<{ avertissements: string[] } | null>(null);
+  const [dernierCommandeId, setDernierCommandeId] = useState<string | null>(null);
 
-  const gammesDuClient = (gammes ?? []).filter((g) => g.client_id === instance.client_id);
   const erreur = ajouter.error as PrismeAPIError | null;
 
   function ouvrir() {
-    setGammeId("");
-    setQuantite("");
+    setTachesChoisies([]);
     setDateLimite("");
-    setDernierResultat(null);
+    setDernierCommandeId(null);
     ajouter.reset();
     setOuvert(true);
+  }
+
+  function basculerTache(tacheId: string) {
+    setTachesChoisies((prev) =>
+      prev.includes(tacheId) ? prev.filter((id) => id !== tacheId) : [...prev, tacheId],
+    );
   }
 
   function soumettre() {
@@ -741,8 +741,7 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
       {
         instanceId: instance.instance_id,
         requete: {
-          gamme_id: gammeId,
-          quantite: quantite ? Number(quantite) : undefined,
+          taches: tachesChoisies,
           date_limite: dateLimite ? Number(dateLimite) : undefined,
         },
       },
@@ -750,14 +749,14 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
         onSuccess: (resultat) => {
           queryClient.invalidateQueries({ queryKey: prismeKeys.instance(instance.instance_id) });
           queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
-          setDernierResultat({ avertissements: resultat.avertissements });
+          setDernierCommandeId(resultat.commande_id);
           setOuvert(false);
         },
       },
     );
   }
 
-  if (gammesDuClient.length === 0) return null;
+  if (instance.taches.length === 0) return null;
 
   return (
     <div className="space-y-2">
@@ -765,48 +764,35 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
         <h4 className="text-sm font-semibold">Commandes</h4>
         {!ouvert && (
           <Button size="sm" variant="outline" onClick={ouvrir}>
-            <ShoppingCart className="mr-1.5 h-3.5 w-3.5" /> Nouvelle commande
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Nouvelle commande
           </Button>
         )}
       </div>
 
       {ouvert && (
         <div className="space-y-3 rounded-lg border border-border/50 p-3">
-          <div className="grid grid-cols-3 gap-2">
-            <div className="space-y-1">
-              <Label>Produit (gamme)</Label>
-              <Select value={gammeId} onValueChange={setGammeId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="choisir" />
-                </SelectTrigger>
-                <SelectContent>
-                  {gammesDuClient.map((g) => (
-                    <SelectItem key={g.gamme_id} value={g.gamme_id}>
-                      {g.produit}
-                      {g.nom ? ` — ${g.nom}` : ""}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <div className="space-y-1">
+            <Label>Tâches concernées</Label>
+            <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 p-2">
+              {instance.taches.map((t) => (
+                <label key={t.id} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={tachesChoisies.includes(t.id)}
+                    onCheckedChange={() => basculerTache(t.id)}
+                  />
+                  {t.nom ? `${t.nom} (${t.id})` : t.id}
+                </label>
+              ))}
             </div>
-            <div className="space-y-1">
-              <Label>Quantité</Label>
-              <Input
-                type="number"
-                min={1}
-                value={quantite}
-                onChange={(e) => setQuantite(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Échéance (jours)</Label>
-              <Input
-                type="number"
-                min={0}
-                value={dateLimite}
-                onChange={(e) => setDateLimite(e.target.value)}
-              />
-            </div>
+          </div>
+          <div className="space-y-1">
+            <Label>Échéance (jours)</Label>
+            <Input
+              type="number"
+              min={0}
+              value={dateLimite}
+              onChange={(e) => setDateLimite(e.target.value)}
+            />
           </div>
 
           {erreur && (
@@ -827,24 +813,19 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
             >
               Annuler
             </Button>
-            <Button size="sm" onClick={soumettre} disabled={!gammeId || ajouter.isPending}>
+            <Button
+              size="sm"
+              onClick={soumettre}
+              disabled={tachesChoisies.length === 0 || ajouter.isPending}
+            >
               {ajouter.isPending ? "Ajout..." : "Ajouter la commande"}
             </Button>
           </div>
         </div>
       )}
 
-      {dernierResultat && dernierResultat.avertissements.length > 0 && (
-        <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-2 text-xs">
-          <div className="flex items-center gap-1.5 font-medium text-amber-600 dark:text-amber-400">
-            <AlertTriangle className="h-3.5 w-3.5" /> Avertissements
-          </div>
-          <ul className="mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
-            {dernierResultat.avertissements.map((a, i) => (
-              <li key={i}>{a}</li>
-            ))}
-          </ul>
-        </div>
+      {dernierCommandeId && (
+        <p className="text-xs text-muted-foreground">Commande {dernierCommandeId} créée.</p>
       )}
     </div>
   );

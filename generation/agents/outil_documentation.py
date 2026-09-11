@@ -1,9 +1,8 @@
 """Outil de consultation documentaire pour les agents Architecte et Développeur (§5.6) — un vrai
 usage d'outil, pas du tool-calling natif LangChain (`bind_tools`/`method="function_calling"`) :
 ce mécanisme a été délibérément écarté pour l'ensemble du pipeline
-(`generation/agents/client_llm.py::methode_sortie_structuree`) après des incidents de fin de vie
-de modèles chez deux des cinq fournisseurs du projet — dont NVIDIA, qui sert justement Architecte
-et Développeur par défaut (`config_fournisseurs.py`). Rester provider-agnostic.
+(`generation/agents/client_llm.py::methode_sortie_structuree`), au profit d'un mode JSON natif
+(`"json_mode"`), plus largement supporté côté fournisseur que le tool-calling générique.
 
 Mécanisme retenu : un petit appel de décision en sortie structurée (même méthode que tout le
 reste du pipeline) où l'agent choisit lui-même, parmi un catalogue fermé de sujets, lequel (s'il

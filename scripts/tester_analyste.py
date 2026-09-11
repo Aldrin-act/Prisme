@@ -29,13 +29,9 @@ def main():
     print("  TEST AGENT ANALYSTE")
     print("="*70 + "\n")
 
-    provider = os.getenv('PRISME_LLM_PROVIDER', 'mistral')
-    print(f"📡 Provider : {provider}")
-
-    api_key_var = f'{provider.upper()}_API_KEY'
-    api_key = os.getenv(api_key_var)
+    api_key = os.getenv("KIMI_API_KEY")
     if not api_key:
-        print(f"❌ {api_key_var} non définie dans .env")
+        print("❌ KIMI_API_KEY non définie dans .env")
         sys.exit(1)
 
     print(f"🔑 API Key : {api_key[:20]}...\n")

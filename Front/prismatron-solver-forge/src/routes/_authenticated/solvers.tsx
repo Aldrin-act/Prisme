@@ -76,6 +76,7 @@ function SolversPage() {
                 <TableHead>Client</TableHead>
                 <TableHead>Structure des contraintes</TableHead>
                 <TableHead>Objectifs</TableHead>
+                <TableHead>Algorithme</TableHead>
                 <TableHead>Généré</TableHead>
                 <TableHead />
               </TableRow>
@@ -96,6 +97,15 @@ function SolversPage() {
                     <Badge variant="outline" className="font-mono text-xs">
                       {s.signature_objectifs}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {s.algorithme ? (
+                      <Badge variant="secondary" className="font-mono text-xs">
+                        {s.algorithme}
+                      </Badge>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {new Date(s.date_validation).toLocaleString()}
@@ -215,7 +225,19 @@ function DialogSolveur({
                 <Badge variant="outline" className="font-mono text-xs">
                   {solveur.signature_objectifs}
                 </Badge>
+                {solveur.algorithme && (
+                  <Badge variant="secondary" className="font-mono text-xs">
+                    {solveur.algorithme}
+                  </Badge>
+                )}
               </div>
+
+              {solveur.algorithme_raison && (
+                <p className="text-xs text-muted-foreground">
+                  <span className="font-medium text-foreground">Pourquoi cet algorithme : </span>
+                  {solveur.algorithme_raison}
+                </p>
+              )}
 
               {instancesCompatibles.length === 0 ? (
                 <p className="text-sm text-muted-foreground">

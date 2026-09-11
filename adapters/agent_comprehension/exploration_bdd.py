@@ -42,6 +42,25 @@ if TYPE_CHECKING:
 CHEMIN_PROMPT = Path(__file__).resolve().parent / "prompts" / "exploration_bdd.md"
 
 
+CLIENT_ID_GREENSIG = "greensig"
+
+
+def dsn_lecture_seule_pour_client(client_id: str) -> str | None:
+    """Résout le DSN lecture seule pour `client_id`, toujours côté serveur,
+    jamais depuis une requête HTTP (contrainte de sécurité anti-SSRF — voir
+    `api/routes/sources.py::explorer_bdd`, qui n'accepte jamais de DSN dans
+    son corps de requête). GreenSIG délègue byte-for-byte à
+    `dsn_lecture_seule_greensig_par_defaut` ci-dessous (chemin réel, testé,
+    inchangé) ; tout autre client lit une variable d'environnement dédiée,
+    configurée par un opérateur (voir `.env.example`) — jamais définie par
+    défaut. Ne lève jamais : `None` si non configuré, à l'appelant de
+    décider comment réagir (§FC4, jamais un repli silencieux)."""
+    if client_id == CLIENT_ID_GREENSIG:
+        return dsn_lecture_seule_greensig_par_defaut()
+    variable = "PRISME_DSN_LECTURE_SEULE_" + re.sub(r"[^A-Za-z0-9]", "_", client_id).upper()
+    return os.environ.get(variable) or None
+
+
 def dsn_lecture_seule_greensig_par_defaut() -> str:
     """`GREENSIG_LECTURE_SEULE_DATABASE_URL` si défini ; sinon reconstruit
     depuis `GREENSIG_DB_LECTURE_SEULE_PASSWORD` et les mêmes hôte/port que
@@ -74,6 +93,7 @@ class _SchemaExploration(BaseModel):
     avertissements: list[str] = Field(
         default_factory=list, description="Incertitudes ou besoins hors de portée du schéma fourni."
     )
+
 
 _STATEMENT_TIMEOUT_MS = 5000
 

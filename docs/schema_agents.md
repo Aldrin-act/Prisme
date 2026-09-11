@@ -17,7 +17,7 @@ generation/
 ├── agents/                           # Code des agents
 │   ├── __init__.py                   # Exports publics
 │   ├── base.py                       # Utilitaires communs
-│   ├── client_llm.py                 # Interface LLM LangChain (Mistral, Qwen, Together, NVIDIA, MiniMax, DeepSeek)
+│   ├── client_llm.py                 # Interface LLM LangChain (Mistral, seul fournisseur)
 │   │
 │   ├── analyste.py                   # Agent 1 : Analyse
 │   ├── benchmarker.py                # Agent 2 : Choix de l'algorithme
@@ -459,37 +459,19 @@ converti.
 **Fonctions** :
 ```python
 def construire_modele() -> BaseChatModel
-# Générique, sans identité d'agent — d'après PRISME_LLM_PROVIDER/PRISME_LLM_MODEL.
+# Générique, sans identité d'agent — d'après PRISME_LLM_MODEL.
 
 def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel
-# Routage par agent via config_fournisseurs.py — point d'entrée réel du pipeline.
+# Point d'entrée réel du pipeline, surchargeable par agent.
 ```
 
-**Providers supportés** :
-- `mistral` (via `MISTRAL_API_KEY`, API native — fallback générique du mode single-shot)
-- `nemotron` (via `NVIDIA_API_KEY`, catalogue NVIDIA NIM — modèle `nvidia/nemotron-3-super-120b-a12b`,
-  défaut de la majorité des agents du pipeline multi-agents)
-- `nvidia` (via `NVIDIA_API_KEY`, même catalogue — modèle `meta/llama-3.3-70b-instruct`)
-- `minimax` (via `MINIMAX_API_KEY`, hébergé sur le catalogue NVIDIA — modèle `minimaxai/minimax-m3`)
-- `deepseek` (via `DEEPSEEK_API_KEY`, hébergé sur le catalogue NVIDIA — plus le défaut d'aucun agent,
-  reste un choix de repli valide)
-- `qwen` / `together` (via `TOGETHER_API_KEY`, Qwen hébergé sur Together)
+**Fournisseur unique : Mistral** (via `MISTRAL_API_KEY`, API native) — pour tous les agents, pas de
+routage par agent. Les autres fournisseurs que ce module a supportés (nemotron/nvidia/minimax/
+deepseek/qwen/together, plus `generation/agents/config_fournisseurs.py`'s routage par agent) ont
+été retirés, jugés une complexité non nécessaire pour un seul fournisseur réellement utilisé.
 
-Anthropic/OpenAI ne sont **pas** des fournisseurs supportés par ce module.
-
-**Répartition par défaut** (`generation/agents/config_fournisseurs.py::FOURNISSEURS_PAR_AGENT`) —
-pas un fournisseur unique pour tout le pipeline :
-
-| Agent(s) | Fournisseur | Modèle |
-|---|---|---|
-| Analyste, Architecte, Développeur, Testeur, Debugger, Reviewer (inactif), Compréhension ERP | `nemotron` | `nvidia/nemotron-3-super-120b-a12b` |
-| Benchmarker | `minimax` | `minimaxai/minimax-m3` |
-| Documentation | `nvidia` | `meta/llama-3.3-70b-instruct` |
-| Supervision (MT7, hors pipeline de génération) | `mistral` | `mistral-large-latest` |
-
-**Sélection** : `PRISME_LLM_PROVIDER`/`PRISME_LLM_MODEL` (fallback générique, mode single-shot
-uniquement), ou par agent via `PRISME_LLM_PROVIDER_<AGENT>`/`PRISME_LLM_MODEL_<AGENT>`/
-`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>` — voir `generation/agents/config_fournisseurs.py`.
+**Sélection du modèle** : `PRISME_LLM_MODEL` (défaut `mistral-large-latest`, fallback générique),
+ou par agent via `PRISME_LLM_MODEL_<AGENT>`/`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>`.
 
 ---
 
@@ -744,8 +726,8 @@ print(resultat.contraintes_a_couvrir)
 ### Pipeline AVEC Boucle (Étape 6, production)
 
 `generation/graph.py` construit lui-même le `BaseChatModel` de chaque agent
-(routage par fournisseur via `construire_modele_pour_agent`, voir
-`config_fournisseurs.py`) — aucun client LLM à passer en argument.
+via `construire_modele_pour_agent` (Mistral, surchargeable par agent) —
+aucun client LLM à passer en argument.
 
 ```python
 from generation.graph import tenter_generation_avec_boucle

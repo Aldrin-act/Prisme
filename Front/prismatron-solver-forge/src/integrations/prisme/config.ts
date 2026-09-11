@@ -33,7 +33,6 @@ export const PRISME_CONFIG = {
     validation: "/validation",
     adapters: "/adapters",
     sources: "/sources",
-    gammes: "/gammes",
     clients: "/clients",
     generation: "/generation",
     apiKeys: "/api-keys",

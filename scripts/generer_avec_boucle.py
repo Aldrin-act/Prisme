@@ -75,9 +75,7 @@ def main():
     print(f"  GÉNÉRATION AVEC BOUCLE DE RÉPARATION (max {MAX_TENTATIVES_REPARATION} tentatives)")
     print("="*70 + "\n")
 
-    provider = os.getenv('PRISME_LLM_PROVIDER', 'mistral')
-    print(f"📡 Provider : {provider}")
-    print(f"🔑 API Key : {os.getenv(f'{provider.upper()}_API_KEY', 'NON DÉFINIE')[:20]}...")
+    print(f"🔑 KIMI_API_KEY : {os.getenv('KIMI_API_KEY', 'NON DÉFINIE')[:20]}...")
 
     # Génération avec boucle
     print("\n🚀 Démarrage pipeline multi-agents AVEC boucle...\n")

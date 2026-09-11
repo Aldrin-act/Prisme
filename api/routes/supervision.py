@@ -83,6 +83,8 @@ def lister_solveurs(
             "signature_objectifs": artefact.signature_objectifs,
             "date_validation": artefact.date_validation,
             "empreinte_sha256": artefact.empreinte_sha256,
+            "algorithme": artefact.algorithme,
+            "algorithme_raison": artefact.algorithme_raison,
         }
         for artefact in registre.rechercher_solveurs(client_id=client_id_pour_filtre(utilisateur))
     ]

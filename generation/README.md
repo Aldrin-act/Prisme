@@ -19,12 +19,11 @@
 Les deux chemins convergent sur la même chaîne de garde-fous procéduraux —
 jamais des agents, volontairement :
 
-- `agents/client_llm.py` — client LLM générique ; fournisseur et modèle par
-  défaut choisis par variable d'environnement (`PRISME_LLM_PROVIDER` —
-  `mistral`/`qwen`/`together`/`nvidia`/`minimax`/`deepseek` —,
-  `PRISME_LLM_MODEL`). `graph.py` route en réalité chaque agent vers son
-  propre fournisseur optimal via `agents/config_fournisseurs.py`,
-  surchargeable par agent (`PRISME_LLM_PROVIDER_<AGENT>` / `_MODEL_<AGENT>`).
+- `agents/client_llm.py` — client LLM générique ; fournisseur unique (Mistral), modèle choisi par
+  variable d'environnement (`PRISME_LLM_MODEL`, défaut `mistral-large-latest`). `graph.py`
+  construit le modèle de chaque agent via `construire_modele_pour_agent(nom)`, surchargeable par
+  agent (`PRISME_LLM_MODEL_<AGENT>` / `_TIMEOUT_SECONDES_<AGENT>`) — jamais de choix de
+  fournisseur, il n'y en a qu'un.
 - `agents/base.py` — utilitaires partagés par les agents : charger la
   mission commune (`prompts/generation_solveur.md`), extraire un bloc de
   code de la réponse d'un LLM.

@@ -20,6 +20,7 @@ instance silencieusement tronquée.
 
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING, Any
 
 import httpx
@@ -28,7 +29,11 @@ from fastapi import APIRouter, Body, Depends, File, HTTPException, UploadFile
 from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import BaseModel, ValidationError
 
-from adapters.agent_comprehension import comprendre_donnees_erp
+from adapters.agent_comprehension import (
+    comprendre_donnees_erp,
+    dsn_lecture_seule_pour_client,
+    explorer_base_de_donnees,
+)
 from adapters.csv_import import ErreurFichierInvalide as ErreurFichierCsvInvalide
 from adapters.csv_import import traduire as traduire_csv
 from adapters.greensig import extraire_et_traduire
@@ -84,9 +89,7 @@ def ingerer_depuis_greensig(
 
 def _valider_delimiteur(delimiteur: str) -> None:
     if len(delimiteur) != 1:
-        raise HTTPException(
-            status_code=422, detail=f"delimiteur doit être un seul caractère, reçu {delimiteur!r}"
-        )
+        raise HTTPException(status_code=422, detail=f"delimiteur doit être un seul caractère, reçu {delimiteur!r}")
 
 
 @router.post("/csv/{client_id}")
@@ -217,6 +220,86 @@ def ingerer_via_comprehension(
         "description_metier": resultat.description_metier,
         "avertissements": list(resultat.avertissements),
         "justifications": [{"contrainte": j.contrainte, "raison": j.raison} for j in resultat.justifications],
+    }
+
+
+_TAILLE_MAX_REPONSE_BDD_OCTETS = 5_000_000  # même garde-fou/raison que POST /sources/explorer-bdd
+
+
+class RequeteIngestionBDD(BaseModel):
+    client_id: str
+    schemas: list[str] | None = None
+    nom_projet: str | None = None
+    secteur_activite: str | None = None
+
+
+@router.post("/bdd/ingerer")
+def ingerer_depuis_bdd(
+    requete: RequeteIngestionBDD,
+    etat: EtatAPI = Depends(obtenir_etat),
+    modele: BaseChatModel = Depends(construire_modele_comprehension),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Enchaîne exploration BDD (`POST /sources/explorer-bdd`) et agent de
+    compréhension (`POST /comprehension/ingerer` ci-dessus) en un seul
+    appel — même principe immédiat, sans persister ni la donnée brute
+    explorée ni de `SourceDonnees` intermédiaire. Le DSN reste résolu côté
+    serveur par `client_id` (`dsn_lecture_seule_pour_client`, jamais fourni
+    dans la requête — même contrainte de sécurité anti-SSRF).
+
+    Pour relire les données explorées avant de créer l'instance (plus
+    prudent), préférer `POST /sources/explorer-bdd` puis `POST
+    /comprehension/ingerer` séparément."""
+    verifier_acces_client(utilisateur, requete.client_id)
+
+    dsn = dsn_lecture_seule_pour_client(requete.client_id)
+    if dsn is None:
+        raise HTTPException(
+            status_code=404, detail=f"exploration BDD non configurée pour ce client ({requete.client_id!r})"
+        )
+
+    schemas = tuple(requete.schemas) if requete.schemas else ("public",)
+
+    try:
+        exploration = explorer_base_de_donnees(modele, dsn, schemas=schemas)
+    except ErreurReponseAgentInvalide as erreur:
+        raise HTTPException(status_code=502, detail=f"agent d'exploration : {erreur}") from erreur
+    except psycopg.OperationalError as erreur:
+        raise HTTPException(status_code=503, detail="base de données injoignable pour ce client") from erreur
+    except psycopg.Error as erreur:
+        raise HTTPException(status_code=502, detail=f"requête d'exploration a échoué : {erreur}") from erreur
+
+    donnees_brutes = json.dumps(exploration.donnees_json, ensure_ascii=False)
+    taille = len(donnees_brutes.encode("utf-8"))
+    if taille > _TAILLE_MAX_REPONSE_BDD_OCTETS:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"résultat d'exploration trop volumineux ({taille} octets, max {_TAILLE_MAX_REPONSE_BDD_OCTETS})"
+            ),
+        )
+
+    try:
+        resultat = comprendre_donnees_erp(modele, donnees_brutes, secteur_activite=requete.secteur_activite)
+    except ErreurReponseAgentInvalide as erreur:
+        raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
+
+    instance = valider_payload_trco(resultat.instance_brute)  # lève déjà un 422 si invalide
+
+    instance_id = etat.enregistrer_instance(
+        requete.client_id,
+        instance,
+        description_metier=resultat.description_metier,
+        nom_projet=requete.nom_projet,
+        secteur_activite=requete.secteur_activite,
+    )
+    return {
+        "instance_id": instance_id,
+        "structure_contraintes": structure_contraintes(instance),
+        "description_metier": resultat.description_metier,
+        "avertissements": [*exploration.avertissements, *resultat.avertissements],
+        "justifications": [{"contrainte": j.contrainte, "raison": j.raison} for j in resultat.justifications],
+        "requetes_executees": list(exploration.requetes_executees),
     }
 
 

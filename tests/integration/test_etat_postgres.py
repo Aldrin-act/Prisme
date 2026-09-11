@@ -658,3 +658,60 @@ def test_supprimer_instance_orpheline_les_propositions_sans_les_detruire(
 
     proposition = etat_postgres_test.recuperer_proposition(proposition_id)  # survit, orpheline
     assert proposition.instance_id is None
+
+
+def test_commande_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", 10, ("T1", "T2"))
+
+    commande = etat_postgres_test.recuperer_commande("cmd-1")
+
+    assert commande.id == "cmd-1"
+    assert commande.instance_id == instance_id
+    assert commande.client_id == "client-test"
+    assert commande.date_limite == 10
+    assert commande.taches == ("T1", "T2")
+    assert commande.date_creation
+
+
+def test_commande_date_limite_optionnelle(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", None, ("t1",))
+
+    commande = etat_postgres_test.recuperer_commande("cmd-1")
+
+    assert commande.date_limite is None
+
+
+def test_recuperer_commande_inconnue_leve_key_error(etat_postgres_test: EtatPostgres) -> None:
+    try:
+        etat_postgres_test.recuperer_commande("id-inexistant")
+    except KeyError:
+        return
+    raise AssertionError("KeyError attendu pour une commande inconnue")
+
+
+def test_lister_commandes_filtre_par_instance(etat_postgres_test: EtatPostgres) -> None:
+    instance_a = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    instance_b = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etat_postgres_test.enregistrer_commande("cmd-a", instance_a, "client-test", None, ("t1",))
+    etat_postgres_test.enregistrer_commande("cmd-b", instance_b, "client-test", None, ("t1",))
+
+    toutes = etat_postgres_test.lister_commandes()
+    pour_a = etat_postgres_test.lister_commandes(instance_id=instance_a)
+
+    assert {c.id for c in toutes} >= {"cmd-a", "cmd-b"}
+    assert [c.id for c in pour_a] == ["cmd-a"]
+
+
+def test_supprimer_instance_cascade_supprime_ses_commandes(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", None, ("t1",))
+
+    etat_postgres_test.supprimer_instance(instance_id)
+
+    try:
+        etat_postgres_test.recuperer_commande("cmd-1")
+    except KeyError:
+        return
+    raise AssertionError("KeyError attendu — commande supprimée en cascade avec son instance")

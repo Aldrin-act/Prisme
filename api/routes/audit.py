@@ -17,7 +17,7 @@ def obtenir_code_source(
     execution_id: str,
     etat: EtatAPI = Depends(obtenir_etat),
     registre: Registre = Depends(obtenir_registre),
-) -> dict[str, str]:
+) -> dict[str, str | None]:
     try:
         id_solveur, _, _ = etat.recuperer_execution(execution_id)
     except KeyError:
@@ -28,14 +28,19 @@ def obtenir_code_source(
     except (KeyError, ErreurIntegriteSolveur) as erreur:
         raise HTTPException(status_code=500, detail=str(erreur)) from erreur
 
-    return {"id_solveur": id_solveur, "code_source": artefact.code_source}
+    return {
+        "id_solveur": id_solveur,
+        "code_source": artefact.code_source,
+        "algorithme": artefact.algorithme,
+        "algorithme_raison": artefact.algorithme_raison,
+    }
 
 
 @router.get("/solveur/{id_solveur}")
 def obtenir_code_source_par_solveur(
     id_solveur: str,
     registre: Registre = Depends(obtenir_registre),
-) -> dict[str, str]:
+) -> dict[str, str | None]:
     """Même canal, mais accessible directement par id de solveur — un
     solveur tout juste enregistré n'a encore aucune `execution_id` qui
     pointe vers lui, donc `/audit/{execution_id}` ne peut pas le retrouver."""
@@ -44,4 +49,9 @@ def obtenir_code_source_par_solveur(
     except (KeyError, ErreurIntegriteSolveur) as erreur:
         raise HTTPException(status_code=500, detail=str(erreur)) from erreur
 
-    return {"id_solveur": id_solveur, "code_source": artefact.code_source}
+    return {
+        "id_solveur": id_solveur,
+        "code_source": artefact.code_source,
+        "algorithme": artefact.algorithme,
+        "algorithme_raison": artefact.algorithme_raison,
+    }

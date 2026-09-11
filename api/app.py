@@ -21,7 +21,6 @@ from api.routes import (
     clients,
     diagnostics,
     execution,
-    gammes,
     generation,
     ingestion,
     planifier,
@@ -72,7 +71,6 @@ app.include_router(clients.router)
 app.include_router(ingestion.router)
 app.include_router(adapters.router)
 app.include_router(sources.router)
-app.include_router(gammes.router)
 app.include_router(generation.router)
 app.include_router(execution.router)
 app.include_router(planning.router)

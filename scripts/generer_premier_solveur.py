@@ -77,9 +77,8 @@ def main():
     except Exception as e:
         print(f"❌ Erreur lors de la génération : {e}")
         print("\nVérifiez :")
-        print("  1. Variable PRISME_LLM_PROVIDER définie (anthropic/openai)")
-        print("  2. Clé API configurée (ANTHROPIC_API_KEY ou OPENAI_API_KEY)")
-        print("  3. Extra [llm] installé : uv sync --extra llm")
+        print("  1. Clé API configurée (KIMI_API_KEY)")
+        print("  2. Extra [llm] installé : uv sync --extra llm")
         sys.exit(1)
 
     # ========================================================================

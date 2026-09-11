@@ -197,9 +197,8 @@ uv run python -m scripts.demo_bout_en_bout
 ### Option 2 : Mesurer le taux de succès du générateur LLM
 
 ```bash
-# Nécessite : PRISME_LLM_PROVIDER et clé API
-export PRISME_LLM_PROVIDER=anthropic
-export ANTHROPIC_API_KEY=sk-...
+# Nécessite : MISTRAL_API_KEY
+export MISTRAL_API_KEY=...
 
 # Lance N générations sur des instances variées
 uv run python -m scripts.mesurer_taux_succes_generation
@@ -283,8 +282,7 @@ curl -X POST http://localhost:8000/execution/client_test_1 \
 uv sync --extra llm
 
 # Variables d'environnement
-export PRISME_LLM_PROVIDER=anthropic  # ou openai, mistralai
-export ANTHROPIC_API_KEY=sk-ant-...  # votre clé
+export MISTRAL_API_KEY=...  # votre clé
 ```
 
 **Tester sur 1 instance** :

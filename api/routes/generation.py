@@ -172,7 +172,13 @@ def _construire_reponse(
 
     assert resultat.verdict_cascade is not None  # garanti par ResultatPipelineAvecBoucle.reussi
     id_solveur = registre.enregistrer_solveur(
-        resultat.code_final, structure, resultat.verdict_cascade, client_id, signature_obj
+        resultat.code_final,
+        structure,
+        resultat.verdict_cascade,
+        client_id,
+        signature_obj,
+        algorithme=resultat.algorithme_recommande,
+        algorithme_raison=resultat.justification_algorithme,
     )
     return {
         "reussi": True,

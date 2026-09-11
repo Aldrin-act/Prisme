@@ -1,9 +1,8 @@
-"""Génère un solveur avec Mistral AI (utilise le .env)."""
+"""Génère un solveur avec Kimi (Moonshot AI) (utilise le .env)."""
 
 from __future__ import annotations
 
 import sys
-import os
 from pathlib import Path
 
 # Ajouter le projet au PYTHONPATH
@@ -15,7 +14,6 @@ try:
     from dotenv import load_dotenv
     load_dotenv(projet_root / ".env")
     print("✅ Fichier .env chargé")
-    print(f"   Provider: {os.getenv('PRISME_LLM_PROVIDER')}")
 except ImportError:
     print("⚠️  python-dotenv non installé, utilise les variables d'environnement système")
 
@@ -35,7 +33,7 @@ def main():
     """Génère un solveur sur une instance simple."""
 
     print("\n" + "🤖" * 35)
-    print("  GÉNÉRATION D'UN SOLVEUR AVEC MISTRAL AI")
+    print("  GÉNÉRATION D'UN SOLVEUR AVEC KIMI (MOONSHOT AI)")
     print("🤖" * 35 + "\n")
 
     # ========================================================================
@@ -71,13 +69,12 @@ def main():
 
     try:
         modele = construire_modele()
-        print(f"   ✅ Client {os.getenv('PRISME_LLM_PROVIDER', 'mistral')} créé")
+        print("   ✅ Client Kimi créé")
         print()
     except Exception as e:
         print(f"❌ Erreur de configuration LLM : {e}")
         print("\nVérifiez :")
-        print("  - PRISME_LLM_PROVIDER dans .env")
-        print("  - MISTRAL_API_KEY dans .env")
+        print("  - KIMI_API_KEY dans .env")
         sys.exit(1)
 
     # ========================================================================
@@ -86,7 +83,7 @@ def main():
 
     print("🤖 Étape 3 : Génération du code par le LLM")
     print("   ⏱️  Cela peut prendre 30-90 secondes...")
-    print("   💰 Coût estimé avec Mistral : ~$0.01-0.05")
+    print("   💰 Coût estimé avec Kimi : ~$0.01-0.05")
     print()
 
     try:

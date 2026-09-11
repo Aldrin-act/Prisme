@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
+from api.routes.auth import obtenir_utilisateur_courant
 
 
 def _creer_source(
@@ -327,6 +328,211 @@ def test_unite_duree_se_propage_de_la_source_a_linstance_generee() -> None:
         reponse_instance = client.get(f"/ingestion/{instance_id}")
         assert reponse_instance.status_code == 200, reponse_instance.json()
         assert reponse_instance.json()["unite_duree"] == "mois"
+    finally:
+        app.dependency_overrides.clear()
+
+
+_REQUETE_EXPLORATION_BDD = {"client_id": "acme"}
+
+
+class _ResultatExplorationBDDFactice:
+    def __init__(
+        self,
+        donnees_json: dict[str, object],
+        avertissements: tuple[str, ...] = (),
+        requetes_executees: tuple[str, ...] = (),
+    ) -> None:
+        self.reponse_brute = "{}"
+        self.requetes_executees = requetes_executees
+        self.donnees_json = donnees_json
+        self.avertissements = avertissements
+
+
+def test_explorer_bdd_retourne_les_donnees_json_serialisees(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(
+        "api.routes.sources.explorer_base_de_donnees",
+        lambda *_a, **_k: _ResultatExplorationBDDFactice(
+            donnees_json={"taches": [{"id": 1}]},
+            avertissements=("x",),
+            requetes_executees=("SELECT 1",),
+        ),
+    )
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json=_REQUETE_EXPLORATION_BDD)
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        import json as _json
+
+        assert _json.loads(corps["donnees_brutes"]) == {"taches": [{"id": 1}]}
+        assert corps["avertissements"] == ["x"]
+        assert corps["requetes_executees"] == ["SELECT 1"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_client_sans_dsn_configure_renvoie_404(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: None)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json=_REQUETE_EXPLORATION_BDD)
+
+        assert reponse.status_code == 404
+        assert "non configurée" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_connexion_impossible_renvoie_503(monkeypatch: pytest.MonkeyPatch) -> None:
+    import psycopg
+
+    def _echec(*_a: object, **_k: object) -> None:
+        raise psycopg.OperationalError("connexion refusée")
+
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _echec)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json=_REQUETE_EXPLORATION_BDD)
+
+        assert reponse.status_code == 503
+        assert "injoignable" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_requete_echoue_renvoie_502(monkeypatch: pytest.MonkeyPatch) -> None:
+    import psycopg
+
+    def _echec(*_a: object, **_k: object) -> None:
+        raise psycopg.Error("relation inconnue")
+
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _echec)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json=_REQUETE_EXPLORATION_BDD)
+
+        assert reponse.status_code == 502
+        assert "requête d'exploration a échoué" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_reponse_llm_non_conforme_renvoie_502(monkeypatch: pytest.MonkeyPatch) -> None:
+    from generation.agents.base import ErreurReponseAgentInvalide
+
+    def _echec(*_a: object, **_k: object) -> None:
+        raise ErreurReponseAgentInvalide("mal formé")
+
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _echec)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json=_REQUETE_EXPLORATION_BDD)
+
+        assert reponse.status_code == 502
+        assert "agent d'exploration" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_schemas_par_defaut_est_public(monkeypatch: pytest.MonkeyPatch) -> None:
+    captures: dict[str, object] = {}
+
+    def _capture(_modele: object, _dsn: str, schemas: tuple[str, ...]) -> _ResultatExplorationBDDFactice:
+        captures["schemas"] = schemas
+        return _ResultatExplorationBDDFactice(donnees_json={})
+
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _capture)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json={"client_id": "acme"})
+
+        assert reponse.status_code == 200, reponse.json()
+        assert captures["schemas"] == ("public",)
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_schemas_personnalises_sont_transmis(monkeypatch: pytest.MonkeyPatch) -> None:
+    captures: dict[str, object] = {}
+
+    def _capture(_modele: object, _dsn: str, schemas: tuple[str, ...]) -> _ResultatExplorationBDDFactice:
+        captures["schemas"] = schemas
+        return _ResultatExplorationBDDFactice(donnees_json={})
+
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _capture)
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json={"client_id": "acme", "schemas": ["public", "vente"]})
+
+        assert reponse.status_code == 200, reponse.json()
+        assert captures["schemas"] == ("public", "vente")
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_resultat_trop_volumineux_renvoie_422(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
+    monkeypatch.setattr(
+        "api.routes.sources.explorer_base_de_donnees",
+        lambda *_a, **_k: _ResultatExplorationBDDFactice(donnees_json={"x": "y" * 6_000_000}),
+    )
+    try:
+        client = TestClient(app)
+        reponse = client.post("/sources/explorer-bdd", json=_REQUETE_EXPLORATION_BDD)
+
+        assert reponse.status_code == 422
+        assert "trop volumineux" in reponse.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_admin_peut_cibler_un_autre_client(monkeypatch: pytest.MonkeyPatch) -> None:
+    captures: dict[str, object] = {}
+
+    def _capture_client_id(client_id: str) -> str | None:
+        captures["client_id"] = client_id
+        return None  # 404 ensuite, peu importe ici : on ne vérifie que le client_id résolu
+
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", _capture_client_id)
+    try:
+        client = TestClient(app)
+        client.post("/sources/explorer-bdd", json={"client_id": "acme"})
+
+        assert captures["client_id"] == "acme"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_explorer_bdd_non_admin_est_contraint_a_son_propre_client(monkeypatch: pytest.MonkeyPatch) -> None:
+    captures: dict[str, object] = {}
+
+    def _capture_client_id(client_id: str) -> str | None:
+        captures["client_id"] = client_id
+        return None
+
+    app.dependency_overrides[obtenir_utilisateur_courant] = lambda: {
+        "id": "u1",
+        "email": "op@client.test",
+        "nom": "Op",
+        "prenom": "Erateur",
+        "role": "operateur",
+        "client_id": "mon_client",
+        "date_creation": "2024-01-01T00:00:00+00:00",
+        "dernier_acces": None,
+    }
+    monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", _capture_client_id)
+    try:
+        client = TestClient(app)
+        client.post("/sources/explorer-bdd", json={"client_id": "acme"})
+
+        assert captures["client_id"] == "mon_client"
     finally:
         app.dependency_overrides.clear()
 

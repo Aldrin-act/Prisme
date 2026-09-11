@@ -7,7 +7,6 @@ création automatique de la table, connexion via DATABASE_URL.
 
 from __future__ import annotations
 
-import os
 import uuid
 from contextlib import closing
 from datetime import UTC, datetime

@@ -51,11 +51,10 @@ from psycopg import sql
 from api.etat import (
     ActionSuggeree,
     Client,
+    CommandeEnregistree,
     Decision,
     DecisionHumaine,
-    EtapeGamme,
     EvenementGeneration,
-    GammeProduit,
     JobGeneration,
     Priorite,
     PropositionSupervision,
@@ -156,16 +155,10 @@ class EtatPostgres:
                     table=self._table("sources_donnees")
                 )
             )
-            connexion.execute(
-                sql.SQL(
-                    "CREATE TABLE IF NOT EXISTS {table} ("
-                    "id TEXT PRIMARY KEY, "
-                    "client_id TEXT NOT NULL REFERENCES {clients}(id), "
-                    "produit TEXT NOT NULL, "
-                    "nom TEXT, "
-                    "etapes JSONB NOT NULL)"
-                ).format(table=self._table("gammes_produit"), clients=self._table("clients"))
-            )
+            # Ancienne table Gammes produit (gabarits de routage, fonctionnalité retirée) —
+            # les commandes référencent désormais des tâches déjà existantes plutôt que
+            # d'exploser une gamme (voir `commandes.gamme_id` retiré ci-dessous).
+            connexion.execute(sql.SQL("DROP TABLE IF EXISTS {} CASCADE").format(self._table("gammes_produit")))
 
             # Ancienne table Projet (portait un pointeur "instance courante" +
             # son propre historique d'exécution) — retirée, remplacée par
@@ -184,6 +177,34 @@ class EtatPostgres:
                     "structure_contraintes TEXT NOT NULL, "
                     "date_ingestion TEXT NOT NULL)"
                 ).format(table=self._table("instances_trco"), clients=self._table("clients"))
+            )
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "instance_id TEXT NOT NULL REFERENCES {instances}(id), "
+                    "client_id TEXT NOT NULL REFERENCES {clients}(id), "
+                    "date_limite INTEGER, "
+                    "taches JSONB NOT NULL, "
+                    "date_creation TEXT NOT NULL)"
+                ).format(
+                    table=self._table("commandes"),
+                    instances=self._table("instances_trco"),
+                    clients=self._table("clients"),
+                )
+            )
+            # Migrations idempotentes : la commande référence désormais des tâches déjà
+            # existantes (adapters/commande_derivation.py) plutôt que d'exploser une gamme
+            # (fonctionnalité retirée) — gamme_id/quantite n'ont plus de sens.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS gamme_id").format(
+                    table=self._table("commandes")
+                )
+            )
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS quantite").format(
+                    table=self._table("commandes")
+                )
             )
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS projet_id").format(
@@ -703,38 +724,16 @@ class EtatPostgres:
             )
             connexion.commit()
 
-    # --- Gammes produit ------------------------------------------------
+    # --- Commandes -------------------------------------------------------
 
-    @staticmethod
-    def _etapes_vers_json(etapes: tuple[EtapeGamme, ...]) -> str:
-        return json.dumps(
-            [
-                {
-                    "id": e.id,
-                    "competences": list(e.competences),
-                    "predecesseurs": list(e.predecesseurs),
-                    "duree_nominale": e.duree_nominale,
-                }
-                for e in etapes
-            ]
-        )
-
-    @staticmethod
-    def _etapes_depuis_json(donnees: list[dict]) -> tuple[EtapeGamme, ...]:
-        return tuple(
-            EtapeGamme(
-                id=d["id"],
-                competences=tuple(d["competences"]),
-                predecesseurs=tuple(d.get("predecesseurs", [])),
-                duree_nominale=d.get("duree_nominale"),
-            )
-            for d in donnees
-        )
-
-    def enregistrer_gamme(
-        self, client_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> str:
-        gamme_id = str(uuid.uuid4())
+    def enregistrer_commande(
+        self,
+        commande_id: str,
+        instance_id: str,
+        client_id: str,
+        date_limite: int | None,
+        taches: tuple[str, ...],
+    ) -> None:
         with closing(self._connexion()) as connexion:
             connexion.execute(
                 sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(
@@ -744,76 +743,62 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, produit, nom, etapes) VALUES (%s, %s, %s, %s, %s::jsonb)"
-                ).format(self._table("gammes_produit")),
-                (gamme_id, client_id, produit, nom, self._etapes_vers_json(etapes)),
+                    "INSERT INTO {} (id, instance_id, client_id, date_limite, taches, date_creation) "
+                    "VALUES (%s, %s, %s, %s, %s::jsonb, %s)"
+                ).format(self._table("commandes")),
+                (
+                    commande_id,
+                    instance_id,
+                    client_id,
+                    date_limite,
+                    json.dumps(list(taches)),
+                    datetime.now(UTC).isoformat(),
+                ),
             )
             connexion.commit()
-        return gamme_id
 
-    def recuperer_gamme(self, gamme_id: str) -> GammeProduit:
+    def recuperer_commande(self, commande_id: str) -> CommandeEnregistree:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
-                sql.SQL("SELECT id, client_id, produit, nom, etapes FROM {} WHERE id = %s").format(
-                    self._table("gammes_produit")
-                ),
-                (gamme_id,),
+                sql.SQL(
+                    "SELECT id, instance_id, client_id, date_limite, taches, date_creation FROM {} WHERE id = %s"
+                ).format(self._table("commandes")),
+                (commande_id,),
             ).fetchone()
         if ligne is None:
-            raise KeyError(gamme_id)
-        id_, client_id, produit, nom, etapes = ligne
-        return GammeProduit(
-            id=id_, client_id=client_id, produit=produit, nom=nom, etapes=self._etapes_depuis_json(etapes)
+            raise KeyError(commande_id)
+        id_, instance_id, client_id, date_limite, taches, date_creation = ligne
+        return CommandeEnregistree(
+            id=id_,
+            instance_id=instance_id,
+            client_id=client_id,
+            date_limite=date_limite,
+            taches=tuple(taches),
+            date_creation=date_creation,
         )
 
-    def lister_gammes(self, client_id: str | None = None) -> list[GammeProduit]:
-        requete = sql.SQL("SELECT id, client_id, produit, nom, etapes FROM {} WHERE 1 = 1").format(
-            self._table("gammes_produit")
-        )
+    def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:
+        requete = sql.SQL(
+            "SELECT id, instance_id, client_id, date_limite, taches, date_creation FROM {} WHERE 1 = 1"
+        ).format(self._table("commandes"))
         parametres: list[str] = []
-        if client_id is not None:
-            requete += sql.SQL(" AND client_id = %s")
-            parametres.append(client_id)
+        if instance_id is not None:
+            requete += sql.SQL(" AND instance_id = %s")
+            parametres.append(instance_id)
 
         with closing(self._connexion()) as connexion:
             lignes = connexion.execute(requete, parametres).fetchall()
         return [
-            GammeProduit(id=id_, client_id=cid, produit=produit, nom=nom, etapes=self._etapes_depuis_json(etapes))
-            for id_, cid, produit, nom, etapes in lignes
+            CommandeEnregistree(
+                id=id_,
+                instance_id=iid,
+                client_id=cid,
+                date_limite=date_limite,
+                taches=tuple(taches),
+                date_creation=date_creation,
+            )
+            for id_, iid, cid, date_limite, taches, date_creation in lignes
         ]
-
-    def modifier_gamme(
-        self, gamme_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> GammeProduit:
-        with closing(self._connexion()) as connexion:
-            existe = connexion.execute(
-                sql.SQL("SELECT client_id FROM {} WHERE id = %s").format(self._table("gammes_produit")),
-                (gamme_id,),
-            ).fetchone()
-            if existe is None:
-                raise KeyError(gamme_id)
-            connexion.execute(
-                sql.SQL("UPDATE {} SET produit = %s, nom = %s, etapes = %s::jsonb WHERE id = %s").format(
-                    self._table("gammes_produit")
-                ),
-                (produit, nom, self._etapes_vers_json(etapes), gamme_id),
-            )
-            connexion.commit()
-        return GammeProduit(id=gamme_id, client_id=existe[0], produit=produit, nom=nom, etapes=etapes)
-
-    def supprimer_gamme(self, gamme_id: str) -> None:
-        with closing(self._connexion()) as connexion:
-            existe = connexion.execute(
-                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("gammes_produit")),
-                (gamme_id,),
-            ).fetchone()
-            if existe is None:
-                raise KeyError(gamme_id)
-            connexion.execute(
-                sql.SQL("DELETE FROM {} WHERE id = %s").format(self._table("gammes_produit")),
-                (gamme_id,),
-            )
-            connexion.commit()
 
     # --- Instances -----------------------------------------------------
 
@@ -1030,12 +1015,12 @@ class EtatPostgres:
     def supprimer_instance(self, instance_id: str) -> None:
         """Cascade-supprime son propre historique d'exécution (exécutions,
         plannings, opérations planifiées, décisions humaines, révisions de
-        planning ajustées associées) — une exécution n'existe jamais sans
-        l'instance qui l'a produite. Le lien de provenance depuis
-        `sources_donnees` (`ON DELETE SET NULL`) et depuis `jobs_generation`
-        (même comportement, préserve l'audit de génération) sont gérés par
-        Postgres lui-même via les contraintes de clé étrangère, rien à faire
-        ici pour eux."""
+        planning ajustées, commandes associées) — une exécution/commande
+        n'existe jamais sans l'instance qui l'a produite. Le lien de
+        provenance depuis `sources_donnees` (`ON DELETE SET NULL`) et depuis
+        `jobs_generation` (même comportement, préserve l'audit de
+        génération) sont gérés par Postgres lui-même via les contraintes de
+        clé étrangère, rien à faire ici pour eux."""
         with closing(self._connexion()) as connexion:
             existe = connexion.execute(
                 sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("instances_trco")),
@@ -1044,6 +1029,10 @@ class EtatPostgres:
             if existe is None:
                 raise KeyError(instance_id)
 
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE instance_id = %s").format(self._table("commandes")),
+                (instance_id,),
+            )
             connexion.execute(
                 sql.SQL(
                     "DELETE FROM {ops} WHERE planning_id IN ("

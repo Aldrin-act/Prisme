@@ -798,9 +798,8 @@ def tenter_generation_avec_boucle_stream(
     taille très différente — accepté, pas quelque chose à corriger ici.
 
     Chaque agent construit son propre modèle LangChain via
-    `construire_modele_pour_agent(nom)` (§5.6, `config_fournisseurs.py`) —
-    le fournisseur optimal par agent, jamais un client partagé imposé par
-    l'appelant.
+    `construire_modele_pour_agent(nom)` (§5.6, Kimi seul fournisseur) —
+    jamais un client partagé imposé par l'appelant.
 
     `client_id` : transmis tel quel à l'agent Analyste (voir
     `generation/agents/analyste.py::analyser_mission`), pour son outil

@@ -141,8 +141,8 @@ La boucle respecte l'esprit de la spécification : intervention automatique born
 La boucle est automatiquement activée dans `tenter_generation_multi_agents()`. Aucune configuration supplémentaire nécessaire.
 
 **Variables d'environnement :**
-- `PRISME_LLM_PROVIDER_DEBUGGER` : Surcharge le fournisseur LLM du Debugger (par défaut : deepseek)
-- `PRISME_LLM_MODEL_DEBUGGER` : Surcharge le modèle LLM du Debugger
+- `PRISME_LLM_MODEL_DEBUGGER` : Surcharge le modèle Mistral du Debugger (fournisseur unique,
+  aucune variable de choix de fournisseur)
 
 **Scripts de test :**
 - `scripts/test_pipeline_verbeux.py` : Affiche la progression en temps réel

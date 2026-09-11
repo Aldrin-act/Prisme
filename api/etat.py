@@ -174,43 +174,22 @@ class SourceDonnees:
 
 
 @dataclass(frozen=True)
-class EtapeGamme:
-    """Une étape d'une `GammeProduit` — jamais vue par le solveur : purement
-    un gabarit, explosé en `Tache`/`Contrainte` DSL ordinaires par
-    `adapters/gamme_derivation.py::exploser_gamme` à l'arrivée d'une
-    commande. `competences` (>=1) plutôt qu'une ressource fixe : la
-    compatibilité réelle se dérive à l'explosion via
-    `adapters/competence_derivation.py`, donc la gamme reste valide même si
-    le parc de ressources évolue. `predecesseurs` référence d'autres `id`
-    d'étapes de la même gamme (jamais d'une autre) — plusieurs prédécesseurs
-    pour une même étape expriment une fusion (plusieurs sous-produits qui
-    convergent vers une étape commune), sans mécanisme dédié."""
+class CommandeEnregistree:
+    """Une commande traitée via `POST /ingestion/{instance_id}/commandes`, persistée pour que son
+    identité survive à la fusion dans l'instance — sans ça, elle est perdue dès la réponse HTTP.
+    Référence des tâches déjà présentes dans l'instance (jamais n'en crée — voir
+    `adapters/commande_derivation.py::deriver_echeances_par_commande`, même mécanisme que
+    `csv_import`/`json_import`) ; nom distinct de `adapters.commande_derivation.Commande` pour
+    éviter toute confusion entre les deux. Contrairement à `SourceDonnees`, porte volontairement
+    un lien vers son instance : c'est tout le point — suivre son état dans le temps, à travers
+    les exécutions successives de cette même instance."""
 
     id: str
-    competences: tuple[str, ...]
-    predecesseurs: tuple[str, ...] = ()
-    # Durée déclarée (jours) pour cette étape, appliquée à chaque tâche qu'elle produit —
-    # même rôle que `TacheAvecDureeEstimee.duree_estimee_jours` des adaptateurs CSV/JSON
-    # (`adapters/json_import/traducteur.py`) : source primaire de durée, l'estimateur ML
-    # (`estimation/`) ne comble que ce qui reste manquant. Sans elle ET sans estimateur
-    # configuré, l'explosion échoue explicitement (`CompetenceSansDureeEstimee`) plutôt que
-    # de deviner une durée.
-    duree_nominale: int | None = None
-
-
-@dataclass(frozen=True)
-class GammeProduit:
-    """Gamme opératoire réutilisable pour un produit d'un client — décrite
-    une fois, explosée à chaque commande (`traiter_nouvelle_commande`) en
-    tâches concrètes plutôt que redéclarée à la main à chaque fois. Comme
-    `SourceDonnees`, volontairement minimale : ne porte aucun historique
-    d'exécution, aucune instance "courante"."""
-
-    id: str
+    instance_id: str
     client_id: str
-    produit: str
-    nom: str | None
-    etapes: tuple[EtapeGamme, ...]
+    date_limite: int | None
+    taches: tuple[str, ...]
+    date_creation: str
 
 
 @dataclass(frozen=True)
@@ -289,7 +268,7 @@ class EtatAPI:
     decisions: dict[str, DecisionHumaine] = field(default_factory=dict)
     sources: dict[str, SourceDonnees] = field(default_factory=dict)
     source_par_instance: dict[str, str] = field(default_factory=dict)
-    gammes: dict[str, GammeProduit] = field(default_factory=dict)
+    commandes: dict[str, CommandeEnregistree] = field(default_factory=dict)
     # Description métier proposée par l'agent de compréhension (§5.4 bis) —
     # absente (None) pour toute instance ingérée hors de ce chemin (payload
     # T-R-C-O direct, adaptateur écrit à la main...). Hors `InstanceTRCO`
@@ -457,41 +436,32 @@ class EtatAPI:
         for instance_id in [iid for iid, sid in self.source_par_instance.items() if sid == source_id]:
             del self.source_par_instance[instance_id]
 
-    def enregistrer_gamme(
-        self, client_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> str:
-        self.enregistrer_client(client_id)
-        gamme_id = str(uuid.uuid4())
-        self.gammes[gamme_id] = GammeProduit(
-            id=gamme_id, client_id=client_id, produit=produit, nom=nom, etapes=etapes
+    def enregistrer_commande(
+        self,
+        commande_id: str,
+        instance_id: str,
+        client_id: str,
+        date_limite: int | None,
+        taches: tuple[str, ...],
+    ) -> None:
+        """`commande_id` fourni par l'appelant (déjà généré avant la dérivation d'échéance —
+        voir `api/routes/ingestion.py::ajouter_commande`)."""
+        self.commandes[commande_id] = CommandeEnregistree(
+            id=commande_id,
+            instance_id=instance_id,
+            client_id=client_id,
+            date_limite=date_limite,
+            taches=taches,
+            date_creation=datetime.now(UTC).isoformat(),
         )
-        return gamme_id
 
-    def recuperer_gamme(self, gamme_id: str) -> GammeProduit:
-        if gamme_id not in self.gammes:
-            raise KeyError(gamme_id)
-        return self.gammes[gamme_id]
+    def recuperer_commande(self, commande_id: str) -> CommandeEnregistree:
+        if commande_id not in self.commandes:
+            raise KeyError(commande_id)
+        return self.commandes[commande_id]
 
-    def lister_gammes(self, client_id: str | None = None) -> list[GammeProduit]:
-        return [g for g in self.gammes.values() if client_id is None or g.client_id == client_id]
-
-    def modifier_gamme(
-        self, gamme_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> GammeProduit:
-        """Remplace en place le contenu d'une gamme déjà enregistrée — même
-        `id`/`client_id`, comme `modifier_instance` pour une instance."""
-        if gamme_id not in self.gammes:
-            raise KeyError(gamme_id)
-        gamme = GammeProduit(
-            id=gamme_id, client_id=self.gammes[gamme_id].client_id, produit=produit, nom=nom, etapes=etapes
-        )
-        self.gammes[gamme_id] = gamme
-        return gamme
-
-    def supprimer_gamme(self, gamme_id: str) -> None:
-        if gamme_id not in self.gammes:
-            raise KeyError(gamme_id)
-        del self.gammes[gamme_id]
+    def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:
+        return [c for c in self.commandes.values() if instance_id is None or c.instance_id == instance_id]
 
     def recuperer_instance(self, instance_id: str) -> tuple[str, InstanceTRCO]:
         if instance_id not in self.instances:
@@ -590,11 +560,12 @@ class EtatAPI:
 
     def supprimer_instance(self, instance_id: str) -> None:
         """Cascade-supprime son propre historique d'exécution (exécutions,
-        décisions humaines associées) — une exécution n'existe jamais sans
-        l'instance qui l'a produite. Le lien de provenance vers sa source
-        éventuelle est coupé. Les jobs de génération qui la référencent
-        survivent, orphelins (`instance_id` devient `None`) — préserve
-        l'audit de génération même après suppression de l'instance."""
+        décisions humaines, commandes associées) — une exécution/commande
+        n'existe jamais sans l'instance qui l'a produite. Le lien de
+        provenance vers sa source éventuelle est coupé. Les jobs de
+        génération qui la référencent survivent, orphelins (`instance_id`
+        devient `None`) — préserve l'audit de génération même après
+        suppression de l'instance."""
         if instance_id not in self.instances:
             raise KeyError(instance_id)
         del self.instances[instance_id]
@@ -605,6 +576,8 @@ class EtatAPI:
         self.unites_duree.pop(instance_id, None)
         self.dates_modification.pop(instance_id, None)
         self.groupes_scenario.pop(instance_id, None)
+        for commande_id in [cid for cid, c in self.commandes.items() if c.instance_id == instance_id]:
+            del self.commandes[commande_id]
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:
             del self.executions[execution_id]
             self.decisions.pop(execution_id, None)

@@ -1,7 +1,7 @@
 """
 Génère un solveur IA pour une instance TRCO spécifique.
 
-Ce script génère un solveur via l'IA (Mistral) et l'enregistre
+Ce script génère un solveur via l'IA (Kimi) et l'enregistre
 dans le solver_store pour l'utiliser avec notre instance.
 
 Usage:

@@ -134,14 +134,14 @@ def comprendre_donnees_erp(
     )
     prompt = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes, secteur_activite=bloc_secteur)
 
-    # `method="json_mode"` toujours, jamais `methode_sortie_structuree(modele)` (qui choisirait
-    # "json_schema" pour Mistral, comme le reste du pipeline) : vérifié par appel réel, le mode
-    # de sortie structurée strict de Mistral renvoie systématiquement `instance` vide ({}) pour ce
-    # schéma précis — `instance: dict[str, Any]` est volontairement libre (voir plus haut), et un
-    # schéma JSON sans `properties` sous contrainte stricte semble se réduire à l'objet minimal
-    # valide plutôt que d'être rempli. `json_mode`, sans contrainte de grammaire token par token,
-    # n'a pas ce problème (revalidé par appel réel, y compris avec Mistral) et reste ce que
-    # nemotron/les autres fournisseurs utilisaient déjà par défaut — aucun changement pour eux.
+    # `method="json_mode"` explicite plutôt que `methode_sortie_structuree(modele)` — même valeur
+    # aujourd'hui (Kimi, comme le reste du pipeline), mais gardé en dur ici volontairement :
+    # `instance: dict[str, Any]` est libre sans `properties` (voir plus haut), et le mode schéma
+    # strict (`"json_schema"`) s'était avéré, empiriquement avec l'ancien fournisseur (Mistral),
+    # renvoyer un `instance` vide ({}) pour ce genre de schéma sans propriétés déclarées — un
+    # schéma JSON sous contrainte stricte semblant se réduire à l'objet minimal valide plutôt que
+    # d'être rempli. Pas revérifié contre Kimi ; `json_mode`, sans contrainte de grammaire token
+    # par token, reste le choix le plus sûr ici tant que ce n'est pas revalidé par un appel réel.
     structure = modele.with_structured_output(_SchemaComprehension, include_raw=True, method="json_mode")
     sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
     reponse_brute = extraire_texte_brut(sortie["raw"])
