@@ -44,7 +44,7 @@ from adapters.agent_comprehension import comprendre_donnees_erp
 from adapters.greensig import extraire_et_traduire
 from api.autorisation import verifier_acces_client
 from api.dependencies import obtenir_registre
-from api.etat import EtatAPI, SecteurActivite, durees_par_contrainte, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, durees_par_contrainte, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.adapters import CLIENT_ID_GREENSIG
 from api.routes.auth import obtenir_utilisateur_courant
@@ -81,8 +81,6 @@ def _reponse_planning(
 
 @router.post("/greensig")
 def planifier_depuis_greensig(
-    nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     registre: Registre = Depends(obtenir_registre),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
@@ -99,9 +97,7 @@ def planifier_depuis_greensig(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_id = etat.enregistrer_instance(
-        CLIENT_ID_GREENSIG, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
-    )
+    instance_id = etat.enregistrer_instance(CLIENT_ID_GREENSIG, instance, canal_ingestion="api")
 
     execution_id, resultat, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)
 
@@ -112,8 +108,6 @@ def planifier_depuis_greensig(
 def planifier(
     client_id: str,
     payload: dict[str, Any],
-    nom_projet: str | None = None,
-    secteur_activite: SecteurActivite | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     registre: Registre = Depends(obtenir_registre),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
@@ -122,9 +116,7 @@ def planifier(
     solveur correspondant, renvoie le planning en un seul aller-retour."""
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
-    instance_id = etat.enregistrer_instance(
-        client_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
-    )
+    instance_id = etat.enregistrer_instance(client_id, instance, canal_ingestion="manuel")
 
     execution_id, resultat, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)
 
@@ -133,8 +125,6 @@ def planifier(
 
 class RequeteComprehension(BaseModel):
     donnees_brutes: str
-    nom_projet: str | None = None
-    secteur_activite: SecteurActivite | None = None
 
 
 @router.post("/{client_id}/comprehension")
@@ -153,9 +143,7 @@ def planifier_via_comprehension(
     payload — un rejet reste un 422 explicite, jamais masqué."""
     verifier_acces_client(utilisateur, client_id)
     try:
-        resultat_comprehension = comprendre_donnees_erp(
-            modele, requete.donnees_brutes, secteur_activite=requete.secteur_activite
-        )
+        resultat_comprehension = comprendre_donnees_erp(modele, requete.donnees_brutes)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 
@@ -165,8 +153,7 @@ def planifier_via_comprehension(
         client_id,
         instance,
         description_metier=resultat_comprehension.description_metier,
-        nom_projet=requete.nom_projet,
-        secteur_activite=requete.secteur_activite,
+        canal_ingestion="agent_ia",
     )
 
     execution_id, resultat, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)

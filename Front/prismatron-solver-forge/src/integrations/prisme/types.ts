@@ -13,32 +13,6 @@ export interface Client {
 }
 
 // ============================================================================
-// SECTEUR D'ACTIVITÉ — vocabulaire fermé dupliqué à la main depuis
-// api/etat.py::SecteurActivite (pas de pont codegen dans ce projet, même
-// pratique déjà en place pour Contrainte/Objectif). Métadonnée opérationnelle
-// (comme nom_projet), jamais lue par le solveur/DSL, mais avec trois effets
-// réels : oriente le prompt de l'agent de compréhension, filtre les pages
-// Instances/Données, alimente des suggestions de ressources à l'ingestion.
-// ============================================================================
-
-export type SecteurActivite =
-  | "atelier_mecanique"
-  | "assemblage_electronique"
-  | "production_agroalimentaire"
-  | "maintenance_industrielle"
-  | "imprimerie"
-  | "centre_appels";
-
-export const LABELS_SECTEUR_ACTIVITE: Record<SecteurActivite, string> = {
-  atelier_mecanique: "Atelier mécanique",
-  assemblage_electronique: "Assemblage électronique",
-  production_agroalimentaire: "Production agroalimentaire",
-  maintenance_industrielle: "Maintenance industrielle",
-  imprimerie: "Imprimerie",
-  centre_appels: "Centre d'appels",
-};
-
-// ============================================================================
 // MODÈLES DE BASE (DSL T-R-C-O)
 // ============================================================================
 
@@ -243,12 +217,6 @@ export interface InstanceDetail extends InstanceTRCO {
   instance_id: string;
   client_id: string;
   structure_contraintes: string;
-  // Étiquette libre pour retrouver/regrouper des instances liées (voir
-  // InstanceInfo.nom_projet).
-  nom_projet: string | null;
-  // Un des 6 secteurs de SecteurActivite, ou un secteur personnalisé saisi
-  // via "Autre" — jamais restreint au vocabulaire fermé côté stockage.
-  secteur_activite: string | null;
   // Unité d'affichage des durées/échéances — "jours" implicite si `null`
   // (voir src/lib/unite-duree.ts). Purement cosmétique, jamais lu par le DSL.
   unite_duree: string | null;
@@ -299,7 +267,6 @@ export interface MetriquesPlanning {
 export interface ScenarioComparaison {
   instance_id: string;
   est_instance_de_base: boolean;
-  nom_projet: string | null;
   execution_id: string | null;
   date_execution: string | null;
   // null tant que ce scénario n'a jamais été exécuté avec succès — jamais déclenché
@@ -374,17 +341,11 @@ export interface InstanceInfo {
   client_id: string;
   structure_contraintes: string;
   executee: boolean;
-  // Étiquette libre choisie à l'ingestion pour retrouver/regrouper des
-  // instances liées entre elles (réingestions successives d'un même
-  // atelier), ou modifiée depuis lors via "Modifier".
-  nom_projet: string | null;
-  secteur_activite: string | null;
   unite_duree: string | null;
-}
-
-export interface NomProjetInfo {
-  nom_projet: string;
-  nb_instances: number;
+  // Canal d'ingestion ayant produit cette instance — "manuel", "csv", "json",
+  // "api", "agent_ia" ou "scenario". `null` pour toute instance enregistrée
+  // avant l'ajout de ce champ — purement informatif, jamais lu par le solveur.
+  canal_ingestion: string | null;
 }
 
 export interface ExecutionInfo {
@@ -698,13 +659,11 @@ export interface SourceDonnees {
   nom: string | null;
   date_creation: string;
   nb_instances: number;
-  secteur_activite: string | null;
 }
 
 export interface InstanceDeSource {
   instance_id: string;
   structure_contraintes: string;
-  nom_projet: string | null;
 }
 
 export interface SourceDetail extends SourceDonnees {

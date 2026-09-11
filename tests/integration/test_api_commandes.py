@@ -28,14 +28,8 @@ def _payload_instance_minimale() -> dict:
     }
 
 
-def _creer_instance(
-    client: TestClient, *, nom_projet: str | None = None, secteur_activite: str | None = None
-) -> str:
-    reponse = client.post(
-        "/ingestion/client_test",
-        json=_payload_instance_minimale(),
-        params={"nom_projet": nom_projet, "secteur_activite": secteur_activite},
-    )
+def _creer_instance(client: TestClient) -> str:
+    reponse = client.post("/ingestion/client_test", json=_payload_instance_minimale())
     assert reponse.status_code == 200, reponse.json()
     return reponse.json()["instance_id"]
 
@@ -45,7 +39,7 @@ def test_ajouter_commande_derive_une_echeance_pour_des_taches_existantes() -> No
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
     try:
         client = TestClient(app)
-        instance_id = _creer_instance(client, nom_projet="Atelier X", secteur_activite="imprimerie")
+        instance_id = _creer_instance(client)
 
         reponse = client.post(
             f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
@@ -65,10 +59,6 @@ def test_ajouter_commande_derive_une_echeance_pour_des_taches_existantes() -> No
             c["type"] == "echeance" and c["tache"] == "EXISTANT" and c["echeance"] == 10
             for c in instance_json["contraintes"]
         )
-        # nom_projet/secteur_activite préservés — même piège que PUT /{instance_id}
-        # (modifier_instance les écrase sinon renvoyés explicitement).
-        assert instance_json["nom_projet"] == "Atelier X"
-        assert instance_json["secteur_activite"] == "imprimerie"
     finally:
         app.dependency_overrides.clear()
 

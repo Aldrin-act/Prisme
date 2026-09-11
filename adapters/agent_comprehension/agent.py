@@ -118,21 +118,10 @@ class ResultatComprehension:
     justifications: tuple[Justification, ...]
 
 
-def comprendre_donnees_erp(
-    modele: BaseChatModel, donnees_brutes: str, secteur_activite: str | None = None
-) -> ResultatComprehension:
-    """`secteur_activite` (optionnel) : contexte métier fourni explicitement
-    par l'utilisateur, jamais deviné par l'agent (voir `comprehension.md`)
-    — absent du prompt (chaîne vide) si `None`, jamais interpolé comme la
-    chaîne littérale "None"."""
+def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> ResultatComprehension:
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     regles_dsl = CHEMIN_REGLES_DSL.read_text(encoding="utf-8")
-    bloc_secteur = (
-        f"## Secteur d'activité déclaré par le client\n\n{secteur_activite}\n"
-        if secteur_activite is not None
-        else ""
-    )
-    prompt = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes, secteur_activite=bloc_secteur)
+    prompt = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes)
 
     # `method="json_mode"` explicite plutôt que `methode_sortie_structuree(modele)` — même valeur
     # aujourd'hui (Kimi, comme le reste du pipeline), mais gardé en dur ici volontairement :

@@ -61,12 +61,9 @@ import {
   useSources,
   useSupprimerSource,
   useDeclencherExecution,
-  useNomsProjet,
   PrismeAPIError,
-  LABELS_SECTEUR_ACTIVITE,
   type AuthentificationAPI,
   type Justification,
-  type SecteurActivite,
   type TypeAuthentificationAPI,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
@@ -87,20 +84,13 @@ function DonneesPage() {
   // Pré-rempli depuis l'URL (?source=<id>) — permet un lien direct depuis la
   // page Instances vers le détail de la source qui a généré une instance donnée.
   const [sourceActiveId, setSourceActiveId] = useState<string | null>(source ?? null);
-  // Nom de projet choisi à l'étape de création — porté ici pour être
-  // transmis à SourceActivePanel (chaque génération d'instance en a besoin).
-  // Réinitialisé à l'ouverture d'une source depuis l'historique : on ne le
-  // devine pas, SourceActivePanel se replie alors sur source.nom.
-  const [nomProjetActif, setNomProjetActif] = useState<string | undefined>(undefined);
 
-  function creerEtOuvrirSource(sourceId: string, nomProjet?: string) {
+  function creerEtOuvrirSource(sourceId: string) {
     setSourceActiveId(sourceId);
-    setNomProjetActif(nomProjet);
   }
 
   function ouvrirSource(sourceId: string) {
     setSourceActiveId(sourceId);
-    setNomProjetActif(undefined);
     setTab("actif");
   }
 
@@ -123,7 +113,6 @@ function DonneesPage() {
             <SourceActivePanel
               sourceId={sourceActiveId}
               onNouveau={() => setSourceActiveId(null)}
-              nomProjetInitial={nomProjetActif}
             />
           ) : (
             <FormulaireNouvelleSource onCree={creerEtOuvrirSource} />
@@ -156,108 +145,34 @@ const ACCEPT_FICHIER_JSON = ".json,application/json";
 // côté backend — copie manuelle après changement).
 const GABARIT_JSON = { nom: "instance_exemple.json", href: "/gabarits/instance_exemple.json" };
 
-// Champs partagés entre FormulaireNouvelleSource (crée une Source réenre-
+// Champ partagé entre FormulaireNouvelleSource (crée une Source réenre-
 // gistrable) et ImporteurCsvDirect (crée une instance immédiatement, sans
-// Source) — Client/Projet/Secteur sont identiques dans les deux flux, seul
-// "Nom de la source" reste propre au premier (aucune Source n'existe côté
-// import CSV direct). L'unité d'affichage des durées n'est plus saisie ici :
-// calculée côté backend à partir des durées réelles de l'instance générée
-// (voir `api/unite_duree.py::detecter_unite_duree`, lue via
-// `instance.unite_duree`/`src/lib/unite-duree.ts` partout où elle s'affiche).
-// Contrôlé par le parent (comme FormulaireConnexionAPI plus bas) plutôt
-// qu'un objet valeur unique : évite de reconstruire le sentinel "_autre" du
-// secteur d'activité à partir d'une valeur déjà résolue.
-function ChampsContexteIngestion({
+// Source) — seul "Nom de la source" reste propre au premier (aucune Source
+// n'existe côté import CSV direct).
+function ChampClientSource({
   idPrefix,
   estAdmin,
   clientId,
   onClientIdChange,
-  nomProjet,
-  onNomProjetChange,
-  nomsProjetConnus,
-  secteurActivite,
-  onSecteurActiviteChange,
-  secteurActiviteAutre,
-  onSecteurActiviteAutreChange,
 }: {
   idPrefix: string;
   estAdmin: boolean;
   clientId: string;
   onClientIdChange: (v: string) => void;
-  nomProjet: string;
-  onNomProjetChange: (v: string) => void;
-  nomsProjetConnus?: { nom_projet: string }[];
-  secteurActivite: SecteurActivite | "_autre" | "";
-  onSecteurActiviteChange: (v: SecteurActivite | "_autre") => void;
-  secteurActiviteAutre: string;
-  onSecteurActiviteAutreChange: (v: string) => void;
 }) {
   return (
-    <>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor={`${idPrefix}_client`}>Client</Label>
-          <Input
-            id={`${idPrefix}_client`}
-            value={clientId}
-            onChange={(e) => onClientIdChange(e.target.value)}
-            disabled={!estAdmin}
-          />
-          {!estAdmin && (
-            <p className="text-xs text-muted-foreground">Associé automatiquement à votre compte.</p>
-          )}
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor={`${idPrefix}_projet`}>Nom du projet (optionnel)</Label>
-          <Input
-            id={`${idPrefix}_projet`}
-            list={`${idPrefix}-noms-projet-suggestions`}
-            value={nomProjet}
-            onChange={(e) => onNomProjetChange(e.target.value)}
-            placeholder="ex : Atelier mécanique"
-          />
-          <datalist id={`${idPrefix}-noms-projet-suggestions`}>
-            {nomsProjetConnus?.map((n) => (
-              <option key={n.nom_projet} value={n.nom_projet} />
-            ))}
-          </datalist>
-          <p className="text-xs text-muted-foreground">
-            Retrouve/regroupe les instances générées à partir de cette source.
-          </p>
-        </div>
-      </div>
-
-      <div className="space-y-1.5 sm:max-w-[calc(50%-0.5rem)]">
-        <Label htmlFor={`${idPrefix}_secteur`}>Secteur d'activité (optionnel)</Label>
-        <Select
-          value={secteurActivite}
-          onValueChange={(v) => onSecteurActiviteChange(v as SecteurActivite | "_autre")}
-        >
-          <SelectTrigger id={`${idPrefix}_secteur`}>
-            <SelectValue placeholder="Non renseigné" />
-          </SelectTrigger>
-          <SelectContent>
-            {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
-              <SelectItem key={s} value={s}>
-                {LABELS_SECTEUR_ACTIVITE[s]}
-              </SelectItem>
-            ))}
-            <SelectItem value="_autre">Autre (préciser)</SelectItem>
-          </SelectContent>
-        </Select>
-        {secteurActivite === "_autre" && (
-          <Input
-            value={secteurActiviteAutre}
-            onChange={(e) => onSecteurActiviteAutreChange(e.target.value)}
-            placeholder="ex : Textile, Logistique..."
-            className="mt-1.5"
-          />
-        )}
-        <p className="text-xs text-muted-foreground">
-          Aide l'agent de compréhension à interpréter des données ambiguës.
-        </p>
-      </div>
-    </>
+    <div className="space-y-1.5 sm:max-w-[calc(50%-0.5rem)]">
+      <Label htmlFor={`${idPrefix}_client`}>Client</Label>
+      <Input
+        id={`${idPrefix}_client`}
+        value={clientId}
+        onChange={(e) => onClientIdChange(e.target.value)}
+        disabled={!estAdmin}
+      />
+      {!estAdmin && (
+        <p className="text-xs text-muted-foreground">Associé automatiquement à votre compte.</p>
+      )}
+    </div>
   );
 }
 
@@ -323,31 +238,14 @@ function ChampFichierUnique({
   );
 }
 
-function FormulaireNouvelleSource({
-  onCree,
-}: {
-  onCree: (sourceId: string, nomProjet?: string) => void;
-}) {
+function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => void }) {
   const creer = useCreerSource();
-  const { data: nomsProjetConnus } = useNomsProjet();
   const inputFichierRef = useRef<HTMLInputElement>(null);
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
   const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
   const [nom, setNom] = useState("");
-  // Étape 1, avant toute donnée : à quel projet cette source se rattache-
-  // t-elle, et dans quel secteur d'activité — ce dernier oriente le prompt
-  // de l'agent de compréhension à la conversion, persisté sur la source.
-  const [nomProjet, setNomProjet] = useState("");
-  // "_autre" est un sentinel local (jamais envoyé tel quel) qui révèle le
-  // champ texte libre secteurActiviteAutre — voir secteurActiviteEffectif.
-  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "_autre" | "">("");
-  const [secteurActiviteAutre, setSecteurActiviteAutre] = useState("");
-  const secteurActiviteEffectif =
-    secteurActivite === "_autre"
-      ? secteurActiviteAutre.trim() || undefined
-      : secteurActivite || undefined;
   const [donneesBrutes, setDonneesBrutes] = useState("");
   const [formatFichier, setFormatFichier] = useState<FormatDonnees>("json");
   const [fichier, setFichier] = useState<File | null>(null);
@@ -385,9 +283,8 @@ function FormulaireNouvelleSource({
         donneesBrutes,
         nom: nom.trim() || undefined,
         clientId: estAdmin ? clientId : undefined,
-        secteurActivite: secteurActiviteEffectif,
       },
-      { onSuccess: (data) => onCree(data.source_id, nomProjet.trim() || undefined) },
+      { onSuccess: (data) => onCree(data.source_id) },
     );
   }
 
@@ -404,18 +301,11 @@ function FormulaireNouvelleSource({
         />
       </div>
 
-      <ChampsContexteIngestion
+      <ChampClientSource
         idPrefix="donnees"
         estAdmin={estAdmin}
         clientId={clientId}
         onClientIdChange={setClientId}
-        nomProjet={nomProjet}
-        onNomProjetChange={setNomProjet}
-        nomsProjetConnus={nomsProjetConnus}
-        secteurActivite={secteurActivite}
-        onSecteurActiviteChange={setSecteurActivite}
-        secteurActiviteAutre={secteurActiviteAutre}
-        onSecteurActiviteAutreChange={setSecteurActiviteAutre}
       />
 
       <div className="space-y-1.5">
@@ -934,18 +824,10 @@ const OPTIONS_DELIMITEUR_CSV: { valeur: string; label: string }[] = [
 function ImporteurCsvDirect() {
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
-  const { data: nomsProjetConnus } = useNomsProjet();
   const importer = useImporterFichiersCsv();
   const executer = useDeclencherExecution();
 
   const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
-  const [nomProjet, setNomProjet] = useState("");
-  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "_autre" | "">("");
-  const [secteurActiviteAutre, setSecteurActiviteAutre] = useState("");
-  const secteurActiviteEffectif =
-    secteurActivite === "_autre"
-      ? secteurActiviteAutre.trim() || undefined
-      : secteurActivite || undefined;
   const [delimiteur, setDelimiteur] = useState(",");
   const [fichiers, setFichiers] = useState<Partial<Record<EntiteCsv, File>>>({});
   const inputRefs: Record<EntiteCsv, RefObject<HTMLInputElement | null>> = {
@@ -986,8 +868,6 @@ function ImporteurCsvDirect() {
           contraintes: fichiers.contraintes,
           commandes: fichiers.commandes,
         },
-        nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActiviteEffectif,
         delimiteur,
       },
       {
@@ -1007,18 +887,11 @@ function ImporteurCsvDirect() {
         (une seule pièce jointe, un format libre), utilisez plutôt l'onglet « Source en cours ».
       </p>
 
-      <ChampsContexteIngestion
+      <ChampClientSource
         idPrefix="import_csv"
         estAdmin={estAdmin}
         clientId={clientId}
         onClientIdChange={setClientId}
-        nomProjet={nomProjet}
-        onNomProjetChange={setNomProjet}
-        nomsProjetConnus={nomsProjetConnus}
-        secteurActivite={secteurActivite}
-        onSecteurActiviteChange={setSecteurActivite}
-        secteurActiviteAutre={secteurActiviteAutre}
-        onSecteurActiviteAutreChange={setSecteurActiviteAutre}
       />
 
       <div className="space-y-1.5">
@@ -1139,12 +1012,16 @@ function ImporteurCsvDirect() {
         </div>
       )}
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs text-muted-foreground">
           Les fichiers Tâches/Ressources/Contraintes sont combinés en une seule instance — importés
           ensemble, pas fichier par fichier.
         </p>
-        <Button onClick={importerFichiers} disabled={!pretPourImport || importer.isPending}>
+        <Button
+          onClick={importerFichiers}
+          disabled={!pretPourImport || importer.isPending}
+          className="shrink-0"
+        >
           <Upload className="mr-2 h-4 w-4" />
           {importer.isPending ? "Import en cours..." : "Importer"}
         </Button>
@@ -1153,25 +1030,12 @@ function ImporteurCsvDirect() {
   );
 }
 
-function SourceActivePanel({
-  sourceId,
-  onNouveau,
-  nomProjetInitial,
-}: {
-  sourceId: string;
-  onNouveau: () => void;
-  nomProjetInitial?: string;
-}) {
+function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouveau: () => void }) {
   const queryClient = useQueryClient();
   const { data: source, isLoading } = useSource(sourceId);
-  const { data: nomsProjetConnus } = useNomsProjet();
   const generer = useGenererInstanceDepuisSource();
   const genererDeterministe = useGenererInstanceDeterministeDepuisSource();
   const executer = useDeclencherExecution();
-  // Éditable ici : chaque génération peut être rattachée à un projet
-  // différent de celui saisi à la création de la source (ex. reconversion
-  // pour un autre usage) — voir genererInstance/genererInstanceDeterministe.
-  const [nomProjet, setNomProjet] = useState(nomProjetInitial ?? "");
   const [dernier, setDernier] = useState<{
     instance_id: string;
     avertissements: string[];
@@ -1207,7 +1071,7 @@ function SourceActivePanel({
     setDernier(null);
     setGenerationEnCours(true);
     generer.mutate(
-      { sourceId, nomProjet: nomProjet.trim() || undefined },
+      { sourceId },
       {
         onSuccess: (data) => {
           setDernier({
@@ -1231,7 +1095,7 @@ function SourceActivePanel({
     executer.reset();
     setDernier(null);
     genererDeterministe.mutate(
-      { sourceId, nomProjet: nomProjet.trim() || undefined },
+      { sourceId },
       {
         onSuccess: (data) => {
           setDernier({ instance_id: data.instance_id, avertissements: [], justifications: [] });
@@ -1265,12 +1129,6 @@ function SourceActivePanel({
               <Badge variant="outline" className="font-mono">
                 {source.source_id}
               </Badge>
-              {source.secteur_activite && (
-                <Badge variant="secondary">
-                  {LABELS_SECTEUR_ACTIVITE[source.secteur_activite as SecteurActivite] ??
-                    source.secteur_activite}
-                </Badge>
-              )}
             </div>
           </div>
           <Button variant="outline" onClick={onNouveau}>
@@ -1340,32 +1198,13 @@ function SourceActivePanel({
 
         <ResultatExecutionAuto executer={executer} />
 
-        <div className="space-y-1.5">
-          <Label htmlFor="nom_projet_source_active" className="text-xs text-muted-foreground">
-            Nom du projet pour la prochaine instance générée (optionnel)
-          </Label>
-          <Input
-            id="nom_projet_source_active"
-            list="noms-projet-suggestions-source-active"
-            value={nomProjet}
-            onChange={(e) => setNomProjet(e.target.value)}
-            placeholder={source.nom ?? "ex : Atelier mécanique"}
-            className="max-w-sm"
-          />
-          <datalist id="noms-projet-suggestions-source-active">
-            {nomsProjetConnus?.map((n) => (
-              <option key={n.nom_projet} value={n.nom_projet} />
-            ))}
-          </datalist>
-        </div>
-
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
             Rejouable à volonté sur ces mêmes données brutes — chaque conversion ajoute une instance
             à l'historique ci-dessous, aucune n'est remplacée. Chaque instance générée est exécutée
             automatiquement si un solveur validé existe déjà pour sa structure.
           </p>
-          <div className="flex shrink-0 gap-2">
+          <div className="flex shrink-0 flex-wrap gap-2">
             <Button
               variant="outline"
               onClick={genererInstanceDeterministe}
@@ -1408,11 +1247,6 @@ function SourceActivePanel({
                 <Badge variant="outline" className="font-mono text-xs">
                   {i.structure_contraintes}
                 </Badge>
-                {i.nom_projet && (
-                  <Badge variant="outline" className="text-xs">
-                    {i.nom_projet}
-                  </Badge>
-                )}
               </div>
             ))}
           </div>
@@ -1508,62 +1342,53 @@ function ListeSources({ onOuvrir }: { onOuvrir: (sourceId: string) => void }) {
   return (
     <>
       <div className="glass overflow-hidden rounded-2xl">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Source</TableHead>
-              <TableHead>Client</TableHead>
-              <TableHead>Secteur</TableHead>
-              <TableHead>Créée le</TableHead>
-              <TableHead>Instances générées</TableHead>
-              <TableHead />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sources?.map((s) => (
-              <TableRow key={s.source_id}>
-                <TableCell>
-                  <div className="font-medium">{s.nom || "Sans nom"}</div>
-                  <div className="font-mono text-xs text-muted-foreground">{s.source_id}</div>
-                </TableCell>
-                <TableCell>{s.client_id}</TableCell>
-                <TableCell>
-                  {s.secteur_activite ? (
-                    <Badge variant="outline">
-                      {LABELS_SECTEUR_ACTIVITE[s.secteur_activite as SecteurActivite] ??
-                        s.secteur_activite}
-                    </Badge>
-                  ) : (
-                    <span className="text-muted-foreground">—</span>
-                  )}
-                </TableCell>
-                <TableCell className="text-sm text-muted-foreground">
-                  {new Date(s.date_creation).toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={s.nb_instances > 0 ? "secondary" : "outline"}>
-                    {s.nb_instances}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-end gap-2">
-                    <Button size="sm" variant="outline" onClick={() => onOuvrir(s.source_id)}>
-                      <FolderOpen className="mr-2 h-3.5 w-3.5" /> Ouvrir
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      aria-label="Supprimer la source"
-                      onClick={() => ouvrirConfirmation(s.source_id)}
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </div>
-                </TableCell>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Source</TableHead>
+                <TableHead>Client</TableHead>
+                <TableHead>Créée le</TableHead>
+                <TableHead>Instances générées</TableHead>
+                <TableHead />
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {sources?.map((s) => (
+                <TableRow key={s.source_id}>
+                  <TableCell>
+                    <div className="font-medium">{s.nom || "Sans nom"}</div>
+                    <div className="font-mono text-xs text-muted-foreground">{s.source_id}</div>
+                  </TableCell>
+                  <TableCell>{s.client_id}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {new Date(s.date_creation).toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={s.nb_instances > 0 ? "secondary" : "outline"}>
+                      {s.nb_instances}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-end gap-2">
+                      <Button size="sm" variant="outline" onClick={() => onOuvrir(s.source_id)}>
+                        <FolderOpen className="mr-2 h-3.5 w-3.5" /> Ouvrir
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        aria-label="Supprimer la source"
+                        onClick={() => ouvrirConfirmation(s.source_id)}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       <AlertDialog open={!!aSupprimer} onOpenChange={(open) => !open && setASupprimer(null)}>

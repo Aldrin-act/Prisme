@@ -57,22 +57,6 @@ def test_planifier_ingere_puis_echoue_proprement_sans_solveur(
     assert len(etat_test.instances) == 1  # l'ingestion a bien eu lieu avant l'échec d'exécution
 
 
-def test_planifier_stocke_nom_projet_et_secteur_activite(
-    client_isole: tuple[TestClient, EtatAPI],
-) -> None:
-    client, etat_test = client_isole
-
-    client.post(
-        "/planifier/client_a",
-        json=_payload_valide(),
-        params={"nom_projet": "Atelier mécanique", "secteur_activite": "atelier_mecanique"},
-    )
-
-    (instance_id,) = etat_test.instances.keys()
-    assert etat_test.recuperer_nom_projet(instance_id) == "Atelier mécanique"
-    assert etat_test.recuperer_secteur_activite(instance_id) == "atelier_mecanique"
-
-
 def test_planifier_via_comprehension_traduit_puis_echoue_proprement_sans_solveur(
     client_isole: tuple[TestClient, EtatAPI],
 ) -> None:
@@ -95,13 +79,12 @@ def test_planifier_via_comprehension_traduit_puis_echoue_proprement_sans_solveur
 
     reponse = client.post(
         "/planifier/client_a/comprehension",
-        json={"donnees_brutes": "T1;R1;10j", "secteur_activite": "atelier_mecanique"},
+        json={"donnees_brutes": "T1;R1;10j"},
     )
 
     assert reponse.status_code == 409  # même limite que le test précédent — pas de solveur encore
     (instance_id,) = etat_test.instances.keys()
     assert etat_test.recuperer_description_metier(instance_id) == "Une tâche T1 exécutée sur la ressource R1."
-    assert etat_test.recuperer_secteur_activite(instance_id) == "atelier_mecanique"
 
 
 def test_planifier_via_comprehension_relaie_le_rejet_du_garde_fou(

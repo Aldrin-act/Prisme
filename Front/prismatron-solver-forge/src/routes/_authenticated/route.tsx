@@ -124,7 +124,7 @@ function AppShell() {
         </div>
       </aside>
 
-      <main className="flex-1">
+      <main className="min-w-0 flex-1">
         <header className="glass sticky top-0 z-10 flex items-center justify-between border-b border-border/50 px-6 py-4">
           <div>
             <div className="text-xs uppercase tracking-widest text-muted-foreground">

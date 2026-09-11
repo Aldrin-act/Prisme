@@ -41,7 +41,7 @@ export function InspecteurTache({
   }
 
   return (
-    <div className="flex w-80 flex-shrink-0 flex-col gap-3 overflow-y-auto rounded-lg border border-border bg-card p-3">
+    <div className="flex w-full shrink-0 flex-col gap-3 overflow-y-auto rounded-lg border border-border bg-card p-3 sm:w-80">
       <div className="flex items-center justify-between">
         <Label className="text-sm font-semibold">Tâche</Label>
         <Button type="button" size="icon" variant="ghost" className="h-7 w-7" onClick={onFermer}>

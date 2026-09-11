@@ -46,21 +46,17 @@ import {
   useImporterJsonAvecCompetences,
   useImporterCsvLocal,
   useDeclencherExecution,
-  useNomsProjet,
   PrismeAPIError,
-  LABELS_SECTEUR_ACTIVITE,
   type Contrainte,
   type InstanceDetail,
   type InstanceTRCO,
   type Objectif,
   type Ressource,
-  type SecteurActivite,
   type Tache,
   type TypeContrainte,
   type TypeObjectif,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
-import { RESSOURCES_SUGGEREES_PAR_SECTEUR } from "./suggestions-secteur";
 
 // Adaptateurs ERP réellement branchés côté backend (POST /adapters/{id}/ingerer).
 // Ajouter un adaptateur = ajouter une entrée ici, aucun autre changement de composant.
@@ -374,38 +370,6 @@ export function IngestionDialog({
   const inputContraintesCsvRef = useRef<HTMLInputElement>(null);
   const inputCommandesCsvRef = useRef<HTMLInputElement>(null);
   const [cheminDossierCsvLocal, setCheminDossierCsvLocal] = useState("");
-  // Étiquette libre partagée par les 6 canaux d'ingestion, pour retrouver/
-  // regrouper des instances liées (réingestions successives d'un même
-  // atelier après un aléa) — voir InstanceInfo.nom_projet. Un seul champ,
-  // rendu une fois au-dessus des onglets, quel que soit celui utilisé pour
-  // soumettre.
-  const [nomProjet, setNomProjet] = useState(instanceDepart?.nom_projet ?? "");
-  // Vocabulaire fermé pour le menu/les suggestions (contrairement à
-  // nom_projet), mais avec échappatoire "_autre" (sentinel local, jamais
-  // envoyé tel quel) vers secteurActiviteAutre pour un secteur non listé —
-  // voir secteurActiviteEffectif.
-  const secteurConnuAEditer = (Object.keys(LABELS_SECTEUR_ACTIVITE) as string[]).includes(
-    instanceDepart?.secteur_activite ?? "",
-  );
-  const [secteurActivite, setSecteurActivite] = useState<SecteurActivite | "_autre" | "">(
-    instanceDepart?.secteur_activite
-      ? secteurConnuAEditer
-        ? (instanceDepart.secteur_activite as SecteurActivite)
-        : "_autre"
-      : "",
-  );
-  const [secteurActiviteAutre, setSecteurActiviteAutre] = useState(
-    instanceDepart?.secteur_activite && !secteurConnuAEditer ? instanceDepart.secteur_activite : "",
-  );
-  const secteurActiviteEffectif =
-    secteurActivite === "_autre"
-      ? secteurActiviteAutre.trim() || undefined
-      : secteurActivite || undefined;
-  // Un secteur personnalisé ("_autre") n'a pas de suggestions de ressources
-  // — seul un des 6 secteurs connus est transmis à SectionRessources.
-  const secteurActiviteConnu =
-    secteurActivite === "_autre" ? undefined : secteurActivite || undefined;
-  const { data: nomsProjetConnus } = useNomsProjet();
   const [succes, setSucces] = useState<{
     instance_id: string;
     structure_contraintes: string;
@@ -417,9 +381,6 @@ export function IngestionDialog({
     setRessources([nouvelleRessource()]);
     setContraintes([]);
     setObjectifs([nouvelObjectif()]);
-    setNomProjet("");
-    setSecteurActivite("");
-    setSecteurActiviteAutre("");
     setFichier(null);
     if (inputFichierRef.current) inputFichierRef.current.value = "";
     setFichierJson(null);
@@ -479,41 +440,25 @@ export function IngestionDialog({
       objectifs,
       contraintesNonEditables,
     );
-    const nomProjetSoumis = nomProjet.trim() || undefined;
     if (scenarioDeBase) {
       creerScenario.mutate(
-        { instanceId: scenarioDeBase.instance_id, instance, nomProjet: nomProjetSoumis },
+        { instanceId: scenarioDeBase.instance_id, instance },
         { onSuccess: onIngestionReussie },
       );
       return;
     }
     if (instanceAEditer) {
       modifier.mutate(
-        {
-          instanceId: instanceAEditer.instance_id,
-          instance,
-          nomProjet: nomProjetSoumis,
-          secteurActivite: secteurActiviteEffectif,
-        },
+        { instanceId: instanceAEditer.instance_id, instance },
         { onSuccess: onIngestionReussie },
       );
       return;
     }
-    ingerer.mutate(
-      { clientId, instance, nomProjet: nomProjetSoumis, secteurActivite: secteurActiviteEffectif },
-      { onSuccess: onIngestionReussie },
-    );
+    ingerer.mutate({ clientId, instance }, { onSuccess: onIngestionReussie });
   }
 
   function soumettreImport() {
-    importer.mutate(
-      {
-        nomAdaptateur: source,
-        nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActiviteEffectif,
-      },
-      { onSuccess: onIngestionReussie },
-    );
+    importer.mutate({ nomAdaptateur: source }, { onSuccess: onIngestionReussie });
   }
 
   function soumettreFichier() {
@@ -532,8 +477,6 @@ export function IngestionDialog({
           contraintes: fichierContraintesCsv,
           commandes: fichierCommandesCsv ?? undefined,
         },
-        nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActiviteEffectif,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -549,26 +492,13 @@ export function IngestionDialog({
       setErreurParseJson("Le fichier n'est pas un JSON valide.");
       return;
     }
-    importerJson.mutate(
-      {
-        clientId,
-        payload,
-        nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActiviteEffectif,
-      },
-      { onSuccess: onIngestionReussie },
-    );
+    importerJson.mutate({ clientId, payload }, { onSuccess: onIngestionReussie });
   }
 
   function soumettreCsvLocal() {
     if (!cheminDossierCsvLocal.trim()) return;
     importerCsvLocal.mutate(
-      {
-        clientId,
-        cheminDossier: cheminDossierCsvLocal,
-        nomProjet: nomProjet.trim() || undefined,
-        secteurActivite: secteurActiviteEffectif,
-      },
+      { clientId, cheminDossier: cheminDossierCsvLocal },
       { onSuccess: onIngestionReussie },
     );
   }
@@ -696,59 +626,6 @@ export function IngestionDialog({
           </div>
         ) : (
           <>
-            <div className="space-y-1.5">
-              <Label htmlFor="nom_projet">Nom du projet (optionnel)</Label>
-              <Input
-                id="nom_projet"
-                list="noms-projet-suggestions"
-                value={nomProjet}
-                onChange={(e) => setNomProjet(e.target.value)}
-                placeholder="ex : Atelier mécanique"
-              />
-              <datalist id="noms-projet-suggestions">
-                {nomsProjetConnus?.map((n) => (
-                  <option key={n.nom_projet} value={n.nom_projet} />
-                ))}
-              </datalist>
-              <p className="text-xs text-muted-foreground">
-                Étiquette libre pour retrouver/regrouper des instances liées entre elles (ex.
-                réingestions successives d'un même atelier après un aléa), quel que soit l'onglet
-                utilisé ci-dessous.
-              </p>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="secteur_activite">Secteur d'activité (optionnel)</Label>
-              <Select
-                value={secteurActivite}
-                onValueChange={(v) => setSecteurActivite(v as SecteurActivite | "_autre")}
-              >
-                <SelectTrigger id="secteur_activite">
-                  <SelectValue placeholder="Non renseigné" />
-                </SelectTrigger>
-                <SelectContent>
-                  {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {LABELS_SECTEUR_ACTIVITE[s]}
-                    </SelectItem>
-                  ))}
-                  <SelectItem value="_autre">Autre (préciser)</SelectItem>
-                </SelectContent>
-              </Select>
-              {secteurActivite === "_autre" && (
-                <Input
-                  value={secteurActiviteAutre}
-                  onChange={(e) => setSecteurActiviteAutre(e.target.value)}
-                  placeholder="ex : Textile, Logistique..."
-                  className="mt-1.5"
-                />
-              )}
-              <p className="text-xs text-muted-foreground">
-                Aide l'agent de compréhension à interpréter des données ambiguës et suggère des
-                ressources typiques sur l'onglet Saisie T-R-C-O.
-              </p>
-            </div>
-
             {instanceAEditer || scenarioDeBase ? (
               <div className="space-y-5">
                 <div className="flex items-center gap-2 text-sm">
@@ -769,7 +646,6 @@ export function IngestionDialog({
                   ressources={ressources}
                   setRessources={setRessources}
                   setContraintes={setContraintes}
-                  secteurActivite={secteurActiviteConnu}
                 />
                 <SectionContraintes
                   contraintes={contraintes}
@@ -824,7 +700,6 @@ export function IngestionDialog({
                     ressources={ressources}
                     setRessources={setRessources}
                     setContraintes={setContraintes}
-                    secteurActivite={secteurActiviteConnu}
                   />
                   <SectionContraintes
                     contraintes={contraintes}
@@ -1202,7 +1077,7 @@ function SectionTaches({
       </div>
       <div className="space-y-2">
         {taches.map((t, i) => (
-          <div key={t.clef} className="flex gap-2">
+          <div key={t.clef} className="flex flex-wrap gap-2">
             <Input
               placeholder="id (ex: T1)"
               value={t.id}
@@ -1217,6 +1092,7 @@ function SectionTaches({
               onChange={(e) =>
                 setTaches((arr) => arr.map((x, j) => (j === i ? { ...x, nom: e.target.value } : x)))
               }
+              className="min-w-32 flex-1"
             />
             <Input
               placeholder="priorité 1-5"
@@ -1253,7 +1129,6 @@ function SectionRessources({
   ressources,
   setRessources,
   setContraintes,
-  secteurActivite,
 }: {
   ressources: RessourceLigne[];
   setRessources: React.Dispatch<React.SetStateAction<RessourceLigne[]>>;
@@ -1261,23 +1136,7 @@ function SectionRessources({
   // (les deux call sites actuels de ce composant le passent toujours) — permet le
   // bouton "Marquer indisponible" ci-dessous sans dupliquer SectionContraintes.
   setContraintes?: React.Dispatch<React.SetStateAction<ContrainteLigne[]>>;
-  secteurActivite?: SecteurActivite;
 }) {
-  const suggestions = secteurActivite ? RESSOURCES_SUGGEREES_PAR_SECTEUR[secteurActivite] : [];
-
-  function ajouterSuggestion(suggestion: { id: string; competences?: string[] }) {
-    setRessources((r) => [
-      ...r,
-      {
-        clef: idLocal(),
-        id: suggestion.id,
-        nom: "",
-        competences: suggestion.competences ?? [],
-        competencesTexte: (suggestion.competences ?? []).join(", "),
-      },
-    ]);
-  }
-
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -1291,26 +1150,9 @@ function SectionRessources({
           <Plus className="mr-1 h-3.5 w-3.5" /> Ajouter
         </Button>
       </div>
-      {suggestions.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 rounded-md border border-dashed border-border p-2">
-          <span className="text-xs text-muted-foreground">
-            Suggestions pour {LABELS_SECTEUR_ACTIVITE[secteurActivite!]} :
-          </span>
-          {suggestions.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => ajouterSuggestion(s)}
-              className="rounded-full border border-border px-2.5 py-0.5 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-            >
-              + {s.id}
-            </button>
-          ))}
-        </div>
-      )}
       <div className="space-y-2">
         {ressources.map((r, i) => (
-          <div key={r.clef} className="flex gap-2">
+          <div key={r.clef} className="flex flex-wrap gap-2">
             <Input
               placeholder="id (ex: R1)"
               value={r.id}
@@ -1329,6 +1171,7 @@ function SectionRessources({
                   arr.map((x, j) => (j === i ? { ...x, nom: e.target.value } : x)),
                 )
               }
+              className="min-w-32 flex-1"
             />
             <Input
               placeholder="compétences (séparées par des virgules)"
@@ -1338,6 +1181,7 @@ function SectionRessources({
                   arr.map((x, j) => (j === i ? { ...x, competencesTexte: e.target.value } : x)),
                 )
               }
+              className="min-w-40 flex-1"
             />
             {setContraintes && (
               <Button

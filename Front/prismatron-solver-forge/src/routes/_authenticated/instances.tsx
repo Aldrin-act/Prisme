@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -71,15 +71,12 @@ import {
   useSolveurs,
   useCodeSourceSolveur,
   useJobsGeneration,
-  useNomsProjet,
   useComparaisonScenarios,
   useAjouterCommande,
   PrismeAPIError,
-  LABELS_SECTEUR_ACTIVITE,
   type Contrainte,
   type InstanceDetail,
   type Objectif,
-  type SecteurActivite,
 } from "@/integrations/prisme";
 import { formatDuree, formatDureeCourte } from "@/lib/unite-duree";
 
@@ -102,25 +99,12 @@ function InstancesPage() {
   const [instanceScenarioDeBase, setInstanceScenarioDeBase] = useState<InstanceDetail | null>(null);
   const { data: instances, isLoading } = useInstances();
   const { data: jobsGeneration } = useJobsGeneration();
-  const { data: nomsProjetConnus } = useNomsProjet();
   const queryClient = useQueryClient();
   const supprimer = useSupprimerInstance();
 
   const instancesEnGeneration = new Set(
     (jobsGeneration ?? []).filter((j) => !j.termine).map((j) => j.instance_id),
   );
-
-  // Filtrage côté client — quelques dizaines d'instances au plus, le filtre
-  // serveur existe déjà sur GET /supervision/instances si le volume grossit.
-  const [filtreNomProjet, setFiltreNomProjet] = useState("");
-  const [filtreSecteur, setFiltreSecteur] = useState<SecteurActivite | "">("");
-  const instancesFiltrees = useMemo(() => {
-    return (instances ?? []).filter((i) => {
-      if (filtreNomProjet && i.nom_projet !== filtreNomProjet) return false;
-      if (filtreSecteur && i.secteur_activite !== filtreSecteur) return false;
-      return true;
-    });
-  }, [instances, filtreNomProjet, filtreSecteur]);
 
   // /supervision/instances ne relie pas les instances à leur source — le
   // label (nom de la source + rang de génération) vient de useLabelsInstances.
@@ -207,69 +191,21 @@ function InstancesPage() {
 
       {instances && instances.length > 0 && (
         <>
-          <div className="mb-4 flex flex-wrap items-end gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="filtre_nom_projet" className="text-xs text-muted-foreground">
-                Projet
-              </Label>
-              <Input
-                id="filtre_nom_projet"
-                list="filtre-noms-projet-suggestions"
-                value={filtreNomProjet}
-                onChange={(e) => setFiltreNomProjet(e.target.value)}
-                placeholder="Tous les projets"
-                className="w-56"
-              />
-              <datalist id="filtre-noms-projet-suggestions">
-                {nomsProjetConnus?.map((n) => (
-                  <option key={n.nom_projet} value={n.nom_projet} />
-                ))}
-              </datalist>
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="filtre_secteur" className="text-xs text-muted-foreground">
-                Secteur
-              </Label>
-              <Select
-                value={filtreSecteur}
-                onValueChange={(v) => setFiltreSecteur(v === "_tous" ? "" : (v as SecteurActivite))}
-              >
-                <SelectTrigger id="filtre_secteur" className="w-56">
-                  <SelectValue placeholder="Tous les secteurs" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="_tous">Tous les secteurs</SelectItem>
-                  {(Object.keys(LABELS_SECTEUR_ACTIVITE) as SecteurActivite[]).map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {LABELS_SECTEUR_ACTIVITE[s]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {instancesFiltrees.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Aucune instance ne correspond à ces filtres.
-            </p>
-          ) : (
-            <div className="glass overflow-hidden rounded-2xl">
+          <div className="glass overflow-hidden rounded-2xl">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Instance</TableHead>
                     <TableHead>Source</TableHead>
                     <TableHead>Client</TableHead>
-                    <TableHead>Projet</TableHead>
-                    <TableHead>Secteur</TableHead>
                     <TableHead>Structure des contraintes</TableHead>
                     <TableHead>Statut</TableHead>
                     <TableHead />
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {instancesFiltrees.map((instance) => {
+                  {instances.map((instance) => {
                     const info = labels.get(instance.instance_id);
                     return (
                       <TableRow key={instance.instance_id}>
@@ -277,39 +213,22 @@ function InstancesPage() {
                           {info ? info.label : instance.instance_id}
                         </TableCell>
                         <TableCell>
-                          {info?.sourceId ? (
-                            <Link
-                              to="/donnees"
-                              search={{ source: info.sourceId }}
-                              className="text-primary underline-offset-2 hover:underline"
-                            >
-                              {info.nomSource}
-                            </Link>
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
+                          <div className="flex flex-col items-start gap-1">
+                            <Badge variant="outline" className="text-xs">
+                              {LABELS_CANAL_INGESTION[instance.canal_ingestion ?? ""] ?? "—"}
+                            </Badge>
+                            {info?.sourceId && (
+                              <Link
+                                to="/donnees"
+                                search={{ source: info.sourceId }}
+                                className="text-primary text-xs underline-offset-2 hover:underline"
+                              >
+                                {info.nomSource}
+                              </Link>
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell>{instance.client_id}</TableCell>
-                        <TableCell className="max-w-55">
-                          {instance.nom_projet ? (
-                            <span className="block truncate" title={instance.nom_projet}>
-                              {instance.nom_projet}
-                            </span>
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {instance.secteur_activite ? (
-                            <Badge variant="outline">
-                              {LABELS_SECTEUR_ACTIVITE[
-                                instance.secteur_activite as SecteurActivite
-                              ] ?? instance.secteur_activite}
-                            </Badge>
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="font-mono text-xs">
                             {instance.structure_contraintes}
@@ -352,7 +271,7 @@ function InstancesPage() {
                 </TableBody>
               </Table>
             </div>
-          )}
+          </div>
         </>
       )}
 
@@ -408,6 +327,17 @@ function InstancesPage() {
     </>
   );
 }
+
+// Canal d'ingestion (voir Types.InstanceInfo.canal_ingestion) — purement
+// informatif, jamais lu par le solveur.
+const LABELS_CANAL_INGESTION: Record<string, string> = {
+  manuel: "Manuel",
+  csv: "CSV",
+  json: "JSON",
+  api: "API",
+  agent_ia: "Agent IA",
+  scenario: "Scénario",
+};
 
 const LABELS_TYPE_CONTRAINTE: Record<Contrainte["type"], string> = {
   precedence: "Précédence",
@@ -657,52 +587,44 @@ function SectionScenarios({
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Chargement...</p>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Instance</TableHead>
-              <TableHead>Projet</TableHead>
-              <TableHead>Makespan</TableHead>
-              <TableHead>Utilisation moy.</TableHead>
-              <TableHead>Tâches en retard</TableHead>
-              <TableHead>Exécuté le</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {(comparaison?.scenarios ?? []).map((s) => {
-              const taux = Object.values(s.metriques?.taux_utilisation_par_ressource ?? {});
-              const moyenne =
-                taux.length > 0 ? taux.reduce((a, b) => a + b, 0) / taux.length : null;
-              return (
-                <TableRow key={s.instance_id}>
-                  <TableCell className="font-mono text-xs">
-                    {s.instance_id}
-                    {s.est_instance_de_base && (
-                      <Badge variant="secondary" className="ml-1.5 text-xs">
-                        base
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="max-w-55">
-                    {s.nom_projet ? (
-                      <span className="block truncate" title={s.nom_projet}>
-                        {s.nom_projet}
-                      </span>
-                    ) : (
-                      "—"
-                    )}
-                  </TableCell>
-                  <TableCell>{s.metriques ? s.metriques.makespan : "—"}</TableCell>
-                  <TableCell>{moyenne !== null ? `${moyenne.toFixed(0)}%` : "—"}</TableCell>
-                  <TableCell>{s.metriques ? s.metriques.taches_en_retard.length : "—"}</TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
-                    {s.date_execution ? new Date(s.date_execution).toLocaleString() : "jamais"}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Instance</TableHead>
+                <TableHead>Makespan</TableHead>
+                <TableHead>Utilisation moy.</TableHead>
+                <TableHead>Tâches en retard</TableHead>
+                <TableHead>Exécuté le</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(comparaison?.scenarios ?? []).map((s) => {
+                const taux = Object.values(s.metriques?.taux_utilisation_par_ressource ?? {});
+                const moyenne =
+                  taux.length > 0 ? taux.reduce((a, b) => a + b, 0) / taux.length : null;
+                return (
+                  <TableRow key={s.instance_id}>
+                    <TableCell className="font-mono text-xs">
+                      {s.instance_id}
+                      {s.est_instance_de_base && (
+                        <Badge variant="secondary" className="ml-1.5 text-xs">
+                          base
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>{s.metriques ? s.metriques.makespan : "—"}</TableCell>
+                    <TableCell>{moyenne !== null ? `${moyenne.toFixed(0)}%` : "—"}</TableCell>
+                    <TableCell>{s.metriques ? s.metriques.taches_en_retard.length : "—"}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">
+                      {s.date_execution ? new Date(s.date_execution).toLocaleString() : "jamais"}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
       )}
     </div>
   );

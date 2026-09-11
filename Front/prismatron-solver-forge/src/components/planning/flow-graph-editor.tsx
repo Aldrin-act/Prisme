@@ -371,12 +371,7 @@ function EditeurCanvas({
   function enregistrer() {
     const instanceComplete = construireInstanceDepuisGraphe(instance, nodes, edges);
     modifier.mutate(
-      {
-        instanceId: instance.instance_id,
-        instance: instanceComplete,
-        nomProjet: instance.nom_projet ?? undefined,
-        secteurActivite: instance.secteur_activite ?? undefined,
-      },
+      { instanceId: instance.instance_id, instance: instanceComplete },
       { onSuccess: onEnregistre },
     );
   }
@@ -397,8 +392,12 @@ function EditeurCanvas({
         </p>
       </div>
 
-      <div className="flex h-[500px] gap-2">
-        <div className="min-w-0 flex-1 rounded-lg border border-border">
+      <div className="flex flex-col gap-2 sm:h-[500px] sm:flex-row">
+        {/* `flex-1` seulement à partir de `sm:` — sur mobile (ligne sans
+        hauteur définie), `flex-basis: 0%` de flex-1 court-circuiterait la
+        hauteur explicite ci-dessous (le canevas s'écraserait à ~0px, faute
+        d'espace disponible à distribuer par flex-grow). */}
+        <div className="h-[350px] min-w-0 rounded-lg border border-border sm:h-auto sm:flex-1">
           <ReactFlow
             nodes={nodes}
             edges={edges}

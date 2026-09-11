@@ -175,10 +175,6 @@ class RequeteCreationSource(BaseModel):
     donnees_brutes: str
     nom: str | None = None
     client_id: str | None = None  # admin uniquement : cible un client autre que le sien
-    # Capturé une fois ici, réutilisé à chaque reconversion (generer_instance/
-    # generer_instance_deterministe) — oriente le prompt de l'agent de
-    # compréhension sans devoir être re-saisi à chaque tentative.
-    secteur_activite: str | None = None
 
 
 def _client_id_effectif(requete_client_id: str | None, utilisateur: dict) -> str:
@@ -197,7 +193,7 @@ def creer_source(
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     client_id = _client_id_effectif(requete.client_id, utilisateur)
-    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom, requete.secteur_activite)
+    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom)
     return {"source_id": source_id}
 
 
@@ -228,7 +224,6 @@ def obtenir_source(
         "nom": source.nom,
         "donnees_brutes": source.donnees_brutes,
         "date_creation": source.date_creation,
-        "secteur_activite": source.secteur_activite,
         "instances": etat.lister_instances_pour_source(source_id),
     }
 
@@ -254,7 +249,6 @@ def supprimer_source(
 @router.post("/{source_id}/generer-instance")
 def generer_instance(
     source_id: str,
-    nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     modele: BaseChatModel = Depends(construire_modele_comprehension),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
@@ -262,12 +256,7 @@ def generer_instance(
     """Rejouable à volonté sur la même source : chaque appel ajoute une
     instance à son historique de provenance, il ne remplace jamais les
     précédentes. L'instance produite s'exécute directement par son propre
-    `instance_id` — aucune association supplémentaire n'est nécessaire.
-    `nom_projet` (query, optionnel) étiquette librement l'instance produite ;
-    à défaut, reprend le nom de la source elle-même (`source.nom`).
-    `secteur_activite` n'est pas un paramètre ici : il vient de la source
-    (`source.secteur_activite`, capturé une fois à sa création) et oriente
-    le prompt de l'agent de compréhension à chaque reconversion."""
+    `instance_id` — aucune association supplémentaire n'est nécessaire."""
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -276,7 +265,7 @@ def generer_instance(
     verifier_acces_client(utilisateur, source.client_id)
 
     try:
-        resultat = comprendre_donnees_erp(modele, source.donnees_brutes, secteur_activite=source.secteur_activite)
+        resultat = comprendre_donnees_erp(modele, source.donnees_brutes)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 
@@ -287,8 +276,7 @@ def generer_instance(
         instance,
         source_id=source_id,
         description_metier=resultat.description_metier,
-        nom_projet=nom_projet if nom_projet is not None else source.nom,
-        secteur_activite=source.secteur_activite,
+        canal_ingestion="agent_ia",
     )
     return {
         "instance_id": instance_id,
@@ -302,7 +290,6 @@ def generer_instance(
 @router.post("/{source_id}/generer-instance-deterministe")
 def generer_instance_deterministe(
     source_id: str,
-    nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -311,9 +298,7 @@ def generer_instance_deterministe(
     `adapters.csv_import`) s'il est déjà structuré — gratuit, instantané, mais
     n'aboutit que si ce texte est un JSON canonique ou un export CSV
     Tâches/Ressources/Contraintes reconstituable ; sinon 422, direction
-    `generer_instance` (l'agent), qui interprète n'importe quel texte libre.
-    `nom_projet` (query, optionnel) suit la même convention que
-    `generer_instance` (défaut : `source.nom`)."""
+    `generer_instance` (l'agent), qui interprète n'importe quel texte libre."""
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -333,12 +318,15 @@ def generer_instance_deterministe(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
+    try:
+        est_json = isinstance(json.loads(source.donnees_brutes.strip()), dict)
+    except (json.JSONDecodeError, ValueError):
+        est_json = False
     instance_id = etat.enregistrer_instance(
         source.client_id,
         resultat.instance,
         source_id=source_id,
-        nom_projet=nom_projet if nom_projet is not None else source.nom,
-        secteur_activite=source.secteur_activite,
+        canal_ingestion="json" if est_json else "csv",
     )
     return {
         "instance_id": instance_id,

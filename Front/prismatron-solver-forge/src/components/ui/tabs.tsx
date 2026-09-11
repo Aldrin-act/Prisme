@@ -3,7 +3,18 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/lib/utils";
 
-const Tabs = TabsPrimitive.Root;
+// `min-w-0` : Tabs.Root a souvent un ancêtre flex/grid (DialogContent en
+// grid, layouts en flex...) — sans ça, la taille minimale automatique de
+// l'élément suit la largeur intrinsèque de son contenu (TabsList compris),
+// et un TabsList trop large pousse tout le conteneur en overflow horizontal
+// au lieu de se contenir dans la largeur disponible.
+const Tabs = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Root ref={ref} className={cn("min-w-0", className)} {...props} />
+));
+Tabs.displayName = TabsPrimitive.Root.displayName;
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
@@ -12,7 +23,13 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+      // `justify-start` plutôt que `justify-center` : un TabsList qui tient déjà
+      // dans son conteneur (cas courant, inline-flex = largeur intrinsèque) n'a
+      // aucun espace superflu à centrer, donc ça ne change rien visuellement —
+      // mais dès qu'il déborde (max-w-full + overflow-x-auto ci-dessous), un
+      // centrage rend le tout début du contenu inatteignable au défilement
+      // (piège CSS connu : justify-content: center + overflow).
+      "inline-flex h-9 max-w-full items-center justify-start overflow-x-auto rounded-lg bg-muted p-1 text-muted-foreground",
       className,
     )}
     {...props}

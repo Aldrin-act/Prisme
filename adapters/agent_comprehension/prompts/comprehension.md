@@ -27,7 +27,6 @@ d'une base de données, description en langage naturel, extrait de tableur...
 {donnees_brutes}
 ```
 
-{secteur_activite}
 ## Ton rôle : Agent de compréhension
 
 Traduis ces données brutes vers le format T-R-C-O canonique décrit

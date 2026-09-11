@@ -69,8 +69,6 @@ def _estimateur_duree_optionnel() -> EstimateurDuree | None:
 
 @router.post("/greensig/ingerer")
 def ingerer_depuis_greensig(
-    nom_projet: str | None = None,
-    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
@@ -81,9 +79,7 @@ def ingerer_depuis_greensig(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_id = etat.enregistrer_instance(
-        CLIENT_ID_GREENSIG, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
-    )
+    instance_id = etat.enregistrer_instance(CLIENT_ID_GREENSIG, instance, canal_ingestion="api")
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 
@@ -99,8 +95,6 @@ async def ingerer_depuis_csv(
     ressources: UploadFile = File(...),
     contraintes: UploadFile = File(...),
     commandes: UploadFile | None = File(None),
-    nom_projet: str | None = None,
-    secteur_activite: str | None = None,
     delimiteur: str = ",",
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
@@ -140,9 +134,7 @@ async def ingerer_depuis_csv(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_id = etat.enregistrer_instance(
-        client_id, resultat.instance, nom_projet=nom_projet, secteur_activite=secteur_activite
-    )
+    instance_id = etat.enregistrer_instance(client_id, resultat.instance, canal_ingestion="csv")
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(resultat.instance),
@@ -154,8 +146,6 @@ async def ingerer_depuis_csv(
 def ingerer_depuis_json_avec_competences(
     client_id: str,
     payload: dict[str, Any] = Body(...),
-    nom_projet: str | None = None,
-    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -173,9 +163,7 @@ def ingerer_depuis_json_avec_competences(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_id = etat.enregistrer_instance(
-        client_id, resultat.instance, nom_projet=nom_projet, secteur_activite=secteur_activite
-    )
+    instance_id = etat.enregistrer_instance(client_id, resultat.instance, canal_ingestion="json")
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(resultat.instance),
@@ -186,8 +174,6 @@ def ingerer_depuis_json_avec_competences(
 class RequeteComprehension(BaseModel):
     client_id: str
     donnees_brutes: str
-    nom_projet: str | None = None
-    secteur_activite: str | None = None
 
 
 @router.post("/comprehension/ingerer")
@@ -199,9 +185,7 @@ def ingerer_via_comprehension(
 ) -> dict[str, object]:
     verifier_acces_client(utilisateur, requete.client_id)
     try:
-        resultat = comprendre_donnees_erp(
-            modele, requete.donnees_brutes, secteur_activite=requete.secteur_activite
-        )
+        resultat = comprendre_donnees_erp(modele, requete.donnees_brutes)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 
@@ -211,8 +195,7 @@ def ingerer_via_comprehension(
         requete.client_id,
         instance,
         description_metier=resultat.description_metier,
-        nom_projet=requete.nom_projet,
-        secteur_activite=requete.secteur_activite,
+        canal_ingestion="agent_ia",
     )
     return {
         "instance_id": instance_id,
@@ -229,8 +212,6 @@ _TAILLE_MAX_REPONSE_BDD_OCTETS = 5_000_000  # même garde-fou/raison que POST /s
 class RequeteIngestionBDD(BaseModel):
     client_id: str
     schemas: list[str] | None = None
-    nom_projet: str | None = None
-    secteur_activite: str | None = None
 
 
 @router.post("/bdd/ingerer")
@@ -280,7 +261,7 @@ def ingerer_depuis_bdd(
         )
 
     try:
-        resultat = comprendre_donnees_erp(modele, donnees_brutes, secteur_activite=requete.secteur_activite)
+        resultat = comprendre_donnees_erp(modele, donnees_brutes)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 
@@ -290,8 +271,7 @@ def ingerer_depuis_bdd(
         requete.client_id,
         instance,
         description_metier=resultat.description_metier,
-        nom_projet=requete.nom_projet,
-        secteur_activite=requete.secteur_activite,
+        canal_ingestion="api",
     )
     return {
         "instance_id": instance_id,
@@ -308,8 +288,6 @@ class RequeteCsvLocal(BaseModel):
 
     chemin_dossier: str
     client_id: str
-    nom_projet: str | None = None
-    secteur_activite: str | None = None
     delimiteur: str = ","
 
 
@@ -395,9 +373,7 @@ def ingerer_depuis_csv_local(
     instance = resultat.instance
 
     # Enregistrer l'instance
-    instance_id = etat.enregistrer_instance(
-        requete.client_id, instance, nom_projet=requete.nom_projet, secteur_activite=requete.secteur_activite
-    )
+    instance_id = etat.enregistrer_instance(requete.client_id, instance, canal_ingestion="csv")
 
     # Préparer la réponse avec statistiques
     return {

@@ -106,31 +106,12 @@ def test_ingestion_calcule_la_structure_de_contraintes(client_isole: tuple[TestC
     assert reponse.json()["structure_contraintes"] == "compatibilite_ressource_tache,precedence"
 
 
-# --- nom_projet ---------------------------------------------------------
-
 _PAYLOAD_MINIMAL = {
     "taches": [{"id": "T1"}],
     "ressources": [{"id": "R1"}],
     "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}],
     "objectifs": [{"type": "minimiser_makespan"}],
 }
-
-
-def test_sans_nom_projet_reste_absent(client_isole: tuple[TestClient, EtatAPI]) -> None:
-    client, _ = client_isole
-    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
-
-    assert client.get(f"/ingestion/{instance_id}").json()["nom_projet"] is None
-
-
-def test_nom_projet_explicite_round_trip(client_isole: tuple[TestClient, EtatAPI]) -> None:
-    client, _ = client_isole
-
-    reponse = client.post("/ingestion/client_a?nom_projet=Atelier+mécanique", json=_PAYLOAD_MINIMAL)
-
-    assert reponse.status_code == 200
-    instance_id = reponse.json()["instance_id"]
-    assert client.get(f"/ingestion/{instance_id}").json()["nom_projet"] == "Atelier mécanique"
 
 
 # --- Modification en place (PUT /ingestion/{instance_id}) -----------------
@@ -184,18 +165,6 @@ def test_modifier_instance_payload_invalide_422(client_isole: tuple[TestClient, 
     reponse = client.put(f"/ingestion/{instance_id}", json=payload_invalide)
 
     assert reponse.status_code == 422
-
-
-def test_modifier_instance_met_a_jour_le_nom_projet(client_isole: tuple[TestClient, EtatAPI]) -> None:
-    client, _ = client_isole
-    instance_id = client.post("/ingestion/client_a?nom_projet=Atelier+mécanique", json=_PAYLOAD_MINIMAL).json()[
-        "instance_id"
-    ]
-
-    reponse = client.put(f"/ingestion/{instance_id}?nom_projet=Ligne+B", json=_PAYLOAD_MODIFIE)
-
-    assert reponse.status_code == 200
-    assert client.get(f"/ingestion/{instance_id}").json()["nom_projet"] == "Ligne B"
 
 
 # --- Scénarios comparatifs (what-if) --------------------------------------

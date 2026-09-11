@@ -32,21 +32,16 @@ class RequeteNouvelleCommande(BaseModel):
 def ingerer_instance(
     client_id: str,
     payload: dict[str, Any],
-    nom_projet: str | None = None,
-    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     """Valide le payload (garde-fou amont, §6.7) et le met en attente
-    d'exécution. `nom_projet`/`secteur_activite` (query, optionnels)
-    étiquettent librement l'instance créée. Pour modifier une instance déjà
-    ingérée, voir `PUT /{instance_id}` ci-dessous — modification en place,
-    jamais une nouvelle instance."""
+    d'exécution. Pour modifier une instance déjà ingérée, voir
+    `PUT /{instance_id}` ci-dessous — modification en place, jamais une
+    nouvelle instance."""
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
-    instance_id = etat.enregistrer_instance(
-        client_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
-    )
+    instance_id = etat.enregistrer_instance(client_id, instance, canal_ingestion="manuel")
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
 
 
@@ -71,9 +66,8 @@ def obtenir_instance(
         "client_id": client_id,
         "structure_contraintes": structure_contraintes(instance),
         "description_metier": etat.recuperer_description_metier(instance_id),
-        "nom_projet": etat.recuperer_nom_projet(instance_id),
-        "secteur_activite": etat.recuperer_secteur_activite(instance_id),
         "unite_duree": etat.recuperer_unite_duree(instance_id),
+        "canal_ingestion": etat.recuperer_canal_ingestion(instance_id),
         **instance.model_dump(mode="json"),
     }
 
@@ -82,7 +76,6 @@ def obtenir_instance(
 def creer_scenario(
     instance_id: str,
     payload: dict[str, Any],
-    nom_projet: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
@@ -100,7 +93,7 @@ def creer_scenario(
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
     scenario_id = etat.enregistrer_instance(
-        client_id, instance, nom_projet=nom_projet, groupe_scenario_id=instance_id
+        client_id, instance, groupe_scenario_id=instance_id, canal_ingestion="scenario"
     )
     return {"instance_id": scenario_id, "structure_contraintes": structure_contraintes(instance)}
 
@@ -149,7 +142,6 @@ def comparer_scenarios(
             {
                 "instance_id": membre_id,
                 "est_instance_de_base": membre_id == instance_id,
-                "nom_projet": etat.recuperer_nom_projet(membre_id),
                 "execution_id": derniere["execution_id"] if derniere else None,
                 "date_execution": derniere["date_execution"] if derniere else None,
                 "metriques": metriques,
@@ -194,8 +186,6 @@ def modifier_objectifs_instance(
 def modifier_instance(
     instance_id: str,
     payload: dict[str, Any],
-    nom_projet: str | None = None,
-    secteur_activite: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -210,9 +200,7 @@ def modifier_instance(
 
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
-    instance = etat.modifier_instance(
-        instance_id, instance, nom_projet=nom_projet, secteur_activite=secteur_activite
-    )
+    instance = etat.modifier_instance(instance_id, instance)
 
     return {
         "instance_id": instance_id,
@@ -233,9 +221,7 @@ def ajouter_commande(
     `Echeance` (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`)
     — ne crée jamais de tâche, contrairement à l'ancienne explosion de gamme (fonctionnalité
     retirée). `commande_id` généré ici, jamais fourni par l'appelant : aucun risque de collision.
-    Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact)
-    en renvoyant explicitement `nom_projet`/`secteur_activite` courants (sinon écrasés à `None`,
-    même piège que pour `PUT /{instance_id}`)."""
+    Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact)."""
     try:
         client_id, instance = etat.recuperer_instance(instance_id)
     except KeyError:
@@ -260,12 +246,7 @@ def ajouter_commande(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_fusionnee = etat.modifier_instance(
-        instance_id,
-        instance_fusionnee_dsl,
-        nom_projet=etat.recuperer_nom_projet(instance_id),
-        secteur_activite=etat.recuperer_secteur_activite(instance_id),
-    )
+    instance_fusionnee = etat.modifier_instance(instance_id, instance_fusionnee_dsl)
 
     etat.enregistrer_commande(commande_id, instance_id, client_id, requete.date_limite, tuple(requete.taches))
 
