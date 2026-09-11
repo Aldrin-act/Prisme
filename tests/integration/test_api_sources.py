@@ -501,6 +501,9 @@ def test_explorer_bdd_schemas_personnalises_sont_transmis(monkeypatch: pytest.Mo
 
 
 def test_explorer_bdd_resultat_trop_volumineux_renvoie_422(monkeypatch: pytest.MonkeyPatch) -> None:
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
     monkeypatch.setattr(
         "api.routes.sources.explorer_base_de_donnees",
@@ -523,6 +526,9 @@ def test_explorer_bdd_admin_peut_cibler_un_autre_client(monkeypatch: pytest.Monk
         captures["client_id"] = client_id
         return None  # 404 ensuite, peu importe ici : on ne vérifie que le client_id résolu
 
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", _capture_client_id)
     try:
         client = TestClient(app)
@@ -550,6 +556,9 @@ def test_explorer_bdd_non_admin_est_contraint_a_son_propre_client(monkeypatch: p
         "date_creation": "2024-01-01T00:00:00+00:00",
         "dernier_acces": None,
     }
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", _capture_client_id)
     try:
         client = TestClient(app)
