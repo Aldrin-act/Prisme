@@ -13,6 +13,8 @@ from fastapi.testclient import TestClient
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
+from generation.agents.client_llm import construire_modele_comprehension
+from tests.unit.aides_test_agents import ModeleFactice
 
 
 def _creer_source(
@@ -349,6 +351,9 @@ class _ResultatExplorationBDDFactice:
 
 
 def test_explorer_bdd_retourne_les_donnees_json_serialisees(monkeypatch: pytest.MonkeyPatch) -> None:
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
     monkeypatch.setattr(
         "api.routes.sources.explorer_base_de_donnees",
@@ -374,6 +379,9 @@ def test_explorer_bdd_retourne_les_donnees_json_serialisees(monkeypatch: pytest.
 
 
 def test_explorer_bdd_client_sans_dsn_configure_renvoie_404(monkeypatch: pytest.MonkeyPatch) -> None:
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: None)
     try:
         client = TestClient(app)
@@ -391,6 +399,9 @@ def test_explorer_bdd_connexion_impossible_renvoie_503(monkeypatch: pytest.Monke
     def _echec(*_a: object, **_k: object) -> None:
         raise psycopg.OperationalError("connexion refusée")
 
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
     monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _echec)
     try:
@@ -409,6 +420,9 @@ def test_explorer_bdd_requete_echoue_renvoie_502(monkeypatch: pytest.MonkeyPatch
     def _echec(*_a: object, **_k: object) -> None:
         raise psycopg.Error("relation inconnue")
 
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
     monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _echec)
     try:
@@ -427,6 +441,9 @@ def test_explorer_bdd_reponse_llm_non_conforme_renvoie_502(monkeypatch: pytest.M
     def _echec(*_a: object, **_k: object) -> None:
         raise ErreurReponseAgentInvalide("mal formé")
 
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
     monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _echec)
     try:
@@ -446,6 +463,9 @@ def test_explorer_bdd_schemas_par_defaut_est_public(monkeypatch: pytest.MonkeyPa
         captures["schemas"] = schemas
         return _ResultatExplorationBDDFactice(donnees_json={})
 
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
     monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _capture)
     try:
@@ -465,6 +485,9 @@ def test_explorer_bdd_schemas_personnalises_sont_transmis(monkeypatch: pytest.Mo
         captures["schemas"] = schemas
         return _ResultatExplorationBDDFactice(donnees_json={})
 
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=None
+    )
     monkeypatch.setattr("api.routes.sources.dsn_lecture_seule_pour_client", lambda _client_id: "postgresql://x")
     monkeypatch.setattr("api.routes.sources.explorer_base_de_donnees", _capture)
     try:
