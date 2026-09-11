@@ -62,11 +62,12 @@ def main():
         print("  2. Le conteneur db_greensig tourne :")
         print("     docker compose --profile greensig up -d db_greensig")
         print("  3. Le backup a été restauré :")
-        print(  # noqa: E501 — commande shell à copier-coller telle quelle, ne pas la scinder
-            '     PowerShell : cmd /c "docker compose exec -T db_greensig psql -U greensig -d greensig -f - < backup_20260503.sql"'
+        # Commandes shell à copier-coller telles quelles, ne pas les scinder.
+        print(
+            '     PowerShell : cmd /c "docker compose exec -T db_greensig psql -U greensig -d greensig -f - < backup_20260503.sql"'  # noqa: E501
         )
-        print(  # noqa: E501 — idem
-            "     Bash/Git Bash : docker compose exec -T db_greensig psql -U greensig -d greensig -f - < backup_20260503.sql"
+        print(
+            "     Bash/Git Bash : docker compose exec -T db_greensig psql -U greensig -d greensig -f - < backup_20260503.sql"  # noqa: E501
         )
         print()
         sys.exit(1)
