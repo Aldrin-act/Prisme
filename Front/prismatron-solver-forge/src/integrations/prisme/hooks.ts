@@ -43,6 +43,8 @@ export const prismeKeys = {
   comparaisonScenarios: (instanceId: string) =>
     [...prismeKeys.all, "comparaisonScenarios", instanceId] as const,
   commande: (commandeId: string) => [...prismeKeys.all, "commande", commandeId] as const,
+  commandesInstance: (instanceId: string) =>
+    [...prismeKeys.all, "commandesInstance", instanceId] as const,
 } as const;
 
 // ============================================================================
@@ -287,6 +289,22 @@ export function useCommande(
     queryKey: prismeKeys.commande(commandeId || ""),
     queryFn: () => prismeClient.obtenirCommande(commandeId!),
     enabled: !!commandeId,
+    ...options,
+  });
+}
+
+/**
+ * Toutes les commandes de cet atelier (instance), chacune avec son statut recalculé à
+ * la volée contre le dernier planning réussi — voir GET /ingestion/{instance_id}/commandes.
+ */
+export function useCommandesInstance(
+  instanceId: string | null,
+  options?: Omit<UseQueryOptions<Types.StatutCommande[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.commandesInstance(instanceId || ""),
+    queryFn: () => prismeClient.listerCommandes(instanceId!),
+    enabled: !!instanceId,
     ...options,
   });
 }

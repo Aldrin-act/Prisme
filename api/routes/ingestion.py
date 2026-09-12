@@ -14,7 +14,7 @@ from api.comparaison_scenarios import calculer_metriques, calculer_statut_comman
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
-from dsl.schema import Objectif
+from dsl.schema import InstanceTRCO, Objectif
 
 router = APIRouter(prefix="/ingestion", tags=["ingestion"])
 
@@ -26,6 +26,15 @@ class RequeteModificationObjectifs(BaseModel):
 class RequeteNouvelleCommande(BaseModel):
     taches: list[str] = Field(min_length=1)
     date_limite: int | None = Field(default=None, ge=0)
+
+
+def _ressources_manquantes_par_rapport_a_la_base(base: InstanceTRCO, scenario: InstanceTRCO) -> set[str]:
+    """Un scénario compare des façons différentes de faire tourner le MÊME atelier — jamais deux
+    ateliers différents (une instance représente un atelier, voir CLAUDE.md). Le scénario peut
+    ajouter des ressources (ex. « et si on achetait une nouvelle machine ? ») mais ne peut pas en
+    retirer une déjà présente sur l'instance de base : un ensemble de ressources disjoint
+    signalerait un atelier différent, pas une variante du même."""
+    return {r.id for r in base.ressources} - {r.id for r in scenario.ressources}
 
 
 @router.post("/{client_id}")
@@ -84,14 +93,30 @@ def creer_scenario(
     groupe de scénarios comparatifs — voir
     `GET /{instance_id}/scenarios/comparaison`. Une nouvelle instance à part
     entière (son propre historique d'exécution), jamais une modification de
-    l'originale : `instance_id` reste intact et exécutable indépendamment."""
+    l'originale : `instance_id` reste intact et exécutable indépendamment.
+    Doit conserver toutes les ressources de l'instance de base (`_ressources_
+    manquantes_par_rapport_a_la_base`) — un scénario compare des variantes
+    du même atelier, jamais deux ateliers différents."""
     try:
-        client_id, _ = etat.recuperer_instance(instance_id)
+        client_id, instance_base = etat.recuperer_instance(instance_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="instance inconnue") from None
 
     verifier_acces_client(utilisateur, client_id)
     instance = valider_payload_trco(payload)
+
+    manquantes = _ressources_manquantes_par_rapport_a_la_base(instance_base, instance)
+    if manquantes:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "un scénario doit conserver toutes les ressources de l'instance de base "
+                f"(même atelier) — ressource(s) manquante(s) : {sorted(manquantes)}. Pour un "
+                "atelier différent, ingérez une nouvelle instance indépendante via "
+                "POST /ingestion/{client_id}."
+            ),
+        )
+
     scenario_id = etat.enregistrer_instance(
         client_id, instance, groupe_scenario_id=instance_id, canal_ingestion="scenario"
     )
@@ -111,7 +136,12 @@ def comparer_scenarios(
     instance du groupe pas encore exécutée apparaît avec `metriques: null`,
     à exécuter explicitement via `POST /execution/{instance_id}` (§2.3,
     l'exécution reste toujours une décision humaine explicite, jamais un
-    effet de bord d'une lecture)."""
+    effet de bord d'une lecture).
+
+    `est_instance_de_base` est calculé contre `racine_groupe_scenario(instance_id)`,
+    jamais contre `instance_id` lui-même : appeler cette route depuis une variante
+    (`instance_id` = un scénario, pas l'instance d'origine) doit quand même désigner
+    la vraie racine du groupe comme base, jamais la variante consultée."""
     try:
         client_id, _ = etat.recuperer_instance(instance_id)
     except KeyError:
@@ -119,6 +149,7 @@ def comparer_scenarios(
 
     verifier_acces_client(utilisateur, client_id)
     membres = etat.lister_instances_du_groupe_scenario(instance_id)
+    racine_id = etat.racine_groupe_scenario(instance_id)
 
     dernieres_executions: dict[str, dict[str, object]] = {}
     for execution in etat.lister_executions(client_id=client_id):
@@ -141,7 +172,7 @@ def comparer_scenarios(
         scenarios.append(
             {
                 "instance_id": membre_id,
-                "est_instance_de_base": membre_id == instance_id,
+                "est_instance_de_base": membre_id == racine_id,
                 "execution_id": derniere["execution_id"] if derniere else None,
                 "date_execution": derniere["date_execution"] if derniere else None,
                 "metriques": metriques,
@@ -255,6 +286,38 @@ def ajouter_commande(
         "commande_id": commande_id,
         "structure_contraintes": structure_contraintes(instance_fusionnee),
     }
+
+
+@router.get("/{instance_id}/commandes")
+def lister_commandes_instance(
+    instance_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> list[dict[str, object]]:
+    """Toutes les commandes de cet atelier (créées via `POST /{instance_id}/commandes`),
+    chacune avec son statut recalculé à la volée contre le dernier planning *réussi* de
+    l'instance — même calcul, jamais mis en cache, que `GET /commandes/{commande_id}` ci-dessous
+    (voir sa docstring). Un seul appel à `dernier_planning_pour_instance` pour toutes les
+    commandes de l'instance, plutôt qu'un par commande."""
+    try:
+        client_id, instance = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+
+    verifier_acces_client(utilisateur, client_id)
+
+    planning = etat.dernier_planning_pour_instance(instance_id)
+    return [
+        {
+            "commande_id": commande.id,
+            "instance_id": commande.instance_id,
+            "date_limite": commande.date_limite,
+            "taches": list(commande.taches),
+            "date_creation": commande.date_creation,
+            **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
+        }
+        for commande in etat.lister_commandes(instance_id=instance_id)
+    ]
 
 
 @router.get("/commandes/{commande_id}")

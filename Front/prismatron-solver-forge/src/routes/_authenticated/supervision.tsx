@@ -56,7 +56,7 @@ const ICONE_TYPE_SIGNAL: Record<PropositionSupervision["type_signal"], typeof Al
   instance_a_replanifier: RefreshCw,
 };
 
-function BadgeTypeSignal({ type }: { type: PropositionSupervision["type_signal"] }) {
+export function BadgeTypeSignal({ type }: { type: PropositionSupervision["type_signal"] }) {
   const Icone = ICONE_TYPE_SIGNAL[type];
   return (
     <Badge variant="outline" className="gap-1">

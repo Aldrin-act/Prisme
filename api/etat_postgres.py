@@ -865,6 +865,20 @@ class EtatPostgres:
             membres |= {row[0] for row in variantes}
         return sorted(membres)
 
+    def racine_groupe_scenario(self, instance_id: str) -> str:
+        """Voir `EtatAPI.racine_groupe_scenario` (même contrat) — lève `KeyError` si
+        `instance_id` est inconnue, contrairement à `lister_instances_du_groupe_scenario`
+        qui renvoie silencieusement `[]` (ses appelants valident déjà l'existence en amont,
+        voir `comparer_scenarios`)."""
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT groupe_scenario_id FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(instance_id)
+        return ligne[0] or instance_id
+
     def recuperer_instance(self, instance_id: str) -> tuple[str, InstanceTRCO]:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(

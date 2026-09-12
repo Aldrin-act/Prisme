@@ -319,10 +319,21 @@ class EtatAPI:
         elle-même dans `groupes_scenario`, sa propre présence dans
         `self.instances` suffit à la qualifier de racine) ou l'une des
         variantes créées ensuite. Ordre non garanti."""
-        groupe_id = self.groupes_scenario.get(instance_id, instance_id)
+        groupe_id = self.racine_groupe_scenario(instance_id)
         membres = {groupe_id} if groupe_id in self.instances else set()
         membres |= {iid for iid, gid in self.groupes_scenario.items() if gid == groupe_id}
         return sorted(membres)
+
+    def racine_groupe_scenario(self, instance_id: str) -> str:
+        """L'identifiant de l'instance de base d'un groupe de scénarios — celle qui n'a
+        jamais elle-même de `groupe_scenario_id` (créée hors de `POST .../scenarios`) —
+        qu'`instance_id` soit cette base ou l'une de ses variantes. Distinct de
+        `lister_instances_du_groupe_scenario` : ne renvoie que la racine, jamais tous les
+        membres. Sert à `api/routes/ingestion.py::comparer_scenarios` à calculer
+        `est_instance_de_base` correctement même quand on consulte la comparaison depuis
+        une variante plutôt que depuis la base elle-même — sinon la variante consultée se
+        déclarerait elle-même base à tort."""
+        return self.groupes_scenario.get(instance_id, instance_id)
 
     def enregistrer_source(
         self,

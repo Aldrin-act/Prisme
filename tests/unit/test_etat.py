@@ -333,3 +333,22 @@ def test_supprimer_instance_purge_sa_date_modification() -> None:
     etat.supprimer_instance(instance_id)
 
     assert instance_id not in etat.dates_modification
+
+
+def test_racine_groupe_scenario_depuis_la_base_ou_la_variante() -> None:
+    """La racine reste l'instance de base qu'on l'interroge depuis elle-même ou depuis une
+    variante — jamais la variante elle-même (voir `api/routes/ingestion.py::comparer_scenarios`,
+    qui s'en sert pour calculer `est_instance_de_base` correctement dans les deux cas)."""
+    etat = EtatAPI()
+    base_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    scenario_id = etat.enregistrer_instance("client-test", _instance_exemple(), groupe_scenario_id=base_id)
+
+    assert etat.racine_groupe_scenario(base_id) == base_id
+    assert etat.racine_groupe_scenario(scenario_id) == base_id
+
+
+def test_racine_groupe_scenario_instance_sans_scenario_est_sa_propre_racine() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat.racine_groupe_scenario(instance_id) == instance_id

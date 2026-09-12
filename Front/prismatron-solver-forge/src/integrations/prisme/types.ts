@@ -240,6 +240,14 @@ export interface ResultatNouvelleCommande {
   structure_contraintes: string;
 }
 
+// Une tâche de la commande positionnée dans le temps (début/fin résolus contre le dernier
+// planning réussi) — de quoi tracer sa timeline. Absent tant que la commande n'est pas planifiee.
+export interface OperationCommande {
+  tache: string;
+  debut: number;
+  fin: number;
+}
+
 // GET /ingestion/commandes/{commande_id} — statut recalculé à la volée contre le dernier
 // planning réussi de l'instance, jamais mis en cache.
 export interface StatutCommande {
@@ -252,6 +260,7 @@ export interface StatutCommande {
   date_fin_prevue: number | null;
   en_retard: boolean | null;
   taches_manquantes: string[];
+  operations: OperationCommande[];
 }
 
 // ============================================================================

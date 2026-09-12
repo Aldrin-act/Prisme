@@ -218,6 +218,66 @@ def test_obtenir_commande_inconnue_renvoie_404() -> None:
         app.dependency_overrides.clear()
 
 
+def test_lister_commandes_instance_renvoie_leur_statut() -> None:
+    """`GET /{instance_id}/commandes` — même statut recalculé à la volée que `GET
+    /commandes/{commande_id}`, pour toutes les commandes de l'atelier en un seul appel."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+
+        reponse = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        )
+        commande_id = reponse.json()["commande_id"]
+
+        resultat = ResultatExecution(
+            planning=Planning(operations=[OperationPlanifiee(tache="EXISTANT", ressource="R1", debut=0)]),
+            verdict_faisabilite=ResultatFaisabilite(violations=()),
+            erreur=None,
+        )
+        etat_test.enregistrer_execution("solveur-factice", instance_id, resultat)
+
+        reponse = client.get(f"/ingestion/{instance_id}/commandes")
+
+        assert reponse.status_code == 200, reponse.json()
+        commandes = reponse.json()
+        assert len(commandes) == 1
+        assert commandes[0]["commande_id"] == commande_id
+        assert commandes[0]["planifiee"] is True
+        assert commandes[0]["en_retard"] is False
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_lister_commandes_instance_vide_sans_commande() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+
+        reponse = client.get(f"/ingestion/{instance_id}/commandes")
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json() == []
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_lister_commandes_instance_inconnue_renvoie_404() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        reponse = client.get("/ingestion/id-inexistant/commandes")
+
+        assert reponse.status_code == 404
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_supprimer_instance_supprime_ses_commandes() -> None:
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test

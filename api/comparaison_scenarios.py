@@ -34,17 +34,23 @@ class MetriquesPlanning:
         }
 
 
-def fin_par_tache(instance: InstanceTRCO, planning: Planning) -> dict[str, int]:
-    """Instant de fin de chaque tâche planifiée (`debut + durée`) — durée résolue depuis la
-    `CompatibiliteRessourceTache` réellement choisie par le planning (`operation.tache|
+def intervalle_par_tache(instance: InstanceTRCO, planning: Planning) -> dict[str, tuple[int, int]]:
+    """Intervalle (début, fin) de chaque tâche planifiée — fin = `début + durée`, durée résolue
+    depuis la `CompatibiliteRessourceTache` réellement choisie par le planning (`operation.tache|
     operation.ressource`), 0 si absente (ne devrait pas arriver sur un planning légal). Factorisé
-    hors de `calculer_metriques` : réutilisé aussi par `calculer_statut_commande`."""
+    hors de `calculer_metriques` : réutilisé par `fin_par_tache` (fin seule) et
+    `calculer_statut_commande` (timeline complète d'une commande, §visualisation)."""
     durees = durees_par_contrainte(instance)
-    resultat: dict[str, int] = {}
+    resultat: dict[str, tuple[int, int]] = {}
     for operation in planning.operations:
         duree = durees.get(f"{operation.tache}|{operation.ressource}", 0)
-        resultat[operation.tache] = operation.debut + duree
+        resultat[operation.tache] = (operation.debut, operation.debut + duree)
     return resultat
+
+
+def fin_par_tache(instance: InstanceTRCO, planning: Planning) -> dict[str, int]:
+    """Instant de fin de chaque tâche planifiée — voir `intervalle_par_tache`."""
+    return {tache: fin for tache, (_, fin) in intervalle_par_tache(instance, planning).items()}
 
 
 def calculer_metriques(instance: InstanceTRCO, planning: Planning) -> MetriquesPlanning:
@@ -83,11 +89,27 @@ def calculer_metriques(instance: InstanceTRCO, planning: Planning) -> MetriquesP
 
 
 @dataclass(frozen=True)
+class OperationCommande:
+    """Une tâche de la commande positionnée dans le temps — de quoi tracer sa timeline (§visualisation),
+    jamais recalculée séparément : dérivée du même `intervalle_par_tache` que `date_fin_prevue`."""
+
+    tache: str
+    debut: int
+    fin: int
+
+    def en_dict(self) -> dict[str, object]:
+        return {"tache": self.tache, "debut": self.debut, "fin": self.fin}
+
+
+@dataclass(frozen=True)
 class StatutCommande:
     planifiee: bool
     date_fin_prevue: int | None
     en_retard: bool | None
     taches_manquantes: tuple[str, ...]
+    # Vide tant que `planifiee` est faux (rien à positionner dans le temps sans planning complet
+    # pour cette commande) — un élément par tâche de la commande sinon, dans l'ordre déclaré.
+    operations: tuple[OperationCommande, ...] = ()
 
     def en_dict(self) -> dict[str, object]:
         return {
@@ -95,6 +117,7 @@ class StatutCommande:
             "date_fin_prevue": self.date_fin_prevue,
             "en_retard": self.en_retard,
             "taches_manquantes": list(self.taches_manquantes),
+            "operations": [op.en_dict() for op in self.operations],
         }
 
 
@@ -110,13 +133,18 @@ def calculer_statut_commande(
     if planning is None:
         return StatutCommande(planifiee=False, date_fin_prevue=None, en_retard=None, taches_manquantes=taches)
 
-    fins = fin_par_tache(instance, planning)
-    manquantes = tuple(t for t in taches if t not in fins)
+    intervalles = intervalle_par_tache(instance, planning)
+    manquantes = tuple(t for t in taches if t not in intervalles)
     if manquantes:
         return StatutCommande(planifiee=False, date_fin_prevue=None, en_retard=None, taches_manquantes=manquantes)
 
-    date_fin_prevue = max(fins[t] for t in taches)
+    operations = tuple(OperationCommande(tache=t, debut=intervalles[t][0], fin=intervalles[t][1]) for t in taches)
+    date_fin_prevue = max(op.fin for op in operations)
     en_retard = date_fin_prevue > date_limite if date_limite is not None else None
     return StatutCommande(
-        planifiee=True, date_fin_prevue=date_fin_prevue, en_retard=en_retard, taches_manquantes=()
+        planifiee=True,
+        date_fin_prevue=date_fin_prevue,
+        en_retard=en_retard,
+        taches_manquantes=(),
+        operations=operations,
     )

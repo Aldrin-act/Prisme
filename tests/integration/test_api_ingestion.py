@@ -183,6 +183,47 @@ def test_creer_scenario_ajoute_une_instance_variante(client_isole: tuple[TestCli
     assert etat_test.groupes_scenario[scenario_id] == instance_id
 
 
+def test_creer_scenario_peut_ajouter_une_ressource(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    """Un scénario peut ajouter une ressource à celles de l'instance de base (ex. « et si on
+    achetait une nouvelle machine ? ») — seul en retirer une déjà présente est rejeté, voir
+    test_creer_scenario_retire_une_ressource_de_la_base_422."""
+    client, etat_test = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    payload_avec_nouvelle_ressource = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1"}, {"id": "R2"}],
+        "contraintes": [
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R2", "duree": 10},
+        ],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+    reponse = client.post(f"/ingestion/{instance_id}/scenarios", json=payload_avec_nouvelle_ressource)
+
+    assert reponse.status_code == 200, reponse.json()
+    scenario_id = reponse.json()["instance_id"]
+    assert scenario_id in etat_test.instances
+
+
+def test_creer_scenario_retire_une_ressource_de_la_base_422(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    """Une instance représente un atelier — un scénario compare des variantes du MÊME atelier,
+    jamais deux ateliers différents : retirer une ressource de l'instance de base est rejeté."""
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    payload_sans_r1 = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R2"}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R2", "duree": 10}],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+    reponse = client.post(f"/ingestion/{instance_id}/scenarios", json=payload_sans_r1)
+
+    assert reponse.status_code == 422
+    assert "R1" in reponse.json()["detail"]
+
+
 def test_creer_scenario_instance_de_base_inconnue_404(client_isole: tuple[TestClient, EtatAPI]) -> None:
     client, _ = client_isole
     reponse = client.post("/ingestion/id-inexistant/scenarios", json=_PAYLOAD_MODIFIE)
@@ -218,6 +259,24 @@ def test_comparer_scenarios_sans_execution_donne_des_metriques_nulles(
     scenarios_par_id = {s["instance_id"]: s for s in corps["scenarios"]}
     assert set(scenarios_par_id) == {instance_id, scenario_id}
     assert all(s["metriques"] is None for s in scenarios_par_id.values())
+    assert scenarios_par_id[instance_id]["est_instance_de_base"] is True
+    assert scenarios_par_id[scenario_id]["est_instance_de_base"] is False
+
+
+def test_comparer_scenarios_depuis_une_variante_designe_quand_meme_la_vraie_base(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    """Consulter la comparaison depuis l'`instance_id` d'un scénario (pas depuis l'instance
+    d'origine) doit quand même désigner l'instance d'origine comme base — jamais le scénario
+    consulté, même si c'est lui que l'appelant a passé dans l'URL."""
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+    scenario_id = client.post(f"/ingestion/{instance_id}/scenarios", json=_PAYLOAD_MODIFIE).json()["instance_id"]
+
+    reponse = client.get(f"/ingestion/{scenario_id}/scenarios/comparaison")
+
+    assert reponse.status_code == 200
+    scenarios_par_id = {s["instance_id"]: s for s in reponse.json()["scenarios"]}
     assert scenarios_par_id[instance_id]["est_instance_de_base"] is True
     assert scenarios_par_id[scenario_id]["est_instance_de_base"] is False
 

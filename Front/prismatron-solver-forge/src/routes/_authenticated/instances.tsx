@@ -73,12 +73,17 @@ import {
   useJobsGeneration,
   useComparaisonScenarios,
   useAjouterCommande,
+  useCommandesInstance,
+  usePropositionsSupervision,
   PrismeAPIError,
   type Contrainte,
   type InstanceDetail,
+  type InstanceInfo,
   type Objectif,
+  type StatutCommande,
 } from "@/integrations/prisme";
 import { formatDuree, formatDureeCourte } from "@/lib/unite-duree";
+import { BadgeTypeSignal } from "./supervision";
 
 export const Route = createFileRoute("/_authenticated/instances")({
   head: () => ({ meta: [{ title: "Instances — PRISME" }] }),
@@ -320,6 +325,7 @@ function InstancesPage() {
 
       <DialogDetailInstance
         instanceId={aVoir}
+        instances={instances ?? []}
         onOpenChange={(open) => !open && setAVoir(null)}
         onModifier={ouvrirModification}
         onCreerScenario={ouvrirCreationScenario}
@@ -565,21 +571,40 @@ function SectionSolveurs({
 
 function SectionScenarios({
   instance,
+  estExecutee,
   onCreerScenario,
 }: {
   instance: InstanceDetail;
+  estExecutee: boolean;
   onCreerScenario: (instance: InstanceDetail) => void;
 }) {
   const { data: comparaison, isLoading } = useComparaisonScenarios(instance.instance_id);
+  // Signaux de l'agent de supervision (§2, MT7) en attente d'une décision —
+  // un scénario est une instance comme une autre pour ces détecteurs
+  // (`supervision/detecteurs.py` ne filtre jamais sur groupe_scenario_id),
+  // donc "signature orpheline" (aucun solveur ne matche) et "à replanifier"
+  // (jamais exécutée / modifiée depuis) s'y déclenchent déjà — seule leur
+  // affichage manquait ici, relégué à la page /supervision séparée.
+  const { data: propositions } = usePropositionsSupervision(true);
+  const propositionParInstance = new Map(
+    (propositions ?? []).filter((p) => p.instance_id).map((p) => [p.instance_id, p]),
+  );
 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">
-          Compare cette instance à ses variantes (what-if) sur leur dernière exécution réussie
-          connue — n'exécute jamais rien elle-même.
+          {estExecutee
+            ? "Compare cette instance à ses variantes (what-if) sur leur dernière exécution réussie connue — n'exécute jamais rien elle-même."
+            : "Exécutez d'abord cette instance : sans exécution de référence, il n'y a rien à comparer entre elle et ses scénarios."}
         </p>
-        <Button size="sm" variant="outline" onClick={() => onCreerScenario(instance)}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => onCreerScenario(instance)}
+          disabled={!estExecutee}
+          title={estExecutee ? undefined : "Exécutez d'abord cette instance"}
+        >
           <GitCompareArrows className="mr-1.5 h-3.5 w-3.5" /> Créer un scénario
         </Button>
       </div>
@@ -596,6 +621,7 @@ function SectionScenarios({
                 <TableHead>Utilisation moy.</TableHead>
                 <TableHead>Tâches en retard</TableHead>
                 <TableHead>Exécuté le</TableHead>
+                <TableHead>Supervision</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -603,6 +629,7 @@ function SectionScenarios({
                 const taux = Object.values(s.metriques?.taux_utilisation_par_ressource ?? {});
                 const moyenne =
                   taux.length > 0 ? taux.reduce((a, b) => a + b, 0) / taux.length : null;
+                const proposition = propositionParInstance.get(s.instance_id);
                 return (
                   <TableRow key={s.instance_id}>
                     <TableCell className="font-mono text-xs">
@@ -619,6 +646,19 @@ function SectionScenarios({
                     <TableCell className="text-xs text-muted-foreground">
                       {s.date_execution ? new Date(s.date_execution).toLocaleString() : "jamais"}
                     </TableCell>
+                    <TableCell>
+                      {proposition ? (
+                        <Link
+                          to="/supervision"
+                          title={proposition.resume}
+                          className="inline-block hover:opacity-80"
+                        >
+                          <BadgeTypeSignal type={proposition.type_signal} />
+                        </Link>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -634,9 +674,70 @@ function SectionScenarios({
 // (voir api/routes/ingestion.py, POST /ingestion/{instance_id}/commandes) — ne crée jamais de
 // tâche : contrairement à l'ancienne explosion de gamme, il faut que l'instance ait déjà les
 // tâches concernées (via l'ingestion normale).
+// Timeline compacte d'une commande : une ligne par tâche, échelonnée entre 0 et le plus tardif
+// de (sa propre fin, son échéance) — jamais le makespan de tout l'atelier, qui noierait la
+// commande dans le reste de l'activité. Rien à tracer avant sa première exécution réussie
+// (`planifiee`) : le badge de statut au-dessus suffit alors.
+function CommandeTimeline({
+  commande,
+  uniteDuree,
+}: {
+  commande: StatutCommande;
+  uniteDuree?: string | null;
+}) {
+  if (!commande.planifiee || commande.operations.length === 0) return null;
+
+  const echelleMax = Math.max(
+    commande.date_limite ?? 0,
+    ...commande.operations.map((op) => op.fin),
+  );
+  if (echelleMax === 0) return null;
+  const limitePct =
+    commande.date_limite !== null ? (commande.date_limite / echelleMax) * 100 : null;
+
+  return (
+    <div className="space-y-1">
+      {commande.operations.map((op) => {
+        const enRetard = commande.date_limite !== null && op.fin > commande.date_limite;
+        const gauche = (op.debut / echelleMax) * 100;
+        const largeur = Math.max(((op.fin - op.debut) / echelleMax) * 100, 1.5);
+        return (
+          <div key={op.tache} className="flex items-center gap-2">
+            <span
+              className="w-20 shrink-0 truncate font-mono text-[10px] text-muted-foreground"
+              title={op.tache}
+            >
+              {op.tache}
+            </span>
+            <div className="relative h-4 flex-1 rounded bg-muted/30">
+              {limitePct !== null && (
+                <div
+                  className="absolute top-0 h-full w-px bg-foreground/50"
+                  style={{ left: `${limitePct}%` }}
+                  title={`Échéance : ${formatDureeCourte(commande.date_limite as number, uniteDuree)}`}
+                />
+              )}
+              <div
+                className={`absolute top-0 h-full rounded ${
+                  enRetard ? "bg-destructive" : "bg-gradient-to-r from-primary to-accent"
+                }`}
+                style={{ left: `${gauche}%`, width: `${largeur}%` }}
+                title={`${formatDureeCourte(op.debut, uniteDuree)} → ${formatDureeCourte(op.fin, uniteDuree)}${
+                  enRetard ? " (en retard)" : ""
+                }`}
+              />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
   const queryClient = useQueryClient();
   const ajouter = useAjouterCommande();
+  const { data: commandes } = useCommandesInstance(instance.instance_id);
   const [ouvert, setOuvert] = useState(false);
   const [tachesChoisies, setTachesChoisies] = useState<string[]>([]);
   const [dateLimite, setDateLimite] = useState("");
@@ -671,6 +772,9 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
         onSuccess: (resultat) => {
           queryClient.invalidateQueries({ queryKey: prismeKeys.instance(instance.instance_id) });
           queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+          queryClient.invalidateQueries({
+            queryKey: prismeKeys.commandesInstance(instance.instance_id),
+          });
           setDernierCommandeId(resultat.commande_id);
           setOuvert(false);
         },
@@ -690,6 +794,39 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
           </Button>
         )}
       </div>
+
+      {commandes && commandes.length > 0 && (
+        <div className="space-y-1.5">
+          {commandes.map((c) => (
+            <div
+              key={c.commande_id}
+              className="space-y-2 rounded-lg border border-border/50 px-3 py-2"
+            >
+              <div className="flex items-center justify-between">
+                <div className="text-sm">
+                  <span className="font-mono text-xs">{c.commande_id}</span>
+                  <span className="ml-2 text-xs text-muted-foreground">
+                    {c.taches.length} tâche{c.taches.length > 1 ? "s" : ""}
+                    {c.date_limite !== null && ` · échéance J+${c.date_limite}`}
+                  </span>
+                </div>
+                <Badge
+                  variant={c.en_retard ? "destructive" : c.planifiee ? "secondary" : "outline"}
+                >
+                  {c.en_retard
+                    ? "En retard"
+                    : c.planifiee
+                      ? "Planifiée"
+                      : c.taches_manquantes.length > 0
+                        ? "Tâches manquantes au planning"
+                        : "En attente d'exécution"}
+                </Badge>
+              </div>
+              <CommandeTimeline commande={c} uniteDuree={instance.unite_duree} />
+            </div>
+          ))}
+        </div>
+      )}
 
       {ouvert && (
         <div className="space-y-3 rounded-lg border border-border/50 p-3">
@@ -755,15 +892,20 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
 
 function DialogDetailInstance({
   instanceId,
+  instances,
   onOpenChange,
   onModifier,
   onCreerScenario,
 }: {
   instanceId: string | null;
+  instances: InstanceInfo[];
   onOpenChange: (open: boolean) => void;
   onModifier: (instance: InstanceDetail) => void;
   onCreerScenario: (instance: InstanceDetail) => void;
 }) {
+  // Une instance jamais exécutée n'a aucune référence à comparer — voir
+  // SectionScenarios, qui désactive "Créer un scénario" tant que c'est vrai.
+  const estExecutee = instances.find((i) => i.instance_id === instanceId)?.executee ?? false;
   const { data: instance, isLoading } = useInstance(instanceId);
   const queryClient = useQueryClient();
   const modifier = useModifierObjectifs();
@@ -940,7 +1082,11 @@ function DialogDetailInstance({
             </TabsContent>
 
             <TabsContent value="scenarios">
-              <SectionScenarios instance={instance} onCreerScenario={onCreerScenario} />
+              <SectionScenarios
+                instance={instance}
+                estExecutee={estExecutee}
+                onCreerScenario={onCreerScenario}
+              />
             </TabsContent>
           </Tabs>
         )}

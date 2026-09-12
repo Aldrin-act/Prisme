@@ -641,20 +641,16 @@ export function IngestionDialog({
                   </p>
                 )}
 
-                <SectionTaches taches={taches} setTaches={setTaches} />
-                <SectionRessources
+                <OngletsTRCO
+                  taches={taches}
+                  setTaches={setTaches}
                   ressources={ressources}
                   setRessources={setRessources}
-                  setContraintes={setContraintes}
-                />
-                <SectionContraintes
                   contraintes={contraintes}
                   setContraintes={setContraintes}
-                  taches={taches}
-                  ressources={ressources}
+                  objectifs={objectifs}
+                  setObjectifs={setObjectifs}
                 />
-
-                <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
 
                 {erreur && (modifier.error ?? creerScenario.error) && (
                   <ErreursAPI erreur={erreur} />
@@ -695,20 +691,16 @@ export function IngestionDialog({
                     idChamp="client_id"
                   />
 
-                  <SectionTaches taches={taches} setTaches={setTaches} />
-                  <SectionRessources
+                  <OngletsTRCO
+                    taches={taches}
+                    setTaches={setTaches}
                     ressources={ressources}
                     setRessources={setRessources}
-                    setContraintes={setContraintes}
-                  />
-                  <SectionContraintes
                     contraintes={contraintes}
                     setContraintes={setContraintes}
-                    taches={taches}
-                    ressources={ressources}
+                    objectifs={objectifs}
+                    setObjectifs={setObjectifs}
                   />
-
-                  <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
 
                   {erreur && ingerer.error && <ErreursAPI erreur={erreur} />}
 
@@ -1052,6 +1044,63 @@ export function IngestionDialog({
         )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+// Les quatre sections T-R-C-O sous onglets plutôt qu'empilées verticalement —
+// une instance avec plusieurs dizaines de tâches rendait Ressources/
+// Contraintes/Objectifs inatteignables sans défiler toute la liste des
+// tâches d'abord. Un seul onglet visible à la fois, changer d'onglet ne
+// perd aucune saisie (tout reste dans le state du parent, pas démonté).
+function OngletsTRCO({
+  taches,
+  setTaches,
+  ressources,
+  setRessources,
+  contraintes,
+  setContraintes,
+  objectifs,
+  setObjectifs,
+}: {
+  taches: TacheLigne[];
+  setTaches: React.Dispatch<React.SetStateAction<TacheLigne[]>>;
+  ressources: RessourceLigne[];
+  setRessources: React.Dispatch<React.SetStateAction<RessourceLigne[]>>;
+  contraintes: ContrainteLigne[];
+  setContraintes: React.Dispatch<React.SetStateAction<ContrainteLigne[]>>;
+  objectifs: ObjectifLigne[];
+  setObjectifs: React.Dispatch<React.SetStateAction<ObjectifLigne[]>>;
+}) {
+  return (
+    <Tabs defaultValue="taches">
+      <TabsList>
+        <TabsTrigger value="taches">Tâches ({taches.length})</TabsTrigger>
+        <TabsTrigger value="ressources">Ressources ({ressources.length})</TabsTrigger>
+        <TabsTrigger value="contraintes">Contraintes ({contraintes.length})</TabsTrigger>
+        <TabsTrigger value="objectifs">Objectifs ({objectifs.length})</TabsTrigger>
+      </TabsList>
+      <TabsContent value="taches" className="pt-3">
+        <SectionTaches taches={taches} setTaches={setTaches} />
+      </TabsContent>
+      <TabsContent value="ressources" className="pt-3">
+        <SectionRessources
+          ressources={ressources}
+          setRessources={setRessources}
+          setContraintes={setContraintes}
+        />
+      </TabsContent>
+      <TabsContent value="contraintes" className="pt-3">
+        <SectionContraintes
+          contraintes={contraintes}
+          setContraintes={setContraintes}
+          taches={taches}
+          ressources={ressources}
+        />
+      </TabsContent>
+      <TabsContent value="objectifs" className="pt-3">
+        <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
+      </TabsContent>
+    </Tabs>
   );
 }
 

@@ -440,6 +440,10 @@ export const prismeClient = {
   // Statut d'une commande, recalculé à la volée contre le dernier planning réussi.
   obtenirCommande: (commandeId: string) =>
     apiFetch<Types.StatutCommande>(`${PRISME_CONFIG.routes.ingestion}/commandes/${commandeId}`),
+
+  // Toutes les commandes de cet atelier, chacune avec son statut recalculé à la volée.
+  listerCommandes: (instanceId: string) =>
+    apiFetch<Types.StatutCommande[]>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}/commandes`),
 } as const;
 
 // ============================================================================

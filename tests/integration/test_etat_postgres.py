@@ -65,6 +65,27 @@ def test_groupe_scenario_lie_deux_instances(etat_postgres_test: EtatPostgres) ->
     assert etat_postgres_test.lister_instances_du_groupe_scenario(scenario_id) == membres
 
 
+def test_racine_groupe_scenario_depuis_la_base_ou_la_variante(etat_postgres_test: EtatPostgres) -> None:
+    """La racine reste l'instance de base qu'on l'interroge depuis elle-même ou depuis une
+    variante — jamais la variante elle-même (voir `api/routes/ingestion.py::comparer_scenarios`,
+    qui s'en sert pour calculer `est_instance_de_base` correctement dans les deux cas)."""
+    base_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    scenario_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), groupe_scenario_id=base_id
+    )
+
+    assert etat_postgres_test.racine_groupe_scenario(base_id) == base_id
+    assert etat_postgres_test.racine_groupe_scenario(scenario_id) == base_id
+
+
+def test_racine_groupe_scenario_instance_inconnue_leve_key_error(etat_postgres_test: EtatPostgres) -> None:
+    try:
+        etat_postgres_test.racine_groupe_scenario("id-inexistant")
+        raise AssertionError("KeyError attendu pour une instance inconnue")
+    except KeyError:
+        pass
+
+
 def test_instance_sans_scenario_est_seule_dans_son_groupe(etat_postgres_test: EtatPostgres) -> None:
     instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
 

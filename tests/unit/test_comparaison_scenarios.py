@@ -3,7 +3,7 @@ déjà produits — aucune E/S, aucun appel solveur."""
 
 from __future__ import annotations
 
-from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
+from api.comparaison_scenarios import OperationCommande, calculer_metriques, calculer_statut_commande
 from dsl.schema import (
     CompatibiliteRessourceTache,
     Echeance,
@@ -181,6 +181,27 @@ def test_statut_commande_sans_date_limite_en_retard_est_indetermine() -> None:
     assert statut.en_retard is None
 
 
+def test_statut_commande_operations_positionnent_chaque_tache_dans_le_temps() -> None:
+    instance = _instance()
+    planning = _planning(
+        OperationPlanifiee(tache="T1", ressource="R1", debut=0),  # 0 -> 5
+        OperationPlanifiee(tache="T2", ressource="R2", debut=5),  # 5 -> 8
+    )
+
+    statut = calculer_statut_commande(instance, planning, ("T1", "T2"), date_limite=10)
+
+    assert statut.operations == (
+        OperationCommande(tache="T1", debut=0, fin=5),
+        OperationCommande(tache="T2", debut=5, fin=8),
+    )
+
+
+def test_statut_commande_non_planifiee_n_a_aucune_operation() -> None:
+    statut = calculer_statut_commande(_instance(), None, ("T1",), date_limite=10)
+
+    assert statut.operations == ()
+
+
 def test_statut_commande_en_dict_serialise_tous_les_champs() -> None:
     instance = _instance()
     planning = _planning(OperationPlanifiee(tache="T1", ressource="R1", debut=0))
@@ -192,4 +213,5 @@ def test_statut_commande_en_dict_serialise_tous_les_champs() -> None:
         "date_fin_prevue": 5,
         "en_retard": False,
         "taches_manquantes": [],
+        "operations": [{"tache": "T1", "debut": 0, "fin": 5}],
     }
