@@ -56,6 +56,9 @@ export function PlanningCalendar({
   commandes?: StatutCommande[];
 }) {
   const evenements: EvenementPlanning[] = [];
+  // Ouvre le calendrier sur le mois du planning affiché plutôt que sur "aujourd'hui" — un
+  // planning passé ou futur resterait sinon invisible tant qu'on n'a pas navigué manuellement.
+  const dateParDefaut = planning ? debutJour(new Date(planning.date_execution)) : new Date();
 
   if (planning) {
     const ancrage = debutJour(new Date(planning.date_execution));
@@ -123,6 +126,7 @@ export function PlanningCalendar({
         events={evenements}
         views={["month", "week", "agenda"]}
         defaultView="month"
+        defaultDate={dateParDefaut}
         style={{ height: 650 }}
         eventPropGetter={(event) => {
           const e = event as EvenementPlanning;
