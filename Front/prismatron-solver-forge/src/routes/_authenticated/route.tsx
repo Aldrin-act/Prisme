@@ -24,6 +24,7 @@ import {
   Search,
   Building2,
   Loader2,
+  ClipboardList,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,7 @@ const NAV = [
   { to: "/app", icon: LayoutDashboard, label: "Tableau de bord" },
   { to: "/donnees", icon: Database, label: "Données" },
   { to: "/instances", icon: FolderKanban, label: "Instances" },
+  { to: "/commandes", icon: ClipboardList, label: "Commandes" },
   { to: "/solver-generator", icon: Cpu, label: "Générateur de solveurs" },
   { to: "/solvers", icon: FileCode2, label: "Solveurs générés" },
   { to: "/execution", icon: Play, label: "Centre d'exécution" },

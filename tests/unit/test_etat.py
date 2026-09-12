@@ -108,6 +108,27 @@ def test_supprimer_instance_cascade_ses_executions() -> None:
     assert etat.decision_pour(execution_id) is None
 
 
+def test_recuperer_date_execution_round_trip() -> None:
+    """Sert d'ancrage calendaire stable au Gantt (voir GanttChart côté frontend) — la même
+    exécution doit toujours renvoyer la même date, jamais recalculée à la lecture."""
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur=None)
+    execution_id = etat.enregistrer_execution("solveur-abc", instance_id, resultat)
+
+    date_a = etat.recuperer_date_execution(execution_id)
+    date_b = etat.recuperer_date_execution(execution_id)
+
+    assert date_a == date_b
+    assert date_a  # non vide
+
+
+def test_recuperer_date_execution_inconnue_leve_key_error() -> None:
+    etat = EtatAPI()
+    with pytest.raises(KeyError):
+        etat.recuperer_date_execution("id-inexistant")
+
+
 def test_supprimer_instance_orpheline_les_jobs_generation_sans_les_detruire() -> None:
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
@@ -244,6 +265,36 @@ def test_dernier_planning_pour_instance_prend_la_plus_recente_reussie() -> None:
     etat.enregistrer_execution("solveur-abc", instance_id, ResultatExecution(planning_recent, verdict_legal, None))
 
     assert etat.dernier_planning_pour_instance(instance_id) == planning_recent
+
+
+def test_date_derniere_execution_reussie_absente_renvoie_none() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat.date_derniere_execution_reussie(instance_id) is None
+
+
+def test_date_derniere_execution_reussie_ignore_les_executions_echouees() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    echec = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    etat.enregistrer_execution("solveur-abc", instance_id, echec)
+
+    assert etat.date_derniere_execution_reussie(instance_id) is None
+
+
+def test_date_derniere_execution_reussie_correspond_a_la_meme_execution_que_le_planning() -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    planning_ancien = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    planning_recent = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=5)])
+    verdict_legal = ResultatFaisabilite(violations=())
+    etat.enregistrer_execution("solveur-abc", instance_id, ResultatExecution(planning_ancien, verdict_legal, None))
+    execution_id_recent = etat.enregistrer_execution(
+        "solveur-abc", instance_id, ResultatExecution(planning_recent, verdict_legal, None)
+    )
+
+    assert etat.date_derniere_execution_reussie(instance_id) == etat.recuperer_date_execution(execution_id_recent)
 
 
 def test_planning_ajuste_absent_renvoie_none() -> None:

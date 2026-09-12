@@ -182,6 +182,11 @@ export interface Planning {
 
 export interface PlanningAvecDurees extends Planning {
   durees: Record<string, number>; // Format: "tache|ressource" -> duree
+  // Horodatage réel de l'exécution qui a produit ce planning (ISO-8601) — ancrage calendaire
+  // stable du Gantt ("jour 0" = cette date, voir src/components/planning/gantt-chart.tsx),
+  // jamais recalculé côté client. Une révision ajustée porte le même horodatage que l'original :
+  // même exécution, pas une nouvelle date "au moment de l'ajustement".
+  date_execution: string;
 }
 
 // Gantt interactif (Phase 3) : une contrainte violée par un planning ajusté à la main. `type`
@@ -220,6 +225,10 @@ export interface InstanceDetail extends InstanceTRCO {
   // Unité d'affichage des durées/échéances — "jours" implicite si `null`
   // (voir src/lib/unite-duree.ts). Purement cosmétique, jamais lu par le DSL.
   unite_duree: string | null;
+  // Résumé en langage naturel de ce que fait l'atelier, proposé par l'agent de compréhension
+  // (§5.4 bis) — `null` pour toute instance ingérée hors de ce chemin (payload T-R-C-O direct,
+  // adaptateur écrit à la main...). Jamais lu par le DSL/solveur, purement informatif.
+  description_metier: string | null;
 }
 
 // ============================================================================
@@ -253,9 +262,19 @@ export interface OperationCommande {
 export interface StatutCommande {
   commande_id: string;
   instance_id: string;
+  // L'« atelier » d'une commande, c'est son instance (voir CLAUDE.md / api/routes/ingestion.py) —
+  // client_id ajouté ici pour la vue transverse (GET /ingestion/commandes, tous ateliers), utile
+  // à un admin qui voit plusieurs clients ; toujours son propre client_id pour un compte non-admin.
+  client_id: string;
   date_limite: number | null;
   taches: string[];
   date_creation: string;
+  // Horodatage réel de la dernière exécution réussie de l'instance (même valeur que
+  // PlanningAvecDurees.date_execution) — ancrage calendaire des jours relatifs de cette
+  // commande (date_limite, operations[].debut/fin). `null` tant que l'instance n'a jamais été
+  // exécutée avec succès (toujours le cas quand `planifiee` est faux) : le frontend retombe
+  // alors sur une prévisualisation ancrée sur "aujourd'hui".
+  date_execution: string | null;
   planifiee: boolean;
   date_fin_prevue: number | null;
   en_retard: boolean | null;
@@ -301,6 +320,9 @@ export interface ReponseExecution {
   // précédent trouvé) d'un gel réellement appliqué, jamais silencieux.
   horizon_gele_jours: number;
   planning_precedent_utilise: boolean;
+  // Voir PlanningAvecDurees.date_execution — même valeur, exposée ici aussi pour l'avoir
+  // immédiatement après le déclenchement, sans attendre le premier GET /planning/{execution_id}.
+  date_execution: string;
 }
 
 export interface ResultatExecution {
@@ -498,6 +520,9 @@ export interface Justification {
 export interface ReponseComprehension {
   instance_id: string;
   structure_contraintes: string;
+  // Résumé en langage naturel de ce que fait l'atelier, proposé par l'agent à partir des
+  // données brutes — voir InstanceDetail.description_metier (même valeur, relue plus tard).
+  description_metier: string;
   avertissements: string[];
   // Une entrée par contrainte precedence/echeance/competence_requise produite,
   // citant le champ des données brutes qui l'a justifiée (jamais pour

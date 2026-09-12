@@ -1,16 +1,26 @@
-"""`detecter_signature_et_replanification` interroge `Registre` (Postgres,
-`solver_store/registry.py`) — pas testable en couche 1, voir
-`tests/integration/conftest.py::registre_test` (skip si Postgres injoignable).
-"""
+"""`detecter_signaux` interroge `Registre` (Postgres, `solver_store/registry.py`) — pas testable
+en couche 1, voir `tests/integration/conftest.py::registre_test` (skip si Postgres injoignable).
+Le modèle LLM reste toujours un faux (`ModeleFactice`, voir `tests/unit/aides_test_agents.py`),
+jamais un vrai appel réseau, même en intégration — mêmes conventions que
+`tests/integration/test_supervision_orchestrateur.py`."""
 
 from __future__ import annotations
+
+import json
 
 from api.etat import EtatAPI
 from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
 from sandbox.runner import ResultatExecution
 from scripts.enregistrer_solveur_reference import STRUCTURE_MINIMALE, enregistrer
 from solver_store.registry import Registre
-from supervision.detecteurs import detecter_signature_et_replanification
+from supervision import agent as agent_module
+from supervision.detecteurs import (
+    SignalEchecsRepetes,
+    SignalInstanceAReplanifier,
+    SignalSignatureOrpheline,
+    detecter_signaux,
+)
+from tests.unit.aides_test_agents import ModeleFactice
 
 _INSTANCE_STRUCTURE_MINIMALE = InstanceTRCO(
     taches=[Tache(id="T1"), Tache(id="T2")],
@@ -31,66 +41,134 @@ _INSTANCE_SANS_SOLVEUR = InstanceTRCO(
 )
 
 
+def _modele_avec_signaux(signaux: list[dict]) -> ModeleFactice:
+    schema = agent_module._SchemaDetectionSupervision(
+        signaux=[agent_module._SchemaSignalDetecte(**s) for s in signaux]
+    )
+    return ModeleFactice(raw_content=json.dumps(schema.model_dump()), parsed=schema)
+
+
 def test_signature_orpheline_quand_aucun_solveur_ne_correspond(registre_test: Registre) -> None:
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    modele = _modele_avec_signaux([{"instance_id": instance_id, "type_signal": "signature_orpheline"}])
 
-    orphelines, a_replanifier = detecter_signature_et_replanification(etat, registre_test, "client_test")
+    signaux = detecter_signaux(etat, registre_test, modele, "client_test")
 
-    assert a_replanifier == ()
-    assert len(orphelines) == 1
-    assert orphelines[0].instance_id == instance_id
-    assert orphelines[0].structure_contraintes == "compatibilite_ressource_tache"
+    assert len(signaux) == 1
+    assert isinstance(signaux[0], SignalSignatureOrpheline)
+    assert signaux[0].instance_id == instance_id
 
 
 def test_instance_a_replanifier_quand_solveur_disponible_mais_jamais_executee(registre_test: Registre) -> None:
     id_solveur = enregistrer(registre_test, client_id="client_test")
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    modele = _modele_avec_signaux(
+        [
+            {
+                "instance_id": instance_id,
+                "type_signal": "instance_a_replanifier",
+                "raison": "jamais_executee",
+                "id_solveur_disponible": id_solveur,
+            }
+        ]
+    )
 
-    orphelines, a_replanifier = detecter_signature_et_replanification(etat, registre_test, "client_test")
+    signaux = detecter_signaux(etat, registre_test, modele, "client_test")
 
-    assert orphelines == ()
-    assert len(a_replanifier) == 1
-    assert a_replanifier[0].instance_id == instance_id
-    assert a_replanifier[0].id_solveur_disponible == id_solveur
-    assert a_replanifier[0].structure_contraintes == STRUCTURE_MINIMALE
-    assert a_replanifier[0].raison == "jamais_executee"
-
-
-def test_instance_deja_executee_avec_solveur_disponible_nest_ni_lun_ni_lautre(registre_test: Registre) -> None:
-    enregistrer(registre_test, client_id="client_test")
-    etat = EtatAPI()
-    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
-    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="peu importe")
-    etat.enregistrer_execution("un-solveur", instance_id, resultat)
-
-    orphelines, a_replanifier = detecter_signature_et_replanification(etat, registre_test, "client_test")
-
-    assert orphelines == ()
-    assert a_replanifier == ()
+    assert len(signaux) == 1
+    assert isinstance(signaux[0], SignalInstanceAReplanifier)
+    assert signaux[0].instance_id == instance_id
+    assert signaux[0].id_solveur_disponible == id_solveur
+    assert signaux[0].structure_contraintes == STRUCTURE_MINIMALE
+    assert signaux[0].raison == "jamais_executee"
 
 
 def test_instance_a_replanifier_quand_modifiee_apres_sa_derniere_execution(registre_test: Registre) -> None:
-    """Régression : avant le retrait de la logique de "dérivée", toute
-    modification qui ne changeait pas la structure créait une instance neuve
-    (donc `executee=False` par construction). Depuis `modifier_instance`
-    (même `instance_id`, en place), ce cas ne se déclenchait plus du tout —
-    voir le docstring de `supervision/detecteurs.py`."""
     id_solveur = enregistrer(registre_test, client_id="client_test")
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
     resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="peu importe")
     execution_id = etat.enregistrer_execution("un-solveur", instance_id, resultat)
     etat.dates_execution[execution_id] = "2026-01-01T00:00:00"
-
     etat.modifier_instance(instance_id, _INSTANCE_STRUCTURE_MINIMALE)
     etat.dates_modification[instance_id] = "2026-01-02T00:00:00"
+    modele = _modele_avec_signaux(
+        [
+            {
+                "instance_id": instance_id,
+                "type_signal": "instance_a_replanifier",
+                "raison": "modifiee_apres_derniere_execution",
+                "id_solveur_disponible": id_solveur,
+            }
+        ]
+    )
 
-    orphelines, a_replanifier = detecter_signature_et_replanification(etat, registre_test, "client_test")
+    signaux = detecter_signaux(etat, registre_test, modele, "client_test")
 
-    assert orphelines == ()
-    assert len(a_replanifier) == 1
-    assert a_replanifier[0].instance_id == instance_id
-    assert a_replanifier[0].id_solveur_disponible == id_solveur
-    assert a_replanifier[0].raison == "modifiee_apres_derniere_execution"
+    assert len(signaux) == 1
+    assert signaux[0].raison == "modifiee_apres_derniere_execution"
+
+
+def test_echecs_repetes(registre_test: Registre) -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    echec = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="boom")
+    execution_ids = tuple(etat.enregistrer_execution("s1", instance_id, echec) for _ in range(3))
+    for i, execution_id in enumerate(execution_ids):
+        etat.dates_execution[execution_id] = f"2026-01-0{i + 1}T00:00:00"
+    modele = _modele_avec_signaux(
+        [
+            {
+                "instance_id": instance_id,
+                "type_signal": "echecs_repetes",
+                "id_solveur": "s1",
+                "execution_ids": list(execution_ids),
+            }
+        ]
+    )
+
+    signaux = detecter_signaux(etat, registre_test, modele, "client_test")
+
+    # Aussi signature_orpheline (aucun solveur enregistré) : le LLM n'a ici renvoyé que
+    # echecs_repetes, ce qui suffit à prouver que ce signal est bien transporté indépendamment.
+    echecs = [s for s in signaux if isinstance(s, SignalEchecsRepetes)]
+    assert len(echecs) == 1
+    assert echecs[0].id_solveur == "s1"
+    assert set(echecs[0].execution_ids) == set(execution_ids)
+
+
+def test_aucune_instance_nappelle_jamais_le_llm(registre_test: Registre) -> None:
+    etat = EtatAPI()
+    # `modele=None` : si detecter_signaux appelait le LLM malgré l'absence
+    # totale d'instance pour ce client, ça planterait.
+    assert detecter_signaux(etat, registre_test, None, "client_sans_instance") == ()
+
+
+def test_instance_id_halluciné_est_ignore(registre_test: Registre) -> None:
+    etat = EtatAPI()
+    etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    modele = _modele_avec_signaux(
+        [{"instance_id": "instance-qui-nexiste-pas", "type_signal": "signature_orpheline"}]
+    )
+
+    assert detecter_signaux(etat, registre_test, modele, "client_test") == ()
+
+
+def test_id_solveur_disponible_halluciné_est_ignore(registre_test: Registre) -> None:
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    # Aucun solveur réellement enregistré, mais le LLM en invente un.
+    modele = _modele_avec_signaux(
+        [
+            {
+                "instance_id": instance_id,
+                "type_signal": "instance_a_replanifier",
+                "raison": "jamais_executee",
+                "id_solveur_disponible": "solveur-invente",
+            }
+        ]
+    )
+
+    assert detecter_signaux(etat, registre_test, modele, "client_test") == ()

@@ -83,4 +83,7 @@ def declencher_execution(
         "erreur": resultat.erreur,
         "horizon_gele_jours": horizon_gele_jours,
         "planning_precedent_utilise": planning_precedent_utilise,
+        # Ancrage calendaire stable du Gantt (voir EtatAPI.recuperer_date_execution) — évite un
+        # aller-retour supplémentaire pour le connaître juste après avoir déclenché l'exécution.
+        "date_execution": etat.recuperer_date_execution(execution_id),
     }

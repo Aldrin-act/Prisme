@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { AlertCircle, RotateCcw, Save } from "lucide-react";
+import { AlertCircle, RotateCcw, Save, ZoomIn, ZoomOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   prismeKeys,
@@ -8,12 +8,41 @@ import {
   type Contrainte,
   type OperationPlanifiee,
   type PlanningAvecDurees,
+  type StatutCommande,
+  type Tache,
 } from "@/integrations/prisme";
 import { tachesEnRetard, tauxUtilisationRessource } from "@/lib/charge-ressources";
-import { formatDureeCourte } from "@/lib/unite-duree";
+import { dateDepuisAncrage, debutJour, formatDateRelative } from "@/lib/dates-relatives";
 
 function cle(op: { tache: string; ressource: string }): string {
   return `${op.tache}|${op.ressource}`;
+}
+
+// `ancrage` (jour 0) est `planning.date_execution`, posée une fois côté serveur au moment réel
+// de l'exécution (voir PlanningAvecDurees.date_execution) — la même exécution montre toujours
+// les mêmes dates, quel que soit le jour où on la consulte, contrairement à un ancrage sur
+// "aujourd'hui" côté client (voir src/lib/dates-relatives.ts).
+const formatDateGantt = formatDateRelative;
+
+// Samedi/dimanche marqués non ouvrés sur le Gantt — purement visuel, ancré sur la même date que
+// les graduations (voir formatDateGantt) ; le DSL/solveur ne connaît aucune notion de jour ouvré
+// (voir `ContrainteDisponibiliteRessource.jours_semaine_indisponibles` pour la vraie contrainte
+// de planification, une notion distincte de cet affichage). Jours consécutifs fusionnés en un
+// seul segment plutôt qu'un rectangle par jour, pour un rendu propre sans trait de jointure.
+function segmentsWeekEnd(makespan: number, ancrage: Date): { debut: number; fin: number }[] {
+  const segments: { debut: number; fin: number }[] = [];
+  let debutCourant: number | null = null;
+  for (let jour = 0; jour < makespan; jour++) {
+    const jourWeekEnd = [0, 6].includes(dateDepuisAncrage(jour, ancrage).getDay());
+    if (jourWeekEnd && debutCourant === null) {
+      debutCourant = jour;
+    } else if (!jourWeekEnd && debutCourant !== null) {
+      segments.push({ debut: debutCourant, fin: jour });
+      debutCourant = null;
+    }
+  }
+  if (debutCourant !== null) segments.push({ debut: debutCourant, fin: makespan });
+  return segments;
 }
 
 // Ni `fin` ni `makespan` n'existent sur le fil (`dsl/schema/planning.py` est
@@ -26,46 +55,64 @@ interface EtatDrag {
   cle: string;
   xDepart: number;
   debutDepart: number;
-  largeurPistePx: number;
-  makespanDepart: number;
 }
+
+// Échelle fixe en pixels/jour (plutôt qu'un % de la durée totale) : `duree`/`debut` du DSL sont
+// des entiers de jours, jamais d'heures (`dsl/schema/planning.py`, `contraintes.py` — champs
+// `int`) — une grille zoomable à l'échelle du jour reflète honnêtement cette granularité, une
+// grille à l'heure suggérerait une précision que le solveur ne produit jamais.
+const PX_PAR_JOUR_DEFAUT = 48;
+const PX_PAR_JOUR_MIN = 16;
+const PX_PAR_JOUR_MAX = 160;
+const PAS_ZOOM = 16;
+const LARGEUR_COL_RESSOURCE = 144; // == w-36, dupliqué en px pour aligner l'offset de l'en-tête
 
 export function GanttChart({
   planning,
   contraintes,
+  taches,
+  commandes,
   editable = false,
   executionId,
   onAjustementReussi,
-  uniteDuree,
 }: {
   planning: PlanningAvecDurees;
   // Optionnelle : sans elle, la colonne taux d'utilisation ne s'affiche
   // simplement pas plutôt que d'afficher un chiffre faux.
   contraintes?: Contrainte[];
+  // Optionnelle : sans elle, les barres n'affichent que l'identifiant de tâche (pas de produit).
+  taches?: Tache[];
+  // Optionnelle : sans elle, aucune commande n'est affichée sur les barres ni d'échéance
+  // marquée sur l'axe (voir GET /ingestion/{instance_id}/commandes). `date_limite` est sur le
+  // même référentiel de jours relatifs que `op.debut`/`op.fin` — comparable et positionnable
+  // directement sur cet axe, aucune conversion nécessaire.
+  commandes?: StatutCommande[];
   // Gantt interactif (Phase 3) : glisser une barre change son jour de début (jamais sa
   // ressource — contraint à l'axe horizontal de sa propre ligne). `executionId` requis pour
   // pouvoir soumettre l'ajustement ; sans lui, `editable` reste sans effet.
   editable?: boolean;
   executionId?: string;
   onAjustementReussi?: (planning: PlanningAvecDurees) => void;
-  // Unité d'affichage (voir src/lib/unite-duree.ts) — "jours" implicite si
-  // absent. Ne change jamais le positionnement des barres (calculé en jours
-  // bruts), seulement le texte affiché (graduations, tooltips).
-  uniteDuree?: string | null;
 }) {
   const queryClient = useQueryClient();
   const ajuster = useAjusterPlanning();
+  // Jour 0 ancré sur la date réelle de l'exécution — voir formatDateGantt ci-dessus. Normalisé à
+  // minuit local pour que l'arithmétique "+N jours" reste exacte quelle que soit l'heure à
+  // laquelle le solveur a tourné.
+  const ancrage = debutJour(new Date(planning.date_execution));
   const [operationsLocales, setOperationsLocales] = useState(planning.operations);
   const [drag, setDrag] = useState<EtatDrag | null>(null);
+  const [pxParJour, setPxParJour] = useState(PX_PAR_JOUR_DEFAUT);
 
   // Toute nouvelle version du planning affiché (nouvelle exécution, bascule
-  // original/ajusté...) réinitialise l'édition en cours — jamais un mélange
+  // original/ajusté...) réinitialise l'édition en cours et le zoom — jamais un mélange
   // entre deux plannings différents. `ajuster` exclu volontairement : son
   // identité change à chaque mutation, la réintégrer redéclencherait cet
   // effet et effacerait l'édition en cours pile au moment d'afficher un
   // refus (violations).
   useEffect(() => {
     setOperationsLocales(planning.operations);
+    setPxParJour(PX_PAR_JOUR_DEFAUT);
     ajuster.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planning]);
@@ -85,6 +132,21 @@ export function GanttChart({
       .filter((op, i) => op.debut !== planning.operations[i]?.debut)
       .map((op) => cle(op)),
   );
+  const produitParTache = new Map((taches ?? []).map((t) => [t.id, t.produit]));
+
+  const commandesParTache = new Map<string, StatutCommande[]>();
+  const commandesParEcheance = new Map<number, StatutCommande[]>();
+  for (const commande of commandes ?? []) {
+    for (const tache of commande.taches) {
+      commandesParTache.set(tache, [...(commandesParTache.get(tache) ?? []), commande]);
+    }
+    if (commande.date_limite !== null) {
+      commandesParEcheance.set(commande.date_limite, [
+        ...(commandesParEcheance.get(commande.date_limite) ?? []),
+        commande,
+      ]);
+    }
+  }
 
   function reinitialiser() {
     setOperationsLocales(planning.operations);
@@ -113,22 +175,15 @@ export function GanttChart({
   ) {
     if (!peutEditer) return;
     e.currentTarget.setPointerCapture(e.pointerId);
-    const piste = e.currentTarget.parentElement;
-    if (!piste) return;
-    setDrag({
-      cle: cleOp,
-      xDepart: e.clientX,
-      debutDepart: debutActuel,
-      largeurPistePx: piste.getBoundingClientRect().width,
-      makespanDepart: makespan,
-    });
+    setDrag({ cle: cleOp, xDepart: e.clientX, debutDepart: debutActuel });
   }
 
+  // Échelle fixe (pxParJour) : le delta en jours ne dépend plus de la largeur de la piste, une
+  // simple division par l'échelle courante suffit (et reste correcte si le zoom change en cours
+  // de glissement, relu à chaque évènement plutôt que figé au pointerdown).
   function onPointerMoveBarre(e: React.PointerEvent<HTMLDivElement>) {
-    if (!drag || drag.largeurPistePx === 0 || drag.makespanDepart === 0) return;
-    const deltaJours = Math.round(
-      ((e.clientX - drag.xDepart) / drag.largeurPistePx) * drag.makespanDepart,
-    );
+    if (!drag) return;
+    const deltaJours = Math.round((e.clientX - drag.xDepart) / pxParJour);
     const nouveauDebut = Math.max(0, drag.debutDepart + deltaJours);
     setOperationsLocales((ops) =>
       ops.map((op) => (cle(op) === drag.cle ? { ...op, debut: nouveauDebut } : op)),
@@ -137,6 +192,10 @@ export function GanttChart({
 
   function onPointerUpBarre() {
     setDrag(null);
+  }
+
+  function zoomer(sens: 1 | -1) {
+    setPxParJour((p) => Math.min(PX_PAR_JOUR_MAX, Math.max(PX_PAR_JOUR_MIN, p + sens * PAS_ZOOM)));
   }
 
   if (operations.length === 0 || makespan === 0) {
@@ -154,8 +213,15 @@ export function GanttChart({
   }
   const ressources = [...parRessource.keys()].sort();
 
-  const graduations = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(makespan * f));
+  const jours = Array.from({ length: makespan }, (_, i) => i);
+  const weekEnds = segmentsWeekEnd(makespan, ancrage);
   const violations = ajuster.data && !ajuster.data.legal ? ajuster.data.violations : [];
+
+  // Position (en jours, généralement fractionnaire) de l'instant présent sur l'axe du planning —
+  // masquée si "maintenant" tombe hors de la plage affichée (planning entièrement passé, ou
+  // futur au-delà de son propre horizon).
+  const joursDepuisAncrage = (Date.now() - ancrage.getTime()) / 86_400_000;
+  const afficherMaintenant = joursDepuisAncrage >= 0 && joursDepuisAncrage <= makespan;
 
   return (
     <div className="space-y-3">
@@ -197,13 +263,81 @@ export function GanttChart({
         </div>
       )}
 
+      <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-3">
+          {weekEnds.length > 0 && (
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-2.5 rounded-sm bg-foreground/10" />
+              Jours non ouvrés (samedi, dimanche)
+            </div>
+          )}
+          {afficherMaintenant && (
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-0.5 bg-blue-500" />
+              Aujourd'hui
+            </div>
+          )}
+          {commandesParEcheance.size > 0 && (
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-0.5 border-l-2 border-dashed border-amber-500" />
+              Échéance commande
+            </div>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
+          <Button
+            size="icon"
+            variant="outline"
+            className="h-6 w-6"
+            onClick={() => zoomer(-1)}
+            disabled={pxParJour <= PX_PAR_JOUR_MIN}
+            aria-label="Réduire le zoom"
+          >
+            <ZoomOut className="h-3 w-3" />
+          </Button>
+          <span className="w-12 text-center font-mono">{pxParJour}px/j</span>
+          <Button
+            size="icon"
+            variant="outline"
+            className="h-6 w-6"
+            onClick={() => zoomer(1)}
+            disabled={pxParJour >= PX_PAR_JOUR_MAX}
+            aria-label="Augmenter le zoom"
+          >
+            <ZoomIn className="h-3 w-3" />
+          </Button>
+        </div>
+      </div>
+
+      {(commandes ?? []).length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 text-xs">
+          <span className="text-muted-foreground">Commandes :</span>
+          {(commandes ?? []).map((c) => (
+            <span
+              key={c.commande_id}
+              className="rounded-md border border-border/50 bg-muted/30 px-1.5 py-0.5 font-mono text-[10px]"
+              title={`${c.taches.length} tâche${c.taches.length > 1 ? "s" : ""} : ${c.taches.join(", ")}`}
+            >
+              {c.commande_id}
+            </span>
+          ))}
+        </div>
+      )}
+
       <div className="overflow-x-auto">
-        <div className="min-w-160">
-          <div className="mb-1 flex pl-36 text-xs text-muted-foreground">
-            {graduations.map((g, i) => (
-              <span key={i} className="flex-1 text-center first:text-left last:text-right">
-                {formatDureeCourte(g, uniteDuree)}
-              </span>
+        <div>
+          <div
+            className="mb-1 flex text-xs text-muted-foreground"
+            style={{ paddingLeft: LARGEUR_COL_RESSOURCE + 12 }}
+          >
+            {jours.map((j) => (
+              <div
+                key={j}
+                className="shrink-0 truncate border-r border-border/40 px-1 text-center first:border-l"
+                style={{ width: pxParJour }}
+              >
+                {formatDateGantt(j, ancrage)}
+              </div>
             ))}
           </div>
           <div className="space-y-2.5">
@@ -212,38 +346,92 @@ export function GanttChart({
               const taux = contraintes
                 ? tauxUtilisationRessource(ressource, operationsRessource, makespan, contraintes)
                 : null;
+              const largeurPiste = makespan * pxParJour;
               return (
                 <div key={ressource} className="flex items-center gap-3">
                   <div
-                    className="w-36 shrink-0 truncate font-mono text-xs text-muted-foreground"
+                    className="shrink-0 truncate font-mono text-xs text-muted-foreground"
+                    style={{ width: LARGEUR_COL_RESSOURCE }}
                     title={ressource}
                   >
                     {ressource}
                   </div>
-                  <div className="relative h-10 flex-1 rounded bg-muted/30">
+                  <div
+                    className="relative h-10 shrink-0 overflow-hidden rounded bg-muted/30"
+                    style={{ width: largeurPiste }}
+                  >
+                    {jours.map((j) => (
+                      <div
+                        key={j}
+                        className="absolute top-0 h-full w-px bg-border/40"
+                        style={{ left: j * pxParJour }}
+                      />
+                    ))}
+                    {weekEnds.map((w, i) => (
+                      <div
+                        key={i}
+                        className="absolute top-0 h-full bg-foreground/10"
+                        style={{
+                          left: w.debut * pxParJour,
+                          width: (w.fin - w.debut) * pxParJour,
+                        }}
+                        title="Jour non ouvré (week-end)"
+                      />
+                    ))}
+                    {afficherMaintenant && (
+                      <div
+                        className="absolute top-0 z-10 h-full w-0.5 bg-blue-500"
+                        style={{ left: joursDepuisAncrage * pxParJour }}
+                        title="Aujourd'hui"
+                      />
+                    )}
+                    {[...commandesParEcheance.entries()].map(([jourEcheance, cmds]) => (
+                      <div
+                        key={jourEcheance}
+                        className="absolute top-0 z-10 h-full w-0.5 border-l-2 border-dashed border-amber-500"
+                        style={{ left: jourEcheance * pxParJour }}
+                        title={`Échéance (${formatDateGantt(jourEcheance, ancrage)}) : ${cmds
+                          .map((c) => c.commande_id)
+                          .join(", ")}`}
+                      />
+                    ))}
                     {operationsRessource.map((op) => {
-                      const gauche = (op.debut / makespan) * 100;
-                      const largeur = ((op.fin - op.debut) / makespan) * 100;
                       const cleOp = cle(op);
                       const enRetard = tachesEnRetardIds.has(op.tache);
+                      const duree = op.fin - op.debut;
+                      const produit = produitParTache.get(op.tache);
+                      const commandesTache = commandesParTache.get(op.tache) ?? [];
+                      const libelleCommandes =
+                        commandesTache.length === 1
+                          ? ` · ${commandesTache[0].commande_id}`
+                          : commandesTache.length > 1
+                            ? ` · ${commandesTache.length} commandes`
+                            : "";
                       return (
                         <div
                           key={cleOp}
-                          title={`${op.tache} : ${formatDureeCourte(op.debut, uniteDuree)} → ${formatDureeCourte(
+                          title={`${op.tache} : ${formatDateGantt(op.debut, ancrage)} → ${formatDateGantt(
                             op.fin,
-                            uniteDuree,
-                          )}${enRetard ? " (en retard)" : ""}`}
+                            ancrage,
+                          )}${enRetard ? " (en retard)" : ""}${
+                            commandesTache.length > 0
+                              ? ` — commande(s) : ${commandesTache.map((c) => c.commande_id).join(", ")}`
+                              : ""
+                          }`}
                           onPointerDown={(e) => onPointerDownBarre(e, cleOp, op.debut)}
                           onPointerMove={onPointerMoveBarre}
                           onPointerUp={onPointerUpBarre}
-                          className={`absolute top-0 flex h-full items-center justify-center overflow-hidden rounded px-1.5 text-xs font-medium text-primary-foreground ${
+                          className={`absolute top-0 flex h-full items-center overflow-hidden rounded px-1.5 text-xs font-medium text-primary-foreground ${
                             enRetard ? "bg-destructive" : "bg-gradient-to-r from-primary to-accent"
                           } ${peutEditer ? "cursor-grab touch-none active:cursor-grabbing" : ""} ${
                             clesModifiees.has(cleOp) ? "ring-2 ring-yellow-400" : ""
                           }`}
-                          style={{ left: `${gauche}%`, width: `${largeur}%` }}
+                          style={{ left: op.debut * pxParJour, width: duree * pxParJour }}
                         >
-                          <span className="truncate">{op.tache}</span>
+                          <span className="truncate">
+                            {op.tache} ({duree}j){produit ? ` ${produit}` : ""}
+                            {libelleCommandes}
+                          </span>
                         </div>
                       );
                     })}

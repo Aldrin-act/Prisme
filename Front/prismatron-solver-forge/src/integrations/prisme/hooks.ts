@@ -45,6 +45,7 @@ export const prismeKeys = {
   commande: (commandeId: string) => [...prismeKeys.all, "commande", commandeId] as const,
   commandesInstance: (instanceId: string) =>
     [...prismeKeys.all, "commandesInstance", instanceId] as const,
+  commandes: () => [...prismeKeys.all, "commandes"] as const,
 } as const;
 
 // ============================================================================
@@ -305,6 +306,20 @@ export function useCommandesInstance(
     queryKey: prismeKeys.commandesInstance(instanceId || ""),
     queryFn: () => prismeClient.listerCommandes(instanceId!),
     enabled: !!instanceId,
+    ...options,
+  });
+}
+
+/**
+ * Toutes les commandes de tous les ateliers (instances) du compte authentifié — vue
+ * transverse (page Commandes), voir GET /ingestion/commandes.
+ */
+export function useCommandes(
+  options?: Omit<UseQueryOptions<Types.StatutCommande[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.commandes(),
+    queryFn: () => prismeClient.listerToutesCommandes(),
     ...options,
   });
 }

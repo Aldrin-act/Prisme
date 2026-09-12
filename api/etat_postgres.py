@@ -1192,6 +1192,32 @@ class EtatPostgres:
         resultat = ResultatExecution(planning=planning, verdict_faisabilite=verdict_faisabilite, erreur=erreur)
         return solveur_id, instance_id, resultat
 
+    def recuperer_date_execution(self, execution_id: str) -> str:
+        """Voir `EtatAPI.recuperer_date_execution` (même contrat, même usage : ancrage
+        calendaire stable du Gantt)."""
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT date_execution FROM {} WHERE id = %s").format(self._table("executions")),
+                (execution_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(execution_id)
+        return ligne[0]
+
+    def date_derniere_execution_reussie(self, instance_id: str) -> str | None:
+        """Voir `EtatAPI.date_derniere_execution_reussie` (même contrat) — requête indépendante
+        de `dernier_planning_pour_instance` ci-dessous plutôt qu'une valeur de retour partagée :
+        pas de jointure sur `plannings` nécessaire pour cette seule date."""
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL(
+                    "SELECT date_execution FROM {} WHERE instance_id = %s AND statut = 'reussi' "
+                    "ORDER BY date_execution DESC LIMIT 1"
+                ).format(self._table("executions")),
+                (instance_id,),
+            ).fetchone()
+        return ligne[0] if ligne else None
+
     def dernier_planning_pour_instance(self, instance_id: str) -> Planning | None:
         """Équivalent Postgres d'`EtatAPI.dernier_planning_pour_instance` — voir sa docstring
         pour le contrat (Phase 2, replanification à horizon glissant). Ne considère que les

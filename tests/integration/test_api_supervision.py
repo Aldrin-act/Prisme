@@ -62,15 +62,37 @@ def test_solveurs_enregistres_sans_code_source(registre_test: Registre) -> None:
         app.dependency_overrides.clear()
 
 
-def _modele_factice_avec_reference(reference: str) -> ModeleFactice:
-    schema = agent_module._SchemaSupervision(
+def _modele_factice_detection_et_redaction(signal_detection: dict, reference: str) -> ModeleFactice:
+    """`analyser_et_proposer` invoque le même modèle pour deux schémas différents — détection
+    (`_SchemaDetectionSupervision`, doit désigner le signal attendu par le test) puis rédaction
+    (`_SchemaSupervision`, `reference` recopiée telle quelle) — voir
+    `ModeleFactice.reponses_par_schema`."""
+    schema_detection = agent_module._SchemaDetectionSupervision(
+        signaux=[agent_module._SchemaSignalDetecte(**signal_detection)]
+    )
+    schema_propositions = agent_module._SchemaSupervision(
         propositions=[
             agent_module._SchemaPropositionUnitaire(
                 reference=reference, resume="Résumé de test.", priorite="haute"
             )
         ]
     )
-    return ModeleFactice(raw_content=json.dumps(schema.model_dump()), parsed=schema)
+    return ModeleFactice(
+        raw_content=json.dumps(schema_propositions.model_dump()),
+        parsed=schema_propositions,
+        reponses_par_schema={
+            agent_module._SchemaDetectionSupervision: (
+                json.dumps(schema_detection.model_dump()),
+                schema_detection,
+                None,
+            ),
+            agent_module._SchemaSupervision: (
+                json.dumps(schema_propositions.model_dump()),
+                schema_propositions,
+                None,
+            ),
+        },
+    )
 
 
 def test_lister_propositions_vide_sur_etat_neuf() -> None:
@@ -104,7 +126,9 @@ def test_analyser_detecte_une_signature_orpheline_via_lapi(registre_test: Regist
             "instance_id"
         ]
         reference = f"signature_orpheline:{instance_id}"
-        app.dependency_overrides[construire_modele_supervision] = lambda: _modele_factice_avec_reference(reference)
+        app.dependency_overrides[construire_modele_supervision] = lambda: _modele_factice_detection_et_redaction(
+            {"instance_id": instance_id, "type_signal": "signature_orpheline"}, reference
+        )
 
         reponse = client.post("/supervision/analyser", json={"client_id": "client_test"})
         assert reponse.status_code == 200, reponse.json()
@@ -138,7 +162,9 @@ def test_decider_refusee_ne_declenche_aucune_action(registre_test: Registre) -> 
             "instance_id"
         ]
         reference = f"signature_orpheline:{instance_id}"
-        app.dependency_overrides[construire_modele_supervision] = lambda: _modele_factice_avec_reference(reference)
+        app.dependency_overrides[construire_modele_supervision] = lambda: _modele_factice_detection_et_redaction(
+            {"instance_id": instance_id, "type_signal": "signature_orpheline"}, reference
+        )
         proposition_id = client.post("/supervision/analyser", json={"client_id": "client_test"}).json()[0][
             "proposition_id"
         ]
@@ -161,7 +187,7 @@ def test_decider_acceptee_executer_declenche_une_execution(image_sandbox: str, r
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 
     try:
-        enregistrer(registre_test, client_id="client_test")
+        id_solveur = enregistrer(registre_test, client_id="client_test")
         client = TestClient(app)
 
         instance = InstanceTRCO(
@@ -178,7 +204,15 @@ def test_decider_acceptee_executer_declenche_une_execution(image_sandbox: str, r
             "instance_id"
         ]
         reference = f"instance_a_replanifier:{instance_id}"
-        app.dependency_overrides[construire_modele_supervision] = lambda: _modele_factice_avec_reference(reference)
+        app.dependency_overrides[construire_modele_supervision] = lambda: _modele_factice_detection_et_redaction(
+            {
+                "instance_id": instance_id,
+                "type_signal": "instance_a_replanifier",
+                "raison": "jamais_executee",
+                "id_solveur_disponible": id_solveur,
+            },
+            reference,
+        )
         proposition_id = client.post("/supervision/analyser", json={"client_id": "client_test"}).json()[0][
             "proposition_id"
         ]

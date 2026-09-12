@@ -32,6 +32,7 @@ import { PageHeader, EmptyState } from "@/components/app-page";
 import { GanttChart } from "@/components/planning/gantt-chart";
 import {
   useSolveurs,
+  useCommandesInstance,
   useInstance,
   useInstances,
   useLabelsInstances,
@@ -137,9 +138,11 @@ function DialogSolveur({
   const { data: instances } = useInstances();
   const labels = useLabelsInstances();
   const [instanceId, setInstanceId] = useState("");
-  // Uniquement pour son `unite_duree` (affichage du Gantt) — le reste de ce
-  // dialogue s'appuie déjà sur `InstanceInfo` (liste ci-dessus).
+  // Uniquement pour ses `contraintes` (taux d'utilisation) et `taches` (produit affiché sur les
+  // barres) consommés par GanttChart — le reste de ce dialogue s'appuie déjà sur `InstanceInfo`
+  // (liste ci-dessus).
   const { data: instanceChoisie } = useInstance(instanceId || null);
+  const { data: commandes } = useCommandesInstance(instanceId || null);
   const [horizonGeleJours, setHorizonGeleJours] = useState("");
   const [executionId, setExecutionId] = useState<string | null>(null);
   const [voirOriginal, setVoirOriginal] = useState(false);
@@ -347,9 +350,10 @@ function DialogSolveur({
                   <GanttChart
                     planning={!voirOriginal && planningAjuste ? planningAjuste : planning}
                     contraintes={instanceChoisie?.contraintes}
+                    taches={instanceChoisie?.taches}
+                    commandes={commandes}
                     editable={!voirOriginal}
                     executionId={executionId ?? undefined}
-                    uniteDuree={instanceChoisie?.unite_duree}
                   />
                 </div>
               ) : (

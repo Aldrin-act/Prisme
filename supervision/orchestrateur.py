@@ -1,5 +1,5 @@
 """Point d'entrée unique de l'agent de supervision (§2, MT7) — la seule
-implémentation de « détecter + dédupliquer + LLM + persister », appelée à la
+implémentation de « détecter (LLM) + dédupliquer + rédiger (LLM) + persister », appelée à la
 fois par la route manuelle (`POST /supervision/analyser`) et par la boucle
 périodique (`supervision/planificateur.py`) : jamais deux implémentations de
 ce cycle."""
@@ -13,11 +13,11 @@ from api.etat import ActionSuggeree, EtatAPI, PropositionSupervision, TypeSignal
 from solver_store.registry import Registre
 from supervision.agent import FaitSignal, proposer_actions
 from supervision.detecteurs import (
+    SignalDetecte,
     SignalEchecsRepetes,
     SignalInstanceAReplanifier,
     SignalSignatureOrpheline,
-    detecter_echecs_repetes,
-    detecter_signature_et_replanification,
+    detecter_signaux,
 )
 
 if TYPE_CHECKING:
@@ -113,21 +113,24 @@ def _unifier_echecs_repetes(signal: SignalEchecsRepetes) -> _SignalUnifie:
     )
 
 
+def _unifier(signal: SignalDetecte) -> _SignalUnifie:
+    if isinstance(signal, SignalSignatureOrpheline):
+        return _unifier_signature_orpheline(signal)
+    if isinstance(signal, SignalInstanceAReplanifier):
+        return _unifier_instance_a_replanifier(signal)
+    return _unifier_echecs_repetes(signal)
+
+
 def analyser_et_proposer(
     etat: EtatAPI, registre: Registre, modele: BaseChatModel, client_id: str
 ) -> list[PropositionSupervision]:
-    """Détecte les 3 signaux, écarte ceux déjà couverts par une proposition
-    en attente, fait rédiger/prioriser le reste par l'agent LLM (un seul
-    appel, jamais un par signal), puis persiste. Retourne `[]` sans jamais
-    appeler le LLM si rien de nouveau n'est détecté."""
-    orphelines, a_replanifier = detecter_signature_et_replanification(etat, registre, client_id)
-    echecs = detecter_echecs_repetes(etat, client_id)
-
-    signaux = [
-        *(_unifier_signature_orpheline(s) for s in orphelines),
-        *(_unifier_instance_a_replanifier(s) for s in a_replanifier),
-        *(_unifier_echecs_repetes(s) for s in echecs),
-    ]
+    """Détecte les signaux (un appel LLM, `supervision.detecteurs.detecter_signaux` — ne peut
+    plus être évité même si rien de nouveau ne sera finalement proposé : c'est justement ce que
+    la détection sert à établir), écarte ceux déjà couverts par une proposition en attente, fait
+    rédiger/prioriser le reste par un second appel LLM (`proposer_actions`, un seul appel jamais
+    un par signal), puis persiste. Ce second appel reste évité quand tout ce qui a été détecté
+    était déjà en attente — seule la détection elle-même est désormais systématique."""
+    signaux = [_unifier(s) for s in detecter_signaux(etat, registre, modele, client_id)]
 
     deja_en_attente = {
         (p["type_signal"], p["instance_id"])
@@ -147,8 +150,8 @@ def analyser_et_proposer(
     for signal in nouveaux:
         reference = _reference(signal.type_signal, signal.instance_id)
         proposition_llm = propositions_llm.get(reference)
-        # Le détecteur Python fait foi — si le LLM a ignoré ou déformé cette
-        # référence, on ne perd jamais le signal détecté, on retombe sur un
+        # Le signal déjà détecté et validé (`detecter_signaux`) fait foi — si l'appel LLM de
+        # rédaction a ignoré ou déformé cette référence, on ne le perd jamais, on retombe sur un
         # résumé canné plutôt que de le laisser passer silencieusement.
         resume = proposition_llm.resume if proposition_llm is not None else _RESUME_REPLI[signal.type_signal]
         priorite = proposition_llm.priorite if proposition_llm is not None else _PRIORITE_REPLI

@@ -60,7 +60,7 @@ def test_horizon_gele_sans_historique_solve_normalement(
 ) -> None:
     """Première exécution de cette instance : `horizon_gele_jours>0` est demandé mais il n'existe
     encore aucun planning précédent — rien à figer, le solve se déroule normalement."""
-    client, _ = client_isole
+    client, etat_test = client_isole
     _enregistrer_solveur_minimal(registre_test)
     instance_id = client.post("/ingestion/client_a", json=_payload_valide()).json()["instance_id"]
 
@@ -71,6 +71,9 @@ def test_horizon_gele_sans_historique_solve_normalement(
     assert corps["reussi"] is True, corps["erreur"]
     assert corps["horizon_gele_jours"] == 5
     assert corps["planning_precedent_utilise"] is False
+    # Ancrage calendaire du Gantt (voir GanttChart côté frontend) — exposé directement à la
+    # réponse de déclenchement, pas seulement via un GET /planning/{execution_id} séparé.
+    assert corps["date_execution"] == etat_test.recuperer_date_execution(corps["execution_id"])
 
 
 def test_horizon_gele_avec_historique_reutilise_le_dernier_planning_reussi(

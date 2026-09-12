@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
+from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from validation_engine.feasibility_checker import ResultatFaisabilite
@@ -28,10 +29,25 @@ def _payload_instance_minimale() -> dict:
     }
 
 
-def _creer_instance(client: TestClient) -> str:
-    reponse = client.post("/ingestion/client_test", json=_payload_instance_minimale())
+def _creer_instance(client: TestClient, client_id: str = "client_test") -> str:
+    reponse = client.post(f"/ingestion/{client_id}", json=_payload_instance_minimale())
     assert reponse.status_code == 200, reponse.json()
     return reponse.json()["instance_id"]
+
+
+def _utilisateur_scope(client_id: str, role: str = "operateur") -> dict:
+    """Même patron que `test_api_sources.py` : écrase le fixture admin par défaut
+    (`conftest.py::_utilisateur_authentifie_par_defaut`) pour vérifier un filtrage par client_id réel."""
+    return {
+        "id": "u1",
+        "email": "op@client.test",
+        "nom": "Op",
+        "prenom": "Erateur",
+        "role": role,
+        "client_id": client_id,
+        "date_creation": "2024-01-01T00:00:00+00:00",
+        "dernier_acces": None,
+    }
 
 
 def test_ajouter_commande_derive_une_echeance_pour_des_taches_existantes() -> None:
@@ -127,6 +143,9 @@ def test_commande_persistee_consultable_avant_execution() -> None:
         assert corps["date_fin_prevue"] is None
         assert corps["en_retard"] is None
         assert corps["taches_manquantes"] == ["EXISTANT"]
+        # Rien à ancrer calendairement sans exécution réussie — voir
+        # EtatAPI.date_derniere_execution_reussie.
+        assert corps["date_execution"] is None
     finally:
         app.dependency_overrides.clear()
 
@@ -159,6 +178,9 @@ def test_commande_planifiee_dans_les_temps_apres_execution_reussie() -> None:
         assert corps["date_fin_prevue"] == 1  # duree=1 de la compatibilité EXISTANT|R1
         assert corps["en_retard"] is False
         assert corps["taches_manquantes"] == []
+        # Ancrage calendaire de l'exécution qui a produit ce statut — voir
+        # EtatAPI.date_derniere_execution_reussie.
+        assert corps["date_execution"] is not None
     finally:
         app.dependency_overrides.clear()
 
@@ -247,6 +269,7 @@ def test_lister_commandes_instance_renvoie_leur_statut() -> None:
         assert commandes[0]["commande_id"] == commande_id
         assert commandes[0]["planifiee"] is True
         assert commandes[0]["en_retard"] is False
+        assert commandes[0]["date_execution"] is not None
     finally:
         app.dependency_overrides.clear()
 
@@ -290,5 +313,108 @@ def test_supprimer_instance_supprime_ses_commandes() -> None:
         assert client.delete(f"/ingestion/{instance_id}").status_code == 204
 
         assert client.get(f"/ingestion/commandes/{commande_id}").status_code == 404
+    finally:
+        app.dependency_overrides.clear()
+
+
+# --- GET /ingestion/commandes (liste globale, tous ateliers) ----------------
+
+
+def test_lister_toutes_commandes_agrege_plusieurs_ateliers() -> None:
+    """Une commande par instance, deux instances distinctes — les deux ressortent,
+    chacune avec le bon instance_id/client_id (l'« atelier associé »)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_a = _creer_instance(client, client_id="client_a")
+        instance_b = _creer_instance(client, client_id="client_b")
+        cmd_a = client.post(
+            f"/ingestion/{instance_a}/commandes", json={"taches": ["EXISTANT"], "date_limite": 5}
+        ).json()["commande_id"]
+        cmd_b = client.post(
+            f"/ingestion/{instance_b}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+
+        reponse = client.get("/ingestion/commandes")
+
+        assert reponse.status_code == 200, reponse.json()
+        par_id = {c["commande_id"]: c for c in reponse.json()}
+        assert set(par_id) == {cmd_a, cmd_b}
+        assert par_id[cmd_a]["instance_id"] == instance_a
+        assert par_id[cmd_a]["client_id"] == "client_a"
+        assert par_id[cmd_b]["instance_id"] == instance_b
+        assert par_id[cmd_b]["client_id"] == "client_b"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_lister_toutes_commandes_calcule_le_statut_par_atelier() -> None:
+    """Même statut (planifiee/en_retard/date_execution) que GET /{instance_id}/commandes —
+    la version agrégée ne doit rien perdre du calcul par atelier."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+
+        resultat = ResultatExecution(
+            planning=Planning(operations=[OperationPlanifiee(tache="EXISTANT", ressource="R1", debut=0)]),
+            verdict_faisabilite=ResultatFaisabilite(violations=()),
+            erreur=None,
+        )
+        etat_test.enregistrer_execution("solveur-factice", instance_id, resultat)
+
+        reponse = client.get("/ingestion/commandes")
+
+        assert reponse.status_code == 200, reponse.json()
+        commandes = reponse.json()
+        assert len(commandes) == 1
+        assert commandes[0]["commande_id"] == commande_id
+        assert commandes[0]["planifiee"] is True
+        assert commandes[0]["en_retard"] is False
+        assert commandes[0]["date_execution"] is not None
+        assert commandes[0]["operations"] == [{"tache": "EXISTANT", "debut": 0, "fin": 1}]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_lister_toutes_commandes_scopee_par_client_pour_un_non_admin() -> None:
+    """Un utilisateur non-admin ne voit que les commandes de son propre client_id —
+    même filtrage que supervision.py::lister_instances (client_id_pour_filtre)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_mon_client = _creer_instance(client, client_id="mon_client")
+        instance_autre_client = _creer_instance(client, client_id="autre_client")
+        client.post(f"/ingestion/{instance_mon_client}/commandes", json={"taches": ["EXISTANT"]})
+        client.post(f"/ingestion/{instance_autre_client}/commandes", json={"taches": ["EXISTANT"]})
+
+        app.dependency_overrides[obtenir_utilisateur_courant] = lambda: _utilisateur_scope("mon_client")
+
+        reponse = client.get("/ingestion/commandes")
+
+        assert reponse.status_code == 200, reponse.json()
+        commandes = reponse.json()
+        assert len(commandes) == 1
+        assert commandes[0]["instance_id"] == instance_mon_client
+        assert commandes[0]["client_id"] == "mon_client"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_lister_toutes_commandes_vide_sans_aucune_commande() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        reponse = client.get("/ingestion/commandes")
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json() == []
     finally:
         app.dependency_overrides.clear()

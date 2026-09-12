@@ -155,6 +155,28 @@ def test_modifier_instance_inconnue_leve_key_error(etat_postgres_test: EtatPostg
     raise AssertionError("KeyError attendu pour une instance inconnue")
 
 
+def test_recuperer_date_execution_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    """Sert d'ancrage calendaire stable au Gantt (voir GanttChart côté frontend) — la même
+    exécution doit toujours renvoyer la même date, jamais recalculée à la lecture."""
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur=None)
+    execution_id = etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, resultat)
+
+    date_a = etat_postgres_test.recuperer_date_execution(execution_id)
+    date_b = etat_postgres_test.recuperer_date_execution(execution_id)
+
+    assert date_a == date_b
+    assert date_a
+
+
+def test_recuperer_date_execution_inconnue_leve_key_error(etat_postgres_test: EtatPostgres) -> None:
+    try:
+        etat_postgres_test.recuperer_date_execution("id-inexistant")
+    except KeyError:
+        return
+    raise AssertionError("KeyError attendu pour une exécution inconnue")
+
+
 def test_date_modification_posee_a_la_creation(etat_postgres_test: EtatPostgres) -> None:
     etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
 
@@ -273,6 +295,41 @@ def test_dernier_planning_pour_instance_prend_la_plus_recente_reussie(etat_postg
     dernier = etat_postgres_test.dernier_planning_pour_instance(instance_id)
     assert dernier is not None
     assert len(dernier.operations) == 2
+
+
+def test_date_derniere_execution_reussie_absente_renvoie_none(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+
+    assert etat_postgres_test.date_derniere_execution_reussie(instance_id) is None
+
+
+def test_date_derniere_execution_reussie_ignore_les_executions_echouees(
+    etat_postgres_test: EtatPostgres,
+) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    echec = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="instance infaisable")
+    etat_postgres_test.enregistrer_execution("solveur-abc", instance_id, echec)
+
+    assert etat_postgres_test.date_derniere_execution_reussie(instance_id) is None
+
+
+def test_date_derniere_execution_reussie_correspond_a_la_meme_execution_que_le_planning(
+    etat_postgres_test: EtatPostgres,
+) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    verdict_legal = ResultatFaisabilite(violations=())
+    planning_ancien = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    planning_recent = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=5)])
+    etat_postgres_test.enregistrer_execution(
+        "solveur-abc", instance_id, ResultatExecution(planning_ancien, verdict_legal, None)
+    )
+    execution_id_recent = etat_postgres_test.enregistrer_execution(
+        "solveur-abc", instance_id, ResultatExecution(planning_recent, verdict_legal, None)
+    )
+
+    assert etat_postgres_test.date_derniere_execution_reussie(
+        instance_id
+    ) == etat_postgres_test.recuperer_date_execution(execution_id_recent)
 
 
 def test_planning_ajuste_absent_renvoie_none(etat_postgres_test: EtatPostgres) -> None:

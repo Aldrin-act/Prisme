@@ -6,6 +6,7 @@ import {
   Code2,
   Cpu,
   Eye,
+  Factory,
   FolderKanban,
   GitCompareArrows,
   Loader2,
@@ -82,7 +83,15 @@ import {
   type Objectif,
   type StatutCommande,
 } from "@/integrations/prisme";
-import { formatDuree, formatDureeCourte } from "@/lib/unite-duree";
+import {
+  aujourdhui,
+  debutJour,
+  formatDateRelative,
+  formatEntreeDate,
+  jourDepuisAncrage,
+  parseEntreeDate,
+} from "@/lib/dates-relatives";
+import { formatDuree } from "@/lib/unite-duree";
 import { BadgeTypeSignal } from "./supervision";
 
 export const Route = createFileRoute("/_authenticated/instances")({
@@ -357,17 +366,29 @@ const LABELS_TYPE_CONTRAINTE: Record<Contrainte["type"], string> = {
   changement_serie: "Changement de série",
 };
 
-// Phrases complètes, destinées à un lecteur métier — distinct du badge
-// compact `structure_contraintes` (liste de types bruts) affiché ailleurs.
-function decrireContrainte(c: Contrainte, uniteDuree?: string | null): string {
-  const enJours = !uniteDuree || uniteDuree === "jours";
+const NOMS_JOURS_SEMAINE = [
+  "dimanche",
+  "lundi",
+  "mardi",
+  "mercredi",
+  "jeudi",
+  "vendredi",
+  "samedi",
+];
+
+// Phrases complètes, destinées à un lecteur métier — distinct du badge compact
+// `structure_contraintes` (liste de types bruts) affiché ailleurs. `ancrage` convertit les jours
+// relatifs du DSL (échéance, jours indisponibles) en dates calendaires — voir
+// src/lib/dates-relatives.ts ; ici toujours une prévisualisation "si exécuté aujourd'hui" (cette
+// instance n'a pas forcément encore d'exécution réelle), jamais une valeur persistée.
+function decrireContrainte(c: Contrainte, ancrage: Date, uniteDuree?: string | null): string {
   switch (c.type) {
     case "precedence":
       return `La tâche ${c.avant} doit être terminée avant que ${c.apres} commence.`;
     case "compatibilite_ressource_tache":
       return `${c.tache} peut être réalisée sur ${c.ressource} (durée : ${formatDuree(c.duree, uniteDuree)}).`;
     case "echeance":
-      return `${c.tache} doit être terminée au plus tard dans ${formatDuree(c.echeance, uniteDuree)}.`;
+      return `${c.tache} doit être terminée au plus tard le ${formatDateRelative(c.echeance, ancrage)}.`;
     case "competence_requise":
       return `${c.tache} exige la compétence « ${c.competence} ».`;
     case "capacite":
@@ -377,21 +398,19 @@ function decrireContrainte(c: Contrainte, uniteDuree?: string | null): string {
       if (c.jours_indisponibles.length > 0) {
         const pluriel = c.jours_indisponibles.length > 1;
         parties.push(
-          enJours
-            ? `le${pluriel ? "s" : ""} jour${pluriel ? "s" : ""} ${c.jours_indisponibles.join(", ")}`
-            : `${pluriel ? "aux dates" : "à la date"} ${c.jours_indisponibles
-                .map((j) => formatDureeCourte(j, uniteDuree))
-                .join(", ")}`,
+          `${pluriel ? "aux dates" : "à la date"} ${c.jours_indisponibles
+            .map((j) => formatDateRelative(j, ancrage))
+            .join(", ")}`,
         );
       }
       if (c.jours_semaine_indisponibles && c.jours_semaine_indisponibles.length > 0) {
+        const pluriel = c.jours_semaine_indisponibles.length > 1;
         parties.push(
-          `chaque semaine aux positions ${c.jours_semaine_indisponibles.join(", ")} (motif récurrent)`,
+          `chaque semaine ${pluriel ? "les" : "le"} ${c.jours_semaine_indisponibles
+            .map((p) => NOMS_JOURS_SEMAINE[(ancrage.getDay() + p) % 7])
+            .join(", ")} (motif récurrent)`,
         );
       }
-      // Évite un ".." si `parties` se termine déjà par l'abréviation pointée
-      // d'une unité courte ("j.", "sem.") — jamais avec l'unité "jours" par
-      // défaut, qui n'utilise pas `formatDureeCourte` ci-dessus.
       const phrase = `${c.ressource} est indisponible ${parties.join(" et ")}`;
       return phrase.endsWith(".") ? phrase : `${phrase}.`;
     }
@@ -433,13 +452,23 @@ function SectionContraintes({
     );
   }
 
+  const ancrage = aujourdhui();
   const groupes = new Map<Contrainte["type"], Contrainte[]>();
   for (const c of contraintes) {
     groupes.set(c.type, [...(groupes.get(c.type) ?? []), c]);
   }
+  const aDesDates = contraintes.some(
+    (c) => c.type === "echeance" || c.type === "disponibilite_ressource",
+  );
 
   return (
     <div className="space-y-5">
+      {aDesDates && (
+        <p className="text-xs italic text-muted-foreground">
+          Dates calculées comme si cette instance s'exécutait aujourd'hui — l'exécution réelle
+          ancrera le planning sur sa propre date, qui peut différer.
+        </p>
+      )}
       {ORDRE_TYPE_CONTRAINTE.map((type) => {
         const groupe = groupes.get(type);
         if (!groupe) return null;
@@ -450,7 +479,7 @@ function SectionContraintes({
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
               {groupe.map((c, i) => (
-                <li key={i}>{decrireContrainte(c, uniteDuree)}</li>
+                <li key={i}>{decrireContrainte(c, ancrage, uniteDuree)}</li>
               ))}
             </ul>
           </div>
@@ -640,7 +669,9 @@ function SectionScenarios({
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>{s.metriques ? s.metriques.makespan : "—"}</TableCell>
+                    <TableCell>
+                      {s.metriques ? formatDuree(s.metriques.makespan, instance.unite_duree) : "—"}
+                    </TableCell>
                     <TableCell>{moyenne !== null ? `${moyenne.toFixed(0)}%` : "—"}</TableCell>
                     <TableCell>{s.metriques ? s.metriques.taches_en_retard.length : "—"}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">
@@ -678,14 +709,14 @@ function SectionScenarios({
 // de (sa propre fin, son échéance) — jamais le makespan de tout l'atelier, qui noierait la
 // commande dans le reste de l'activité. Rien à tracer avant sa première exécution réussie
 // (`planifiee`) : le badge de statut au-dessus suffit alors.
-function CommandeTimeline({
-  commande,
-  uniteDuree,
-}: {
-  commande: StatutCommande;
-  uniteDuree?: string | null;
-}) {
-  if (!commande.planifiee || commande.operations.length === 0) return null;
+function CommandeTimeline({ commande }: { commande: StatutCommande }) {
+  // `planifiee` n'est vrai que si l'instance a déjà une exécution réussie (voir
+  // `calculer_statut_commande` côté backend) — `date_execution` est donc garanti non nul ici,
+  // sauf état incohérent défensif.
+  if (!commande.planifiee || commande.operations.length === 0 || !commande.date_execution) {
+    return null;
+  }
+  const ancrage = debutJour(new Date(commande.date_execution));
 
   const echelleMax = Math.max(
     commande.date_limite ?? 0,
@@ -714,7 +745,7 @@ function CommandeTimeline({
                 <div
                   className="absolute top-0 h-full w-px bg-foreground/50"
                   style={{ left: `${limitePct}%` }}
-                  title={`Échéance : ${formatDureeCourte(commande.date_limite as number, uniteDuree)}`}
+                  title={`Échéance : ${formatDateRelative(commande.date_limite as number, ancrage)}`}
                 />
               )}
               <div
@@ -722,7 +753,7 @@ function CommandeTimeline({
                   enRetard ? "bg-destructive" : "bg-gradient-to-r from-primary to-accent"
                 }`}
                 style={{ left: `${gauche}%`, width: `${largeur}%` }}
-                title={`${formatDureeCourte(op.debut, uniteDuree)} → ${formatDureeCourte(op.fin, uniteDuree)}${
+                title={`${formatDateRelative(op.debut, ancrage)} → ${formatDateRelative(op.fin, ancrage)}${
                   enRetard ? " (en retard)" : ""
                 }`}
               />
@@ -760,12 +791,16 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
   }
 
   function soumettre() {
+    const date = parseEntreeDate(dateLimite);
     ajouter.mutate(
       {
         instanceId: instance.instance_id,
         requete: {
           taches: tachesChoisies,
-          date_limite: dateLimite ? Number(dateLimite) : undefined,
+          // Convertie en jours relatifs à "aujourd'hui" — aucune exécution réelle n'existe
+          // forcément encore pour ancrer sur autre chose au moment de la saisie (voir
+          // src/lib/dates-relatives.ts). Le DSL/backend ne voit jamais que cet entier de jours.
+          date_limite: date ? jourDepuisAncrage(date, aujourdhui()) : undefined,
         },
       },
       {
@@ -797,34 +832,42 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
 
       {commandes && commandes.length > 0 && (
         <div className="space-y-1.5">
-          {commandes.map((c) => (
-            <div
-              key={c.commande_id}
-              className="space-y-2 rounded-lg border border-border/50 px-3 py-2"
-            >
-              <div className="flex items-center justify-between">
-                <div className="text-sm">
-                  <span className="font-mono text-xs">{c.commande_id}</span>
-                  <span className="ml-2 text-xs text-muted-foreground">
-                    {c.taches.length} tâche{c.taches.length > 1 ? "s" : ""}
-                    {c.date_limite !== null && ` · échéance J+${c.date_limite}`}
-                  </span>
+          {commandes.map((c) => {
+            // Ancrage réel (dernière exécution réussie) quand il existe, sinon prévisualisation
+            // "si exécuté aujourd'hui" — voir src/lib/dates-relatives.ts.
+            const ancrageCommande = c.date_execution
+              ? debutJour(new Date(c.date_execution))
+              : aujourdhui();
+            return (
+              <div
+                key={c.commande_id}
+                className="space-y-2 rounded-lg border border-border/50 px-3 py-2"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-sm">
+                    <span className="font-mono text-xs">{c.commande_id}</span>
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      {c.taches.length} tâche{c.taches.length > 1 ? "s" : ""}
+                      {c.date_limite !== null &&
+                        ` · échéance le ${formatDateRelative(c.date_limite, ancrageCommande)}`}
+                    </span>
+                  </div>
+                  <Badge
+                    variant={c.en_retard ? "destructive" : c.planifiee ? "secondary" : "outline"}
+                  >
+                    {c.en_retard
+                      ? "En retard"
+                      : c.planifiee
+                        ? "Planifiée"
+                        : c.taches_manquantes.length > 0
+                          ? "Tâches manquantes au planning"
+                          : "En attente d'exécution"}
+                  </Badge>
                 </div>
-                <Badge
-                  variant={c.en_retard ? "destructive" : c.planifiee ? "secondary" : "outline"}
-                >
-                  {c.en_retard
-                    ? "En retard"
-                    : c.planifiee
-                      ? "Planifiée"
-                      : c.taches_manquantes.length > 0
-                        ? "Tâches manquantes au planning"
-                        : "En attente d'exécution"}
-                </Badge>
+                <CommandeTimeline commande={c} />
               </div>
-              <CommandeTimeline commande={c} uniteDuree={instance.unite_duree} />
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -845,10 +888,11 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
             </div>
           </div>
           <div className="space-y-1">
-            <Label>Échéance (jours)</Label>
+            <Label>Échéance *</Label>
             <Input
-              type="number"
-              min={0}
+              type="date"
+              min={formatEntreeDate(aujourdhui())}
+              required
               value={dateLimite}
               onChange={(e) => setDateLimite(e.target.value)}
             />
@@ -875,7 +919,7 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
             <Button
               size="sm"
               onClick={soumettre}
-              disabled={tachesChoisies.length === 0 || ajouter.isPending}
+              disabled={tachesChoisies.length === 0 || !dateLimite || ajouter.isPending}
             >
               {ajouter.isPending ? "Ajout..." : "Ajouter la commande"}
             </Button>
@@ -975,6 +1019,15 @@ function DialogDetailInstance({
                   <Pencil className="mr-1.5 h-3.5 w-3.5" /> Modifier
                 </Button>
               </div>
+
+              {instance.description_metier && (
+                <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+                  <div className="flex items-center gap-2 font-medium text-primary">
+                    <Factory className="h-4 w-4" /> Comment fonctionne cet atelier
+                  </div>
+                  <p className="mt-1 text-muted-foreground">{instance.description_metier}</p>
+                </div>
+              )}
 
               <div>
                 <h4 className="mb-2 text-sm font-semibold">Tâches ({instance.taches.length})</h4>

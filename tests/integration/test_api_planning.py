@@ -15,7 +15,7 @@ from fastapi.testclient import TestClient
 from api.app import app
 from api.dependencies import obtenir_registre
 from api.etat import EtatAPI, obtenir_etat
-from dsl.schema import InstanceTRCO
+from dsl.schema import InstanceTRCO, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from solver_store.registry import Registre
 
@@ -70,10 +70,14 @@ def test_ajuster_planning_legal_persiste_et_se_relit(client_isole: tuple[TestCli
     assert corps["legal"] is True
     assert corps["violations"] == []
     assert corps["planning"]["operations"] == planning_legal["operations"]
+    # Ancrage calendaire du Gantt (voir GanttChart côté frontend) — une révision ajustée porte
+    # la même date que l'exécution d'origine, jamais une nouvelle date "au moment de l'ajustement".
+    assert corps["planning"]["date_execution"] == etat_test.recuperer_date_execution(execution_id)
 
     relu = client.get(f"/planning/{execution_id}/ajuste")
     assert relu.status_code == 200
     assert relu.json()["operations"] == planning_legal["operations"]
+    assert relu.json()["date_execution"] == etat_test.recuperer_date_execution(execution_id)
 
 
 def test_ajuster_planning_illegal_renvoie_les_violations_sans_persister(
@@ -101,6 +105,26 @@ def test_ajuster_planning_illegal_renvoie_les_violations_sans_persister(
     relu = client.get(f"/planning/{execution_id}/ajuste")
     assert relu.status_code == 200
     assert relu.json() is None
+
+
+def test_obtenir_planning_inclut_la_date_execution(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    """`GET /planning/{execution_id}` (pas seulement `/ajuste`) porte lui aussi l'ancrage
+    calendaire du Gantt — voir GanttChart côté frontend, qui en dépend pour son jour 0."""
+    client, etat_test = client_isole
+    instance_id = etat_test.enregistrer_instance("client_a", _instance_exemple())
+    planning = Planning(
+        operations=[
+            OperationPlanifiee(tache="T1", ressource="R1", debut=0),
+            OperationPlanifiee(tache="T2", ressource="R1", debut=5),
+        ]
+    )
+    resultat = ResultatExecution(planning=planning, verdict_faisabilite=None, erreur=None)
+    execution_id = etat_test.enregistrer_execution("solveur-abc", instance_id, resultat)
+
+    reponse = client.get(f"/planning/{execution_id}")
+
+    assert reponse.status_code == 200
+    assert reponse.json()["date_execution"] == etat_test.recuperer_date_execution(execution_id)
 
 
 def test_obtenir_planning_ajuste_absent_renvoie_null(client_isole: tuple[TestClient, EtatAPI]) -> None:

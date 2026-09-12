@@ -45,7 +45,13 @@ def obtenir_planning(
     # Durées ajoutées pour le Gantt du dashboard : `Planning` n'a délibérément
     # pas de champ durée (§ dsl/schema/planning.py) — elle vit sur
     # `CompatibiliteRessourceTache`, propre au couple (tâche, ressource).
-    return {**resultat.planning.model_dump(mode="json"), "durees": durees_par_contrainte(instance)}
+    # `date_execution` sert d'ancrage calendaire stable à l'affichage (voir
+    # `EtatAPI.recuperer_date_execution`) — jamais lue par le DSL/solveur.
+    return {
+        **resultat.planning.model_dump(mode="json"),
+        "durees": durees_par_contrainte(instance),
+        "date_execution": etat.recuperer_date_execution(execution_id),
+    }
 
 
 @router.post("/{execution_id}/ajuster")
@@ -76,7 +82,13 @@ def ajuster_planning(
     return {
         "legal": True,
         "violations": [],
-        "planning": {**planning.model_dump(mode="json"), "durees": durees_par_contrainte(instance)},
+        "planning": {
+            **planning.model_dump(mode="json"),
+            "durees": durees_par_contrainte(instance),
+            # Même ancrage que l'original (§ obtenir_planning) : une révision ajustée reste le
+            # plan de cette même exécution, jamais une nouvelle date "au moment de l'ajustement".
+            "date_execution": etat.recuperer_date_execution(execution_id),
+        },
     }
 
 
@@ -101,4 +113,8 @@ def obtenir_planning_ajuste(
     if planning_ajuste is None:
         return None
 
-    return {**planning_ajuste.model_dump(mode="json"), "durees": durees_par_contrainte(instance)}
+    return {
+        **planning_ajuste.model_dump(mode="json"),
+        "durees": durees_par_contrainte(instance),
+        "date_execution": etat.recuperer_date_execution(execution_id),
+    }

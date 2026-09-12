@@ -23,6 +23,7 @@ import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
+import { Route as AuthenticatedCommandesRouteImport } from './routes/_authenticated/commandes'
 import { Route as AuthenticatedDonneesRouteImport } from './routes/_authenticated/donnees'
 import { Route as AuthenticatedExecutionRouteImport } from './routes/_authenticated/execution'
 import { Route as AuthenticatedInstancesRouteImport } from './routes/_authenticated/instances'
@@ -101,6 +102,11 @@ const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
   path: '/clients',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCommandesRoute = AuthenticatedCommandesRouteImport.update({
+  id: '/commandes',
+  path: '/commandes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDonneesRoute = AuthenticatedDonneesRouteImport.update({
   id: '/donnees',
   path: '/donnees',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
   '/clients': typeof AuthenticatedClientsRoute
+  '/commandes': typeof AuthenticatedCommandesRoute
   '/donnees': typeof AuthenticatedDonneesRoute
   '/execution': typeof AuthenticatedExecutionRoute
   '/instances': typeof AuthenticatedInstancesRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
   '/clients': typeof AuthenticatedClientsRoute
+  '/commandes': typeof AuthenticatedCommandesRoute
   '/donnees': typeof AuthenticatedDonneesRoute
   '/execution': typeof AuthenticatedExecutionRoute
   '/instances': typeof AuthenticatedInstancesRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
+  '/_authenticated/commandes': typeof AuthenticatedCommandesRoute
   '/_authenticated/donnees': typeof AuthenticatedDonneesRoute
   '/_authenticated/execution': typeof AuthenticatedExecutionRoute
   '/_authenticated/instances': typeof AuthenticatedInstancesRoute
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/api-keys'
     | '/app'
     | '/clients'
+    | '/commandes'
     | '/donnees'
     | '/execution'
     | '/instances'
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/api-keys'
     | '/app'
     | '/clients'
+    | '/commandes'
     | '/donnees'
     | '/execution'
     | '/instances'
@@ -278,6 +289,7 @@ export interface FileRouteTypes {
     | '/_authenticated/api-keys'
     | '/_authenticated/app'
     | '/_authenticated/clients'
+    | '/_authenticated/commandes'
     | '/_authenticated/donnees'
     | '/_authenticated/execution'
     | '/_authenticated/instances'
@@ -401,6 +413,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClientsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/commandes': {
+      id: '/_authenticated/commandes'
+      path: '/commandes'
+      fullPath: '/commandes'
+      preLoaderRoute: typeof AuthenticatedCommandesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/donnees': {
       id: '/_authenticated/donnees'
       path: '/donnees'
@@ -465,6 +484,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedApiKeysRoute: typeof AuthenticatedApiKeysRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
+  AuthenticatedCommandesRoute: typeof AuthenticatedCommandesRoute
   AuthenticatedDonneesRoute: typeof AuthenticatedDonneesRoute
   AuthenticatedExecutionRoute: typeof AuthenticatedExecutionRoute
   AuthenticatedInstancesRoute: typeof AuthenticatedInstancesRoute
@@ -480,6 +500,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedApiKeysRoute: AuthenticatedApiKeysRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
+  AuthenticatedCommandesRoute: AuthenticatedCommandesRoute,
   AuthenticatedDonneesRoute: AuthenticatedDonneesRoute,
   AuthenticatedExecutionRoute: AuthenticatedExecutionRoute,
   AuthenticatedInstancesRoute: AuthenticatedInstancesRoute,

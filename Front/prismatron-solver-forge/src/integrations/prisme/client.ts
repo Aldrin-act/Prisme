@@ -444,6 +444,11 @@ export const prismeClient = {
   // Toutes les commandes de cet atelier, chacune avec son statut recalculé à la volée.
   listerCommandes: (instanceId: string) =>
     apiFetch<Types.StatutCommande[]>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}/commandes`),
+
+  // Toutes les commandes de tous les ateliers (instances) du compte authentifié — sans filtre
+  // pour un admin (page Commandes, vue transverse).
+  listerToutesCommandes: () =>
+    apiFetch<Types.StatutCommande[]>(`${PRISME_CONFIG.routes.ingestion}/commandes`),
 } as const;
 
 // ============================================================================

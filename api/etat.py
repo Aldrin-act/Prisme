@@ -527,12 +527,18 @@ class EtatAPI:
             raise KeyError(execution_id)
         return self.executions[execution_id]
 
-    def dernier_planning_pour_instance(self, instance_id: str) -> Planning | None:
-        """Le planning de la plus récente exécution *réussie* de `instance_id` — jamais une
-        exécution échouée (`resultat.reussi`), même si elle est plus récente. Utilisé par
-        `POST /execution/{instance_id}?horizon_gele_jours=...` (Phase 2, replanification à
-        horizon glissant) pour retrouver ce qu'il faut potentiellement figer ; `None` si cette
-        instance n'a encore jamais été exécutée avec succès."""
+    def recuperer_date_execution(self, execution_id: str) -> str:
+        """Horodatage réel de l'exécution (posé une fois par `enregistrer_execution`, jamais
+        recalculé) — sert d'ancrage calendaire à l'affichage du Gantt (`GanttChart`, "jour 0" =
+        cette date), jamais au DSL/solveur eux-mêmes qui restent en jours relatifs purs. Un
+        ancrage sur "aujourd'hui" recalculé à chaque ouverture du Gantt donnerait des dates
+        différentes selon qui regarde quand — celui-ci est stable, la même exécution montre
+        toujours les mêmes dates."""
+        if execution_id not in self.dates_execution:
+            raise KeyError(execution_id)
+        return self.dates_execution[execution_id]
+
+    def _derniere_execution_reussie(self, instance_id: str) -> tuple[str, Planning] | None:
         candidats = [
             (self.dates_execution[execution_id], resultat.planning)
             for execution_id, (_, id_instance, resultat) in self.executions.items()
@@ -541,7 +547,25 @@ class EtatAPI:
         if not candidats:
             return None
         candidats.sort(key=lambda candidat: candidat[0])
-        return candidats[-1][1]
+        return candidats[-1]
+
+    def dernier_planning_pour_instance(self, instance_id: str) -> Planning | None:
+        """Le planning de la plus récente exécution *réussie* de `instance_id` — jamais une
+        exécution échouée (`resultat.reussi`), même si elle est plus récente. Utilisé par
+        `POST /execution/{instance_id}?horizon_gele_jours=...` (Phase 2, replanification à
+        horizon glissant) pour retrouver ce qu'il faut potentiellement figer ; `None` si cette
+        instance n'a encore jamais été exécutée avec succès."""
+        candidat = self._derniere_execution_reussie(instance_id)
+        return candidat[1] if candidat else None
+
+    def date_derniere_execution_reussie(self, instance_id: str) -> str | None:
+        """Horodatage de la même exécution que `dernier_planning_pour_instance` — ancrage
+        calendaire pour les commandes/échéances affichées côté frontend (voir
+        `recuperer_date_execution`, même principe : un ancrage stable plutôt que recalculé sur
+        "aujourd'hui"). `None` si cette instance n'a jamais été exécutée avec succès — le
+        frontend retombe alors sur une prévisualisation "si exécuté aujourd'hui"."""
+        candidat = self._derniere_execution_reussie(instance_id)
+        return candidat[0] if candidat else None
 
     def enregistrer_planning_ajuste(
         self, execution_id: str, planning: Planning, makespan: int | None = None

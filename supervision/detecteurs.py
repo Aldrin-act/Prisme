@@ -1,48 +1,42 @@
-"""Détection de signaux (§2, MT7) : purs, déterministes, sans appel LLM — le
-LLM (`supervision/agent.py`) n'intervient qu'après, pour habiller ces faits
-d'une proposition priorisée en langage naturel. Trois signaux, tous dérivés
-de données déjà présentes dans `api/etat.py`/`solver_store/registry.py`, jamais
-recalculés ailleurs :
+"""Détection de signaux (§2, MT7) — délègue la décision (quel signal s'applique à quelle
+instance) à un appel LLM unique (`supervision.agent.detecter_signaux_llm`) plutôt qu'à des
+comparaisons Python : c'est le LLM qui compare les signatures de contraintes/objectifs, les
+dates de modification/exécution et l'historique d'échecs, à partir des faits bruts assemblés
+ici. Ce module se limite à rassembler ces faits et à valider ce que le LLM en tire avant de le
+convertir en signaux typés — jamais recalculé ni redécidé ici, mais jamais non plus accepté
+aveuglément : un `instance_id`, `id_solveur_disponible` ou `execution_id` qui ne correspond à
+aucune donnée réellement fournie est silencieusement écarté plutôt que propagé (le LLM peut se
+tromper ou halluciner, voir `supervision.agent.SignalBrutLLM`).
+
+Trois signaux, toujours le même sens métier qu'avant ce changement (seul le mécanisme de
+détection a changé, jamais leur signification) :
 
 1. **Signature orpheline** — la signature courante (`structure_contraintes`/
-   `signature_objectifs`, `api/etat.py:33-47`) d'une instance ne correspond à
-   aucun solveur actif enregistré pour son client. C'est exactement le cas
-   qui échoue aujourd'hui en synchrone avec un `HTTPException(409, ...)`
-   (`api/routes/execution.py`), sans jamais être tracé nulle part.
-2. **Instance à replanifier** — signature qui correspond bien à un solveur
-   actif, mais soit l'instance n'a jamais été exécutée, soit elle l'a été
-   puis a été modifiée depuis (`modifier_instance`/`modifier_objectifs`,
-   `api/etat.py`) sans être ré-exécutée : le planning existant ne
-   correspond plus à son contenu actuel, alors que le solveur enregistré
-   reste valide, juste besoin d'une exécution. Distingue les deux cas via
-   `SignalInstanceAReplanifier.raison`, en comparant la dernière
-   modification de l'instance (`info["date_modification"]`) à sa dernière
-   exécution (`lister_executions`) — jamais via le seul booléen `executee`,
-   qui reste vrai indéfiniment une fois l'instance exécutée au moins une
-   fois, y compris après une modification en place ultérieure.
-3. **Échecs répétés** — les `seuil` dernières exécutions d'une même instance
-   sont toutes en échec.
-
-Les signaux 1 et 2 se combinent naturellement sans logique dédiée : une
-instance dont la modification a aussi changé le *type* d'une contrainte ou
-d'un objectif tombe dans le signal 1 (régénération, `structure_contraintes`/
-`signature_objectifs` recalculées à chaque appel) ; une modification qui ne
-touche que des valeurs (durées, poids, `methode`...) tombe dans le signal 2
-(ré-exécution) — le même passage sur `lister_instances` répond aux deux à la
-fois.
+   `signature_objectifs`) d'une instance ne correspond à aucun solveur actif enregistré pour son
+   client.
+2. **Instance à replanifier** — signature qui correspond bien à un solveur actif, mais soit
+   l'instance n'a jamais été exécutée, soit elle l'a été puis a été modifiée depuis
+   (`modifier_instance`/`modifier_objectifs`, `api/etat.py`) sans être ré-exécutée.
+3. **Échecs répétés** — les 3 dernières exécutions d'une même instance sont toutes en échec.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
+from typing import TYPE_CHECKING
 
 from api.etat import EtatAPI, signature_objectifs, structure_contraintes
 from solver_store.registry import Registre
+from supervision.agent import (
+    ExecutionSupervision,
+    InstanceSupervision,
+    RaisonReplanification,
+    SolveurSupervision,
+    detecter_signaux_llm,
+)
 
-SEUIL_ECHECS_CONSECUTIFS = 3
-
-RaisonReplanification = Literal["jamais_executee", "modifiee_apres_derniere_execution"]
+if TYPE_CHECKING:
+    from langchain_core.language_models.chat_models import BaseChatModel
 
 
 @dataclass(frozen=True)
@@ -68,100 +62,95 @@ class SignalEchecsRepetes:
     instance_id: str
     client_id: str
     id_solveur: str
-    execution_ids: tuple[str, ...]  # la plus récente en premier
+    execution_ids: tuple[str, ...]
     structure_contraintes: str
     signature_objectifs: str
 
 
-def _derniere_execution_par_instance(etat: EtatAPI, client_id: str) -> dict[str, str]:
-    """Date de la plus récente exécution de chaque instance — même motif de
-    regroupement que `detecter_echecs_repetes`, sans dépendre de l'ordre déjà
-    trié ou non de `lister_executions` (in-memory vs Postgres)."""
-    dernieres: dict[str, str] = {}
-    for execution in etat.lister_executions(client_id=client_id):
-        instance_id = execution["instance_id"]
-        date_execution = execution["date_execution"]
-        if date_execution is not None and (
-            instance_id not in dernieres or date_execution > dernieres[instance_id]
-        ):
-            dernieres[instance_id] = date_execution
-    return dernieres
+SignalDetecte = SignalSignatureOrpheline | SignalInstanceAReplanifier | SignalEchecsRepetes
 
 
-def detecter_signature_et_replanification(
-    etat: EtatAPI, registre: Registre, client_id: str
-) -> tuple[tuple[SignalSignatureOrpheline, ...], tuple[SignalInstanceAReplanifier, ...]]:
-    """Un seul passage sur `lister_instances` répond aux deux signaux à la
-    fois (voir docstring du module)."""
-    orphelines: list[SignalSignatureOrpheline] = []
-    a_replanifier: list[SignalInstanceAReplanifier] = []
-    dernieres_executions = _derniere_execution_par_instance(etat, client_id)
+def detecter_signaux(
+    etat: EtatAPI, registre: Registre, modele: BaseChatModel, client_id: str
+) -> tuple[SignalDetecte, ...]:
+    """Rassemble instances/solveurs/exécutions de ce client, délègue la détection à
+    `supervision.agent.detecter_signaux_llm`, puis valide et convertit sa réponse. N'appelle
+    jamais le LLM si le client n'a aucune instance — rien à détecter."""
+    instances: dict[str, InstanceSupervision] = {}
     for info in etat.lister_instances(client_id=client_id):
         instance_id = info["instance_id"]
         _, instance = etat.recuperer_instance(instance_id)
-        structure = structure_contraintes(instance)
-        objectifs = signature_objectifs(instance)
-        solveurs = registre.rechercher_solveurs(
-            client_id=client_id, structure_contraintes=structure, signature_objectifs=objectifs
+        instances[instance_id] = InstanceSupervision(
+            instance_id=instance_id,
+            structure_contraintes=structure_contraintes(instance),
+            signature_objectifs=signature_objectifs(instance),
+            date_modification=info["date_modification"],
         )
-        if not solveurs:
-            orphelines.append(
+    if not instances:
+        return ()
+
+    solveurs = {
+        s.id: SolveurSupervision(
+            id=s.id, structure_contraintes=s.structure_contraintes, signature_objectifs=s.signature_objectifs
+        )
+        for s in registre.rechercher_solveurs(client_id=client_id)
+    }
+
+    executions = {
+        e["execution_id"]: ExecutionSupervision(
+            execution_id=e["execution_id"],
+            instance_id=e["instance_id"],
+            id_solveur=e["id_solveur"],
+            date_execution=e["date_execution"],
+            reussi=e["reussi"],
+        )
+        for e in etat.lister_executions(client_id=client_id)
+    }
+
+    bruts = detecter_signaux_llm(
+        modele, tuple(instances.values()), tuple(solveurs.values()), tuple(executions.values())
+    )
+
+    signaux: list[SignalDetecte] = []
+    for brut in bruts:
+        instance = instances.get(brut.instance_id)
+        if instance is None:
+            continue  # instance_id halluciné — jamais propagé
+
+        if brut.type_signal == "signature_orpheline":
+            signaux.append(
                 SignalSignatureOrpheline(
-                    instance_id=instance_id,
+                    instance_id=instance.instance_id,
                     client_id=client_id,
-                    structure_contraintes=structure,
-                    signature_objectifs=objectifs,
+                    structure_contraintes=instance.structure_contraintes,
+                    signature_objectifs=instance.signature_objectifs,
                 )
             )
-            continue
-
-        derniere_execution = dernieres_executions.get(instance_id)
-        raison: RaisonReplanification | None = None
-        if derniere_execution is None:
-            raison = "jamais_executee"
-        elif info["date_modification"] is not None and info["date_modification"] > derniere_execution:
-            raison = "modifiee_apres_derniere_execution"
-
-        if raison is not None:
-            a_replanifier.append(
+        elif brut.type_signal == "instance_a_replanifier":
+            if brut.raison is None or brut.id_solveur_disponible not in solveurs:
+                continue
+            signaux.append(
                 SignalInstanceAReplanifier(
-                    instance_id=instance_id,
+                    instance_id=instance.instance_id,
                     client_id=client_id,
-                    structure_contraintes=structure,
-                    signature_objectifs=objectifs,
-                    id_solveur_disponible=solveurs[0].id,
-                    raison=raison,
+                    structure_contraintes=instance.structure_contraintes,
+                    signature_objectifs=instance.signature_objectifs,
+                    id_solveur_disponible=brut.id_solveur_disponible,
+                    raison=brut.raison,
                 )
             )
-    return tuple(orphelines), tuple(a_replanifier)
-
-
-def detecter_echecs_repetes(
-    etat: EtatAPI, client_id: str, seuil: int = SEUIL_ECHECS_CONSECUTIFS
-) -> tuple[SignalEchecsRepetes, ...]:
-    """Groupe par instance, trie explicitement par `date_execution` — les
-    implémentations in-memory et Postgres de `lister_executions` n'ordonnent
-    pas pareil (insertion vs `ORDER BY date_execution DESC`), cette fonction
-    ne doit dépendre d'aucune des deux."""
-    par_instance: dict[str, list[dict]] = {}
-    for execution in etat.lister_executions(client_id=client_id):
-        par_instance.setdefault(execution["instance_id"], []).append(execution)
-
-    signaux: list[SignalEchecsRepetes] = []
-    for instance_id, executions in par_instance.items():
-        executions_triees = sorted(executions, key=lambda e: e["date_execution"], reverse=True)
-        dernieres = executions_triees[:seuil]
-        if len(dernieres) < seuil or any(e["reussi"] for e in dernieres):
-            continue
-        _, instance = etat.recuperer_instance(instance_id)
-        signaux.append(
-            SignalEchecsRepetes(
-                instance_id=instance_id,
-                client_id=client_id,
-                id_solveur=dernieres[0]["id_solveur"],
-                execution_ids=tuple(e["execution_id"] for e in dernieres),
-                structure_contraintes=structure_contraintes(instance),
-                signature_objectifs=signature_objectifs(instance),
+        else:  # echecs_repetes
+            ids_valides = tuple(e for e in brut.execution_ids if e in executions)
+            if brut.id_solveur is None or not ids_valides:
+                continue
+            signaux.append(
+                SignalEchecsRepetes(
+                    instance_id=instance.instance_id,
+                    client_id=client_id,
+                    id_solveur=brut.id_solveur,
+                    execution_ids=ids_valides,
+                    structure_contraintes=instance.structure_contraintes,
+                    signature_objectifs=instance.signature_objectifs,
+                )
             )
-        )
     return tuple(signaux)

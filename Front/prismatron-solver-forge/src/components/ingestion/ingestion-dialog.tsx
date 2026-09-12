@@ -13,6 +13,7 @@ import {
   AlertCircle,
   FolderOpen,
   CalendarOff,
+  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -57,10 +58,22 @@ import {
   type TypeObjectif,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
+import {
+  aujourdhui,
+  dateDepuisAncrage,
+  formatEntreeDate,
+  jourDepuisAncrage,
+  parseEntreeDate,
+} from "@/lib/dates-relatives";
 
 // Adaptateurs ERP réellement branchés côté backend (POST /adapters/{id}/ingerer).
 // Ajouter un adaptateur = ajouter une entrée ici, aucun autre changement de composant.
 const SOURCES_IMPORT = [{ id: "greensig", label: "GreenSIG" }] as const;
+
+// Indexé par Date.getDay() (0 = dimanche) — pour le sélecteur de motif hebdomadaire récurrent de
+// disponibilite_ressource, converti en position dans le cycle DSL à la soumission (voir
+// construireInstance).
+const NOMS_JOURS_SEMAINE_COURTS = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 
 let compteurId = 0;
 function idLocal() {
@@ -83,12 +96,16 @@ interface ContrainteLigne {
   tache: string;
   ressource: string;
   duree: string;
+  // Date calendaire "YYYY-MM-DD" (<input type="date">), pas le jour relatif brut — convertie à
+  // la soumission via jourDepuisAncrage(_, aujourdhui()) (voir construireInstance ci-dessous et
+  // src/lib/dates-relatives.ts). Le DSL ne voit jamais que l'entier de jours qui en ressort.
   echeance: string;
   competence: string;
-  // disponibilite_ressource : saisie en chaîne séparée par virgules ("0,3,7"),
-  // parsée en number[] à la soumission — même principe que les autres champs.
-  joursIndisponibles: string;
-  joursSemaineIndisponibles: string;
+  // disponibilite_ressource : dates calendaires individuelles ("YYYY-MM-DD") et jours de semaine
+  // sélectionnés (0-6, convention JS Date.getDay() — pas la position DSL dans le cycle de 7
+  // jours) — convertis en jours/positions relatifs à la soumission, ancrés sur "aujourd'hui".
+  joursIndisponibles: string[];
+  joursSemaineIndisponibles: number[];
 }
 
 export interface ObjectifLigne {
@@ -128,8 +145,8 @@ function nouvelleContrainte(): ContrainteLigne {
     duree: "",
     echeance: "",
     competence: "",
-    joursIndisponibles: "",
-    joursSemaineIndisponibles: "",
+    joursIndisponibles: [],
+    joursSemaineIndisponibles: [],
   };
 }
 export function nouvelObjectif(): ObjectifLigne {
@@ -199,15 +216,6 @@ export function construireObjectifs(objectifs: ObjectifLigne[]): Objectif[] {
   });
 }
 
-// "0, 3,7" -> [0, 3, 7] — même principe que competencesTexte pour les ressources :
-// une chaîne libre séparée par virgules, parsée à la soumission, jamais un composant dédié.
-function parserListeEntiers(texte: string): number[] {
-  return texte
-    .split(",")
-    .map((partie) => Number(partie.trim()))
-    .filter((n) => Number.isInteger(n));
-}
-
 function construireInstance(
   taches: TacheLigne[],
   ressources: RessourceLigne[],
@@ -244,8 +252,14 @@ function construireInstance(
               ressource: c.ressource,
               duree: Number(c.duree),
             };
-          case "echeance":
-            return { type: "echeance", tache: c.tache, echeance: Number(c.echeance) };
+          case "echeance": {
+            const date = parseEntreeDate(c.echeance);
+            return {
+              type: "echeance",
+              tache: c.tache,
+              echeance: date ? jourDepuisAncrage(date, aujourdhui()) : 0,
+            };
+          }
           case "competence_requise":
             return { type: "competence_requise", tache: c.tache, competence: c.competence };
           case "changement_serie":
@@ -257,11 +271,22 @@ function construireInstance(
               duree_setup: Number(c.duree),
             };
           case "disponibilite_ressource": {
-            const joursSemaine = parserListeEntiers(c.joursSemaineIndisponibles);
+            // Ancrage unique pour les deux champs de cette ligne — une seule référence
+            // "aujourd'hui" pour convertir à la fois les dates individuelles et le motif hebdo.
+            const ancrage = aujourdhui();
+            const joursIndisponibles = c.joursIndisponibles
+              .map((v) => parseEntreeDate(v))
+              .filter((d): d is Date => d !== null)
+              .map((d) => jourDepuisAncrage(d, ancrage));
+            // Position dans le cycle de 7 jours du DSL (jour 0 = jour de weekday `ancrage`),
+            // pas le jour de semaine JS lui-même (voir contrainteVersLigne pour l'inverse).
+            const joursSemaine = c.joursSemaineIndisponibles.map(
+              (jourSemaine) => (jourSemaine - ancrage.getDay() + 7) % 7,
+            );
             return {
               type: "disponibilite_ressource",
               ressource: c.ressource,
-              jours_indisponibles: parserListeEntiers(c.joursIndisponibles),
+              jours_indisponibles: joursIndisponibles,
               ...(joursSemaine.length > 0 ? { jours_semaine_indisponibles: joursSemaine } : {}),
             };
           }
@@ -1367,12 +1392,11 @@ function SectionContraintes({
                   onChange={(v) => majLigne(i, { tache: v })}
                 />
                 <Input
-                  placeholder="échéance"
-                  type="number"
-                  min={0}
+                  type="date"
+                  min={formatEntreeDate(aujourdhui())}
                   value={c.echeance}
                   onChange={(e) => majLigne(i, { echeance: e.target.value })}
-                  className="w-32"
+                  className="w-40"
                 />
               </>
             )}
@@ -1431,17 +1455,59 @@ function SectionContraintes({
                   onChange={(v) => majLigne(i, { ressource: v })}
                 />
                 <Input
-                  placeholder="jours indisponibles (ex: 0,3,7)"
-                  value={c.joursIndisponibles}
-                  onChange={(e) => majLigne(i, { joursIndisponibles: e.target.value })}
-                  className="w-48"
+                  type="date"
+                  min={formatEntreeDate(aujourdhui())}
+                  value=""
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (v && !c.joursIndisponibles.includes(v)) {
+                      majLigne(i, { joursIndisponibles: [...c.joursIndisponibles, v].sort() });
+                    }
+                  }}
+                  className="w-40"
+                  title="Ajouter une date d'indisponibilité"
                 />
-                <Input
-                  placeholder="motif hebdo, jours 0-6 (ex: 5,6)"
-                  value={c.joursSemaineIndisponibles}
-                  onChange={(e) => majLigne(i, { joursSemaineIndisponibles: e.target.value })}
-                  className="w-56"
-                />
+                {c.joursIndisponibles.map((jour) => (
+                  <Badge key={jour} variant="secondary" className="gap-1 font-normal">
+                    {new Date(jour).toLocaleDateString("fr-FR")}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        majLigne(i, {
+                          joursIndisponibles: c.joursIndisponibles.filter((j) => j !== jour),
+                        })
+                      }
+                      aria-label={`Retirer le ${jour}`}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+                <div className="flex items-center gap-1" title="Motif hebdomadaire récurrent">
+                  {NOMS_JOURS_SEMAINE_COURTS.map((nom, jourSemaine) => {
+                    const actif = c.joursSemaineIndisponibles.includes(jourSemaine);
+                    return (
+                      <button
+                        key={jourSemaine}
+                        type="button"
+                        onClick={() =>
+                          majLigne(i, {
+                            joursSemaineIndisponibles: actif
+                              ? c.joursSemaineIndisponibles.filter((j) => j !== jourSemaine)
+                              : [...c.joursSemaineIndisponibles, jourSemaine],
+                          })
+                        }
+                        className={`rounded px-1.5 py-1 text-xs ${
+                          actif
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
+                        {nom}
+                      </button>
+                    );
+                  })}
+                </div>
               </>
             )}
 
@@ -1527,7 +1593,7 @@ function contrainteVersLigne(
         clef: idLocal(),
         type: "echeance",
         tache: c.tache,
-        echeance: c.echeance.toString(),
+        echeance: formatEntreeDate(dateDepuisAncrage(c.echeance, aujourdhui())),
       };
     case "competence_requise":
       return {
@@ -1547,15 +1613,21 @@ function contrainteVersLigne(
         apres: c.tache_apres,
         duree: c.duree_setup.toString(),
       };
-    case "disponibilite_ressource":
+    case "disponibilite_ressource": {
+      const ancrage = aujourdhui();
       return {
         ...base,
         clef: idLocal(),
         type: "disponibilite_ressource",
         ressource: c.ressource,
-        joursIndisponibles: c.jours_indisponibles.join(","),
-        joursSemaineIndisponibles: (c.jours_semaine_indisponibles ?? []).join(","),
+        joursIndisponibles: c.jours_indisponibles.map((j) =>
+          formatEntreeDate(dateDepuisAncrage(j, ancrage)),
+        ),
+        joursSemaineIndisponibles: (c.jours_semaine_indisponibles ?? []).map(
+          (p) => (ancrage.getDay() + p) % 7,
+        ),
       };
+    }
   }
 }
 

@@ -8,6 +8,7 @@ import {
   AlertCircle,
   AlertTriangle,
   Download,
+  Factory,
   FolderOpen,
   Lightbulb,
   Loader2,
@@ -147,7 +148,7 @@ const GABARIT_JSON = { nom: "instance_exemple.json", href: "/gabarits/instance_e
 
 // Champ partagé entre FormulaireNouvelleSource (crée une Source réenre-
 // gistrable) et ImporteurCsvDirect (crée une instance immédiatement, sans
-// Source) — seul "Nom de la source" reste propre au premier (aucune Source
+// Source) — seul "Nom de l'atelier" reste propre au premier (aucune Source
 // n'existe côté import CSV direct).
 function ChampClientSource({
   idPrefix,
@@ -174,6 +175,13 @@ function ChampClientSource({
       )}
     </div>
   );
+}
+
+// "export_atelier_mecanique.json" -> "export_atelier_mecanique" — utilisé pour préremplir
+// "Nom de l'atelier" (voir FormulaireNouvelleSource) à partir du fichier choisi, jamais pour
+// deviner quoi que ce soit dans les données elles-mêmes.
+function nomDepuisNomFichier(nomFichier: string): string {
+  return nomFichier.replace(/\.[^./\\]+$/, "").trim();
 }
 
 // Bouton "Choisir un fichier..." stylé / badge de fichier choisi avec retrait
@@ -265,6 +273,9 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
     setFichier(nouveauFichier);
     setErreurFichier(null);
     if (!nouveauFichier) return;
+    // Suggestion automatique du nom depuis le fichier choisi — seulement si le champ est
+    // encore vide, jamais pour écraser un nom déjà saisi à la main.
+    setNom((actuel) => (actuel.trim() ? actuel : nomDepuisNomFichier(nouveauFichier.name)));
     setChargementFichier(true);
     try {
       setDonneesBrutes(await nouveauFichier.text());
@@ -291,12 +302,12 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   return (
     <div className="glass space-y-5 rounded-2xl p-6">
       <div className="space-y-1.5">
-        <Label htmlFor="nom_source">Nom de la source (optionnel)</Label>
+        <Label htmlFor="nom_atelier">Nom de l'atelier (optionnel)</Label>
         <Input
-          id="nom_source"
+          id="nom_atelier"
           value={nom}
           onChange={(e) => setNom(e.target.value)}
-          placeholder="ex : Export ERP atelier mécanique"
+          placeholder="ex : Atelier mécanique"
           className="max-w-sm"
         />
       </div>
@@ -1038,6 +1049,9 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
   const executer = useDeclencherExecution();
   const [dernier, setDernier] = useState<{
     instance_id: string;
+    // Résumé en langage naturel de ce que fait l'atelier — absent (null) pour une conversion
+    // déterministe (genererInstanceDeterministe), aucun agent LLM n'intervient sur ce chemin.
+    descriptionMetier: string | null;
     avertissements: string[];
     justifications: Justification[];
   } | null>(null);
@@ -1076,6 +1090,7 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
         onSuccess: (data) => {
           setDernier({
             instance_id: data.instance_id,
+            descriptionMetier: data.description_metier,
             avertissements: data.avertissements,
             justifications: data.justifications,
           });
@@ -1098,7 +1113,12 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
       { sourceId },
       {
         onSuccess: (data) => {
-          setDernier({ instance_id: data.instance_id, avertissements: [], justifications: [] });
+          setDernier({
+            instance_id: data.instance_id,
+            descriptionMetier: null,
+            avertissements: [],
+            justifications: [],
+          });
           invaliderApresConversion();
           executerAutomatiquement(data.instance_id);
         },
@@ -1160,6 +1180,15 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
               <AlertCircle className="h-4 w-4" /> Échec de la conversion déterministe
             </div>
             <p className="mt-1">{erreurDeterministe.message}</p>
+          </div>
+        )}
+
+        {dernier?.descriptionMetier && (
+          <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+            <div className="flex items-center gap-2 font-medium text-primary">
+              <Factory className="h-4 w-4" /> Comment fonctionne cet atelier
+            </div>
+            <p className="mt-1 text-muted-foreground">{dernier.descriptionMetier}</p>
           </div>
         )}
 

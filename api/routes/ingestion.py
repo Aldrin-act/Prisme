@@ -9,9 +9,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from adapters.commande_derivation import Commande, deriver_echeances_par_commande
-from api.autorisation import verifier_acces_client
+from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
-from api.etat import EtatAPI, obtenir_etat, structure_contraintes
+from api.etat import CommandeEnregistree, EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import InstanceTRCO, Objectif
@@ -52,6 +52,56 @@ def ingerer_instance(
     instance = valider_payload_trco(payload)
     instance_id = etat.enregistrer_instance(client_id, instance, canal_ingestion="manuel")
     return {"instance_id": instance_id, "structure_contraintes": structure_contraintes(instance)}
+
+
+@router.get("/commandes")
+def lister_toutes_commandes(
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> list[dict[str, object]]:
+    """Toutes les commandes de tous les ateliers (instances) du client authentifié — sans filtre
+    pour un admin, voir `client_id_pour_filtre` (même patron que `supervision.py::lister_instances`).
+    Même calcul de statut, à la volée, que `lister_commandes_instance` plus bas, mais un seul
+    appel à `dernier_planning_pour_instance`/`date_derniere_execution_reussie` par instance
+    *distincte* plutôt que par instance à chaque requête — une commande ne référence jamais une
+    instance inconnue (`enregistrer_commande` n'est jamais appelé sans instance déjà existante) ni
+    supprimée (`supprimer_instance` cascade-supprime ses commandes, voir `api/etat.py`).
+
+    Déclarée ici, avant `GET /{instance_id}` ci-dessous plutôt qu'à côté des autres routes
+    `/commandes*` (§ordre de correspondance FastAPI/Starlette) : un chemin à un seul segment
+    (`/commandes`) serait sinon capturé par `GET /{instance_id}` (instance_id="commandes"),
+    déclarée avant elle dans le fichier — l'ordre d'enregistrement des routes prime sur leur
+    position dans le code source, jamais l'inverse."""
+    filtre_client = client_id_pour_filtre(utilisateur)
+    commandes = [
+        c for c in etat.lister_commandes(instance_id=None) if filtre_client is None or c.client_id == filtre_client
+    ]
+
+    par_instance: dict[str, list[CommandeEnregistree]] = {}
+    for commande in commandes:
+        par_instance.setdefault(commande.instance_id, []).append(commande)
+
+    resultats: list[dict[str, object]] = []
+    for instance_id, commandes_instance in par_instance.items():
+        _, instance = etat.recuperer_instance(instance_id)
+        planning = etat.dernier_planning_pour_instance(instance_id)
+        date_execution = etat.date_derniere_execution_reussie(instance_id)
+        for commande in commandes_instance:
+            resultats.append(
+                {
+                    "commande_id": commande.id,
+                    "instance_id": commande.instance_id,
+                    "client_id": commande.client_id,
+                    "date_limite": commande.date_limite,
+                    "taches": list(commande.taches),
+                    "date_creation": commande.date_creation,
+                    "date_execution": date_execution,
+                    **calculer_statut_commande(
+                        instance, planning, commande.taches, commande.date_limite
+                    ).en_dict(),
+                }
+            )
+    return resultats
 
 
 @router.get("/{instance_id}")
@@ -307,13 +357,16 @@ def lister_commandes_instance(
     verifier_acces_client(utilisateur, client_id)
 
     planning = etat.dernier_planning_pour_instance(instance_id)
+    date_execution = etat.date_derniere_execution_reussie(instance_id)
     return [
         {
             "commande_id": commande.id,
             "instance_id": commande.instance_id,
+            "client_id": commande.client_id,
             "date_limite": commande.date_limite,
             "taches": list(commande.taches),
             "date_creation": commande.date_creation,
+            "date_execution": date_execution,
             **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
         }
         for commande in etat.lister_commandes(instance_id=instance_id)
@@ -344,9 +397,11 @@ def obtenir_commande(
     return {
         "commande_id": commande.id,
         "instance_id": commande.instance_id,
+        "client_id": commande.client_id,
         "date_limite": commande.date_limite,
         "taches": list(commande.taches),
         "date_creation": commande.date_creation,
+        "date_execution": etat.date_derniere_execution_reussie(commande.instance_id),
         **statut.en_dict(),
     }
 

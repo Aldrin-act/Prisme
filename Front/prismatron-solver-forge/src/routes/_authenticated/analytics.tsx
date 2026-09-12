@@ -34,7 +34,8 @@ import {
   type PlanningAvecDurees,
 } from "@/integrations/prisme";
 import { chargeParJour, chargeParRessource, tachesEnRetard } from "@/lib/charge-ressources";
-import { formatDuree, formatDureeCourte } from "@/lib/unite-duree";
+import { debutJour, formatDateRelative } from "@/lib/dates-relatives";
+import { formatDuree } from "@/lib/unite-duree";
 
 // Une ressource à ce taux de charge ou plus, sur tout le makespan, compte
 // comme un goulot d'étranglement — seuil pragmatique, pas une valeur du DSL.
@@ -486,6 +487,9 @@ function ContenuChargeRessources({
     fin: op.debut + (planning.durees[`${op.tache}|${op.ressource}`] ?? 0),
   }));
   const makespan = operations.length > 0 ? Math.max(...operations.map((op) => op.fin)) : 0;
+  // Ancrage calendaire du dernier planning réussi — voir src/lib/dates-relatives.ts. Un fait
+  // historique figé côté serveur (PlanningAvecDurees.date_execution), jamais "aujourd'hui".
+  const ancrage = debutJour(new Date(planning.date_execution));
 
   if (makespan === 0) {
     return (
@@ -569,7 +573,7 @@ function ContenuChargeRessources({
                 />
               </div>
               <span className="text-[10px] text-muted-foreground">
-                {formatDureeCourte(j.jour, instance.unite_duree)}
+                {formatDateRelative(j.jour, ancrage)}
               </span>
             </div>
           ))}
@@ -602,8 +606,8 @@ function ContenuChargeRessources({
                   <AlertTriangle className="h-4 w-4 shrink-0" /> {r.tache}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  fin dans {formatDuree(r.fin, instance.unite_duree)} · échéance{" "}
-                  {formatDuree(r.echeance, instance.unite_duree)} · retard de{" "}
+                  fin le {formatDateRelative(r.fin, ancrage)} · échéance le{" "}
+                  {formatDateRelative(r.echeance, ancrage)} · retard de{" "}
                   {formatDuree(r.retard, instance.unite_duree)}
                 </span>
               </li>
