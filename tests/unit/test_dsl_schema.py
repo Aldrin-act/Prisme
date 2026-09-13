@@ -378,6 +378,48 @@ def test_disponibilite_ressource_motif_hebdomadaire_hors_bornes_rejetee() -> Non
         charger_instance(payload)
 
 
+def test_unite_temps_defaut_est_jours() -> None:
+    instance = charger_instance(_instance_minimale())
+    assert instance.unite_temps == "jours"
+
+
+def test_disponibilite_motif_hebdomadaire_mode_heures_jusqu_a_167_acceptee() -> None:
+    payload = _instance_minimale(
+        unite_temps="heures",
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1", "jours_semaine_indisponibles": [167]},
+        ],
+    )
+    instance = charger_instance(payload)
+    assert instance.unite_temps == "heures"
+
+
+def test_disponibilite_motif_hebdomadaire_mode_heures_168_rejetee() -> None:
+    payload = _instance_minimale(
+        unite_temps="heures",
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1", "jours_semaine_indisponibles": [168]},
+        ],
+    )
+    with pytest.raises(ValidationError, match="entre 0 et 167"):
+        charger_instance(payload)
+
+
+def test_disponibilite_motif_hebdomadaire_mode_jours_reste_borne_a_6_meme_valeur_permise_en_heures() -> None:
+    """Régression : une valeur légale en mode heures (30) doit rester rejetée en mode jours
+    (défaut) — la borne dépend bien de `unite_temps`, jamais une relaxation globale du champ."""
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "disponibilite_ressource", "ressource": "R1", "jours_semaine_indisponibles": [30]},
+        ]
+    )
+    with pytest.raises(ValidationError, match="entre 0 et 6"):
+        charger_instance(payload)
+
+
 def test_taille_lot_valide_acceptee() -> None:
     payload = _instance_minimale(
         contraintes=[

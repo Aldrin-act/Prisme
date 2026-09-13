@@ -30,9 +30,9 @@ def main():
     print("  TEST AGENT ANALYSTE")
     print("=" * 70 + "\n")
 
-    api_key = os.getenv("KIMI_API_KEY")
+    api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
-        print("❌ KIMI_API_KEY non définie dans .env")
+        print("❌ OPENROUTER_API_KEY non définie dans .env")
         sys.exit(1)
 
     print(f"🔑 API Key : {api_key[:20]}...\n")

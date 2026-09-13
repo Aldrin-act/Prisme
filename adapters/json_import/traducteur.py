@@ -27,7 +27,7 @@ jamais la notion de "commande" elle-même (§5.3, vocabulaire DSL fini).
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
@@ -84,6 +84,7 @@ class InstanceBrute(BaseModel):
     contraintes: list[Contrainte] = Field(default_factory=list)
     objectifs: list[Objectif] = Field(default_factory=lambda: [MinimiserMakespan()])
     commandes: list[CommandeBrute] = Field(default_factory=list)
+    unite_temps: Literal["jours", "heures"] = "jours"
 
 
 def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None = None) -> ResultatTraduction:
@@ -98,11 +99,20 @@ def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None =
     `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
     automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
     aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
-    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée)."""
+    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée). Ignoré
+    (comme si absent) si le payload déclare `"unite_temps": "heures"` : entraîné sur une échelle
+    jours (`estimation/donnees_historique.py`), une estimation à cette échelle serait fausse pour
+    des durées en heures.
+
+    `unite_temps` (optionnel dans le payload, "jours" par défaut) devient `InstanceTRCO.
+    unite_temps` tel quel — voir `dsl/schema/instance.py`."""
     try:
         brute = InstanceBrute.model_validate(payload)
     except ValidationError as erreur:
         raise ErreurPayloadInvalide(str(erreur)) from erreur
+
+    if brute.unite_temps == "heures":
+        estimateur_duree = None
 
     taches = [
         Tache(id=t.id, nom=t.nom, priorite=t.priorite, statut=t.statut, quantite=t.quantite, produit=t.produit)
@@ -134,5 +144,6 @@ def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None =
         ressources=brute.ressources,
         contraintes=[*brute.contraintes, *compatibilites_derivees, *echeances_derivees],
         objectifs=brute.objectifs,
+        unite_temps=brute.unite_temps,
     )
     return ResultatTraduction(instance=instance, avertissements=tuple(avertissements))

@@ -130,20 +130,25 @@ class ContrainteIncompatibilite(BaseModel):
 
 
 class ContrainteDisponibiliteRessource(BaseModel):
-    """La ressource `ressource` est indisponible durant les jours listés dans
+    """La ressource `ressource` est indisponible durant les instants listés dans
     `jours_indisponibles` et/ou durant chaque occurrence du motif récurrent
     `jours_semaine_indisponibles` — aucune opération ne peut s'y dérouler un
-    jour indisponible (même référentiel que `Echeance`/`duree` : jours
-    relatifs, jamais une date calendaire — convertir un vrai calendrier/jours
-    fériés en jours reste un problème d'adaptateur, en amont de l'ingestion).
+    instant indisponible (même référentiel que `Echeance`/`duree` : relatifs à
+    `InstanceTRCO.unite_temps` — jours ou heures —, jamais une date calendaire —
+    convertir un vrai calendrier/jours fériés reste un problème d'adaptateur,
+    en amont de l'ingestion).
 
-    `jours_semaine_indisponibles` exprime un motif qui se répète tous les 7
-    jours à partir du jour 0 de l'instance (`0` = position 0 du cycle, ...,
-    `6` = position 6) — pour un vrai "week-end" calendaire, c'est à
-    l'adaptateur de savoir quel jour relatif de l'instance correspond à quel
-    jour de la semaine réel, pas au DSL (toujours relatif, jamais une date).
-    Les deux champs se combinent : une ressource peut avoir un motif
-    récurrent (repos hebdomadaire) *et* des jours exceptionnels explicites
+    `jours_semaine_indisponibles` exprime un motif qui se répète selon un cycle
+    fixé par `InstanceTRCO.unite_temps` (7 en mode jours, 168 en mode heures) à
+    partir de l'instant 0 de l'instance (`0` = position 0 du cycle, ..., la
+    dernière position = fin du cycle) — pour un vrai "week-end" calendaire,
+    c'est à l'adaptateur de savoir quel instant relatif de l'instance
+    correspond à quel jour/heure réel, pas au DSL (toujours relatif, jamais
+    une date). La borne haute du cycle dépend de `unite_temps` et n'est donc
+    vérifiée qu'au niveau de `InstanceTRCO` (`_disponibilite_dans_le_cycle`),
+    pas ici — cette contrainte, validée seule, ne garantit qu'une valeur
+    positive. Les deux champs se combinent : une ressource peut avoir un motif
+    récurrent (repos hebdomadaire) *et* des instants exceptionnels explicites
     (jours fériés), déclarés soit dans la même contrainte, soit dans deux
     contraintes distinctes pour la même ressource (elles s'additionnent,
     jamais un remplacement — même principe que plusieurs
@@ -165,8 +170,9 @@ class ContrainteDisponibiliteRessource(BaseModel):
     )
     jours_semaine_indisponibles: list[int] | None = Field(
         default=None,
-        description="Motif récurrent (cycle de 7 jours depuis le jour 0 de l'instance) : "
-        "positions 0 à 6 où cette ressource est indisponible chaque semaine.",
+        description="Motif récurrent (cycle de 7 jours ou 168 heures selon InstanceTRCO."
+        "unite_temps, depuis l'instant 0 de l'instance) : positions où cette ressource est "
+        "indisponible à chaque occurrence du cycle.",
     )
 
     @model_validator(mode="after")
@@ -178,13 +184,14 @@ class ContrainteDisponibiliteRessource(BaseModel):
         return self
 
     @model_validator(mode="after")
-    def _jours_semaine_dans_le_cycle(self) -> ContrainteDisponibiliteRessource:
+    def _jours_semaine_positifs(self) -> ContrainteDisponibiliteRessource:
+        """Borne haute (dépendante de `InstanceTRCO.unite_temps` — 7 ou 168) volontairement
+        absente ici : cette contrainte est validée seule, avant assemblage dans l'instance, donc
+        ne peut pas connaître l'unité de temps déclarée — voir `InstanceTRCO._disponibilite_dans_le_cycle`."""
         if self.jours_semaine_indisponibles is not None:
-            invalides = sorted({j for j in self.jours_semaine_indisponibles if not (0 <= j <= 6)})
+            invalides = sorted({j for j in self.jours_semaine_indisponibles if j < 0})
             if invalides:
-                raise ValueError(
-                    f"jours_semaine_indisponibles doit contenir des valeurs entre 0 et 6 : {invalides}"
-                )
+                raise ValueError(f"jours_semaine_indisponibles doit contenir des valeurs positives : {invalides}")
         return self
 
 

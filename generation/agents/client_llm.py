@@ -1,14 +1,15 @@
 """Client LLM générique pour les agents du pipeline (§5.6).
 
-**Fournisseur unique : Kimi (Moonshot AI)** (`KIMI_API_KEY`, jamais lue/manipulée/journalisée
-directement ici, uniquement passée telle quelle à `ChatOpenAI`, voir `_construire_modele_kimi`
-pour pourquoi `ChatOpenAI` plutôt qu'un package dédié). `PRISME_LLM_MODEL`
-(défaut `kimi-k2.6`) et les surcharges par agent
+**Fournisseur unique : OpenRouter** (`OPENROUTER_API_KEY`, jamais lue/manipulée/journalisée
+directement ici, uniquement passée telle quelle à `ChatOpenAI`, voir `_construire_modele_openrouter`
+pour pourquoi `ChatOpenAI` plutôt qu'un package dédié) — une passerelle compatible OpenAI vers
+Kimi K2 (Moonshot AI) et d'autres modèles, plutôt qu'un appel direct à l'API Moonshot. `PRISME_LLM_MODEL`
+(défaut `moonshotai/kimi-k2.6`) et les surcharges par agent
 (`PRISME_LLM_MODEL_<AGENT>`/`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>`) restent disponibles ;
 il n'existe plus de variable de choix de fournisseur — les autres fournisseurs
-(qwen/together/nvidia/minimax/deepseek/nemotron, puis Mistral) ont été retirés du code au fil
-du temps, jugés une complexité non nécessaire pour un seul fournisseur réellement utilisé en
-production.
+(qwen/together/nvidia/minimax/deepseek/nemotron, puis Mistral, puis l'appel direct à Moonshot)
+ont été retirés du code au fil du temps, jugés une complexité non nécessaire pour un seul
+fournisseur réellement utilisé en production.
 
 Construit sur LangChain (`langchain-core`/`langchain-openai`, `extra` optionnel
 `llm` du projet) plutôt que sur le SDK brut : donne un timeout HTTP réel par appel
@@ -175,6 +176,16 @@ def invoquer_agent_avec_outils(
         reponse = _avec_retry(modele_avec_outils.invoke)(conversation)
         conversation.append(reponse)
         if not reponse.tool_calls:
+            # Certains fournisseurs compatibles OpenAI exigent que le dernier message envoyé
+            # ait role=user — sans ce message de relance, la conversation se terminerait sur
+            # cet AIMessage juste ajouté, rejetée par ces fournisseurs avant même d'atteindre
+            # `invoquer_agent_structure` (vu en pratique, erreur 400 "last message must have
+            # role=user"). Même message que le cas `max_appels_outils` atteint ci-dessous.
+            conversation.append(
+                HumanMessage(
+                    content="Réponds maintenant directement avec le JSON demandé, sans outil supplémentaire."
+                )
+            )
             break
         for appel in reponse.tool_calls:
             outil = outils_par_nom.get(appel["name"])
@@ -193,8 +204,8 @@ def invoquer_agent_avec_outils(
     return donnees, reponse_brute, appels_effectues
 
 
-_MODELE_KIMI_PAR_DEFAUT = "kimi-k2.6"
-_KIMI_API_BASE_URL_PAR_DEFAUT = "https://api.moonshot.ai/v1"
+_MODELE_PAR_DEFAUT = "moonshotai/kimi-k2.6"
+_OPENROUTER_API_BASE_URL_PAR_DEFAUT = "https://openrouter.ai/api/v1"
 
 
 def _timeout_pour_agent(nom_agent: str | None) -> float:
@@ -205,18 +216,18 @@ def _timeout_pour_agent(nom_agent: str | None) -> float:
     return float(os.environ.get("PRISME_LLM_TIMEOUT_SECONDES") or _TIMEOUT_DEFAUT_SECONDES)
 
 
-def _construire_modele_kimi(modele: str, timeout: float) -> BaseChatModel:
-    """Kimi (Moonshot AI) est compatible OpenAI — `ChatOpenAI` avec un `base_url` personnalisé
+def _construire_modele_openrouter(modele: str, timeout: float) -> BaseChatModel:
+    """OpenRouter est compatible OpenAI — `ChatOpenAI` avec un `base_url` personnalisé
     est le patron officiellement recommandé par LangChain pour tout fournisseur compatible,
-    plutôt qu'un package tiers dédié (`langchain-moonshot`, communautaire, pas un partner
+    plutôt qu'un package tiers dédié (`langchain-openrouter`, communautaire, pas un partner
     package LangChain officiel à ce jour) — même logique que le retrait des autres fournisseurs
     (qwen/together/nvidia/minimax/deepseek) : une seule dépendance fiable plutôt que plusieurs."""
     from langchain_openai import ChatOpenAI
 
     return ChatOpenAI(
         model=modele,
-        api_key=os.environ.get("KIMI_API_KEY"),
-        base_url=os.environ.get("KIMI_API_BASE_URL") or _KIMI_API_BASE_URL_PAR_DEFAUT,
+        api_key=os.environ.get("OPENROUTER_API_KEY"),
+        base_url=os.environ.get("OPENROUTER_API_BASE_URL") or _OPENROUTER_API_BASE_URL_PAR_DEFAUT,
         timeout=timeout,
     )
 
@@ -227,8 +238,8 @@ def methode_sortie_structuree(modele: BaseChatModel) -> str:
     `"json_mode"` plutôt que le défaut LangChain (`method="function_calling"`, tool-calling
     natif) ou le mode schéma strict (`"json_schema"`) : mode JSON basique, le plus largement
     supporté chez les fournisseurs compatibles OpenAI — choisi par prudence, pas encore
-    revalidé par un appel réel contre Kimi (contrairement au choix précédent pour Mistral, qui
-    l'avait été — voir l'historique de ce fichier)."""
+    revalidé par un appel réel contre Kimi via OpenRouter (contrairement au choix précédent
+    pour Mistral, qui l'avait été — voir l'historique de ce fichier)."""
     return "json_mode"
 
 
@@ -240,12 +251,12 @@ def construire_modele() -> BaseChatModel:
     # déclare toujours, vide par défaut (`PRISME_LLM_MODEL=`), ce qui donnerait `modele = ""`
     # sans le `or` : le fournisseur rejette alors l'appel avec une erreur "modèle manquant"
     # plutôt que d'utiliser son propre défaut, l'erreur n'a rien d'évident depuis l'appelant.
-    modele_nom = os.environ.get("PRISME_LLM_MODEL") or _MODELE_KIMI_PAR_DEFAUT
-    return _construire_modele_kimi(modele_nom, _timeout_pour_agent(None))
+    modele_nom = os.environ.get("PRISME_LLM_MODEL") or _MODELE_PAR_DEFAUT
+    return _construire_modele_openrouter(modele_nom, _timeout_pour_agent(None))
 
 
 def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel:
-    """Construit le `BaseChatModel` LangChain (Kimi) pour un agent spécifique. Le retry
+    """Construit le `BaseChatModel` LangChain (OpenRouter) pour un agent spécifique. Le retry
     (`_avec_retry` pour les erreurs réseau transitoires, `invoquer_agent_structure` pour une
     sortie structurée non conforme) reste à la charge de l'appelant, qui l'applique au point
     d'appel réel (`.invoke(...)` sur le `Runnable` structuré ou brut), puisque le modèle
@@ -255,8 +266,8 @@ def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel:
     `PRISME_LLM_TIMEOUT_SECONDES_<AGENT>` — jamais de choix de fournisseur, il n'y en a qu'un.
     """
     var_modele = f"PRISME_LLM_MODEL_{nom_agent.upper()}"
-    modele_nom = os.environ.get(var_modele) or _MODELE_KIMI_PAR_DEFAUT
-    return _construire_modele_kimi(modele_nom, _timeout_pour_agent(nom_agent))
+    modele_nom = os.environ.get(var_modele) or os.environ.get("PRISME_LLM_MODEL") or _MODELE_PAR_DEFAUT
+    return _construire_modele_openrouter(modele_nom, _timeout_pour_agent(nom_agent))
 
 
 def construire_modele_comprehension() -> BaseChatModel:

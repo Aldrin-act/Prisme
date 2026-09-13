@@ -349,13 +349,19 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
         if contrainte.jours_semaine_indisponibles:
             motif_hebdo_par_ressource[contrainte.ressource].update(contrainte.jours_semaine_indisponibles)
 
+    # Longueur du cycle du motif hebdomadaire récurrent — dépend de l'unité de temps déclarée
+    # par l'instance (voir InstanceTRCO.unite_temps, dsl/schema/instance.py) : 7 en mode jours,
+    # 168 en mode heures. `jours_semaine_indisponibles` a déjà été validé contre cette même borne
+    # à l'ingestion (InstanceTRCO._disponibilite_dans_le_cycle).
+    longueur_cycle = 7 if instance.unite_temps == "jours" else 168
+
     for ressource_id in jours_indisponibles_par_ressource.keys() | motif_hebdo_par_ressource.keys():
         jours_bloques = jours_indisponibles_par_ressource.get(ressource_id, set())
         motif_hebdo = motif_hebdo_par_ressource.get(ressource_id, set())
         for tache_id, debut, fin in operations_par_ressource.get(ressource_id, []):
             jours_occupes = set(range(debut, fin))
             jours_en_conflit = {
-                jour for jour in jours_occupes if jour in jours_bloques or (jour % 7) in motif_hebdo
+                jour for jour in jours_occupes if jour in jours_bloques or (jour % longueur_cycle) in motif_hebdo
             }
             if jours_en_conflit:
                 violations.append(

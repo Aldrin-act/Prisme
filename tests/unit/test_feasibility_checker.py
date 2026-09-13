@@ -25,12 +25,13 @@ from dsl.schema import (
 from validation_engine.feasibility_checker import verifier_faisabilite
 
 
-def _instance(taches, ressources, contraintes=()) -> InstanceTRCO:
+def _instance(taches, ressources, contraintes=(), unite_temps="jours") -> InstanceTRCO:
     return InstanceTRCO(
         taches=taches,
         ressources=ressources,
         contraintes=list(contraintes),
         objectifs=[MinimiserMakespan()],
+        unite_temps=unite_temps,
     )
 
 
@@ -425,6 +426,49 @@ def test_disponibilite_ressource_motif_hebdomadaire_se_repete_sur_tout_l_horizon
     resultat = verifier_faisabilite(instance, planning)
 
     assert not resultat.legal
+
+
+def test_disponibilite_ressource_motif_hebdomadaire_mode_heures_utilise_un_cycle_de_168() -> None:
+    """L'instant 100 est à la position 100 d'un cycle de 168 (mode heures) — un motif qui bloque
+    la position 100 doit donc détecter une violation à cet instant précis."""
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=1),
+            ContrainteDisponibiliteRessource(ressource="R1", jours_semaine_indisponibles=[100]),
+        ],
+        unite_temps="heures",
+    )
+    # instant 100 : position 100 dans le cycle de 168 (100 % 168 == 100) -> indisponible.
+    planning = _planning(_op("T1", "R1", 100))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["ressource_indisponible"]
+
+
+def test_disponibilite_ressource_motif_hebdomadaire_mode_heures_hors_motif_est_legal() -> None:
+    """Le même instant (100) serait bloqué avec un cycle de 7 (100 % 7 == 2) si le motif
+    contenait 2 — ici le motif ([2]) bloque bien la position 2 du cycle de 168 (l'instant 2, pas
+    100), preuve que le bon cycle (168, pas 7) est réellement utilisé en mode heures."""
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=1),
+            ContrainteDisponibiliteRessource(ressource="R1", jours_semaine_indisponibles=[2]),
+        ],
+        unite_temps="heures",
+    )
+    # instant 100 : position 100 dans le cycle de 168 (100 % 168 == 100, pas dans [2]) -> légal.
+    # Avec un cycle de 7 (bug), 100 % 7 == 2, qui EST dans le motif -> détecterait à tort une violation.
+    planning = _planning(_op("T1", "R1", 100))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
 
 
 def test_disponibilite_ressource_jours_explicites_et_motif_hebdomadaire_se_combinent() -> None:

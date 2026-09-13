@@ -111,8 +111,8 @@ bout-en-bout s'exécutent réellement, pas seulement en `skip`). Un run rouge do
 
 | Variable | Rôle | Défaut |
 |---|---|---|
-| `KIMI_API_KEY` | Clé API du fournisseur LLM unique (`generation/`) | — |
-| `PRISME_LLM_MODEL` | Modèle Kimi à utiliser | `kimi-k2.6` |
+| `OPENROUTER_API_KEY` | Clé API du fournisseur LLM unique (`generation/`) | — |
+| `PRISME_LLM_MODEL` | Modèle à utiliser (routé via OpenRouter) | `moonshotai/kimi-k2.6` |
 
 ## Arborescence
 

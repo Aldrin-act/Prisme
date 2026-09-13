@@ -62,8 +62,11 @@ import {
   aujourdhui,
   dateDepuisAncrage,
   formatEntreeDate,
+  formatEntreeDateHeure,
   jourDepuisAncrage,
   parseEntreeDate,
+  parseEntreeDateHeure,
+  type UniteTemps,
 } from "@/lib/dates-relatives";
 
 // Adaptateurs ERP réellement branchés côté backend (POST /adapters/{id}/ingerer).
@@ -216,6 +219,12 @@ export function construireObjectifs(objectifs: ObjectifLigne[]): Objectif[] {
   });
 }
 
+// Longueur du cycle du motif hebdomadaire récurrent — 7 en mode jours, 168 en mode heures (voir
+// dsl/schema/instance.py::InstanceTRCO._disponibilite_dans_le_cycle, même constante côté serveur).
+function longueurCycle(unite: UniteTemps): number {
+  return unite === "heures" ? 168 : 7;
+}
+
 function construireInstance(
   taches: TacheLigne[],
   ressources: RessourceLigne[],
@@ -225,7 +234,14 @@ function construireInstance(
   // telles quelles (voir contraintesNonEditables) — jamais perdues au
   // réenregistrement d'une instance qui en avait.
   contraintesNonEditables: Contrainte[] = [],
+  uniteTemps: UniteTemps = "jours",
 ): InstanceTRCO {
+  const ancrage = aujourdhui();
+  // Point de référence unique pour le motif hebdomadaire, dans le même référentiel que
+  // `longueurCycle` : position 0 du cycle en mode heures = (jour de semaine × 24 + heure) de
+  // `ancrage` — pas seulement son jour de semaine, contrairement au mode jours.
+  const referenceCycle =
+    uniteTemps === "heures" ? ancrage.getDay() * 24 + ancrage.getHours() : ancrage.getDay();
   return {
     taches: taches.map(({ id, nom, priorite }) => ({
       id,
@@ -253,11 +269,14 @@ function construireInstance(
               duree: Number(c.duree),
             };
           case "echeance": {
-            const date = parseEntreeDate(c.echeance);
+            const date =
+              uniteTemps === "heures"
+                ? parseEntreeDateHeure(c.echeance)
+                : parseEntreeDate(c.echeance);
             return {
               type: "echeance",
               tache: c.tache,
-              echeance: date ? jourDepuisAncrage(date, aujourdhui()) : 0,
+              echeance: date ? jourDepuisAncrage(date, ancrage, uniteTemps) : 0,
             };
           }
           case "competence_requise":
@@ -271,17 +290,16 @@ function construireInstance(
               duree_setup: Number(c.duree),
             };
           case "disponibilite_ressource": {
-            // Ancrage unique pour les deux champs de cette ligne — une seule référence
-            // "aujourd'hui" pour convertir à la fois les dates individuelles et le motif hebdo.
-            const ancrage = aujourdhui();
             const joursIndisponibles = c.joursIndisponibles
-              .map((v) => parseEntreeDate(v))
+              .map((v) => (uniteTemps === "heures" ? parseEntreeDateHeure(v) : parseEntreeDate(v)))
               .filter((d): d is Date => d !== null)
-              .map((d) => jourDepuisAncrage(d, ancrage));
-            // Position dans le cycle de 7 jours du DSL (jour 0 = jour de weekday `ancrage`),
-            // pas le jour de semaine JS lui-même (voir contrainteVersLigne pour l'inverse).
+              .map((d) => jourDepuisAncrage(d, ancrage, uniteTemps));
+            // Position dans le cycle DSL (0 = position de `referenceCycle`), pas la valeur brute
+            // choisie dans l'UI (jour de semaine JS, ou index plat jour×24+heure — voir
+            // contrainteVersLigne pour l'inverse).
+            const cycle = longueurCycle(uniteTemps);
             const joursSemaine = c.joursSemaineIndisponibles.map(
-              (jourSemaine) => (jourSemaine - ancrage.getDay() + 7) % 7,
+              (valeurBrute) => (valeurBrute - referenceCycle + cycle) % cycle,
             );
             return {
               type: "disponibilite_ressource",
@@ -294,6 +312,7 @@ function construireInstance(
       })
       .concat(contraintesNonEditables),
     objectifs: construireObjectifs(objectifs),
+    unite_temps: uniteTemps,
   };
 }
 
@@ -360,6 +379,12 @@ export function IngestionDialog({
   const [clientId, setClientId] = useState(
     instanceDepart?.client_id ?? utilisateur?.client_id ?? "",
   );
+  // "Unité de temps" (jours/heures) — un seul état partagé par les onglets Saisie T-R-C-O et
+  // Fichiers CSV (voir CLIENT_CONFIG.routes.adapters, POST .../csv/{client_id}?unite_temps=...) :
+  // les deux produisent une seule instance, l'unité ne peut pas différer entre les deux.
+  const [uniteTemps, setUniteTemps] = useState<UniteTemps>(
+    instanceDepart?.unite_temps === "heures" ? "heures" : "jours",
+  );
   const [taches, setTaches] = useState<TacheLigne[]>(
     instanceDepart ? instanceDepart.taches.map(tacheVersLigne) : [nouvelleTache()],
   );
@@ -368,7 +393,9 @@ export function IngestionDialog({
   );
   const [contraintes, setContraintes] = useState<ContrainteLigne[]>(
     instanceDepart
-      ? instanceDepart.contraintes.filter(estContrainteEditable).map(contrainteVersLigne)
+      ? instanceDepart.contraintes
+          .filter(estContrainteEditable)
+          .map((c) => contrainteVersLigne(c, uniteTemps))
       : [],
   );
   // Contraintes présentes sur l'instance de départ mais que ce formulaire ne
@@ -402,6 +429,7 @@ export function IngestionDialog({
 
   function reinitialiser() {
     setClientId(utilisateur?.client_id ?? "");
+    setUniteTemps("jours");
     setTaches([nouvelleTache()]);
     setRessources([nouvelleRessource()]);
     setContraintes([]);
@@ -464,6 +492,7 @@ export function IngestionDialog({
       contraintes,
       objectifs,
       contraintesNonEditables,
+      uniteTemps,
     );
     if (scenarioDeBase) {
       creerScenario.mutate(
@@ -502,6 +531,7 @@ export function IngestionDialog({
           contraintes: fichierContraintesCsv,
           commandes: fichierCommandesCsv ?? undefined,
         },
+        uniteTemps,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -666,6 +696,8 @@ export function IngestionDialog({
                   </p>
                 )}
 
+                <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
+
                 <OngletsTRCO
                   taches={taches}
                   setTaches={setTaches}
@@ -675,6 +707,7 @@ export function IngestionDialog({
                   setContraintes={setContraintes}
                   objectifs={objectifs}
                   setObjectifs={setObjectifs}
+                  uniteTemps={uniteTemps}
                 />
 
                 {erreur && (modifier.error ?? creerScenario.error) && (
@@ -716,6 +749,8 @@ export function IngestionDialog({
                     idChamp="client_id"
                   />
 
+                  <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
+
                   <OngletsTRCO
                     taches={taches}
                     setTaches={setTaches}
@@ -725,6 +760,7 @@ export function IngestionDialog({
                     setContraintes={setContraintes}
                     objectifs={objectifs}
                     setObjectifs={setObjectifs}
+                    uniteTemps={uniteTemps}
                   />
 
                   {erreur && ingerer.error && <ErreursAPI erreur={erreur} />}
@@ -832,6 +868,8 @@ export function IngestionDialog({
                     estAdmin={estAdmin}
                     idChamp="client_id_csv"
                   />
+
+                  <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
 
                   <div className="space-y-1.5">
                     <Label htmlFor="fichier_csv_taches">Tâches (.csv)</Label>
@@ -1086,6 +1124,7 @@ function OngletsTRCO({
   setContraintes,
   objectifs,
   setObjectifs,
+  uniteTemps,
 }: {
   taches: TacheLigne[];
   setTaches: React.Dispatch<React.SetStateAction<TacheLigne[]>>;
@@ -1095,6 +1134,7 @@ function OngletsTRCO({
   setContraintes: React.Dispatch<React.SetStateAction<ContrainteLigne[]>>;
   objectifs: ObjectifLigne[];
   setObjectifs: React.Dispatch<React.SetStateAction<ObjectifLigne[]>>;
+  uniteTemps: UniteTemps;
 }) {
   return (
     <Tabs defaultValue="taches">
@@ -1120,6 +1160,7 @@ function OngletsTRCO({
           setContraintes={setContraintes}
           taches={taches}
           ressources={ressources}
+          uniteTemps={uniteTemps}
         />
       </TabsContent>
       <TabsContent value="objectifs" className="pt-3">
@@ -1295,11 +1336,13 @@ function SectionContraintes({
   setContraintes,
   taches,
   ressources,
+  uniteTemps,
 }: {
   contraintes: ContrainteLigne[];
   setContraintes: React.Dispatch<React.SetStateAction<ContrainteLigne[]>>;
   taches: TacheLigne[];
   ressources: RessourceLigne[];
+  uniteTemps: UniteTemps;
 }) {
   function majLigne(i: number, patch: Partial<ContrainteLigne>) {
     setContraintes((arr) => arr.map((x, j) => (j === i ? { ...x, ...patch } : x)));
@@ -1392,8 +1435,12 @@ function SectionContraintes({
                   onChange={(v) => majLigne(i, { tache: v })}
                 />
                 <Input
-                  type="date"
-                  min={formatEntreeDate(aujourdhui())}
+                  type={uniteTemps === "heures" ? "datetime-local" : "date"}
+                  min={
+                    uniteTemps === "heures"
+                      ? formatEntreeDateHeure(aujourdhui())
+                      : formatEntreeDate(aujourdhui())
+                  }
                   value={c.echeance}
                   onChange={(e) => majLigne(i, { echeance: e.target.value })}
                   className="w-40"
@@ -1455,8 +1502,12 @@ function SectionContraintes({
                   onChange={(v) => majLigne(i, { ressource: v })}
                 />
                 <Input
-                  type="date"
-                  min={formatEntreeDate(aujourdhui())}
+                  type={uniteTemps === "heures" ? "datetime-local" : "date"}
+                  min={
+                    uniteTemps === "heures"
+                      ? formatEntreeDateHeure(aujourdhui())
+                      : formatEntreeDate(aujourdhui())
+                  }
                   value=""
                   onChange={(e) => {
                     const v = e.target.value;
@@ -1465,11 +1516,17 @@ function SectionContraintes({
                     }
                   }}
                   className="w-40"
-                  title="Ajouter une date d'indisponibilité"
+                  title={
+                    uniteTemps === "heures"
+                      ? "Ajouter un instant d'indisponibilité"
+                      : "Ajouter une date d'indisponibilité"
+                  }
                 />
                 {c.joursIndisponibles.map((jour) => (
                   <Badge key={jour} variant="secondary" className="gap-1 font-normal">
-                    {new Date(jour).toLocaleDateString("fr-FR")}
+                    {uniteTemps === "heures"
+                      ? new Date(jour).toLocaleString("fr-FR")
+                      : new Date(jour).toLocaleDateString("fr-FR")}
                     <button
                       type="button"
                       onClick={() =>
@@ -1483,31 +1540,38 @@ function SectionContraintes({
                     </button>
                   </Badge>
                 ))}
-                <div className="flex items-center gap-1" title="Motif hebdomadaire récurrent">
-                  {NOMS_JOURS_SEMAINE_COURTS.map((nom, jourSemaine) => {
-                    const actif = c.joursSemaineIndisponibles.includes(jourSemaine);
-                    return (
-                      <button
-                        key={jourSemaine}
-                        type="button"
-                        onClick={() =>
-                          majLigne(i, {
-                            joursSemaineIndisponibles: actif
-                              ? c.joursSemaineIndisponibles.filter((j) => j !== jourSemaine)
-                              : [...c.joursSemaineIndisponibles, jourSemaine],
-                          })
-                        }
-                        className={`rounded px-1.5 py-1 text-xs ${
-                          actif
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {nom}
-                      </button>
-                    );
-                  })}
-                </div>
+                {uniteTemps === "heures" ? (
+                  <GrilleMotifHebdomadaireHeures
+                    valeurs={c.joursSemaineIndisponibles}
+                    onChange={(v) => majLigne(i, { joursSemaineIndisponibles: v })}
+                  />
+                ) : (
+                  <div className="flex items-center gap-1" title="Motif hebdomadaire récurrent">
+                    {NOMS_JOURS_SEMAINE_COURTS.map((nom, jourSemaine) => {
+                      const actif = c.joursSemaineIndisponibles.includes(jourSemaine);
+                      return (
+                        <button
+                          key={jourSemaine}
+                          type="button"
+                          onClick={() =>
+                            majLigne(i, {
+                              joursSemaineIndisponibles: actif
+                                ? c.joursSemaineIndisponibles.filter((j) => j !== jourSemaine)
+                                : [...c.joursSemaineIndisponibles, jourSemaine],
+                            })
+                          }
+                          className={`rounded px-1.5 py-1 text-xs ${
+                            actif
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {nom}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </>
             )}
 
@@ -1529,6 +1593,52 @@ function SectionContraintes({
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+// Motif hebdomadaire récurrent en mode heures : une grille 7 jours × 24 heures plutôt que 7
+// boutons — chaque cellule (jourSemaine, heure) bascule l'index plat `jourSemaine * 24 + heure`
+// dans `valeurs` (même convention JS Date.getDay() que le mode jours, converti en position dans
+// le cycle DSL de 168 à la soumission — voir construireInstance/contrainteVersLigne). Compacte
+// (cellules 20px) : 168 cases restent lisibles à cette taille, une grille par bouton comme en
+// mode jours serait illisible à cette densité.
+function GrilleMotifHebdomadaireHeures({
+  valeurs,
+  onChange,
+}: {
+  valeurs: number[];
+  onChange: (v: number[]) => void;
+}) {
+  const heures = Array.from({ length: 24 }, (_, h) => h);
+  function bascule(index: number) {
+    onChange(valeurs.includes(index) ? valeurs.filter((v) => v !== index) : [...valeurs, index]);
+  }
+  return (
+    <div
+      className="space-y-0.5 rounded-md border border-border/50 p-1.5"
+      title="Motif hebdomadaire récurrent"
+    >
+      {NOMS_JOURS_SEMAINE_COURTS.map((nom, jourSemaine) => (
+        <div key={jourSemaine} className="flex items-center gap-1">
+          <span className="w-7 shrink-0 text-[10px] text-muted-foreground">{nom}</span>
+          <div className="flex gap-px">
+            {heures.map((h) => {
+              const index = jourSemaine * 24 + h;
+              const actif = valeurs.includes(index);
+              return (
+                <button
+                  key={h}
+                  type="button"
+                  onClick={() => bascule(index)}
+                  title={`${nom} ${h}h-${h + 1}h`}
+                  className={`h-4 w-3 rounded-[2px] ${actif ? "bg-primary" : "bg-muted"}`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -1573,6 +1683,7 @@ function estContrainteEditable(
 
 function contrainteVersLigne(
   c: Extract<Contrainte, { type: (typeof TYPES_CONTRAINTE_EDITABLES)[number] }>,
+  uniteTemps: UniteTemps = "jours",
 ): ContrainteLigne {
   const base = nouvelleContrainte();
   switch (c.type) {
@@ -1587,14 +1698,17 @@ function contrainteVersLigne(
         ressource: c.ressource,
         duree: c.duree.toString(),
       };
-    case "echeance":
+    case "echeance": {
+      const ancrage = aujourdhui();
+      const date = dateDepuisAncrage(c.echeance, ancrage, uniteTemps);
       return {
         ...base,
         clef: idLocal(),
         type: "echeance",
         tache: c.tache,
-        echeance: formatEntreeDate(dateDepuisAncrage(c.echeance, aujourdhui())),
+        echeance: uniteTemps === "heures" ? formatEntreeDateHeure(date) : formatEntreeDate(date),
       };
+    }
     case "competence_requise":
       return {
         ...base,
@@ -1615,16 +1729,20 @@ function contrainteVersLigne(
       };
     case "disponibilite_ressource": {
       const ancrage = aujourdhui();
+      const referenceCycle =
+        uniteTemps === "heures" ? ancrage.getDay() * 24 + ancrage.getHours() : ancrage.getDay();
+      const cycle = longueurCycle(uniteTemps);
       return {
         ...base,
         clef: idLocal(),
         type: "disponibilite_ressource",
         ressource: c.ressource,
-        joursIndisponibles: c.jours_indisponibles.map((j) =>
-          formatEntreeDate(dateDepuisAncrage(j, ancrage)),
-        ),
+        joursIndisponibles: c.jours_indisponibles.map((j) => {
+          const date = dateDepuisAncrage(j, ancrage, uniteTemps);
+          return uniteTemps === "heures" ? formatEntreeDateHeure(date) : formatEntreeDate(date);
+        }),
         joursSemaineIndisponibles: (c.jours_semaine_indisponibles ?? []).map(
-          (p) => (ancrage.getDay() + p) % 7,
+          (p) => (referenceCycle + p) % cycle,
         ),
       };
     }
@@ -1830,6 +1948,36 @@ function ChampClient({
       {!estAdmin && (
         <p className="text-xs text-muted-foreground">Associé automatiquement à votre compte.</p>
       )}
+    </div>
+  );
+}
+
+// Réutilisé par les onglets Saisie T-R-C-O et Fichiers CSV (voir soumettreTRCO/soumettreCsv) —
+// bascule l'unité de tous les entiers duree/echeance/debut de l'instance à ingérer. Changer
+// cette valeur en cours d'édition ne rééchelonne jamais les nombres déjà saisis (un "5" reste un
+// "5") — seule sa signification (jours vs heures) change, à l'utilisateur de le savoir.
+function SelecteurUniteTemps({
+  valeur,
+  onChange,
+}: {
+  valeur: UniteTemps;
+  onChange: (v: UniteTemps) => void;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <Label>Unité de temps</Label>
+      <Select value={valeur} onValueChange={(v) => onChange(v as UniteTemps)}>
+        <SelectTrigger className="w-48">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="jours">Jours</SelectItem>
+          <SelectItem value="heures">Heures</SelectItem>
+        </SelectContent>
+      </Select>
+      <p className="text-xs text-muted-foreground">
+        Unité des durées/échéances de cette instance — jamais un mélange des deux.
+      </p>
     </div>
   );
 }

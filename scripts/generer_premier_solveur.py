@@ -76,7 +76,7 @@ def main():
     except Exception as e:
         print(f"❌ Erreur lors de la génération : {e}")
         print("\nVérifiez :")
-        print("  1. Clé API configurée (KIMI_API_KEY)")
+        print("  1. Clé API configurée (OPENROUTER_API_KEY)")
         print("  2. Extra [llm] installé : uv sync --extra llm")
         sys.exit(1)
 

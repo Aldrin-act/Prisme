@@ -324,6 +324,7 @@ function SectionPlanning({
               contraintes={instance?.contraintes}
               taches={instance?.taches}
               commandes={commandes}
+              uniteDuree={instance?.unite_duree}
               editable={!voirOriginal}
               executionId={execution?.execution_id}
             />
@@ -340,6 +341,7 @@ function SectionPlanning({
             contraintes={instance?.contraintes}
             taches={instance?.taches}
             commandes={commandes}
+            uniteDuree={instance?.unite_duree}
           />
         </TabsContent>
       </Tabs>

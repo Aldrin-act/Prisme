@@ -178,6 +178,35 @@ def test_ingestion_depuis_csv_avec_delimiteur_point_virgule() -> None:
         app.dependency_overrides.clear()
 
 
+def test_ingestion_depuis_csv_avec_unite_temps_heures() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            params={"unite_temps": "heures"},
+            files={
+                "taches": ("taches.csv", b"id\nT1\n", "text/csv"),
+                "ressources": ("ressources.csv", b"id\nR1\n", "text/csv"),
+                "contraintes": (
+                    "contraintes.csv",
+                    b"type,tache,ressource,duree_jours\ncompatibilite_ressource_tache,T1,R1,100\n",
+                    "text/csv",
+                ),
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        instance_id = reponse.json()["instance_id"]
+        _, instance = etat_test.recuperer_instance(instance_id)
+        assert instance.unite_temps == "heures"
+        assert etat_test.recuperer_unite_duree(instance_id) == "heures"
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_ingestion_depuis_csv_rejette_un_delimiteur_multi_caracteres() -> None:
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
@@ -351,6 +380,36 @@ def test_ingestion_depuis_json_ingere_une_instance_canonique_sans_transformation
         corps = reponse.json()
         assert corps["structure_contraintes"] == "compatibilite_ressource_tache"
         assert corps["instance_id"] in etat_test.instances
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_json_avec_unite_temps_heures() -> None:
+    """`unite_temps` est un champ optionnel du payload JSON lui-même (pas un paramètre de
+    requête, contrairement au CSV) — vérifie qu'il n'est pas rejeté comme un champ inconnu
+    (`InstanceBrute` a `extra="forbid"`) et qu'il atteint bien l'instance finale."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/json/client_test",
+            json={
+                "taches": [{"id": "T1"}],
+                "ressources": [{"id": "R1"}],
+                "contraintes": [
+                    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 100}
+                ],
+                "unite_temps": "heures",
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        instance_id = reponse.json()["instance_id"]
+        _, instance = etat_test.recuperer_instance(instance_id)
+        assert instance.unite_temps == "heures"
+        assert etat_test.recuperer_unite_duree(instance_id) == "heures"
     finally:
         app.dependency_overrides.clear()
 

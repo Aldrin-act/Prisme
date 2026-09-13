@@ -352,6 +352,7 @@ function DialogSolveur({
                     contraintes={instanceChoisie?.contraintes}
                     taches={instanceChoisie?.taches}
                     commandes={commandes}
+                    uniteDuree={instanceChoisie?.unite_duree}
                     editable={!voirOriginal}
                     executionId={executionId ?? undefined}
                   />

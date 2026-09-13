@@ -107,21 +107,27 @@ comme si ces deux paramètres n'existaient pas.
   au moment de choisir une ressource pour l'autre tâche.
 - `ContrainteDisponibiliteRessource(ressource, jours_indisponibles,
   jours_semaine_indisponibles)` : la ressource citée est indisponible durant
-  chacun des jours (relatifs) listés dans `jours_indisponibles`, **et/ou**
+  chacun des instants (relatifs) listés dans `jours_indisponibles`, **et/ou**
   durant chaque occurrence du motif récurrent `jours_semaine_indisponibles`
-  (positions 0 à 6 d'un cycle de 7 jours depuis le jour 0 de l'instance,
-  répété sur tout l'horizon — ex. `[5, 6]` bloque les jours 5, 6, 12, 13,
-  19, 20...) — aucune opération ne peut y démarrer ni s'y poursuivre ces
-  jours-là. Les deux champs se combinent (jamais l'un remplace l'autre), y
-  compris entre plusieurs `ContrainteDisponibiliteRessource` distinctes pour
-  la **même** ressource (additionne, ne prends jamais seulement la dernière
-  rencontrée). Un calendrier global d'atelier (jours fériés/repos
-  hebdomadaire communs à toutes les ressources) n'est pas un mécanisme
-  séparé : c'est la même contrainte déclarée identiquement pour chaque
-  ressource de l'instance. En CP-SAT : matérialise d'abord
-  `jours_semaine_indisponibles` en jours concrets sur tout l'horizon
-  (`{jour for jour in range(horizon) if jour % 7 in motif}`), fusionne avec
-  `jours_indisponibles` dans le **même** ensemble par ressource, puis pour
+  (positions d'un cycle depuis l'instant 0 de l'instance, répété sur tout
+  l'horizon — ex. `[5, 6]` bloque les instants 5, 6, 12, 13, 19, 20... pour
+  un cycle de 7). **La longueur du cycle dépend de `InstanceTRCO.unite_temps`
+  de l'instance que tu génères : 7 en mode `"jours"`, 168 en mode
+  `"heures"`** — lis toujours cette valeur sur l'instance plutôt que de
+  supposer 7, le code généré doit fonctionner pour les deux modes séparément
+  (une instance donnée n'utilise qu'un seul mode, jamais les deux à la fois).
+  Aucune opération ne peut démarrer ni se poursuivre ces instants-là. Les
+  deux champs se combinent (jamais l'un remplace l'autre), y compris entre
+  plusieurs `ContrainteDisponibiliteRessource` distinctes pour la **même**
+  ressource (additionne, ne prends jamais seulement la dernière rencontrée).
+  Un calendrier global d'atelier (jours fériés/repos hebdomadaire communs à
+  toutes les ressources) n'est pas un mécanisme séparé : c'est la même
+  contrainte déclarée identiquement pour chaque ressource de l'instance. En
+  CP-SAT : matérialise d'abord `jours_semaine_indisponibles` en instants
+  concrets sur tout l'horizon (`longueur_cycle = 7 if instance.unite_temps ==
+  "jours" else 168` puis `{instant for instant in range(horizon) if instant %
+  longueur_cycle in motif}`), fusionne avec `jours_indisponibles` dans le
+  **même** ensemble par ressource, puis pour
   chaque jour indisponible (peu importe son origine) ajoute un intervalle
   **fixe** (obligatoire, pas optionnel, `NewIntervalVar` couvrant `[jour,
   jour + 1)`) dans la **même** liste d'intervalles déjà passée à
@@ -321,22 +327,25 @@ accède, ne les devine jamais par analogie avec un autre projet :
   la tâche `avant` doit être terminée avant que `apres` ne commence.
 - `CompatibiliteRessourceTache.tache`, `.ressource`, `.duree`.
 - `Echeance.tache`, `.echeance` (pas `date_limite`) : instant limite de fin
-  de la tâche, en jours.
+  de la tâche, dans l'unité de temps déclarée par `InstanceTRCO.unite_temps`
+  (jours ou heures).
 - `ContrainteCapacite.ressource`, `.capacite` : nombre d'opérations que
   cette ressource peut traiter simultanément (jamais 0, jamais négatif).
 - `ContrainteIncompatibilite.tache`, `.tache_incompatible` (pas
   `tache_1`/`tache_2`) : relation symétrique, l'ordre des deux champs n'a
   aucun sens métier.
 - `ContrainteDisponibiliteRessource.ressource`, `.jours_indisponibles`
-  (liste de jours relatifs, jamais une date calendaire),
-  `.jours_semaine_indisponibles` (`list[int] | None`, positions 0-6 d'un
-  motif récurrent sur un cycle de 7 jours — voir plus haut ; les deux
-  champs se combinent, aucun des deux n'est garanti non-vide seul).
+  (liste d'instants relatifs, jamais une date calendaire),
+  `.jours_semaine_indisponibles` (`list[int] | None`, positions d'un motif
+  récurrent sur un cycle de 7 ou 168 selon `InstanceTRCO.unite_temps` — voir
+  plus haut ; les deux champs se combinent, aucun des deux n'est garanti
+  non-vide seul).
 - `ContrainteTailleLot.tache`, `.lot_min`, `.lot_max` : validation statique
   uniquement (voir plus haut) — jamais lue dans le code généré.
 - `ContrainteChangementSerie.ressource`, `.tache_avant`, `.tache_apres`,
-  `.duree_setup` (jours) : contrainte dirigée, `tache_avant` → `tache_apres`
-  uniquement dans ce sens — voir plus haut pour l'encodage.
+  `.duree_setup` (unité de `InstanceTRCO.unite_temps`) : contrainte dirigée,
+  `tache_avant` → `tache_apres` uniquement dans ce sens — voir plus haut
+  pour l'encodage.
 - `Tache.priorite` (`int | None`, 1 à 5) : départage uniquement, voir
   "Priorité des tâches" plus haut — jamais un champ de contrainte/objectif.
 - `Tache.quantite` (`int | None`) : donnée d'entrée pour `ContrainteTailleLot`
@@ -391,16 +400,18 @@ for c in instance.contraintes:
 # récurrent, ou deux contraintes distinctes) doivent s'additionner, jamais que la dernière
 # rencontrée écrase les précédentes.
 jours_indisponibles_par_ressource: dict[str, set[int]] = {}
+# 7 en mode jours, 168 en mode heures — jamais 7 codé en dur, lis toujours unite_temps.
+longueur_cycle = 7 if instance.unite_temps == "jours" else 168
 for c in instance.contraintes:
     if not isinstance(c, ContrainteDisponibiliteRessource):
         continue
     jours = jours_indisponibles_par_ressource.setdefault(c.ressource, set())
     jours.update(c.jours_indisponibles)
     if c.jours_semaine_indisponibles:
-        # Matérialise le motif récurrent en jours concrets sur tout l'horizon (`horizon`,
+        # Matérialise le motif récurrent en instants concrets sur tout l'horizon (`horizon`,
         # déjà connu à ce stade — calculé à partir des durées, voir plus haut/le plan
         # technique) — une seule fois ici, jamais recalculé à chaque intervalle créé.
-        jours.update(jour for jour in range(horizon) if jour % 7 in c.jours_semaine_indisponibles)
+        jours.update(jour for jour in range(horizon) if jour % longueur_cycle in c.jours_semaine_indisponibles)
 ```
 
 Pour un algorithme non-CP-SAT dont le décodeur/la fitness est appelé des

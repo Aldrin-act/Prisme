@@ -6,7 +6,7 @@ testant l'agent de compréhension en conditions réelles : `.env` déclare
 "modèle manquant" sans que l'erreur ne pointe vers la vraie cause.
 
 Aucun appel réseau ici : le constructeur LangChain (`ChatOpenAI`, utilisé en
-mode compatible pour Kimi) ne contacte le fournisseur qu'au premier
+mode compatible pour OpenRouter) ne contacte le fournisseur qu'au premier
 `.invoke()`, sa construction est pure.
 """
 
@@ -23,19 +23,19 @@ def test_modele_vide_dans_env_retombe_sur_le_defaut(monkeypatch: pytest.MonkeyPa
     monkeypatch.setenv("PRISME_LLM_MODEL", "")  # présent mais vide, comme dans .env par défaut
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_kimi", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele()
 
-    assert modeles_construits == [client_llm._MODELE_KIMI_PAR_DEFAUT]
+    assert modeles_construits == [client_llm._MODELE_PAR_DEFAUT]
 
 
 def test_modele_explicite_dans_env_est_respecte(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("PRISME_LLM_MODEL", "mon-modele-precis")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_kimi", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele()
@@ -60,30 +60,55 @@ class TestTimeoutParAgent:
         assert client_llm._timeout_pour_agent("analyste") == 10.0
 
 
-def test_construire_modele_kimi_construit_bien_un_chat_openai(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("KIMI_API_KEY", "cle-test")
-    modele = client_llm._construire_modele_kimi("kimi-k2.6", 120.0)
-    assert modele.model == "kimi-k2.6"
-    assert str(modele.openai_api_base) == "https://api.moonshot.ai/v1"
+def test_construire_modele_openrouter_construit_bien_un_chat_openai(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("OPENROUTER_API_KEY", "cle-test")
+    # `api/routes/auth.py`/`api/auth_db.py` chargent le vrai `.env` au moment de l'import (sans
+    # `override`) — dans une suite complète, un module de test important l'un des deux avant
+    # celui-ci suffit à injecter un `OPENROUTER_API_BASE_URL` réel dans `os.environ`, invisible
+    # en lançant ce fichier seul. Même précaution que `TestTimeoutParAgent` plus haut.
+    monkeypatch.delenv("OPENROUTER_API_BASE_URL", raising=False)
+    modele = client_llm._construire_modele_openrouter("moonshotai/kimi-k2.6", 120.0)
+    assert modele.model == "moonshotai/kimi-k2.6"
+    assert str(modele.openai_api_base) == "https://openrouter.ai/api/v1"
 
 
-def test_construire_modele_kimi_respecte_lurl_personnalisee(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("KIMI_API_KEY", "cle-test")
-    monkeypatch.setenv("KIMI_API_BASE_URL", "https://api.moonshot.cn/v1")
-    modele = client_llm._construire_modele_kimi("kimi-k2.6", 120.0)
-    assert str(modele.openai_api_base) == "https://api.moonshot.cn/v1"
+def test_construire_modele_openrouter_respecte_lurl_personnalisee(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("OPENROUTER_API_KEY", "cle-test")
+    monkeypatch.setenv("OPENROUTER_API_BASE_URL", "https://openrouter.example/api/v1")
+    modele = client_llm._construire_modele_openrouter("moonshotai/kimi-k2.6", 120.0)
+    assert str(modele.openai_api_base) == "https://openrouter.example/api/v1"
 
 
 def test_construire_modele_pour_agent_respecte_la_surcharge_de_modele(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("PRISME_LLM_MODEL_DOCUMENTATION", "un-modele-precis")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_kimi", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele_pour_agent("documentation")
 
     assert modeles_construits == ["un-modele-precis"]
+
+
+def test_construire_modele_pour_agent_retombe_sur_le_modele_global_sans_surcharge(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Bug reproduit en conditions réelles (pipeline `generation/graph.py` pointée sur un
+    fournisseur alternatif via `PRISME_LLM_MODEL` seul, sans surcharge par agent) :
+    `construire_modele_pour_agent` ignorait `PRISME_LLM_MODEL`, retombant directement sur
+    `_MODELE_PAR_DEFAUT` codé en dur dès qu'aucune variable `PRISME_LLM_MODEL_<AGENT>`
+    n'était définie — rendant le réglage global sans effet sur le pipeline réel."""
+    monkeypatch.delenv("PRISME_LLM_MODEL_ANALYSTE", raising=False)
+    monkeypatch.setenv("PRISME_LLM_MODEL", "mon-modele-global")
+    modeles_construits: list[str] = []
+    monkeypatch.setattr(
+        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
+    )
+
+    client_llm.construire_modele_pour_agent("analyste")
+
+    assert modeles_construits == ["mon-modele-global"]
 
 
 class _ErreurAvecStatut(Exception):

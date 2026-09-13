@@ -12,32 +12,35 @@ import {
   type Tache,
 } from "@/integrations/prisme";
 import { tachesEnRetard, tauxUtilisationRessource } from "@/lib/charge-ressources";
-import { dateDepuisAncrage, debutJour, formatDateRelative } from "@/lib/dates-relatives";
+import {
+  dateDepuisAncrage,
+  debutJour,
+  formatDateRelative,
+  type UniteTemps,
+} from "@/lib/dates-relatives";
 
 function cle(op: { tache: string; ressource: string }): string {
   return `${op.tache}|${op.ressource}`;
 }
 
-// `ancrage` (jour 0) est `planning.date_execution`, posée une fois côté serveur au moment réel
-// de l'exécution (voir PlanningAvecDurees.date_execution) — la même exécution montre toujours
-// les mêmes dates, quel que soit le jour où on la consulte, contrairement à un ancrage sur
-// "aujourd'hui" côté client (voir src/lib/dates-relatives.ts).
-const formatDateGantt = formatDateRelative;
-
 // Samedi/dimanche marqués non ouvrés sur le Gantt — purement visuel, ancré sur la même date que
-// les graduations (voir formatDateGantt) ; le DSL/solveur ne connaît aucune notion de jour ouvré
-// (voir `ContrainteDisponibiliteRessource.jours_semaine_indisponibles` pour la vraie contrainte
-// de planification, une notion distincte de cet affichage). Jours consécutifs fusionnés en un
-// seul segment plutôt qu'un rectangle par jour, pour un rendu propre sans trait de jointure.
-function segmentsWeekEnd(makespan: number, ancrage: Date): { debut: number; fin: number }[] {
+// les graduations ; le DSL/solveur ne connaît aucune notion de jour ouvré (voir
+// `ContrainteDisponibiliteRessource.jours_semaine_indisponibles` pour la vraie contrainte de
+// planification, une notion distincte de cet affichage). Segments consécutifs (jours en mode
+// jours, heures en mode heures) fusionnés en un seul, pour un rendu propre sans trait de jointure.
+function segmentsWeekEnd(
+  makespan: number,
+  ancrage: Date,
+  unite: UniteTemps,
+): { debut: number; fin: number }[] {
   const segments: { debut: number; fin: number }[] = [];
   let debutCourant: number | null = null;
-  for (let jour = 0; jour < makespan; jour++) {
-    const jourWeekEnd = [0, 6].includes(dateDepuisAncrage(jour, ancrage).getDay());
-    if (jourWeekEnd && debutCourant === null) {
-      debutCourant = jour;
-    } else if (!jourWeekEnd && debutCourant !== null) {
-      segments.push({ debut: debutCourant, fin: jour });
+  for (let instant = 0; instant < makespan; instant++) {
+    const weekEnd = [0, 6].includes(dateDepuisAncrage(instant, ancrage, unite).getDay());
+    if (weekEnd && debutCourant === null) {
+      debutCourant = instant;
+    } else if (!weekEnd && debutCourant !== null) {
+      segments.push({ debut: debutCourant, fin: instant });
       debutCourant = null;
     }
   }
@@ -57,14 +60,17 @@ interface EtatDrag {
   debutDepart: number;
 }
 
-// Échelle fixe en pixels/jour (plutôt qu'un % de la durée totale) : `duree`/`debut` du DSL sont
-// des entiers de jours, jamais d'heures (`dsl/schema/planning.py`, `contraintes.py` — champs
-// `int`) — une grille zoomable à l'échelle du jour reflète honnêtement cette granularité, une
-// grille à l'heure suggérerait une précision que le solveur ne produit jamais.
-const PX_PAR_JOUR_DEFAUT = 48;
-const PX_PAR_JOUR_MIN = 16;
-const PX_PAR_JOUR_MAX = 160;
-const PAS_ZOOM = 16;
+// Échelle fixe en pixels/unité (plutôt qu'un % de la durée totale) — une unité vaut un jour ou
+// une heure selon `InstanceTRCO.unite_temps` (voir `uniteDuree` ci-dessous) : le DSL ne connaît
+// que des entiers dans l'unité déclarée, jamais une précision plus fine. Constantes plus
+// resserrées en mode heures : un planning de même durée réelle y compte ~24x plus d'unités.
+const ECHELLE_PAR_UNITE: Record<
+  UniteTemps,
+  { defaut: number; min: number; max: number; pas: number }
+> = {
+  jours: { defaut: 48, min: 16, max: 160, pas: 16 },
+  heures: { defaut: 8, min: 2, max: 48, pas: 2 },
+};
 const LARGEUR_COL_RESSOURCE = 144; // == w-36, dupliqué en px pour aligner l'offset de l'en-tête
 
 export function GanttChart({
@@ -72,6 +78,7 @@ export function GanttChart({
   contraintes,
   taches,
   commandes,
+  uniteDuree,
   editable = false,
   executionId,
   onAjustementReussi,
@@ -84,10 +91,14 @@ export function GanttChart({
   taches?: Tache[];
   // Optionnelle : sans elle, aucune commande n'est affichée sur les barres ni d'échéance
   // marquée sur l'axe (voir GET /ingestion/{instance_id}/commandes). `date_limite` est sur le
-  // même référentiel de jours relatifs que `op.debut`/`op.fin` — comparable et positionnable
-  // directement sur cet axe, aucune conversion nécessaire.
+  // même référentiel que `op.debut`/`op.fin` — comparable et positionnable directement sur cet
+  // axe, aucune conversion nécessaire.
   commandes?: StatutCommande[];
-  // Gantt interactif (Phase 3) : glisser une barre change son jour de début (jamais sa
+  // "heures" bascule l'ancrage/l'échelle/le libellé des barres sur une précision horaire —
+  // toute autre valeur (dont absente/null, l'instance n'a jamais été en mode heures) reste
+  // "jours", comportement historique inchangé.
+  uniteDuree?: string | null;
+  // Gantt interactif (Phase 3) : glisser une barre change son instant de début (jamais sa
   // ressource — contraint à l'axe horizontal de sa propre ligne). `executionId` requis pour
   // pouvoir soumettre l'ajustement ; sans lui, `editable` reste sans effet.
   editable?: boolean;
@@ -96,13 +107,20 @@ export function GanttChart({
 }) {
   const queryClient = useQueryClient();
   const ajuster = useAjusterPlanning();
-  // Jour 0 ancré sur la date réelle de l'exécution — voir formatDateGantt ci-dessus. Normalisé à
-  // minuit local pour que l'arithmétique "+N jours" reste exacte quelle que soit l'heure à
-  // laquelle le solveur a tourné.
-  const ancrage = debutJour(new Date(planning.date_execution));
+  const unite: UniteTemps = uniteDuree === "heures" ? "heures" : "jours";
+  const echelle = ECHELLE_PAR_UNITE[unite];
+  // Instant 0 ancré sur la date réelle de l'exécution. Normalisé à minuit local en mode jours
+  // (l'arithmétique "+N jours" reste exacte quelle que soit l'heure à laquelle le solveur a
+  // tourné) ; gardé à sa précision complète en mode heures (l'heure exacte de l'exécution EST
+  // l'ancrage, la tronquer perdrait l'information que l'unité existe justement pour capturer).
+  const ancrage =
+    unite === "heures"
+      ? new Date(planning.date_execution)
+      : debutJour(new Date(planning.date_execution));
+  const formatAxe = (instant: number) => formatDateRelative(instant, ancrage, unite);
   const [operationsLocales, setOperationsLocales] = useState(planning.operations);
   const [drag, setDrag] = useState<EtatDrag | null>(null);
-  const [pxParJour, setPxParJour] = useState(PX_PAR_JOUR_DEFAUT);
+  const [pxParJour, setPxParJour] = useState(echelle.defaut);
 
   // Toute nouvelle version du planning affiché (nouvelle exécution, bascule
   // original/ajusté...) réinitialise l'édition en cours et le zoom — jamais un mélange
@@ -112,7 +130,7 @@ export function GanttChart({
   // refus (violations).
   useEffect(() => {
     setOperationsLocales(planning.operations);
-    setPxParJour(PX_PAR_JOUR_DEFAUT);
+    setPxParJour(echelle.defaut);
     ajuster.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planning]);
@@ -195,7 +213,7 @@ export function GanttChart({
   }
 
   function zoomer(sens: 1 | -1) {
-    setPxParJour((p) => Math.min(PX_PAR_JOUR_MAX, Math.max(PX_PAR_JOUR_MIN, p + sens * PAS_ZOOM)));
+    setPxParJour((p) => Math.min(echelle.max, Math.max(echelle.min, p + sens * echelle.pas)));
   }
 
   if (operations.length === 0 || makespan === 0) {
@@ -214,13 +232,14 @@ export function GanttChart({
   const ressources = [...parRessource.keys()].sort();
 
   const jours = Array.from({ length: makespan }, (_, i) => i);
-  const weekEnds = segmentsWeekEnd(makespan, ancrage);
+  const weekEnds = segmentsWeekEnd(makespan, ancrage, unite);
   const violations = ajuster.data && !ajuster.data.legal ? ajuster.data.violations : [];
 
-  // Position (en jours, généralement fractionnaire) de l'instant présent sur l'axe du planning —
-  // masquée si "maintenant" tombe hors de la plage affichée (planning entièrement passé, ou
-  // futur au-delà de son propre horizon).
-  const joursDepuisAncrage = (Date.now() - ancrage.getTime()) / 86_400_000;
+  // Position (généralement fractionnaire) de l'instant présent sur l'axe du planning — masquée
+  // si "maintenant" tombe hors de la plage affichée (planning entièrement passé, ou futur
+  // au-delà de son propre horizon).
+  const msParUnite = unite === "heures" ? 3_600_000 : 86_400_000;
+  const joursDepuisAncrage = (Date.now() - ancrage.getTime()) / msParUnite;
   const afficherMaintenant = joursDepuisAncrage >= 0 && joursDepuisAncrage <= makespan;
 
   return (
@@ -228,7 +247,7 @@ export function GanttChart({
       {peutEditer && (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
-            Glisse une barre pour changer son jour de début — proposition revalidée avant tout
+            Glisse une barre pour changer son instant de début — proposition revalidée avant tout
             enregistrement, jamais appliquée silencieusement.
           </p>
           {estModifie && (
@@ -290,18 +309,20 @@ export function GanttChart({
             variant="outline"
             className="h-6 w-6"
             onClick={() => zoomer(-1)}
-            disabled={pxParJour <= PX_PAR_JOUR_MIN}
+            disabled={pxParJour <= echelle.min}
             aria-label="Réduire le zoom"
           >
             <ZoomOut className="h-3 w-3" />
           </Button>
-          <span className="w-12 text-center font-mono">{pxParJour}px/j</span>
+          <span className="w-12 text-center font-mono">
+            {pxParJour}px/{unite === "heures" ? "h" : "j"}
+          </span>
           <Button
             size="icon"
             variant="outline"
             className="h-6 w-6"
             onClick={() => zoomer(1)}
-            disabled={pxParJour >= PX_PAR_JOUR_MAX}
+            disabled={pxParJour >= echelle.max}
             aria-label="Augmenter le zoom"
           >
             <ZoomIn className="h-3 w-3" />
@@ -336,7 +357,7 @@ export function GanttChart({
                 className="shrink-0 truncate border-r border-border/40 px-1 text-center first:border-l"
                 style={{ width: pxParJour }}
               >
-                {formatDateGantt(j, ancrage)}
+                {formatAxe(j)}
               </div>
             ))}
           </div>
@@ -375,7 +396,7 @@ export function GanttChart({
                           left: w.debut * pxParJour,
                           width: (w.fin - w.debut) * pxParJour,
                         }}
-                        title="Jour non ouvré (week-end)"
+                        title="Non ouvré (week-end)"
                       />
                     ))}
                     {afficherMaintenant && (
@@ -390,7 +411,7 @@ export function GanttChart({
                         key={jourEcheance}
                         className="absolute top-0 z-10 h-full w-0.5 border-l-2 border-dashed border-amber-500"
                         style={{ left: jourEcheance * pxParJour }}
-                        title={`Échéance (${formatDateGantt(jourEcheance, ancrage)}) : ${cmds
+                        title={`Échéance (${formatAxe(jourEcheance)}) : ${cmds
                           .map((c) => c.commande_id)
                           .join(", ")}`}
                       />
@@ -410,10 +431,9 @@ export function GanttChart({
                       return (
                         <div
                           key={cleOp}
-                          title={`${op.tache} : ${formatDateGantt(op.debut, ancrage)} → ${formatDateGantt(
-                            op.fin,
-                            ancrage,
-                          )}${enRetard ? " (en retard)" : ""}${
+                          title={`${op.tache} : ${formatAxe(op.debut)} → ${formatAxe(op.fin)}${
+                            enRetard ? " (en retard)" : ""
+                          }${
                             commandesTache.length > 0
                               ? ` — commande(s) : ${commandesTache.map((c) => c.commande_id).join(", ")}`
                               : ""
@@ -429,7 +449,8 @@ export function GanttChart({
                           style={{ left: op.debut * pxParJour, width: duree * pxParJour }}
                         >
                           <span className="truncate">
-                            {op.tache} ({duree}j){produit ? ` ${produit}` : ""}
+                            {op.tache} ({duree}
+                            {unite === "heures" ? "h" : "j"}){produit ? ` ${produit}` : ""}
                             {libelleCommandes}
                           </span>
                         </div>

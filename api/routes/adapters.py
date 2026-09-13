@@ -21,7 +21,7 @@ instance silencieusement tronquée.
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 import httpx
 import psycopg
@@ -96,6 +96,7 @@ async def ingerer_depuis_csv(
     contraintes: UploadFile = File(...),
     commandes: UploadFile | None = File(None),
     delimiteur: str = ",",
+    unite_temps: Literal["jours", "heures"] = "jours",
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -105,7 +106,9 @@ async def ingerer_depuis_csv(
     des tâches à une commande cliente et une date limite — dérive une
     échéance par tâche liée (`adapters/commande_derivation.py`), jamais
     transmis au solveur tel quel. `delimiteur` (un seul caractère, `,` par
-    défaut) s'applique aux quatre fichiers identiquement."""
+    défaut) s'applique aux quatre fichiers identiquement. `unite_temps`
+    ("jours" par défaut, ou "heures") devient `InstanceTRCO.unite_temps`
+    (voir `dsl/schema/instance.py`)."""
     verifier_acces_client(utilisateur, client_id)
     _valider_delimiteur(delimiteur)
     fichiers_requis = (taches, ressources, contraintes)
@@ -128,6 +131,7 @@ async def ingerer_depuis_csv(
             commandes_octets,
             estimateur_duree=_estimateur_duree_optionnel(),
             delimiteur=delimiteur,
+            unite_temps=unite_temps,
         )
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur

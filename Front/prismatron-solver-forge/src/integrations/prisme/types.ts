@@ -161,6 +161,10 @@ export interface InstanceTRCO {
   ressources: Ressource[];
   contraintes: Contrainte[];
   objectifs: Objectif[];
+  // Unité des entiers duree/echeance/debut/duree_setup de cette instance — "jours" par défaut
+  // (absent = "jours", rétrocompatible). Affecte le cycle de disponibilite_ressource.
+  // jours_semaine_indisponibles (7 en jours, 168 en heures) — voir dsl/schema/instance.py.
+  unite_temps?: "jours" | "heures";
 }
 
 // ============================================================================

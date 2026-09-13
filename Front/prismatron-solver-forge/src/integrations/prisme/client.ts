@@ -310,10 +310,12 @@ export const prismeClient = {
   // voir adapters/csv_import/) — dérive des échéances par tâche, une échéance
   // déjà explicite l'emporte toujours sur une dérivée. `delimiteur` (un seul
   // caractère, "," par défaut) s'applique identiquement aux quatre fichiers.
+  // `uniteTemps` ("jours" par défaut, ou "heures") devient InstanceTRCO.unite_temps.
   importerFichiersCsv: (
     clientId: string,
     fichiers: { taches: File; ressources: File; contraintes: File; commandes?: File },
     delimiteur?: string,
+    uniteTemps?: string,
   ) => {
     const corps = new FormData();
     corps.append("taches", fichiers.taches);
@@ -322,6 +324,7 @@ export const prismeClient = {
     if (fichiers.commandes) corps.append("commandes", fichiers.commandes);
     const params = new URLSearchParams();
     if (delimiteur) params.set("delimiteur", delimiteur);
+    if (uniteTemps) params.set("unite_temps", uniteTemps);
     const requete = params.toString();
     return apiFetch<Types.ReponseImportCsv>(
       `${PRISME_CONFIG.routes.adapters}/csv/${clientId}${requete ? `?${requete}` : ""}`,

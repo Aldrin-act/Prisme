@@ -52,9 +52,15 @@ def _resumer_echecs_cascade(verdict) -> str:
 def afficher_tentative(tentative: TentativeReparation, numero: int) -> None:
     """Affiche les détails d'une tentative de réparation."""
     print(f"\n   ┌─ Tentative #{numero}")
-    print(f"   │  Reviewer : {'✅ APPROUVÉ' if tentative.revue.approuve else '❌ REJETÉ'}")
 
-    if not tentative.revue.approuve:
+    # Reviewer désactivé dans `_construire_graphe` (voir CLAUDE.md, §6.6) — `tentative.revue`
+    # vaut toujours `None` depuis son retrait, ce script datant d'avant cette désactivation.
+    if tentative.revue is None:
+        print("   │  Reviewer : ⏭️  Désactivé (validation directe par la cascade)")
+    else:
+        print(f"   │  Reviewer : {'✅ APPROUVÉ' if tentative.revue.approuve else '❌ REJETÉ'}")
+
+    if tentative.revue is not None and not tentative.revue.approuve:
         print(f"   │  Bugs détectés : {tentative.revue.commentaires[:100]}...")
     else:
         # Validation effectuée
@@ -80,7 +86,7 @@ def main():
     print(f"  GÉNÉRATION AVEC BOUCLE DE RÉPARATION (max {MAX_TENTATIVES_REPARATION} tentatives)")
     print("=" * 70 + "\n")
 
-    print(f"🔑 KIMI_API_KEY : {os.getenv('KIMI_API_KEY', 'NON DÉFINIE')[:20]}...")
+    print(f"🔑 OPENROUTER_API_KEY : {os.getenv('OPENROUTER_API_KEY', 'NON DÉFINIE')[:20]}...")
 
     # Génération avec boucle
     print("\n🚀 Démarrage pipeline multi-agents AVEC boucle...\n")

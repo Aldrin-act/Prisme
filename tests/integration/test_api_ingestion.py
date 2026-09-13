@@ -52,6 +52,28 @@ def test_ingestion_accepte_un_payload_valide(client_isole: tuple[TestClient, Eta
     assert corps["structure_contraintes"] == "compatibilite_ressource_tache"
 
 
+def test_ingestion_accepte_unite_temps_heures(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    """Chemin manuel : `unite_temps` est un champ `InstanceTRCO` comme un autre (voir
+    `dsl/schema/instance.py`) — un payload brut le déclarant est accepté sans aucun changement
+    de route, contrairement au JSON import (`InstanceBrute`, `extra="forbid"`)."""
+    client, etat_test = client_isole
+    payload = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1"}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 100}],
+        "objectifs": [{"type": "minimiser_makespan"}],
+        "unite_temps": "heures",
+    }
+
+    reponse = client.post("/ingestion/client_a", json=payload)
+
+    assert reponse.status_code == 200, reponse.json()
+    instance_id = reponse.json()["instance_id"]
+    _, instance = etat_test.recuperer_instance(instance_id)
+    assert instance.unite_temps == "heures"
+    assert etat_test.recuperer_unite_duree(instance_id) == "heures"
+
+
 def test_ingestion_rejette_un_payload_invalide(client_isole: tuple[TestClient, EtatAPI]) -> None:
     client, _ = client_isole
     payload = {

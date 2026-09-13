@@ -14,6 +14,7 @@ est rejeté avant d'atteindre le solveur.
 from __future__ import annotations
 
 from collections import defaultdict
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -43,6 +44,13 @@ class InstanceTRCO(BaseModel):
     ressources: list[Ressource] = Field(min_length=1)
     contraintes: list[Contrainte] = Field(default_factory=list)
     objectifs: list[Objectif] = Field(min_length=1)
+    # Unité de temps des entiers `duree`/`echeance`/`debut`/`duree_setup` portés par cette
+    # instance — "jours" par défaut (toute instance/solveur existant reste inchangé). Affecte la
+    # longueur du cycle hebdomadaire de `ContrainteDisponibiliteRessource.jours_semaine_
+    # indisponibles` (7 en jours, 168 en heures, voir `_disponibilite_dans_le_cycle` ci-dessous)
+    # et l'affichage frontend (`api/unite_duree.py`) — jamais interprété par le reste du DSL/le
+    # solveur généré, qui restent des entiers génériques quelle que soit l'unité déclarée.
+    unite_temps: Literal["jours", "heures"] = "jours"
 
     @model_validator(mode="after")
     def _identifiants_uniques_par_axe(self) -> InstanceTRCO:
@@ -99,6 +107,27 @@ class InstanceTRCO(BaseModel):
                     if id_tache not in ids_taches:
                         raise ValueError(f"changement de série référence une tâche inconnue : {id_tache!r}")
 
+        return self
+
+    @model_validator(mode="after")
+    def _disponibilite_dans_le_cycle(self) -> InstanceTRCO:
+        """`ContrainteDisponibiliteRessource` est validée seule (avant assemblage dans
+        l'instance) et ne peut donc pas connaître `unite_temps` — elle ne borne que `>= 0`. La
+        vraie borne haute du cycle hebdomadaire (7 jours ou 168 heures) ne peut être vérifiée
+        qu'ici, une fois `unite_temps` connu."""
+        longueur_cycle = 7 if self.unite_temps == "jours" else 168
+        for contrainte in self.contraintes:
+            if not isinstance(contrainte, ContrainteDisponibiliteRessource):
+                continue
+            if contrainte.jours_semaine_indisponibles is None:
+                continue
+            invalides = sorted({j for j in contrainte.jours_semaine_indisponibles if j >= longueur_cycle})
+            if invalides:
+                raise ValueError(
+                    f"jours_semaine_indisponibles de {contrainte.ressource!r} doit contenir des "
+                    f"valeurs entre 0 et {longueur_cycle - 1} (cycle de {longueur_cycle} en mode "
+                    f"{self.unite_temps!r}) : {invalides}"
+                )
         return self
 
     @model_validator(mode="after")

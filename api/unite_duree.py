@@ -17,11 +17,15 @@ _SEUIL_MOIS_JOURS = 60
 
 
 def detecter_unite_duree(instance: InstanceTRCO) -> str:
-    """ "jours"/"semaines"/"mois" choisie à partir de la plus grande durée réellement présente
-    dans les contraintes de l'instance — échéances (`Echeance.echeance`) et durées tâche-
-    ressource (`CompatibiliteRessourceTache.duree`), les deux seules valeurs que le frontend
-    convertit via `formatDuree`/`formatDureeCourte`. Une instance sans aucune de ces deux
-    contraintes retombe sur "jours" (comportement par défaut historique, inchangé)."""
+    """ "heures"/"jours"/"semaines"/"mois" — "heures" directement si `instance.unite_temps ==
+    "heures"` (pas de sur-échelle, non demandé), sinon choisie à partir de la plus grande durée
+    réellement présente dans les contraintes de l'instance — échéances (`Echeance.echeance`) et
+    durées tâche-ressource (`CompatibiliteRessourceTache.duree`), les deux seules valeurs que le
+    frontend convertit via `formatDuree`/`formatDureeCourte`. Une instance en mode jours sans
+    aucune de ces deux contraintes retombe sur "jours" (comportement par défaut historique,
+    inchangé)."""
+    if instance.unite_temps == "heures":
+        return "heures"
     valeurs = [
         c.duree if isinstance(c, CompatibiliteRessourceTache) else c.echeance
         for c in instance.contraintes

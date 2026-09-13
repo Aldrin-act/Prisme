@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import csv
 from io import StringIO
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from adapters.commande_derivation import Commande, deriver_echeances_par_commande
 from adapters.competence_derivation import (
@@ -241,6 +241,7 @@ def traduire(
     commandes_csv: bytes | None = None,
     estimateur_duree: EstimateurDuree | None = None,
     delimiteur: str = ",",
+    unite_temps: Literal["jours", "heures"] = "jours",
 ) -> ResultatTraduction:
     """Traduit trois fichiers CSV (Tâches, Ressources, Contraintes), plus un quatrième optionnel
     (Commandes), en une instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est
@@ -252,10 +253,19 @@ def traduire(
     `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
     automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
     aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
-    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée).
+    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée). Ignoré
+    (comme si absent) si `unite_temps == "heures"` : entraîné sur une échelle jours
+    (`estimation/donnees_historique.py`), une estimation à cette échelle serait fausse pour des
+    durées en heures — limitation documentée, pas un ré-entraînement dans ce chantier.
 
     `delimiteur` (un seul caractère, `,` par défaut) s'applique identiquement aux quatre
-    fichiers — un export cohérent utilise toujours le même séparateur partout."""
+    fichiers — un export cohérent utilise toujours le même séparateur partout.
+
+    `unite_temps` ("jours" par défaut) devient `InstanceTRCO.unite_temps` tel quel — voir
+    `dsl/schema/instance.py` pour ce que ça change (cycle de `ContrainteDisponibiliteRessource.
+    jours_semaine_indisponibles`, affichage frontend)."""
+    if unite_temps == "heures":
+        estimateur_duree = None
     taches, durees_estimees = _lire_taches(taches_csv, delimiteur)
     ressources = _lire_ressources(ressources_csv, delimiteur)
     contraintes = _lire_contraintes(contraintes_csv, delimiteur)
@@ -282,5 +292,6 @@ def traduire(
         ressources=ressources,
         contraintes=[*contraintes, *compatibilites_derivees, *echeances_derivees],
         objectifs=[MinimiserMakespan()],
+        unite_temps=unite_temps,
     )
     return ResultatTraduction(instance=instance, avertissements=tuple(avertissements))

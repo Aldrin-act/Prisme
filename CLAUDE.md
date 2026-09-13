@@ -41,11 +41,12 @@ cd Front/prismatron-solver-forge && npm install && npm run dev  # frontend dev s
 ```
 
 No type-checker configured. Environment variables:
-- `PRISME_LLM_MODEL` (default `kimi-k2.6`) / `KIMI_API_KEY` — Kimi (Moonshot AI, OpenAI-compatible
-  API, via `ChatOpenAI(base_url=...)` — no dedicated LangChain partner package used, same reasoning
-  as the removals below) is the sole LLM provider (`generation/agents/client_llm.py`; the other
-  providers this project used to support — qwen/together/nvidia/minimax/deepseek, plus
-  `config_fournisseurs.py`'s per-agent routing, then Mistral itself — were removed, judged unneeded
+- `PRISME_LLM_MODEL` (default `moonshotai/kimi-k2.6`) / `OPENROUTER_API_KEY` — OpenRouter
+  (OpenAI-compatible gateway to Kimi K2/Moonshot AI and other models, via `ChatOpenAI(base_url=...)`
+  — no dedicated LangChain partner package used, same reasoning as the removals below) is the sole
+  LLM provider (`generation/agents/client_llm.py`; the other providers this project used to
+  support — qwen/together/nvidia/minimax/deepseek, plus `config_fournisseurs.py`'s per-agent
+  routing, then Mistral itself, then a direct Moonshot API call — were removed, judged unneeded
   complexity for a single provider actually run in production). Per-agent overrides:
   `PRISME_LLM_MODEL_<AGENT>` / `_TIMEOUT_SECONDES_<AGENT>` (e.g. `PRISME_LLM_MODEL_DEBUGGER`) — no
   per-agent provider choice anymore, there's only one.
