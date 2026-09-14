@@ -49,38 +49,51 @@ pour le cycle de vie des solveurs et des exécutions.
 ```
 Déclenchement (manuel "Analyser maintenant" | boucle périodique)
         │
-        ▼
-Assemblage des faits bruts (instances, solveurs actifs, historique d'exécutions du client)
-        │
-        ▼
-Appel LLM n°1 — détection (detecter_signaux_llm)
-  → le modèle compare instance_id / dates / historique d'échecs et décide seul
-    quel signal s'applique à quelle instance ; rien n'est précalculé côté Python
-        │
-        ▼
-Validation déterministe (detecter_signaux)
-  → tout identifiant recopié par le LLM (instance_id, id_solveur_disponible, execution_id)
-    qui ne correspond à aucune donnée réellement fournie est écarté silencieusement
-        │
-        ▼
-Déduplication (orchestrateur) — un signal déjà couvert par une proposition en attente
-n'est pas resoumis
-        │
-        ▼
-Appel LLM n°2 — rédaction/priorisation (proposer_actions), un seul appel pour
-tous les signaux nouveaux, jamais un par signal
-  → si le modèle ignore/déforme une référence, un résumé de repli pré-écrit par type
-    de signal prend le relais (le signal n'est jamais perdu)
-        │
-        ▼
-Persistance (PropositionSupervision, statut "en attente")
-        │
-        ▼
-Décision humaine explicite (Accepter / Refuser, page Supervision)
-        │
-        ▼ (si acceptée)
-Dispatch vers la route de production existante — génération, exécution ou diagnostic
-(jamais une réimplémentation)
+        ├──────────────────────────────┐
+        ▼                               ▼
+Assemblage des faits bruts       Détection déterministe des commandes en retard
+(instances, solveurs actifs,     (detecter_commandes_en_retard, aucun LLM — réutilise
+historique d'exécutions)         calculer_statut_commande, déjà fiable et testée ailleurs)
+        │                               │
+        ▼                               │
+Appel LLM n°1 — détection              │
+(detecter_signaux_llm)                 │
+  → le modèle compare instance_id /    │
+    dates / historique d'échecs et     │
+    décide seul quel signal            │
+    s'applique ; rien n'est            │
+    précalculé côté Python pour ces    │
+    trois signaux                      │
+        │                               │
+        ▼                               │
+Validation déterministe                │
+(detecter_signaux)                     │
+  → tout identifiant recopié par le    │
+    LLM qui ne correspond à aucune     │
+    donnée réellement fournie est      │
+    écarté silencieusement             │
+        │                               │
+        └───────────────┬───────────────┘
+                         ▼
+        Déduplication (orchestrateur) — un signal déjà couvert par une proposition
+        en attente n'est pas resoumis (clé : type_signal + instance_id + commande_id)
+                         │
+                         ▼
+        Appel LLM n°2 — rédaction/priorisation (proposer_actions), un seul appel pour
+        tous les signaux nouveaux (des quatre types), jamais un par signal
+          → si le modèle ignore/déforme une référence, un résumé de repli pré-écrit par
+            type de signal prend le relais (le signal n'est jamais perdu)
+                         │
+                         ▼
+        Persistance (PropositionSupervision, statut "en attente")
+                         │
+                         ▼
+        Décision humaine explicite (Accepter / Refuser, page Supervision)
+                         │
+                         ▼ (si acceptée)
+        Dispatch vers la route de production existante — génération, exécution ou
+        diagnostic (jamais une réimplémentation) ; aucune route pour commande_en_retard,
+        purement informatif
 ```
 
 ## 4. Fonctionnalités détaillées
@@ -99,7 +112,8 @@ Dispatch vers la route de production existante — génération, exécution ou d
 ### F2 — Détection des signaux
 
 Un seul appel LLM par client couvre toutes les instances à la fois (jamais un appel par instance).
-Trois signaux possibles, mutuellement compatibles sauf le premier avec le second :
+Quatre signaux possibles ; les trois premiers sont mutuellement compatibles sauf le premier avec le
+second, le quatrième (commande en retard) est indépendant de tous :
 
 **F2.1 — Signature orpheline** (`signature_orpheline`)
 Aucun solveur actif enregistré pour ce client n'a d'`instance_id` égal à celui de l'instance
@@ -118,6 +132,16 @@ autre), mais :
 **F2.3 — Échecs répétés** (`echecs_repetes`)
 Les trois dernières exécutions de l'instance (triées par date) ont toutes échoué. Indépendant des
 deux signaux précédents — peut se cumuler avec l'un d'eux sur la même instance.
+
+**F2.4 — Commande en retard** (`commande_en_retard`)
+Détecté **sans appel LLM** (`supervision/detecteurs.py::detecter_commandes_en_retard`) — réutilise
+directement `calculer_statut_commande` (`api/comparaison_scenarios.py`), déjà utilisée par la page
+Commandes pour son badge "En retard" : redemander cette comparaison de deux entiers à un LLM
+n'apporterait rien, seulement un risque d'erreur sur un calcul déjà fiable. Une commande produit ce
+signal quand `date_fin_prevue > date_limite` d'après le dernier planning réussi de son instance —
+jamais si `en_retard` vaut `None` (commande pas encore planifiable : aucune exécution réussie, ou
+tâches de la commande encore absentes du planning). Portée par **commande**, pas par instance :
+deux commandes en retard sur la même instance produisent deux propositions distinctes.
 
 ### F3 — Rédaction et priorisation des propositions
 
@@ -147,9 +171,11 @@ de réception.
 | `signature_orpheline` | `regenerer_solveur` | déclenche une génération (`POST /generation/{instance_id}/demarrer`, job suivi comme n'importe quelle génération manuelle) |
 | `instance_a_replanifier` | `executer` | déclenche une exécution (`executer_pour_instance`, même fonction que `POST /execution/{instance_id}`) |
 | `echecs_repetes` | `diagnostiquer` | lance un diagnostic sur la plus récente exécution en échec qui a produit un planning exploitable (les échecs sans planning — solveur introuvable, crash sandbox — ne sont pas diagnosticables, essai du plus récent au plus ancien) |
+| `commande_en_retard` | `aucune` | rien — aucune action système ne peut rattraper un retard déjà constaté par le planning actuel ; Accepter fait juste office d'accusé "pris en compte" |
 
 Si l'instance associée a été supprimée entre-temps, l'acceptation échoue explicitement (422),
-jamais une action silencieusement avortée.
+jamais une action silencieusement avortée — sauf pour `commande_en_retard`, qui ne dépend d'aucune
+instance encore existante pour son accusé informatif.
 
 ## 5. Modèle de données — `PropositionSupervision`
 
@@ -157,16 +183,17 @@ jamais une action silencieusement avortée.
 |---|---|---|
 | `id` | str | Identifiant de la proposition. |
 | `client_id` | str | Client concerné. |
-| `type_signal` | `signature_orpheline` \| `instance_a_replanifier` \| `echecs_repetes` | |
-| `action_suggeree` | `regenerer_solveur` \| `executer` \| `diagnostiquer` | Dérivée mécaniquement du type de signal (§F6), jamais choisie par le LLM. |
+| `type_signal` | `signature_orpheline` \| `instance_a_replanifier` \| `echecs_repetes` \| `commande_en_retard` | |
+| `action_suggeree` | `regenerer_solveur` \| `executer` \| `diagnostiquer` \| `aucune` | Dérivée mécaniquement du type de signal (§F6), jamais choisie par le LLM. |
 | `resume` | str | Texte destiné à l'humain (F3). |
 | `priorite` | `haute` \| `moyenne` \| `basse` | |
-| `details` | liste de str | Détail technique (ex. `structure=...`, `solveur_disponible=...`) — trace, jamais relu par le pipeline. |
+| `details` | liste de str | Détail technique (ex. `structure=...`, `solveur_disponible=...`, ou `date_fin_prevue=.../date_limite=...` pour `commande_en_retard`) — trace, jamais relu par le pipeline. |
 | `instance_id` | str \| None | `None` si l'instance a été supprimée depuis. |
 | `execution_ids` | liste de str | Uniquement pour `echecs_repetes`. |
-| `structure_contraintes`, `signature_objectifs` | str | Capturés au moment de la détection, informatifs. |
+| `structure_contraintes`, `signature_objectifs` | str | Capturés au moment de la détection, informatifs — vides pour `commande_en_retard` (non pertinents). |
 | `decision` | `acceptee` \| `refusee` \| `None` | `None` = en attente. |
 | `horodatage_decision`, `commentaire` | | Renseignés à la décision. |
+| `commande_id` | str \| None | Uniquement pour `commande_en_retard` — distingue plusieurs commandes en retard sur une même instance. |
 
 ## 6. Interfaces
 
@@ -204,6 +231,11 @@ lancez une analyse...") plutôt qu'un tableau vide silencieux.
   silencieusement écarté avant persistance — jamais propagé jusqu'à l'humain.
 - **Boucle périodique désactivée par défaut** — opt-in explicite requis, jamais un comportement
   surprise en développement ou en CI.
+- **Le LLM n'est sollicité que là où une vraie comparaison de dates/signatures textuelles est en
+  jeu** — `commande_en_retard` réutilise une fonction déjà déterministe et testée
+  (`calculer_statut_commande`) plutôt que de redemander au LLM une comparaison de deux entiers
+  qu'il pourrait se tromper à faire ; le LLM garde son rôle de rédaction/priorisation pour ce
+  signal comme pour les trois autres.
 
 ## 8. Limites connues / hors périmètre
 

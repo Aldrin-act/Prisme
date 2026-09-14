@@ -11,13 +11,23 @@ from __future__ import annotations
 import json
 
 from api.etat import EtatAPI
-from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
+from dsl.schema import (
+    CompatibiliteRessourceTache,
+    InstanceTRCO,
+    MinimiserMakespan,
+    OperationPlanifiee,
+    Planning,
+    Precedence,
+    Ressource,
+    Tache,
+)
 from sandbox.runner import ResultatExecution
 from scripts.enregistrer_solveur_reference import enregistrer
 from solver_store.registry import Registre
 from supervision import agent as agent_module
 from supervision.orchestrateur import analyser_et_proposer
 from tests.unit.aides_test_agents import ModeleFactice
+from validation_engine.feasibility_checker import ResultatFaisabilite
 
 _INSTANCE_SANS_SOLVEUR = InstanceTRCO(
     taches=[Tache(id="T1")],
@@ -166,3 +176,37 @@ def test_instance_modifiee_apres_execution_propose_bien_une_reexecution(registre
     assert propositions[0].instance_id == instance_id
     assert propositions[0].action_suggeree == "executer"
     assert "modifiée depuis sa dernière exécution" in propositions[0].resume
+
+
+def test_commande_en_retard_dedoublonnee_par_commande_id(registre_test: Registre) -> None:
+    """Deux commandes en retard sur la même instance, détectées à deux passes différentes : la
+    seconde passe doit proposer la nouvelle commande sans jamais reproposer la première déjà en
+    attente — la clé de dédoublonnage doit inclure commande_id, pas seulement
+    (type_signal, instance_id), sans quoi la seconde commande serait silencieusement engloutie
+    par la proposition déjà pendante de la première."""
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    resultat = ResultatExecution(
+        planning=Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)]),
+        verdict_faisabilite=ResultatFaisabilite(violations=()),
+        erreur=None,
+    )
+    assert resultat.reussi
+    etat.enregistrer_execution("solveur-quelconque", instance_id, resultat)
+    etat.enregistrer_commande("cmd_1", instance_id, "client_test", date_limite=5, taches=("T1",))
+
+    modele_vide = _modele(signaux_detection=[], propositions=[])
+    premiere_passe = analyser_et_proposer(etat, registre_test, modele_vide, "client_test")
+    assert len(premiere_passe) == 1
+    assert premiere_passe[0].type_signal == "commande_en_retard"
+    assert premiere_passe[0].commande_id == "cmd_1"
+    assert premiere_passe[0].action_suggeree == "aucune"
+
+    # Une deuxième commande devient en retard sur la MÊME instance.
+    etat.enregistrer_commande("cmd_2", instance_id, "client_test", date_limite=2, taches=("T1",))
+
+    deuxieme_passe = analyser_et_proposer(etat, registre_test, modele_vide, "client_test")
+
+    assert len(deuxieme_passe) == 1
+    assert deuxieme_passe[0].type_signal == "commande_en_retard"
+    assert deuxieme_passe[0].commande_id == "cmd_2"
