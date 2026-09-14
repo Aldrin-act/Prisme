@@ -42,15 +42,18 @@ def _payload_valide() -> dict:
     }
 
 
-def _enregistrer_solveur_minimal(registre: Registre) -> None:
+def _enregistrer_solveur_minimal(registre: Registre, instance_id: str) -> None:
     """Enregistre `_solveur_minimal.py` (déjà étendu, Phase 2) — verdict vert « à blanc », comme
     `test_solveur_valide_stocke_puis_execute_en_sandbox` : ce test vérifie le câblage
-    route → sandbox → état, pas la cascade elle-même (déjà couverte ailleurs)."""
+    route → sandbox → état, pas la cascade elle-même (déjà couverte ailleurs). Un solveur ne
+    sert que l'instance qui l'a fait générer — `instance_id` obligatoire, l'instance doit donc
+    déjà exister (ingérée) avant cet appel."""
     code_source = Path(_module_solveur_minimal.__file__).read_text(encoding="utf-8")
     registre.enregistrer_solveur(
         code_source=code_source,
         structure_contraintes="compatibilite_ressource_tache",
         verdict_cascade=VerdictCascade(diagnostics=()),
+        instance_id=instance_id,
         client_id="client_a",
     )
 
@@ -61,8 +64,8 @@ def test_horizon_gele_sans_historique_solve_normalement(
     """Première exécution de cette instance : `horizon_gele_jours>0` est demandé mais il n'existe
     encore aucun planning précédent — rien à figer, le solve se déroule normalement."""
     client, etat_test = client_isole
-    _enregistrer_solveur_minimal(registre_test)
     instance_id = client.post("/ingestion/client_a", json=_payload_valide()).json()["instance_id"]
+    _enregistrer_solveur_minimal(registre_test, instance_id)
 
     reponse = client.post(f"/execution/{instance_id}", params={"horizon_gele_jours": 5})
 
@@ -82,8 +85,8 @@ def test_horizon_gele_avec_historique_reutilise_le_dernier_planning_reussi(
     """Deuxième exécution de la même instance, après un premier succès : `horizon_gele_jours>0`
     trouve bien un planning précédent à transmettre — transparence humaine, jamais silencieux."""
     client, _ = client_isole
-    _enregistrer_solveur_minimal(registre_test)
     instance_id = client.post("/ingestion/client_a", json=_payload_valide()).json()["instance_id"]
+    _enregistrer_solveur_minimal(registre_test, instance_id)
 
     premiere = client.post(f"/execution/{instance_id}")
     assert premiere.json()["reussi"] is True, premiere.json()["erreur"]

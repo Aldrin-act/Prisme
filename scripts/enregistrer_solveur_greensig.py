@@ -29,11 +29,16 @@ STRUCTURE_CONTRAINTES = "compatibilite_ressource_tache"  # instance GreenSig : a
 ALGORITHME = "genetic"  # recommande par le Benchmarker pour cette instance (2165 taches)
 
 
-def enregistrer(registre: Registre) -> str:
-    """Idempotent : réutilise un solveur déjà enregistré pour ce client et
-    cette structure plutôt que d'en dupliquer un (même convention que
-    `scripts.enregistrer_solveur_reference.enregistrer`)."""
-    existants = registre.rechercher_solveurs(client_id=CLIENT_ID, structure_contraintes=STRUCTURE_CONTRAINTES)
+def enregistrer(registre: Registre, instance_id: str) -> str:
+    """Idempotent : réutilise un solveur déjà enregistré pour cette instance
+    plutôt que d'en dupliquer un (même convention que
+    `scripts.enregistrer_solveur_reference.enregistrer`). `instance_id`
+    obligatoire — un solveur ne sert que l'instance qui l'a fait générer
+    (`solver_store/registry.py`), l'appelant doit donc avoir déjà ingéré
+    l'instance GreenSig avant d'appeler cette fonction."""
+    existants = registre.rechercher_solveurs(
+        client_id=CLIENT_ID, instance_id=instance_id, structure_contraintes=STRUCTURE_CONTRAINTES
+    )
     if existants:
         return existants[0].id
 
@@ -54,6 +59,7 @@ def enregistrer(registre: Registre) -> str:
         code_source=code_source,
         structure_contraintes=STRUCTURE_CONTRAINTES,
         verdict_cascade=verdict,
+        instance_id=instance_id,
         client_id=CLIENT_ID,
     )
 
@@ -63,8 +69,12 @@ def main() -> None:
         print(f"introuvable : {CHEMIN_CODE}")
         sys.exit(1)
 
-    id_solveur = enregistrer(Registre())
-    print(f"solveur GreenSig enregistré : id={id_solveur!r}, client_id={CLIENT_ID!r}")
+    print(
+        "usage direct impossible désormais : un solveur doit être enregistré pour une instance "
+        "GreenSig déjà ingérée — appeler enregistrer(registre, instance_id=...) depuis un script "
+        "qui a d'abord ingéré l'instance GreenSig réelle (voir scripts/demo_greensig_vraies_donnees.py)."
+    )
+    sys.exit(1)
 
 
 if __name__ == "__main__":

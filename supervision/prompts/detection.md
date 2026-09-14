@@ -4,12 +4,14 @@ Tu es un expert en supervision de systèmes d'ordonnancement industriel (FJSP �
 
 ## Mission
 
-Examine les données brutes ci-dessous (instances, solveurs enregistrés et historique d'exécutions d'un même client) et détecte, pour chaque instance concernée, lequel des trois signaux définis plus bas s'applique. Rien n'a été précalculé ou présélectionné pour toi : c'est toi qui compares les signatures de contraintes/objectifs, les dates, et l'historique d'échecs.
+Examine les données brutes ci-dessous (instances, solveurs enregistrés et historique d'exécutions d'un même client) et détecte, pour chaque instance concernée, lequel des trois signaux définis plus bas s'applique. Rien n'a été précalculé ou présélectionné pour toi : c'est toi qui compares les identifiants d'instance, les dates, et l'historique d'échecs.
+
+Un solveur ne sert que l'instance pour laquelle il a été généré (`instance_id` sur chaque solveur) — jamais une autre instance, même de `structure_contraintes`/`signature_objectifs` identique. Ces deux derniers champs restent affichés à titre d'information (pour comprendre le problème traité), jamais comme critère de correspondance entre une instance et un solveur.
 
 ## Les trois signaux
 
-1. **signature_orpheline** — la `structure_contraintes` et la `signature_objectifs` de l'instance ne correspondent, **toutes les deux et exactement** (chaîne identique caractère pour caractère), à aucun solveur de la liste « Solveurs enregistrés » pour ce client. Une instance dans ce cas ne peut être ni exécutée ni replanifiée — ne la considère jamais pour le signal 2 ci-dessous.
-2. **instance_a_replanifier** — au moins un solveur correspond exactement (même `structure_contraintes` ET même `signature_objectifs`), mais :
+1. **signature_orpheline** — aucun solveur de la liste « Solveurs enregistrés » n'a un `instance_id` **exactement égal** à l'`instance_id` de cette instance. Une instance dans ce cas ne peut être ni exécutée ni replanifiée — ne la considère jamais pour le signal 2 ci-dessous.
+2. **instance_a_replanifier** — un solveur de la liste a un `instance_id` exactement égal à celui de cette instance (c'est **le sien**, jamais celui d'une autre instance même similaire), mais :
    - soit l'instance n'apparaît dans **aucune** exécution de la liste « Historique d'exécutions » → raison `jamais_executee` ;
    - soit sa `date_modification` est **postérieure** à la date de sa **plus récente** exécution (celle avec le `date_execution` le plus tardif parmi les siennes) → raison `modifiee_apres_derniere_execution`.
    Si l'instance a déjà été exécutée et n'a pas été modifiée depuis, ne génère aucun signal pour elle.
@@ -47,7 +49,7 @@ Examine les données brutes ci-dessous (instances, solveurs enregistrés et hist
 
 - N'invente jamais un `instance_id`, `id_solveur_disponible`, `id_solveur` ou un élément de `execution_ids` qui n'apparaît pas tel quel dans les données ci-dessus.
 - Une instance ne reçoit jamais à la fois `signature_orpheline` et `instance_a_replanifier` — le premier rend le second sans objet pour cette instance.
-- Compare les chaînes `structure_contraintes`/`signature_objectifs` de façon stricte — pas d'approximation, de similarité partielle ou de jugement de proximité.
+- Compare les `instance_id` de façon stricte — pas d'approximation, de similarité partielle ou de jugement de proximité. Ne considère jamais qu'un solveur d'une autre instance "convient" parce que sa structure ou ses objectifs ressemblent.
 - N'inclus dans ta réponse que les instances qui correspondent réellement à l'un des trois cas — ne force jamais un signal par excès de prudence, et n'en génère aucun pour une instance qui ne pose aucun problème.
 - Réponds uniquement en JSON, sans texte autour.
 

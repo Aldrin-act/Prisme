@@ -131,7 +131,10 @@ found and fixed then.
 - **Étape 8 — API + adapters** (`api/`, `adapters/`): a multi-tenant surface — **Instance**
   (`api/etat.py`) is the sole primary entity: it owns its own execution/planning history directly
   and is what execution triggers on (**`POST /execution/{instance_id}`**, solver lookup by
-  `client_id` + the instance's **exact** constraint-type-signature match). Deleting an instance
+  `client_id` + `instance_id` — a solver serves only the instance it was generated for, never
+  another instance even of identical structure/objectifs; `structure_contraintes`/
+  `signature_objectifs` are still checked in addition, to catch an instance modified since its
+  own solver was generated). Deleting an instance
   cascade-deletes its own executions/plannings/decisions. **SourceDonnees** (`routes/sources.py`)
   is a separate, deliberately minimal concept: persisted raw data replayable through the
   comprehension agent (`generer-instance`) — it owns no execution history and has no "current
@@ -152,10 +155,14 @@ where type ∈ {`feature/`, `fix/`, `docs/`, `chore/`, `refactor/`}; PR + squash
 ## The founding principle (do not violate)
 
 **Generate once, re-execute many times.** The AI writes solver code a single time, offline, at a
-rare event (new client / new constraint structure). Once validated, that code is **frozen**,
-persisted (`solver_store/`), and re-run on changing data inside a fresh ephemeral container
-(`sandbox/`) — **never regenerated per execution**: *code persists* (performance), *execution is
-disposable* (security).
+rare event (new instance ingested, or an existing instance's constraint structure changed enough
+to need a fresh solver). Once validated, that code is **frozen**, persisted (`solver_store/`,
+keyed by `instance_id` — a solver serves only the instance it was generated for, never shared
+across instances even of identical structure/objectifs, see Étape 8), and re-run on that same
+instance's changing data inside a fresh ephemeral container (`sandbox/`) — **never regenerated per
+execution**: *code persists* (performance), *execution is disposable* (security). "Re-execute many
+times" describes repeated executions of one instance over time, never sharing generated code
+across different instances.
 
 **Human-in-the-loop is non-negotiable.** At every risky decision — triggering a reschedule,
 diagnosing a bad plan, a generation failure — the system alerts and *proposes*; a human decides,

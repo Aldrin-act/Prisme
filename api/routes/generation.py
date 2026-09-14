@@ -25,11 +25,15 @@ générations devient significatif).
 
 Distinct de l'agent de compréhension (`adapters/agent_comprehension/`) : ici
 on génère du **code** de solveur, générique à l'ensemble du DSL — l'instance
-ne sert qu'à retrouver le `client_id` et la clé de matching
-(`structure_contraintes` + `signature_objectifs`) sous laquelle enregistrer
-le résultat, jamais comme donnée injectée dans le prompt (le code produit
-n'est pas spécifique à cette instance, §5.2 "generate once, re-execute
-many")."""
+sert à retrouver le `client_id`, la clé de matching
+(`structure_contraintes` + `signature_objectifs`, utilisée pour détecter un
+solveur devenu incompatible après modification de l'instance) et son propre
+`instance_id`, sous lequel le résultat est enregistré : un solveur généré ne
+sert que cette instance, jamais une autre même de signature identique.
+L'instance n'est jamais injectée comme donnée dans le prompt (le code
+produit n'est pas spécifique à son contenu, seulement à sa structure, §5.2
+"generate once, re-execute many" — au sens d'une même instance rejouée dans
+le temps, pas d'un partage entre instances)."""
 
 from __future__ import annotations
 
@@ -119,6 +123,7 @@ def _construire_reponse(
     resultat: ResultatPipelineAvecBoucle,
     registre: Registre,
     client_id: str,
+    instance_id: str,
     structure: str,
     signature_obj: str,
 ) -> dict[str, object]:
@@ -175,8 +180,9 @@ def _construire_reponse(
         resultat.code_final,
         structure,
         resultat.verdict_cascade,
-        client_id,
-        signature_obj,
+        instance_id=instance_id,
+        client_id=client_id,
+        signature_objectifs=signature_obj,
         algorithme=resultat.algorithme_recommande,
         algorithme_raison=resultat.justification_algorithme,
     )
@@ -240,7 +246,9 @@ def _executer_job(
         for item in tenter_generation_avec_boucle_stream(instance_dict, client_id=client_id):
             if isinstance(item, ResultatPipelineAvecBoucle):
                 resultat_pipeline = item
-                job.resultat = _construire_reponse(item, registre, client_id, structure, signature_obj)
+                job.resultat = _construire_reponse(
+                    item, registre, client_id, job.instance_id, structure, signature_obj
+                )
             elif isinstance(item, ResultatPartiel):
                 if item.champ == "tentative":
                     etat.ajouter_tentative_generation(job.id, _tentative_persistee(item.valeur))
@@ -317,7 +325,7 @@ def generer_solveur(
     etat.enregistrer_job_generation(job_id, instance_id, client_id)
 
     resultat = tenter_generation_avec_boucle(instance_exemple=instance_dict, client_id=client_id)
-    reponse = _construire_reponse(resultat, registre, client_id, structure, signature_obj)
+    reponse = _construire_reponse(resultat, registre, client_id, instance_id, structure, signature_obj)
 
     for tentative in resultat.boucle_reparation.tentatives:
         etat.ajouter_tentative_generation(job_id, _tentative_persistee(tentative))

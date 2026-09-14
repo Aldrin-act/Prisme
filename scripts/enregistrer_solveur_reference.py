@@ -25,16 +25,21 @@ from validation_engine.cascade import evaluer_cascade
 STRUCTURE_MINIMALE = "compatibilite_ressource_tache,precedence"
 
 
-def enregistrer(registre: Registre, client_id: str = "demo") -> str:
-    """Idempotent : réutilise un solveur déjà enregistré pour ce client et
-    cette structure plutôt que d'en dupliquer un à chaque appel (le script
-    et la démo peuvent être relancés sans effet de bord).
+def enregistrer(registre: Registre, instance_id: str, client_id: str = "demo") -> str:
+    """Idempotent : réutilise un solveur déjà enregistré pour cette instance
+    plutôt que d'en dupliquer un à chaque appel (le script et la démo
+    peuvent être relancés sans effet de bord). `instance_id` obligatoire —
+    un solveur ne sert que l'instance qui l'a fait générer
+    (`solver_store/registry.py`), l'appelant doit donc avoir déjà créé son
+    instance avant d'appeler cette fonction.
 
     Rejoue la cascade complète (Étape 5) sur le solveur minimal avant
     d'enregistrer — le store ne doit jamais recevoir un verdict qu'on n'a
     pas réellement vérifié.
     """
-    existants = registre.rechercher_solveurs(client_id=client_id, structure_contraintes=STRUCTURE_MINIMALE)
+    existants = registre.rechercher_solveurs(
+        client_id=client_id, instance_id=instance_id, structure_contraintes=STRUCTURE_MINIMALE
+    )
     if existants:
         return existants[0].id
 
@@ -47,6 +52,7 @@ def enregistrer(registre: Registre, client_id: str = "demo") -> str:
         code_source=code_source,
         structure_contraintes=STRUCTURE_MINIMALE,
         verdict_cascade=verdict,
+        instance_id=instance_id,
         client_id=client_id,
     )
 

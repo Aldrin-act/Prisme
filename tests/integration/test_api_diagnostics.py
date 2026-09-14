@@ -27,7 +27,6 @@ def test_diagnostic_via_l_api_ne_trouve_aucune_cause_pour_un_solveur_sain(
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 
     try:
-        enregistrer(registre_test, client_id="client_test")
         client = TestClient(app)
 
         instance = InstanceTRCO(
@@ -43,6 +42,9 @@ def test_diagnostic_via_l_api_ne_trouve_aucune_cause_pour_un_solveur_sain(
         instance_id = client.post("/ingestion/client_test", json=instance.model_dump(mode="json")).json()[
             "instance_id"
         ]
+        # Un solveur ne sert que l'instance qui l'a fait générer — enregistré une fois
+        # l'instance ingérée connue.
+        enregistrer(registre_test, instance_id=instance_id, client_id="client_test")
         # L'exécution se déclenche directement par instance_id, sans intermédiaire.
         reponse = client.post(f"/execution/{instance_id}")
         assert reponse.status_code == 200, reponse.json()

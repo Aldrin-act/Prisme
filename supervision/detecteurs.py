@@ -1,22 +1,23 @@
 """Détection de signaux (§2, MT7) — délègue la décision (quel signal s'applique à quelle
 instance) à un appel LLM unique (`supervision.agent.detecter_signaux_llm`) plutôt qu'à des
-comparaisons Python : c'est le LLM qui compare les signatures de contraintes/objectifs, les
-dates de modification/exécution et l'historique d'échecs, à partir des faits bruts assemblés
-ici. Ce module se limite à rassembler ces faits et à valider ce que le LLM en tire avant de le
-convertir en signaux typés — jamais recalculé ni redécidé ici, mais jamais non plus accepté
-aveuglément : un `instance_id`, `id_solveur_disponible` ou `execution_id` qui ne correspond à
-aucune donnée réellement fournie est silencieusement écarté plutôt que propagé (le LLM peut se
-tromper ou halluciner, voir `supervision.agent.SignalBrutLLM`).
+comparaisons Python : c'est le LLM qui compare les `instance_id`, les dates de
+modification/exécution et l'historique d'échecs, à partir des faits bruts assemblés ici. Ce
+module se limite à rassembler ces faits et à valider ce que le LLM en tire avant de le convertir
+en signaux typés — jamais recalculé ni redécidé ici, mais jamais non plus accepté aveuglément :
+un `instance_id`, `id_solveur_disponible` ou `execution_id` qui ne correspond à aucune donnée
+réellement fournie est silencieusement écarté plutôt que propagé (le LLM peut se tromper ou
+halluciner, voir `supervision.agent.SignalBrutLLM`) — y compris un `id_solveur_disponible` réel
+mais appartenant à une **autre** instance : un solveur ne sert jamais que l'instance qui l'a fait
+générer (`solver_store/registry.py`), jamais une autre même de structure/objectifs identiques.
 
-Trois signaux, toujours le même sens métier qu'avant ce changement (seul le mécanisme de
-détection a changé, jamais leur signification) :
+Trois signaux :
 
-1. **Signature orpheline** — la signature courante (`structure_contraintes`/
-   `signature_objectifs`) d'une instance ne correspond à aucun solveur actif enregistré pour son
-   client.
-2. **Instance à replanifier** — signature qui correspond bien à un solveur actif, mais soit
-   l'instance n'a jamais été exécutée, soit elle l'a été puis a été modifiée depuis
-   (`modifier_instance`/`modifier_objectifs`, `api/etat.py`) sans être ré-exécutée.
+1. **Signature orpheline** — aucun solveur actif enregistré pour ce client n'a d'`instance_id`
+   égal à celui de cette instance.
+2. **Instance à replanifier** — un solveur actif a bien un `instance_id` égal à celui de cette
+   instance (le sien), mais soit l'instance n'a jamais été exécutée, soit elle l'a été puis a été
+   modifiée depuis (`modifier_instance`/`modifier_objectifs`, `api/etat.py`) sans être
+   ré-exécutée.
 3. **Échecs répétés** — les 3 dernières exécutions d'une même instance sont toutes en échec.
 """
 
@@ -91,7 +92,10 @@ def detecter_signaux(
 
     solveurs = {
         s.id: SolveurSupervision(
-            id=s.id, structure_contraintes=s.structure_contraintes, signature_objectifs=s.signature_objectifs
+            id=s.id,
+            instance_id=s.instance_id,
+            structure_contraintes=s.structure_contraintes,
+            signature_objectifs=s.signature_objectifs,
         )
         for s in registre.rechercher_solveurs(client_id=client_id)
     }
@@ -127,7 +131,14 @@ def detecter_signaux(
                 )
             )
         elif brut.type_signal == "instance_a_replanifier":
-            if brut.raison is None or brut.id_solveur_disponible not in solveurs:
+            # Un solveur ne sert que l'instance qui l'a fait générer — revérifié ici même si le
+            # prompt (`detection.md`) l'interdit déjà : le LLM peut se tromper de solveur ou
+            # halluciner, jamais fait confiance aveuglément (voir docstring de module).
+            if (
+                brut.raison is None
+                or brut.id_solveur_disponible not in solveurs
+                or solveurs[brut.id_solveur_disponible].instance_id != instance.instance_id
+            ):
                 continue
             signaux.append(
                 SignalInstanceAReplanifier(

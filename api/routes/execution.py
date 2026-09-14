@@ -41,14 +41,22 @@ def executer_pour_instance(
 
     structure = structure_contraintes(instance)
     objectifs = signature_objectifs(instance)
+    # instance_id en plus de structure/objectifs : un solveur ne sert que l'instance qui l'a
+    # fait générer (plus de partage par signature entre instances d'un même client) — le filtre
+    # structure/objectifs reste en plus, pour détecter le cas où l'instance a été modifiée
+    # depuis la génération de son propre solveur (devenu incompatible sans être régénéré).
     solveurs = registre.rechercher_solveurs(
-        client_id=client_id, structure_contraintes=structure, signature_objectifs=objectifs
+        client_id=client_id,
+        instance_id=instance_id,
+        structure_contraintes=structure,
+        signature_objectifs=objectifs,
     )
     if not solveurs:
         raise HTTPException(
             status_code=409,
             detail=(
-                f"aucun solveur validé pour client={client_id!r}, structure={structure!r}, objectifs={objectifs!r}"
+                f"aucun solveur validé pour instance={instance_id!r} "
+                f"(client={client_id!r}, structure={structure!r}, objectifs={objectifs!r})"
             ),
         )
     artefact = solveurs[0]

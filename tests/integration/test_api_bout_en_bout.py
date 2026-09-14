@@ -22,8 +22,6 @@ def test_bout_en_bout_erp_vers_planning_et_audit(image_sandbox: str, registre_te
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 
     try:
-        id_solveur = enregistrer(registre_test, client_id="client_test")
-
         payload_erp = PayloadERP(
             operations=[
                 OperationERP(code_operation="OP10", duree_jours=1, poste_id="POSTE_A"),
@@ -45,6 +43,10 @@ def test_bout_en_bout_erp_vers_planning_et_audit(image_sandbox: str, registre_te
         corps_ingestion = reponse.json()
         assert corps_ingestion["structure_contraintes"] == STRUCTURE_MINIMALE
         instance_id = corps_ingestion["instance_id"]
+
+        # Un solveur ne sert que l'instance qui l'a fait générer — enregistré seulement une fois
+        # l'instance ingérée connue, jamais avant.
+        id_solveur = enregistrer(registre_test, instance_id=instance_id, client_id="client_test")
 
         # L'exécution se déclenche directement par instance_id, sans intermédiaire.
         reponse = client.post(f"/execution/{instance_id}")

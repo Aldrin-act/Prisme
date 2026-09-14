@@ -137,9 +137,9 @@ def test_instance_modifiee_apres_execution_propose_bien_une_reexecution(registre
     """Bout en bout : une instance exécutée puis modifiée en place (même
     instance_id) doit produire une proposition `instance_a_replanifier` dont
     le résumé de repli mentionne la modification — pas "jamais exécutée"."""
-    id_solveur = enregistrer(registre_test, client_id="client_test")
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur = enregistrer(registre_test, instance_id=instance_id, client_id="client_test")
     resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="peu importe")
     execution_id = etat.enregistrer_execution("un-solveur", instance_id, resultat)
     etat.dates_execution[execution_id] = "2026-01-01T00:00:00"

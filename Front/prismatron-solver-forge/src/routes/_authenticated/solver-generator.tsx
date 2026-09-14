@@ -204,18 +204,17 @@ function SolverGeneratorPage() {
   // illisibles — même hook que la page Instances.
   const labelParInstance = useLabelsInstances();
 
-  // Approximation (client_id + structure_contraintes seulement — les
-  // objectifs ne sont pas dans /supervision/instances) : suffisant pour un
-  // indicateur visuel, la page Instances fait le matching exact.
-  const clesAvecSolveur = new Set(
-    (solveurs ?? []).map((s) => `${s.client_id}::${s.structure_contraintes}`),
+  // Un solveur ne sert que l'instance qui l'a fait générer (plus de partage par signature entre
+  // instances) — indicateur "a déjà un solveur" basé directement sur instance_id.
+  const instancesAvecSolveur = new Set(
+    (solveurs ?? []).map((s) => s.instance_id).filter((id): id is string => id !== null),
   );
   const instancesEnGeneration = new Set(
     (jobsGeneration ?? []).filter((j) => !j.termine).map((j) => j.instance_id),
   );
   const instancesTriees = [...(instances ?? [])].sort((a, b) => {
-    const aEn = clesAvecSolveur.has(`${a.client_id}::${a.structure_contraintes}`) ? 1 : 0;
-    const bEn = clesAvecSolveur.has(`${b.client_id}::${b.structure_contraintes}`) ? 1 : 0;
+    const aEn = instancesAvecSolveur.has(a.instance_id) ? 1 : 0;
+    const bEn = instancesAvecSolveur.has(b.instance_id) ? 1 : 0;
     return aEn - bEn;
   });
 
@@ -380,9 +379,7 @@ function SolverGeneratorPage() {
             <SelectContent>
               {instancesTriees.map((i) => {
                 const label = labelParInstance.get(i.instance_id)?.label;
-                const aDejaUnSolveur = clesAvecSolveur.has(
-                  `${i.client_id}::${i.structure_contraintes}`,
-                );
+                const aDejaUnSolveur = instancesAvecSolveur.has(i.instance_id);
                 const enGeneration = instancesEnGeneration.has(i.instance_id);
                 return (
                   <SelectItem key={i.instance_id} value={i.instance_id}>
@@ -414,7 +411,7 @@ function SolverGeneratorPage() {
               instances={instances}
               instancesLoading={isLoading}
               labelParInstance={labelParInstance}
-              clesAvecSolveur={clesAvecSolveur}
+              instancesAvecSolveur={instancesAvecSolveur}
               instancesEnGeneration={instancesEnGeneration}
               onChangerInstance={(instanceId) => mettreAJourOnglet(o.id, { instanceId })}
               onLancer={() => lancer(o.id)}
@@ -432,7 +429,7 @@ function ContenuOnglet({
   instances,
   instancesLoading,
   labelParInstance,
-  clesAvecSolveur,
+  instancesAvecSolveur,
   instancesEnGeneration,
   onChangerInstance,
   onLancer,
@@ -442,7 +439,7 @@ function ContenuOnglet({
   instances: InstanceInfo[] | undefined;
   instancesLoading: boolean;
   labelParInstance: Map<string, LabelInstance>;
-  clesAvecSolveur: Set<string>;
+  instancesAvecSolveur: Set<string>;
   instancesEnGeneration: Set<string>;
   onChangerInstance: (instanceId: string) => void;
   onLancer: () => void;
@@ -485,9 +482,7 @@ function ContenuOnglet({
               <SelectContent>
                 {(instances ?? []).map((i) => {
                   const label = labelParInstance.get(i.instance_id)?.label;
-                  const aDejaUnSolveur = clesAvecSolveur.has(
-                    `${i.client_id}::${i.structure_contraintes}`,
-                  );
+                  const aDejaUnSolveur = instancesAvecSolveur.has(i.instance_id);
                   const enGeneration = instancesEnGeneration.has(i.instance_id);
                   return (
                     <SelectItem key={i.instance_id} value={i.instance_id}>
@@ -512,13 +507,10 @@ function ContenuOnglet({
             </Select>
           )}
           <p className="mt-2 text-xs text-muted-foreground">
-            <CheckCircle2 className="mr-1 inline h-3 w-3 text-primary" />= un solveur existe déjà
-            pour ce client et cette structure de contraintes (approximatif, sans les objectifs —
-            voir l'onglet Solveurs d'une instance pour le matching exact). Le code généré est
-            générique à tout le DSL, pas spécifique aux données de cette instance — elle sert
-            seulement à déterminer sous quelle clé (client, structure des contraintes, objectifs)
-            enregistrer le solveur, pour que <code className="font-mono">/execution</code> le
-            retrouve ensuite.
+            <CheckCircle2 className="mr-1 inline h-3 w-3 text-primary" />= cette instance a déjà son
+            propre solveur généré. Un solveur ne sert que l'instance pour laquelle il a été généré,
+            jamais partagé avec une autre instance même de structure/objectifs identiques — voir
+            l'onglet Solveurs d'une instance pour le détail.
           </p>
         </div>
         <Button
@@ -629,7 +621,7 @@ function ContenuOnglet({
                 </Badge>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-                <span className="text-muted-foreground">clé de matching :</span>
+                <span className="text-muted-foreground">structure / objectifs :</span>
                 <Badge variant="outline" className="font-mono text-xs">
                   {onglet.resultat.structure_contraintes}
                 </Badge>

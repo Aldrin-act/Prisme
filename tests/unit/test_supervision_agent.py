@@ -64,7 +64,9 @@ _INSTANCES = (
     ),
 )
 _SOLVEURS = (
-    SolveurSupervision(id="s1", structure_contraintes="precedence", signature_objectifs="minimiser_makespan"),
+    SolveurSupervision(
+        id="s1", instance_id="i1", structure_contraintes="precedence", signature_objectifs="minimiser_makespan"
+    ),
 )
 _EXECUTIONS = (
     ExecutionSupervision(

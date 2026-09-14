@@ -45,22 +45,25 @@ def _payload_erp_simule() -> PayloadERP:
 
 def main() -> None:
     registre = obtenir_registre()
-    print("1. Enregistrement du solveur de référence dans le store (§7)...")
-    id_solveur = enregistrer(registre, client_id=CLIENT_ID)
-    print(f"   -> id_solveur = {id_solveur}")
 
-    print("\n2. Traduction ERP -> T-R-C-O (adaptateur, §5.4)...")
+    print("1. Traduction ERP -> T-R-C-O (adaptateur, §5.4)...")
     payload_erp = _payload_erp_simule()
     instance = traduire(payload_erp)
     print(f"   -> {len(instance.taches)} tâches, {len(instance.ressources)} ressources")
 
     client = TestClient(app)
 
-    print("\n3. POST /ingestion (garde-fou amont, §6.7)...")
+    print("\n2. POST /ingestion (garde-fou amont, §6.7)...")
     reponse = client.post(f"/ingestion/{CLIENT_ID}", json=instance.model_dump(mode="json"))
     reponse.raise_for_status()
     instance_id = reponse.json()["instance_id"]
     print(f"   -> instance_id = {instance_id}")
+
+    # Un solveur ne sert que l'instance qui l'a fait générer (solver_store/registry.py) —
+    # enregistré ici seulement une fois l'instance connue, jamais avant.
+    print("\n3. Enregistrement du solveur de référence dans le store (§7)...")
+    id_solveur = enregistrer(registre, instance_id=instance_id, client_id=CLIENT_ID)
+    print(f"   -> id_solveur = {id_solveur}")
 
     print("\n4. POST /execution (bac à sable + store, §7)...")
     reponse = client.post(f"/execution/{instance_id}", params={"client_id": CLIENT_ID})

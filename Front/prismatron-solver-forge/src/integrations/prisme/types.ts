@@ -403,6 +403,10 @@ export interface ExecutionInfo {
 export interface SolveurInfo {
   id: string;
   client_id: string;
+  // Instance pour laquelle ce solveur a été généré — un solveur ne sert que celle-ci, jamais une
+  // autre même de structure_contraintes/signature_objectifs identique. `null` pour un solveur
+  // enregistré avant ce changement (orphelin, plus jamais proposé par /execution).
+  instance_id: string | null;
   structure_contraintes: string;
   signature_objectifs: string;
   date_validation: string;

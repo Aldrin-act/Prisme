@@ -15,7 +15,7 @@ from scripts.enregistrer_solveur_reference import enregistrer
 from solver_store.registry import Registre
 
 
-def _executer_une_instance(client: TestClient) -> str:
+def _executer_une_instance(client: TestClient, registre: Registre) -> str:
     instance = InstanceTRCO(
         taches=[Tache(id="T1"), Tache(id="T2")],
         ressources=[Ressource(id="R1")],
@@ -29,6 +29,10 @@ def _executer_une_instance(client: TestClient) -> str:
     reponse_ingestion = client.post("/ingestion/client_test", json=instance.model_dump(mode="json"))
     instance_id = reponse_ingestion.json()["instance_id"]
 
+    # Un solveur ne sert que l'instance qui l'a fait générer — enregistré une fois l'instance
+    # ingérée connue, jamais avant.
+    enregistrer(registre, instance_id=instance_id, client_id="client_test")
+
     # L'exécution se déclenche directement par instance_id, sans intermédiaire.
     reponse = client.post(f"/execution/{instance_id}")
     assert reponse.status_code == 200, reponse.json()
@@ -41,9 +45,8 @@ def test_aucune_decision_avant_validation_explicite(image_sandbox: str, registre
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 
     try:
-        enregistrer(registre_test, client_id="client_test")
         client = TestClient(app)
-        execution_id = _executer_une_instance(client)
+        execution_id = _executer_une_instance(client, registre_test)
 
         # PH10-T2 : rien n'est "appliqué" tant que l'humain n'a pas tranché.
         reponse = client.get(f"/executions/{execution_id}/decision")
@@ -73,9 +76,8 @@ def test_decision_refusee_est_tracee(image_sandbox: str, registre_test: Registre
     app.dependency_overrides[obtenir_registre] = lambda: registre_test
 
     try:
-        enregistrer(registre_test, client_id="client_test")
         client = TestClient(app)
-        execution_id = _executer_une_instance(client)
+        execution_id = _executer_une_instance(client, registre_test)
 
         reponse = client.post(
             f"/executions/{execution_id}/decision",

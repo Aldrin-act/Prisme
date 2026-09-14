@@ -21,12 +21,14 @@ def test_enregistrer_puis_recuperer_solveur(registre_test: Registre) -> None:
         code_source="def resoudre(instance):\n    return None\n",
         structure_contraintes="precedence",
         verdict_cascade=VERDICT_VERT,
+        instance_id="inst_a",
         client_id="client_a",
     )
 
     artefact = registre_test.recuperer_solveur(id_solveur)
 
     assert artefact.client_id == "client_a"
+    assert artefact.instance_id == "inst_a"
     assert artefact.structure_contraintes == "precedence"
     assert artefact.code_source == "def resoudre(instance):\n    return None\n"
     assert artefact.chemin_code.exists()
@@ -38,6 +40,7 @@ def test_enregistrer_refuse_solveur_non_valide(registre_test: Registre) -> None:
             code_source="def resoudre(instance):\n    return None\n",
             structure_contraintes="precedence",
             verdict_cascade=VERDICT_ROUGE,
+            instance_id="inst_x",
         )
 
 
@@ -51,6 +54,7 @@ def test_alteration_du_fichier_fige_est_detectee(registre_test: Registre) -> Non
         code_source="def resoudre(instance):\n    return None\n",
         structure_contraintes="precedence",
         verdict_cascade=VERDICT_VERT,
+        instance_id="inst_x",
     )
 
     artefact = registre_test.recuperer_solveur(id_solveur)
@@ -65,6 +69,7 @@ def test_desactiver_solveur_le_retire_de_la_recherche(registre_test: Registre) -
         code_source="def resoudre(instance):\n    return None\n",
         structure_contraintes="precedence",
         verdict_cascade=VERDICT_VERT,
+        instance_id="inst_c",
         client_id="client_c",
     )
 
@@ -96,12 +101,14 @@ def test_rechercher_par_client_et_structure(registre_test: Registre) -> None:
         code_source="def resoudre(instance):\n    return None\n",
         structure_contraintes="precedence",
         verdict_cascade=VERDICT_VERT,
+        instance_id="inst_a",
         client_id="client_a",
     )
     id_b = registre_test.enregistrer_solveur(
         code_source="def resoudre(instance):\n    return None\n",
         structure_contraintes="precedence,compatibilite_ressource_tache",
         verdict_cascade=VERDICT_VERT,
+        instance_id="inst_b",
         client_id="client_b",
     )
 
@@ -112,3 +119,31 @@ def test_rechercher_par_client_et_structure(registre_test: Registre) -> None:
         structure_contraintes="precedence,compatibilite_ressource_tache"
     )
     assert [artefact.id for artefact in resultats_structure] == [id_b]
+
+
+def test_solveur_ne_sert_que_son_instance_meme_structure_partagee(registre_test: Registre) -> None:
+    """Un solveur ne doit jamais être trouvé pour une AUTRE instance, même de structure et
+    client identiques — fin du partage par signature entre instances d'un même client."""
+    id_pour_inst_1 = registre_test.enregistrer_solveur(
+        code_source="def resoudre(instance):\n    return None\n",
+        structure_contraintes="precedence,compatibilite_ressource_tache",
+        verdict_cascade=VERDICT_VERT,
+        instance_id="inst_1",
+        client_id="client_partage",
+    )
+
+    resultats_inst_1 = registre_test.rechercher_solveurs(client_id="client_partage", instance_id="inst_1")
+    assert [artefact.id for artefact in resultats_inst_1] == [id_pour_inst_1]
+
+    # Même client, même structure de contraintes, mais une AUTRE instance : aucun résultat.
+    resultats_inst_2 = registre_test.rechercher_solveurs(client_id="client_partage", instance_id="inst_2")
+    assert resultats_inst_2 == []
+
+    # Le filtre structure seul (sans instance_id) continue de trouver le solveur — c'est le
+    # filtre instance_id qui borne désormais la réutilisation, pas la disponibilité du filtre
+    # structure lui-même (toujours utile comme vérification de compatibilité, voir
+    # `api/routes/execution.py`).
+    resultats_structure_seule = registre_test.rechercher_solveurs(
+        client_id="client_partage", structure_contraintes="precedence,compatibilite_ressource_tache"
+    )
+    assert [artefact.id for artefact in resultats_structure_seule] == [id_pour_inst_1]

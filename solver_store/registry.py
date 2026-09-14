@@ -70,6 +70,7 @@ class ErreurIntegriteSolveur(Exception):
 class ArtefactSolveur:
     id: str
     client_id: str | None
+    instance_id: str | None
     structure_contraintes: str
     signature_objectifs: str
     chemin_code: Path
@@ -157,6 +158,16 @@ class Registre:
                     table=_table(self._schema)
                 )
             )
+            # Migration idempotente : un solveur ne sert désormais que l'instance qui l'a fait
+            # générer (fin du partage par signature entre instances d'un même client) —
+            # nullable, les solveurs enregistrés avant ce changement restent orphelins (aucune
+            # instance d'origine capturée à l'époque), invisibles pour /execution et la
+            # supervision désormais, jamais devinés après coup.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS instance_id TEXT").format(
+                    table=_table(self._schema)
+                )
+            )
             connexion.commit()
 
     def _connexion(self) -> psycopg.Connection:
@@ -167,6 +178,7 @@ class Registre:
         code_source: str,
         structure_contraintes: str,
         verdict_cascade: VerdictCascade,
+        instance_id: str,
         client_id: str | None = None,
         signature_objectifs: str = "minimiser_makespan",
         algorithme: str | None = None,
@@ -174,12 +186,15 @@ class Registre:
     ) -> str:
         """N'enregistre que du code déjà passé au vert par la cascade
         (Étape 5) — le store ne persiste jamais un solveur non validé
-        (principe fondateur, §5.2). `signature_objectifs` vaut par défaut
-        "minimiser_makespan" pour ne pas casser les appelants existants,
-        tous générés avant l'ajout des objectifs paramétrables. `algorithme`/
-        `algorithme_raison` (optionnels, `None` par défaut pour la même
-        raison) : le choix du Benchmarker et sa justification, capturés une
-        fois ici plutôt que perdus après la génération — voir
+        (principe fondateur, §5.2). `instance_id` obligatoire, sans défaut :
+        un solveur ne sert désormais que l'instance qui l'a fait générer,
+        jamais une autre instance même de signature identique — plus de
+        solveur "orphelin par construction". `signature_objectifs` vaut par
+        défaut "minimiser_makespan" pour ne pas casser les appelants
+        existants, tous générés avant l'ajout des objectifs paramétrables.
+        `algorithme`/`algorithme_raison` (optionnels, `None` par défaut pour
+        la même raison) : le choix du Benchmarker et sa justification,
+        capturés une fois ici plutôt que perdus après la génération — voir
         `ArtefactSolveur`."""
         if not verdict_cascade.reussi:
             raise ValueError("refus d'enregistrer un solveur dont la cascade de validation n'est pas au vert")
@@ -194,13 +209,14 @@ class Registre:
             connexion.execute(
                 sql.SQL(
                     "INSERT INTO {table} "
-                    "(id, client_id, structure_contraintes, signature_objectifs, chemin_code, "
+                    "(id, client_id, instance_id, structure_contraintes, signature_objectifs, chemin_code, "
                     "empreinte_sha256, date_validation, algorithme, algorithme_raison) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 ).format(table=_table(self._schema)),
                 (
                     id_solveur,
                     client_id,
+                    instance_id,
                     structure_contraintes,
                     signature_objectifs,
                     str(chemin_code),
@@ -218,7 +234,7 @@ class Registre:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT id, client_id, structure_contraintes, signature_objectifs, chemin_code, "
+                    "SELECT id, client_id, instance_id, structure_contraintes, signature_objectifs, chemin_code, "
                     "empreinte_sha256, date_validation, actif, algorithme, algorithme_raison "
                     "FROM {table} WHERE id = %s"
                 ).format(table=_table(self._schema)),
@@ -231,6 +247,7 @@ class Registre:
         (
             id_,
             client_id,
+            instance_id,
             structure,
             objectifs_signature,
             chemin_code,
@@ -249,6 +266,7 @@ class Registre:
         return ArtefactSolveur(
             id=id_,
             client_id=client_id,
+            instance_id=instance_id,
             structure_contraintes=structure,
             signature_objectifs=objectifs_signature,
             chemin_code=Path(chemin_code),
@@ -263,6 +281,7 @@ class Registre:
     def rechercher_solveurs(
         self,
         client_id: str | None = None,
+        instance_id: str | None = None,
         structure_contraintes: str | None = None,
         signature_objectifs: str | None = None,
         inclure_inactifs: bool = False,
@@ -270,7 +289,9 @@ class Registre:
         """Par défaut, ne renvoie que les solveurs actifs — `/execution` ne
         doit jamais retomber sur un solveur désactivé (ex. bug de
         performance découvert après coup). `inclure_inactifs=True` sert à
-        l'audit/l'historique, jamais au chemin d'exécution normal."""
+        l'audit/l'historique, jamais au chemin d'exécution normal.
+        `instance_id` filtre sur l'instance d'origine du solveur — un
+        solveur ne sert que celle-ci désormais, voir `enregistrer_solveur`."""
         requete = sql.SQL("SELECT id FROM {table} WHERE 1 = 1").format(table=_table(self._schema))
         parametres: list[str] = []
         if not inclure_inactifs:
@@ -278,6 +299,9 @@ class Registre:
         if client_id is not None:
             requete += sql.SQL(" AND client_id = %s")
             parametres.append(client_id)
+        if instance_id is not None:
+            requete += sql.SQL(" AND instance_id = %s")
+            parametres.append(instance_id)
         if structure_contraintes is not None:
             requete += sql.SQL(" AND structure_contraintes = %s")
             parametres.append(structure_contraintes)

@@ -63,6 +63,7 @@ def lister_solveurs(
         {
             "id": artefact.id,
             "client_id": artefact.client_id,
+            "instance_id": artefact.instance_id,
             "structure_contraintes": artefact.structure_contraintes,
             "signature_objectifs": artefact.signature_objectifs,
             "date_validation": artefact.date_validation,

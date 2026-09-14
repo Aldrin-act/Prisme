@@ -502,26 +502,7 @@ function decrireObjectif(o: Objectif): string {
   return `${LABELS_TYPE_OBJECTIF[o.type]}${poids}`;
 }
 
-// Même calcul que api/etat.py::signature_objectifs — types d'objectifs
-// uniques, triés, joints par virgule. Reproduit côté client plutôt
-// qu'exposé par le backend : instance.objectifs suffit déjà.
-function calculerSignatureObjectifs(objectifs: Objectif[]): string {
-  return Array.from(new Set(objectifs.map((o) => o.type)))
-    .sort()
-    .join(",");
-}
-
-function SectionSolveurs({
-  instanceId,
-  clientId,
-  structureContraintes,
-  signatureObjectifs,
-}: {
-  instanceId: string;
-  clientId: string;
-  structureContraintes: string;
-  signatureObjectifs: string;
-}) {
+function SectionSolveurs({ instanceId }: { instanceId: string }) {
   const { data: solveurs, isLoading } = useSolveurs();
   const { data: jobsInstance } = useJobsGeneration(instanceId);
   const [idAffiche, setIdAffiche] = useState<string | null>(null);
@@ -533,12 +514,9 @@ function SectionSolveurs({
     return <p className="text-sm text-muted-foreground">Chargement...</p>;
   }
 
-  const correspondants = (solveurs ?? []).filter(
-    (s) =>
-      s.client_id === clientId &&
-      s.structure_contraintes === structureContraintes &&
-      s.signature_objectifs === signatureObjectifs,
-  );
+  // Un solveur ne sert que l'instance qui l'a fait générer (plus de partage par signature entre
+  // instances d'un même client).
+  const correspondants = (solveurs ?? []).filter((s) => s.instance_id === instanceId);
 
   const banniereJob = jobActif && (
     <div className="mb-3 flex items-center gap-3 rounded-lg border border-primary/40 bg-primary/10 p-3 text-sm">
@@ -554,7 +532,7 @@ function SectionSolveurs({
         <EmptyState
           icon={Cpu}
           title="Aucun solveur généré pour cette instance"
-          desc="Génère un solveur correspondant à cette structure de contraintes et ces objectifs depuis la page Générateur de solveurs."
+          desc="Génère un solveur pour cette instance depuis la page Générateur de solveurs — un solveur ne sert que l'instance pour laquelle il a été généré."
         />
       </div>
     );
@@ -1126,12 +1104,7 @@ function DialogDetailInstance({
             </TabsContent>
 
             <TabsContent value="solveurs">
-              <SectionSolveurs
-                instanceId={instance.instance_id}
-                clientId={instance.client_id}
-                structureContraintes={instance.structure_contraintes}
-                signatureObjectifs={calculerSignatureObjectifs(instance.objectifs)}
-              />
+              <SectionSolveurs instanceId={instance.instance_id} />
             </TabsContent>
 
             <TabsContent value="scenarios">

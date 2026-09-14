@@ -61,9 +61,9 @@ def test_signature_orpheline_quand_aucun_solveur_ne_correspond(registre_test: Re
 
 
 def test_instance_a_replanifier_quand_solveur_disponible_mais_jamais_executee(registre_test: Registre) -> None:
-    id_solveur = enregistrer(registre_test, client_id="client_test")
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur = enregistrer(registre_test, instance_id=instance_id, client_id="client_test")
     modele = _modele_avec_signaux(
         [
             {
@@ -86,9 +86,9 @@ def test_instance_a_replanifier_quand_solveur_disponible_mais_jamais_executee(re
 
 
 def test_instance_a_replanifier_quand_modifiee_apres_sa_derniere_execution(registre_test: Registre) -> None:
-    id_solveur = enregistrer(registre_test, client_id="client_test")
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur = enregistrer(registre_test, instance_id=instance_id, client_id="client_test")
     resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="peu importe")
     execution_id = etat.enregistrer_execution("un-solveur", instance_id, resultat)
     etat.dates_execution[execution_id] = "2026-01-01T00:00:00"
@@ -172,3 +172,52 @@ def test_id_solveur_disponible_halluciné_est_ignore(registre_test: Registre) ->
     )
 
     assert detecter_signaux(etat, registre_test, modele, "client_test") == ()
+
+
+def test_solveur_dune_autre_instance_nest_jamais_propose(registre_test: Registre) -> None:
+    """Un solveur ne sert que l'instance qui l'a fait générer — même si le LLM (par erreur ou
+    hallucination) propose un `id_solveur_disponible` réel, appartenant à une AUTRE instance de
+    structure identique, `detecter_signaux` doit l'écarter plutôt que le propager."""
+    etat = EtatAPI()
+    instance_id_1 = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    instance_id_2 = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur_1 = enregistrer(registre_test, instance_id=instance_id_1, client_id="client_test")
+
+    modele = _modele_avec_signaux(
+        [
+            {
+                "instance_id": instance_id_2,
+                "type_signal": "instance_a_replanifier",
+                "raison": "jamais_executee",
+                "id_solveur_disponible": id_solveur_1,
+            }
+        ]
+    )
+
+    assert detecter_signaux(etat, registre_test, modele, "client_test") == ()
+
+
+def test_deux_instances_meme_structure_solveur_ne_se_partage_pas(registre_test: Registre) -> None:
+    """Deux instances de structure/objectifs identiques, un solveur enregistré pour l'une
+    seulement : l'autre doit être `signature_orpheline`, jamais `instance_a_replanifier` — fin du
+    partage par signature entre instances d'un même client."""
+    etat = EtatAPI()
+    instance_avec_solveur = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    instance_sans_solveur = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur = enregistrer(registre_test, instance_id=instance_avec_solveur, client_id="client_test")
+
+    modele = _modele_avec_signaux(
+        [
+            {
+                "instance_id": instance_sans_solveur,
+                "type_signal": "signature_orpheline",
+            }
+        ]
+    )
+
+    signaux = detecter_signaux(etat, registre_test, modele, "client_test")
+
+    assert len(signaux) == 1
+    assert isinstance(signaux[0], SignalSignatureOrpheline)
+    assert signaux[0].instance_id == instance_sans_solveur
+    assert id_solveur  # le solveur existe bien, juste jamais proposé pour l'autre instance

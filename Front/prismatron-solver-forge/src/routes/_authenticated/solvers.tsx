@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertCircle, CheckCircle2, Cpu, Play, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,13 +14,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -57,7 +50,7 @@ function SolversPage() {
     <>
       <PageHeader
         title="Solveurs générés"
-        desc="Chaque solveur validé par la cascade (faisabilité, optimalité, fidélité) puis enregistré par PRISME. Exécute-le sur une instance compatible pour obtenir un planning."
+        desc="Chaque solveur validé par la cascade (faisabilité, optimalité, fidélité) puis enregistré par PRISME. Chacun ne sert que l'instance pour laquelle il a été généré — exécute-le pour obtenir un planning."
       />
 
       {!isLoading && solveurs && solveurs.length === 0 && (
@@ -155,16 +148,20 @@ function DialogSolveur({
   const { data: planningAjuste } = usePlanningAjuste(executionId);
   const { data: codeSource, isLoading: chargementCode } = useCodeSourceSolveur(solveur?.id ?? null);
 
-  // On choisit une instance dont le client + la structure de contraintes
-  // correspondent au solveur — approximatif sans les objectifs comme
-  // ailleurs dans l'app ; /execution refait le matching exact côté serveur
-  // et renvoie une erreur 409 claire en cas de décalage.
-  const instancesCompatibles = (instances ?? []).filter(
-    (i) =>
-      solveur &&
-      i.client_id === solveur.client_id &&
-      i.structure_contraintes === solveur.structure_contraintes,
+  // Un solveur ne sert que l'instance qui l'a fait générer (plus de partage par signature entre
+  // instances) — plus de choix à faire, l'instance à exécuter est directement celle du solveur.
+  // `null` uniquement pour un solveur enregistré avant ce changement (orphelin, jamais exécutable).
+  const instanceProprietaire = (instances ?? []).find(
+    (i) => i.instance_id === solveur?.instance_id,
   );
+
+  useEffect(() => {
+    setInstanceId(solveur?.instance_id ?? "");
+    setExecutionId(null);
+    setVoirOriginal(false);
+    declencher.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [solveur?.id]);
 
   function fermer(open: boolean) {
     if (!open) {
@@ -175,13 +172,6 @@ function DialogSolveur({
       declencher.reset();
     }
     onOpenChange(open);
-  }
-
-  function changerInstance(id: string) {
-    setInstanceId(id);
-    setExecutionId(null);
-    setVoirOriginal(false);
-    declencher.reset();
   }
 
   function executer() {
@@ -242,28 +232,25 @@ function DialogSolveur({
                 </p>
               )}
 
-              {instancesCompatibles.length === 0 ? (
+              {!solveur.instance_id ? (
                 <p className="text-sm text-muted-foreground">
-                  Aucune instance ne correspond à ce client et cette structure de contraintes.
-                  Ingère ou génère une instance compatible depuis la page Données ou Instances pour
-                  pouvoir exécuter ce solveur.
+                  Solveur orphelin — enregistré avant qu'un solveur ne soit rattaché à une instance
+                  précise, aucune instance d'origine connue. Génère un nouveau solveur depuis la
+                  page Générateur de solveurs pour pouvoir l'exécuter.
+                </p>
+              ) : !instanceProprietaire ? (
+                <p className="text-sm text-muted-foreground">
+                  L'instance {solveur.instance_id} pour laquelle ce solveur a été généré n'existe
+                  plus (supprimée).
                 </p>
               ) : (
                 <div className="space-y-3">
                   <div>
                     <p className="mb-2 text-sm font-medium">Instance à exécuter</p>
-                    <Select value={instanceId} onValueChange={changerInstance}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choisir une instance compatible..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {instancesCompatibles.map((i) => (
-                          <SelectItem key={i.instance_id} value={i.instance_id}>
-                            {labels.get(i.instance_id)?.label ?? i.instance_id}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <p className="text-sm">
+                      {labels.get(instanceProprietaire.instance_id)?.label ??
+                        instanceProprietaire.instance_id}
+                    </p>
                   </div>
 
                   <div className="space-y-1.5">
