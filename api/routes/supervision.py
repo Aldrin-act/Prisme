@@ -100,6 +100,7 @@ def _proposition_en_dict(p: PropositionSupervision) -> dict[str, Any]:
         "decision": p.decision,
         "horodatage_decision": p.horodatage_decision,
         "commentaire": p.commentaire,
+        "commande_id": p.commande_id,
     }
 
 
@@ -161,6 +162,12 @@ def _dispatcher_action(
     route existante — jamais une réimplémentation. Le clic « Accepter » EST
     la décision humaine explicite qui autorise cette action (§ principe
     fondateur, humain-dans-la-boucle)."""
+    if proposition.action_suggeree == "aucune":
+        # commande_en_retard — purement informatif, aucun retard déjà constaté par le planning
+        # actuel ne peut être rattrapé par une action système. Accepter sert seulement à faire
+        # remonter l'alerte pour une action humaine hors système.
+        return {"action": "aucune"}
+
     if proposition.action_suggeree in ("regenerer_solveur", "executer") and proposition.instance_id is None:
         raise HTTPException(
             status_code=422, detail="l'instance associée à cette proposition a depuis été supprimée"

@@ -427,8 +427,11 @@ export interface Sante {
 // n'a pas accepté ou refusé via POST /supervision/propositions/{id}/decision.
 
 export type TypeSignalSupervision =
-  "signature_orpheline" | "echecs_repetes" | "instance_a_replanifier";
-export type ActionSuggereeSupervision = "regenerer_solveur" | "executer" | "diagnostiquer";
+  "signature_orpheline" | "echecs_repetes" | "instance_a_replanifier" | "commande_en_retard";
+// "aucune" : commande_en_retard — purement informatif, aucune route système déclenchée sur
+// acceptation (voir api/routes/supervision.py::_dispatcher_action).
+export type ActionSuggereeSupervision =
+  "regenerer_solveur" | "executer" | "diagnostiquer" | "aucune";
 export type PrioriteSupervision = "haute" | "moyenne" | "basse";
 
 export interface PropositionSupervision {
@@ -447,6 +450,9 @@ export interface PropositionSupervision {
   decision: "acceptee" | "refusee" | null;
   horodatage_decision: string | null;
   commentaire: string | null;
+  // Uniquement pour commande_en_retard — distingue plusieurs commandes en retard sur une même
+  // instance.
+  commande_id: string | null;
 }
 
 export interface RequeteAnalyseSupervision {
@@ -458,8 +464,9 @@ export interface RequeteDecisionProposition {
   commentaire?: string;
 }
 
-// Exactement une des trois clés est présente, selon `action_suggeree` de la
-// proposition acceptée (voir api/routes/supervision.py::_dispatcher_action).
+// Au plus une des clés optionnelles ci-dessous est présente, selon `action_suggeree` de la
+// proposition acceptée — aucune si `action_suggeree === "aucune"` (voir
+// api/routes/supervision.py::_dispatcher_action).
 export interface ReponseDecisionPropositionSupervision {
   proposition_id: string;
   decision: "acceptee" | "refusee";

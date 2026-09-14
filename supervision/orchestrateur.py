@@ -13,10 +13,12 @@ from api.etat import ActionSuggeree, EtatAPI, PropositionSupervision, TypeSignal
 from solver_store.registry import Registre
 from supervision.agent import FaitSignal, proposer_actions
 from supervision.detecteurs import (
+    SignalCommandeEnRetard,
     SignalDetecte,
     SignalEchecsRepetes,
     SignalInstanceAReplanifier,
     SignalSignatureOrpheline,
+    detecter_commandes_en_retard,
     detecter_signaux,
 )
 
@@ -27,6 +29,9 @@ _ACTION_PAR_SIGNAL: dict[TypeSignal, ActionSuggeree] = {
     "signature_orpheline": "regenerer_solveur",
     "instance_a_replanifier": "executer",
     "echecs_repetes": "diagnostiquer",
+    # Aucune route système ne rattrape un retard déjà constaté par le planning actuel — purement
+    # informatif, voir supervision/detecteurs.py::detecter_commandes_en_retard.
+    "commande_en_retard": "aucune",
 }
 
 _RESUME_REPLI: dict[TypeSignal, str] = {
@@ -42,6 +47,10 @@ _RESUME_REPLI: dict[TypeSignal, str] = {
         "Plusieurs exécutions récentes de cette instance ont échoué — "
         "un diagnostic permettrait d'en identifier la cause."
     ),
+    "commande_en_retard": (
+        "Cette commande finira après sa date limite d'après le planning actuel de son instance — "
+        "à traiter côté client/planification, aucune action système ne peut rattraper ce retard."
+    ),
 }
 
 _PRIORITE_REPLI: Literal["moyenne"] = "moyenne"
@@ -56,10 +65,17 @@ class _SignalUnifie:
     execution_ids: tuple[str, ...]
     details: tuple[str, ...]
     description: str
+    # Uniquement pour commande_en_retard — distingue plusieurs commandes en retard sur une même
+    # instance, qui sans ça partageraient la même référence/le même dédoublonnage.
+    commande_id: str | None = None
+
+    @property
+    def identifiant_reference(self) -> str:
+        return self.commande_id if self.commande_id is not None else self.instance_id
 
 
-def _reference(type_signal: TypeSignal, instance_id: str) -> str:
-    return f"{type_signal}:{instance_id}"
+def _reference(type_signal: TypeSignal, identifiant: str) -> str:
+    return f"{type_signal}:{identifiant}"
 
 
 def _unifier_signature_orpheline(signal: SignalSignatureOrpheline) -> _SignalUnifie:
@@ -113,42 +129,70 @@ def _unifier_echecs_repetes(signal: SignalEchecsRepetes) -> _SignalUnifie:
     )
 
 
+def _unifier_commande_en_retard(signal: SignalCommandeEnRetard) -> _SignalUnifie:
+    return _SignalUnifie(
+        type_signal="commande_en_retard",
+        instance_id=signal.instance_id,
+        # Structure/objectifs non pertinents pour ce signal (pas une question de compatibilité
+        # solveur/instance) — vides plutôt qu'un placeholder trompeur.
+        structure_contraintes="",
+        signature_objectifs="",
+        execution_ids=(),
+        details=(f"date_fin_prevue={signal.date_fin_prevue}", f"date_limite={signal.date_limite}"),
+        description=(
+            f"La commande {signal.commande_id} finira au jour {signal.date_fin_prevue} d'après le "
+            f"planning actuel de son instance, après sa date limite ({signal.date_limite})."
+        ),
+        commande_id=signal.commande_id,
+    )
+
+
 def _unifier(signal: SignalDetecte) -> _SignalUnifie:
     if isinstance(signal, SignalSignatureOrpheline):
         return _unifier_signature_orpheline(signal)
     if isinstance(signal, SignalInstanceAReplanifier):
         return _unifier_instance_a_replanifier(signal)
+    if isinstance(signal, SignalCommandeEnRetard):
+        return _unifier_commande_en_retard(signal)
     return _unifier_echecs_repetes(signal)
 
 
 def analyser_et_proposer(
     etat: EtatAPI, registre: Registre, modele: BaseChatModel, client_id: str
 ) -> list[PropositionSupervision]:
-    """Détecte les signaux (un appel LLM, `supervision.detecteurs.detecter_signaux` — ne peut
-    plus être évité même si rien de nouveau ne sera finalement proposé : c'est justement ce que
-    la détection sert à établir), écarte ceux déjà couverts par une proposition en attente, fait
-    rédiger/prioriser le reste par un second appel LLM (`proposer_actions`, un seul appel jamais
-    un par signal), puis persiste. Ce second appel reste évité quand tout ce qui a été détecté
-    était déjà en attente — seule la détection elle-même est désormais systématique."""
+    """Détecte les signaux — un appel LLM pour les trois signaux solveur/instance/exécution
+    (`supervision.detecteurs.detecter_signaux`, ne peut plus être évité même si rien de nouveau ne
+    sera finalement proposé : c'est justement ce que la détection sert à établir), plus une
+    détection déterministe sans LLM pour les commandes en retard
+    (`detecter_commandes_en_retard`) — écarte ceux déjà couverts par une proposition en attente,
+    fait rédiger/prioriser le reste par un second appel LLM (`proposer_actions`, un seul appel
+    jamais un par signal), puis persiste. Ce second appel reste évité quand tout ce qui a été
+    détecté était déjà en attente."""
     signaux = [_unifier(s) for s in detecter_signaux(etat, registre, modele, client_id)]
+    signaux += [_unifier(s) for s in detecter_commandes_en_retard(etat, client_id)]
 
+    # `commande_id` fait partie de la clé : sans lui, une seule commande en retard sur une
+    # instance couvrirait indéfiniment toutes les *autres* commandes en retard de la même
+    # instance (jamais reproposées) — `None` pour les trois autres signaux, sans effet sur leur
+    # comportement (toujours dédupliqués par (type_signal, instance_id) seuls).
     deja_en_attente = {
-        (p["type_signal"], p["instance_id"])
+        (p["type_signal"], p["instance_id"], p.get("commande_id"))
         for p in etat.lister_propositions(client_id=client_id, en_attente_seulement=True)
     }
-    nouveaux = [s for s in signaux if (s.type_signal, s.instance_id) not in deja_en_attente]
+    nouveaux = [s for s in signaux if (s.type_signal, s.instance_id, s.commande_id) not in deja_en_attente]
     if not nouveaux:
         return []
 
     faits = tuple(
-        FaitSignal(reference=_reference(s.type_signal, s.instance_id), description=s.description) for s in nouveaux
+        FaitSignal(reference=_reference(s.type_signal, s.identifiant_reference), description=s.description)
+        for s in nouveaux
     )
     resultat = proposer_actions(modele, faits)
     propositions_llm = {p.reference: p for p in resultat.propositions}
 
     proposition_ids: list[str] = []
     for signal in nouveaux:
-        reference = _reference(signal.type_signal, signal.instance_id)
+        reference = _reference(signal.type_signal, signal.identifiant_reference)
         proposition_llm = propositions_llm.get(reference)
         # Le signal déjà détecté et validé (`detecter_signaux`) fait foi — si l'appel LLM de
         # rédaction a ignoré ou déformé cette référence, on ne le perd jamais, on retombe sur un
@@ -167,6 +211,7 @@ def analyser_et_proposer(
             execution_ids=signal.execution_ids,
             structure_contraintes=signal.structure_contraintes,
             signature_objectifs=signal.signature_objectifs,
+            commande_id=signal.commande_id,
         )
         proposition_ids.append(proposition_id)
 

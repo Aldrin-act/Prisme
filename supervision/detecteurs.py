@@ -10,7 +10,7 @@ halluciner, voir `supervision.agent.SignalBrutLLM`) — y compris un `id_solveur
 mais appartenant à une **autre** instance : un solveur ne sert jamais que l'instance qui l'a fait
 générer (`solver_store/registry.py`), jamais une autre même de structure/objectifs identiques.
 
-Trois signaux :
+Trois signaux détectés par le LLM :
 
 1. **Signature orpheline** — aucun solveur actif enregistré pour ce client n'a d'`instance_id`
    égal à celui de cette instance.
@@ -19,6 +19,13 @@ Trois signaux :
    modifiée depuis (`modifier_instance`/`modifier_objectifs`, `api/etat.py`) sans être
    ré-exécutée.
 3. **Échecs répétés** — les 3 dernières exécutions d'une même instance sont toutes en échec.
+
+Un quatrième signal, **commande en retard** (`detecter_commandes_en_retard` ci-dessous), est
+volontairement détecté **sans appel LLM** : contrairement aux trois précédents, la comparaison
+nécessaire (date de fin prévue vs date limite d'une commande) est déjà calculée de façon exacte
+par `api.comparaison_scenarios.calculer_statut_commande`, utilisée telle quelle ailleurs dans
+l'app (page Commandes) — redemander cette comparaison à un LLM n'apporterait rien, seulement un
+risque d'erreur sur une simple comparaison d'entiers déjà fiable.
 """
 
 from __future__ import annotations
@@ -26,7 +33,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from api.etat import EtatAPI, signature_objectifs, structure_contraintes
+from api.comparaison_scenarios import calculer_statut_commande
+from api.etat import CommandeEnregistree, EtatAPI, signature_objectifs, structure_contraintes
 from solver_store.registry import Registre
 from supervision.agent import (
     ExecutionSupervision,
@@ -68,7 +76,18 @@ class SignalEchecsRepetes:
     signature_objectifs: str
 
 
-SignalDetecte = SignalSignatureOrpheline | SignalInstanceAReplanifier | SignalEchecsRepetes
+@dataclass(frozen=True)
+class SignalCommandeEnRetard:
+    commande_id: str
+    instance_id: str
+    client_id: str
+    date_fin_prevue: int
+    date_limite: int
+
+
+SignalDetecte = (
+    SignalSignatureOrpheline | SignalInstanceAReplanifier | SignalEchecsRepetes | SignalCommandeEnRetard
+)
 
 
 def detecter_signaux(
@@ -164,4 +183,41 @@ def detecter_signaux(
                     signature_objectifs=instance.signature_objectifs,
                 )
             )
+    return tuple(signaux)
+
+
+def detecter_commandes_en_retard(etat: EtatAPI, client_id: str) -> tuple[SignalCommandeEnRetard, ...]:
+    """Aucun appel LLM (voir docstring de module) — réutilise directement
+    `calculer_statut_commande`, déjà utilisée telle quelle par la page Commandes
+    (`api/routes/ingestion.py::lister_toutes_commandes`, même patron de groupement par instance
+    repris ici : un seul appel à `recuperer_instance`/`dernier_planning_pour_instance` par
+    instance distincte, puis un appel à `calculer_statut_commande` par commande du groupe).
+
+    Ne retient que `statut.en_retard is True` explicitement — jamais `None`, qui signifie
+    "aucun jugement possible" (commande jamais planifiée ou tâches encore manquantes du
+    planning), pas "en retard"."""
+    commandes = [c for c in etat.lister_commandes(instance_id=None) if c.client_id == client_id]
+    if not commandes:
+        return ()
+
+    par_instance: dict[str, list[CommandeEnregistree]] = {}
+    for commande in commandes:
+        par_instance.setdefault(commande.instance_id, []).append(commande)
+
+    signaux: list[SignalCommandeEnRetard] = []
+    for instance_id, commandes_instance in par_instance.items():
+        _, instance = etat.recuperer_instance(instance_id)
+        planning = etat.dernier_planning_pour_instance(instance_id)
+        for commande in commandes_instance:
+            statut = calculer_statut_commande(instance, planning, commande.taches, commande.date_limite)
+            if statut.en_retard is True:
+                signaux.append(
+                    SignalCommandeEnRetard(
+                        commande_id=commande.id,
+                        instance_id=instance_id,
+                        client_id=client_id,
+                        date_fin_prevue=statut.date_fin_prevue,
+                        date_limite=commande.date_limite,
+                    )
+                )
     return tuple(signaux)

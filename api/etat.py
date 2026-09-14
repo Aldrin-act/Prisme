@@ -29,8 +29,8 @@ if TYPE_CHECKING:
     from api.etat_postgres import EtatPostgres
 
 Decision = Literal["acceptee", "refusee"]
-TypeSignal = Literal["signature_orpheline", "echecs_repetes", "instance_a_replanifier"]
-ActionSuggeree = Literal["regenerer_solveur", "executer", "diagnostiquer"]
+TypeSignal = Literal["signature_orpheline", "echecs_repetes", "instance_a_replanifier", "commande_en_retard"]
+ActionSuggeree = Literal["regenerer_solveur", "executer", "diagnostiquer", "aucune"]
 Priorite = Literal["haute", "moyenne", "basse"]
 
 
@@ -100,6 +100,9 @@ class PropositionSupervision:
     decision: Decision | None = None
     horodatage_decision: str | None = None
     commentaire: str | None = None
+    # Uniquement pour commande_en_retard — distingue plusieurs commandes en retard sur une même
+    # instance (voir supervision/orchestrateur.py::_SignalUnifie).
+    commande_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -649,6 +652,7 @@ class EtatAPI:
         execution_ids: tuple[str, ...] = (),
         structure_contraintes: str | None = None,
         signature_objectifs: str | None = None,
+        commande_id: str | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
         proposition_id = str(uuid.uuid4())
@@ -665,6 +669,7 @@ class EtatAPI:
             execution_ids=execution_ids,
             structure_contraintes=structure_contraintes,
             signature_objectifs=signature_objectifs,
+            commande_id=commande_id,
         )
         return proposition_id
 
@@ -693,6 +698,7 @@ class EtatAPI:
                 "decision": p.decision,
                 "horodatage_decision": p.horodatage_decision,
                 "commentaire": p.commentaire,
+                "commande_id": p.commande_id,
             }
             for p in self.propositions.values()
             if (client_id is None or p.client_id == client_id) and (not en_attente_seulement or p.decision is None)

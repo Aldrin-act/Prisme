@@ -48,12 +48,14 @@ const LABEL_TYPE_SIGNAL: Record<PropositionSupervision["type_signal"], string> =
   signature_orpheline: "Signature orpheline",
   echecs_repetes: "Échecs répétés",
   instance_a_replanifier: "À replanifier",
+  commande_en_retard: "Commande en retard",
 };
 
 const ICONE_TYPE_SIGNAL: Record<PropositionSupervision["type_signal"], typeof AlertTriangle> = {
   signature_orpheline: AlertTriangle,
   echecs_repetes: XCircle,
   instance_a_replanifier: RefreshCw,
+  commande_en_retard: Clock,
 };
 
 export function BadgeTypeSignal({ type }: { type: PropositionSupervision["type_signal"] }) {
@@ -109,6 +111,8 @@ function resumeResultatDispatch(
   }
   if (resultat.action === "diagnostiquer")
     return `Diagnostic : cause identifiée — ${resultat.cause}.`;
+  if (resultat.action === "aucune")
+    return "Signalé — aucune action système, à traiter côté client/planification.";
   return "Action déclenchée.";
 }
 
@@ -173,7 +177,7 @@ function SupervisionPage() {
     <>
       <PageHeader
         title="Supervision"
-        desc="L'agent de supervision détecte des signaux sur l'historique des instances et exécutions (signature orpheline, échecs répétés, instance en attente de replanification) et propose une action — jamais appliquée automatiquement. Accepter une proposition déclenche l'action correspondante (génération, exécution ou diagnostic)."
+        desc="L'agent de supervision détecte des signaux sur l'historique des instances, exécutions et commandes (signature orpheline, échecs répétés, instance en attente de replanification, commande en retard) et propose une action — jamais appliquée automatiquement. Accepter une proposition déclenche l'action correspondante (génération, exécution, diagnostic) ou reste purement informatif pour un retard de commande."
       />
 
       <div className="glass mb-6 flex flex-wrap items-end gap-4 rounded-2xl p-4">

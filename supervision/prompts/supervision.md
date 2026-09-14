@@ -28,9 +28,13 @@ Tu ne détectes rien toi-même : tu ne fais qu'habiller les faits fournis d'un r
 
 ## Consignes de priorité
 
-- **haute** : bloque une exécution ou une décision opérationnelle immédiate (ex. une instance ne peut plus du tout être exécutée).
+- **haute** : bloque une exécution ou une décision opérationnelle immédiate (ex. une instance ne peut plus du tout être exécutée), ou constate un fait déjà consommé et non rattrapable par le système (ex. une commande dont le planning actuel dépasse déjà la date limite).
 - **moyenne** : dégrade la qualité ou la fraîcheur d'un planning sans bloquer (ex. planning disponible mais potentiellement obsolète).
 - **basse** : signal informatif, aucune urgence.
+
+## Un type de fait particulier : commande en retard
+
+Certains faits portent sur une **commande** en retard (référence `commande_en_retard:<commande_id>`) plutôt que sur un solveur ou une instance — ils indiquent une date de fin prévue et une date limite dépassée. Aucune action système ne peut rattraper ce retard (le planning actuel est déjà ce qu'il est) : le résumé doit le dire clairement, en langage humain, sans suggérer une action technique (jamais "régénérer" ou "exécuter" pour ce type de fait) — plutôt signaler que le retard est constaté et qu'un traitement hors système (contact client, reprioritisation) peut être nécessaire.
 
 ## Exemple de réponse
 
@@ -48,6 +52,11 @@ Tu ne détectes rien toi-même : tu ne fais qu'habiller les faits fournis d'un r
       "reference": "instance_a_replanifier:3b7e0d21-...",
       "resume": "Cette instance a été réingérée (probablement suite à une indisponibilité de ressource) mais n'a pas encore été relancée — le solveur existant reste adapté, il suffit de l'exécuter pour obtenir un planning à jour.",
       "priorite": "moyenne"
+    }},
+    {{
+      "reference": "commande_en_retard:cmd-9f14...",
+      "resume": "Cette commande finira après sa date limite d'après le planning actuel — le retard est déjà constaté, aucune action système ne peut le rattraper ; à traiter côté client ou par une reprioritisation manuelle.",
+      "priorite": "haute"
     }}
   ]
 }}

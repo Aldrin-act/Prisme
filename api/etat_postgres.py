@@ -92,6 +92,7 @@ def _proposition_depuis_ligne(ligne: tuple) -> PropositionSupervision:
         decision,
         horodatage_decision,
         commentaire,
+        commande_id,
     ) = ligne
     return PropositionSupervision(
         id=id_,
@@ -109,6 +110,7 @@ def _proposition_depuis_ligne(ligne: tuple) -> PropositionSupervision:
         decision=decision,
         horodatage_decision=horodatage_decision,
         commentaire=commentaire,
+        commande_id=commande_id,
     )
 
 
@@ -569,6 +571,17 @@ class EtatPostgres:
                     clients=self._table("clients"),
                     instances=self._table("instances_trco"),
                 )
+            )
+            # Migration idempotente : signal "commande en retard" (détecté sans LLM, voir
+            # supervision/detecteurs.py::detecter_commandes_en_retard) — distingue plusieurs
+            # commandes en retard sur une même instance, jamais renseigné pour les trois autres
+            # signaux. Même politique ON DELETE SET NULL que instance_id ci-dessus : supprimer
+            # une commande ne doit jamais faire disparaître une proposition déjà persistée.
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS commande_id TEXT "
+                    "REFERENCES {commandes}(id) ON DELETE SET NULL"
+                ).format(table=self._table("propositions_supervision"), commandes=self._table("commandes"))
             )
             connexion.commit()
 
@@ -1409,6 +1422,7 @@ class EtatPostgres:
         execution_ids: tuple[str, ...] = (),
         structure_contraintes: str | None = None,
         signature_objectifs: str | None = None,
+        commande_id: str | None = None,
     ) -> str:
         proposition_id = str(uuid.uuid4())
         with closing(self._connexion()) as connexion:
@@ -1422,8 +1436,8 @@ class EtatPostgres:
                 sql.SQL(
                     "INSERT INTO {} "
                     "(id, client_id, type_signal, action_suggeree, resume, priorite, details, date_creation, "
-                    "instance_id, execution_ids, structure_contraintes, signature_objectifs) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s, %s::jsonb, %s, %s)"
+                    "instance_id, execution_ids, structure_contraintes, signature_objectifs, commande_id) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s, %s::jsonb, %s, %s, %s)"
                 ).format(self._table("propositions_supervision")),
                 (
                     proposition_id,
@@ -1438,6 +1452,7 @@ class EtatPostgres:
                     json.dumps(list(execution_ids)),
                     structure_contraintes,
                     signature_objectifs,
+                    commande_id,
                 ),
             )
             connexion.commit()
@@ -1449,7 +1464,7 @@ class EtatPostgres:
                 sql.SQL(
                     "SELECT id, client_id, type_signal, action_suggeree, resume, priorite, details, "
                     "date_creation, instance_id, execution_ids, structure_contraintes, signature_objectifs, "
-                    "decision, horodatage_decision, commentaire FROM {} WHERE id = %s"
+                    "decision, horodatage_decision, commentaire, commande_id FROM {} WHERE id = %s"
                 ).format(self._table("propositions_supervision")),
                 (proposition_id,),
             ).fetchone()
@@ -1463,7 +1478,7 @@ class EtatPostgres:
         requete = sql.SQL(
             "SELECT id, client_id, type_signal, action_suggeree, resume, priorite, details, "
             "date_creation, instance_id, execution_ids, structure_contraintes, signature_objectifs, "
-            "decision, horodatage_decision, commentaire FROM {} WHERE 1 = 1"
+            "decision, horodatage_decision, commentaire, commande_id FROM {} WHERE 1 = 1"
         ).format(self._table("propositions_supervision"))
         parametres: list[str] = []
         if client_id is not None:
@@ -1492,6 +1507,7 @@ class EtatPostgres:
                 "decision": p.decision,
                 "horodatage_decision": p.horodatage_decision,
                 "commentaire": p.commentaire,
+                "commande_id": p.commande_id,
             }
             for p in (_proposition_depuis_ligne(ligne) for ligne in lignes)
         ]
