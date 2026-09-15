@@ -27,8 +27,10 @@ def duree_jours_pour(operation: OperationERP) -> int:
     """Résout la durée d'une opération vers le référentiel jours relatifs du DSL — directement si
     `duree_jours` est déclaré, sinon par différence calendaire `date_fin - date_debut` (les deux
     modes sont mutuellement exclusifs, déjà vérifié par `OperationERP`, §5.4). Même motif que
-    `adapters/greensig/translator.py::duree_jours_pour` : la conversion reste dans l'adaptateur,
-    jamais une notion que le DSL connaît."""
+    `adapters/greensig/translator.py::duree_heures_pour` : la conversion reste dans l'adaptateur,
+    jamais une notion que le DSL connaît. Contrairement à GreenSIG, cet ERP fictif reste en jours
+    nativement — vocabulaire propre à ce PoC, jamais dérivé d'une estimation en heures (voir
+    docstring du module)."""
     if operation.duree_jours is not None:
         return operation.duree_jours
     assert operation.date_debut is not None and operation.date_fin is not None

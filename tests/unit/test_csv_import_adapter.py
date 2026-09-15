@@ -197,6 +197,51 @@ def test_commande_date_limite_non_numerique_leve_erreur_fichier_invalide() -> No
         traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV, commandes_csv)
 
 
+# --- Matières (declaration_materiau/consommation_matiere, deux types de contraintes.csv de plus) ---
+
+
+def test_sans_declaration_materiau_ne_produit_aucune_contrainte_matiere() -> None:
+    instance = traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV)
+    assert not [c for c in instance.contraintes if c.type in ("declaration_materiau", "consommation_matiere")]
+
+
+def test_declaration_materiau_et_consommation_matiere_sont_lues() -> None:
+    contraintes_csv = (
+        b"type,tache_avant,tache_apres,tache,ressource,duree_jours,materiau,quantite,stock_initial,unite\n"
+        b"precedence,T1,T2,,,,,,,\n"
+        b"compatibilite_ressource_tache,,,T1,R1,10,,,,\n"
+        b"compatibilite_ressource_tache,,,T2,R1,15,,,,\n"
+        b"declaration_materiau,,,,,,M1,,100,kg\n"
+        b"consommation_matiere,,,T1,,,M1,5,,\n"
+    )
+
+    instance = traduire(TACHES_CSV, RESSOURCES_CSV, contraintes_csv)
+
+    declarations = [c for c in instance.contraintes if c.type == "declaration_materiau"]
+    assert len(declarations) == 1
+    assert declarations[0].stock_initial == 100
+    assert declarations[0].unite == "kg"
+    consommations = [c for c in instance.contraintes if c.type == "consommation_matiere"]
+    assert len(consommations) == 1
+    assert consommations[0].tache == "T1"
+    assert consommations[0].materiau == "M1"
+    assert consommations[0].quantite == 5
+
+
+def test_declaration_materiau_stock_non_numerique_leve_erreur_fichier_invalide() -> None:
+    contraintes_csv = b"type,materiau,stock_initial\ndeclaration_materiau,M1,pas-un-nombre\n"
+
+    with pytest.raises(ErreurFichierInvalide, match="stock initial invalide"):
+        traduire(TACHES_CSV, RESSOURCES_CSV, contraintes_csv)
+
+
+def test_consommation_matiere_quantite_non_numerique_leve_erreur_fichier_invalide() -> None:
+    contraintes_csv = b"type,tache,materiau,quantite\nconsommation_matiere,T1,M1,pas-un-nombre\n"
+
+    with pytest.raises(ErreurFichierInvalide, match="quantité invalide"):
+        traduire(TACHES_CSV, RESSOURCES_CSV, contraintes_csv)
+
+
 # --- ResultatTraduction / estimateur_duree (§FC4, décision humaine préservée) ---
 #
 # Un faux estimateur duck-typé (pas `estimation.EstimateurDuree`) : ces tests

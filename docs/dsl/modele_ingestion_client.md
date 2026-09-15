@@ -33,7 +33,7 @@ structurellement, voir ci-dessous.
 
 ### `contraintes` (peut être vide, mais voir règle 3 ci-dessous)
 
-Quatre types possibles, chacun avec son propre champ `type` :
+Six types possibles, chacun avec son propre champ `type` :
 
 **Précédence** — la tâche `avant` doit finir avant que `apres` ne commence :
 ```json
@@ -62,6 +62,23 @@ utilise plusieurs contraintes de ce type :
 {"type": "competence_requise", "tache": "<id-tache>", "competence": "<nom-competence>"}
 ```
 
+**Déclaration de matériau** (optionnel) — déclare un matériau (matière première/composant
+consommable) et son stock de départ ; c'est la seule façon dont un matériau existe dans le
+fichier, il n'y a pas de section séparée pour ça (contrairement à `taches`/`ressources`) :
+```json
+{"type": "declaration_materiau", "materiau": "<id-materiau>", "stock_initial": <nombre >= 0>, "unite": "<optionnel, ex. kg>"}
+```
+
+**Consommation de matière** (optionnel — nécessite une `declaration_materiau` pour le même
+`materiau`) — la tâche `tache` prélève `quantite` unités du matériau `materiau` sur son stock, au
+moment où la tâche commence. Contrainte **dure** : contrairement aux règles 1-5 ci-dessous
+(rejetées à l'ingestion, avant tout calcul), le respect du stock n'est vérifié qu'une fois un
+planning produit — le solveur généré ne doit jamais produire un planning qui fait passer un stock
+sous zéro :
+```json
+{"type": "consommation_matiere", "tache": "<id-tache>", "materiau": "<id-materiau>", "quantite": <nombre > 0>}
+```
+
 ### `objectifs` (au moins un)
 
 Un seul type supporté aujourd'hui :
@@ -71,14 +88,18 @@ Un seul type supporté aujourd'hui :
 
 ## Règles de validation automatiques (rejet avant tout calcul)
 
-1. Un identifiant ne peut pas être répété au sein d'un même axe (deux tâches `id: "T1"` : rejeté).
-2. Toute contrainte doit référencer des tâches/ressources réellement déclarées dans le fichier.
+1. Un identifiant ne peut pas être répété au sein d'un même axe (deux tâches `id: "T1"` : rejeté) ;
+   même règle entre deux `declaration_materiau` pour le même `materiau`.
+2. Toute contrainte doit référencer des tâches/ressources réellement déclarées dans le fichier ;
+   `consommation_matiere.materiau` doit correspondre à une `declaration_materiau` présente.
 3. **Chaque tâche doit avoir au moins une compatibilité ressource-tâche** — sans ça, sa durée est
    inconnue et elle ne peut pas être planifiée.
 4. Aucun champ en dehors de ceux listés ci-dessus n'est toléré (schéma strict — un champ en trop
    fait rejeter tout le fichier, pas seulement ce champ).
 5. Si une tâche a une contrainte `competence_requise`, toute `compatibilite_ressource_tache` la
    concernant doit référencer une ressource dont `competences` couvre cette exigence — sinon rejeté.
+6. `declaration_materiau.stock_initial` doit être `>= 0`, `consommation_matiere.quantite` doit
+   être `> 0`.
 
 ## Gabarit à remplir
 

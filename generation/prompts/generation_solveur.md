@@ -30,9 +30,10 @@ comme si ces deux paramètres n'existaient pas.
   `Contrainte`, `Precedence`, `CompatibiliteRessourceTache`, `Echeance`,
   `CompetenceRequise`, `ContrainteCapacite`, `ContrainteIncompatibilite`,
   `ContrainteDisponibiliteRessource`, `ContrainteTailleLot`,
-  `ContrainteChangementSerie`, `Objectif`, `MinimiserMakespan`,
-  `EquilibrerCharge` s'importent depuis `dsl.schema` (n'importe que les
-  types d'objectif réellement utilisés dans le code généré).
+  `ContrainteChangementSerie`, `DeclarationMateriau`, `ConsommationMatiere`, `Objectif`,
+  `MinimiserMakespan`, `EquilibrerCharge` s'importent depuis `dsl.schema` (n'importe que
+  les types d'objectif réellement utilisés dans le code généré, et
+  `DeclarationMateriau`/`ConsommationMatiere` seulement si l'instance en contient).
 - `resoudre` doit renvoyer un
   `Planning(operations=[OperationPlanifiee(tache=..., ressource=..., debut=...), ...])`
   légal et optimal (ou proche de l'optimal) au sens du ou des objectifs
@@ -174,6 +175,53 @@ comme si ces deux paramètres n'existaient pas.
   fixer le début — le concept de "dernière tâche placée sur cette ressource"
   existe déjà naturellement dans ce type de décodeur, rien de nouveau à
   construire.
+
+## Matières (`DeclarationMateriau` + `ConsommationMatiere`)
+
+Aucune `DeclarationMateriau` dans `instance.contraintes` sur la très grande majorité des
+instances — dans ce cas, ignore complètement cette section, aucun code lié aux matières à
+générer. Contrairement à `Tache`/`Ressource`, un matériau n'a pas de liste top-level dédiée : sa
+seule existence est sa `DeclarationMateriau(materiau, stock_initial, ...)`, une contrainte parmi
+les autres. Quand une ou plusieurs sont présentes, une ou plusieurs `ConsommationMatiere(tache,
+materiau, quantite)` décrivent la quantité prélevée par chaque tâche sur le stock d'un matériau,
+**au moment où la tâche commence** (`debut` de son opération). C'est une contrainte **dure** : le
+stock d'un matériau ne doit **jamais** passer sous zéro à aucun instant du planning produit — pas
+un objectif, pas une pénalité, aucune notion de "pénurie tolérée" à ce stade. Aucun
+réapprovisionnement à modéliser : `stock_initial` couvre tout l'horizon de planification.
+
+- **CP-SAT** : utilise la primitive dédiée `AddReservoirConstraint`, faite exactement pour ce
+  cas (un niveau qui varie par événements datés, jamais négatif). Pour chaque `DeclarationMateriau`,
+  construit la liste des événements de consommation à partir des `ConsommationMatiere` qui le
+  citent et des variables `debut` déjà créées pour les tâches concernées :
+  ```python
+  declarations_materiaux = [c for c in instance.contraintes if isinstance(c, DeclarationMateriau)]
+  for declaration in declarations_materiaux:
+      consommations = [c for c in instance.contraintes
+                        if isinstance(c, ConsommationMatiere) and c.materiau == declaration.materiau]
+      if not consommations:
+          continue
+      temps = [debut[c.tache] for c in consommations]  # mêmes variables debut que plus haut
+      changements_niveau = [-int(c.quantite) for c in consommations]
+      modele.AddReservoirConstraint(
+          temps, changements_niveau,
+          min_level=0, max_level=int(declaration.stock_initial),
+      )
+  ```
+  (`AddReservoirConstraint` exige des niveaux entiers — arrondis/mise à l'échelle si
+  `stock_initial`/`quantite` ne sont pas des entiers dans l'instance, cohérence à garder entre le
+  facteur d'échelle utilisé pour `min_level`/`max_level` et celui utilisé pour
+  `changements_niveau`.) Pas de `max_level` artificiel au-delà de `stock_initial` : le stock ne
+  peut que décroître dans ce v1, jamais dépasser son niveau de départ.
+- **Décodeur non-CP-SAT** (génétique/ACO/glouton/dispatching) : maintiens un compteur de stock
+  courant par matériau (initialisé à `stock_initial`), précalculé une seule fois en table
+  `consommations_par_tache` (jamais une recherche dans `instance.contraintes` à l'intérieur de la
+  boucle de décision — voir "Précalcule tout" plus bas). Au moment de fixer le `debut` d'une
+  tâche, si elle consomme un ou plusieurs matériaux, vérifie que chaque stock concerné a assez de
+  marge une fois la consommation appliquée ; si un stock manquerait, ce placement est **rejeté par
+  construction** (retente un autre `debut`/une autre ressource, jamais un individu "illégal" gardé
+  avec une pénalité de fitness — même principe que "contraintes dures = construction, jamais
+  pénalité" plus haut). Une fois un placement accepté, décrémente réellement le compteur de stock
+  du matériau concerné avant de continuer le décodage des tâches suivantes.
 
 ## Replanification à horizon glissant (`planning_precedent`, `horizon_gele_jours`)
 

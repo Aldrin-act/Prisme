@@ -6,9 +6,9 @@
 | `api_users_equipe.id` (`actif = true`)                                    | `Ressource.id` (préfixé `E` — ex. `id=100` → `"E100"`)                      |
 | `api_users_competenceoperateur`/`api_users_operateur.equipe_id`, via `mapping/competences_types_tache.py` (type de tâche mappé) | `CompatibiliteRessourceTache` — une par équipe ayant ≥1 opérateur qualifié (voir "Compatibilité par compétence" ci-dessous) |
 | `api_planification_tache_equipes` (type de tâche **non** mappé — fallback) | `CompatibiliteRessourceTache` — une par couple (tâche, équipe affectée)       |
-| `api_planification_tache.charge_estimee_heures × 60`                      | `CompatibiliteRessourceTache.duree` (identique pour chaque équipe compatible) |
-| *(absent si `charge_estimee_heures` est `NULL` ou `0`)*                   | `CompatibiliteRessourceTache.duree = 30` (valeur par défaut, `_DUREE_PAR_DEFAUT_MINUTES`) |
-| *(`charge_estimee_heures` non nulle mais arrondissant à 0 minute)*        | `CompatibiliteRessourceTache.duree = 1` (plancher, `_DUREE_MINIMALE_MINUTES` — observé sur données réelles : ex. `0.00064h`, quelques secondes) |
+| `api_planification_tache.charge_estimee_heures` (arrondie à l'heure entière) | `CompatibiliteRessourceTache.duree` (identique pour chaque équipe compatible ; `InstanceTRCO.unite_temps = "heures"`) |
+| *(absent si `charge_estimee_heures` est `NULL` ou `0`)*                   | `CompatibiliteRessourceTache.duree = 1` (valeur par défaut, `_DUREE_PAR_DEFAUT_HEURES`) |
+| *(`charge_estimee_heures` non nulle mais arrondissant à 0 heure)*         | `CompatibiliteRessourceTache.duree = 1` (plancher, `_DUREE_MINIMALE_HEURES` — ex. `0.3h`, quelques minutes, arrondi à 1h) |
 | *(aucune colonne)*                                                        | `Precedence` → jamais produite (voir limite 1 ci-dessous)                   |
 | *(aucun champ GreenSIG)*                                                  | `Objectif` → toujours `MinimiserMakespan()` (GreenSIG n'a pas la notion)    |
 

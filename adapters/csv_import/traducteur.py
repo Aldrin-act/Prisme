@@ -16,7 +16,7 @@ dans `contraintes.csv`) — l'adaptateur calcule alors lui-même une
 estimée de la tâche (`taches.csv`, colonne `duree_estimee_jours`), appliquée
 telle quelle à toutes ces ressources — même principe que
 `adapters/greensig/translator.py` (`equipes_compatibles_pour`/
-`duree_jours_pour`). Le DSL lui-même (`dsl/schema/instance.py`,
+`duree_heures_pour`). Le DSL lui-même (`dsl/schema/instance.py`,
 `_competences_requises_respectees`) revérifie ensuite que chaque compatibilité
 déclarée pour une tâche à compétences requises couvre bien toutes ces
 compétences — un garde-fou de plus, pas remplacé ici.
@@ -30,6 +30,15 @@ Commandes (`adapters/commande_derivation.py`) : un quatrième fichier optionnel
 métadonnée de traçabilité d'ingestion, dérive une `Echeance` par tâche liée (sauf si déjà
 explicite pour cette tâche dans `contraintes.csv`), le solveur ne voit jamais la notion de
 "commande" elle-même (§5.3, vocabulaire DSL fini).
+
+Matières (`DeclarationMateriau`/`ConsommationMatiere`, `dsl/schema/contraintes.py`) :
+`contraintes.csv` gagne deux types supplémentaires — `declaration_materiau` (colonnes `materiau`,
+`stock_initial`, `unite`) déclare le référentiel matière (pas de fichier séparé : un matériau
+n'existe pour l'instance qu'à travers cette ligne, comme dans le DSL lui-même) et
+`consommation_matiere` (colonnes `tache`, `materiau`, `quantite`) relie une tâche à sa
+consommation — même granularité atomique que les autres types de contraintes de ce fichier. Aucune
+dérivation depuis une nomenclature/BOM dans cet adaptateur (v1) : la consommation doit être
+déclarée ligne par ligne.
 """
 
 from __future__ import annotations
@@ -48,7 +57,9 @@ from adapters.competence_derivation import (
 from dsl.schema import (
     CompatibiliteRessourceTache,
     CompetenceRequise,
+    ConsommationMatiere,
     Contrainte,
+    DeclarationMateriau,
     InstanceTRCO,
     MinimiserMakespan,
     Precedence,
@@ -71,8 +82,18 @@ COLONNES_CONTRAINTES_OPTIONNELLES = (
     "ressource",
     "duree_jours",
     "competence",
+    "materiau",
+    "quantite",
+    "stock_initial",
+    "unite",
 )
-TYPES_CONTRAINTE_SUPPORTES = ("precedence", "compatibilite_ressource_tache", "competence_requise")
+TYPES_CONTRAINTE_SUPPORTES = (
+    "precedence",
+    "compatibilite_ressource_tache",
+    "competence_requise",
+    "declaration_materiau",
+    "consommation_matiere",
+)
 COLONNES_COMMANDES_REQUISES = ("id", "taches")
 COLONNES_COMMANDES_OPTIONNELLES = ("client", "date_limite")
 
@@ -201,6 +222,32 @@ def _lire_contraintes(contenu: bytes, delimiteur: str = ",") -> list[Contrainte]
             )
         elif type_ == "competence_requise":
             contraintes.append(CompetenceRequise(tache=ligne["tache"], competence=ligne["competence"]))
+        elif type_ == "declaration_materiau":
+            try:
+                stock_initial = float(ligne["stock_initial"])
+            except ValueError as erreur:
+                raise ErreurFichierInvalide(
+                    f"contraintes.csv : stock initial invalide « {ligne['stock_initial']} » pour "
+                    f"{ligne['materiau']!r}"
+                ) from erreur
+            contraintes.append(
+                DeclarationMateriau(
+                    materiau=ligne["materiau"],
+                    stock_initial=stock_initial,
+                    **({"unite": ligne["unite"]} if ligne["unite"] else {}),
+                )
+            )
+        elif type_ == "consommation_matiere":
+            try:
+                quantite = float(ligne["quantite"])
+            except ValueError as erreur:
+                raise ErreurFichierInvalide(
+                    f"contraintes.csv : quantité invalide « {ligne['quantite']} » pour "
+                    f"{ligne['tache']}/{ligne['materiau']}"
+                ) from erreur
+            contraintes.append(
+                ConsommationMatiere(tache=ligne["tache"], materiau=ligne["materiau"], quantite=quantite)
+            )
         else:
             raise ErreurFichierInvalide(
                 f"contraintes.csv : type de contrainte inconnu « {type_} » "

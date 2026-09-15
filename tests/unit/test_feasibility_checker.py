@@ -8,11 +8,13 @@ from __future__ import annotations
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    ConsommationMatiere,
     ContrainteCapacite,
     ContrainteChangementSerie,
     ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
     ContrainteTailleLot,
+    DeclarationMateriau,
     Echeance,
     InstanceTRCO,
     MinimiserMakespan,
@@ -647,6 +649,88 @@ def test_changement_serie_ne_s_applique_pas_dans_l_ordre_inverse() -> None:
     )
     # T2 d'abord (finit à 2), puis T1 juste après (démarre à 2) — pas la paire déclarée.
     planning = _planning(_op("T2", "R1", 0), _op("T1", "R1", 2))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_stock_materiau_suffisant_est_legal() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=2),
+            DeclarationMateriau(materiau="M1", stock_initial=10),
+            ConsommationMatiere(tache="T1", materiau="M1", quantite=4),
+            ConsommationMatiere(tache="T2", materiau="M1", quantite=6),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 2))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert resultat.legal
+
+
+def test_stock_materiau_insuffisant_est_detecte() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=2),
+            DeclarationMateriau(materiau="M1", stock_initial=10),
+            ConsommationMatiere(tache="T1", materiau="M1", quantite=4),
+            ConsommationMatiere(tache="T2", materiau="M1", quantite=7),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0), _op("T2", "R1", 2))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["stock_insuffisant"]
+    assert resultat.violations[0].tache == "T2"
+
+
+def test_stock_materiau_respecte_l_ordre_chronologique_pas_l_ordre_de_declaration() -> None:
+    """La tâche qui épuise le stock en premier (par `debut`, pas par ordre de
+    déclaration des contraintes) est celle signalée en faute."""
+    instance = _instance(
+        taches=[Tache(id="T1"), Tache(id="T2")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=2),
+            DeclarationMateriau(materiau="M1", stock_initial=5),
+            # Déclarée en premier, mais planifiée en second (debut=3).
+            ConsommationMatiere(tache="T1", materiau="M1", quantite=4),
+            ConsommationMatiere(tache="T2", materiau="M1", quantite=3),
+        ],
+    )
+    # T2 planifiée avant T1 chronologiquement (debut=0 < debut=3).
+    planning = _planning(_op("T2", "R1", 0), _op("T1", "R1", 3))
+
+    resultat = verifier_faisabilite(instance, planning)
+
+    assert not resultat.legal
+    assert [v.type for v in resultat.violations] == ["stock_insuffisant"]
+    # T2 consomme 3 (reste 2), puis T1 consomme 4 (passe à -2) : c'est T1 la fautive.
+    assert resultat.violations[0].tache == "T1"
+
+
+def test_stock_materiau_sans_consommation_declaree_est_legal() -> None:
+    instance = _instance(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[
+            CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=2),
+            DeclarationMateriau(materiau="M1", stock_initial=0),
+        ],
+    )
+    planning = _planning(_op("T1", "R1", 0))
 
     resultat = verifier_faisabilite(instance, planning)
 

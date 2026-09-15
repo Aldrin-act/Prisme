@@ -9,6 +9,13 @@ compatibilité déclarée n'aurait donc aucune durée connue), et toute
 compatibilité déclarée pour une tâche ayant des `CompetenceRequise` porte sur
 une ressource réellement qualifiée. Un payload qui échoue cette validation
 est rejeté avant d'atteindre le solveur.
+
+Cas particulier des matériaux (`DeclarationMateriau`/`ConsommationMatiere`,
+`dsl/schema/contraintes.py`) : contrairement à `Tache`/`Ressource`, il n'y a pas
+de liste top-level dédiée — un matériau n'existe pour l'instance qu'à travers sa
+`DeclarationMateriau` (elle-même une `Contrainte`), donc son identifiant unique
+et les références vers lui sont vérifiés ici en scannant `contraintes`, pas un
+axe séparé.
 """
 
 from __future__ import annotations
@@ -21,12 +28,14 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from .contraintes import (
     CompatibiliteRessourceTache,
     CompetenceRequise,
+    ConsommationMatiere,
     Contrainte,
     ContrainteCapacite,
     ContrainteChangementSerie,
     ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
     ContrainteTailleLot,
+    DeclarationMateriau,
     Echeance,
     Precedence,
 )
@@ -51,6 +60,22 @@ class InstanceTRCO(BaseModel):
     # et l'affichage frontend (`api/unite_duree.py`) — jamais interprété par le reste du DSL/le
     # solveur généré, qui restent des entiers génériques quelle que soit l'unité déclarée.
     unite_temps: Literal["jours", "heures"] = "jours"
+    # Jours de la semaine fermés par défaut, consommés uniquement par la correction post-solveur
+    # (`validation_engine/jours_non_ouvres.py`, appelée depuis `sandbox/runner.py` juste avant le
+    # garde-fou de faisabilité) — jamais lu par le solveur généré ni par `feasibility_checker.py`.
+    # Convention JS `Date.getDay()` (0=dimanche..6=samedi), pas celle de Python `date.weekday()`
+    # (0=lundi..6=dimanche) : choisie pour rester cohérente avec le formulaire d'ingestion
+    # (`ingestion-dialog.tsx`, `NOMS_JOURS_SEMAINE_COURTS`) qui la déclare. Par défaut samedi+
+    # dimanche (`[0, 6]`) — un champ d'instance ordinaire, jamais une `Contrainte` : ne change
+    # jamais `structure_contraintes`, donc ne peut jamais invalider un solveur déjà enregistré.
+    jours_fermes: list[int] = Field(default_factory=lambda: [0, 6])
+
+    @model_validator(mode="after")
+    def _jours_fermes_valides(self) -> InstanceTRCO:
+        invalides = sorted({j for j in self.jours_fermes if not (0 <= j <= 6)})
+        if invalides:
+            raise ValueError(f"jours_fermes doit contenir des valeurs entre 0 (dimanche) et 6 (samedi) : {invalides}")
+        return self
 
     @model_validator(mode="after")
     def _identifiants_uniques_par_axe(self) -> InstanceTRCO:
@@ -68,6 +93,15 @@ class InstanceTRCO(BaseModel):
     def _contraintes_referencent_des_entites_declarees(self) -> InstanceTRCO:
         ids_taches = {t.id for t in self.taches}
         ids_ressources = {r.id for r in self.ressources}
+
+        # Les matériaux n'ont pas de liste top-level dédiée (contrairement à taches/ressources) :
+        # un matériau n'existe pour l'instance qu'à travers sa DeclarationMateriau, elle-même une
+        # Contrainte — l'unicité de ses identifiants se vérifie donc ici, pas dans
+        # `_identifiants_uniques_par_axe` ci-dessus.
+        ids_materiaux_declares = [c.materiau for c in self.contraintes if isinstance(c, DeclarationMateriau)]
+        if len(ids_materiaux_declares) != len(set(ids_materiaux_declares)):
+            raise ValueError("identifiants de matériaux dupliqués")
+        ids_materiaux = set(ids_materiaux_declares)
 
         for contrainte in self.contraintes:
             if isinstance(contrainte, Precedence):
@@ -106,6 +140,13 @@ class InstanceTRCO(BaseModel):
                 for id_tache in (contrainte.tache_avant, contrainte.tache_apres):
                     if id_tache not in ids_taches:
                         raise ValueError(f"changement de série référence une tâche inconnue : {id_tache!r}")
+            elif isinstance(contrainte, ConsommationMatiere):
+                if contrainte.tache not in ids_taches:
+                    raise ValueError(f"consommation de matière référence une tâche inconnue : {contrainte.tache!r}")
+                if contrainte.materiau not in ids_materiaux:
+                    raise ValueError(
+                        f"consommation de matière référence un matériau inconnu : {contrainte.materiau!r}"
+                    )
 
         return self
 

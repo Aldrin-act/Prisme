@@ -43,7 +43,7 @@ def test_traduction_produit_les_bonnes_taches_et_ressources() -> None:
     assert {r.id for r in instance.ressources} == {"E100", "E200"}
 
 
-def test_duree_convertie_en_jours_depuis_la_charge_estimee() -> None:
+def test_duree_conservee_en_heures_depuis_la_charge_estimee() -> None:
     payload = PayloadGreenSIG(
         taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=48.0, equipes_ids=[100])],
         equipes=[EquipeGreenSIG(id=100, nom_equipe="Equipe Nord", actif=True)],
@@ -52,9 +52,10 @@ def test_duree_convertie_en_jours_depuis_la_charge_estimee() -> None:
 
     instance = traduire(payload)
 
+    assert instance.unite_temps == "heures"
     compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
     assert len(compatibilites) == 1
-    assert compatibilites[0] == CompatibiliteRessourceTache(tache="T1", ressource="E100", duree=2)
+    assert compatibilites[0] == CompatibiliteRessourceTache(tache="T1", ressource="E100", duree=48)
 
 
 def test_duree_par_defaut_si_charge_estimee_absente() -> None:
@@ -70,15 +71,30 @@ def test_duree_par_defaut_si_charge_estimee_absente() -> None:
     assert compatibilites[0].duree == 1
 
 
-def test_duree_plancher_a_un_jour_pour_une_charge_typique_de_quelques_heures() -> None:
-    """Conséquence assumée du passage du DSL en jours : GreenSIG ne stocke
-    que `charge_estimee_heures`, typiquement quelques heures (tondre,
-    désherber...) — bien en-dessous d'un jour. `round(heures / 24)` ramène
-    donc quasi toute charge non nulle à 0, plancher à 1 (`CompatibiliteRessourceTache.duree`
-    exige `> 0`) : la quasi-totalité des tâches GreenSIG deviennent 1 jour,
-    la granularité fine en heures est perdue (voir `duree_jours_pour`)."""
+def test_duree_conserve_la_granularite_fine_en_heures() -> None:
+    """Avant l'ajout de `unite_temps="heures"`, cet adaptateur convertissait en jours
+    (`round(heures / 24)`), ce qui ramenait quasi toute charge non nulle au plancher de 1 jour —
+    la quasi-totalité des tâches GreenSIG devenaient indiscernables en durée. `duree_heures_pour`
+    arrondit directement à l'heure entière, préservant la granularité réelle des données : deux
+    charges différentes (3h vs 5h) restent deux durées différentes, jamais toutes deux aplaties à 1."""
     payload = PayloadGreenSIG(
-        taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=2.5, equipes_ids=[100])],
+        taches=[
+            TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=3.0, equipes_ids=[100]),
+            TacheGreenSIG(id=2, id_type_tache_id=10, charge_estimee_heures=5.0, equipes_ids=[100]),
+        ],
+        equipes=[EquipeGreenSIG(id=100, nom_equipe="Equipe Nord", actif=True)],
+        types_tache=[TypeTacheGreenSIG(id=10, nom_tache="Tonte")],
+    )
+
+    instance = traduire(payload)
+
+    durees = {c.tache: c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)}
+    assert durees == {"T1": 3, "T2": 5}
+
+
+def test_duree_plancher_a_une_heure_si_larrondi_atteint_zero() -> None:
+    payload = PayloadGreenSIG(
+        taches=[TacheGreenSIG(id=1, id_type_tache_id=10, charge_estimee_heures=0.3, equipes_ids=[100])],
         equipes=[EquipeGreenSIG(id=100, nom_equipe="Equipe Nord", actif=True)],
         types_tache=[TypeTacheGreenSIG(id=10, nom_tache="Tonte")],
     )

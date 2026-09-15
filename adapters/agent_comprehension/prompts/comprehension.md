@@ -123,6 +123,15 @@ ci-dessus. Règles impératives :
   qui te l'a fait déduire — un humain doit pouvoir vérifier ta déduction sans
   relire tout le fichier source. Une justification vague ("déduit du
   contexte") ne remplit pas ce rôle : cite la valeur exacte lue.
+- **Matières (optionnel — contraintes `declaration_materiau` + `consommation_matiere`)** : ne
+  produis ces contraintes que si les données brutes portent explicitement un stock de matière
+  première/composant ET une quantité consommée par tâche — même règle "n'invente rien" que pour
+  la compatibilité ci-dessus : un champ qui ne fait qu'indiquer *quel produit* une tâche fabrique
+  (sans stock ni quantité prélevée) n'est pas une consommation de matière. `declaration_materiau`
+  déclare le matériau lui-même (id + stock) ; toute `consommation_matiere` doit référencer un
+  `materiau` déclaré par une `declaration_materiau` de la même réponse, sinon rejetée à la
+  validation. En cas de doute (stock mentionné mais consommation par tâche ambiguë), omets et
+  signale dans `avertissements` plutôt que de deviner une `quantite`.
 
 ## Rappel avant de répondre
 
@@ -148,7 +157,9 @@ texte, pas de bloc markdown autour) :
       {{"type": "precedence", "avant": "...", "apres": "..."}},
       {{"type": "compatibilite_ressource_tache", "tache": "...", "ressource": "...", "duree": 2}},
       {{"type": "echeance", "tache": "...", "echeance": 5}},
-      {{"type": "competence_requise", "tache": "...", "competence": "..."}}
+      {{"type": "competence_requise", "tache": "...", "competence": "..."}},
+      {{"type": "declaration_materiau", "materiau": "...", "stock_initial": 100, "unite": "kg"}},
+      {{"type": "consommation_matiere", "tache": "...", "materiau": "...", "quantite": 5}}
     ],
     "objectifs": [{{"type": "minimiser_makespan"}}]
   }},
@@ -161,8 +172,8 @@ texte, pas de bloc markdown autour) :
 }}
 ```
 
-`priorite`, `competences`, `echeance` et `competence_requise` sont **optionnels** —
-n'en mets que si les données brutes les portent explicitement, jamais par supposition
-(même règle "n'invente rien" que pour la compatibilité). `justifications` est un
-tableau vide seulement si tu n'as produit aucune contrainte `precedence`,
-`echeance` ou `competence_requise`.
+`priorite`, `competences`, `echeance`, `competence_requise`, `declaration_materiau` et
+`consommation_matiere` sont **optionnels** — n'en mets que si les données brutes les portent
+explicitement, jamais par supposition (même règle "n'invente rien" que pour la compatibilité).
+`justifications` est un tableau vide seulement si tu n'as produit aucune contrainte
+`precedence`, `echeance` ou `competence_requise`.

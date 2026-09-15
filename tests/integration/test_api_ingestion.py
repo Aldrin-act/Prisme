@@ -347,3 +347,47 @@ def test_comparer_scenarios_calcule_les_metriques_de_la_derniere_execution(
         "taches_en_retard": [],
     }
     assert scenario["execution_id"] is not None
+    assert scenario["commandes_en_retard"] == 0
+
+
+def test_comparer_scenarios_compte_les_commandes_en_retard(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    """`commandes_en_retard` compte les commandes, pas les tâches individuelles (voir
+    `commandes_en_retard` vs `metriques.taches_en_retard`) — une commande en retard et une à
+    temps, une seule doit compter."""
+    client, etat_test = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    # T1 dure 10 (voir _PAYLOAD_MINIMAL), planifiée à debut=0 -> fin=10.
+    planning = Planning(operations=[OperationPlanifiee(tache="T1", ressource="R1", debut=0)])
+    resultat = ResultatExecution(
+        planning=planning, verdict_faisabilite=ResultatFaisabilite(violations=()), erreur=None
+    )
+    etat_test.enregistrer_execution("solveur-factice", instance_id, resultat)
+
+    etat_test.enregistrer_commande("cmd-retard", instance_id, "client_a", date_limite=5, taches=("T1",))
+    etat_test.enregistrer_commande("cmd-a-temps", instance_id, "client_a", date_limite=15, taches=("T1",))
+
+    reponse = client.get(f"/ingestion/{instance_id}/scenarios/comparaison")
+
+    assert reponse.status_code == 200
+    scenario = reponse.json()["scenarios"][0]
+    assert scenario["commandes_en_retard"] == 1
+
+
+def test_comparer_scenarios_commandes_en_retard_null_sans_execution(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    """Même garde que `metriques` : `None`, jamais `0`, tant qu'aucune exécution réussie n'existe
+    — `0` signifierait à tort "vérifié, aucune commande en retard"."""
+    client, etat_test = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+    etat_test.enregistrer_commande("cmd-1", instance_id, "client_a", date_limite=5, taches=("T1",))
+
+    reponse = client.get(f"/ingestion/{instance_id}/scenarios/comparaison")
+
+    assert reponse.status_code == 200
+    scenario = reponse.json()["scenarios"][0]
+    assert scenario["metriques"] is None
+    assert scenario["commandes_en_retard"] is None

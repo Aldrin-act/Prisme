@@ -7,7 +7,7 @@ par cette tâche (`CompetenceRequise`), avec la durée estimée de la tâche
 §4.2, elle dépend de la ressource en vrai FJSP flexible) appliquée telle
 quelle à chaque ressource ainsi qualifiée. Même principe que
 `adapters/greensig/translator.py` (`equipes_compatibles_pour`/
-`duree_jours_pour`) : une durée par tâche, pas par couple, faute de mieux
+`duree_heures_pour`) : une durée par tâche, pas par couple, faute de mieux
 quand seules des compétences sont déclarées.
 
 Une compatibilité déjà explicite pour un couple (tâche, ressource) l'emporte

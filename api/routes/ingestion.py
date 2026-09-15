@@ -5,15 +5,18 @@ from __future__ import annotations
 import uuid
 from typing import Any
 
+import psycopg
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from adapters.commande_derivation import Commande, deriver_echeances_par_commande
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
+from api.dependencies import obtenir_registre
 from api.etat import CommandeEnregistree, EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
+from api.routes.execution import executer_pour_instance
 from dsl.schema import InstanceTRCO, Objectif
 
 router = APIRouter(prefix="/ingestion", tags=["ingestion"])
@@ -26,6 +29,9 @@ class RequeteModificationObjectifs(BaseModel):
 class RequeteNouvelleCommande(BaseModel):
     taches: list[str] = Field(min_length=1)
     date_limite: int | None = Field(default=None, ge=0)
+    # Durée globale prévue, saisie librement par l'utilisateur (heures) — pure métadonnée de
+    # traçabilité (voir `CommandeEnregistree.duree_heures`), jamais dérivée en Echeance.
+    duree_heures: int | None = Field(default=None, ge=0)
 
 
 def _ressources_manquantes_par_rapport_a_la_base(base: InstanceTRCO, scenario: InstanceTRCO) -> set[str]:
@@ -181,12 +187,17 @@ def comparer_scenarios(
 ) -> dict[str, object]:
     """Compare toutes les instances du groupe de scénarios d'`instance_id`
     (elle comprise) sur leur dernière exécution connue — makespan, taux
-    d'utilisation par ressource, tâches en retard
+    d'utilisation par ressource, commandes en retard
     (`api/comparaison_scenarios.py`). Ne déclenche jamais d'exécution : une
     instance du groupe pas encore exécutée apparaît avec `metriques: null`,
     à exécuter explicitement via `POST /execution/{instance_id}` (§2.3,
     l'exécution reste toujours une décision humaine explicite, jamais un
     effet de bord d'une lecture).
+
+    `commandes_en_retard` (compte, pas une liste de tâches) : par commande de ce membre
+    (`etat.lister_commandes`), même calcul que `calculer_statut_commande` (déjà utilisé par
+    `GET .../commandes` et le détecteur de supervision `commande_en_retard`) — `None` tant
+    qu'aucune exécution réussie n'existe pour ce membre, même garde que `metriques`.
 
     `est_instance_de_base` est calculé contre `racine_groupe_scenario(instance_id)`,
     jamais contre `instance_id` lui-même : appeler cette route depuis une variante
@@ -215,10 +226,18 @@ def comparer_scenarios(
         _, instance_membre = etat.recuperer_instance(membre_id)
         derniere = dernieres_executions.get(membre_id)
         metriques = None
+        commandes_en_retard = None
         if derniere is not None:
             _, _, resultat = etat.recuperer_execution(derniere["execution_id"])
             if resultat.reussi and resultat.planning is not None:
                 metriques = calculer_metriques(instance_membre, resultat.planning).en_dict()
+                commandes_en_retard = sum(
+                    1
+                    for commande in etat.lister_commandes(instance_id=membre_id)
+                    if calculer_statut_commande(
+                        instance_membre, resultat.planning, commande.taches, commande.date_limite
+                    ).en_retard
+                )
         scenarios.append(
             {
                 "instance_id": membre_id,
@@ -226,6 +245,7 @@ def comparer_scenarios(
                 "execution_id": derniere["execution_id"] if derniere else None,
                 "date_execution": derniere["date_execution"] if derniere else None,
                 "metriques": metriques,
+                "commandes_en_retard": commandes_en_retard,
             }
         )
 
@@ -302,7 +322,25 @@ def ajouter_commande(
     `Echeance` (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`)
     — ne crée jamais de tâche, contrairement à l'ancienne explosion de gamme (fonctionnalité
     retirée). `commande_id` généré ici, jamais fourni par l'appelant : aucun risque de collision.
-    Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact)."""
+    Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact).
+
+    Déclenche ensuite une exécution automatique (best-effort, même composition que
+    `POST /planifier/...` via `executer_pour_instance`) plutôt que d'attendre qu'une analyse de
+    supervision le propose : la commande vient de modifier l'instance (nouvelle `Echeance`), le
+    planning affiché doit refléter ça sans étape supplémentaire. Ne génère jamais de solveur à la
+    volée (principe fondateur "generate once") : si aucun solveur validé n'existe pour la
+    structure de contraintes résultante (ex. première commande à échéance de cette instance —
+    change `structure_contraintes`, un solveur déjà enregistré ne correspond plus tant qu'il
+    n'est pas régénéré), le 409 levé par `executer_pour_instance` est attrapé ici et renvoyé comme
+    statut informatif (`erreur_execution`) — jamais comme un échec de l'ajout de commande
+    lui-même, qui a déjà réussi à ce stade.
+
+    `Registre` volontairement obtenu à la main (`obtenir_registre()`), jamais via `Depends` —
+    sinon FastAPI résoudrait la dépendance (connexion Postgres) *avant* d'entrer dans cette
+    fonction, hors de portée du `try`/`except` ci-dessous : Postgres injoignable ferait alors
+    échouer tout l'ajout de commande, pas seulement l'exécution automatique best-effort. Même
+    raison, aucun fixture `registre_test` requis dans les tests de ce endpoint (§ tests unitaires
+    `EtatAPI` sans service externe, voir `test_api_commandes.py`)."""
     try:
         client_id, instance = etat.recuperer_instance(instance_id)
     except KeyError:
@@ -329,12 +367,35 @@ def ajouter_commande(
 
     instance_fusionnee = etat.modifier_instance(instance_id, instance_fusionnee_dsl)
 
-    etat.enregistrer_commande(commande_id, instance_id, client_id, requete.date_limite, tuple(requete.taches))
+    etat.enregistrer_commande(
+        commande_id,
+        instance_id,
+        client_id,
+        requete.date_limite,
+        tuple(requete.taches),
+        duree_heures=requete.duree_heures,
+    )
+
+    execution_id: str | None = None
+    execution_reussie: bool | None = None
+    erreur_execution: str | None = None
+    try:
+        registre = obtenir_registre()
+        execution_id, resultat_execution, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)
+        execution_reussie = resultat_execution.reussi
+        erreur_execution = resultat_execution.erreur
+    except HTTPException as erreur:
+        erreur_execution = str(erreur.detail)
+    except psycopg.OperationalError as erreur:
+        erreur_execution = f"exécution automatique indisponible (Postgres injoignable) : {erreur}"
 
     return {
         "instance_id": instance_id,
         "commande_id": commande_id,
         "structure_contraintes": structure_contraintes(instance_fusionnee),
+        "execution_id": execution_id,
+        "execution_reussie": execution_reussie,
+        "erreur_execution": erreur_execution,
     }
 
 
@@ -366,6 +427,7 @@ def lister_commandes_instance(
             "date_limite": commande.date_limite,
             "taches": list(commande.taches),
             "date_creation": commande.date_creation,
+            "duree_heures": commande.duree_heures,
             "date_execution": date_execution,
             **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
         }
@@ -401,6 +463,7 @@ def obtenir_commande(
         "date_limite": commande.date_limite,
         "taches": list(commande.taches),
         "date_creation": commande.date_creation,
+        "duree_heures": commande.duree_heures,
         "date_execution": etat.date_derniere_execution_reussie(commande.instance_id),
         **statut.en_dict(),
     }

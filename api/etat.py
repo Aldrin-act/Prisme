@@ -154,6 +154,10 @@ class CommandeEnregistree:
     date_limite: int | None
     taches: tuple[str, ...]
     date_creation: str
+    # Durée globale prévue pour la commande, saisie librement par l'utilisateur (heures) — pure
+    # métadonnée de traçabilité comme le reste de cette classe (voir docstring ci-dessus) : jamais
+    # dérivée en Echeance, jamais lue par le DSL/solveur, affichée telle quelle.
+    duree_heures: int | None = None
 
 
 @dataclass(frozen=True)
@@ -406,6 +410,7 @@ class EtatAPI:
         client_id: str,
         date_limite: int | None,
         taches: tuple[str, ...],
+        duree_heures: int | None = None,
     ) -> None:
         """`commande_id` fourni par l'appelant (déjà généré avant la dérivation d'échéance —
         voir `api/routes/ingestion.py::ajouter_commande`)."""
@@ -416,6 +421,7 @@ class EtatAPI:
             date_limite=date_limite,
             taches=taches,
             date_creation=datetime.now(UTC).isoformat(),
+            duree_heures=duree_heures,
         )
 
     def recuperer_commande(self, commande_id: str) -> CommandeEnregistree:
@@ -487,6 +493,11 @@ class EtatAPI:
         client_id, _ = self.instances[instance_id]
         self.instances[instance_id] = (client_id, instance)
         self.dates_modification[instance_id] = datetime.now(UTC).isoformat()
+        # Recalculée à chaque remplacement (même principe que `structure_contraintes`, déjà
+        # toujours réévaluée) — sans ça, `unite_duree` reste figée sur sa valeur d'ingestion même
+        # si `unite_temps`/les durées changent, un affichage cosmétique désormais faux plutôt
+        # qu'absent (voir `api/unite_duree.py`).
+        self.unites_duree[instance_id] = detecter_unite_duree(instance)
         return instance
 
     def supprimer_instance(self, instance_id: str) -> None:

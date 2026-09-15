@@ -383,6 +383,29 @@ def test_unite_temps_defaut_est_jours() -> None:
     assert instance.unite_temps == "jours"
 
 
+def test_jours_fermes_defaut_est_samedi_dimanche() -> None:
+    instance = charger_instance(_instance_minimale())
+    assert instance.jours_fermes == [0, 6]
+
+
+def test_jours_fermes_personnalises_acceptes() -> None:
+    payload = _instance_minimale(jours_fermes=[4, 5])
+    instance = charger_instance(payload)
+    assert instance.jours_fermes == [4, 5]
+
+
+def test_jours_fermes_vide_accepte() -> None:
+    payload = _instance_minimale(jours_fermes=[])
+    instance = charger_instance(payload)
+    assert instance.jours_fermes == []
+
+
+def test_jours_fermes_hors_bornes_rejete() -> None:
+    payload = _instance_minimale(jours_fermes=[7])
+    with pytest.raises(ValidationError, match="jours_fermes doit contenir des valeurs entre 0"):
+        charger_instance(payload)
+
+
 def test_disponibilite_motif_hebdomadaire_mode_heures_jusqu_a_167_acceptee() -> None:
     payload = _instance_minimale(
         unite_temps="heures",
@@ -543,4 +566,74 @@ def test_changement_serie_vers_tache_inconnue_rejetee() -> None:
         ],
     )
     with pytest.raises(ValidationError, match="changement de série référence une tâche inconnue"):
+        charger_instance(payload)
+
+
+def test_declaration_materiau_et_consommation_valides_acceptees() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "declaration_materiau", "materiau": "M1", "stock_initial": 100},
+            {"type": "consommation_matiere", "tache": "T1", "materiau": "M1", "quantite": 5},
+        ],
+    )
+    instance = charger_instance(payload)
+    assert len(instance.contraintes) == 3
+
+
+def test_declaration_materiau_identifiants_dupliques_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "declaration_materiau", "materiau": "M1", "stock_initial": 10},
+            {"type": "declaration_materiau", "materiau": "M1", "stock_initial": 20},
+        ],
+    )
+    with pytest.raises(ValidationError, match="identifiants de matériaux dupliqués"):
+        charger_instance(payload)
+
+
+def test_declaration_materiau_stock_negatif_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "declaration_materiau", "materiau": "M1", "stock_initial": -1},
+        ],
+    )
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_consommation_matiere_quantite_nulle_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "declaration_materiau", "materiau": "M1", "stock_initial": 10},
+            {"type": "consommation_matiere", "tache": "T1", "materiau": "M1", "quantite": 0},
+        ],
+    )
+    with pytest.raises(ValidationError):
+        charger_instance(payload)
+
+
+def test_consommation_matiere_vers_tache_inconnue_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "declaration_materiau", "materiau": "M1", "stock_initial": 10},
+            {"type": "consommation_matiere", "tache": "T99", "materiau": "M1", "quantite": 5},
+        ],
+    )
+    with pytest.raises(ValidationError, match="consommation de matière référence une tâche inconnue"):
+        charger_instance(payload)
+
+
+def test_consommation_matiere_vers_materiau_inconnu_rejetee() -> None:
+    payload = _instance_minimale(
+        contraintes=[
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "consommation_matiere", "tache": "T1", "materiau": "M99", "quantite": 5},
+        ],
+    )
+    with pytest.raises(ValidationError, match="consommation de matière référence un matériau inconnu"):
         charger_instance(payload)

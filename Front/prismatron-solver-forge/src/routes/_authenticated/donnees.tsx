@@ -111,10 +111,7 @@ function DonneesPage() {
 
         <TabsContent value="actif" className="max-w-3xl">
           {sourceActiveId ? (
-            <SourceActivePanel
-              sourceId={sourceActiveId}
-              onNouveau={() => setSourceActiveId(null)}
-            />
+            <SourceActivePanel sourceId={sourceActiveId} />
           ) : (
             <FormulaireNouvelleSource onCree={creerEtOuvrirSource} />
           )}
@@ -1041,7 +1038,7 @@ function ImporteurCsvDirect() {
   );
 }
 
-function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouveau: () => void }) {
+function SourceActivePanel({ sourceId }: { sourceId: string }) {
   const queryClient = useQueryClient();
   const { data: source, isLoading } = useSource(sourceId);
   const generer = useGenererInstanceDepuisSource();
@@ -1137,23 +1134,18 @@ function SourceActivePanel({ sourceId, onNouveau }: { sourceId: string; onNouvea
   return (
     <div className="space-y-4">
       <div className="glass space-y-4 rounded-2xl p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Source</div>
-            <h3 className="text-lg font-semibold">{source.nom || "Sans nom"}</h3>
-            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <span>{source.client_id}</span>
-              <span>·</span>
-              <span>{new Date(source.date_creation).toLocaleString()}</span>
-              <span>·</span>
-              <Badge variant="outline" className="font-mono">
-                {source.source_id}
-              </Badge>
-            </div>
+        <div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">Source</div>
+          <h3 className="text-lg font-semibold">{source.nom || "Sans nom"}</h3>
+          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <span>{source.client_id}</span>
+            <span>·</span>
+            <span>{new Date(source.date_creation).toLocaleString()}</span>
+            <span>·</span>
+            <Badge variant="outline" className="font-mono">
+              {source.source_id}
+            </Badge>
           </div>
-          <Button variant="outline" onClick={onNouveau}>
-            <Plus className="mr-2 h-4 w-4" /> Nouvelle source
-          </Button>
         </div>
 
         <details className="rounded-lg border border-border/50 p-3 text-xs">

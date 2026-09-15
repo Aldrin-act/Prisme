@@ -125,6 +125,49 @@ def test_traduire_commande_sans_taches_rejetee() -> None:
         traduire(payload)
 
 
+# --- Matières (DeclarationMateriau/ConsommationMatiere, deux types de contraintes de plus) ---
+
+
+def test_traduire_sans_declaration_materiau_ne_produit_aucune_contrainte_matiere() -> None:
+    instance = traduire(_payload_de_base())
+    assert not [c for c in instance.contraintes if c.type in ("declaration_materiau", "consommation_matiere")]
+
+
+def test_traduire_ingere_declaration_materiau_et_consommation_matiere() -> None:
+    payload = _payload_de_base(
+        contraintes=[
+            {"type": "precedence", "avant": "T1", "apres": "T2"},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 15},
+            {"type": "declaration_materiau", "materiau": "M1", "stock_initial": 100, "unite": "kg"},
+            {"type": "consommation_matiere", "tache": "T1", "materiau": "M1", "quantite": 5},
+        ],
+    )
+
+    instance = traduire(payload)
+
+    declarations = [c for c in instance.contraintes if c.type == "declaration_materiau"]
+    assert len(declarations) == 1
+    assert declarations[0].stock_initial == 100
+    consommations = [c for c in instance.contraintes if c.type == "consommation_matiere"]
+    assert len(consommations) == 1
+    assert consommations[0].materiau == "M1"
+    assert consommations[0].quantite == 5
+
+
+def test_traduire_consommation_matiere_vers_materiau_inconnu_rejetee() -> None:
+    payload = _payload_de_base(
+        contraintes=[
+            {"type": "precedence", "avant": "T1", "apres": "T2"},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 15},
+            {"type": "consommation_matiere", "tache": "T1", "materiau": "M99", "quantite": 5},
+        ],
+    )
+    with pytest.raises(ValidationError, match="consommation de matière référence un matériau inconnu"):
+        traduire(payload)
+
+
 # --- ResultatTraduction / estimateur_duree (§FC4, décision humaine préservée) ---
 #
 # Même faux estimateur duck-typé que `tests/unit/test_csv_import_adapter.py` —

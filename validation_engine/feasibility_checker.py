@@ -16,7 +16,14 @@ un `Planning` proposé et vérifie :
 6. tout temps de changement de série (`ContrainteChangementSerie` — extension
    optionnelle, §4.2) respecté entre deux opérations directement consécutives
    sur une même ressource, sans effet si la paire déclarée ne se retrouve pas
-   consécutive dans le planning proposé.
+   consécutive dans le planning proposé ;
+7. aucun matériau dont le stock (`DeclarationMateriau.stock_initial` —
+   extension optionnelle, §4.2) passe sous zéro au fil du planning — seule
+   vérification **chronologique/stateful** du module (les six précédentes
+   sont toutes locales, pairwise ou des agrégats statiques) : simule un
+   stock qui décroît opération par opération, triées par `debut`, sans
+   jamais se reconstituer (pas de réapprovisionnement dans ce v1, sans effet
+   sur une instance sans `DeclarationMateriau`/`ConsommationMatiere`).
 
 Sert deux fois (§6.7, garde-fou déterministe) : hors ligne dans la validation
 du code généré (couche 2, §6.1), et en ligne comme garde-fou de production
@@ -43,11 +50,13 @@ from typing import Literal
 
 from dsl.schema import (
     CompatibiliteRessourceTache,
+    ConsommationMatiere,
     ContrainteCapacite,
     ContrainteChangementSerie,
     ContrainteDisponibiliteRessource,
     ContrainteIncompatibilite,
     ContrainteTailleLot,
+    DeclarationMateriau,
     Echeance,
     InstanceTRCO,
     OperationPlanifiee,
@@ -69,6 +78,7 @@ TypeViolation = Literal[
     "ressource_indisponible",
     "taille_lot_hors_bornes",
     "changement_serie_insuffisant",
+    "stock_insuffisant",
 ]
 
 
@@ -392,5 +402,46 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
                     ressource=operation_1.ressource,
                 )
             )
+
+    # Stock de matériaux : seule vérification chronologique/stateful du module. Ne porte que sur
+    # les opérations structurellement valides (tâche connue, planifiée une seule fois, ressource
+    # connue) — une tâche déjà signalée non planifiée/dupliquée n'a pas de `debut` fiable à
+    # intégrer dans la simulation. `DeclarationMateriau` n'a pas de liste top-level dédiée (voir
+    # dsl/schema/instance.py) : le stock initial se lit directement dans `instance.contraintes`.
+    consommations_par_tache: dict[str, list[ConsommationMatiere]] = defaultdict(list)
+    stock_initial_par_materiau: dict[str, float] = {
+        c.materiau: c.stock_initial for c in instance.contraintes if isinstance(c, DeclarationMateriau)
+    }
+    for contrainte in instance.contraintes:
+        if isinstance(contrainte, ConsommationMatiere):
+            consommations_par_tache[contrainte.tache].append(contrainte)
+
+    if stock_initial_par_materiau and consommations_par_tache:
+        evenements_par_materiau: dict[str, list[tuple[int, str, float]]] = defaultdict(list)
+        for tache_id, operation in operations_valides.items():
+            for consommation in consommations_par_tache.get(tache_id, []):
+                evenements_par_materiau[consommation.materiau].append(
+                    (operation.debut, tache_id, consommation.quantite)
+                )
+
+        for materiau_id, evenements in evenements_par_materiau.items():
+            stock = stock_initial_par_materiau.get(materiau_id)
+            if stock is None:
+                # Matériau inconnu : déjà rejeté à la construction de l'instance
+                # (InstanceTRCO._contraintes_referencent_des_entites_declarees) — ne peut pas
+                # arriver ici, gardé défensif plutôt que silencieux.
+                continue
+            for debut, tache_id, quantite in sorted(evenements, key=lambda evenement: evenement[0]):
+                stock -= quantite
+                if stock < 0:
+                    violations.append(
+                        Violation(
+                            "stock_insuffisant",
+                            f"stock de {materiau_id!r} insuffisant : la tâche {tache_id!r} (jour "
+                            f"{debut}) le fait passer à {stock}",
+                            tache=tache_id,
+                            ressource=None,
+                        )
+                    )
 
     return ResultatFaisabilite(tuple(violations))

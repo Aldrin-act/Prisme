@@ -61,6 +61,10 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   strictement consécutives ; voir la mission pour l'exemple CP-SAT complet).
   Si des tâches ont une `priorite` déclarée, ajoute un terme de départage à
   l'objectif (jamais au détriment de sa valeur principale — voir la mission).
+  Si l'instance contient des `DeclarationMateriau`, ajoute pour chacune couverte par au moins une
+  `ConsommationMatiere` un `AddReservoirConstraint(temps, changements_niveau, min_level=0,
+  max_level=stock_initial)` — voir la section "Matières" de la mission pour la construction
+  exacte des événements ; sans effet si l'instance n'en contient aucune.
 - Pour tout autre algorithme (génétique, ACO, recuit simulé, tabou,
   glouton + recherche locale, règles de dispatching) : adapte les mêmes
   champs à cet algorithme — `variables` devient la représentation de la
@@ -95,7 +99,11 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
      placée sur la ressource candidate est `tache_avant` d'une de ces
      contraintes pour la tâche courante (`tache_apres`), repousse l'heure de
      début la plus tôt possible d'au moins `duree_setup` après la fin de
-     cette dernière tâche ;
+     cette dernière tâche. Si l'instance contient des `DeclarationMateriau` et que la
+     tâche courante a une ou plusieurs `ConsommationMatiere`, rejette tout
+     placement qui ferait passer le stock courant d'un matériau concerné
+     sous zéro (compteur de stock précalculé, décrémenté seulement une fois
+     le placement accepté — voir la section "Matières" de la mission) ;
   4. Résultat : **toute** solution décodée est légale par construction ; la
      fitness (le score que la recherche optimise) se limite au makespan de
      ce planning déjà légal, sans terme de pénalité pour les contraintes

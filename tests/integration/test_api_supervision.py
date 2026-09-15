@@ -325,10 +325,17 @@ def test_analyser_detecte_une_commande_en_retard_via_lapi(image_sandbox: str, re
 
     try:
         client = TestClient(app)
+        # Structure compatibilite_ressource_tache+precedence — doit correspondre exactement à
+        # STRUCTURE_MINIMALE (scripts/enregistrer_solveur_reference.py), sinon /execution rejette
+        # (structure/objectifs revérifiés en plus d'instance_id, voir api/routes/execution.py).
         instance = InstanceTRCO(
-            taches=[Tache(id="T1")],
+            taches=[Tache(id="T1"), Tache(id="T2")],
             ressources=[Ressource(id="R1")],
-            contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
+            contraintes=[
+                Precedence(avant="T1", apres="T2"),
+                CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+                CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=5),
+            ],
             objectifs=[MinimiserMakespan()],
         )
         instance_id = client.post("/ingestion/client_test", json=instance.model_dump(mode="json")).json()[
@@ -337,7 +344,7 @@ def test_analyser_detecte_une_commande_en_retard_via_lapi(image_sandbox: str, re
         enregistrer(registre_test, instance_id=instance_id, client_id="client_test")
 
         # T1 finit au jour 10 (durée déclarée par sa seule compatibilité ressource-tâche) — une
-        # commande avec date_limite=5 est donc en retard.
+        # commande sur T1 seul, avec date_limite=5, est donc en retard.
         reponse_execution = client.post(f"/execution/{instance_id}")
         assert reponse_execution.status_code == 200, reponse_execution.json()
 
@@ -384,9 +391,13 @@ def test_deux_commandes_en_retard_meme_instance_via_lapi(image_sandbox: str, reg
     try:
         client = TestClient(app)
         instance = InstanceTRCO(
-            taches=[Tache(id="T1")],
+            taches=[Tache(id="T1"), Tache(id="T2")],
             ressources=[Ressource(id="R1")],
-            contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
+            contraintes=[
+                Precedence(avant="T1", apres="T2"),
+                CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+                CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=5),
+            ],
             objectifs=[MinimiserMakespan()],
         )
         instance_id = client.post("/ingestion/client_test", json=instance.model_dump(mode="json")).json()[

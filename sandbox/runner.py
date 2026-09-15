@@ -23,12 +23,14 @@ import ast
 import json
 import tempfile
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from dsl.schema import InstanceTRCO, Planning
 from solver_store.registry import ErreurIntegriteSolveur, Registre
 from validation_engine.feasibility_checker import ResultatFaisabilite, verifier_faisabilite
+from validation_engine.jours_non_ouvres import repousser_hors_jours_non_ouvres
 
 IMAGE_SANDBOX = "prisme-sandbox:latest"
 _CHEMIN_CODE_CONTENEUR = "/mnt/solveur.py"
@@ -376,6 +378,16 @@ def executer_solveur_valide(
 
     if planning is None:
         return ResultatExecution(None, None, "le solveur a jugé l'instance infaisable")
+
+    # Jours non ouvrés par défaut (samedi/dimanche) : correction après coup, jamais appris au
+    # solveur généré — voir validation_engine/jours_non_ouvres.py. Les opérations déjà gelées par
+    # horizon_gele_jours ne sont jamais décalées, quel que soit le jour où elles tombent.
+    operations_gelees = frozenset(
+        (op.tache, op.ressource)
+        for op in (planning_precedent.operations if planning_precedent else [])
+        if op.debut < horizon_gele_jours
+    )
+    planning = repousser_hors_jours_non_ouvres(instance, planning, datetime.now(UTC), operations_gelees)
 
     verdict = verifier_faisabilite(instance, planning)
     return ResultatExecution(planning, verdict, None)

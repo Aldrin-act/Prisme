@@ -206,6 +206,15 @@ class EtatPostgres:
                     table=self._table("commandes")
                 )
             )
+            # Migration idempotente : durée globale prévue pour la commande, saisie librement par
+            # l'utilisateur (heures) — pure métadonnée de traçabilité comme le reste de Commande
+            # (voir sa docstring dans api/etat.py) : jamais dérivée en Echeance, jamais lue par le
+            # DSL/solveur, affichée telle quelle.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS duree_heures INTEGER").format(
+                    table=self._table("commandes")
+                )
+            )
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS quantite").format(
                     table=self._table("commandes")
@@ -739,6 +748,7 @@ class EtatPostgres:
         client_id: str,
         date_limite: int | None,
         taches: tuple[str, ...],
+        duree_heures: int | None = None,
     ) -> None:
         with closing(self._connexion()) as connexion:
             connexion.execute(
@@ -749,8 +759,8 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, instance_id, client_id, date_limite, taches, date_creation) "
-                    "VALUES (%s, %s, %s, %s, %s::jsonb, %s)"
+                    "INSERT INTO {} (id, instance_id, client_id, date_limite, taches, date_creation, "
+                    "duree_heures) VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s)"
                 ).format(self._table("commandes")),
                 (
                     commande_id,
@@ -759,6 +769,7 @@ class EtatPostgres:
                     date_limite,
                     json.dumps(list(taches)),
                     datetime.now(UTC).isoformat(),
+                    duree_heures,
                 ),
             )
             connexion.commit()
@@ -767,13 +778,14 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT id, instance_id, client_id, date_limite, taches, date_creation FROM {} WHERE id = %s"
+                    "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures "
+                    "FROM {} WHERE id = %s"
                 ).format(self._table("commandes")),
                 (commande_id,),
             ).fetchone()
         if ligne is None:
             raise KeyError(commande_id)
-        id_, instance_id, client_id, date_limite, taches, date_creation = ligne
+        id_, instance_id, client_id, date_limite, taches, date_creation, duree_heures = ligne
         return CommandeEnregistree(
             id=id_,
             instance_id=instance_id,
@@ -781,11 +793,13 @@ class EtatPostgres:
             date_limite=date_limite,
             taches=tuple(taches),
             date_creation=date_creation,
+            duree_heures=duree_heures,
         )
 
     def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:
         requete = sql.SQL(
-            "SELECT id, instance_id, client_id, date_limite, taches, date_creation FROM {} WHERE 1 = 1"
+            "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures "
+            "FROM {} WHERE 1 = 1"
         ).format(self._table("commandes"))
         parametres: list[str] = []
         if instance_id is not None:
@@ -802,8 +816,9 @@ class EtatPostgres:
                 date_limite=date_limite,
                 taches=tuple(taches),
                 date_creation=date_creation,
+                duree_heures=duree_heures,
             )
-            for id_, iid, cid, date_limite, taches, date_creation in lignes
+            for id_, iid, cid, date_limite, taches, date_creation, duree_heures in lignes
         ]
 
     # --- Instances -----------------------------------------------------

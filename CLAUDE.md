@@ -65,9 +65,11 @@ see below) plus Phase 10 (frontend, §2.3), out of roadmap order (see Build orde
 full test suite (Docker included) runs and passes — see "Verified" notes below for two real bugs
 found and fixed then.
 
-- **Étape 1 — DSL** (`dsl/schema/`): Pydantic v2 — `Tache`, `Ressource`, `Contrainte` (discriminated
-  union), `Objectif`s (now configurable — `objectifs_parametrables.py`), `InstanceTRCO` aggregate
-  root (cross-axis validation); `Planning`/`OperationPlanifiee` deliberately invariant-free (Étape 2).
+- **Étape 1 — DSL** (`dsl/schema/`): Pydantic v2 — `Tache`, `Ressource`, `Contrainte`
+  (discriminated union — includes `DeclarationMateriau`/`ConsommationMatiere`, the materials/stock
+  mechanism, see below), `Objectif`s (now configurable — `objectifs_parametrables.py`),
+  `InstanceTRCO` aggregate root (cross-axis validation); `Planning`/`OperationPlanifiee`
+  deliberately invariant-free (Étape 2).
 - **Étape 2 — feasibility checker** (`validation_engine/feasibility_checker.py`):
   `verifier_faisabilite(instance, planning) -> ResultatFaisabilite`, pure, never raises — every
   anomaly becomes a `Violation`. `CompatibiliteRessourceTache` is mandatory (≥1 per task, enforced by
@@ -183,7 +185,8 @@ control — `dsl/schema/common.py`'s `Identifiant`). Four axes: **T**âches, **R
 **`dsl/schema/` conventions:** every model sets `extra="forbid"`; `Contrainte` is a
 `Literal["type"]`-discriminated `Union` so new kinds join without touching existing ones;
 `InstanceTRCO` enforces per-axis unique IDs and that every constraint references a declared
-`Tache`/`Ressource` — that cross-axis check *is* the §6.7 upstream guardrail. **Minimal viable
+`Tache`/`Ressource` — that cross-axis check *is* the §6.7
+upstream guardrail. **Minimal viable
 core:** precedence, ressource-task compatibility, durations. **Optional extensions** (`Contrainte`
 subtypes with no effect on an instance that doesn't use them, taught to the generation prompts —
 `generation/prompts/generation_solveur.md`/`architecte.md` — and checked by
@@ -207,7 +210,24 @@ two only if the solver chooses to sequence them back-to-back on that resource, n
 constraint itself, that stays `Precedence`'s job; generated CP-SAT code encodes it deliberately
 **conservatively** via a reified order boolean — the setup gap is enforced whenever `tache_avant`
 precedes `tache_apres` in time on the resource at all, not only when strictly adjacent, traded off
-against exact `AddCircuit`-based sequencing for LLM-generation reliability). `Tache.priorite`
+against exact `AddCircuit`-based sequencing for LLM-generation reliability).
+`DeclarationMateriau`/`ConsommationMatiere` (materials/stock: `DeclarationMateriau(materiau,
+stock_initial, ...)` declares a raw material/component — its *only* way to exist in an instance,
+there's no top-level entity list for it the way `Tache`/`Ressource` get one;
+`ConsommationMatiere(tache, materiau, quantite)` links a task to how much it draws from that
+stock, at the task's `debut`) is the one exception to "no effect if unused" being a *soft*
+default: it's a **hard** constraint a generated solver must actually respect — a solver must
+never produce a planning that drives a material's stock below zero
+(`AddReservoirConstraint` in CP-SAT, an equivalent running-stock guard in heuristic decoders — see
+`generation/prompts/generation_solveur.md`), and `feasibility_checker.py` re-checks it
+deterministically (`stock_insuffisant`) — the module's one **chronological/stateful** check,
+everything else there being pairwise/sweep-line per resource or a static aggregate. No
+replenishment modeled yet (`stock_initial` covers the whole planning horizon) and no
+BOM/nomenclature auto-derivation from an ERP's `nomenclatures`/`produit_id` (`ConsommationMatiere`
+must be declared directly, v1 scope) — both explicitly deferred follow-ups. Same
+optional-if-unused behavior as the rest of this list: an instance with no `DeclarationMateriau`
+is unaffected by any stock check.
+`Tache.priorite`
 (1–5) is consumed by generated code as a **tie-break only** — never a weight on the primary
 objective, never a constraint — see "Priorité des tâches" in `generation_solveur.md`.
 `Tache.statut`/`Tache.produit`/`Ressource.type` remain purely informative fields (no constraint or

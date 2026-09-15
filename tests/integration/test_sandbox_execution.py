@@ -69,6 +69,7 @@ def test_solveur_valide_stocke_puis_execute_en_sandbox(image_sandbox: str, regis
         code_source=code_source,
         structure_contraintes="precedence,compatibilite_ressource_tache",
         verdict_cascade=VerdictCascade(diagnostics=()),
+        instance_id="inst_test",
     )
 
     cas = next(c for c in generer_catalogue() if c.nom == "taille_2_chaine_simple")
@@ -91,6 +92,7 @@ def test_solveur_ancienne_signature_continue_de_fonctionner_sans_horizon_gele(
         code_source=CODE_ANCIENNE_SIGNATURE,
         structure_contraintes="compatibilite_ressource_tache",
         verdict_cascade=VerdictCascade(diagnostics=()),
+        instance_id="inst_test",
     )
 
     resultat = executer_solveur_valide(registre_test, id_solveur, _instance_triviale())
@@ -107,6 +109,7 @@ def test_solveur_ancienne_signature_avec_horizon_gele_echoue_explicitement(regis
         code_source=CODE_ANCIENNE_SIGNATURE,
         structure_contraintes="compatibilite_ressource_tache",
         verdict_cascade=VerdictCascade(diagnostics=()),
+        instance_id="inst_test",
     )
 
     resultat = executer_solveur_valide(registre_test, id_solveur, _instance_triviale(), horizon_gele_jours=5)

@@ -1,8 +1,14 @@
 """C — Contraintes : précédence, compatibilité ressource-tâche, échéance,
-compétence requise, capacité, incompatibilité, disponibilité ressource et
-taille de lot (§3.1, §4). Les deux premières forment le noyau minimal ; les
-autres sont des extensions optionnelles (aucun effet sur une instance qui ne
-les utilise pas) — voir `docs/dsl/modele_ingestion_client.md`.
+compétence requise, capacité, incompatibilité, disponibilité ressource,
+taille de lot, déclaration de matériau et consommation matière (§3.1, §4).
+Les deux premières forment le noyau minimal ; les autres sont des extensions
+optionnelles (aucun effet sur une instance qui ne les utilise pas) — voir
+`docs/dsl/modele_ingestion_client.md`. `DeclarationMateriau`/`ConsommationMatiere`
+forment ensemble le mécanisme matières/stock : contrairement à toutes les
+autres contraintes ci-dessous (qui relient des entités déjà déclarées dans
+`taches`/`ressources`), `DeclarationMateriau` déclare l'entité matériau
+elle-même (id + stock) — il n'existe pas d'axe M séparé, un matériau n'est
+connu de l'instance qu'à travers cette contrainte.
 
 Une contrainte est un objet discriminé par son champ `type`, pour rester
 homogène et extensible : d'autres pourront encore s'ajouter à cette union
@@ -256,6 +262,50 @@ class ContrainteChangementSerie(BaseModel):
         return self
 
 
+class DeclarationMateriau(BaseModel):
+    """Déclare un matériau (matière première/composant consommable) avec son stock de départ —
+    la seule façon dont un `materiau` existe pour l'instance : contrairement à `Tache`/`Ressource`,
+    il n'y a pas de liste top-level dédiée, cette contrainte *est* l'entité.
+
+    Aucun réapprovisionnement dans ce v1 : `stock_initial` couvre tout l'horizon de planification.
+    Une instance sans `DeclarationMateriau` n'est affectée par aucune vérification de stock —
+    extension optionnelle, comme `Echeance`/`ContrainteCapacite` (§4.2)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["declaration_materiau"] = "declaration_materiau"
+    materiau: Identifiant
+    stock_initial: float = Field(ge=0, description="Stock disponible au début de l'horizon de planification")
+    unite: str | None = Field(
+        default=None,
+        description="Unité de mesure du stock/de la consommation (ex. kg, litres, unités) — "
+        "optionnel, purement informatif : ni le solveur ni le vérificateur de faisabilité n'en "
+        "dépendent.",
+    )
+
+
+class ConsommationMatiere(BaseModel):
+    """La tâche `tache` consomme `quantite` unités du matériau `materiau` (déclaré par une
+    `DeclarationMateriau` de la même instance) — prélevées sur son stock au moment où la tâche
+    commence.
+
+    Contrainte **dure** : le solveur ne doit jamais produire un planning où, à un instant
+    donné, le cumul des consommations dépasse le stock disponible du matériau (vérifié par
+    `validation_engine/feasibility_checker.py`, encodé côté solveur généré via
+    `AddReservoirConstraint` en CP-SAT — voir `generation/prompts/generation_solveur.md`).
+    Aucune notion de réapprovisionnement dans ce v1 : `stock_initial` couvre tout l'horizon.
+
+    Une tâche consommant plusieurs matériaux est décrite par plusieurs contraintes de ce
+    type (une par matériau), même granularité atomique que `CompatibiliteRessourceTache`."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["consommation_matiere"] = "consommation_matiere"
+    tache: Identifiant
+    materiau: Identifiant
+    quantite: float = Field(gt=0, description="Quantité de matériau prélevée par cette tâche")
+
+
 Contrainte = Annotated[
     Precedence
     | CompatibiliteRessourceTache
@@ -265,6 +315,8 @@ Contrainte = Annotated[
     | ContrainteIncompatibilite
     | ContrainteDisponibiliteRessource
     | ContrainteTailleLot
-    | ContrainteChangementSerie,
+    | ContrainteChangementSerie
+    | DeclarationMateriau
+    | ConsommationMatiere,
     Field(discriminator="type"),
 ]

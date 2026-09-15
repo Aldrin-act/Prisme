@@ -165,6 +165,11 @@ export interface InstanceTRCO {
   // (absent = "jours", rétrocompatible). Affecte le cycle de disponibilite_ressource.
   // jours_semaine_indisponibles (7 en jours, 168 en heures) — voir dsl/schema/instance.py.
   unite_temps?: "jours" | "heures";
+  // Jours de la semaine fermés par défaut (0=dimanche..6=samedi, convention Date.getDay() —
+  // même convention ici et côté backend) — consommé uniquement par la correction post-solveur
+  // (validation_engine/jours_non_ouvres.py), jamais par le solveur généré. Absent/omis = défaut
+  // serveur (`[0, 6]`, samedi+dimanche) — voir dsl/schema/instance.py.
+  jours_fermes?: number[];
 }
 
 // ============================================================================
@@ -245,12 +250,23 @@ export interface InstanceDetail extends InstanceTRCO {
 export interface RequeteNouvelleCommande {
   taches: string[];
   date_limite?: number;
+  // Durée globale prévue pour la commande, saisie librement par l'utilisateur (heures) — pure
+  // métadonnée de traçabilité, jamais dérivée en Echeance ni lue par le DSL/solveur.
+  duree_heures?: number;
 }
 
 export interface ResultatNouvelleCommande {
   instance_id: string;
   commande_id: string;
   structure_contraintes: string;
+  // Exécution automatique déclenchée juste après l'ajout (best-effort, voir
+  // api/routes/ingestion.py::ajouter_commande) — jamais de génération à la volée : execution_id
+  // reste null et erreur_execution porte le motif (ex. "aucun solveur validé") si aucun solveur
+  // ne correspond déjà à la structure résultante. L'ajout de la commande lui-même a toujours
+  // réussi à ce stade, quel que soit le contenu de ces trois champs.
+  execution_id: string | null;
+  execution_reussie: boolean | null;
+  erreur_execution: string | null;
 }
 
 // Une tâche de la commande positionnée dans le temps (début/fin résolus contre le dernier
@@ -273,6 +289,9 @@ export interface StatutCommande {
   date_limite: number | null;
   taches: string[];
   date_creation: string;
+  // Durée globale prévue pour la commande, saisie librement par l'utilisateur (heures) — pure
+  // métadonnée de traçabilité, jamais dérivée en Echeance ni lue par le DSL/solveur.
+  duree_heures: number | null;
   // Horodatage réel de la dernière exécution réussie de l'instance (même valeur que
   // PlanningAvecDurees.date_execution) — ancrage calendaire des jours relatifs de cette
   // commande (date_limite, operations[].debut/fin). `null` tant que l'instance n'a jamais été
@@ -304,6 +323,11 @@ export interface ScenarioComparaison {
   // null tant que ce scénario n'a jamais été exécuté avec succès — jamais déclenché
   // automatiquement par la simple lecture de la comparaison (§2.3).
   metriques: MetriquesPlanning | null;
+  // Nombre de commandes en retard (calculer_statut_commande, même calcul que GET .../commandes
+  // et le détecteur de supervision commande_en_retard) — pas les tâches individuelles en retard
+  // (voir metriques.taches_en_retard). Même garde que metriques : null tant qu'aucune exécution
+  // réussie n'existe, jamais 0 par défaut (0 signifierait à tort "vérifié, aucun retard").
+  commandes_en_retard: number | null;
 }
 
 export interface ReponseComparaisonScenarios {

@@ -23,6 +23,12 @@ Commandes (`adapters/commande_derivation.py`) : un champ optionnel `commandes` r
 à une commande cliente et une date limite — pure métadonnée de traçabilité d'ingestion, dérive
 une `Echeance` par tâche liée (sauf si déjà explicite pour cette tâche), le solveur ne voit
 jamais la notion de "commande" elle-même (§5.3, vocabulaire DSL fini).
+
+Matières (`DeclarationMateriau`/`ConsommationMatiere`, `dsl/schema/contraintes.py`) : deux types de
+`contraintes` parmi d'autres, ingérés tels quels — aucune transformation ici, contrairement aux
+compétences/commandes ci-dessus, ils passent directement vers `InstanceTRCO` via `contraintes`
+comme n'importe quel autre type de l'union. Aucune dérivation depuis une nomenclature/BOM dans cet
+adaptateur (v1) : la consommation doit être déclarée directement.
 """
 
 from __future__ import annotations

@@ -77,6 +77,7 @@ import {
   useCommandesInstance,
   usePropositionsSupervision,
   PrismeAPIError,
+  type CompatibiliteRessourceTache,
   type Contrainte,
   type InstanceDetail,
   type InstanceInfo,
@@ -88,10 +89,13 @@ import {
   debutJour,
   formatDateRelative,
   formatEntreeDate,
+  formatEntreeDateHeure,
   jourDepuisAncrage,
   parseEntreeDate,
+  parseEntreeDateHeure,
+  type UniteTemps,
 } from "@/lib/dates-relatives";
-import { formatDuree } from "@/lib/unite-duree";
+import { formatDuree, formatDureeCourte } from "@/lib/unite-duree";
 import { BadgeTypeSignal } from "./supervision";
 
 export const Route = createFileRoute("/_authenticated/instances")({
@@ -626,7 +630,7 @@ function SectionScenarios({
                 <TableHead>Instance</TableHead>
                 <TableHead>Makespan</TableHead>
                 <TableHead>Utilisation moy.</TableHead>
-                <TableHead>Tâches en retard</TableHead>
+                <TableHead>Commandes en retard</TableHead>
                 <TableHead>Exécuté le</TableHead>
                 <TableHead>Supervision</TableHead>
               </TableRow>
@@ -651,7 +655,7 @@ function SectionScenarios({
                       {s.metriques ? formatDuree(s.metriques.makespan, instance.unite_duree) : "—"}
                     </TableCell>
                     <TableCell>{moyenne !== null ? `${moyenne.toFixed(0)}%` : "—"}</TableCell>
-                    <TableCell>{s.metriques ? s.metriques.taches_en_retard.length : "—"}</TableCell>
+                    <TableCell>{s.commandes_en_retard !== null ? s.commandes_en_retard : "—"}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">
                       {s.date_execution ? new Date(s.date_execution).toLocaleString() : "jamais"}
                     </TableCell>
@@ -687,14 +691,25 @@ function SectionScenarios({
 // de (sa propre fin, son échéance) — jamais le makespan de tout l'atelier, qui noierait la
 // commande dans le reste de l'activité. Rien à tracer avant sa première exécution réussie
 // (`planifiee`) : le badge de statut au-dessus suffit alors.
-function CommandeTimeline({ commande }: { commande: StatutCommande }) {
+function CommandeTimeline({
+  commande,
+  uniteTemps,
+}: {
+  commande: StatutCommande;
+  uniteTemps: UniteTemps;
+}) {
   // `planifiee` n'est vrai que si l'instance a déjà une exécution réussie (voir
   // `calculer_statut_commande` côté backend) — `date_execution` est donc garanti non nul ici,
   // sauf état incohérent défensif.
   if (!commande.planifiee || commande.operations.length === 0 || !commande.date_execution) {
     return null;
   }
-  const ancrage = debutJour(new Date(commande.date_execution));
+  // Jamais tronqué à minuit en mode heures (l'heure exacte EST l'ancrage) — même principe que
+  // gantt-chart.tsx et l'échéance ci-dessus.
+  const ancrage =
+    uniteTemps === "heures"
+      ? new Date(commande.date_execution)
+      : debutJour(new Date(commande.date_execution));
 
   const echelleMax = Math.max(
     commande.date_limite ?? 0,
@@ -723,7 +738,7 @@ function CommandeTimeline({ commande }: { commande: StatutCommande }) {
                 <div
                   className="absolute top-0 h-full w-px bg-foreground/50"
                   style={{ left: `${limitePct}%` }}
-                  title={`Échéance : ${formatDateRelative(commande.date_limite as number, ancrage)}`}
+                  title={`Échéance : ${formatDateRelative(commande.date_limite as number, ancrage, uniteTemps)}`}
                 />
               )}
               <div
@@ -731,7 +746,7 @@ function CommandeTimeline({ commande }: { commande: StatutCommande }) {
                   enRetard ? "bg-destructive" : "bg-gradient-to-r from-primary to-accent"
                 }`}
                 style={{ left: `${gauche}%`, width: `${largeur}%` }}
-                title={`${formatDateRelative(op.debut, ancrage)} → ${formatDateRelative(op.fin, ancrage)}${
+                title={`${formatDateRelative(op.debut, ancrage, uniteTemps)} → ${formatDateRelative(op.fin, ancrage, uniteTemps)}${
                   enRetard ? " (en retard)" : ""
                 }`}
               />
@@ -743,6 +758,27 @@ function CommandeTimeline({ commande }: { commande: StatutCommande }) {
   );
 }
 
+// Une tâche est compatible avec une ou plusieurs ressources, chacune avec sa propre durée (FJSP
+// flexible, voir CLAUDE.md) — jamais une durée unique garantie par tâche. Renvoie `null` si la
+// tâche n'a aucune compatibilité déclarée (ne devrait pas arriver, garde-fou §6.7 amont), sinon
+// une durée unique ou un intervalle min–max selon que les ressources compatibles partagent la
+// même durée ou non.
+function libelleDureeTache(tacheId: string, instance: InstanceDetail): string | null {
+  const durees = instance.contraintes
+    .filter(
+      (c): c is CompatibiliteRessourceTache =>
+        c.type === "compatibilite_ressource_tache" && c.tache === tacheId,
+    )
+    .map((c) => c.duree);
+  if (durees.length === 0) return null;
+  const min = Math.min(...durees);
+  const max = Math.max(...durees);
+  const uniteTemps: UniteTemps = instance.unite_temps === "heures" ? "heures" : "jours";
+  return min === max
+    ? formatDureeCourte(min, uniteTemps)
+    : `${formatDureeCourte(min, uniteTemps)}–${formatDureeCourte(max, uniteTemps)}`;
+}
+
 function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
   const queryClient = useQueryClient();
   const ajouter = useAjouterCommande();
@@ -750,14 +786,25 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
   const [ouvert, setOuvert] = useState(false);
   const [tachesChoisies, setTachesChoisies] = useState<string[]>([]);
   const [dateLimite, setDateLimite] = useState("");
+  const [dureeHeures, setDureeHeures] = useState("");
+  const uniteTemps: UniteTemps = instance.unite_temps === "heures" ? "heures" : "jours";
   const [dernierCommandeId, setDernierCommandeId] = useState<string | null>(null);
+  // Résultat de l'exécution automatique déclenchée juste après l'ajout (best-effort, voir
+  // api/routes/ingestion.py::ajouter_commande) — distinct de `erreur` ci-dessous, qui ne porte
+  // que sur l'ajout de la commande lui-même (toujours un succès à ce stade).
+  const [dernierResultatExecution, setDernierResultatExecution] = useState<{
+    reussie: boolean | null;
+    erreur: string | null;
+  } | null>(null);
 
   const erreur = ajouter.error as PrismeAPIError | null;
 
   function ouvrir() {
     setTachesChoisies([]);
     setDateLimite("");
+    setDureeHeures("");
     setDernierCommandeId(null);
+    setDernierResultatExecution(null);
     ajouter.reset();
     setOuvert(true);
   }
@@ -769,16 +816,20 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
   }
 
   function soumettre() {
-    const date = parseEntreeDate(dateLimite);
+    // "jours" ou "heures" selon instance.unite_temps — un input date perd toute précision
+    // horaire pour une instance en mode heures (voir uniteTemps ci-dessus).
+    const date =
+      uniteTemps === "heures" ? parseEntreeDateHeure(dateLimite) : parseEntreeDate(dateLimite);
     ajouter.mutate(
       {
         instanceId: instance.instance_id,
         requete: {
           taches: tachesChoisies,
-          // Convertie en jours relatifs à "aujourd'hui" — aucune exécution réelle n'existe
+          // Convertie en jours/heures relatifs à "aujourd'hui" — aucune exécution réelle n'existe
           // forcément encore pour ancrer sur autre chose au moment de la saisie (voir
-          // src/lib/dates-relatives.ts). Le DSL/backend ne voit jamais que cet entier de jours.
-          date_limite: date ? jourDepuisAncrage(date, aujourdhui()) : undefined,
+          // src/lib/dates-relatives.ts). Le DSL/backend ne voit jamais que cet entier.
+          date_limite: date ? jourDepuisAncrage(date, aujourdhui(), uniteTemps) : undefined,
+          duree_heures: dureeHeures !== "" ? Number(dureeHeures) : undefined,
         },
       },
       {
@@ -788,7 +839,16 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
           queryClient.invalidateQueries({
             queryKey: prismeKeys.commandesInstance(instance.instance_id),
           });
+          // L'ajout vient de déclencher une exécution automatique best-effort côté serveur (voir
+          // api/routes/ingestion.py::ajouter_commande) — rafraîchit les vues qui affichent des
+          // exécutions/plannings (Centre d'exécution, Plannings) pour qu'elles la montrent sans
+          // attendre une action séparée.
+          queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
           setDernierCommandeId(resultat.commande_id);
+          setDernierResultatExecution({
+            reussie: resultat.execution_reussie,
+            erreur: resultat.erreur_execution,
+          });
           setOuvert(false);
         },
       },
@@ -808,71 +868,49 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
         )}
       </div>
 
-      {commandes && commandes.length > 0 && (
-        <div className="space-y-1.5">
-          {commandes.map((c) => {
-            // Ancrage réel (dernière exécution réussie) quand il existe, sinon prévisualisation
-            // "si exécuté aujourd'hui" — voir src/lib/dates-relatives.ts.
-            const ancrageCommande = c.date_execution
-              ? debutJour(new Date(c.date_execution))
-              : aujourdhui();
-            return (
-              <div
-                key={c.commande_id}
-                className="space-y-2 rounded-lg border border-border/50 px-3 py-2"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="text-sm">
-                    <span className="font-mono text-xs">{c.commande_id}</span>
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      {c.taches.length} tâche{c.taches.length > 1 ? "s" : ""}
-                      {c.date_limite !== null &&
-                        ` · échéance le ${formatDateRelative(c.date_limite, ancrageCommande)}`}
-                    </span>
-                  </div>
-                  <Badge
-                    variant={c.en_retard ? "destructive" : c.planifiee ? "secondary" : "outline"}
-                  >
-                    {c.en_retard
-                      ? "En retard"
-                      : c.planifiee
-                        ? "Planifiée"
-                        : c.taches_manquantes.length > 0
-                          ? "Tâches manquantes au planning"
-                          : "En attente d'exécution"}
-                  </Badge>
-                </div>
-                <CommandeTimeline commande={c} />
-              </div>
-            );
-          })}
-        </div>
-      )}
-
       {ouvert && (
         <div className="space-y-3 rounded-lg border border-border/50 p-3">
           <div className="space-y-1">
             <Label>Tâches concernées</Label>
             <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 p-2">
-              {instance.taches.map((t) => (
-                <label key={t.id} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={tachesChoisies.includes(t.id)}
-                    onCheckedChange={() => basculerTache(t.id)}
-                  />
-                  {t.nom ? `${t.nom} (${t.id})` : t.id}
-                </label>
-              ))}
+              {instance.taches.map((t) => {
+                const duree = libelleDureeTache(t.id, instance);
+                return (
+                  <label key={t.id} className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                      checked={tachesChoisies.includes(t.id)}
+                      onCheckedChange={() => basculerTache(t.id)}
+                    />
+                    <span>{t.nom ? `${t.nom} (${t.id})` : t.id}</span>
+                    {duree && <span className="text-xs text-muted-foreground">· {duree}</span>}
+                  </label>
+                );
+              })}
             </div>
           </div>
           <div className="space-y-1">
             <Label>Échéance *</Label>
             <Input
-              type="date"
-              min={formatEntreeDate(aujourdhui())}
+              type={uniteTemps === "heures" ? "datetime-local" : "date"}
+              min={
+                uniteTemps === "heures"
+                  ? formatEntreeDateHeure(aujourdhui())
+                  : formatEntreeDate(aujourdhui())
+              }
               required
               value={dateLimite}
               onChange={(e) => setDateLimite(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1">
+            <Label>Durée globale prévue (heures)</Label>
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              placeholder="Optionnel — indicatif, sans effet sur la planification"
+              value={dureeHeures}
+              onChange={(e) => setDureeHeures(e.target.value)}
             />
           </div>
 
@@ -905,8 +943,70 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
         </div>
       )}
 
+      {commandes && commandes.length > 0 && (
+        <div className="space-y-1.5">
+          {commandes.map((c) => {
+            // Ancrage réel (dernière exécution réussie) quand il existe, sinon prévisualisation
+            // "si exécuté aujourd'hui" — voir src/lib/dates-relatives.ts. Jamais tronqué à minuit
+            // en mode heures (l'heure exacte EST l'ancrage, même principe que gantt-chart.tsx).
+            const ancrageCommande = c.date_execution
+              ? uniteTemps === "heures"
+                ? new Date(c.date_execution)
+                : debutJour(new Date(c.date_execution))
+              : aujourdhui();
+            return (
+              <div
+                key={c.commande_id}
+                className="space-y-2 rounded-lg border border-border/50 px-3 py-2"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-sm">
+                    <span className="font-mono text-xs">{c.commande_id}</span>
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      {c.taches.length} tâche{c.taches.length > 1 ? "s" : ""}
+                      {c.date_limite !== null &&
+                        ` · échéance le ${formatDateRelative(c.date_limite, ancrageCommande, uniteTemps)}`}
+                      {c.duree_heures !== null && ` · durée prévue ${c.duree_heures} h`}
+                    </span>
+                  </div>
+                  <Badge
+                    variant={c.en_retard ? "destructive" : c.planifiee ? "secondary" : "outline"}
+                  >
+                    {c.en_retard
+                      ? "En retard"
+                      : c.planifiee
+                        ? "Planifiée"
+                        : c.taches_manquantes.length > 0
+                          ? "Tâches manquantes au planning"
+                          : "En attente d'exécution"}
+                  </Badge>
+                </div>
+                <CommandeTimeline commande={c} uniteTemps={uniteTemps} />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {dernierCommandeId && (
-        <p className="text-xs text-muted-foreground">Commande {dernierCommandeId} créée.</p>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Commande {dernierCommandeId} créée.</p>
+          {dernierResultatExecution?.reussie === true && (
+            <p className="text-xs text-muted-foreground">
+              Exécution automatique déclenchée — planning mis à jour.
+            </p>
+          )}
+          {dernierResultatExecution?.reussie === false && (
+            <p className="text-xs text-amber-600">
+              Exécution automatique déclenchée mais échouée : {dernierResultatExecution.erreur}
+            </p>
+          )}
+          {dernierResultatExecution?.reussie === null && dernierResultatExecution.erreur && (
+            <p className="text-xs text-amber-600">
+              Exécution automatique non disponible : {dernierResultatExecution.erreur}
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

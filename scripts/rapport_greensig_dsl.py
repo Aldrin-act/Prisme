@@ -24,7 +24,7 @@ from pydantic import ValidationError
 
 from adapters.greensig import PayloadGreenSIG, extraire_payload, traduire
 from adapters.greensig.translator import (
-    duree_jours_pour,
+    duree_heures_pour,
     equipes_compatibles_pour,
     equipes_competentes_pour,
     id_tache,
@@ -61,7 +61,7 @@ def _lignes_par_tache(payload: PayloadGreenSIG) -> list[dict[str, object]]:
                 "tache_id": id_tache(tache.id),
                 "type_tache": types_par_id.get(tache.id_type_tache_id, "?"),
                 "charge_estimee_heures": tache.charge_estimee_heures,
-                "duree_jours_calculee": duree_jours_pour(tache.charge_estimee_heures),
+                "duree_heures_calculee": duree_heures_pour(tache.charge_estimee_heures),
                 "nb_ressources_compatibles": nb_compatibles,
                 "source_compatibilite": source_compatibilite,
                 "statut": "traduit" if nb_compatibles > 0 else "rejeté : aucune ressource compatible",

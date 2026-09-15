@@ -235,6 +235,7 @@ function construireInstance(
   // réenregistrement d'une instance qui en avait.
   contraintesNonEditables: Contrainte[] = [],
   uniteTemps: UniteTemps = "jours",
+  joursFermes: number[] = [0, 6],
 ): InstanceTRCO {
   const ancrage = aujourdhui();
   // Point de référence unique pour le motif hebdomadaire, dans le même référentiel que
@@ -313,6 +314,7 @@ function construireInstance(
       .concat(contraintesNonEditables),
     objectifs: construireObjectifs(objectifs),
     unite_temps: uniteTemps,
+    jours_fermes: joursFermes,
   };
 }
 
@@ -385,6 +387,9 @@ export function IngestionDialog({
   const [uniteTemps, setUniteTemps] = useState<UniteTemps>(
     instanceDepart?.unite_temps === "heures" ? "heures" : "jours",
   );
+  // Jours fermés par défaut (correction post-solveur, dsl/schema/instance.py::jours_fermes) —
+  // défaut serveur si l'instance de départ ne le précise pas (samedi+dimanche, 0=dimanche..6=samedi).
+  const [joursFermes, setJoursFermes] = useState<number[]>(instanceDepart?.jours_fermes ?? [0, 6]);
   const [taches, setTaches] = useState<TacheLigne[]>(
     instanceDepart ? instanceDepart.taches.map(tacheVersLigne) : [nouvelleTache()],
   );
@@ -493,6 +498,7 @@ export function IngestionDialog({
       objectifs,
       contraintesNonEditables,
       uniteTemps,
+      joursFermes,
     );
     if (scenarioDeBase) {
       creerScenario.mutate(
@@ -697,6 +703,7 @@ export function IngestionDialog({
                 )}
 
                 <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
+                <SelecteurJoursFermes valeurs={joursFermes} onChange={setJoursFermes} />
 
                 <OngletsTRCO
                   taches={taches}
@@ -750,6 +757,7 @@ export function IngestionDialog({
                   />
 
                   <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
+                  <SelecteurJoursFermes valeurs={joursFermes} onChange={setJoursFermes} />
 
                   <OngletsTRCO
                     taches={taches}
@@ -1977,6 +1985,49 @@ function SelecteurUniteTemps({
       </Select>
       <p className="text-xs text-muted-foreground">
         Unité des durées/échéances de cette instance — jamais un mélange des deux.
+      </p>
+    </div>
+  );
+}
+
+// Jours de la semaine fermés par défaut (dsl/schema/instance.py::InstanceTRCO.jours_fermes) —
+// consommé uniquement par la correction post-solveur (validation_engine/jours_non_ouvres.py),
+// jamais par le solveur généré ni par ContrainteDisponibiliteRessource (mécanisme séparé, opt-in,
+// propre à chaque ressource, réglé plus bas dans le formulaire). Même patron de boutons que le
+// motif hebdomadaire par ressource ci-dessus, mais un seul réglage partagé par toute l'instance.
+function SelecteurJoursFermes({
+  valeurs,
+  onChange,
+}: {
+  valeurs: number[];
+  onChange: (v: number[]) => void;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <Label>Jours fermés par défaut</Label>
+      <div className="flex items-center gap-1" title="Jours fermés par défaut pour toutes les ressources">
+        {NOMS_JOURS_SEMAINE_COURTS.map((nom, jourSemaine) => {
+          const actif = valeurs.includes(jourSemaine);
+          return (
+            <button
+              key={jourSemaine}
+              type="button"
+              onClick={() =>
+                onChange(actif ? valeurs.filter((j) => j !== jourSemaine) : [...valeurs, jourSemaine])
+              }
+              className={`rounded px-1.5 py-1 text-xs ${
+                actif ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {nom}
+            </button>
+          );
+        })}
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Une tâche que le solveur placerait sur un de ces jours est décalée après coup au prochain
+        jour ouvert — n'affecte jamais le solveur généré lui-même, seul le planning final en tient
+        compte.
       </p>
     </div>
   );
