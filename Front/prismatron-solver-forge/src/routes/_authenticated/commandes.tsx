@@ -1,7 +1,17 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, CheckCircle2, ClipboardList, Clock } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ClipboardList, Clock, Plus, X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -11,7 +21,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageHeader, EmptyState } from "@/components/app-page";
-import { useCommandes, type StatutCommande } from "@/integrations/prisme";
+import { FormulaireNouvelleCommande } from "@/components/commandes/formulaire-nouvelle-commande";
+import {
+  useCommandes,
+  useInstance,
+  useInstances,
+  useLabelsInstances,
+  type StatutCommande,
+} from "@/integrations/prisme";
 import { aujourdhui, debutJour, formatDateRelative } from "@/lib/dates-relatives";
 
 export const Route = createFileRoute("/_authenticated/commandes")({
@@ -92,6 +109,54 @@ function BadgeStatut({ commande }: { commande: StatutCommande }) {
   );
 }
 
+// Choix de l'atelier (instance) concerné par la nouvelle commande, puis le même formulaire que
+// l'onglet Flux d'une instance (`FormulaireNouvelleCommande`, jamais dupliqué) — cette page
+// couvrant tous les ateliers à la fois, contrairement à l'onglet Flux déjà scopé à une instance,
+// il lui faut ce sélecteur en plus.
+function SectionNouvelleCommandeGlobale() {
+  const { data: instances } = useInstances();
+  const labels = useLabelsInstances();
+  const [instanceId, setInstanceId] = useState<string | null>(null);
+  const { data: instance, isLoading: instanceEnChargement } = useInstance(instanceId);
+
+  return (
+    <div className="glass space-y-3 rounded-2xl p-4">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold">Nouvelle commande</h3>
+        {instanceId && (
+          <Button size="sm" variant="ghost" onClick={() => setInstanceId(null)}>
+            <X className="mr-1.5 h-3.5 w-3.5" /> Changer d'atelier
+          </Button>
+        )}
+      </div>
+
+      <div className="max-w-sm space-y-1">
+        <Label>Atelier</Label>
+        <Select value={instanceId ?? undefined} onValueChange={setInstanceId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Choisir l'atelier concerné" />
+          </SelectTrigger>
+          <SelectContent>
+            {(instances ?? []).map((inst) => {
+              const info = labels.get(inst.instance_id);
+              return (
+                <SelectItem key={inst.instance_id} value={inst.instance_id}>
+                  {info ? info.label : inst.instance_id} · {inst.client_id}
+                </SelectItem>
+              );
+            })}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {instanceId && instanceEnChargement && (
+        <p className="text-xs text-muted-foreground">Chargement de l'atelier...</p>
+      )}
+      {instanceId && instance && <FormulaireNouvelleCommande instance={instance} />}
+    </div>
+  );
+}
+
 function CommandesPage() {
   const { data: commandes, isLoading } = useCommandes();
 
@@ -102,10 +167,11 @@ function CommandesPage() {
           title="Commandes"
           desc="Suivez les commandes clients à travers tous les ateliers — échéance et date de début d'exécution prévues."
         />
+        <SectionNouvelleCommandeGlobale />
         <EmptyState
           icon={ClipboardList}
           title="Aucune commande pour l'instant"
-          desc="Une commande relie des tâches déjà présentes dans un atelier à une échéance client. Ajoutez-en une depuis l'onglet « Flux » d'une instance, page Instances."
+          desc="Une commande relie des tâches déjà présentes dans un atelier à une échéance client — choisissez un atelier ci-dessus pour en ajouter une."
         />
       </>
     );
@@ -119,6 +185,8 @@ function CommandesPage() {
         title="Commandes"
         desc="Suivez les commandes clients à travers tous les ateliers — échéance et date de début d'exécution prévues."
       />
+
+      <SectionNouvelleCommandeGlobale />
 
       <div className="glass overflow-hidden rounded-2xl">
         <div className="overflow-x-auto">
