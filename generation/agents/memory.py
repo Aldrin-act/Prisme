@@ -19,13 +19,23 @@ AUCUNE_TENTATIVE = "Aucune tentative précédente dans cette génération."
 _LONGUEUR_MAX_PROBLEME = 300
 
 
-def formater_entree(numero: int, probleme: str, cause: str, *, cible: str | None = None) -> str:
+def formater_entree(
+    numero: int, probleme: str, cause: str, *, cible: str | None = None, correctif: str | None = None
+) -> str:
     """Une ligne d'historique pour la tentative `numero` — `probleme` tronqué
     pour ne pas faire grandir le prompt sans borne sur les dix tentatives
     possibles (`MAX_TENTATIVES_REPARATION`). `cible` (`"solveur"` ou
     `"tests"`) uniquement pour le chemin `corriger_solveur_ou_tests`
-    (§6.6bis) ; `None` pour `corriger_code`, où c'est toujours le solveur."""
+    (§6.6bis) ; `None` pour `corriger_code`, où c'est toujours le solveur.
+
+    `correctif` : ce que le Debugger a réellement modifié à cette tentative, tel qu'il le
+    résume lui-même — sans lui, la consigne « ne rejoue jamais un correctif déjà tenté » était
+    invérifiable (seule la cause supposée restait en mémoire, jamais le changement fait)."""
     probleme_tronque = probleme[:_LONGUEUR_MAX_PROBLEME]
+    entree = f"Tentative {numero} : problème = {probleme_tronque} → "
     if cible is not None:
-        return f"Tentative {numero} : problème = {probleme_tronque} → {cible} corrigé, cause identifiée = {cause}"
-    return f"Tentative {numero} : problème = {probleme_tronque} → cause identifiée = {cause}"
+        entree += f"{cible} corrigé, "
+    entree += f"cause identifiée = {cause}"
+    if correctif:
+        entree += f" ; correctif appliqué = {correctif[:_LONGUEUR_MAX_PROBLEME]}"
+    return entree

@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING, Any, get_args
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
-from dsl.schema import Contrainte, Objectif
+from dsl.schema import Contrainte, InstanceTRCO, Objectif
 from generation.agents.base import ErreurReponseAgentInvalide, extraire_texte_brut
 from generation.agents.client_llm import _avec_retry
 
@@ -155,3 +155,85 @@ def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> Result
             Justification(contrainte=j.contrainte, raison=j.raison) for j in donnees.justifications
         ),
     )
+
+
+class _SchemaDescriptionAtelier(BaseModel):
+    description_metier: str = Field(
+        description="Description du processus métier de l'atelier (nature du processus, étapes, "
+        "acteurs) déduite uniquement de l'instance T-R-C-O fournie — jamais de contexte absent "
+        "des données."
+    )
+
+
+_PROMPT_SYSTEME_DESCRIPTION = (
+    "Tu es un analyste industriel. À partir du résumé d'une instance de planification déjà "
+    "structurée (ressources, compétences, produits, tâches, contraintes), tu rédiges une "
+    "description métier concise de l'atelier qu'elle représente — quelques phrases, jamais une "
+    "description du format de données lui-même, jamais un identifiant technique recopié, jamais "
+    "un point que les données ne permettent pas de déduire. Tu réponds toujours en JSON strict, "
+    'sous la forme {"description_metier": "..."}.'
+)
+
+# Au-delà, les noms d'exemple n'apportent plus rien à la description et font grossir le prompt
+# sans borne — une instance alimentée par des commandes peut compter des centaines de tâches.
+_NB_MAX_EXEMPLES_DESCRIPTION = 30
+
+
+def _resumer_instance_pour_description(instance: InstanceTRCO) -> str:
+    """Résumé compact et borné de l'instance pour `decrire_atelier`, plutôt que son JSON complet :
+    les tâches explosées depuis des gammes de commandes portent des identifiants générés
+    (`cmd-1a2b3c4d_0_DECOUPE`) et se répètent d'une commande à l'autre — seuls les produits, les
+    noms d'étapes distincts, les ressources et les types de contraintes décrivent l'atelier."""
+    from collections import Counter
+
+    ressources = [
+        f"- {r.nom or r.id}" + (f" (compétences : {', '.join(r.competences)})" if r.competences else "")
+        for r in instance.ressources[:_NB_MAX_EXEMPLES_DESCRIPTION]
+    ]
+    produits = Counter(t.produit for t in instance.taches if t.produit)
+    noms_taches = list(dict.fromkeys(t.nom for t in instance.taches if t.nom))[:_NB_MAX_EXEMPLES_DESCRIPTION]
+    types_contraintes = Counter(c.type for c in instance.contraintes)
+    competences_requises = sorted({c.competence for c in instance.contraintes if c.type == "competence_requise"})
+    produits_texte = ", ".join(f"{p} ({n})" for p, n in produits.most_common(_NB_MAX_EXEMPLES_DESCRIPTION))
+    competences_texte = ", ".join(competences_requises[:_NB_MAX_EXEMPLES_DESCRIPTION])
+    contraintes_texte = ", ".join(f"{t} ({n})" for t, n in sorted(types_contraintes.items()))
+    lignes = [
+        f"Unité de temps : {instance.unite_temps}",
+        f"{len(instance.ressources)} ressource(s) :",
+        *ressources,
+        f"{len(instance.taches)} tâche(s).",
+        "Produits (nombre de tâches) : " + (produits_texte or "non renseignés"),
+        "Noms d'étapes distincts : " + (", ".join(noms_taches) or "non renseignés"),
+        "Compétences requises : " + (competences_texte or "aucune"),
+        "Contraintes par type : " + (contraintes_texte or "aucune"),
+        "Objectifs : " + ", ".join(o.type for o in instance.objectifs),
+    ]
+    return "\n".join(lignes)
+
+
+def decrire_atelier(modele: BaseChatModel, instance: InstanceTRCO) -> str:
+    """Résume en langage naturel l'atelier que représente une instance T-R-C-O **déjà
+    construite** (ex. import CSV/JSON déterministe, `adapters/csv_import`/`adapters/json_import`)
+    — contrairement à `comprendre_donnees_erp` ci-dessus, ne produit ni ne modifie jamais la
+    structure T-R-C-O elle-même, uniquement une description : l'instance qui en résulte reste
+    exactement celle déjà validée par le garde-fou déterministe (§6.7), jamais réinterprétée par
+    le LLM. Un chemin d'ingestion déterministe (CSV/JSON) n'a autrement aucune `description_metier`
+    (champ resté `None`, voir `api/etat.py`)."""
+    prompt = (
+        "Voici le résumé d'une instance de planification d'atelier :\n\n"
+        f"{_resumer_instance_pour_description(instance)}\n\n"
+        "Rédige une description métier concise (3 à 6 phrases) de l'atelier que cette instance "
+        "représente : nature du processus, produits fabriqués, étapes principales, ressources "
+        "impliquées. Si les noms de tâches ou de produits ne sont pas renseignés, dis simplement "
+        "que le processus n'est décrit que structurellement, sans inventer de secteur ni d'étape."
+    )
+    structure = modele.with_structured_output(_SchemaDescriptionAtelier, include_raw=True, method="json_mode")
+    sortie = _avec_retry(structure.invoke)(
+        [SystemMessage(content=_PROMPT_SYSTEME_DESCRIPTION), HumanMessage(content=prompt)]
+    )
+    if sortie["parsing_error"] is not None:
+        reponse_brute = extraire_texte_brut(sortie["raw"])
+        raise ErreurReponseAgentInvalide(
+            f"réponse non conforme au schéma reçue de l'agent : {reponse_brute[:200]!r}"
+        ) from sortie["parsing_error"]
+    return sortie["parsed"].description_metier

@@ -1,20 +1,26 @@
 {mission}
 
-## Structure de cette famille d'instances (types uniquement, jamais des valeurs)
+## Structure de l'instance (types uniquement, jamais des valeurs)
 
-Cette structure (types de contraintes + types d'objectifs) est la clé qui décide quelles instances
-futures réutiliseront le solveur que ce pipeline s'apprête à générer — toute instance partageant
-exactement cette structure le réexécutera tel quel, avec des valeurs potentiellement très
-différentes de celles-ci :
+Le solveur que ce pipeline s'apprête à générer sert **uniquement cette instance**, mais il sera
+réexécuté tel quel à chaque évolution de ses données — notamment à chaque commande client, qui
+ajoute des tâches, des précédences, des compétences requises et des échéances. Tant que les types
+ci-dessous ne changent pas, aucune régénération n'a lieu : les valeurs, elles, peuvent devenir très
+différentes de celles d'aujourd'hui.
 
 - Types de contraintes présents : {types_contraintes}
 - Types d'objectifs présents : {types_objectifs}
-- Ordre de grandeur (exemple, jamais une borne à coder en dur) : {nb_taches} tâche(s),
-  {nb_ressources} ressource(s)
+- Taille actuelle (jamais une borne à coder en dur — les commandes la font grossir) :
+  {nb_taches} tâche(s), {nb_ressources} ressource(s)
 
 Ne mentionne jamais une valeur précise (identifiant de tâche, échéance, poids d'objectif...) dans ta
-réponse — uniquement les types ci-dessus. `contraintes_a_couvrir` doit se limiter aux types
-réellement présents dans cette structure, pas à la liste complète des types possibles du DSL.
+réponse — uniquement les types ci-dessus. `contraintes_a_couvrir` doit couvrir **chacun** des
+types de contraintes présents ci-dessus (une règle par type au minimum, `competence_requise` et
+`taille_lot` compris même si le solveur n'a rien à en faire — dis-le alors
+explicitement) et se limiter à eux, jamais à la liste complète des types possibles du DSL.
+Mentionne aussi, si c'est pertinent pour ces types, les points de la mission qui piègent le plus
+souvent : borne d'`horizon` quand il y a des indisponibilités, événement initial du réservoir pour
+les matières, échéances non garantissables par construction pour une heuristique.
 
 ## Ton rôle : Agent Analyste
 
@@ -33,11 +39,11 @@ mission.
 ## Outil disponible (facultatif)
 
 Si l'outil `rechercher_instances_similaires` t'est proposé, tu peux
-l'appeler pour savoir si un solveur a déjà été validé et enregistré pour
-cette même structure de contraintes et ces mêmes objectifs, chez ce client
-ou chez un autre — purement informatif, ça n'a aucune influence sur ta
-spécification (toujours la même quelle que soit la réponse de l'outil) : ce
-n'est pas à toi de décider de réutiliser ou non un solveur existant.
+l'appeler pour savoir si des solveurs ont déjà été validés pour une
+structure de contraintes et d'objectifs identique — purement informatif :
+un solveur ne sert jamais une autre instance que la sienne, rien ne sera
+réutilisé, et ta spécification doit être la même quelle que soit la
+réponse. Dans le doute, ne l'appelle pas.
 
 ## Format de réponse exigé
 

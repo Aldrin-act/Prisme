@@ -1,11 +1,18 @@
-# Prompt de génération — solveur FJSP pour le noyau minimal T-R-C-O
+# Mission commune — solveur FJSP généré pour une instance T-R-C-O
 
-Tu es un générateur de code. Écris un module Python unique qui résout le
-Flexible Job-Shop Scheduling Problem (FJSP) pour le noyau minimal du DSL
-T-R-C-O de PRISME : précédence, compatibilité ressource-tâche, durées,
-optimisation du ou des objectifs déclarés dans `instance.objectifs`
-(`minimiser_makespan` est le cas par défaut et le plus courant, mais pas le
-seul possible — voir plus bas).
+Ce document est le contrat commun à tous les agents du pipeline de génération de PRISME. Le
+pipeline, dans son ensemble, doit produire **un module Python unique** qui résout le Flexible
+Job-Shop Scheduling Problem (FJSP) décrit par le DSL T-R-C-O : précédence, compatibilité
+ressource-tâche, durées, extensions optionnelles présentes dans l'instance, et optimisation du ou
+des objectifs déclarés dans `instance.objectifs` (`minimiser_makespan` est le cas par défaut et le
+plus courant, mais pas le seul possible — voir plus bas). Seuls les agents Développeur et Debugger
+écrivent ce module ; les autres s'appuient sur ce contrat pour leur propre rôle, précisé à la suite
+de ce document.
+
+Ce module est généré **une seule fois** pour une instance donnée, puis figé et **réexécuté sur
+cette même instance** à chaque évolution de ses données (nouvelle commande, durée modifiée,
+ressource indisponible...) — sans jamais rappeler l'IA. Il doit donc lire toutes les valeurs dans
+`instance` au moment de l'exécution, jamais figer une valeur vue au moment de l'écrire.
 
 ## Contrat exigé
 
@@ -42,8 +49,9 @@ comme si ces deux paramètres n'existaient pas.
   que `minimiser_makespan` (le cas le plus courant), cela reste simplement
   "planning légal de makespan minimal", comme avant.
 - L'algorithme à utiliser est celui recommandé par l'agent Benchmarker en
-  amont dans le pipeline (voir le plan technique de l'agent Architecte
-  ci-joint) : `ortools.sat.python.cp_model` (CP-SAT) par défaut, ou un
+  amont dans le pipeline (repris par le plan technique de l'agent Architecte,
+  fourni aux agents qui écrivent ou corrigent le code) :
+  `ortools.sat.python.cp_model` (CP-SAT) par défaut, ou un
   algorithme alternatif (génétique, ACO, recuit simulé, tabou, glouton +
   recherche locale, règles de dispatching) pour les instances où CP-SAT ne
   passe pas à l'échelle. N'utilise jamais un autre algorithme que celui
@@ -59,6 +67,25 @@ comme si ces deux paramètres n'existaient pas.
   itérations...), jamais par une limite de temps écoulé — non reproductible
   d'une machine à l'autre, et de toute façon appliquée par le bac à sable
   d'exécution (Étape 7, limites CPU/mémoire, kill au dépassement).
+  **En CP-SAT**, jamais `max_time_in_seconds` (temps réel, donc résultat
+  variable selon la charge de la machine) : configure le solveur ainsi, pour
+  une recherche reproductible et bornée (le bac à sable n'a qu'**un seul
+  vCPU** et 512 Mo de mémoire — plusieurs workers ne feraient que se
+  partager ce cœur) :
+  ```python
+  solveur = cp_model.CpSolver()
+  solveur.parameters.num_workers = 1                # déterministe, un seul vCPU disponible
+  solveur.parameters.random_seed = 0
+  solveur.parameters.max_deterministic_time = 10.0  # temps déterministe, indépendant de la machine
+  ```
+  Si la limite est atteinte avec une solution (`FEASIBLE`), renvoie-la : ce
+  n'est pas un échec. Renvoie `None` seulement pour `INFEASIBLE`, ou si
+  aucune solution n'a été trouvée.
+- **Budget d'exécution** : chaque exécution tourne dans un conteneur tué au
+  bout de **30 secondes** (réelles, 1 vCPU, 512 Mo). Tout algorithme doit rendre
+  la main bien avant — un nombre fixe d'itérations/générations dimensionné
+  pour une instance de plusieurs centaines de tâches, pas seulement pour le
+  petit banc de validation.
 - **Contraintes dures = construction, jamais pénalité** : que l'algorithme
   soit CP-SAT ou un algorithme alternatif, une contrainte dure (précédence,
   compatibilité ressource-tâche, non-chevauchement d'une ressource) doit
@@ -66,16 +93,17 @@ comme si ces deux paramètres n'existaient pas.
   terme de pénalité dans une fonction de fitness/coût qu'un individu
   pourrait quand même faire gagner malgré la violation. Pour un algorithme
   non-CP-SAT, cela veut dire un décodeur qui construit le planning en
-  respectant ces règles au moment même où il place chaque tâche (voir le
-  plan technique de l'agent Architecte pour le schéma exact) — la recherche
-  (génétique, ACO, recuit...) n'optimise alors que le makespan du planning
-  déjà légal, jamais un score composite mêlant faisabilité et qualité.
-- `Echeance`/`CompetenceRequise`/`ContrainteCapacite`/`ContrainteIncompatibilite`/
+  respectant ces règles au moment même où il place chaque tâche (schéma
+  *serial schedule generation scheme* détaillé dans le plan technique de
+  l'agent Architecte) — la recherche (génétique, ACO, recuit...) n'optimise
+  alors que l'objectif du planning déjà légal, jamais un score composite
+  mêlant faisabilité et qualité. Seule exception encadrée : `Echeance`, voir
+  la section dédiée plus bas.
+- `CompetenceRequise`/`ContrainteCapacite`/`ContrainteIncompatibilite`/
   `ContrainteDisponibiliteRessource`/`ContrainteTailleLot`/`ContrainteChangementSerie`
-  sont des extensions optionnelles du noyau minimal (absentes de la plupart des
-  instances) : si l'instance contient des `Echeance`, encode-les en
-  contrainte dure sur la fin de la tâche concernée (`modele.Add(fin <=
-  echeance)`) — sinon ignore-les, elles n'existent pas. `CompetenceRequise`
+  sont des extensions optionnelles du noyau minimal : si l'instance n'en
+  contient pas, ignore-les, elles n'existent pas. `Echeance` a sa propre
+  section plus bas (fréquente depuis que les commandes en dérivent). `CompetenceRequise`
   ne demande aucun traitement côté solveur : `InstanceTRCO` garantit déjà,
   avant que `resoudre` ne soit appelé, que toute `CompatibiliteRessourceTache`
   respecte les compétences requises — `CompatibiliteRessourceTache` reste la
@@ -176,6 +204,56 @@ comme si ces deux paramètres n'existaient pas.
   existe déjà naturellement dans ce type de décodeur, rien de nouveau à
   construire.
 
+## Instance vivante : les commandes font grossir l'instance entre deux exécutions
+
+Le module est réexécuté sur la même instance à chaque commande client ajoutée. La notion de
+« commande » n'existe pas dans le DSL — tu ne la vois jamais comme telle — mais chaque commande
+modifie l'instance avant la réexécution suivante :
+
+- elle ajoute des `Tache` neuves, dont l'identifiant est généré (ex. `cmd-1a2b3c4d_0_DECOUPE`)
+  et dont `produit`/`quantite` sont renseignés quand elles viennent d'une gamme produit ;
+- elle ajoute les `Precedence` qui enchaînent les étapes de chaque gamme — y compris **plusieurs
+  prédécesseurs pour une même tâche** (sous-produits qui convergent vers un assemblage), et des
+  tâches sans aucune précédence ;
+- elle ajoute des `CompetenceRequise` et les `CompatibiliteRessourceTache` qui en sont dérivées ;
+- si la commande a une date limite, elle ajoute **une `Echeance` identique pour chacune de ses
+  tâches** ;
+- elle peut remplacer la durée d'une tâche existante sur toutes ses ressources compatibles.
+
+Conséquences pour le code :
+
+- ne suppose jamais un nombre de tâches, un format ou un préfixe d'identifiant, un nombre de
+  produits ou une forme de graphe de précédence (chaînes simples, arbres convergents et tâches
+  isolées coexistent dans la même instance) — parcours toujours ce qui est présent ;
+- `Tache.produit`, `Tache.quantite`, `Tache.statut` et `Tache.nom` sont purement informatifs :
+  jamais lus pour décider d'une affectation, d'un ordre, d'une durée ou d'un objectif ;
+- l'instance peut compter plusieurs fois plus de tâches à une exécution future qu'au moment de la
+  génération : la complexité doit rester maîtrisée (voir « Précalcule tout » et « Budget
+  d'exécution »).
+
+## Échéances (`Echeance`)
+
+`Echeance(tache, echeance)` : la tâche doit **finir** au plus tard à l'instant `echeance` (même
+unité que les durées). C'est une contrainte **dure**, vérifiée comme telle par le garde-fou de
+faisabilité en aval : un planning qui en dépasse une est rejeté. Si aucune `Echeance` n'est
+présente, ignore cette section.
+
+- **CP-SAT** : `modele.Add(fin[tache] <= echeance)` pour chaque `Echeance`. Si le modèle devient
+  infaisable (une commande impossible à tenir), renvoie `None` — c'est le comportement attendu,
+  l'humain décide ensuite ; ne relâche jamais une échéance toi-même.
+- **Décodeur non-CP-SAT** : une échéance ne peut pas être garantie au moment où l'on place une
+  tâche (la placer au plus tôt est déjà le mieux possible pour elle). Procède ainsi :
+  1. le décodeur place les tâches comme d'habitude, puis compte `nb_echeances_depassees` sur le
+     planning obtenu ;
+  2. la fitness renvoie un **tuple** `(nb_echeances_depassees, objectif_principal,
+     terme_priorite)` — la comparaison lexicographique des tuples Python fait qu'un planning qui
+     respecte toutes les échéances bat toujours un planning qui en dépasse une, quel que soit son
+     objectif ;
+  3. oriente la recherche vers les échéances : au moins un individu/une solution initiale trié par
+     échéance croissante (règle EDD, tâches sans échéance en dernier) ;
+  4. à la fin, si la meilleure solution trouvée a `nb_echeances_depassees > 0`, renvoie `None` —
+     jamais un planning qui dépasse une échéance.
+
 ## Matières (`DeclarationMateriau` + `ConsommationMatiere`)
 
 Aucune `DeclarationMateriau` dans `instance.contraintes` sur la très grande majorité des
@@ -192,26 +270,30 @@ réapprovisionnement à modéliser : `stock_initial` couvre tout l'horizon de pl
 - **CP-SAT** : utilise la primitive dédiée `AddReservoirConstraint`, faite exactement pour ce
   cas (un niveau qui varie par événements datés, jamais négatif). Pour chaque `DeclarationMateriau`,
   construit la liste des événements de consommation à partir des `ConsommationMatiere` qui le
-  citent et des variables `debut` déjà créées pour les tâches concernées :
+  citent et des variables `debut` déjà créées pour les tâches concernées. **Attention : le
+  réservoir de CP-SAT démarre toujours au niveau 0** — sans événement initial qui apporte le
+  stock à l'instant 0, la toute première consommation fait passer le niveau sous zéro et le
+  modèle est infaisable. Ajoute donc toujours cet événement de départ :
   ```python
-  declarations_materiaux = [c for c in instance.contraintes if isinstance(c, DeclarationMateriau)]
-  for declaration in declarations_materiaux:
-      consommations = [c for c in instance.contraintes
-                        if isinstance(c, ConsommationMatiere) and c.materiau == declaration.materiau]
+  # Une seule fois, avant la construction des contraintes (voir "Précalcule tout").
+  consommations_par_materiau: dict[str, list[ConsommationMatiere]] = {}
+  for c in instance.contraintes:
+      if isinstance(c, ConsommationMatiere):
+          consommations_par_materiau.setdefault(c.materiau, []).append(c)
+
+  for declaration in (c for c in instance.contraintes if isinstance(c, DeclarationMateriau)):
+      consommations = consommations_par_materiau.get(declaration.materiau, [])
       if not consommations:
           continue
-      temps = [debut[c.tache] for c in consommations]  # mêmes variables debut que plus haut
-      changements_niveau = [-int(c.quantite) for c in consommations]
-      modele.AddReservoirConstraint(
-          temps, changements_niveau,
-          min_level=0, max_level=int(declaration.stock_initial),
-      )
+      stock = int(declaration.stock_initial)
+      temps = [0] + [debut[c.tache] for c in consommations]  # événement initial à l'instant 0
+      changements_niveau = [stock] + [-int(c.quantite) for c in consommations]
+      modele.AddReservoirConstraint(temps, changements_niveau, min_level=0, max_level=stock)
   ```
-  (`AddReservoirConstraint` exige des niveaux entiers — arrondis/mise à l'échelle si
-  `stock_initial`/`quantite` ne sont pas des entiers dans l'instance, cohérence à garder entre le
-  facteur d'échelle utilisé pour `min_level`/`max_level` et celui utilisé pour
-  `changements_niveau`.) Pas de `max_level` artificiel au-delà de `stock_initial` : le stock ne
-  peut que décroître dans ce v1, jamais dépasser son niveau de départ.
+  (`AddReservoirConstraint` exige des niveaux entiers — si `stock_initial`/`quantite` ne sont pas
+  entiers dans l'instance, multiplie **tous** les niveaux, stock initial compris, par le même
+  facteur d'échelle avant `int(...)`.) Pas de `max_level` au-delà de `stock_initial` : le stock ne
+  peut que décroître dans ce v1.
 - **Décodeur non-CP-SAT** (génétique/ACO/glouton/dispatching) : maintiens un compteur de stock
   courant par matériau (initialisé à `stock_initial`), précalculé une seule fois en table
   `consommations_par_tache` (jamais une recherche dans `instance.contraintes` à l'intérieur de la
@@ -241,24 +323,15 @@ les prochains jours perturbés par une replanification ; seul le reste de l'hori
 En CP-SAT :
 
 ```python
-operations_precedentes = {
-    (op.tache, op.ressource): op.debut
-    for op in (planning_precedent.operations if planning_precedent else [])
-}
-for (tache_id, ressource_id), debut_var in debut.items():  # mêmes variables que plus haut
-    debut_precedent = operations_precedentes.get((tache_id, ressource_id))
-    if (
-        horizon_gele_jours > 0
-        and debut_precedent is not None
-        and debut_precedent < horizon_gele_jours
-        and (tache_id, ressource_id) in presence  # toujours une compatibilité valide
-    ):
-        modele.Add(presence[(tache_id, ressource_id)] == 1)
-        modele.Add(debut_var == debut_precedent)
+if planning_precedent is not None and horizon_gele_jours > 0:
+    for op in planning_precedent.operations:
+        if op.debut < horizon_gele_jours and (op.tache, op.ressource) in presence:  # compatibilité toujours valide
+            modele.Add(presence[(op.tache, op.ressource)] == 1)
+            modele.Add(debut[op.tache] == op.debut)
 ```
 
-(`presence`/`debut` : les mêmes variables déjà construites pour `AddNoOverlap`/`AddCumulative`
-plus haut — jamais redéfinies.) Pour un décodeur non-CP-SAT : avant de lancer le décodeur normal,
+(`presence`/`debut` : les mêmes variables déjà construites plus haut, avec les clés décrites dans
+« Noms des variables CP-SAT » — jamais redéfinies.) Pour un décodeur non-CP-SAT : avant de lancer le décodeur normal,
 place d'abord toutes les opérations gelées (dans leur `(ressource, debut)` fixe, en marquant la
 ressource occupée jusqu'à `debut + duree`), puis laisse le décodeur traiter les tâches restantes
 normalement — le mécanisme "contraintes dures = construction, jamais pénalité" (voir plus haut)
@@ -280,10 +353,11 @@ Si plusieurs objectifs sont présents, combine-les par **somme pondérée** (cha
 fitness pour un algorithme non-CP-SAT) — jamais un seul objectif choisi en
 ignorant les autres. `objectif.poids`, `objectif.methode`,
 `objectif.ressources_cibles` sont des **valeurs lues à l'exécution**, jamais
-des constantes que tu figerais toi-même au moment d'écrire le code : deux
-instances peuvent partager le même *type* d'objectif (donc le même code
-généré, principe "generate once, re-execute many") avec des valeurs
-différentes.
+des constantes que tu figerais toi-même au moment d'écrire le code : le
+même module est réexécuté sur la même instance à chaque évolution de ses
+données (principe « générer une fois, réexécuter souvent »), et un
+utilisateur peut modifier un poids ou une méthode sans que le solveur soit
+régénéré.
 
 - `MinimiserMakespan(poids, makespan_cible, penalite_depassement)` : le cas
   par défaut. `makespan_cible`/`penalite_depassement` sont optionnels
@@ -334,9 +408,8 @@ principal, jamais une contrainte.
   tâches ayant une `priorite` déclarée (poids 5 pour priorité 1/critique,
   poids 1 pour priorité 5/faible ; tâches sans `priorite` exclues de la
   somme, aucune contribution). Choisis une `ECHELLE` strictement supérieure
-  au maximum possible de `terme_priorite` (ex. `5 * nb_taches *
-  horizon_max`, `horizon_max` étant la même borne que celle déjà utilisée
-  pour la variable makespan — somme de toutes les durées possibles), puis
+  au maximum possible de `terme_priorite` (ex. `5 * nb_taches * horizon + 1`,
+  `horizon` étant la borne décrite dans la section « Horizon » plus bas), puis
   `modele.Minimize(objectif_principal * ECHELLE + terme_priorite)`. Avec ce
   choix d'échelle, `terme_priorite` ne peut jamais faire préférer un
   planning de moins bonne valeur d'objectif principal — il ne fait que
@@ -348,14 +421,16 @@ principal, jamais une contrainte.
 
 ## Accès aux données de l'instance (noms de champs exacts — ne pas en deviner d'autres)
 
-`InstanceTRCO` n'a que **quatre** champs : `taches`, `ressources`,
-`contraintes`, `objectifs`. Il n'existe **aucun** raccourci du type
-`instance.precedences` ou `instance.compatibilite_ressource_tache` —
+`InstanceTRCO` a exactement ces champs : `taches`, `ressources`, `contraintes`, `objectifs`,
+`unite_temps` (`"jours"` ou `"heures"`, lu uniquement pour la longueur du cycle hebdomadaire des
+indisponibilités) et `jours_fermes` (**jamais lu par le solveur** — les jours fermés sont
+appliqués après coup, hors du module généré). Il n'existe **aucun** raccourci du type
+`instance.precedences`, `instance.compatibilite_ressource_tache` ou `instance.commandes` —
 `contraintes` est une **liste polymorphe unique** (`Precedence |
 CompatibiliteRessourceTache | Echeance | CompetenceRequise |
 ContrainteCapacite | ContrainteIncompatibilite |
 ContrainteDisponibiliteRessource | ContrainteTailleLot |
-ContrainteChangementSerie`), à filtrer par type avec `isinstance` :
+ContrainteChangementSerie | DeclarationMateriau | ConsommationMatiere`), à filtrer par type avec `isinstance` :
 
 ```python
 compatibilites = [c for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)]
@@ -398,7 +473,12 @@ accède, ne les devine jamais par analogie avec un autre projet :
   "Priorité des tâches" plus haut — jamais un champ de contrainte/objectif.
 - `Tache.quantite` (`int | None`) : donnée d'entrée pour `ContrainteTailleLot`
   uniquement (déjà vérifiée en amont) — jamais lue dans le code généré, ni
-  comme durée, ni comme poids, ni comme borne de décision.
+  comme durée, ni comme poids, ni comme borne de décision. Renseignée par les
+  commandes issues d'une gamme : ce n'est **pas** un multiplicateur de durée
+  (la durée à utiliser est déjà dans `CompatibiliteRessourceTache.duree`).
+- `Tache.produit`, `Tache.statut` (`str | None`) : purement informatifs, jamais lus.
+- `DeclarationMateriau.materiau`, `.stock_initial` (`float`), `.unite` (informatif) ;
+  `ConsommationMatiere.tache`, `.materiau`, `.quantite` (`float`) — voir « Matières ».
 - `Tache.id`, `Ressource.id` (type `Identifiant`, une chaîne) sont les
   **seuls** identifiants stables à utiliser partout où une tâche/ressource
   doit être référencée : clé de dictionnaire, gène de chromosome,
@@ -406,6 +486,53 @@ accède, ne les devine jamais par analogie avec un autre projet :
   sont **optionnels** (`str | None`, souvent absents) et pas garantis
   uniques — ne jamais les utiliser comme identifiant, seulement pour de
   l'affichage.
+
+## Noms des variables CP-SAT (une seule convention dans tout le module)
+
+Tous les extraits de ce document supposent exactement ces noms et ces clés — ne les mélange
+jamais avec une autre convention :
+
+- `debut[tache_id]`, `fin[tache_id]` : une variable entière par **tâche** (clé = `Tache.id`) ;
+- `presence[(tache_id, ressource_id)]` : un booléen par couple **compatible** ;
+- `intervalle[(tache_id, ressource_id)]` : l'intervalle optionnel de ce couple
+  (`NewOptionalIntervalVar(debut[tache_id], duree, fin[tache_id], presence[(tache_id, ressource_id)], ...)`) ;
+- `AddExactlyOne(presence[(tache_id, r)] for r in ressources compatibles)` pour chaque tâche.
+
+## Horizon (borne supérieure du temps)
+
+`horizon` borne toutes les variables de temps, la matérialisation des indisponibilités
+récurrentes et l'échelle de la priorité. Trop court, il rend infaisable une instance qui ne l'est
+pas (le solveur renvoie `None` à tort) ; la « somme des durées » seule ne suffit **pas** dès qu'il
+y a des jours d'indisponibilité, des temps de changement de série ou des opérations gelées.
+Calcule-le une fois, au début de `resoudre`, ainsi :
+
+```python
+duree_max_par_tache: dict[str, int] = {}
+for c in instance.contraintes:
+    if isinstance(c, CompatibiliteRessourceTache):
+        duree_max_par_tache[c.tache] = max(duree_max_par_tache.get(c.tache, 0), c.duree)
+horizon = sum(duree_max_par_tache.values())
+horizon += sum(c.duree_setup for c in instance.contraintes if isinstance(c, ContrainteChangementSerie))
+if planning_precedent is not None and horizon_gele_jours > 0:
+    horizon += max((op.debut for op in planning_precedent.operations), default=0)
+
+disponibilites = [c for c in instance.contraintes if isinstance(c, ContrainteDisponibiliteRessource)]
+if disponibilites:
+    longueur_cycle = 7 if instance.unite_temps == "jours" else 168
+    motif_par_ressource: dict[str, set[int]] = {}
+    for c in disponibilites:
+        motif_par_ressource.setdefault(c.ressource, set()).update(c.jours_semaine_indisponibles or [])
+    positions_bloquees = max(len(motif) for motif in motif_par_ressource.values())
+    positions_libres = max(1, longueur_cycle - positions_bloquees)
+    dernier_instant_bloque = max((j for c in disponibilites for j in c.jours_indisponibles), default=0)
+    # Étire l'horizon au prorata des positions bloquées du cycle, puis ajoute la dernière
+    # indisponibilité explicite et une marge d'un cycle + la plus longue tâche.
+    horizon = -(-horizon * longueur_cycle // positions_libres) + dernier_instant_bloque + longueur_cycle
+    horizon += max(duree_max_par_tache.values(), default=0)
+```
+
+Une tâche plus longue que la plus longue plage libre de sa ressource ne pourra jamais être placée :
+c'est une vraie infaisabilité (renvoie `None`), pas un problème d'horizon.
 
 ## Précalcule tout, jamais de recherche répétée dans `instance.contraintes`
 
@@ -416,7 +543,8 @@ ou par évaluation est interdit** — ça transforme un algorithme censé être
 rapide en un algorithme quadratique (ou pire), invisible sur le petit banc
 de validation (1 à 80 tâches, quelques secondes) mais qui explose sur une
 instance réelle de quelques centaines ou milliers de tâches (minutes à
-heures) et dépasse le délai du bac à sable (30 s par défaut).
+heures) et dépasse le délai du bac à sable (30 s). C'est exactement ce qui arrive quand des
+commandes s'accumulent sur une instance générée à petite taille.
 
 Construis chaque table de correspondance **une seule fois**, avant toute
 boucle de recherche/génération, jamais à l'intérieur :
@@ -457,8 +585,8 @@ for c in instance.contraintes:
     jours.update(c.jours_indisponibles)
     if c.jours_semaine_indisponibles:
         # Matérialise le motif récurrent en instants concrets sur tout l'horizon (`horizon`,
-        # déjà connu à ce stade — calculé à partir des durées, voir plus haut/le plan
-        # technique) — une seule fois ici, jamais recalculé à chaque intervalle créé.
+        # calculé juste avant, voir la section « Horizon ») — une seule fois ici, jamais
+        # recalculé à chaque intervalle créé.
         jours.update(jour for jour in range(horizon) if jour % longueur_cycle in c.jours_semaine_indisponibles)
 ```
 

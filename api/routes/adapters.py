@@ -31,6 +31,7 @@ from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import (
     comprendre_donnees_erp,
+    decrire_atelier,
     dsn_lecture_seule_pour_client,
     explorer_base_de_donnees,
 )
@@ -43,8 +44,9 @@ from api.autorisation import verifier_acces_client
 from api.etat import EtatAPI, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
+from dsl.schema import InstanceTRCO
 from generation.agents.base import ErreurReponseAgentInvalide
-from generation.agents.client_llm import construire_modele_comprehension
+from generation.agents.client_llm import construire_modele_comprehension, construire_modele_comprehension_optionnel
 
 if TYPE_CHECKING:
     from estimation import EstimateurDuree
@@ -65,6 +67,27 @@ def _estimateur_duree_optionnel() -> EstimateurDuree | None:
     except ImportError:
         return None
     return estimateur_par_defaut()
+
+
+def _description_metier_optionnelle(
+    modele: BaseChatModel | None, instance: InstanceTRCO, generer: bool
+) -> tuple[str | None, str | None]:
+    """Tentative best-effort de description métier générée par IA pour une instance déjà
+    construite de façon déterministe (import CSV/JSON, `adapters/agent_comprehension::
+    decrire_atelier`) — un chemin d'ingestion direct n'en produit normalement aucune (`None`,
+    voir `api/etat.py`). `generer=False` (défaut des routes ci-dessous) ou `modele=None`
+    (`.[llm]` non installé, voir `construire_modele_comprehension_optionnel`) : aucune tentative,
+    silencieux (pas un aléa, un choix). `generer=True` avec un modèle disponible : tout aléa réel
+    (clé API absente/invalide, timeout, réponse mal formée...) dégrade vers `(None, avertissement)`
+    plutôt que de faire échouer un import par ailleurs valide — même principe que
+    `_estimateur_duree_optionnel` ci-dessus. Renvoie `(description, avertissement)`, l'un des deux
+    valant toujours `None`."""
+    if not generer or modele is None:
+        return None, None
+    try:
+        return decrire_atelier(modele, instance), None
+    except Exception as erreur:  # volontairement large (best-effort) — voir docstring
+        return None, f"description métier non générée automatiquement : {erreur}"
 
 
 @router.post("/greensig/ingerer")
@@ -97,7 +120,9 @@ async def ingerer_depuis_csv(
     commandes: UploadFile | None = File(None),
     delimiteur: str = ",",
     unite_temps: Literal["jours", "heures"] = "jours",
+    generer_description: bool = False,
     etat: EtatAPI = Depends(obtenir_etat),
+    modele: BaseChatModel | None = Depends(construire_modele_comprehension_optionnel),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
     """Ingestion depuis trois fichiers CSV séparés (§5.4) — Tâches, Ressources
@@ -108,7 +133,11 @@ async def ingerer_depuis_csv(
     transmis au solveur tel quel. `delimiteur` (un seul caractère, `,` par
     défaut) s'applique aux quatre fichiers identiquement. `unite_temps`
     ("jours" par défaut, ou "heures") devient `InstanceTRCO.unite_temps`
-    (voir `dsl/schema/instance.py`)."""
+    (voir `dsl/schema/instance.py`). `generer_description` (`False` par défaut, rétrocompatible) :
+    tente une description métier automatique de l'atelier obtenu via l'agent de compréhension
+    (`adapters/agent_comprehension::decrire_atelier`) — jamais une réinterprétation de la
+    structure T-R-C-O elle-même, qui reste exactement celle produite par la traduction
+    déterministe ci-dessus ; best-effort, voir `_description_metier_optionnelle`."""
     verifier_acces_client(utilisateur, client_id)
     _valider_delimiteur(delimiteur)
     fichiers_requis = (taches, ressources, contraintes)
@@ -138,11 +167,20 @@ async def ingerer_depuis_csv(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_id = etat.enregistrer_instance(client_id, resultat.instance, canal_ingestion="csv")
+    description_metier, avertissement_description = _description_metier_optionnelle(
+        modele, resultat.instance, generer_description
+    )
+    instance_id = etat.enregistrer_instance(
+        client_id, resultat.instance, description_metier=description_metier, canal_ingestion="csv"
+    )
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(resultat.instance),
-        "avertissements": list(resultat.avertissements),
+        "description_metier": description_metier,
+        "avertissements": [
+            *resultat.avertissements,
+            *([avertissement_description] if avertissement_description else []),
+        ],
     }
 
 
@@ -151,7 +189,9 @@ def ingerer_depuis_json_avec_competences(
     client_id: str,
     payload: dict[str, Any] = Body(...),
     unite_temps: Literal["jours", "heures"] | None = None,
+    generer_description: bool = False,
     etat: EtatAPI = Depends(obtenir_etat),
+    modele: BaseChatModel | None = Depends(construire_modele_comprehension_optionnel),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
     """Ingestion depuis un JSON « brut avec compétences » (§5.4, `adapters/json_import/`)
@@ -163,7 +203,9 @@ def ingerer_depuis_json_avec_competences(
 
     `unite_temps` (optionnel) l'emporte sur le `"unite_temps"` éventuellement déclaré dans le
     payload : c'est le choix fait à l'import (formulaire d'ingestion) qui tranche, un fichier
-    d'exemple ne portant souvent aucune unité. Absent, le payload décide seul, comme avant."""
+    d'exemple ne portant souvent aucune unité. Absent, le payload décide seul, comme avant.
+
+    `generer_description` : voir `ingerer_depuis_csv` ci-dessus, même mécanisme best-effort."""
     verifier_acces_client(utilisateur, client_id)
     if unite_temps is not None:
         payload = {**payload, "unite_temps": unite_temps}
@@ -174,11 +216,20 @@ def ingerer_depuis_json_avec_competences(
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
-    instance_id = etat.enregistrer_instance(client_id, resultat.instance, canal_ingestion="json")
+    description_metier, avertissement_description = _description_metier_optionnelle(
+        modele, resultat.instance, generer_description
+    )
+    instance_id = etat.enregistrer_instance(
+        client_id, resultat.instance, description_metier=description_metier, canal_ingestion="json"
+    )
     return {
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(resultat.instance),
-        "avertissements": list(resultat.avertissements),
+        "description_metier": description_metier,
+        "avertissements": [
+            *resultat.avertissements,
+            *([avertissement_description] if avertissement_description else []),
+        ],
     }
 
 

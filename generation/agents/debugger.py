@@ -46,6 +46,7 @@ class _SchemaCorrection(BaseModel):
     # Aide au diagnostic/audit (pourquoi le Debugger a changé le code) —
     # jamais bloquant si le LLM l'omet malgré la consigne.
     cause: str | None = Field(default=None, description="Cause identifiée du problème.")
+    correctif: str | None = Field(default=None, description="Ce qui a été modifié dans le code, en une phrase.")
 
 
 @dataclass(frozen=True)
@@ -53,10 +54,29 @@ class ResultatCorrection:
     reponse_brute: str
     code_source: str
     cause: str
+    correctif: str = ""
+
+
+def _contexte_generation(plan_technique: str, algorithme: str | None) -> str:
+    """Plan de l'Architecte + algorithme du Benchmarker, pour le Debugger — sans eux, il ne
+    pouvait ni vérifier « n'utilise jamais un autre algorithme que celui du plan » (mission
+    commune), ni juger un test « au vu du plan technique » (`debugger_tests_sandbox.md`)."""
+    algo = algorithme or "non précisé"
+    plan = plan_technique or "non fourni"
+    return (
+        f"Algorithme imposé : **{algo}** — ne change jamais d'algorithme en corrigeant "
+        f"(la validation applique une tolérance propre à cet algorithme).\n\n{plan}"
+    )
 
 
 def corriger_code(
-    modele: BaseChatModel, code_source: str, probleme: str, *, historique: str = ""
+    modele: BaseChatModel,
+    code_source: str,
+    probleme: str,
+    *,
+    historique: str = "",
+    plan_technique: str = "",
+    algorithme: str | None = None,
 ) -> ResultatCorrection:
     """`historique` : résumé des tentatives de correction précédentes DE
     CETTE MÊME génération (voir `generation/graph.py::_noeud_debugger`) —
@@ -69,7 +89,11 @@ def corriger_code(
     entier avant même l'appel, aucune requête à faire pour l'obtenir."""
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     prompt = gabarit.format(
-        mission=charger_mission(), code=code_source, probleme=probleme, historique=historique or AUCUNE_TENTATIVE
+        mission=charger_mission(),
+        contexte_generation=_contexte_generation(plan_technique, algorithme),
+        code=code_source,
+        probleme=probleme,
+        historique=historique or AUCUNE_TENTATIVE,
     )
 
     donnees, reponse_brute = invoquer_agent_structure(
@@ -79,6 +103,7 @@ def corriger_code(
         reponse_brute=reponse_brute,
         code_source=donnees.code,
         cause=donnees.cause or "non précisée",
+        correctif=donnees.correctif or "",
     )
 
 
@@ -89,6 +114,7 @@ class _SchemaCorrectionTestsSandbox(BaseModel):
     code: str = Field(description="Module Python du solveur, corrigé ou inchangé, complet.")
     tests: str = Field(description="Module de tests, corrigé ou inchangé, complet.")
     cause: str | None = Field(default=None, description="Cause identifiée du problème.")
+    correctif: str | None = Field(default=None, description="Ce qui a été modifié, en une phrase.")
 
 
 @dataclass(frozen=True)
@@ -98,10 +124,18 @@ class ResultatCorrectionTestsSandbox:
     code_source: str
     tests_source: str
     cause: str
+    correctif: str = ""
 
 
 def corriger_solveur_ou_tests(
-    modele: BaseChatModel, code_source: str, code_tests: str, probleme: str, *, historique: str = ""
+    modele: BaseChatModel,
+    code_source: str,
+    code_tests: str,
+    probleme: str,
+    *,
+    historique: str = "",
+    plan_technique: str = "",
+    algorithme: str | None = None,
 ) -> ResultatCorrectionTestsSandbox:
     """Chemin dédié aux échecs de tests sandbox (§6.6bis, voir docstring
     module) : contrairement à `corriger_code`, le Debugger reçoit aussi le
@@ -111,6 +145,7 @@ def corriger_solveur_ou_tests(
     gabarit = CHEMIN_PROMPT_TESTS_SANDBOX.read_text(encoding="utf-8")
     prompt = gabarit.format(
         mission=charger_mission(),
+        contexte_generation=_contexte_generation(plan_technique, algorithme),
         code=code_source,
         tests=code_tests,
         probleme=probleme,
@@ -125,4 +160,5 @@ def corriger_solveur_ou_tests(
         code_source=donnees.code,
         tests_source=donnees.tests,
         cause=donnees.cause or "non précisée",
+        correctif=donnees.correctif or "",
     )

@@ -278,6 +278,21 @@ def construire_modele_comprehension() -> BaseChatModel:
     return construire_modele_pour_agent("comprehension")
 
 
+def construire_modele_comprehension_optionnel() -> BaseChatModel | None:
+    """Variante de `construire_modele_comprehension` ci-dessus pour un usage **best-effort**
+    (ex. description métier automatique sur un import CSV/JSON déterministe,
+    `api/routes/adapters.py::_description_metier_optionnelle`) — un chemin qui doit rester
+    utilisable sans `.[llm]` installé, contrairement aux routes de compréhension elles-mêmes qui
+    en dépendent entièrement. Ne fait *que* couvrir l'absence de la dépendance (`ImportError`,
+    `langchain_openai` non installé) : une clé API absente/invalide construit quand même le
+    client (`ChatOpenAI` ne valide rien à la construction) et échoue seulement au premier appel
+    réel, à la charge de l'appelant."""
+    try:
+        return construire_modele_comprehension()
+    except ImportError:
+        return None
+
+
 def construire_modele_supervision() -> BaseChatModel:
     """Dépendance FastAPI zero-arg (`Depends(...)`) pour l'agent de
     supervision (`supervision/agent.py`, §2, MT7) — même raison d'être que

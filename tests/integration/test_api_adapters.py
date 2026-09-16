@@ -14,7 +14,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 import api.routes.adapters as routes_adapters
-from adapters.agent_comprehension.agent import _SchemaComprehension
+from adapters.agent_comprehension.agent import _SchemaComprehension, _SchemaDescriptionAtelier
 from adapters.agent_comprehension.exploration_bdd import ResultatExplorationBDD
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
@@ -203,6 +203,89 @@ def test_ingestion_depuis_csv_avec_unite_temps_heures() -> None:
         _, instance = etat_test.recuperer_instance(instance_id)
         assert instance.unite_temps == "heures"
         assert etat_test.recuperer_unite_duree(instance_id) == "heures"
+    finally:
+        app.dependency_overrides.clear()
+
+
+_FICHIERS_CSV_MINIMAUX = {
+    "taches": ("taches.csv", b"id\nT1\n", "text/csv"),
+    "ressources": ("ressources.csv", b"id\nR1\n", "text/csv"),
+    "contraintes": (
+        "contraintes.csv",
+        b"type,tache,ressource,duree_jours\ncompatibilite_ressource_tache,T1,R1,10\n",
+        "text/csv",
+    ),
+}
+
+
+def test_ingestion_depuis_csv_sans_generer_description_n_appelle_jamais_le_modele() -> None:
+    """`generer_description` par défaut (`False`) : aucune tentative, même si un modèle est
+    disponible — comportement rétrocompatible, jamais un aléa réseau pour un import CSV
+    ordinaire (voir `_description_metier_optionnelle`)."""
+    etat_test = EtatAPI()
+    modele_factice = ModeleFactice(raw_content="{}")
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[routes_adapters.construire_modele_comprehension_optionnel] = lambda: modele_factice
+
+    try:
+        client = TestClient(app)
+        reponse = client.post("/adapters/csv/client_test", files=_FICHIERS_CSV_MINIMAUX)
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["description_metier"] is None
+        assert modele_factice.appels == 0
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_csv_avec_generer_description_produit_une_description() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[routes_adapters.construire_modele_comprehension_optionnel] = lambda: ModeleFactice(
+        raw_content="{}",
+        parsed=_SchemaDescriptionAtelier(description_metier="Un atelier à une tâche T1 sur R1."),
+    )
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            params={"generer_description": "true"},
+            files=_FICHIERS_CSV_MINIMAUX,
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["description_metier"] == "Un atelier à une tâche T1 sur R1."
+        assert corps["avertissements"] == []
+        assert etat_test.recuperer_description_metier(corps["instance_id"]) == "Un atelier à une tâche T1 sur R1."
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_csv_generer_description_echoue_reste_best_effort() -> None:
+    """Un aléa (ici une réponse non conforme au schéma) dégrade vers `description_metier=None` et
+    un avertissement explicite — n'invalide jamais un import CSV par ailleurs valide."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[routes_adapters.construire_modele_comprehension_optionnel] = lambda: ModeleFactice(
+        raw_content="pas du JSON", parsing_error=ValueError("schéma non respecté")
+    )
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv/client_test",
+            params={"generer_description": "true"},
+            files=_FICHIERS_CSV_MINIMAUX,
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["description_metier"] is None
+        assert len(corps["avertissements"]) == 1
+        assert "description métier non générée automatiquement" in corps["avertissements"][0]
+        assert etat_test.recuperer_description_metier(corps["instance_id"]) is None
     finally:
         app.dependency_overrides.clear()
 

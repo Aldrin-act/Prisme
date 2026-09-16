@@ -23,11 +23,14 @@ en plusieurs fichiers. Ton travail consiste à planifier la **structure
 interne** de ce module unique pour l'algorithme recommandé ci-dessus, pour
 que l'agent Développeur n'ait plus qu'à la traduire en code.
 
-Ni toi ni l'agent Analyste ne voyez les valeurs d'une instance concrète —
-seulement la mission générique ci-dessus (principe "generate once,
-re-execute many" : le module produit doit rester valable pour toute instance
-future partageant la même signature de contraintes/objectifs, pas une seule
-instance figée). Le plan que tu produis pour `objectif` doit donc rester
+Ni toi ni l'agent Analyste ne voyez les valeurs de l'instance — seulement
+la mission ci-dessus et la liste des types de contraintes présents. C'est
+voulu : le module est réexécuté sur cette instance à chaque évolution de ses
+données, en particulier à chaque **commande** qui lui ajoute des tâches, des
+précédences et des échéances (voir « Instance vivante » dans la mission). Le
+plan doit donc tenir pour une instance plusieurs fois plus grande que
+l'actuelle, et ne jamais dépendre d'un identifiant, d'un nombre de tâches ou
+d'une forme de graphe de précédence. Le plan que tu produis pour `objectif` doit donc rester
 **générique sur `instance.objectifs`** : décris comment le code lira cette
 liste à l'exécution et combinera ce qu'elle contient, jamais un objectif
 unique supposé d'avance — voir la section "Objectifs" de la mission
@@ -39,8 +42,18 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   reste fixée (même ressource, même début) dans le nouveau planning, tant que le couple
   (tâche, ressource) reste compatible dans l'instance courante — sans effet si
   `planning_precedent` est absent ou `horizon_gele_jours` vaut 0.
+- Quel que soit l'algorithme, le plan reprend le calcul d'`horizon` de la section « Horizon » de
+  la mission (jamais la seule somme des durées) et, si l'instance contient des `Echeance`, la
+  section « Échéances » (contrainte dure en CP-SAT ; tuple de fitness qui fait passer le nombre
+  d'échéances dépassées avant l'objectif, puis `None` si la meilleure solution en dépasse encore
+  une, pour une heuristique).
 - Si l'algorithme recommandé est `cp_sat` : conçois un modèle CP-SAT
-  classique avec `ortools.sat.python.cp_model` (variables d'intervalle,
+  classique avec `ortools.sat.python.cp_model`, en reprenant exactement les
+  noms de variables de la section « Noms des variables CP-SAT » de la mission
+  (`debut[tache]`, `fin[tache]`, `presence[(tache, ressource)]`,
+  `intervalle[(tache, ressource)]`) et les paramètres de solveur de la
+  section « Déterminisme » (`num_workers = 1`, `random_seed = 0`,
+  `max_deterministic_time`, jamais `max_time_in_seconds`) — variables d'intervalle,
   contraintes de précédence/non-chevauchement, objectif combinant par somme
   pondérée chaque élément de `instance.objectifs` présent — makespan si
   `MinimiserMakespan`, écart de charge entre ressources si
@@ -62,9 +75,12 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   Si des tâches ont une `priorite` déclarée, ajoute un terme de départage à
   l'objectif (jamais au détriment de sa valeur principale — voir la mission).
   Si l'instance contient des `DeclarationMateriau`, ajoute pour chacune couverte par au moins une
-  `ConsommationMatiere` un `AddReservoirConstraint(temps, changements_niveau, min_level=0,
-  max_level=stock_initial)` — voir la section "Matières" de la mission pour la construction
-  exacte des événements ; sans effet si l'instance n'en contient aucune.
+  `ConsommationMatiere` un `AddReservoirConstraint` dont la liste d'événements **commence par
+  l'apport du stock initial à l'instant 0** (`+stock_initial`), suivi d'un événement
+  `-quantite` au `debut` de chaque tâche consommatrice, avec `min_level=0` et
+  `max_level=stock_initial` — sans cet événement initial, le réservoir CP-SAT démarre à 0 et le
+  modèle est toujours infaisable (voir la section "Matières" de la mission) ; sans effet si
+  l'instance n'en contient aucune.
 - Pour tout autre algorithme (génétique, ACO, recuit simulé, tabou,
   glouton + recherche locale, règles de dispatching) : adapte les mêmes
   champs à cet algorithme — `variables` devient la représentation de la
@@ -99,22 +115,33 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
      placée sur la ressource candidate est `tache_avant` d'une de ces
      contraintes pour la tâche courante (`tache_apres`), repousse l'heure de
      début la plus tôt possible d'au moins `duree_setup` après la fin de
-     cette dernière tâche. Si l'instance contient des `DeclarationMateriau` et que la
+     cette dernière tâche. Si elle contient des
+     `ContrainteDisponibiliteRessource`, rejette tout début dont l'intervalle
+     `[debut, fin)` touche un instant indisponible de la ressource (table
+     précalculée) et essaie l'instant libre suivant. Si l'instance contient des `DeclarationMateriau` et que la
      tâche courante a une ou plusieurs `ConsommationMatiere`, rejette tout
      placement qui ferait passer le stock courant d'un matériau concerné
      sous zéro (compteur de stock précalculé, décrémenté seulement une fois
      le placement accepté — voir la section "Matières" de la mission) ;
-  4. Résultat : **toute** solution décodée est légale par construction ; la
-     fitness (le score que la recherche optimise) se limite au makespan de
-     ce planning déjà légal, sans terme de pénalité pour les contraintes
-     dures.
+  4. Résultat : **toute** solution décodée respecte par construction les
+     contraintes ci-dessus ; la fitness (le score que la recherche optimise)
+     se limite à l'objectif de ce planning, sans terme de pénalité pour ces
+     contraintes. Seules les `Echeance` ne peuvent pas être garanties au
+     placement : la fitness est alors un tuple
+     `(nb_echeances_depassees, objectif, terme_priorite)`, et `resoudre`
+     renvoie `None` si la meilleure solution dépasse encore une échéance
+     (voir « Échéances » dans la mission).
 
   Précise aussi **comment obtenir un résultat déterministe** : une seule
   graine fixe pour un générateur aléatoire local (`random.Random(<graine>)`),
   jamais l'état global du module `random` — le solveur doit produire le
   même makespan à chaque exécution sur la même instance. Et un critère
   d'arrêt déterministe et indépendant de la machine (nombre fixe
-  d'itérations ou de générations), jamais une limite de temps écoulé.
+  d'itérations ou de générations), jamais une limite de temps écoulé —
+  dimensionné pour finir largement sous les **30 secondes sur 1 vCPU** du
+  bac à sable avec une instance de plusieurs centaines de tâches (par
+  exemple, réduis la population ou le nombre de générations proposés par le
+  Benchmarker s'ils sont incompatibles avec ce budget).
 
   **Précise explicitement quelles tables de correspondance sont précalculées
   une seule fois avant la recherche** (durée par couple tâche-ressource,

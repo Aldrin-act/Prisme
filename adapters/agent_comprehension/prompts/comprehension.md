@@ -87,11 +87,24 @@ ci-dessus. Règles impératives :
   `avertissements`), jamais comme une compatibilité universelle. Fabriquer
   une compatibilité avec l'ensemble des ressources est au moins aussi
   grave que d'en inventer une seule.
-- Les durées (`CompatibiliteRessourceTache.duree`) sont toujours en jours —
-  convertis si la donnée source est dans une autre unité (minutes, heures...).
-  Arrondis à l'entier le plus proche (jamais 0 pour une tâche dont la durée
-  source est non nulle, arrondis alors à 1) et signale l'arrondi dans
-  `avertissements`.
+- **Unité de temps.** Choisis une seule unité pour toute l'instance et déclare-la dans
+  `instance.unite_temps` : `"jours"` (défaut) ou `"heures"`. Prends `"heures"` quand la plupart
+  des durées source sont inférieures à une journée (minutes, heures) — sinon elles
+  s'écraseraient toutes à 1 jour et le planning perdrait tout son sens. Toutes les valeurs
+  temporelles (`duree`, `echeance`, `jours_indisponibles`, `duree_setup`) sont alors des entiers
+  dans cette unité — les mentions « en jours » du modèle ci-dessus s'entendent dans l'unité que
+  tu as déclarée. Convertis, arrondis à l'entier le plus proche (jamais 0 pour une durée source
+  non nulle : arrondis alors à 1) et signale dans `avertissements` l'unité choisie et tout arrondi
+  significatif.
+- **Commandes / ordres de fabrication.** Si les données regroupent des tâches par commande (ou
+  ordre de fabrication, bon de commande...) portant une date limite, la notion de commande
+  n'existe pas dans le format canonique : produis une `echeance` identique pour **chaque** tâche
+  de cette commande, convertie en instant relatif dans l'unité choisie (ne l'invente jamais si la
+  date limite est absente). Si une tâche appartient à plusieurs commandes, garde l'échéance la
+  plus proche ; une échéance explicite propre à la tâche l'emporte toujours. Une seule entrée de
+  `justifications` par commande suffit (citer la commande et sa date limite, lister ses tâches).
+  Si la date limite est une date calendaire sans date de référence claire pour l'instant 0,
+  n'invente pas de conversion : omets l'échéance et signale-le dans `avertissements`.
 - N'ajoute aucun champ hors de ceux décrits ci-dessus (schéma strict).
 - Pour toute autre information nécessaire absente ou ambiguë (hors
   compatibilité, couverte ci-dessus), fais ton meilleur effort mais note-le
@@ -161,13 +174,15 @@ texte, pas de bloc markdown autour) :
       {{"type": "declaration_materiau", "materiau": "...", "stock_initial": 100, "unite": "kg"}},
       {{"type": "consommation_matiere", "tache": "...", "materiau": "...", "quantite": 5}}
     ],
-    "objectifs": [{{"type": "minimiser_makespan"}}]
+    "objectifs": [{{"type": "minimiser_makespan"}}],
+    "unite_temps": "jours"
   }},
   "description_metier": "Description du processus tel qu'il ressort des données brutes ci-dessus.",
   "avertissements": ["ce qui a été ignoré, incertain, ou à vérifier — tableau vide si rien à signaler"],
   "justifications": [
     {{"contrainte": "precedence: T1 → T2", "raison": "champ \"operation_precedente\": \"T1\" sur l'opération T2"}},
-    {{"contrainte": "echeance: T2 (5 jours)", "raison": "champ \"date_limite_minutes\": 7200 sur l'opération T2, converti en jours"}}
+    {{"contrainte": "echeance: T2 (5 jours)", "raison": "champ \"date_limite_minutes\": 7200 sur l'opération T2, converti en jours"}},
+    {{"contrainte": "echeance: T3, T4 (12 jours)", "raison": "commande \"CMD-042\" : \"delai_jours\": 12, tâches T3 et T4"}}
   ]
 }}
 ```

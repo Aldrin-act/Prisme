@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -471,6 +472,10 @@ export function IngestionDialog({
   const [fichierRessourcesCsv, setFichierRessourcesCsv] = useState<File | null>(null);
   const [fichierContraintesCsv, setFichierContraintesCsv] = useState<File | null>(null);
   const [fichierCommandesCsv, setFichierCommandesCsv] = useState<File | null>(null);
+  // Description métier automatique (IA) sur l'atelier obtenu — coché par défaut (best-effort côté
+  // serveur, voir api/routes/adapters.py::_description_metier_optionnelle) ; désactivable si
+  // l'utilisateur préfère un import rapide sans appel IA.
+  const [genererDescriptionCsv, setGenererDescriptionCsv] = useState(true);
   const inputTachesCsvRef = useRef<HTMLInputElement>(null);
   const inputRessourcesCsvRef = useRef<HTMLInputElement>(null);
   const inputContraintesCsvRef = useRef<HTMLInputElement>(null);
@@ -587,6 +592,7 @@ export function IngestionDialog({
           commandes: fichierCommandesCsv ?? undefined,
         },
         uniteTemps,
+        genererDescription: genererDescriptionCsv,
       },
       { onSuccess: onIngestionReussie },
     );
@@ -1037,6 +1043,19 @@ export function IngestionDialog({
                       fichier Contraintes l'emporte toujours.
                     </p>
                   </div>
+
+                  <label className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                      checked={genererDescriptionCsv}
+                      onCheckedChange={(v) => setGenererDescriptionCsv(v === true)}
+                    />
+                    Générer une description métier de l'atelier (IA)
+                  </label>
+                  <p className="text-xs text-muted-foreground">
+                    Résumé en langage naturel de l'atelier obtenu (nature du processus, étapes,
+                    ressources) — n'affecte jamais les tâches/ressources/contraintes importées,
+                    best-effort (aucun échec de l'import si indisponible).
+                  </p>
 
                   {erreur && importerCsv.error && <ErreursAPI erreur={erreur} />}
 

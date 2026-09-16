@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
@@ -43,12 +43,21 @@ _PROMPT_SYSTEME = (
 )
 
 
+AlgorithmeCatalogue = Literal[
+    "cp_sat", "genetic", "aco", "simulated_annealing", "tabu_search", "dispatching", "greedy_local"
+]
+
+
 class _SchemaRecommandation(BaseModel):
-    algorithme: str = Field(description='"cp_sat", "genetic", "aco", "simulated_annealing", etc.')
+    # `Literal` plutôt que `str` : une variante libre ("GA", "cpsat"...) ne serait reconnue ni par
+    # `parametres_cascade_pour_algorithme` ni par `outil_documentation` — mieux vaut une réponse
+    # non conforme, retentée par `invoquer_agent_structure`, qu'un algorithme mal orthographié
+    # qui passerait silencieusement en aval.
+    algorithme: AlgorithmeCatalogue = Field(description="Une des sept valeurs du catalogue, exactement.")
     raison: str = Field(description="Justification du choix.")
     parametres: dict = Field(default_factory=dict, description="Paramètres recommandés pour cet algorithme.")
-    temps_estime: str = Field(default="inconnu", description='"secondes", "minutes", "dizaines de minutes"...')
-    qualite_attendue: str = Field(default="inconnue", description='"optimale", "très bonne (>95%)"...')
+    temps_estime: str = Field(default="inconnu", description='"secondes", "dizaines de secondes"')
+    qualite_attendue: str = Field(default="inconnue", description='"optimale", "à moins de 10 % de l\'optimum"...')
     alternatives: list[str] = Field(default_factory=list, description="Autres algorithmes envisageables.")
 
 
@@ -64,7 +73,7 @@ class CaracteristiquesInstance:
     nb_taches: int
     nb_ressources: int
     nb_contraintes: int
-    flexibilite_moyenne: float  # Moyenne d'équipes compatibles par tâche
+    flexibilite_moyenne: float  # Moyenne de ressources compatibles par tâche
     a_precedences: bool
     taille_categorie: str  # "petite", "moyenne", "grande", "très grande"
     densite_contraintes: float  # Ratio contraintes / (tâches × ressources)
@@ -76,6 +85,10 @@ class CaracteristiquesInstance:
     # un algorithme non-CP-SAT peut calculer la vraie variance/le vrai Gini
     # exactement dans sa fonction de fitness, signal pertinent pour ce choix.
     equilibrage_methode_approchee_en_cpsat: bool
+    # Types distincts présents dans instance.contraintes, triés — échéances, matières,
+    # indisponibilités... pèsent lourd dans le choix CP-SAT/heuristique (une heuristique ne
+    # garantit pas une échéance par construction), invisibles dans les seuls compteurs ci-dessus.
+    types_contraintes: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -231,6 +244,7 @@ def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesI
         types_objectifs=types_objectifs,
         nb_objectifs=nb_objectifs,
         equilibrage_methode_approchee_en_cpsat=equilibrage_methode_approchee_en_cpsat,
+        types_contraintes=tuple(sorted({c.get("type", "?") for c in instance_json["contraintes"]})),
     )
 
 
@@ -267,6 +281,7 @@ def benchmarker_algorithmes(
         densite_contraintes=carac.densite_contraintes,
         types_objectifs=", ".join(carac.types_objectifs) if carac.types_objectifs else "aucun",
         nb_objectifs=carac.nb_objectifs,
+        types_contraintes=", ".join(carac.types_contraintes) if carac.types_contraintes else "aucun",
         equilibrage_methode_approchee_en_cpsat="Oui" if carac.equilibrage_methode_approchee_en_cpsat else "Non",
     )
 

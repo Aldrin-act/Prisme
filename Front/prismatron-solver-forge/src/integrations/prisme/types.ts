@@ -620,6 +620,9 @@ export type ReponseImportAdaptateur = ReponseIngestion;
 // ci-dessus, qui reste inchangé pour ses autres appelants (tableur, adaptateur ERP).
 export interface ReponseImportCsv extends ReponseIngestion {
   avertissements: string[];
+  // Présente seulement si `genererDescription` a été demandé à l'import — best-effort, `null`
+  // si non demandé ou si la génération a échoué (voir l'avertissement correspondant dans ce cas).
+  description_metier: string | null;
 }
 
 export interface ReponseImportCsvLocal {

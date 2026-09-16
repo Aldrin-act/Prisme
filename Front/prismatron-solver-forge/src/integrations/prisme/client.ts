@@ -311,11 +311,14 @@ export const prismeClient = {
   // déjà explicite l'emporte toujours sur une dérivée. `delimiteur` (un seul
   // caractère, "," par défaut) s'applique identiquement aux quatre fichiers.
   // `uniteTemps` ("jours" par défaut, ou "heures") devient InstanceTRCO.unite_temps.
+  // `genererDescription` (optionnel, false par défaut côté serveur) : tente une description
+  // métier automatique de l'atelier via l'agent de compréhension — best-effort, jamais bloquant.
   importerFichiersCsv: (
     clientId: string,
     fichiers: { taches: File; ressources: File; contraintes: File; commandes?: File },
     delimiteur?: string,
     uniteTemps?: string,
+    genererDescription?: boolean,
   ) => {
     const corps = new FormData();
     corps.append("taches", fichiers.taches);
@@ -325,6 +328,7 @@ export const prismeClient = {
     const params = new URLSearchParams();
     if (delimiteur) params.set("delimiteur", delimiteur);
     if (uniteTemps) params.set("unite_temps", uniteTemps);
+    if (genererDescription) params.set("generer_description", "true");
     const requete = params.toString();
     return apiFetch<Types.ReponseImportCsv>(
       `${PRISME_CONFIG.routes.adapters}/csv/${clientId}${requete ? `?${requete}` : ""}`,

@@ -374,7 +374,12 @@ def _noeud_developpeur(etat: EtatGeneration, config: RunnableConfig) -> dict:
 def _noeud_testeur(etat: EtatGeneration, config: RunnableConfig) -> dict:
     writer = get_stream_writer()
     writer(etape("testeur", "en_cours", "Génération des tests..."))
-    tests = testeur.generer_tests(_modele(config, "testeur"), etat["code_candidat"])
+    tests = testeur.generer_tests(
+        _modele(config, "testeur"),
+        etat["code_candidat"],
+        instance_json=etat.get("instance_exemple") or benchmarker.creer_instance_exemple_defaut(),
+        algorithme=etat["algo"],
+    )
     writer(etape("testeur", "termine", "Tests générés"))
     return {
         "tests_generes": tests.code_tests,
@@ -546,6 +551,11 @@ def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
 
     probleme = etat["message_pour_debugger"] or ""
     historique = "\n".join(etat.get("historique_debugger") or [])
+    conception = etat.get("conception")
+    contexte = {
+        "plan_technique": conception.en_texte() if conception is not None else "",
+        "algorithme": etat.get("algo"),
+    }
 
     if etat.get("origine_probleme") == "test_sandbox":
         correction_tests = corriger_solveur_ou_tests(
@@ -554,9 +564,12 @@ def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
             etat["tests_generes"],
             probleme,
             historique=historique,
+            **contexte,
         )
         writer(etape(nom, "termine", f"{correction_tests.cible.capitalize()} corrigé — {correction_tests.cause}"))
-        entree = memory.formater_entree(n, probleme, correction_tests.cause, cible=correction_tests.cible)
+        entree = memory.formater_entree(
+            n, probleme, correction_tests.cause, cible=correction_tests.cible, correctif=correction_tests.correctif
+        )
         return {
             "code_candidat": correction_tests.code_source,
             "tests_generes": correction_tests.tests_source,
@@ -564,9 +577,11 @@ def _noeud_debugger(etat: EtatGeneration, config: RunnableConfig) -> dict:
             "historique_debugger": [entree],
         }
 
-    correction = corriger_code(_modele(config, "debugger"), etat["code_candidat"], probleme, historique=historique)
+    correction = corriger_code(
+        _modele(config, "debugger"), etat["code_candidat"], probleme, historique=historique, **contexte
+    )
     writer(etape(nom, "termine", "Code corrigé"))
-    entree = memory.formater_entree(n, probleme, correction.cause)
+    entree = memory.formater_entree(n, probleme, correction.cause, correctif=correction.correctif)
     return {
         "code_candidat": correction.code_source,
         "numero_tentative": n + 1,

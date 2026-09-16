@@ -20,19 +20,46 @@ Développeur ci-dessus est disponible comme un module Python nommé
 `from solveur_candidat import resoudre` (jamais un autre nom d'import :
 `resoudre` n'est accessible que via ce module).
 
-Couvre notamment :
+## Ce que ce solveur sait traiter
+
+- Algorithme utilisé : **{algorithme}**
+- Types de contraintes de l'instance pour laquelle il a été généré : {types_contraintes}
+- Types d'objectifs : {types_objectifs}
+
+Le solveur n'a été conçu que pour ces types-là. **Dans tes instances de test, n'utilise que ces
+types de contraintes et d'objectifs** (plus `compatibilite_ressource_tache`, toujours obligatoire)
+— un test qui ajoute un type absent de cette liste (une `Echeance` alors qu'il n'y en a pas, une
+`ContrainteCapacite`...) teste un comportement que personne n'a demandé et échouera sur un solveur
+correct.
+
+Si l'algorithme n'est pas `cp_sat`, le solveur est **approché** : n'affirme jamais un makespan
+optimal exact, sauf sur une instance si petite que l'optimum est évident (une tâche, ou une chaîne
+de tâches sur des ressources dédiées). Vérifie plutôt la légalité du planning.
+
+## Cas à couvrir
+
 - une instance à une seule tâche/une seule ressource compatible ;
-- une instance clairement infaisable — **jamais** en omettant la compatibilité
-  ressource-tâche d'une tâche, ni via une précédence qu'une tâche se donnerait
-  à elle-même : `InstanceTRCO` (respectivement `Precedence`) l'interdit dès la
-  **construction** de l'instance elle-même (`ValidationError` avant même
-  d'appeler `resoudre()` — le test échouerait alors systématiquement, quelle
-  que soit la qualité du solveur). Construis plutôt une instance valide mais
-  impossible à honorer : une tâche dont l'unique ressource compatible a une
-  `duree` supérieure à son `Echeance` (deadline) — vérifie que `resoudre()`
-  renvoie `None`, ne lève pas d'exception ;
-- une instance avec plusieurs ressources compatibles pour une même tâche,
-  chacune avec une durée différente.
+- une instance avec plusieurs ressources compatibles pour une même tâche, chacune avec une durée
+  différente — vérifie que la ressource choisie est bien compatible et que le planning est légal ;
+- une instance **qui ressemble à ce que produisent les commandes clientes** : identifiants générés
+  (ex. `cmd-1a2b3c4d_0_DECOUPE`, `cmd-9f8e7d6c_1_ASSEMBLAGE`), deux chaînes de tâches qui
+  convergent vers une même tâche (une tâche avec **deux** `Precedence` en entrée), plus une tâche
+  isolée sans précédence — vérifie que chaque tâche apparaît exactement une fois et que toutes les
+  précédences sont respectées ;
+- **seulement si `echeance` figure dans les types ci-dessus** : une instance valide mais
+  impossible à honorer — une tâche dont l'unique ressource compatible a une `duree` supérieure à
+  son `Echeance` — et vérifie que `resoudre()` renvoie `None` sans lever d'exception. Sans
+  `echeance` dans la liste, n'écris **aucun** test d'infaisabilité.
+
+Pour construire une instance, n'essaie jamais d'omettre la compatibilité d'une tâche ni de créer
+une précédence d'une tâche vers elle-même : `InstanceTRCO`/`Precedence` le refusent dès la
+construction (`ValidationError` avant même d'appeler `resoudre()`), le test échouerait quelle que
+soit la qualité du solveur.
+
+Pour vérifier la légalité, écris toi-même, dans le module de tests, les vérifications utiles :
+chaque tâche planifiée une fois, sur une ressource compatible ; `debut + duree` d'une tâche ≤
+`debut` de la suivante pour chaque précédence ; aucun chevauchement sur une ressource (capacité 1
+sauf `ContrainteCapacite`). N'importe **que** `dsl.schema`, `pytest` et `solveur_candidat`.
 
 ## Outil disponible (facultatif)
 

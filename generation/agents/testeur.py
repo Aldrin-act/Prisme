@@ -19,6 +19,7 @@ from typing import TYPE_CHECKING
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
+from generation.agents.analyste import extraire_structure_instance
 from generation.agents.base import ErreurReponseAgentInvalide, charger_mission  # noqa: F401 — réexporté (tests)
 from generation.agents.client_llm import invoquer_agent_avec_outils
 
@@ -82,13 +83,34 @@ def _construire_outil_cas_limites_banc_synthetique():
     return consulter_cas_limites_banc_synthetique
 
 
-def generer_tests(modele: BaseChatModel, code_source: str, *, avec_outils: bool = True) -> ResultatTests:
+def generer_tests(
+    modele: BaseChatModel,
+    code_source: str,
+    *,
+    avec_outils: bool = True,
+    instance_json: dict | None = None,
+    algorithme: str = "cp_sat",
+) -> ResultatTests:
     """`avec_outils` : si vrai (défaut), l'agent peut consulter
     `consulter_cas_limites_banc_synthetique` (voir plus haut) avant de
     répondre — jamais requis, purement consultatif. `False` retombe sur un
-    appel structuré simple, sans outil (tests, comparaison avant/après)."""
+    appel structuré simple, sans outil (tests, comparaison avant/après).
+
+    `instance_json`/`algorithme` : seule la *structure* de l'instance (types de contraintes et
+    d'objectifs, jamais ses valeurs — même extraction que l'Analyste) et l'algorithme choisi par
+    le Benchmarker atteignent le prompt. Sans eux, le Testeur écrivait des tests sur des types
+    que le solveur n'a jamais eu à traiter (ex. une `Echeance` pour prouver l'infaisabilité d'une
+    instance sans échéance), qui échouaient sur un solveur correct et poussaient le Debugger à
+    l'abîmer."""
+    structure = extraire_structure_instance(instance_json or {})
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
-    prompt = gabarit.format(mission=charger_mission(), code=code_source)
+    prompt = gabarit.format(
+        mission=charger_mission(),
+        code=code_source,
+        algorithme=algorithme,
+        types_contraintes=", ".join(structure.types_contraintes) or "inconnus (aucune instance fournie)",
+        types_objectifs=", ".join(structure.types_objectifs) or "inconnus (aucune instance fournie)",
+    )
 
     outils = [_construire_outil_cas_limites_banc_synthetique()] if avec_outils else []
     donnees, reponse_brute, appels_outils = invoquer_agent_avec_outils(

@@ -624,12 +624,21 @@ export function useImporterFichiersCsv() {
       fichiers,
       delimiteur,
       uniteTemps,
+      genererDescription,
     }: {
       clientId: string;
       fichiers: { taches: File; ressources: File; contraintes: File; commandes?: File };
       delimiteur?: string;
       uniteTemps?: string;
-    }) => prismeClient.importerFichiersCsv(clientId, fichiers, delimiteur, uniteTemps),
+      genererDescription?: boolean;
+    }) =>
+      prismeClient.importerFichiersCsv(
+        clientId,
+        fichiers,
+        delimiteur,
+        uniteTemps,
+        genererDescription,
+      ),
   });
 }
 
