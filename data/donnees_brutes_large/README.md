@@ -1,19 +1,19 @@
 # Données Brutes à Grande Échelle
 
-Ce répertoire contient des jeux de données volumineux (~200 opérations par fichier)
+Ce répertoire contient des jeux de données volumineux (~100 opérations par fichier)
 pour tester la scalabilité de la pipeline PRISME.
 
 ## Jeux de Données
 
-- **atelier_mecanique_large** : 200+ opérations, fabrication métallique
-- **assemblage_electronique_large** : 200+ opérations, assemblage PCB
-- **production_agroalimentaire_large** : 200+ opérations, transformation alimentaire
-- **hopital_bloc_operatoire_large** : 200+ opérations, planification hospitalière
-- **logistique_transport_large** : 200+ opérations, logistique et transport
-- **restauration_collective_large** : 200+ opérations, restauration collective
-- **services_nettoyage_large** : 200+ opérations, services de nettoyage
-- **gestion_espaces_verts_large** : 200+ opérations, gestion d'espaces verts
-- **education_planification_cours_large** : 200+ opérations, planification de cours
+- **atelier_mecanique_large** : 100+ opérations, fabrication métallique
+- **assemblage_electronique_large** : 100+ opérations, assemblage PCB
+- **production_agroalimentaire_large** : 100+ opérations, transformation alimentaire
+- **hopital_bloc_operatoire_large** : 100+ opérations, planification hospitalière
+- **logistique_transport_large** : 100+ opérations, logistique et transport
+- **restauration_collective_large** : 100+ opérations, restauration collective
+- **services_nettoyage_large** : 100+ opérations, services de nettoyage
+- **gestion_espaces_verts_large** : 100+ opérations, gestion d'espaces verts
+- **education_planification_cours_large** : 100+ opérations, planification de cours
 
 ## Utilisation
 
@@ -50,5 +50,5 @@ Ces instances volumineuses permettent de :
 - Évaluer les temps d'exécution dans le sandbox
 - Benchmarker la cascade de validation
 
-Génération : 200 opérations/fichier
+Génération : 100 opérations/fichier
 Date : 2026-07-23

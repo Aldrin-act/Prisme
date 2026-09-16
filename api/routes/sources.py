@@ -108,15 +108,17 @@ def _type_par_nom_fichier(nom: str) -> str | None:
 def _type_par_entete(bloc: str) -> str | None:
     """Détection de repli quand le nom de fichier n'est pas parlant — d'après
     les colonnes qui n'existent que dans un seul des trois fichiers attendus
-    (voir `adapters/csv_import/traducteur.py`, colonnes requises/optionnelles)."""
+    (voir `adapters/csv_import/traducteur.py`, colonnes requises/optionnelles).
+    `taches.csv` n'a plus de colonne qui lui soit propre (seulement `id`/`nom`,
+    partagées avec `ressources.csv`) : un bloc `taches` anonyme ne peut donc
+    plus être identifié ici — il retombe sur le dernier repli par élimination
+    dans `_reconstruire_fichiers_csv` ci-dessous."""
     premiere_ligne = bloc.split("\n", 1)[0] if bloc else ""
     colonnes = {c.strip().lower() for c in premiere_ligne.split(",")}
     if "type" in colonnes:
         return "contraintes"
     if "competences" in colonnes:
         return "ressources"
-    if "duree_estimee_jours" in colonnes:
-        return "taches"
     return None
 
 

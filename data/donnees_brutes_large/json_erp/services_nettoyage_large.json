@@ -1,1388 +1,543 @@
 {
   "operations": [
     {
-      "code_operation": "COMMISSARIAT_CENTRAL_CONTROLE_QUALITE_0001",
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_SANITAIRES_0002",
-      "poste_id": "EQUIPE_SANITAIRES_1",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_CONTROLE_QUALITE_0001",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_SOLS_0003",
-      "poste_id": "EQUIPE_SOLS_5",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_SANITAIRES_0002",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_VITRES_0004",
-      "poste_id": "EQUIPE_VITRES_5",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_SOLS_0003",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_COMMUNS_0005",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_6",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_VITRES_0004",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_BUREAUX_0006",
-      "poste_id": "EQUIPE_BUREAUX_12",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_COMMUNS_0005",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0007",
-      "poste_id": "EQUIPE_BUREAUX_10",
-      "operation_precedente": null,
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_COMMUNS_0008",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_11",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0007",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0009",
-      "poste_id": "POSTE_CONTROLE_QUALITE_4",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_COMMUNS_0008",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_SOLS_0010",
-      "poste_id": "MACHINE_AUTOLAVEUSE_6",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0009",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_SANITAIRES_0011",
-      "poste_id": "EQUIPE_SANITAIRES_5",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_SOLS_0010",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_VITRES_0012",
+      "code_operation": "CASERNE_POMPIERS_NETTOYAGE_VITRES_0001",
+      "duree_jours": 3,
       "poste_id": "EQUIPE_VITRES_2",
       "operation_precedente": null,
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_SOLS_0013",
-      "poste_id": "MACHINE_AUTOLAVEUSE_3",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_VITRES_0012",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "CASERNE_POMPIERS_NETTOYAGE_COMMUNS_0002",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
+      "operation_precedente": "CASERNE_POMPIERS_NETTOYAGE_VITRES_0001",
+      "competence_requise": "equipe_espaces_communs"
     },
     {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_BUREAUX_0014",
-      "poste_id": "EQUIPE_BUREAUX_10",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_SOLS_0013",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_SANITAIRES_0015",
-      "poste_id": "EQUIPE_SANITAIRES_7",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_BUREAUX_0014",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_COMMUNS_0016",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_10",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_SANITAIRES_0015",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_CONTROLE_QUALITE_0017",
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_COMMUNS_0016",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_CONTROLE_QUALITE_0018",
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_SANITAIRES_0019",
-      "poste_id": "EQUIPE_SANITAIRES_7",
-      "operation_precedente": "ECOLE_PASTEUR_CONTROLE_QUALITE_0018",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_BUREAUX_0020",
-      "poste_id": "EQUIPE_BUREAUX_12",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_SANITAIRES_0019",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_SOLS_0021",
-      "poste_id": "MACHINE_AUTOLAVEUSE_4",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_BUREAUX_0020",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_CONTROLE_QUALITE_0022",
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_BUREAUX_0023",
-      "poste_id": "EQUIPE_BUREAUX_4",
-      "operation_precedente": "BUREAUX_LAFAYETTE_CONTROLE_QUALITE_0022",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_SANITAIRES_0024",
-      "poste_id": "EQUIPE_SANITAIRES_5",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_BUREAUX_0023",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_COMMUNS_0025",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_9",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_SANITAIRES_0024",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_SOLS_0026",
-      "poste_id": "MACHINE_AUTOLAVEUSE_6",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_COMMUNS_0025",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_CONTROLE_QUALITE_0027",
+      "code_operation": "CASERNE_POMPIERS_CONTROLE_QUALITE_0003",
+      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_QUALITE_4",
+      "operation_precedente": "CASERNE_POMPIERS_NETTOYAGE_COMMUNS_0002",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "CASERNE_POMPIERS_NETTOYAGE_SOLS_0004",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SOLS_2",
+      "operation_precedente": "CASERNE_POMPIERS_CONTROLE_QUALITE_0003",
+      "competence_requise": "equipe_sols"
+    },
+    {
+      "code_operation": "CASERNE_POMPIERS_NETTOYAGE_SANITAIRES_0005",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_4",
+      "operation_precedente": "CASERNE_POMPIERS_NETTOYAGE_SOLS_0004",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_SANITAIRES_0006",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_2",
       "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "competence_requise": "equipe_sanitaires"
     },
     {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_SOLS_0028",
-      "poste_id": "EQUIPE_SOLS_3",
-      "operation_precedente": "BUREAUX_LAFAYETTE_CONTROLE_QUALITE_0027",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_COMMUNS_0007",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_8",
+      "operation_precedente": "PISCINE_MUNICIPALE_NETTOYAGE_SANITAIRES_0006",
+      "competence_requise": "equipe_espaces_communs"
     },
     {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_BUREAUX_0029",
-      "poste_id": "EQUIPE_BUREAUX_5",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_SOLS_0028",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_VITRES_0030",
-      "poste_id": "EQUIPE_VITRES_3",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_BUREAUX_0029",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "BUREAUX_LAFAYETTE_NETTOYAGE_SANITAIRES_0031",
-      "poste_id": "EQUIPE_SANITAIRES_9",
-      "operation_precedente": "BUREAUX_LAFAYETTE_NETTOYAGE_VITRES_0030",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_CONTROLE_QUALITE_0032",
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_VITRES_0033",
-      "poste_id": "EQUIPE_VITRES_2",
-      "operation_precedente": "HOPITAL_POMPIDOU_CONTROLE_QUALITE_0032",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_BUREAUX_0034",
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_BUREAUX_0008",
+      "duree_jours": 2,
       "poste_id": "EQUIPE_BUREAUX_13",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_VITRES_0033",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "operation_precedente": "PISCINE_MUNICIPALE_NETTOYAGE_COMMUNS_0007",
+      "competence_requise": "equipe_bureaux"
     },
     {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_SOLS_0035",
+      "code_operation": "PISCINE_MUNICIPALE_CONTROLE_QUALITE_0009",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_1",
+      "operation_precedente": "PISCINE_MUNICIPALE_NETTOYAGE_BUREAUX_0008",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_SOLS_0010",
+      "duree_jours": 2,
+      "poste_id": "MACHINE_AUTOLAVEUSE_2",
+      "operation_precedente": "PISCINE_MUNICIPALE_CONTROLE_QUALITE_0009",
+      "competence_requise": "machine_autolaveuse"
+    },
+    {
+      "code_operation": "GARE_LYON_CONTROLE_QUALITE_0011",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_5",
+      "operation_precedente": null,
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "GARE_LYON_NETTOYAGE_COMMUNS_0012",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_8",
+      "operation_precedente": "GARE_LYON_CONTROLE_QUALITE_0011",
+      "competence_requise": "equipe_espaces_communs"
+    },
+    {
+      "code_operation": "GARE_LYON_NETTOYAGE_VITRES_0013",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_VITRES_5",
+      "operation_precedente": "GARE_LYON_NETTOYAGE_COMMUNS_0012",
+      "competence_requise": "equipe_vitres"
+    },
+    {
+      "code_operation": "GARE_LYON_NETTOYAGE_SANITAIRES_0014",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_5",
+      "operation_precedente": "GARE_LYON_NETTOYAGE_VITRES_0013",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "GARE_LYON_NETTOYAGE_SOLS_0015",
+      "duree_jours": 1,
+      "poste_id": "MACHINE_AUTOLAVEUSE_2",
+      "operation_precedente": "GARE_LYON_NETTOYAGE_SANITAIRES_0014",
+      "competence_requise": "machine_autolaveuse"
+    },
+    {
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_COMMUNS_0016",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_3",
+      "operation_precedente": null,
+      "competence_requise": "equipe_espaces_communs"
+    },
+    {
+      "code_operation": "PISCINE_MUNICIPALE_CONTROLE_QUALITE_0017",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_4",
+      "operation_precedente": "PISCINE_MUNICIPALE_NETTOYAGE_COMMUNS_0016",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_VITRES_0018",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_VITRES_6",
+      "operation_precedente": "PISCINE_MUNICIPALE_CONTROLE_QUALITE_0017",
+      "competence_requise": "equipe_vitres"
+    },
+    {
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_SANITAIRES_0019",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_7",
+      "operation_precedente": "PISCINE_MUNICIPALE_NETTOYAGE_VITRES_0018",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_BUREAUX_0020",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_BUREAUX_8",
+      "operation_precedente": null,
+      "competence_requise": "equipe_bureaux"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_SANITAIRES_0021",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_SANITAIRES_2",
+      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_BUREAUX_0020",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_VITRES_0022",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_VITRES_1",
+      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_SANITAIRES_0021",
+      "competence_requise": "equipe_vitres"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_CONTROLE_QUALITE_0023",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_1",
+      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_VITRES_0022",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_SOLS_0024",
+      "duree_jours": 1,
       "poste_id": "MACHINE_AUTOLAVEUSE_5",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_BUREAUX_0034",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "operation_precedente": "TOUR_MONTPARNASSE_CONTROLE_QUALITE_0023",
+      "competence_requise": "machine_autolaveuse"
     },
     {
-      "code_operation": "CENTRE_LOISIRS_NETTOYAGE_VITRES_0036",
+      "code_operation": "MAIRIE_15EME_NETTOYAGE_BUREAUX_0025",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_BUREAUX_14",
+      "operation_precedente": null,
+      "competence_requise": "equipe_bureaux"
+    },
+    {
+      "code_operation": "MAIRIE_15EME_NETTOYAGE_VITRES_0026",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_VITRES_7",
+      "operation_precedente": "MAIRIE_15EME_NETTOYAGE_BUREAUX_0025",
+      "competence_requise": "equipe_vitres"
+    },
+    {
+      "code_operation": "MAIRIE_15EME_NETTOYAGE_SOLS_0027",
+      "duree_jours": 1,
+      "poste_id": "MACHINE_AUTOLAVEUSE_5",
+      "operation_precedente": "MAIRIE_15EME_NETTOYAGE_VITRES_0026",
+      "competence_requise": "machine_autolaveuse"
+    },
+    {
+      "code_operation": "MAIRIE_15EME_NETTOYAGE_COMMUNS_0028",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_7",
+      "operation_precedente": "MAIRIE_15EME_NETTOYAGE_SOLS_0027",
+      "competence_requise": "equipe_espaces_communs"
+    },
+    {
+      "code_operation": "MAIRIE_15EME_CONTROLE_QUALITE_0029",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_4",
+      "operation_precedente": "MAIRIE_15EME_NETTOYAGE_COMMUNS_0028",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "MAIRIE_15EME_NETTOYAGE_SANITAIRES_0030",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_8",
+      "operation_precedente": "MAIRIE_15EME_CONTROLE_QUALITE_0029",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_SOLS_0031",
+      "duree_jours": 1,
+      "poste_id": "MACHINE_AUTOLAVEUSE_1",
+      "operation_precedente": null,
+      "competence_requise": "machine_autolaveuse"
+    },
+    {
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_SANITAIRES_0032",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_5",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_SOLS_0031",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_VITRES_0033",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_VITRES_3",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_SANITAIRES_0032",
+      "competence_requise": "equipe_vitres"
+    },
+    {
+      "code_operation": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0034",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_4",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_VITRES_0033",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0035",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_BUREAUX_14",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0034",
+      "competence_requise": "equipe_bureaux"
+    },
+    {
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_COMMUNS_0036",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_10",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0035",
+      "competence_requise": "equipe_espaces_communs"
+    },
+    {
+      "code_operation": "USINE_RENAULT_NETTOYAGE_VITRES_0037",
+      "duree_jours": 4,
+      "poste_id": "EQUIPE_VITRES_5",
+      "operation_precedente": null,
+      "competence_requise": "equipe_vitres"
+    },
+    {
+      "code_operation": "USINE_RENAULT_NETTOYAGE_SANITAIRES_0038",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_10",
+      "operation_precedente": "USINE_RENAULT_NETTOYAGE_VITRES_0037",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "USINE_RENAULT_CONTROLE_QUALITE_0039",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_1",
+      "operation_precedente": "USINE_RENAULT_NETTOYAGE_SANITAIRES_0038",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "USINE_RENAULT_NETTOYAGE_COMMUNS_0040",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
+      "operation_precedente": "USINE_RENAULT_CONTROLE_QUALITE_0039",
+      "competence_requise": "equipe_espaces_communs"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_SANITAIRES_0041",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_SANITAIRES_9",
+      "operation_precedente": null,
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_COMMUNS_0042",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
+      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_SANITAIRES_0041",
+      "competence_requise": "equipe_espaces_communs"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_BUREAUX_0043",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_BUREAUX_5",
+      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_COMMUNS_0042",
+      "competence_requise": "equipe_bureaux"
+    },
+    {
+      "code_operation": "TOUR_MONTPARNASSE_CONTROLE_QUALITE_0044",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_1",
+      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_BUREAUX_0043",
+      "competence_requise": "poste_controle_qualite"
+    },
+    {
+      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_VITRES_0045",
+      "duree_jours": 3,
       "poste_id": "EQUIPE_VITRES_8",
       "operation_precedente": null,
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "CENTRE_LOISIRS_NETTOYAGE_SANITAIRES_0037",
-      "poste_id": "EQUIPE_SANITAIRES_9",
-      "operation_precedente": "CENTRE_LOISIRS_NETTOYAGE_VITRES_0036",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CENTRE_LOISIRS_NETTOYAGE_SOLS_0038",
-      "poste_id": "EQUIPE_SOLS_9",
-      "operation_precedente": "CENTRE_LOISIRS_NETTOYAGE_SANITAIRES_0037",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CENTRE_LOISIRS_CONTROLE_QUALITE_0039",
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "CENTRE_LOISIRS_NETTOYAGE_SOLS_0038",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CENTRE_LOISIRS_NETTOYAGE_BUREAUX_0040",
-      "poste_id": "EQUIPE_BUREAUX_6",
-      "operation_precedente": "CENTRE_LOISIRS_CONTROLE_QUALITE_0039",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_SOLS_0041",
-      "poste_id": "EQUIPE_SOLS_1",
-      "operation_precedente": null,
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_SANITAIRES_0042",
-      "poste_id": "EQUIPE_SANITAIRES_10",
-      "operation_precedente": "RESIDENCE_BELLE_VUE_NETTOYAGE_SOLS_0041",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_COMMUNS_0043",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_11",
-      "operation_precedente": "RESIDENCE_BELLE_VUE_NETTOYAGE_SANITAIRES_0042",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_VITRES_0044",
-      "poste_id": "EQUIPE_VITRES_4",
-      "operation_precedente": "RESIDENCE_BELLE_VUE_NETTOYAGE_COMMUNS_0043",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RESIDENCE_BELLE_VUE_CONTROLE_QUALITE_0045",
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": "RESIDENCE_BELLE_VUE_NETTOYAGE_VITRES_0044",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_BUREAUX_0046",
-      "poste_id": "EQUIPE_BUREAUX_10",
-      "operation_precedente": "RESIDENCE_BELLE_VUE_CONTROLE_QUALITE_0045",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_BUREAUX_0047",
-      "poste_id": "EQUIPE_BUREAUX_9",
-      "operation_precedente": null,
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SOLS_0048",
-      "poste_id": "EQUIPE_SOLS_6",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_BUREAUX_0047",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SANITAIRES_0049",
-      "poste_id": "EQUIPE_SANITAIRES_2",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SOLS_0048",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_CONTROLE_QUALITE_0050",
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SANITAIRES_0049",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_COMMUNS_0051",
+      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_COMMUNS_0046",
+      "duree_jours": 3,
       "poste_id": "EQUIPE_ESPACES_COMMUNS_5",
-      "operation_precedente": "GARE_LYON_CONTROLE_QUALITE_0050",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_VITRES_0045",
+      "competence_requise": "equipe_espaces_communs"
     },
     {
-      "code_operation": "GARE_LYON_NETTOYAGE_VITRES_0052",
-      "poste_id": "EQUIPE_VITRES_1",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_COMMUNS_0051",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
+      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_BUREAUX_0047",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_BUREAUX_11",
+      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_COMMUNS_0046",
+      "competence_requise": "equipe_bureaux"
     },
     {
-      "code_operation": "ENTREPOT_LOGISTICS_NETTOYAGE_SANITAIRES_0053",
-      "poste_id": "EQUIPE_SANITAIRES_8",
+      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_SANITAIRES_0048",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SANITAIRES_4",
+      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_BUREAUX_0047",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_SOLS_0049",
+      "duree_jours": 1,
+      "poste_id": "MACHINE_AUTOLAVEUSE_1",
+      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_SANITAIRES_0048",
+      "competence_requise": "machine_autolaveuse"
+    },
+    {
+      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_VITRES_0050",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_VITRES_7",
       "operation_precedente": null,
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "ENTREPOT_LOGISTICS_CONTROLE_QUALITE_0054",
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": "ENTREPOT_LOGISTICS_NETTOYAGE_SANITAIRES_0053",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_COMMUNS_0051",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_6",
+      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_VITRES_0050",
+      "competence_requise": "equipe_espaces_communs"
     },
     {
-      "code_operation": "ENTREPOT_LOGISTICS_NETTOYAGE_COMMUNS_0055",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_12",
-      "operation_precedente": "ENTREPOT_LOGISTICS_CONTROLE_QUALITE_0054",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
+      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_SANITAIRES_0052",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_SANITAIRES_9",
+      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_COMMUNS_0051",
+      "competence_requise": "equipe_sanitaires"
+    },
+    {
+      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_SOLS_0053",
+      "duree_jours": 1,
+      "poste_id": "MACHINE_AUTOLAVEUSE_4",
+      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_SANITAIRES_0052",
+      "competence_requise": "machine_autolaveuse"
+    },
+    {
+      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_BUREAUX_0054",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_BUREAUX_1",
+      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_SOLS_0053",
+      "competence_requise": "equipe_bureaux"
+    },
+    {
+      "code_operation": "HOTEL_MERIDIEN_CONTROLE_QUALITE_0055",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_1",
+      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_BUREAUX_0054",
+      "competence_requise": "poste_controle_qualite"
     },
     {
       "code_operation": "ENTREPOT_LOGISTICS_NETTOYAGE_BUREAUX_0056",
+      "duree_jours": 2,
       "poste_id": "EQUIPE_BUREAUX_2",
-      "operation_precedente": "ENTREPOT_LOGISTICS_NETTOYAGE_COMMUNS_0055",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "operation_precedente": null,
+      "competence_requise": "equipe_bureaux"
     },
     {
-      "code_operation": "ENTREPOT_LOGISTICS_NETTOYAGE_SOLS_0057",
-      "poste_id": "MACHINE_AUTOLAVEUSE_6",
+      "code_operation": "ENTREPOT_LOGISTICS_CONTROLE_QUALITE_0057",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_2",
       "operation_precedente": "ENTREPOT_LOGISTICS_NETTOYAGE_BUREAUX_0056",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "competence_requise": "poste_controle_qualite"
     },
     {
-      "code_operation": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0058",
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "ENTREPOT_LOGISTICS_NETTOYAGE_COMMUNS_0058",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_9",
+      "operation_precedente": "ENTREPOT_LOGISTICS_CONTROLE_QUALITE_0057",
+      "competence_requise": "equipe_espaces_communs"
     },
     {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_SOLS_0059",
-      "poste_id": "MACHINE_AUTOLAVEUSE_1",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0058",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_VITRES_0060",
-      "poste_id": "EQUIPE_VITRES_6",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_SOLS_0059",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0061",
-      "poste_id": "EQUIPE_BUREAUX_13",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_VITRES_0060",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_COMMUNS_0062",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_4",
-      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0061",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_COMMUNS_0063",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_2",
-      "operation_precedente": null,
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SOLS_0064",
-      "poste_id": "MACHINE_AUTOLAVEUSE_1",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_COMMUNS_0063",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_BUREAUX_0065",
-      "poste_id": "EQUIPE_BUREAUX_6",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SOLS_0064",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SANITAIRES_0066",
-      "poste_id": "EQUIPE_SANITAIRES_7",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_BUREAUX_0065",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_COMMUNS_0067",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
-      "operation_precedente": null,
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_BUREAUX_0068",
-      "poste_id": "EQUIPE_BUREAUX_13",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_COMMUNS_0067",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_CONTROLE_QUALITE_0069",
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_BUREAUX_0068",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SANITAIRES_0070",
-      "poste_id": "EQUIPE_SANITAIRES_7",
-      "operation_precedente": "GARE_LYON_CONTROLE_QUALITE_0069",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_VITRES_0071",
-      "poste_id": "EQUIPE_VITRES_6",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SANITAIRES_0070",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SOLS_0072",
-      "poste_id": "EQUIPE_SOLS_6",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_VITRES_0071",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "MEDIATHEQUE_NETTOYAGE_SANITAIRES_0073",
-      "poste_id": "EQUIPE_SANITAIRES_8",
-      "operation_precedente": null,
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MEDIATHEQUE_NETTOYAGE_BUREAUX_0074",
-      "poste_id": "EQUIPE_BUREAUX_10",
-      "operation_precedente": "MEDIATHEQUE_NETTOYAGE_SANITAIRES_0073",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MEDIATHEQUE_CONTROLE_QUALITE_0075",
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": "MEDIATHEQUE_NETTOYAGE_BUREAUX_0074",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MEDIATHEQUE_NETTOYAGE_VITRES_0076",
-      "poste_id": "EQUIPE_VITRES_1",
-      "operation_precedente": "MEDIATHEQUE_CONTROLE_QUALITE_0075",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "MEDIATHEQUE_NETTOYAGE_COMMUNS_0077",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_2",
-      "operation_precedente": "MEDIATHEQUE_NETTOYAGE_VITRES_0076",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_CONTROLE_QUALITE_0078",
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_BUREAUX_0079",
-      "poste_id": "EQUIPE_BUREAUX_14",
-      "operation_precedente": "GARE_LYON_CONTROLE_QUALITE_0078",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_COMMUNS_0080",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_7",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_BUREAUX_0079",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SANITAIRES_0081",
-      "poste_id": "EQUIPE_SANITAIRES_10",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_COMMUNS_0080",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SOLS_0082",
-      "poste_id": "MACHINE_AUTOLAVEUSE_4",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SANITAIRES_0081",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_VITRES_0083",
-      "poste_id": "EQUIPE_VITRES_8",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SOLS_0082",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_VITRES_0084",
-      "poste_id": "EQUIPE_VITRES_3",
-      "operation_precedente": null,
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_COMMUNS_0085",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_11",
-      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_VITRES_0084",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_CONTROLE_QUALITE_0086",
-      "poste_id": "POSTE_CONTROLE_QUALITE_4",
-      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_COMMUNS_0085",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_BUREAUX_0087",
-      "poste_id": "EQUIPE_BUREAUX_12",
-      "operation_precedente": "MUSEE_LOUVRE_CONTROLE_QUALITE_0086",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_SANITAIRES_0088",
-      "poste_id": "EQUIPE_SANITAIRES_7",
-      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_BUREAUX_0087",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "STADE_FRANCE_NETTOYAGE_VITRES_0089",
-      "poste_id": "EQUIPE_VITRES_7",
-      "operation_precedente": null,
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "STADE_FRANCE_CONTROLE_QUALITE_0090",
-      "poste_id": "POSTE_CONTROLE_QUALITE_4",
-      "operation_precedente": "STADE_FRANCE_NETTOYAGE_VITRES_0089",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "STADE_FRANCE_NETTOYAGE_BUREAUX_0091",
-      "poste_id": "EQUIPE_BUREAUX_9",
-      "operation_precedente": "STADE_FRANCE_CONTROLE_QUALITE_0090",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "STADE_FRANCE_NETTOYAGE_SOLS_0092",
-      "poste_id": "EQUIPE_SOLS_2",
-      "operation_precedente": "STADE_FRANCE_NETTOYAGE_BUREAUX_0091",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_SOLS_0093",
-      "poste_id": "MACHINE_AUTOLAVEUSE_6",
-      "operation_precedente": null,
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_COMMUNS_0094",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_SOLS_0093",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_CONTROLE_QUALITE_0095",
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_COMMUNS_0094",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_BUREAUX_0096",
-      "poste_id": "EQUIPE_BUREAUX_14",
-      "operation_precedente": "HOTEL_MERIDIEN_CONTROLE_QUALITE_0095",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_SANITAIRES_0097",
-      "poste_id": "EQUIPE_SANITAIRES_1",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_BUREAUX_0096",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_VITRES_0098",
-      "poste_id": "EQUIPE_VITRES_1",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_SANITAIRES_0097",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "TRIBUNAL_GRANDE_INSTANCE_NETTOYAGE_BUREAUX_0099",
-      "poste_id": "EQUIPE_BUREAUX_14",
-      "operation_precedente": null,
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "TRIBUNAL_GRANDE_INSTANCE_NETTOYAGE_VITRES_0100",
-      "poste_id": "EQUIPE_VITRES_5",
-      "operation_precedente": "TRIBUNAL_GRANDE_INSTANCE_NETTOYAGE_BUREAUX_0099",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "TRIBUNAL_GRANDE_INSTANCE_CONTROLE_QUALITE_0101",
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "TRIBUNAL_GRANDE_INSTANCE_NETTOYAGE_VITRES_0100",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "TRIBUNAL_GRANDE_INSTANCE_NETTOYAGE_COMMUNS_0102",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_10",
-      "operation_precedente": "TRIBUNAL_GRANDE_INSTANCE_CONTROLE_QUALITE_0101",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_CONTROLE_QUALITE_0103",
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_COMMUNS_0104",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
-      "operation_precedente": "HOTEL_MERIDIEN_CONTROLE_QUALITE_0103",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_VITRES_0105",
-      "poste_id": "EQUIPE_VITRES_7",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_COMMUNS_0104",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_SANITAIRES_0106",
+      "code_operation": "ENTREPOT_LOGISTICS_NETTOYAGE_SANITAIRES_0059",
+      "duree_jours": 1,
       "poste_id": "EQUIPE_SANITAIRES_6",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_VITRES_0105",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "operation_precedente": "ENTREPOT_LOGISTICS_NETTOYAGE_COMMUNS_0058",
+      "competence_requise": "equipe_sanitaires"
     },
     {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_SOLS_0107",
-      "poste_id": "EQUIPE_SOLS_3",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_SANITAIRES_0106",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "code_operation": "ENTREPOT_LOGISTICS_NETTOYAGE_SOLS_0060",
+      "duree_jours": 2,
+      "poste_id": "MACHINE_AUTOLAVEUSE_1",
+      "operation_precedente": "ENTREPOT_LOGISTICS_NETTOYAGE_SANITAIRES_0059",
+      "competence_requise": "machine_autolaveuse"
     },
     {
-      "code_operation": "HOTEL_MERIDIEN_NETTOYAGE_BUREAUX_0108",
-      "poste_id": "EQUIPE_BUREAUX_10",
-      "operation_precedente": "HOTEL_MERIDIEN_NETTOYAGE_SOLS_0107",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_SANITAIRES_0109",
-      "poste_id": "EQUIPE_SANITAIRES_9",
+      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_COMMUNS_0061",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_9",
       "operation_precedente": null,
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "competence_requise": "equipe_espaces_communs"
     },
     {
-      "code_operation": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_VITRES_0110",
-      "poste_id": "EQUIPE_VITRES_6",
-      "operation_precedente": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_SANITAIRES_0109",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
+      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_BUREAUX_0062",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_BUREAUX_9",
+      "operation_precedente": "RESIDENCE_BELLE_VUE_NETTOYAGE_COMMUNS_0061",
+      "competence_requise": "equipe_bureaux"
     },
     {
-      "code_operation": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_SOLS_0111",
-      "poste_id": "EQUIPE_SOLS_3",
-      "operation_precedente": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_VITRES_0110",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "RESIDENCE_BELLE_VUE_NETTOYAGE_VITRES_0063",
+      "duree_jours": 3,
+      "poste_id": "EQUIPE_VITRES_5",
+      "operation_precedente": "RESIDENCE_BELLE_VUE_NETTOYAGE_BUREAUX_0062",
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_BUREAUX_0112",
-      "poste_id": "EQUIPE_BUREAUX_12",
-      "operation_precedente": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_SOLS_0111",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "RESIDENCE_BELLE_VUE_CONTROLE_QUALITE_0064",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_2",
+      "operation_precedente": "RESIDENCE_BELLE_VUE_NETTOYAGE_VITRES_0063",
+      "competence_requise": "poste_controle_qualite"
     },
     {
-      "code_operation": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_COMMUNS_0113",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_8",
-      "operation_precedente": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_BUREAUX_0112",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "CASERNE_POMPIERS_NETTOYAGE_SOLS_0065",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_SOLS_12",
+      "operation_precedente": null,
+      "competence_requise": "equipe_sols"
     },
     {
-      "code_operation": "CENTRE_COMMERCIAL_VELIZY_CONTROLE_QUALITE_0114",
+      "code_operation": "CASERNE_POMPIERS_NETTOYAGE_VITRES_0066",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_VITRES_7",
+      "operation_precedente": "CASERNE_POMPIERS_NETTOYAGE_SOLS_0065",
+      "competence_requise": "equipe_vitres"
+    },
+    {
+      "code_operation": "CASERNE_POMPIERS_CONTROLE_QUALITE_0067",
+      "duree_jours": 1,
       "poste_id": "POSTE_CONTROLE_QUALITE_4",
-      "operation_precedente": "CENTRE_COMMERCIAL_VELIZY_NETTOYAGE_COMMUNS_0113",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "CASERNE_POMPIERS_NETTOYAGE_VITRES_0066",
+      "competence_requise": "poste_controle_qualite"
     },
     {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_COMMUNS_0115",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_4",
+      "code_operation": "CASERNE_POMPIERS_NETTOYAGE_BUREAUX_0068",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_BUREAUX_7",
+      "operation_precedente": "CASERNE_POMPIERS_CONTROLE_QUALITE_0067",
+      "competence_requise": "equipe_bureaux"
+    },
+    {
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_VITRES_0069",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_VITRES_7",
       "operation_precedente": null,
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "COMMISSARIAT_CENTRAL_CONTROLE_QUALITE_0116",
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_COMMUNS_0115",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0070",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_1",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_VITRES_0069",
+      "competence_requise": "poste_controle_qualite"
     },
     {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_VITRES_0117",
-      "poste_id": "EQUIPE_VITRES_4",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_CONTROLE_QUALITE_0116",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0071",
+      "duree_jours": 1,
+      "poste_id": "EQUIPE_BUREAUX_10",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_CONTROLE_QUALITE_0070",
+      "competence_requise": "equipe_bureaux"
     },
     {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_SANITAIRES_0118",
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_SANITAIRES_0072",
+      "duree_jours": 1,
       "poste_id": "EQUIPE_SANITAIRES_9",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_VITRES_0117",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_BUREAUX_0071",
+      "competence_requise": "equipe_sanitaires"
     },
     {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_BUREAUX_0119",
-      "poste_id": "EQUIPE_BUREAUX_12",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_SANITAIRES_0118",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "code_operation": "IMMEUBLE_HAUSMANN_NETTOYAGE_COMMUNS_0073",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_ESPACES_COMMUNS_11",
+      "operation_precedente": "IMMEUBLE_HAUSMANN_NETTOYAGE_SANITAIRES_0072",
+      "competence_requise": "equipe_espaces_communs"
     },
     {
-      "code_operation": "COMMISSARIAT_CENTRAL_NETTOYAGE_SOLS_0120",
-      "poste_id": "MACHINE_AUTOLAVEUSE_5",
-      "operation_precedente": "COMMISSARIAT_CENTRAL_NETTOYAGE_BUREAUX_0119",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_SOLS_0121",
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_SOLS_0074",
+      "duree_jours": 2,
       "poste_id": "EQUIPE_SOLS_8",
       "operation_precedente": null,
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "competence_requise": "equipe_sols"
     },
     {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_SANITAIRES_0122",
-      "poste_id": "EQUIPE_SANITAIRES_1",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_SOLS_0121",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_COMMUNS_0123",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_SANITAIRES_0122",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_CONTROLE_QUALITE_0124",
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_COMMUNS_0123",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_BUREAUX_0125",
-      "poste_id": "EQUIPE_BUREAUX_9",
-      "operation_precedente": "ECOLE_PASTEUR_CONTROLE_QUALITE_0124",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_VITRES_0126",
-      "poste_id": "EQUIPE_VITRES_5",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_BUREAUX_0125",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_BUREAUX_0127",
-      "poste_id": "EQUIPE_BUREAUX_6",
-      "operation_precedente": null,
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_COMMUNS_0128",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_4",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_BUREAUX_0127",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_NETTOYAGE_SOLS_0129",
-      "poste_id": "EQUIPE_SOLS_6",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_COMMUNS_0128",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "ECOLE_PASTEUR_CONTROLE_QUALITE_0130",
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": "ECOLE_PASTEUR_NETTOYAGE_SOLS_0129",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_VITRES_0131",
-      "poste_id": "EQUIPE_VITRES_6",
-      "operation_precedente": null,
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_SANITAIRES_0132",
-      "poste_id": "EQUIPE_SANITAIRES_6",
-      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_VITRES_0131",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_BUREAUX_0133",
-      "poste_id": "EQUIPE_BUREAUX_14",
-      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_SANITAIRES_0132",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "TOUR_MONTPARNASSE_CONTROLE_QUALITE_0134",
-      "poste_id": "POSTE_CONTROLE_QUALITE_3",
-      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_BUREAUX_0133",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_SOLS_0135",
-      "poste_id": "MACHINE_AUTOLAVEUSE_5",
-      "operation_precedente": "TOUR_MONTPARNASSE_CONTROLE_QUALITE_0134",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "TOUR_MONTPARNASSE_NETTOYAGE_COMMUNS_0136",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_12",
-      "operation_precedente": "TOUR_MONTPARNASSE_NETTOYAGE_SOLS_0135",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SANITAIRES_0137",
-      "poste_id": "EQUIPE_SANITAIRES_9",
-      "operation_precedente": null,
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SOLS_0138",
-      "poste_id": "MACHINE_AUTOLAVEUSE_2",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SANITAIRES_0137",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_VITRES_0139",
-      "poste_id": "EQUIPE_VITRES_8",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SOLS_0138",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "GARE_LYON_CONTROLE_QUALITE_0140",
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_VITRES_0139",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_COMMUNS_0141",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_7",
-      "operation_precedente": "GARE_LYON_CONTROLE_QUALITE_0140",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_CONTROLE_QUALITE_0142",
-      "poste_id": "POSTE_CONTROLE_QUALITE_2",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_COMMUNS_0143",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_6",
-      "operation_precedente": "HOPITAL_POMPIDOU_CONTROLE_QUALITE_0142",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_VITRES_0144",
-      "poste_id": "EQUIPE_VITRES_5",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_COMMUNS_0143",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_BUREAUX_0145",
-      "poste_id": "EQUIPE_BUREAUX_5",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_VITRES_0144",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_SANITAIRES_0146",
-      "poste_id": "EQUIPE_SANITAIRES_5",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_BUREAUX_0145",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_SOLS_0147",
-      "poste_id": "MACHINE_AUTOLAVEUSE_6",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_SANITAIRES_0146",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_COMMUNS_0148",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_6",
-      "operation_precedente": null,
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_SANITAIRES_0149",
-      "poste_id": "EQUIPE_SANITAIRES_2",
-      "operation_precedente": "USINE_RENAULT_NETTOYAGE_COMMUNS_0148",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "USINE_RENAULT_CONTROLE_QUALITE_0150",
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": "USINE_RENAULT_NETTOYAGE_SANITAIRES_0149",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_BUREAUX_0151",
-      "poste_id": "EQUIPE_BUREAUX_4",
-      "operation_precedente": "USINE_RENAULT_CONTROLE_QUALITE_0150",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_VITRES_0152",
-      "poste_id": "EQUIPE_VITRES_3",
-      "operation_precedente": "USINE_RENAULT_NETTOYAGE_BUREAUX_0151",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_BUREAUX_0153",
-      "poste_id": "EQUIPE_BUREAUX_7",
-      "operation_precedente": null,
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_COMMUNS_0154",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_5",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_BUREAUX_0153",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_VITRES_0155",
-      "poste_id": "EQUIPE_VITRES_3",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_COMMUNS_0154",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SOLS_0156",
-      "poste_id": "MACHINE_AUTOLAVEUSE_6",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_VITRES_0155",
-      "competence_requise": "machine_autolaveuse",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GARE_LYON_NETTOYAGE_SANITAIRES_0157",
-      "poste_id": "EQUIPE_SANITAIRES_2",
-      "operation_precedente": "GARE_LYON_NETTOYAGE_SOLS_0156",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_BUREAUX_0158",
-      "poste_id": "EQUIPE_BUREAUX_12",
-      "operation_precedente": null,
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_CONTROLE_QUALITE_0159",
-      "poste_id": "POSTE_CONTROLE_QUALITE_1",
-      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_BUREAUX_0158",
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_SOLS_0160",
-      "poste_id": "EQUIPE_SOLS_7",
-      "operation_precedente": "MUSEE_LOUVRE_CONTROLE_QUALITE_0159",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_VITRES_0161",
-      "poste_id": "EQUIPE_VITRES_1",
-      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_SOLS_0160",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_COMMUNS_0162",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_1",
-      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_VITRES_0161",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MUSEE_LOUVRE_NETTOYAGE_SANITAIRES_0163",
-      "poste_id": "EQUIPE_SANITAIRES_7",
-      "operation_precedente": "MUSEE_LOUVRE_NETTOYAGE_COMMUNS_0162",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_CONTROLE_QUALITE_0164",
-      "poste_id": "POSTE_CONTROLE_QUALITE_5",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_BUREAUX_0165",
-      "poste_id": "EQUIPE_BUREAUX_2",
-      "operation_precedente": "HOPITAL_POMPIDOU_CONTROLE_QUALITE_0164",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_VITRES_0166",
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_VITRES_0075",
+      "duree_jours": 4,
       "poste_id": "EQUIPE_VITRES_2",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_BUREAUX_0165",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
+      "operation_precedente": "PISCINE_MUNICIPALE_NETTOYAGE_SOLS_0074",
+      "competence_requise": "equipe_vitres"
     },
     {
-      "code_operation": "HOPITAL_POMPIDOU_NETTOYAGE_COMMUNS_0167",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_6",
-      "operation_precedente": "HOPITAL_POMPIDOU_NETTOYAGE_VITRES_0166",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "PISCINE_MUNICIPALE_CONTROLE_QUALITE_0076",
+      "duree_jours": 1,
+      "poste_id": "POSTE_CONTROLE_QUALITE_5",
+      "operation_precedente": "PISCINE_MUNICIPALE_NETTOYAGE_VITRES_0075",
+      "competence_requise": "poste_controle_qualite"
     },
     {
-      "code_operation": "USINE_RENAULT_CONTROLE_QUALITE_0168",
-      "poste_id": "POSTE_CONTROLE_QUALITE_4",
-      "operation_precedente": null,
-      "competence_requise": "poste_controle_qualite",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_SOLS_0169",
-      "poste_id": "EQUIPE_SOLS_4",
-      "operation_precedente": "USINE_RENAULT_CONTROLE_QUALITE_0168",
-      "competence_requise": "equipe_sols",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_VITRES_0170",
-      "poste_id": "EQUIPE_VITRES_3",
-      "operation_precedente": "USINE_RENAULT_NETTOYAGE_SOLS_0169",
-      "competence_requise": "equipe_vitres",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_COMMUNS_0171",
-      "poste_id": "EQUIPE_ESPACES_COMMUNS_5",
-      "operation_precedente": "USINE_RENAULT_NETTOYAGE_VITRES_0170",
-      "competence_requise": "equipe_espaces_communs",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_SANITAIRES_0172",
-      "poste_id": "EQUIPE_SANITAIRES_5",
-      "operation_precedente": "USINE_RENAULT_NETTOYAGE_COMMUNS_0171",
-      "competence_requise": "equipe_sanitaires",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "USINE_RENAULT_NETTOYAGE_BUREAUX_0173",
-      "poste_id": "EQUIPE_BUREAUX_10",
-      "operation_precedente": "USINE_RENAULT_NETTOYAGE_SANITAIRES_0172",
-      "competence_requise": "equipe_bureaux",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "PISCINE_MUNICIPALE_NETTOYAGE_BUREAUX_0077",
+      "duree_jours": 2,
+      "poste_id": "EQUIPE_BUREAUX_11",
+      "operation_precedente": "PISCINE_MUNICIPALE_CONTROLE_QUALITE_0076",
+      "competence_requise": "equipe_bureaux"
     }
   ],
   "postes": [

@@ -2,43 +2,35 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Pesée ingrédients",
-      "duree_estimee_jours": 0.1
+      "nom": "Pesée ingrédients"
     },
     {
       "id": "T2",
-      "nom": "Pétrissage",
-      "duree_estimee_jours": 0.15
+      "nom": "Pétrissage"
     },
     {
       "id": "T3",
-      "nom": "Première pousse",
-      "duree_estimee_jours": 0.3
+      "nom": "Première pousse"
     },
     {
       "id": "T4",
-      "nom": "Façonnage",
-      "duree_estimee_jours": 0.2
+      "nom": "Façonnage"
     },
     {
       "id": "T5",
-      "nom": "Deuxième pousse",
-      "duree_estimee_jours": 0.4
+      "nom": "Deuxième pousse"
     },
     {
       "id": "T6",
-      "nom": "Scarification",
-      "duree_estimee_jours": 0.05
+      "nom": "Scarification"
     },
     {
       "id": "T7",
-      "nom": "Cuisson",
-      "duree_estimee_jours": 0.2
+      "nom": "Cuisson"
     },
     {
       "id": "T8",
-      "nom": "Refroidissement",
-      "duree_estimee_jours": 0.1
+      "nom": "Refroidissement"
     }
   ],
   "ressources": [
@@ -124,44 +116,58 @@
       "apres": "T8"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "pesee"
+      "ressource": "R1",
+      "duree": 0.1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R4",
+      "duree": 0.1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "petrissage"
+      "ressource": "R2",
+      "duree": 0.15
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "pousse"
+      "ressource": "R3",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "faconnage"
+      "ressource": "R4",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "pousse"
+      "ressource": "R3",
+      "duree": 0.4
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "scarification"
+      "ressource": "R4",
+      "duree": 0.05
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "cuisson"
+      "ressource": "R5",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "refroidissement"
+      "ressource": "R6",
+      "duree": 0.1
     }
   ],
   "objectifs": [

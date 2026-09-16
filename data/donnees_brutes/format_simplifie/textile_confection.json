@@ -2,43 +2,35 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Coupe tissu",
-      "duree_estimee_jours": 0.5
+      "nom": "Coupe tissu"
     },
     {
       "id": "T2",
-      "nom": "Surfilage",
-      "duree_estimee_jours": 0.3
+      "nom": "Surfilage"
     },
     {
       "id": "T3",
-      "nom": "Assemblage pièces",
-      "duree_estimee_jours": 1
+      "nom": "Assemblage pièces"
     },
     {
       "id": "T4",
-      "nom": "Montage fermeture",
-      "duree_estimee_jours": 0.4
+      "nom": "Montage fermeture"
     },
     {
       "id": "T5",
-      "nom": "Pose boutons",
-      "duree_estimee_jours": 0.3
+      "nom": "Pose boutons"
     },
     {
       "id": "T6",
-      "nom": "Repassage",
-      "duree_estimee_jours": 0.2
+      "nom": "Repassage"
     },
     {
       "id": "T7",
-      "nom": "Contrôle qualité",
-      "duree_estimee_jours": 0.2
+      "nom": "Contrôle qualité"
     },
     {
       "id": "T8",
-      "nom": "Emballage",
-      "duree_estimee_jours": 0.1
+      "nom": "Emballage"
     }
   ],
   "ressources": [
@@ -129,44 +121,52 @@
       "apres": "T8"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "coupe"
+      "ressource": "R1",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "surfilage"
+      "ressource": "R2",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "assemblage"
+      "ressource": "R3",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "montage_fermeture"
+      "ressource": "R3",
+      "duree": 0.4
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "pose_boutons"
+      "ressource": "R4",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "repassage"
+      "ressource": "R5",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "controle"
+      "ressource": "R6",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "emballage"
+      "ressource": "R6",
+      "duree": 0.1
     }
   ],
   "objectifs": [

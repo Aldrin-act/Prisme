@@ -2,18 +2,15 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Préparation patient",
-      "duree_estimee_jours": 1
+      "nom": "Préparation patient"
     },
     {
       "id": "T2",
-      "nom": "Intervention",
-      "duree_estimee_jours": 2
+      "nom": "Intervention"
     },
     {
       "id": "T3",
-      "nom": "Surveillance",
-      "duree_estimee_jours": 2
+      "nom": "Surveillance"
     }
   ],
   "ressources": [
@@ -51,19 +48,22 @@
       "apres": "T3"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "preparation"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "intervention"
+      "ressource": "R2",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "surveillance"
+      "ressource": "R3",
+      "duree": 2
     }
   ],
   "objectifs": [

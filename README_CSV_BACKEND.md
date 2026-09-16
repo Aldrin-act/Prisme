@@ -144,15 +144,14 @@ Chaque dossier doit contenir exactement **3 fichiers** :
 ### 1. taches.csv
 
 ```csv
-id,nom,duree_estimee_jours
-PREP_PCB,Preparation PCB,1
-POSE_CMS,Pose des composants,2
+id,nom
+PREP_PCB,Preparation PCB
+POSE_CMS,Pose des composants
 ```
 
 **Colonnes** :
 - `id` (requis) : Identifiant unique de la tâche
 - `nom` (optionnel) : Nom descriptif
-- `duree_estimee_jours` (optionnel) : Durée estimée pour dérivation de compatibilités
 
 ### 2. ressources.csv
 

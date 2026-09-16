@@ -1,11 +1,11 @@
 id,nom,competences
-POSTE_SOUDURE_MANUEL,,poste_soudure_manuel
-STATION_PACKAGING,,station_packaging
+AOI,,aoi
+ROBOT_COATING,,robot_coating
 PICK_PLACE,,pick_place
 FOUR_REFUSION,,four_refusion
-ROBOT_COATING,,robot_coating
-BANC_TEST_ICT,,banc_test_ict
-POSTE_DEPANNELISATION,,poste_depannelisation
+POSTE_SOUDURE_MANUEL,,poste_soudure_manuel
+STATION_PACKAGING,,station_packaging
 STATION_ASSEMBLAGE,,station_assemblage
+POSTE_DEPANNELISATION,,poste_depannelisation
 BANC_TEST_FONCTIONNEL,,banc_test_fonctionnel
-AOI,,aoi
+BANC_TEST_ICT,,banc_test_ict

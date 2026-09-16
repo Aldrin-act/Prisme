@@ -2,23 +2,19 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Découpe",
-      "duree_estimee_jours": 1
+      "nom": "Découpe"
     },
     {
       "id": "T2",
-      "nom": "Perçage",
-      "duree_estimee_jours": 1
+      "nom": "Perçage"
     },
     {
       "id": "T3",
-      "nom": "Soudure",
-      "duree_estimee_jours": 2
+      "nom": "Soudure"
     },
     {
       "id": "T4",
-      "nom": "Contrôle",
-      "duree_estimee_jours": 1
+      "nom": "Contrôle"
     }
   ],
   "ressources": [
@@ -68,24 +64,28 @@
       "apres": "T4"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "decoupe"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "percage"
+      "ressource": "R2",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "soudure"
+      "ressource": "R3",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "controle"
+      "ressource": "R4",
+      "duree": 1
     }
   ],
   "objectifs": [

@@ -1,11 +1,11 @@
 {
   "taches": [
-    { "id": "DECOUPE_001", "nom": "Découpe planches lot A", "priorite": 3, "duree_estimee_jours": 1 },
+    { "id": "DECOUPE_001", "nom": "Découpe planches lot A", "priorite": 3 },
     { "id": "RABOTAGE_001", "nom": "Rabotage lot A", "priorite": 3 },
-    { "id": "ASSEMBLAGE_001", "nom": "Assemblage caisson lot A", "priorite": 3, "duree_estimee_jours": 2 },
+    { "id": "ASSEMBLAGE_001", "nom": "Assemblage caisson lot A", "priorite": 3 },
     { "id": "PONCAGE_001", "nom": "Ponçage caisson lot A", "priorite": 2 },
     { "id": "VERNISSAGE_001", "nom": "Vernissage caisson lot A", "priorite": 2 },
-    { "id": "CONTROLE_001", "nom": "Contrôle qualité lot A", "priorite": 4, "duree_estimee_jours": 1 },
+    { "id": "CONTROLE_001", "nom": "Contrôle qualité lot A", "priorite": 4 },
     { "id": "DECOUPE_002", "nom": "Découpe planches lot B", "priorite": 1 },
     { "id": "ASSEMBLAGE_002", "nom": "Assemblage caisson lot B", "priorite": 1 }
   ],
@@ -33,10 +33,6 @@
     { "type": "precedence", "avant": "PONCAGE_001", "apres": "VERNISSAGE_001" },
     { "type": "precedence", "avant": "VERNISSAGE_001", "apres": "CONTROLE_001" },
     { "type": "precedence", "avant": "DECOUPE_002", "apres": "ASSEMBLAGE_002" },
-
-    { "type": "competence_requise", "tache": "DECOUPE_001", "competence": "decoupe" },
-    { "type": "competence_requise", "tache": "ASSEMBLAGE_001", "competence": "assemblage" },
-    { "type": "competence_requise", "tache": "CONTROLE_001", "competence": "controle" },
 
     { "type": "echeance", "tache": "CONTROLE_001", "echeance": 10 },
 

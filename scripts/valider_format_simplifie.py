@@ -70,18 +70,6 @@ def valider_ids_taches(data: dict[str, Any], nom_fichier: str) -> bool:
             print(f"ERREUR {nom_fichier}: Tache {tid} sans nom")
             return False
 
-        if "duree_estimee_jours" not in tache:
-            print(f"ERREUR {nom_fichier}: Tache {tid} sans duree")
-            return False
-
-        if not isinstance(tache["duree_estimee_jours"], (int, float)):
-            print(f"ERREUR {nom_fichier}: Tache {tid} duree invalide: {tache['duree_estimee_jours']}")
-            return False
-
-        if tache["duree_estimee_jours"] <= 0:
-            print(f"ERREUR {nom_fichier}: Tache {tid} duree non positive: {tache['duree_estimee_jours']}")
-            return False
-
     return True
 
 

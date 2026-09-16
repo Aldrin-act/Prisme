@@ -29,34 +29,36 @@ DOSSIER_SORTIE = Path(__file__).resolve().parent.parent / "docs" / "dsl" / "gaba
 def construire(dossier_sortie: Path) -> None:
     dossier_sortie.mkdir(parents=True, exist_ok=True)
 
-    # `duree_estimee_jours` : nécessaire pour toute tâche dont la
-    # compatibilité est dérivée par compétence — c'est le cas de T1 et T2 ici,
-    # aucune des deux ne déclare de compatibilite_ressource_tache directement.
+    # Aucune durée sur la tâche elle-même (`Tache` n'en a délibérément aucun
+    # champ, §4.2 — la durée dépend de la ressource en vrai FJSP flexible) :
+    # elle se déclare via compatibilite_ressource_tache, dans contraintes.csv.
     with (dossier_sortie / "taches.csv").open("w", newline="", encoding="utf-8") as f:
         ecrivain = csv.writer(f)
-        ecrivain.writerow(["id", "nom", "duree_estimee_jours"])
-        ecrivain.writerow(["T1", "Decoupe", "3"])
-        ecrivain.writerow(["T2", "Assemblage", "2"])
+        ecrivain.writerow(["id", "nom"])
+        ecrivain.writerow(["T1", "Decoupe"])
+        ecrivain.writerow(["T2", "Assemblage"])
 
-    # `competences` : liste séparée par `;` (la virgule est déjà le
-    # délimiteur CSV) — R1 sait faire les deux, utilisé pour dériver sa
-    # compatibilité avec T1 et T2 sans la saisir à la main.
+    # `competences` optionnel, laissé vide ici : la dérivation par compétence
+    # (voir `adapters/csv_import/traducteur.py`) a besoin d'un estimateur ML
+    # pour combler la durée d'une tâche sans compatibilité déjà explicite —
+    # un gabarit de départ doit rester valide sans en fournir un, d'où la
+    # compatibilité explicite ci-dessous plutôt qu'une dérivation ici.
     with (dossier_sortie / "ressources.csv").open("w", newline="", encoding="utf-8") as f:
         ecrivain = csv.writer(f)
         ecrivain.writerow(["id", "nom", "competences"])
-        ecrivain.writerow(["R1", "Decoupeuse", "decoupe;assemblage"])
+        ecrivain.writerow(["R1", "Decoupeuse", ""])
 
-    # Compatibilité entièrement dérivée par compétence, aucune saisie
-    # directe de compatibilite_ressource_tache dans cet exemple (ce type de
-    # ligne reste supporté par l'adaptateur, juste pas illustré ici).
+    # Compatibilité déclarée explicitement (avec sa durée) pour T1 et T2 —
+    # voie fiable et toujours valide, contrairement à la dérivation par
+    # compétence qui dépend d'un estimateur ML fourni à l'ingestion.
     with (dossier_sortie / "contraintes.csv").open("w", newline="", encoding="utf-8") as f:
         ecrivain = csv.writer(f)
         ecrivain.writerow(
             ["type", "tache_avant", "tache_apres", "tache", "ressource", "duree_jours", "competence"]
         )
         ecrivain.writerow(["precedence", "T1", "T2", "", "", "", ""])
-        ecrivain.writerow(["competence_requise", "", "", "T1", "", "", "decoupe"])
-        ecrivain.writerow(["competence_requise", "", "", "T2", "", "", "assemblage"])
+        ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T1", "R1", "3", ""])
+        ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T2", "R1", "2", ""])
 
     # `taches` : liste de tâches liées séparée par `;`, même convention que
     # `competences` sur ressources.csv. `date_limite` en jours relatifs (jamais

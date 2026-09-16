@@ -25,10 +25,10 @@ fier à un raisonnement non vérifié).
 
 ## Contenu
 
-8 tâches, 6 ressources, 6 types de contraintes différents en une seule
-instance (`precedence`, `compatibilite_ressource_tache`, `competence_requise`,
-`echeance`, `capacite`, `disponibilite_ressource`) — un atelier de
-menuiserie fictif avec deux lots de production en parallèle.
+8 tâches, 6 ressources, 5 types de contraintes différents en une seule
+instance (`precedence`, `compatibilite_ressource_tache`, `echeance`,
+`capacite`, `disponibilite_ressource`) — un atelier de menuiserie fictif
+avec deux lots de production en parallèle.
 
 ## Utiliser avec l'onglet « API »
 

@@ -2,28 +2,23 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Réception",
-      "duree_estimee_jours": 1
+      "nom": "Réception"
     },
     {
       "id": "T2",
-      "nom": "Lavage",
-      "duree_estimee_jours": 1
+      "nom": "Lavage"
     },
     {
       "id": "T3",
-      "nom": "Découpe",
-      "duree_estimee_jours": 2
+      "nom": "Découpe"
     },
     {
       "id": "T4",
-      "nom": "Cuisson",
-      "duree_estimee_jours": 3
+      "nom": "Cuisson"
     },
     {
       "id": "T5",
-      "nom": "Conditionnement",
-      "duree_estimee_jours": 2
+      "nom": "Conditionnement"
     }
   ],
   "ressources": [
@@ -85,29 +80,34 @@
       "apres": "T5"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "reception"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "lavage"
+      "ressource": "R2",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "decoupe"
+      "ressource": "R3",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "cuisson"
+      "ressource": "R4",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "conditionnement"
+      "ressource": "R5",
+      "duree": 2
     }
   ],
   "objectifs": [

@@ -73,6 +73,18 @@ export function formatDateRelative(
   return unite === "heures" ? FORMATTEUR_DATE_HEURE.format(date) : FORMATTEUR_DATE.format(date);
 }
 
+// Jour seul (sans l'heure), même format que le mode jours de `formatDateRelative` — utilisé par
+// l'axe du Gantt en mode heures pour une ligne de regroupement par jour distincte de la ligne
+// d'heures (voir `gantt-chart.tsx`), plutôt que de répéter la date entière sur chaque colonne.
+export function formatJour(date: Date): string {
+  return FORMATTEUR_DATE.format(date);
+}
+
+// Heure seule ("HH:mm"), en heure locale — deuxième ligne de l'axe du Gantt en mode heures.
+export function formatHeure(date: Date): string {
+  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+}
+
 // Format "YYYY-MM-DD" attendu par <input type="date">, en heure locale — jamais
 // `toISOString().slice(0, 10)`, qui bascule en UTC et peut faire glisser d'un jour selon le
 // fuseau de l'utilisateur.

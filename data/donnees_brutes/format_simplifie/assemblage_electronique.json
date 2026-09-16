@@ -2,28 +2,23 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Préparation",
-      "duree_estimee_jours": 1
+      "nom": "Préparation"
     },
     {
       "id": "T2",
-      "nom": "Pose CMS",
-      "duree_estimee_jours": 2
+      "nom": "Pose CMS"
     },
     {
       "id": "T3",
-      "nom": "Réfusion",
-      "duree_estimee_jours": 1
+      "nom": "Réfusion"
     },
     {
       "id": "T4",
-      "nom": "Inspection",
-      "duree_estimee_jours": 1
+      "nom": "Inspection"
     },
     {
       "id": "T5",
-      "nom": "Test",
-      "duree_estimee_jours": 1
+      "nom": "Test"
     }
   ],
   "ressources": [
@@ -85,29 +80,34 @@
       "apres": "T5"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "preparation"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "pick_place"
+      "ressource": "R2",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "refusion"
+      "ressource": "R3",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "inspection"
+      "ressource": "R4",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "test"
+      "ressource": "R5",
+      "duree": 1
     }
   ],
   "objectifs": [

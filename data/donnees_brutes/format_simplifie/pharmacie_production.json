@@ -2,58 +2,47 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Réception matières premières",
-      "duree_estimee_jours": 0.5
+      "nom": "Réception matières premières"
     },
     {
       "id": "T2",
-      "nom": "Contrôle qualité MP",
-      "duree_estimee_jours": 1
+      "nom": "Contrôle qualité MP"
     },
     {
       "id": "T3",
-      "nom": "Pesée",
-      "duree_estimee_jours": 0.3
+      "nom": "Pesée"
     },
     {
       "id": "T4",
-      "nom": "Mélange",
-      "duree_estimee_jours": 2
+      "nom": "Mélange"
     },
     {
       "id": "T5",
-      "nom": "Granulation",
-      "duree_estimee_jours": 1
+      "nom": "Granulation"
     },
     {
       "id": "T6",
-      "nom": "Séchage",
-      "duree_estimee_jours": 3
+      "nom": "Séchage"
     },
     {
       "id": "T7",
-      "nom": "Compression",
-      "duree_estimee_jours": 1
+      "nom": "Compression"
     },
     {
       "id": "T8",
-      "nom": "Enrobage",
-      "duree_estimee_jours": 2
+      "nom": "Enrobage"
     },
     {
       "id": "T9",
-      "nom": "Contrôle final",
-      "duree_estimee_jours": 1
+      "nom": "Contrôle final"
     },
     {
       "id": "T10",
-      "nom": "Conditionnement primaire",
-      "duree_estimee_jours": 0.5
+      "nom": "Conditionnement primaire"
     },
     {
       "id": "T11",
-      "nom": "Conditionnement secondaire",
-      "duree_estimee_jours": 0.3
+      "nom": "Conditionnement secondaire"
     }
   ],
   "ressources": [
@@ -175,59 +164,70 @@
       "apres": "T11"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "reception"
+      "ressource": "R1",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "controle_mp"
+      "ressource": "R2",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "pesee"
+      "ressource": "R3",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "melange"
+      "ressource": "R4",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "granulation"
+      "ressource": "R5",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "sechage"
+      "ressource": "R6",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "compression"
+      "ressource": "R7",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "enrobage"
+      "ressource": "R8",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T9",
-      "competence": "controle_final"
+      "ressource": "R2",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T10",
-      "competence": "conditionnement_primaire"
+      "ressource": "R9",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T11",
-      "competence": "conditionnement_secondaire"
+      "ressource": "R9",
+      "duree": 0.3
     }
   ],
   "objectifs": [

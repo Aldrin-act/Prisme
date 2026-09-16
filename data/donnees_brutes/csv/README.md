@@ -46,18 +46,15 @@ Chaque secteur contient **3 fichiers CSV séparés**, suivant le format standard
 #### 1. **taches.csv**
 
 ```csv
-id,nom,duree_estimee_jours
-T001,Découpe,1
-T002,Assemblage,2
+id,nom
+T001,Découpe
+T002,Assemblage
 ```
 
 | Colonne | Requis | Description | Exemple |
 |---------|--------|-------------|---------|
 | `id` | ✅ Oui | Identifiant unique de la tâche | T001 |
 | `nom` | Non | Nom descriptif | Découpe laser |
-| `duree_estimee_jours` | Non* | Durée estimée (si dérivation par compétence) | 2 |
-
-*Requis uniquement pour les tâches dont la compatibilité est dérivée par compétence (voir ci-dessous).
 
 #### 2. **ressources.csv**
 
@@ -103,16 +100,17 @@ Au lieu de saisir manuellement chaque couple `(tache, ressource, duree)` dans `c
 
 1. Déclarer les **compétences** d'une ressource dans `ressources.csv` (colonne `competences`)
 2. Déclarer qu'une tâche **exige** une compétence dans `contraintes.csv` (ligne `competence_requise`)
-3. Spécifier la **durée estimée** de la tâche dans `taches.csv` (colonne `duree_estimee_jours`)
+3. Fournir un estimateur de durée (`estimateur_duree`, apprentissage automatique — voir `estimation/`)
+   à l'ingestion, pour combler la durée des tâches sans compatibilité déjà explicite
 
-L'adaptateur crée alors automatiquement une `compatibilite_ressource_tache` pour chaque ressource possédant la compétence requise, avec la durée estimée de la tâche.
+L'adaptateur crée alors automatiquement une `compatibilite_ressource_tache` pour chaque ressource possédant la compétence requise, avec la durée comblée par l'estimateur.
 
 **Exemple** :
 
 ```csv
 # taches.csv
-id,nom,duree_estimee_jours
-T001,Soudure,2
+id,nom
+T001,Soudure
 
 # ressources.csv
 id,nom,competences
@@ -124,7 +122,7 @@ type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
 competence_requise,,,T001,,,soudure
 ```
 
-→ Génère automatiquement :
+→ Génère automatiquement (durée comblée par l'estimateur, ici 2 jours) :
 - `CompatibiliteRessourceTache(tache=T001, ressource=R001, duree=2)`
 - `CompatibiliteRessourceTache(tache=T001, ressource=R002, duree=2)`
 

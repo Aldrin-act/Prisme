@@ -236,8 +236,11 @@ def test_ingestion_depuis_csv_rejette_un_delimiteur_multi_caracteres() -> None:
 def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
     """Bout en bout (§5.4) : plutôt que de saisir tache/ressource/duree à la
     main, une ressource déclare une compétence et une tâche l'exige — la
-    compatibilité (et sa durée) est calculée par l'adaptateur, pas par
-    l'utilisateur (`adapters/csv_import/traducteur.py`)."""
+    compatibilité est calculée par l'adaptateur, sa durée comblée par
+    l'estimateur ML branché par défaut sur cette route
+    (`_estimateur_duree_optionnel`, `api/routes/adapters.py` — voir aussi
+    `test_ingestion_depuis_json_comble_une_duree_manquante_par_estimation_ml`,
+    même mécanisme côté JSON)."""
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
 
@@ -246,7 +249,7 @@ def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
         reponse = client.post(
             "/adapters/csv/client_test",
             files={
-                "taches": ("taches.csv", b"id,duree_estimee_jours\nT1,25\n", "text/csv"),
+                "taches": ("taches.csv", b"id\nT1\n", "text/csv"),
                 "ressources": ("ressources.csv", b"id,competences\nR1,decoupe\nR2,assemblage\n", "text/csv"),
                 "contraintes": (
                     "contraintes.csv",
@@ -259,10 +262,14 @@ def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
         assert reponse.status_code == 200, reponse.json()
         corps = reponse.json()
         assert corps["structure_contraintes"] == "compatibilite_ressource_tache,competence_requise"
+        assert any("estimée par apprentissage automatique" in a for a in corps["avertissements"])
         instance_id = corps["instance_id"]
         _, instance = etat_test.instances[instance_id]
         compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
-        assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
+        assert len(compatibilites) == 1
+        assert compatibilites[0].tache == "T1"
+        assert compatibilites[0].ressource == "R1"
+        assert compatibilites[0].duree >= 1
     finally:
         app.dependency_overrides.clear()
 
@@ -414,38 +421,16 @@ def test_ingestion_depuis_json_avec_unite_temps_heures() -> None:
         app.dependency_overrides.clear()
 
 
-def test_ingestion_depuis_json_derive_la_compatibilite_par_competence() -> None:
-    etat_test = EtatAPI()
-    app.dependency_overrides[obtenir_etat] = lambda: etat_test
-
-    try:
-        client = TestClient(app)
-        reponse = client.post(
-            "/adapters/json/client_test",
-            json={
-                "taches": [{"id": "T1", "duree_estimee_jours": 25}],
-                "ressources": [{"id": "R1", "competences": ["decoupe"]}, {"id": "R2", "competences": []}],
-                "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
-            },
-        )
-
-        assert reponse.status_code == 200, reponse.json()
-        corps = reponse.json()
-        instance_id = corps["instance_id"]
-        _, instance = etat_test.instances[instance_id]
-        compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
-        assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
-    finally:
-        app.dependency_overrides.clear()
-
-
 def test_ingestion_depuis_json_comble_une_duree_manquante_par_estimation_ml() -> None:
     """`estimation` (scikit-learn) est branché par défaut sur cette route
-    (`_estimateur_duree_optionnel`, `api/routes/adapters.py`) — une durée
-    manquante n'est donc plus un rejet : elle est comblée par apprentissage
-    automatique, signalée par un avertissement explicite (§FC4), jamais
-    silencieusement. Voir le test suivant pour le comportement de repli
-    quand `estimation` n'est pas installé."""
+    (`_estimateur_duree_optionnel`, `api/routes/adapters.py`) — une tâche à
+    compétence requise sans compatibilité déjà explicite n'est donc jamais
+    rejetée faute de durée : elle est comblée par apprentissage automatique,
+    signalée par un avertissement explicite (§FC4), jamais silencieusement
+    (même mécanisme côté CSV, voir
+    `test_ingestion_depuis_csv_derive_la_compatibilite_par_competence`). Voir
+    le test suivant pour le comportement de repli quand `estimation` n'est
+    pas installé."""
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
 

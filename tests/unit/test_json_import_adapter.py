@@ -47,7 +47,7 @@ def test_traduire_ingere_une_instance_canonique_sans_transformation() -> None:
 
 def test_traduire_derive_la_compatibilite_par_competence() -> None:
     payload = {
-        "taches": [{"id": "T1", "duree_estimee_jours": 25}],
+        "taches": [{"id": "T1"}],
         "ressources": [
             {"id": "R1", "competences": ["decoupe", "affutage"]},
             {"id": "R2", "competences": ["assemblage"]},
@@ -55,9 +55,9 @@ def test_traduire_derive_la_compatibilite_par_competence() -> None:
         "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
     }
 
-    instance = traduire(payload)
+    resultat = _traduire_resultat(payload, estimateur_duree=_EstimateurFaux(25))
 
-    compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
+    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
     assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
 
 
@@ -208,20 +208,6 @@ def test_estimateur_duree_comble_une_duree_manquante_et_previent() -> None:
     assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 17)]
     assert len(resultat.avertissements) == 1
     assert "T1" in resultat.avertissements[0]
-
-
-def test_duree_declaree_l_emporte_toujours_sur_l_estimateur() -> None:
-    payload = {
-        "taches": [{"id": "T1", "duree_estimee_jours": 25}],
-        "ressources": [{"id": "R1", "competences": ["decoupe"]}],
-        "contraintes": [{"type": "competence_requise", "tache": "T1", "competence": "decoupe"}],
-    }
-
-    resultat = _traduire_resultat(payload, estimateur_duree=_EstimateurFaux(99))
-
-    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
-    assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
-    assert resultat.avertissements == ()
 
 
 def test_sans_estimateur_duree_manquante_leve_toujours_erreur() -> None:

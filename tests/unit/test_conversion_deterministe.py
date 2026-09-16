@@ -54,7 +54,6 @@ def test_type_par_nom_fichier(nom: str, attendu: str | None) -> None:
     [
         ("type,tache_avant,tache_apres,tache,ressource,duree_jours", "contraintes"),
         ("id,nom,competences", "ressources"),
-        ("id,nom,duree_estimee_jours", "taches"),
         ("id,nom", None),
         ("", None),
     ],
@@ -79,15 +78,19 @@ def test_reconstruire_fichiers_csv_par_nom_de_fichier() -> None:
 
 
 def test_reconstruire_fichiers_csv_par_entete_sans_nom_parlant() -> None:
+    """`taches.csv` n'a plus de colonne qui lui soit propre depuis le retrait
+    de `duree_estimee_jours` : son bloc (`export1.csv` ici) n'est identifiable
+    par aucun en-tête, seulement par élimination une fois les deux autres
+    reconnus — exactement ce que ce test vérifie désormais."""
     texte = (
-        "--- export1.csv ---\nid,duree_estimee_jours\nT1,5\n\n"
+        "--- export1.csv ---\nid,nom\nT1,Decoupe\n\n"
         "--- export2.csv ---\nid,competences\nR1,decoupe\n\n"
         "--- export3.csv ---\ntype,tache,competence\ncompetence_requise,T1,decoupe"
     )
 
     taches, ressources, contraintes = _reconstruire_fichiers_csv(texte)
 
-    assert b"duree_estimee_jours" in taches
+    assert b"T1,Decoupe" in taches
     assert b"competences" in ressources
     assert b"competence_requise" in contraintes
 

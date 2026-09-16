@@ -2,33 +2,27 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Découpe pièce A",
-      "duree_estimee_jours": 2
+      "nom": "Découpe pièce A"
     },
     {
       "id": "T2",
-      "nom": "Découpe pièce B",
-      "duree_estimee_jours": 1
+      "nom": "Découpe pièce B"
     },
     {
       "id": "T3",
-      "nom": "Usinage pièce A",
-      "duree_estimee_jours": 3
+      "nom": "Usinage pièce A"
     },
     {
       "id": "T4",
-      "nom": "Usinage pièce B",
-      "duree_estimee_jours": 2
+      "nom": "Usinage pièce B"
     },
     {
       "id": "T5",
-      "nom": "Assemblage",
-      "duree_estimee_jours": 2
+      "nom": "Assemblage"
     },
     {
       "id": "T6",
-      "nom": "Finition",
-      "duree_estimee_jours": 1
+      "nom": "Finition"
     }
   ],
   "ressources": [
@@ -104,34 +98,64 @@
       "apres": "T6"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "decoupe"
+      "ressource": "R1",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R2",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "decoupe"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "usinage"
+      "ressource": "R3",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R4",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "usinage"
+      "ressource": "R3",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R4",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "assemblage"
+      "ressource": "R5",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "finition"
+      "ressource": "R6",
+      "duree": 1
     }
   ],
   "objectifs": [

@@ -740,13 +740,6 @@ const DOC_CHAMPS_CSV: Record<EntiteCsv, ChampDocCsv[]> = {
       valeursAttendues: "Identifiant unique de la tâche",
     },
     { champ: "nom", requis: false, type: "Texte", valeursAttendues: "Libellé affiché" },
-    {
-      champ: "duree_estimee_jours",
-      requis: false,
-      type: "Entier",
-      valeursAttendues:
-        "Requis seulement si compatibilité dérivée par compétence (voir Contraintes)",
-    },
   ],
   ressources: [
     {

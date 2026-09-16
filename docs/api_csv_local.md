@@ -216,13 +216,13 @@ console.log('Statistiques :', resultat.statistiques);
 ### taches.csv
 
 ```csv
-id,nom,duree_estimee_jours
-PREP_PCB,Prep Pcb,1
-POSE_CMS_FACE_A,Pose Cms Face A,2
+id,nom
+PREP_PCB,Prep Pcb
+POSE_CMS_FACE_A,Pose Cms Face A
 ```
 
 **Colonnes requises** : `id`
-**Colonnes optionnelles** : `nom`, `duree_estimee_jours`
+**Colonnes optionnelles** : `nom`
 
 ### ressources.csv
 

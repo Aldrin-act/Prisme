@@ -604,9 +604,10 @@ export function useImporterFichiersCsv() {
 
 /**
  * Mutation pour importer une instance depuis un JSON "brut avec compétences" —
- * sur-ensemble du format T-R-C-O canonique, une tâche peut y porter une durée
- * estimée pour dériver sa compatibilité depuis des compétences plutôt que de
- * la déclarer à la main (gabarit `public/gabarits/instance_exemple.json`).
+ * sur-ensemble du format T-R-C-O canonique, une tâche peut y exiger une
+ * compétence pour dériver sa compatibilité (durée comblée par apprentissage
+ * automatique) plutôt que de la déclarer à la main
+ * (gabarit `public/gabarits/instance_exemple.json`).
  */
 export function useImporterJsonAvecCompetences() {
   return useMutation({

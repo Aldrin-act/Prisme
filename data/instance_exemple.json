@@ -1,15 +1,15 @@
 {
   "taches": [
-    { "id": "T1", "nom": "Decoupe", "duree_estimee_jours": 3 },
-    { "id": "T2", "nom": "Assemblage", "duree_estimee_jours": 2 }
+    { "id": "T1", "nom": "Decoupe" },
+    { "id": "T2", "nom": "Assemblage" }
   ],
   "ressources": [
-    { "id": "R1", "nom": "Decoupeuse", "competences": ["decoupe", "assemblage"] }
+    { "id": "R1", "nom": "Decoupeuse" }
   ],
   "contraintes": [
     { "type": "precedence", "avant": "T1", "apres": "T2" },
-    { "type": "competence_requise", "tache": "T1", "competence": "decoupe" },
-    { "type": "competence_requise", "tache": "T2", "competence": "assemblage" }
+    { "type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 3 },
+    { "type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 2 }
   ],
   "objectifs": [
     { "type": "minimiser_makespan" }

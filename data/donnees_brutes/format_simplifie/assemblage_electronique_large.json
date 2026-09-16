@@ -2,78 +2,63 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Préparation substrat",
-      "duree_estimee_jours": 0.5
+      "nom": "Préparation substrat"
     },
     {
       "id": "T2",
-      "nom": "Application pâte à souder",
-      "duree_estimee_jours": 0.3
+      "nom": "Application pâte à souder"
     },
     {
       "id": "T3",
-      "nom": "Placement composants CMS face A",
-      "duree_estimee_jours": 1
+      "nom": "Placement composants CMS face A"
     },
     {
       "id": "T4",
-      "nom": "Soudure refusion face A",
-      "duree_estimee_jours": 0.5
+      "nom": "Soudure refusion face A"
     },
     {
       "id": "T5",
-      "nom": "Inspection AOI face A",
-      "duree_estimee_jours": 0.3
+      "nom": "Inspection AOI face A"
     },
     {
       "id": "T6",
-      "nom": "Retournement PCB",
-      "duree_estimee_jours": 0.1
+      "nom": "Retournement PCB"
     },
     {
       "id": "T7",
-      "nom": "Application pâte face B",
-      "duree_estimee_jours": 0.3
+      "nom": "Application pâte face B"
     },
     {
       "id": "T8",
-      "nom": "Placement composants CMS face B",
-      "duree_estimee_jours": 1
+      "nom": "Placement composants CMS face B"
     },
     {
       "id": "T9",
-      "nom": "Soudure refusion face B",
-      "duree_estimee_jours": 0.5
+      "nom": "Soudure refusion face B"
     },
     {
       "id": "T10",
-      "nom": "Inspection AOI face B",
-      "duree_estimee_jours": 0.3
+      "nom": "Inspection AOI face B"
     },
     {
       "id": "T11",
-      "nom": "Soudure composants traversants",
-      "duree_estimee_jours": 0.8
+      "nom": "Soudure composants traversants"
     },
     {
       "id": "T12",
-      "nom": "Nettoyage PCB",
-      "duree_estimee_jours": 0.2
+      "nom": "Nettoyage PCB"
     },
     {
       "id": "T13",
-      "nom": "Test fonctionnel",
-      "duree_estimee_jours": 0.5
+      "nom": "Test fonctionnel"
     },
     {
       "id": "T14",
-      "nom": "Test vieillissement",
-      "duree_estimee_jours": 2
+      "nom": "Test vieillissement"
     },
     {
       "id": "T15",
-      "nom": "Conformal coating",
-      "duree_estimee_jours": 0.4
+      "nom": "Conformal coating"
     }
   ],
   "ressources": [
@@ -242,79 +227,130 @@
       "apres": "T15"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "preparation"
+      "ressource": "R1",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "application_pate"
+      "ressource": "R2",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R3",
+      "duree": 0.3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "placement_cms"
+      "ressource": "R4",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R5",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "refusion"
+      "ressource": "R6",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R7",
+      "duree": 0.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "inspection"
+      "ressource": "R8",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "retournement"
+      "ressource": "R1",
+      "duree": 0.1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "application_pate"
+      "ressource": "R2",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T7",
+      "ressource": "R3",
+      "duree": 0.3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "placement_cms"
+      "ressource": "R4",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T8",
+      "ressource": "R5",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T9",
-      "competence": "refusion"
+      "ressource": "R6",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T9",
+      "ressource": "R7",
+      "duree": 0.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T10",
-      "competence": "inspection"
+      "ressource": "R8",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T11",
-      "competence": "soudure_traversant"
+      "ressource": "R9",
+      "duree": 0.8
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T12",
-      "competence": "nettoyage"
+      "ressource": "R10",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T13",
-      "competence": "test_fonctionnel"
+      "ressource": "R11",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T14",
-      "competence": "test_vieillissement"
+      "ressource": "R12",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T15",
-      "competence": "coating"
+      "ressource": "R13",
+      "duree": 0.4
     }
   ],
   "objectifs": [

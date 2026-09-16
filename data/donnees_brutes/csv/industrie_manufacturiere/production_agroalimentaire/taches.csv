@@ -1,10 +1,10 @@
-id,nom,duree_estimee_jours
-RECEPTION_MP,Reception Mp,1
-LAVAGE_LEGUMES,Lavage Legumes,1
-EPLUCHAGE,Epluchage,1
-DECOUPE,Decoupe,1
-CUISSON,Cuisson,3
-REFROIDISSEMENT,Refroidissement,2
-CONDITIONNEMENT,Conditionnement,1
-ETIQUETAGE,Etiquetage,1
-PALETTISATION,Palettisation,1
+id,nom
+RECEPTION_MP,Reception Mp
+LAVAGE_LEGUMES,Lavage Legumes
+EPLUCHAGE,Epluchage
+DECOUPE,Decoupe
+CUISSON,Cuisson
+REFROIDISSEMENT,Refroidissement
+CONDITIONNEMENT,Conditionnement
+ETIQUETAGE,Etiquetage
+PALETTISATION,Palettisation

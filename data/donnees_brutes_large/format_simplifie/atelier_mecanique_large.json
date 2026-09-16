@@ -2,803 +2,643 @@
   "taches": [
     {
       "id": "T0001",
-      "nom": "Lot001_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot001_USINAGE"
     },
     {
       "id": "T0002",
-      "nom": "Lot001_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot001_PREPARATION"
     },
     {
       "id": "T0003",
-      "nom": "Lot001_PEINTURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot001_PEINTURE"
     },
     {
       "id": "T0004",
-      "nom": "Lot001_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot001_FORMAGE"
     },
     {
       "id": "T0005",
-      "nom": "Lot001_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot001_CONTROLE"
     },
     {
       "id": "T0006",
-      "nom": "Lot001_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot001_ASSEMBLAGE"
     },
     {
       "id": "T0007",
-      "nom": "Lot001_FINITION",
-      "duree_estimee_jours": 3
+      "nom": "Lot001_FINITION"
     },
     {
       "id": "T0008",
-      "nom": "Lot001_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot001_SOUDURE"
     },
     {
       "id": "T0009",
-      "nom": "Lot002_ASSEMBLAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot002_ASSEMBLAGE"
     },
     {
       "id": "T0010",
-      "nom": "Lot002_USINAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot002_USINAGE"
     },
     {
       "id": "T0011",
-      "nom": "Lot002_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot002_SOUDURE"
     },
     {
       "id": "T0012",
-      "nom": "Lot002_FINITION",
-      "duree_estimee_jours": 1
+      "nom": "Lot002_FINITION"
     },
     {
       "id": "T0013",
-      "nom": "Lot002_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot002_FORMAGE"
     },
     {
       "id": "T0014",
-      "nom": "Lot002_PREPARATION",
-      "duree_estimee_jours": 2
+      "nom": "Lot002_PREPARATION"
     },
     {
       "id": "T0015",
-      "nom": "Lot002_PEINTURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot002_PEINTURE"
     },
     {
       "id": "T0016",
-      "nom": "Lot002_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot002_CONTROLE"
     },
     {
       "id": "T0017",
-      "nom": "Lot003_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot003_USINAGE"
     },
     {
       "id": "T0018",
-      "nom": "Lot003_SOUDURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot003_SOUDURE"
     },
     {
       "id": "T0019",
-      "nom": "Lot003_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot003_PREPARATION"
     },
     {
       "id": "T0020",
-      "nom": "Lot003_FINITION",
-      "duree_estimee_jours": 1
+      "nom": "Lot003_FINITION"
     },
     {
       "id": "T0021",
-      "nom": "Lot003_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot003_FORMAGE"
     },
     {
       "id": "T0022",
-      "nom": "Lot003_ASSEMBLAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot003_ASSEMBLAGE"
     },
     {
       "id": "T0023",
-      "nom": "Lot003_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot003_CONTROLE"
     },
     {
       "id": "T0024",
-      "nom": "Lot003_PEINTURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot003_PEINTURE"
     },
     {
       "id": "T0025",
-      "nom": "Lot004_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot004_SOUDURE"
     },
     {
       "id": "T0026",
-      "nom": "Lot004_PEINTURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot004_PEINTURE"
     },
     {
       "id": "T0027",
-      "nom": "Lot004_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot004_FORMAGE"
     },
     {
       "id": "T0028",
-      "nom": "Lot004_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot004_PREPARATION"
     },
     {
       "id": "T0029",
-      "nom": "Lot004_USINAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot004_USINAGE"
     },
     {
       "id": "T0030",
-      "nom": "Lot004_ASSEMBLAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot004_ASSEMBLAGE"
     },
     {
       "id": "T0031",
-      "nom": "Lot004_FINITION",
-      "duree_estimee_jours": 1
+      "nom": "Lot004_FINITION"
     },
     {
       "id": "T0032",
-      "nom": "Lot004_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot004_CONTROLE"
     },
     {
       "id": "T0033",
-      "nom": "Lot005_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot005_CONTROLE"
     },
     {
       "id": "T0034",
-      "nom": "Lot005_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot005_SOUDURE"
     },
     {
       "id": "T0035",
-      "nom": "Lot005_PEINTURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot005_PEINTURE"
     },
     {
       "id": "T0036",
-      "nom": "Lot005_ASSEMBLAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot005_ASSEMBLAGE"
     },
     {
       "id": "T0037",
-      "nom": "Lot005_USINAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot005_USINAGE"
     },
     {
       "id": "T0038",
-      "nom": "Lot005_FINITION",
-      "duree_estimee_jours": 2
+      "nom": "Lot005_FINITION"
     },
     {
       "id": "T0039",
-      "nom": "Lot005_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot005_PREPARATION"
     },
     {
       "id": "T0040",
-      "nom": "Lot005_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot005_FORMAGE"
     },
     {
       "id": "T0041",
-      "nom": "Lot006_ASSEMBLAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot006_ASSEMBLAGE"
     },
     {
       "id": "T0042",
-      "nom": "Lot006_FINITION",
-      "duree_estimee_jours": 3
+      "nom": "Lot006_FINITION"
     },
     {
       "id": "T0043",
-      "nom": "Lot006_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot006_PREPARATION"
     },
     {
       "id": "T0044",
-      "nom": "Lot006_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot006_SOUDURE"
     },
     {
       "id": "T0045",
-      "nom": "Lot006_CONTROLE",
-      "duree_estimee_jours": 2
+      "nom": "Lot006_CONTROLE"
     },
     {
       "id": "T0046",
-      "nom": "Lot006_FORMAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot006_FORMAGE"
     },
     {
       "id": "T0047",
-      "nom": "Lot006_USINAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot006_USINAGE"
     },
     {
       "id": "T0048",
-      "nom": "Lot006_PEINTURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot006_PEINTURE"
     },
     {
       "id": "T0049",
-      "nom": "Lot007_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot007_FORMAGE"
     },
     {
       "id": "T0050",
-      "nom": "Lot007_FINITION",
-      "duree_estimee_jours": 3
+      "nom": "Lot007_FINITION"
     },
     {
       "id": "T0051",
-      "nom": "Lot007_PREPARATION",
-      "duree_estimee_jours": 2
+      "nom": "Lot007_PREPARATION"
     },
     {
       "id": "T0052",
-      "nom": "Lot007_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot007_CONTROLE"
     },
     {
       "id": "T0053",
-      "nom": "Lot007_USINAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot007_USINAGE"
     },
     {
       "id": "T0054",
-      "nom": "Lot007_PEINTURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot007_PEINTURE"
     },
     {
       "id": "T0055",
-      "nom": "Lot007_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot007_SOUDURE"
     },
     {
       "id": "T0056",
-      "nom": "Lot007_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot007_ASSEMBLAGE"
     },
     {
       "id": "T0057",
-      "nom": "Lot008_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot008_FORMAGE"
     },
     {
       "id": "T0058",
-      "nom": "Lot008_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot008_USINAGE"
     },
     {
       "id": "T0059",
-      "nom": "Lot008_PEINTURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot008_PEINTURE"
     },
     {
       "id": "T0060",
-      "nom": "Lot008_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot008_SOUDURE"
     },
     {
       "id": "T0061",
-      "nom": "Lot008_ASSEMBLAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot008_ASSEMBLAGE"
     },
     {
       "id": "T0062",
-      "nom": "Lot008_FINITION",
-      "duree_estimee_jours": 1
+      "nom": "Lot008_FINITION"
     },
     {
       "id": "T0063",
-      "nom": "Lot008_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot008_CONTROLE"
     },
     {
       "id": "T0064",
-      "nom": "Lot008_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot008_PREPARATION"
     },
     {
       "id": "T0065",
-      "nom": "Lot009_SOUDURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot009_SOUDURE"
     },
     {
       "id": "T0066",
-      "nom": "Lot009_FINITION",
-      "duree_estimee_jours": 2
+      "nom": "Lot009_FINITION"
     },
     {
       "id": "T0067",
-      "nom": "Lot009_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot009_USINAGE"
     },
     {
       "id": "T0068",
-      "nom": "Lot009_PREPARATION",
-      "duree_estimee_jours": 2
+      "nom": "Lot009_PREPARATION"
     },
     {
       "id": "T0069",
-      "nom": "Lot009_ASSEMBLAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot009_ASSEMBLAGE"
     },
     {
       "id": "T0070",
-      "nom": "Lot009_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot009_FORMAGE"
     },
     {
       "id": "T0071",
-      "nom": "Lot009_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot009_CONTROLE"
     },
     {
       "id": "T0072",
-      "nom": "Lot009_PEINTURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot009_PEINTURE"
     },
     {
       "id": "T0073",
-      "nom": "Lot010_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot010_SOUDURE"
     },
     {
       "id": "T0074",
-      "nom": "Lot010_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot010_PREPARATION"
     },
     {
       "id": "T0075",
-      "nom": "Lot010_ASSEMBLAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot010_ASSEMBLAGE"
     },
     {
       "id": "T0076",
-      "nom": "Lot010_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot010_CONTROLE"
     },
     {
       "id": "T0077",
-      "nom": "Lot010_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot010_FORMAGE"
     },
     {
       "id": "T0078",
-      "nom": "Lot010_USINAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot010_USINAGE"
     },
     {
       "id": "T0079",
-      "nom": "Lot010_FINITION",
-      "duree_estimee_jours": 1
+      "nom": "Lot010_FINITION"
     },
     {
       "id": "T0080",
-      "nom": "Lot010_PEINTURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot010_PEINTURE"
     },
     {
       "id": "T0081",
-      "nom": "Lot011_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot011_ASSEMBLAGE"
     },
     {
       "id": "T0082",
-      "nom": "Lot011_USINAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot011_USINAGE"
     },
     {
       "id": "T0083",
-      "nom": "Lot011_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot011_FORMAGE"
     },
     {
       "id": "T0084",
-      "nom": "Lot011_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot011_SOUDURE"
     },
     {
       "id": "T0085",
-      "nom": "Lot011_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot011_CONTROLE"
     },
     {
       "id": "T0086",
-      "nom": "Lot011_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot011_PREPARATION"
     },
     {
       "id": "T0087",
-      "nom": "Lot011_FINITION",
-      "duree_estimee_jours": 2
+      "nom": "Lot011_FINITION"
     },
     {
       "id": "T0088",
-      "nom": "Lot011_PEINTURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot011_PEINTURE"
     },
     {
       "id": "T0089",
-      "nom": "Lot012_FINITION",
-      "duree_estimee_jours": 1
+      "nom": "Lot012_FINITION"
     },
     {
       "id": "T0090",
-      "nom": "Lot012_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot012_SOUDURE"
     },
     {
       "id": "T0091",
-      "nom": "Lot012_PEINTURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot012_PEINTURE"
     },
     {
       "id": "T0092",
-      "nom": "Lot012_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot012_CONTROLE"
     },
     {
       "id": "T0093",
-      "nom": "Lot012_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot012_ASSEMBLAGE"
     },
     {
       "id": "T0094",
-      "nom": "Lot012_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot012_PREPARATION"
     },
     {
       "id": "T0095",
-      "nom": "Lot012_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot012_FORMAGE"
     },
     {
       "id": "T0096",
-      "nom": "Lot012_USINAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot012_USINAGE"
     },
     {
       "id": "T0097",
-      "nom": "Lot013_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot013_FORMAGE"
     },
     {
       "id": "T0098",
-      "nom": "Lot013_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot013_PREPARATION"
     },
     {
       "id": "T0099",
-      "nom": "Lot013_FINITION",
-      "duree_estimee_jours": 2
+      "nom": "Lot013_FINITION"
     },
     {
       "id": "T0100",
-      "nom": "Lot013_ASSEMBLAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot013_ASSEMBLAGE"
     },
     {
       "id": "T0101",
-      "nom": "Lot013_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot013_USINAGE"
     },
     {
       "id": "T0102",
-      "nom": "Lot013_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot013_SOUDURE"
     },
     {
       "id": "T0103",
-      "nom": "Lot013_PEINTURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot013_PEINTURE"
     },
     {
       "id": "T0104",
-      "nom": "Lot013_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot013_CONTROLE"
     },
     {
       "id": "T0105",
-      "nom": "Lot014_PEINTURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot014_PEINTURE"
     },
     {
       "id": "T0106",
-      "nom": "Lot014_ASSEMBLAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot014_ASSEMBLAGE"
     },
     {
       "id": "T0107",
-      "nom": "Lot014_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot014_PREPARATION"
     },
     {
       "id": "T0108",
-      "nom": "Lot014_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot014_CONTROLE"
     },
     {
       "id": "T0109",
-      "nom": "Lot014_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot014_SOUDURE"
     },
     {
       "id": "T0110",
-      "nom": "Lot014_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot014_FORMAGE"
     },
     {
       "id": "T0111",
-      "nom": "Lot014_FINITION",
-      "duree_estimee_jours": 3
+      "nom": "Lot014_FINITION"
     },
     {
       "id": "T0112",
-      "nom": "Lot014_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot014_USINAGE"
     },
     {
       "id": "T0113",
-      "nom": "Lot015_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot015_PREPARATION"
     },
     {
       "id": "T0114",
-      "nom": "Lot015_PEINTURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot015_PEINTURE"
     },
     {
       "id": "T0115",
-      "nom": "Lot015_FINITION",
-      "duree_estimee_jours": 2
+      "nom": "Lot015_FINITION"
     },
     {
       "id": "T0116",
-      "nom": "Lot015_FORMAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot015_FORMAGE"
     },
     {
       "id": "T0117",
-      "nom": "Lot015_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot015_CONTROLE"
     },
     {
       "id": "T0118",
-      "nom": "Lot015_SOUDURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot015_SOUDURE"
     },
     {
       "id": "T0119",
-      "nom": "Lot015_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot015_USINAGE"
     },
     {
       "id": "T0120",
-      "nom": "Lot015_ASSEMBLAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot015_ASSEMBLAGE"
     },
     {
       "id": "T0121",
-      "nom": "Lot016_PREPARATION",
-      "duree_estimee_jours": 1
+      "nom": "Lot016_PREPARATION"
     },
     {
       "id": "T0122",
-      "nom": "Lot016_CONTROLE",
-      "duree_estimee_jours": 2
+      "nom": "Lot016_CONTROLE"
     },
     {
       "id": "T0123",
-      "nom": "Lot016_PEINTURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot016_PEINTURE"
     },
     {
       "id": "T0124",
-      "nom": "Lot016_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot016_SOUDURE"
     },
     {
       "id": "T0125",
-      "nom": "Lot016_FORMAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot016_FORMAGE"
     },
     {
       "id": "T0126",
-      "nom": "Lot016_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot016_ASSEMBLAGE"
     },
     {
       "id": "T0127",
-      "nom": "Lot016_FINITION",
-      "duree_estimee_jours": 3
+      "nom": "Lot016_FINITION"
     },
     {
       "id": "T0128",
-      "nom": "Lot016_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot016_USINAGE"
     },
     {
       "id": "T0129",
-      "nom": "Lot017_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot017_FORMAGE"
     },
     {
       "id": "T0130",
-      "nom": "Lot017_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot017_SOUDURE"
     },
     {
       "id": "T0131",
-      "nom": "Lot017_USINAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot017_USINAGE"
     },
     {
       "id": "T0132",
-      "nom": "Lot017_PREPARATION",
-      "duree_estimee_jours": 2
+      "nom": "Lot017_PREPARATION"
     },
     {
       "id": "T0133",
-      "nom": "Lot017_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot017_CONTROLE"
     },
     {
       "id": "T0134",
-      "nom": "Lot017_PEINTURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot017_PEINTURE"
     },
     {
       "id": "T0135",
-      "nom": "Lot017_FINITION",
-      "duree_estimee_jours": 1
+      "nom": "Lot017_FINITION"
     },
     {
       "id": "T0136",
-      "nom": "Lot017_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot017_ASSEMBLAGE"
     },
     {
       "id": "T0137",
-      "nom": "Lot018_PEINTURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot018_PEINTURE"
     },
     {
       "id": "T0138",
-      "nom": "Lot018_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot018_ASSEMBLAGE"
     },
     {
       "id": "T0139",
-      "nom": "Lot018_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot018_SOUDURE"
     },
     {
       "id": "T0140",
-      "nom": "Lot018_USINAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot018_USINAGE"
     },
     {
       "id": "T0141",
-      "nom": "Lot018_FORMAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot018_FORMAGE"
     },
     {
       "id": "T0142",
-      "nom": "Lot018_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot018_PREPARATION"
     },
     {
       "id": "T0143",
-      "nom": "Lot018_CONTROLE",
-      "duree_estimee_jours": 2
+      "nom": "Lot018_CONTROLE"
     },
     {
       "id": "T0144",
-      "nom": "Lot018_FINITION",
-      "duree_estimee_jours": 2
+      "nom": "Lot018_FINITION"
     },
     {
       "id": "T0145",
-      "nom": "Lot019_PEINTURE",
-      "duree_estimee_jours": 1
+      "nom": "Lot019_PEINTURE"
     },
     {
       "id": "T0146",
-      "nom": "Lot019_CONTROLE",
-      "duree_estimee_jours": 1
+      "nom": "Lot019_CONTROLE"
     },
     {
       "id": "T0147",
-      "nom": "Lot019_FINITION",
-      "duree_estimee_jours": 3
+      "nom": "Lot019_FINITION"
     },
     {
       "id": "T0148",
-      "nom": "Lot019_SOUDURE",
-      "duree_estimee_jours": 2
+      "nom": "Lot019_SOUDURE"
     },
     {
       "id": "T0149",
-      "nom": "Lot019_FORMAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot019_FORMAGE"
     },
     {
       "id": "T0150",
-      "nom": "Lot019_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot019_PREPARATION"
     },
     {
       "id": "T0151",
-      "nom": "Lot019_ASSEMBLAGE",
-      "duree_estimee_jours": 1
+      "nom": "Lot019_ASSEMBLAGE"
     },
     {
       "id": "T0152",
-      "nom": "Lot019_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot019_USINAGE"
     },
     {
       "id": "T0153",
-      "nom": "Lot020_PREPARATION",
-      "duree_estimee_jours": 3
+      "nom": "Lot020_PREPARATION"
     },
     {
       "id": "T0154",
-      "nom": "Lot020_PEINTURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot020_PEINTURE"
     },
     {
       "id": "T0155",
-      "nom": "Lot020_SOUDURE",
-      "duree_estimee_jours": 3
+      "nom": "Lot020_SOUDURE"
     },
     {
       "id": "T0156",
-      "nom": "Lot020_CONTROLE",
-      "duree_estimee_jours": 3
+      "nom": "Lot020_CONTROLE"
     },
     {
       "id": "T0157",
-      "nom": "Lot020_USINAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot020_USINAGE"
     },
     {
       "id": "T0158",
-      "nom": "Lot020_ASSEMBLAGE",
-      "duree_estimee_jours": 3
+      "nom": "Lot020_ASSEMBLAGE"
     },
     {
       "id": "T0159",
-      "nom": "Lot020_FORMAGE",
-      "duree_estimee_jours": 2
+      "nom": "Lot020_FORMAGE"
     },
     {
       "id": "T0160",
-      "nom": "Lot020_FINITION",
-      "duree_estimee_jours": 3
+      "nom": "Lot020_FINITION"
     }
   ],
   "ressources": [
@@ -1337,46 +1177,6 @@
   ],
   "contraintes": [
     {
-      "type": "competence_requise",
-      "tache": "T0001",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0002",
-      "competence": "decoupe_laser"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0003",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0004",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0005",
-      "competence": "controle_visuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0006",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0007",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0008",
-      "competence": "soudure_robot"
-    },
-    {
       "type": "precedence",
       "avant": "T0001",
       "apres": "T0002"
@@ -1410,46 +1210,6 @@
       "type": "precedence",
       "avant": "T0007",
       "apres": "T0008"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0009",
-      "competence": "assemblage_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0010",
-      "competence": "fraisage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0011",
-      "competence": "soudure_mig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0012",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0013",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0014",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0015",
-      "competence": "peinture_cabine"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0016",
-      "competence": "controle_dimensionnel"
     },
     {
       "type": "precedence",
@@ -1487,46 +1247,6 @@
       "apres": "T0016"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0017",
-      "competence": "fraisage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0018",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0019",
-      "competence": "decoupe_plasma"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0020",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0021",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0022",
-      "competence": "assemblage_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0023",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0024",
-      "competence": "peinture_tunnel"
-    },
-    {
       "type": "precedence",
       "avant": "T0017",
       "apres": "T0018"
@@ -1560,46 +1280,6 @@
       "type": "precedence",
       "avant": "T0023",
       "apres": "T0024"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0025",
-      "competence": "soudure_tig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0026",
-      "competence": "peinture_cabine"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0027",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0028",
-      "competence": "decoupe_laser"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0029",
-      "competence": "tournage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0030",
-      "competence": "assemblage_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0031",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0032",
-      "competence": "controle_dimensionnel"
     },
     {
       "type": "precedence",
@@ -1637,46 +1317,6 @@
       "apres": "T0032"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0033",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0034",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0035",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0036",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0037",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0038",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0039",
-      "competence": "decoupe_laser"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0040",
-      "competence": "pliage"
-    },
-    {
       "type": "precedence",
       "avant": "T0033",
       "apres": "T0034"
@@ -1710,46 +1350,6 @@
       "type": "precedence",
       "avant": "T0039",
       "apres": "T0040"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0041",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0042",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0043",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0044",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0045",
-      "competence": "controle_visuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0046",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0047",
-      "competence": "tournage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0048",
-      "competence": "peinture_tunnel"
     },
     {
       "type": "precedence",
@@ -1787,46 +1387,6 @@
       "apres": "T0048"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0049",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0050",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0051",
-      "competence": "decoupe_laser"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0052",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0053",
-      "competence": "fraisage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0054",
-      "competence": "peinture_cabine"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0055",
-      "competence": "soudure_mig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0056",
-      "competence": "assemblage_robot"
-    },
-    {
       "type": "precedence",
       "avant": "T0049",
       "apres": "T0050"
@@ -1860,46 +1420,6 @@
       "type": "precedence",
       "avant": "T0055",
       "apres": "T0056"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0057",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0058",
-      "competence": "tournage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0059",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0060",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0061",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0062",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0063",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0064",
-      "competence": "percage"
     },
     {
       "type": "precedence",
@@ -1937,46 +1457,6 @@
       "apres": "T0064"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0065",
-      "competence": "soudure_mig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0066",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0067",
-      "competence": "fraisage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0068",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0069",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0070",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0071",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0072",
-      "competence": "peinture_tunnel"
-    },
-    {
       "type": "precedence",
       "avant": "T0065",
       "apres": "T0066"
@@ -2010,46 +1490,6 @@
       "type": "precedence",
       "avant": "T0071",
       "apres": "T0072"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0073",
-      "competence": "soudure_mig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0074",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0075",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0076",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0077",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0078",
-      "competence": "fraisage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0079",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0080",
-      "competence": "peinture_tunnel"
     },
     {
       "type": "precedence",
@@ -2087,46 +1527,6 @@
       "apres": "T0080"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0081",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0082",
-      "competence": "fraisage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0083",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0084",
-      "competence": "soudure_tig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0085",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0086",
-      "competence": "decoupe_laser"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0087",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0088",
-      "competence": "peinture_tunnel"
-    },
-    {
       "type": "precedence",
       "avant": "T0081",
       "apres": "T0082"
@@ -2160,46 +1560,6 @@
       "type": "precedence",
       "avant": "T0087",
       "apres": "T0088"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0089",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0090",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0091",
-      "competence": "peinture_cabine"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0092",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0093",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0094",
-      "competence": "decoupe_plasma"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0095",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0096",
-      "competence": "ebavurage"
     },
     {
       "type": "precedence",
@@ -2237,46 +1597,6 @@
       "apres": "T0096"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0097",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0098",
-      "competence": "decoupe_laser"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0099",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0100",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0101",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0102",
-      "competence": "soudure_mig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0103",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0104",
-      "competence": "controle_dimensionnel"
-    },
-    {
       "type": "precedence",
       "avant": "T0097",
       "apres": "T0098"
@@ -2310,46 +1630,6 @@
       "type": "precedence",
       "avant": "T0103",
       "apres": "T0104"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0105",
-      "competence": "peinture_cabine"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0106",
-      "competence": "assemblage_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0107",
-      "competence": "decoupe_plasma"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0108",
-      "competence": "controle_visuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0109",
-      "competence": "soudure_tig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0110",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0111",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0112",
-      "competence": "ebavurage"
     },
     {
       "type": "precedence",
@@ -2387,46 +1667,6 @@
       "apres": "T0112"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0113",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0114",
-      "competence": "peinture_cabine"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0115",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0116",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0117",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0118",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0119",
-      "competence": "tournage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0120",
-      "competence": "assemblage_robot"
-    },
-    {
       "type": "precedence",
       "avant": "T0113",
       "apres": "T0114"
@@ -2460,46 +1700,6 @@
       "type": "precedence",
       "avant": "T0119",
       "apres": "T0120"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0121",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0122",
-      "competence": "controle_visuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0123",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0124",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0125",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0126",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0127",
-      "competence": "polissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0128",
-      "competence": "fraisage"
     },
     {
       "type": "precedence",
@@ -2537,46 +1737,6 @@
       "apres": "T0128"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0129",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0130",
-      "competence": "soudure_mig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0131",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0132",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0133",
-      "competence": "controle_visuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0134",
-      "competence": "peinture_cabine"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0135",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0136",
-      "competence": "assemblage_manuel"
-    },
-    {
       "type": "precedence",
       "avant": "T0129",
       "apres": "T0130"
@@ -2610,46 +1770,6 @@
       "type": "precedence",
       "avant": "T0135",
       "apres": "T0136"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0137",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0138",
-      "competence": "assemblage_manuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0139",
-      "competence": "soudure_tig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0140",
-      "competence": "fraisage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0141",
-      "competence": "pliage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0142",
-      "competence": "decoupe_laser"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0143",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0144",
-      "competence": "polissage"
     },
     {
       "type": "precedence",
@@ -2687,46 +1807,6 @@
       "apres": "T0144"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0145",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0146",
-      "competence": "controle_visuel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0147",
-      "competence": "ebavurage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0148",
-      "competence": "soudure_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0149",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0150",
-      "competence": "percage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0151",
-      "competence": "assemblage_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0152",
-      "competence": "fraisage"
-    },
-    {
       "type": "precedence",
       "avant": "T0145",
       "apres": "T0146"
@@ -2762,46 +1842,6 @@
       "apres": "T0152"
     },
     {
-      "type": "competence_requise",
-      "tache": "T0153",
-      "competence": "decoupe_plasma"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0154",
-      "competence": "peinture_tunnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0155",
-      "competence": "soudure_mig"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0156",
-      "competence": "controle_dimensionnel"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0157",
-      "competence": "tournage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0158",
-      "competence": "assemblage_robot"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0159",
-      "competence": "emboutissage"
-    },
-    {
-      "type": "competence_requise",
-      "tache": "T0160",
-      "competence": "ebavurage"
-    },
-    {
       "type": "precedence",
       "avant": "T0153",
       "apres": "T0154"
@@ -2835,6 +1875,4266 @@
       "type": "precedence",
       "avant": "T0159",
       "apres": "T0160"
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0020",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0021",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0022",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0023",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0047",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0048",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0049",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0001",
+      "ressource": "R0050",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0002",
+      "ressource": "R0001",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0002",
+      "ressource": "R0002",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0002",
+      "ressource": "R0003",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0003",
+      "ressource": "R0056",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0003",
+      "ressource": "R0057",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0003",
+      "ressource": "R0058",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0003",
+      "ressource": "R0059",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0003",
+      "ressource": "R0060",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0004",
+      "ressource": "R0024",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0004",
+      "ressource": "R0025",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0004",
+      "ressource": "R0026",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0004",
+      "ressource": "R0027",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0004",
+      "ressource": "R0028",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0005",
+      "ressource": "R0069",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0005",
+      "ressource": "R0070",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0005",
+      "ressource": "R0071",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0005",
+      "ressource": "R0072",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0005",
+      "ressource": "R0073",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0006",
+      "ressource": "R0061",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0006",
+      "ressource": "R0062",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0006",
+      "ressource": "R0063",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0006",
+      "ressource": "R0064",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0006",
+      "ressource": "R0065",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0007",
+      "ressource": "R0042",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0007",
+      "ressource": "R0043",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0007",
+      "ressource": "R0044",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0007",
+      "ressource": "R0045",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0007",
+      "ressource": "R0046",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0008",
+      "ressource": "R0039",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0008",
+      "ressource": "R0040",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0008",
+      "ressource": "R0041",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0009",
+      "ressource": "R0066",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0009",
+      "ressource": "R0067",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0009",
+      "ressource": "R0068",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0010",
+      "ressource": "R0012",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0010",
+      "ressource": "R0013",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0010",
+      "ressource": "R0014",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0010",
+      "ressource": "R0015",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0010",
+      "ressource": "R0016",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0011",
+      "ressource": "R0031",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0011",
+      "ressource": "R0032",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0011",
+      "ressource": "R0033",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0011",
+      "ressource": "R0034",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0020",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0021",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0022",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0023",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0047",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0048",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0049",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0012",
+      "ressource": "R0050",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0013",
+      "ressource": "R0029",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0013",
+      "ressource": "R0030",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0014",
+      "ressource": "R0007",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0014",
+      "ressource": "R0008",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0014",
+      "ressource": "R0009",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0014",
+      "ressource": "R0010",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0014",
+      "ressource": "R0011",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0015",
+      "ressource": "R0051",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0015",
+      "ressource": "R0052",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0015",
+      "ressource": "R0053",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0015",
+      "ressource": "R0054",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0015",
+      "ressource": "R0055",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0016",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0016",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0016",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0017",
+      "ressource": "R0012",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0017",
+      "ressource": "R0013",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0017",
+      "ressource": "R0014",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0017",
+      "ressource": "R0015",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0017",
+      "ressource": "R0016",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0018",
+      "ressource": "R0039",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0018",
+      "ressource": "R0040",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0018",
+      "ressource": "R0041",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0019",
+      "ressource": "R0004",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0019",
+      "ressource": "R0005",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0019",
+      "ressource": "R0006",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0020",
+      "ressource": "R0042",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0020",
+      "ressource": "R0043",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0020",
+      "ressource": "R0044",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0020",
+      "ressource": "R0045",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0020",
+      "ressource": "R0046",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0021",
+      "ressource": "R0029",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0021",
+      "ressource": "R0030",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0022",
+      "ressource": "R0066",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0022",
+      "ressource": "R0067",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0022",
+      "ressource": "R0068",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0023",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0023",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0023",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0024",
+      "ressource": "R0056",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0024",
+      "ressource": "R0057",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0024",
+      "ressource": "R0058",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0024",
+      "ressource": "R0059",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0024",
+      "ressource": "R0060",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0025",
+      "ressource": "R0035",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0025",
+      "ressource": "R0036",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0025",
+      "ressource": "R0037",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0025",
+      "ressource": "R0038",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0026",
+      "ressource": "R0051",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0026",
+      "ressource": "R0052",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0026",
+      "ressource": "R0053",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0026",
+      "ressource": "R0054",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0026",
+      "ressource": "R0055",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0027",
+      "ressource": "R0029",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0027",
+      "ressource": "R0030",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0028",
+      "ressource": "R0001",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0028",
+      "ressource": "R0002",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0028",
+      "ressource": "R0003",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0029",
+      "ressource": "R0017",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0029",
+      "ressource": "R0018",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0029",
+      "ressource": "R0019",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0030",
+      "ressource": "R0066",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0030",
+      "ressource": "R0067",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0030",
+      "ressource": "R0068",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0031",
+      "ressource": "R0042",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0031",
+      "ressource": "R0043",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0031",
+      "ressource": "R0044",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0031",
+      "ressource": "R0045",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0031",
+      "ressource": "R0046",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0032",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0032",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0032",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0033",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0033",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0033",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0034",
+      "ressource": "R0039",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0034",
+      "ressource": "R0040",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0034",
+      "ressource": "R0041",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0035",
+      "ressource": "R0056",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0035",
+      "ressource": "R0057",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0035",
+      "ressource": "R0058",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0035",
+      "ressource": "R0059",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0035",
+      "ressource": "R0060",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0036",
+      "ressource": "R0061",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0036",
+      "ressource": "R0062",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0036",
+      "ressource": "R0063",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0036",
+      "ressource": "R0064",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0036",
+      "ressource": "R0065",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0020",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0021",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0022",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0023",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0047",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0048",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0049",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0037",
+      "ressource": "R0050",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0038",
+      "ressource": "R0042",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0038",
+      "ressource": "R0043",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0038",
+      "ressource": "R0044",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0038",
+      "ressource": "R0045",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0038",
+      "ressource": "R0046",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0039",
+      "ressource": "R0001",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0039",
+      "ressource": "R0002",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0039",
+      "ressource": "R0003",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0040",
+      "ressource": "R0024",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0040",
+      "ressource": "R0025",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0040",
+      "ressource": "R0026",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0040",
+      "ressource": "R0027",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0040",
+      "ressource": "R0028",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0041",
+      "ressource": "R0061",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0041",
+      "ressource": "R0062",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0041",
+      "ressource": "R0063",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0041",
+      "ressource": "R0064",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0041",
+      "ressource": "R0065",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0042",
+      "ressource": "R0042",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0042",
+      "ressource": "R0043",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0042",
+      "ressource": "R0044",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0042",
+      "ressource": "R0045",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0042",
+      "ressource": "R0046",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0043",
+      "ressource": "R0007",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0043",
+      "ressource": "R0008",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0043",
+      "ressource": "R0009",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0043",
+      "ressource": "R0010",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0043",
+      "ressource": "R0011",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0044",
+      "ressource": "R0039",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0044",
+      "ressource": "R0040",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0044",
+      "ressource": "R0041",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0045",
+      "ressource": "R0069",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0045",
+      "ressource": "R0070",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0045",
+      "ressource": "R0071",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0045",
+      "ressource": "R0072",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0045",
+      "ressource": "R0073",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0046",
+      "ressource": "R0029",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0046",
+      "ressource": "R0030",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0047",
+      "ressource": "R0017",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0047",
+      "ressource": "R0018",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0047",
+      "ressource": "R0019",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0048",
+      "ressource": "R0056",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0048",
+      "ressource": "R0057",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0048",
+      "ressource": "R0058",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0048",
+      "ressource": "R0059",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0048",
+      "ressource": "R0060",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0049",
+      "ressource": "R0024",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0049",
+      "ressource": "R0025",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0049",
+      "ressource": "R0026",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0049",
+      "ressource": "R0027",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0049",
+      "ressource": "R0028",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0020",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0021",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0022",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0023",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0047",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0048",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0049",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0050",
+      "ressource": "R0050",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0051",
+      "ressource": "R0001",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0051",
+      "ressource": "R0002",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0051",
+      "ressource": "R0003",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0052",
+      "ressource": "R0074",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0052",
+      "ressource": "R0075",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0052",
+      "ressource": "R0076",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0053",
+      "ressource": "R0012",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0053",
+      "ressource": "R0013",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0053",
+      "ressource": "R0014",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0053",
+      "ressource": "R0015",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0053",
+      "ressource": "R0016",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0054",
+      "ressource": "R0051",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0054",
+      "ressource": "R0052",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0054",
+      "ressource": "R0053",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0054",
+      "ressource": "R0054",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0054",
+      "ressource": "R0055",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0055",
+      "ressource": "R0031",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0055",
+      "ressource": "R0032",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0055",
+      "ressource": "R0033",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0055",
+      "ressource": "R0034",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0056",
+      "ressource": "R0066",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0056",
+      "ressource": "R0067",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0056",
+      "ressource": "R0068",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0057",
+      "ressource": "R0024",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0057",
+      "ressource": "R0025",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0057",
+      "ressource": "R0026",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0057",
+      "ressource": "R0027",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0057",
+      "ressource": "R0028",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0058",
+      "ressource": "R0017",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0058",
+      "ressource": "R0018",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0058",
+      "ressource": "R0019",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0059",
+      "ressource": "R0056",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0059",
+      "ressource": "R0057",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0059",
+      "ressource": "R0058",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0059",
+      "ressource": "R0059",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0059",
+      "ressource": "R0060",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0060",
+      "ressource": "R0039",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0060",
+      "ressource": "R0040",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0060",
+      "ressource": "R0041",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0061",
+      "ressource": "R0061",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0061",
+      "ressource": "R0062",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0061",
+      "ressource": "R0063",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0061",
+      "ressource": "R0064",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0061",
+      "ressource": "R0065",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0062",
+      "ressource": "R0042",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0062",
+      "ressource": "R0043",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0062",
+      "ressource": "R0044",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0062",
+      "ressource": "R0045",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0062",
+      "ressource": "R0046",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0063",
+      "ressource": "R0074",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0063",
+      "ressource": "R0075",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0063",
+      "ressource": "R0076",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0064",
+      "ressource": "R0007",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0064",
+      "ressource": "R0008",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0064",
+      "ressource": "R0009",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0064",
+      "ressource": "R0010",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0064",
+      "ressource": "R0011",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0065",
+      "ressource": "R0031",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0065",
+      "ressource": "R0032",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0065",
+      "ressource": "R0033",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0065",
+      "ressource": "R0034",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0066",
+      "ressource": "R0042",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0066",
+      "ressource": "R0043",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0066",
+      "ressource": "R0044",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0066",
+      "ressource": "R0045",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0066",
+      "ressource": "R0046",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0067",
+      "ressource": "R0012",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0067",
+      "ressource": "R0013",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0067",
+      "ressource": "R0014",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0067",
+      "ressource": "R0015",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0067",
+      "ressource": "R0016",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0068",
+      "ressource": "R0007",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0068",
+      "ressource": "R0008",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0068",
+      "ressource": "R0009",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0068",
+      "ressource": "R0010",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0068",
+      "ressource": "R0011",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0069",
+      "ressource": "R0061",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0069",
+      "ressource": "R0062",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0069",
+      "ressource": "R0063",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0069",
+      "ressource": "R0064",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0069",
+      "ressource": "R0065",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0070",
+      "ressource": "R0024",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0070",
+      "ressource": "R0025",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0070",
+      "ressource": "R0026",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0070",
+      "ressource": "R0027",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0070",
+      "ressource": "R0028",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0071",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0071",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0071",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0072",
+      "ressource": "R0056",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0072",
+      "ressource": "R0057",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0072",
+      "ressource": "R0058",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0072",
+      "ressource": "R0059",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0072",
+      "ressource": "R0060",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0073",
+      "ressource": "R0031",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0073",
+      "ressource": "R0032",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0073",
+      "ressource": "R0033",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0073",
+      "ressource": "R0034",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0074",
+      "ressource": "R0007",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0074",
+      "ressource": "R0008",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0074",
+      "ressource": "R0009",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0074",
+      "ressource": "R0010",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0074",
+      "ressource": "R0011",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0075",
+      "ressource": "R0061",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0075",
+      "ressource": "R0062",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0075",
+      "ressource": "R0063",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0075",
+      "ressource": "R0064",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0075",
+      "ressource": "R0065",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0076",
+      "ressource": "R0074",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0076",
+      "ressource": "R0075",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0076",
+      "ressource": "R0076",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0077",
+      "ressource": "R0029",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0077",
+      "ressource": "R0030",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0078",
+      "ressource": "R0012",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0078",
+      "ressource": "R0013",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0078",
+      "ressource": "R0014",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0078",
+      "ressource": "R0015",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0078",
+      "ressource": "R0016",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0079",
+      "ressource": "R0042",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0079",
+      "ressource": "R0043",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0079",
+      "ressource": "R0044",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0079",
+      "ressource": "R0045",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0079",
+      "ressource": "R0046",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0080",
+      "ressource": "R0056",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0080",
+      "ressource": "R0057",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0080",
+      "ressource": "R0058",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0080",
+      "ressource": "R0059",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0080",
+      "ressource": "R0060",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0081",
+      "ressource": "R0061",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0081",
+      "ressource": "R0062",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0081",
+      "ressource": "R0063",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0081",
+      "ressource": "R0064",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0081",
+      "ressource": "R0065",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0082",
+      "ressource": "R0012",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0082",
+      "ressource": "R0013",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0082",
+      "ressource": "R0014",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0082",
+      "ressource": "R0015",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0082",
+      "ressource": "R0016",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0083",
+      "ressource": "R0029",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0083",
+      "ressource": "R0030",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0084",
+      "ressource": "R0035",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0084",
+      "ressource": "R0036",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0084",
+      "ressource": "R0037",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0084",
+      "ressource": "R0038",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0085",
+      "ressource": "R0074",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0085",
+      "ressource": "R0075",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0085",
+      "ressource": "R0076",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0086",
+      "ressource": "R0001",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0086",
+      "ressource": "R0002",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0086",
+      "ressource": "R0003",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0087",
+      "ressource": "R0042",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0087",
+      "ressource": "R0043",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0087",
+      "ressource": "R0044",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0087",
+      "ressource": "R0045",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0087",
+      "ressource": "R0046",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0088",
+      "ressource": "R0056",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0088",
+      "ressource": "R0057",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0088",
+      "ressource": "R0058",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0088",
+      "ressource": "R0059",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0088",
+      "ressource": "R0060",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0089",
+      "ressource": "R0042",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0089",
+      "ressource": "R0043",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0089",
+      "ressource": "R0044",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0089",
+      "ressource": "R0045",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0089",
+      "ressource": "R0046",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0090",
+      "ressource": "R0039",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0090",
+      "ressource": "R0040",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0090",
+      "ressource": "R0041",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0091",
+      "ressource": "R0051",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0091",
+      "ressource": "R0052",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0091",
+      "ressource": "R0053",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0091",
+      "ressource": "R0054",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0091",
+      "ressource": "R0055",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0092",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0092",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0092",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0093",
+      "ressource": "R0061",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0093",
+      "ressource": "R0062",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0093",
+      "ressource": "R0063",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0093",
+      "ressource": "R0064",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0093",
+      "ressource": "R0065",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0094",
+      "ressource": "R0004",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0094",
+      "ressource": "R0005",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0094",
+      "ressource": "R0006",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0095",
+      "ressource": "R0024",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0095",
+      "ressource": "R0025",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0095",
+      "ressource": "R0026",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0095",
+      "ressource": "R0027",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0095",
+      "ressource": "R0028",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0020",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0021",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0022",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0023",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0047",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0048",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0049",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0096",
+      "ressource": "R0050",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0097",
+      "ressource": "R0024",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0097",
+      "ressource": "R0025",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0097",
+      "ressource": "R0026",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0097",
+      "ressource": "R0027",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0097",
+      "ressource": "R0028",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0098",
+      "ressource": "R0001",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0098",
+      "ressource": "R0002",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0098",
+      "ressource": "R0003",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0020",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0021",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0022",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0023",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0047",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0048",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0049",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0099",
+      "ressource": "R0050",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0100",
+      "ressource": "R0061",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0100",
+      "ressource": "R0062",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0100",
+      "ressource": "R0063",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0100",
+      "ressource": "R0064",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0100",
+      "ressource": "R0065",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0020",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0021",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0022",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0023",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0047",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0048",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0049",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0101",
+      "ressource": "R0050",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0102",
+      "ressource": "R0031",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0102",
+      "ressource": "R0032",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0102",
+      "ressource": "R0033",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0102",
+      "ressource": "R0034",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0103",
+      "ressource": "R0056",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0103",
+      "ressource": "R0057",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0103",
+      "ressource": "R0058",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0103",
+      "ressource": "R0059",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0103",
+      "ressource": "R0060",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0104",
+      "ressource": "R0074",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0104",
+      "ressource": "R0075",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0104",
+      "ressource": "R0076",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0105",
+      "ressource": "R0051",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0105",
+      "ressource": "R0052",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0105",
+      "ressource": "R0053",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0105",
+      "ressource": "R0054",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0105",
+      "ressource": "R0055",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0106",
+      "ressource": "R0066",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0106",
+      "ressource": "R0067",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0106",
+      "ressource": "R0068",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0107",
+      "ressource": "R0004",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0107",
+      "ressource": "R0005",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0107",
+      "ressource": "R0006",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0108",
+      "ressource": "R0069",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0108",
+      "ressource": "R0070",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0108",
+      "ressource": "R0071",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0108",
+      "ressource": "R0072",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0108",
+      "ressource": "R0073",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0109",
+      "ressource": "R0035",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0109",
+      "ressource": "R0036",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0109",
+      "ressource": "R0037",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0109",
+      "ressource": "R0038",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0110",
+      "ressource": "R0029",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0110",
+      "ressource": "R0030",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0020",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0021",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0022",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0023",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0047",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0048",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0049",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0111",
+      "ressource": "R0050",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0020",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0021",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0022",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0023",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0047",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0048",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0049",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0112",
+      "ressource": "R0050",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0113",
+      "ressource": "R0007",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0113",
+      "ressource": "R0008",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0113",
+      "ressource": "R0009",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0113",
+      "ressource": "R0010",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0113",
+      "ressource": "R0011",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0114",
+      "ressource": "R0051",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0114",
+      "ressource": "R0052",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0114",
+      "ressource": "R0053",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0114",
+      "ressource": "R0054",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0114",
+      "ressource": "R0055",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0020",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0021",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0022",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0023",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0047",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0048",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0049",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0115",
+      "ressource": "R0050",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0116",
+      "ressource": "R0024",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0116",
+      "ressource": "R0025",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0116",
+      "ressource": "R0026",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0116",
+      "ressource": "R0027",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0116",
+      "ressource": "R0028",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0117",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0117",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0117",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0118",
+      "ressource": "R0039",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0118",
+      "ressource": "R0040",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0118",
+      "ressource": "R0041",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0119",
+      "ressource": "R0017",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0119",
+      "ressource": "R0018",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0119",
+      "ressource": "R0019",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0120",
+      "ressource": "R0066",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0120",
+      "ressource": "R0067",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0120",
+      "ressource": "R0068",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0121",
+      "ressource": "R0007",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0121",
+      "ressource": "R0008",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0121",
+      "ressource": "R0009",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0121",
+      "ressource": "R0010",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0121",
+      "ressource": "R0011",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0122",
+      "ressource": "R0069",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0122",
+      "ressource": "R0070",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0122",
+      "ressource": "R0071",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0122",
+      "ressource": "R0072",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0122",
+      "ressource": "R0073",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0123",
+      "ressource": "R0056",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0123",
+      "ressource": "R0057",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0123",
+      "ressource": "R0058",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0123",
+      "ressource": "R0059",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0123",
+      "ressource": "R0060",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0124",
+      "ressource": "R0039",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0124",
+      "ressource": "R0040",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0124",
+      "ressource": "R0041",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0125",
+      "ressource": "R0024",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0125",
+      "ressource": "R0025",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0125",
+      "ressource": "R0026",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0125",
+      "ressource": "R0027",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0125",
+      "ressource": "R0028",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0126",
+      "ressource": "R0061",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0126",
+      "ressource": "R0062",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0126",
+      "ressource": "R0063",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0126",
+      "ressource": "R0064",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0126",
+      "ressource": "R0065",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0127",
+      "ressource": "R0042",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0127",
+      "ressource": "R0043",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0127",
+      "ressource": "R0044",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0127",
+      "ressource": "R0045",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0127",
+      "ressource": "R0046",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0128",
+      "ressource": "R0012",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0128",
+      "ressource": "R0013",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0128",
+      "ressource": "R0014",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0128",
+      "ressource": "R0015",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0128",
+      "ressource": "R0016",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0129",
+      "ressource": "R0024",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0129",
+      "ressource": "R0025",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0129",
+      "ressource": "R0026",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0129",
+      "ressource": "R0027",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0129",
+      "ressource": "R0028",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0130",
+      "ressource": "R0031",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0130",
+      "ressource": "R0032",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0130",
+      "ressource": "R0033",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0130",
+      "ressource": "R0034",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0020",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0021",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0022",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0023",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0047",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0048",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0049",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0131",
+      "ressource": "R0050",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0132",
+      "ressource": "R0007",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0132",
+      "ressource": "R0008",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0132",
+      "ressource": "R0009",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0132",
+      "ressource": "R0010",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0132",
+      "ressource": "R0011",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0133",
+      "ressource": "R0069",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0133",
+      "ressource": "R0070",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0133",
+      "ressource": "R0071",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0133",
+      "ressource": "R0072",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0133",
+      "ressource": "R0073",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0134",
+      "ressource": "R0051",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0134",
+      "ressource": "R0052",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0134",
+      "ressource": "R0053",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0134",
+      "ressource": "R0054",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0134",
+      "ressource": "R0055",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0020",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0021",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0022",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0023",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0047",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0048",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0049",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0135",
+      "ressource": "R0050",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0136",
+      "ressource": "R0061",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0136",
+      "ressource": "R0062",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0136",
+      "ressource": "R0063",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0136",
+      "ressource": "R0064",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0136",
+      "ressource": "R0065",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0137",
+      "ressource": "R0056",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0137",
+      "ressource": "R0057",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0137",
+      "ressource": "R0058",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0137",
+      "ressource": "R0059",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0137",
+      "ressource": "R0060",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0138",
+      "ressource": "R0061",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0138",
+      "ressource": "R0062",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0138",
+      "ressource": "R0063",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0138",
+      "ressource": "R0064",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0138",
+      "ressource": "R0065",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0139",
+      "ressource": "R0035",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0139",
+      "ressource": "R0036",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0139",
+      "ressource": "R0037",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0139",
+      "ressource": "R0038",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0140",
+      "ressource": "R0012",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0140",
+      "ressource": "R0013",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0140",
+      "ressource": "R0014",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0140",
+      "ressource": "R0015",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0140",
+      "ressource": "R0016",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0141",
+      "ressource": "R0024",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0141",
+      "ressource": "R0025",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0141",
+      "ressource": "R0026",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0141",
+      "ressource": "R0027",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0141",
+      "ressource": "R0028",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0142",
+      "ressource": "R0001",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0142",
+      "ressource": "R0002",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0142",
+      "ressource": "R0003",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0143",
+      "ressource": "R0074",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0143",
+      "ressource": "R0075",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0143",
+      "ressource": "R0076",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0144",
+      "ressource": "R0042",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0144",
+      "ressource": "R0043",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0144",
+      "ressource": "R0044",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0144",
+      "ressource": "R0045",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0144",
+      "ressource": "R0046",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0145",
+      "ressource": "R0056",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0145",
+      "ressource": "R0057",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0145",
+      "ressource": "R0058",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0145",
+      "ressource": "R0059",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0145",
+      "ressource": "R0060",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0146",
+      "ressource": "R0069",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0146",
+      "ressource": "R0070",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0146",
+      "ressource": "R0071",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0146",
+      "ressource": "R0072",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0146",
+      "ressource": "R0073",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0020",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0021",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0022",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0023",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0047",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0048",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0049",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0147",
+      "ressource": "R0050",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0148",
+      "ressource": "R0039",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0148",
+      "ressource": "R0040",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0148",
+      "ressource": "R0041",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0149",
+      "ressource": "R0029",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0149",
+      "ressource": "R0030",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0150",
+      "ressource": "R0007",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0150",
+      "ressource": "R0008",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0150",
+      "ressource": "R0009",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0150",
+      "ressource": "R0010",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0150",
+      "ressource": "R0011",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0151",
+      "ressource": "R0066",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0151",
+      "ressource": "R0067",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0151",
+      "ressource": "R0068",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0152",
+      "ressource": "R0012",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0152",
+      "ressource": "R0013",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0152",
+      "ressource": "R0014",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0152",
+      "ressource": "R0015",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0152",
+      "ressource": "R0016",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0153",
+      "ressource": "R0004",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0153",
+      "ressource": "R0005",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0153",
+      "ressource": "R0006",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0154",
+      "ressource": "R0056",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0154",
+      "ressource": "R0057",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0154",
+      "ressource": "R0058",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0154",
+      "ressource": "R0059",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0154",
+      "ressource": "R0060",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0155",
+      "ressource": "R0031",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0155",
+      "ressource": "R0032",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0155",
+      "ressource": "R0033",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0155",
+      "ressource": "R0034",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0156",
+      "ressource": "R0074",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0156",
+      "ressource": "R0075",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0156",
+      "ressource": "R0076",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0157",
+      "ressource": "R0017",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0157",
+      "ressource": "R0018",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0157",
+      "ressource": "R0019",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0158",
+      "ressource": "R0066",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0158",
+      "ressource": "R0067",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0158",
+      "ressource": "R0068",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0159",
+      "ressource": "R0029",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0159",
+      "ressource": "R0030",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0020",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0021",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0022",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0023",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0047",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0048",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0049",
+      "duree": 3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T0160",
+      "ressource": "R0050",
+      "duree": 3
     }
   ],
   "objectifs": [

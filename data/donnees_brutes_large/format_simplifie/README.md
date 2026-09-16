@@ -1,7 +1,7 @@
 # Données Brutes Large au Format Simplifié
 
-Ce répertoire contient des données brutes de **grande taille** (50-360+ tâches) au format simplifié
-avec compétences.
+Ce répertoire contient des données brutes de **grande taille** (50-360+ tâches) au format simplifié,
+avec compatibilité ressource-tâche déjà explicite (durée comprise).
 
 ## Fichiers générés
 
@@ -17,14 +17,14 @@ Identique au format simplifié standard (voir `instance_exemple.json`):
 ```json
 {
   "taches": [
-    {"id": "T0001", "nom": "Lot001_PREPARATION", "duree_estimee_jours": 2}
+    {"id": "T0001", "nom": "Lot001_PREPARATION"}
   ],
   "ressources": [
-    {"id": "R0001", "nom": "Decoupe Laser #1", "competences": ["decoupe_laser"]}
+    {"id": "R0001", "nom": "Decoupe Laser #1"}
   ],
   "contraintes": [
     {"type": "precedence", "avant": "T0001", "apres": "T0002"},
-    {"type": "competence_requise", "tache": "T0001", "competence": "decoupe_laser"}
+    {"type": "compatibilite_ressource_tache", "tache": "T0001", "ressource": "R0001", "duree": 2}
   ],
   "objectifs": [
     {"type": "minimiser_makespan"}
@@ -58,12 +58,3 @@ uv run python -m scripts.generer_donnees_brutes_large_format_simplifie
 ```
 
 La génération utilise un seed fixe (42) pour garantir la reproductibilité des instances.
-
-## Conversion vers TRCO
-
-Comme pour les données normales, un adaptateur doit:
-1. Dériver `compatibilite_ressource_tache` depuis les compétences
-2. Extraire les durées des tâches
-3. Ajouter les métadonnées
-
-Voir `adapters/competence_derivation.py`.

@@ -14,6 +14,38 @@ from pathlib import Path
 from typing import Any
 
 
+def _vers_compatibilite_explicite(donnee: dict[str, Any]) -> dict[str, Any]:
+    """Remplace `duree_estimee_jours` (tâches) + `competence_requise` (contraintes) par des
+    `compatibilite_ressource_tache` explicites — même logique que
+    `adapters/competence_derivation.py::deriver_compatibilites_par_competence`, appliquée ici
+    au moment de la génération plutôt qu'à l'ingestion (voir même fonction dans
+    `scripts/generer_donnees_brutes_format_simplifie.py`)."""
+    durees = {t["id"]: t.pop("duree_estimee_jours") for t in donnee["taches"] if "duree_estimee_jours" in t}
+    competences_par_ressource = {r["id"]: set(r.get("competences", [])) for r in donnee["ressources"]}
+
+    requises_par_tache: dict[str, set[str]] = {}
+    autres_contraintes = []
+    for contrainte in donnee["contraintes"]:
+        if contrainte["type"] == "competence_requise":
+            requises_par_tache.setdefault(contrainte["tache"], set()).add(contrainte["competence"])
+        else:
+            autres_contraintes.append(contrainte)
+
+    donnee["contraintes"] = autres_contraintes
+    for tache_id, requises in requises_par_tache.items():
+        for ressource_id, competences in competences_par_ressource.items():
+            if requises <= competences:
+                donnee["contraintes"].append(
+                    {
+                        "type": "compatibilite_ressource_tache",
+                        "tache": tache_id,
+                        "ressource": ressource_id,
+                        "duree": durees[tache_id],
+                    }
+                )
+    return donnee
+
+
 def generer_atelier_mecanique_large(nb_lots: int = 20) -> dict[str, Any]:
     """Génère un atelier mécanique de grande taille.
 
@@ -366,6 +398,7 @@ def main() -> None:
         "production_agroalimentaire_large": generer_production_agroalimentaire_large(nb_lots=25),
         "imprimerie_large": generer_imprimerie_large(nb_commandes=15),
     }
+    donnees = {nom: _vers_compatibilite_explicite(donnee) for nom, donnee in donnees.items()}
 
     # Créer le répertoire de destination
     output_dir = Path("data/donnees_brutes_large/format_simplifie")
@@ -393,8 +426,8 @@ def main() -> None:
         f.write(
             """# Données Brutes Large au Format Simplifié
 
-Ce répertoire contient des données brutes de **grande taille** (50-360+ tâches) au format simplifié
-avec compétences.
+Ce répertoire contient des données brutes de **grande taille** (50-360+ tâches) au format simplifié,
+avec compatibilité ressource-tâche déjà explicite (durée comprise).
 
 ## Fichiers générés
 
@@ -415,14 +448,14 @@ Identique au format simplifié standard (voir `instance_exemple.json`):
 ```json
 {
   "taches": [
-    {"id": "T0001", "nom": "Lot001_PREPARATION", "duree_estimee_jours": 2}
+    {"id": "T0001", "nom": "Lot001_PREPARATION"}
   ],
   "ressources": [
-    {"id": "R0001", "nom": "Decoupe Laser #1", "competences": ["decoupe_laser"]}
+    {"id": "R0001", "nom": "Decoupe Laser #1"}
   ],
   "contraintes": [
     {"type": "precedence", "avant": "T0001", "apres": "T0002"},
-    {"type": "competence_requise", "tache": "T0001", "competence": "decoupe_laser"}
+    {"type": "compatibilite_ressource_tache", "tache": "T0001", "ressource": "R0001", "duree": 2}
   ],
   "objectifs": [
     {"type": "minimiser_makespan"}
@@ -456,15 +489,6 @@ uv run python -m scripts.generer_donnees_brutes_large_format_simplifie
 ```
 
 La génération utilise un seed fixe (42) pour garantir la reproductibilité des instances.
-
-## Conversion vers TRCO
-
-Comme pour les données normales, un adaptateur doit:
-1. Dériver `compatibilite_ressource_tache` depuis les compétences
-2. Extraire les durées des tâches
-3. Ajouter les métadonnées
-
-Voir `adapters/competence_derivation.py`.
 """
         )
 

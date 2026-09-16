@@ -62,15 +62,13 @@ Chaque fichier JSON respecte ce schéma:
   "taches": [
     {
       "id": "T1",
-      "nom": "Nom descriptif",
-      "duree_estimee_jours": 2.5
+      "nom": "Nom descriptif"
     }
   ],
   "ressources": [
     {
       "id": "R1",
-      "nom": "Nom ressource",
-      "competences": ["comp1", "comp2"]
+      "nom": "Nom ressource"
     }
   ],
   "contraintes": [
@@ -80,9 +78,10 @@ Chaque fichier JSON respecte ce schéma:
       "apres": "T2"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "comp1"
+      "ressource": "R1",
+      "duree": 3
     }
   ],
   "objectifs": [

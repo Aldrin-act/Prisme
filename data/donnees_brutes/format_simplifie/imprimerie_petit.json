@@ -2,23 +2,19 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Prépresse",
-      "duree_estimee_jours": 2
+      "nom": "Prépresse"
     },
     {
       "id": "T2",
-      "nom": "Impression",
-      "duree_estimee_jours": 3
+      "nom": "Impression"
     },
     {
       "id": "T3",
-      "nom": "Découpe",
-      "duree_estimee_jours": 1
+      "nom": "Découpe"
     },
     {
       "id": "T4",
-      "nom": "Reliure",
-      "duree_estimee_jours": 2
+      "nom": "Reliure"
     }
   ],
   "ressources": [
@@ -68,24 +64,28 @@
       "apres": "T4"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "prepresse"
+      "ressource": "R1",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "impression"
+      "ressource": "R2",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "decoupe"
+      "ressource": "R3",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "reliure"
+      "ressource": "R4",
+      "duree": 2
     }
   ],
   "objectifs": [

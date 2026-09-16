@@ -2,63 +2,51 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Lecture manuscrit",
-      "duree_estimee_jours": 5
+      "nom": "Lecture manuscrit"
     },
     {
       "id": "T2",
-      "nom": "Évaluation comité",
-      "duree_estimee_jours": 3
+      "nom": "Évaluation comité"
     },
     {
       "id": "T3",
-      "nom": "Négociation contrat",
-      "duree_estimee_jours": 2
+      "nom": "Négociation contrat"
     },
     {
       "id": "T4",
-      "nom": "Édition texte",
-      "duree_estimee_jours": 10
+      "nom": "Édition texte"
     },
     {
       "id": "T5",
-      "nom": "Corrections auteur",
-      "duree_estimee_jours": 7
+      "nom": "Corrections auteur"
     },
     {
       "id": "T6",
-      "nom": "Relecture finale",
-      "duree_estimee_jours": 3
+      "nom": "Relecture finale"
     },
     {
       "id": "T7",
-      "nom": "Conception couverture",
-      "duree_estimee_jours": 5
+      "nom": "Conception couverture"
     },
     {
       "id": "T8",
-      "nom": "Mise en page",
-      "duree_estimee_jours": 4
+      "nom": "Mise en page"
     },
     {
       "id": "T9",
-      "nom": "BAT auteur",
-      "duree_estimee_jours": 2
+      "nom": "BAT auteur"
     },
     {
       "id": "T10",
-      "nom": "Impression",
-      "duree_estimee_jours": 3
+      "nom": "Impression"
     },
     {
       "id": "T11",
-      "nom": "Reliure",
-      "duree_estimee_jours": 2
+      "nom": "Reliure"
     },
     {
       "id": "T12",
-      "nom": "Distribution",
-      "duree_estimee_jours": 1
+      "nom": "Distribution"
     }
   ],
   "ressources": [
@@ -192,64 +180,82 @@
       "apres": "T12"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "lecture"
+      "ressource": "R1",
+      "duree": 5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "evaluation"
+      "ressource": "R2",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "negociation"
+      "ressource": "R1",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "edition"
+      "ressource": "R1",
+      "duree": 10
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R3",
+      "duree": 10
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "corrections"
+      "ressource": "R4",
+      "duree": 7
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "relecture"
+      "ressource": "R3",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "conception_couverture"
+      "ressource": "R5",
+      "duree": 5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "mise_en_page"
+      "ressource": "R6",
+      "duree": 4
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T9",
-      "competence": "validation_bat"
+      "ressource": "R4",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T10",
-      "competence": "impression"
+      "ressource": "R7",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T11",
-      "competence": "reliure"
+      "ressource": "R8",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T12",
-      "competence": "distribution"
+      "ressource": "R9",
+      "duree": 1
     }
   ],
   "objectifs": [

@@ -1,6 +1,8 @@
 id,nom,competences
+SALLE_EXAMEN,,salle_examen
+SALLE_COURS_STANDARD,,salle_cours_standard
+LABORATOIRE,,laboratoire
+SALLE_TD,,salle_td
 AMPHITHEATRE,,amphitheatre
 SALLE_TP_INFORMATIQUE,,salle_tp_informatique
-SALLE_TD,,salle_td
-SALLE_TP_SCIENCES,,salle_tp_sciences
-LABORATOIRE,,laboratoire
+BIBLIOTHEQUE,,bibliotheque

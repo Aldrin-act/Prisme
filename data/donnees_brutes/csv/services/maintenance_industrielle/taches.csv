@@ -1,8 +1,8 @@
-id,nom,duree_estimee_jours
-DIAG_PANNE_001,Diag Panne 001,1
-CMD_PIECES_001,Cmd Pieces 001,3
-DEMONTAGE_001,Demontage 001,1
-REPARATION_001,Reparation 001,2
-REMONTAGE_001,Remontage 001,1
-TEST_MARCHE_001,Test Marche 001,1
-NETTOYAGE_FINAL,Nettoyage Final,1
+id,nom
+DIAG_PANNE_001,Diag Panne 001
+CMD_PIECES_001,Cmd Pieces 001
+DEMONTAGE_001,Demontage 001
+REPARATION_001,Reparation 001
+REMONTAGE_001,Remontage 001
+TEST_MARCHE_001,Test Marche 001
+NETTOYAGE_FINAL,Nettoyage Final

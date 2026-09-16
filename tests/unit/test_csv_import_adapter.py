@@ -94,11 +94,12 @@ def test_tache_sans_compatibilite_rejetee_par_le_garde_fou_dsl() -> None:
 
 
 def test_compatibilite_derivee_pour_chaque_ressource_competente() -> None:
-    taches_csv = b"id,nom,duree_estimee_jours\nT1,Decoupe,25\n"
+    taches_csv = b"id,nom\nT1,Decoupe\n"
     ressources_csv = b"id,nom,competences\nR1,Decoupeuse,decoupe;affutage\nR2,Assembleuse,assemblage\n"
     contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
 
-    instance = traduire(taches_csv, ressources_csv, contraintes_csv)
+    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25))
+    instance = resultat.instance
 
     compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
     assert len(compatibilites) == 1
@@ -116,11 +117,12 @@ def test_compatibilite_derivee_exige_toutes_les_competences_requises() -> None:
     ressource qui les couvre TOUTES — même exigence que le garde-fou DSL
     (`InstanceTRCO._competences_requises_respectees`), pas une simple
     intersection non vide."""
-    taches_csv = b"id,duree_estimee_jours\nT1,25\n"
+    taches_csv = b"id\nT1\n"
     ressources_csv = b"id,competences\nR1,decoupe\nR2,decoupe;affutage\n"
     contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\ncompetence_requise,T1,affutage\n"
 
-    instance = traduire(taches_csv, ressources_csv, contraintes_csv)
+    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25))
+    instance = resultat.instance
 
     compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
     assert [c.ressource for c in compatibilites] == ["R2"]
@@ -141,8 +143,8 @@ def test_compatibilite_explicite_et_derivee_par_competence_coexistent() -> None:
     R2 possède aussi la compétence requise (le garde-fou DSL l'exige pour
     toute compatibilité, explicite ou dérivée, dès qu'une compétence est
     requise) mais avec une durée déclarée à la main, différente de celle,
-    dérivée, appliquée à R1."""
-    taches_csv = b"id,duree_estimee_jours\nT1,25\n"
+    dérivée par l'estimateur, appliquée à R1."""
+    taches_csv = b"id\nT1\n"
     ressources_csv = b"id,competences\nR1,decoupe\nR2,decoupe\n"
     contraintes_csv = (
         b"type,tache,ressource,duree_jours,competence\n"
@@ -150,7 +152,8 @@ def test_compatibilite_explicite_et_derivee_par_competence_coexistent() -> None:
         b"competence_requise,T1,,,decoupe\n"
     )
 
-    instance = traduire(taches_csv, ressources_csv, contraintes_csv)
+    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25))
+    instance = resultat.instance
 
     compatibilites = {
         (c.tache, c.ressource, c.duree) for c in instance.contraintes if c.type == "compatibilite_ressource_tache"
@@ -285,20 +288,6 @@ def test_estimateur_duree_comble_une_duree_manquante_et_previent() -> None:
     assert "T1" in resultat.avertissements[0]
 
 
-def test_duree_declaree_l_emporte_toujours_sur_l_estimateur() -> None:
-    taches_csv = b"id,duree_estimee_jours\nT1,25\n"
-    ressources_csv = b"id,competences\nR1,decoupe\n"
-    contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
-
-    resultat = _traduire_resultat(
-        taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(99)
-    )
-
-    compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]
-    assert [(c.tache, c.ressource, c.duree) for c in compatibilites] == [("T1", "R1", 25)]
-    assert resultat.avertissements == ()
-
-
 def test_sans_estimateur_duree_manquante_leve_toujours_erreur() -> None:
     """`estimateur_duree` est strictement optionnel — comportement par défaut
     inchangé quand il est absent, même pour une tâche qu'un estimateur
@@ -317,12 +306,19 @@ def test_sans_estimateur_duree_manquante_leve_toujours_erreur() -> None:
 def test_delimiteur_point_virgule_lit_les_quatre_fichiers() -> None:
     """Export Excel FR typique : `;` partout, la virgule étant déjà le
     séparateur décimal — jamais deviné, toujours déclaré explicitement."""
-    taches_csv = b"id;nom;duree_estimee_jours\nT1;Decoupe;25\n"
+    taches_csv = b"id;nom\nT1;Decoupe\n"
     ressources_csv = b"id;competences\nR1;decoupe\n"
     contraintes_csv = b"type;tache;competence\ncompetence_requise;T1;decoupe\n"
     commandes_csv = b"id;taches;client;date_limite\nCMD1;T1;Client A;20\n"
 
-    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, commandes_csv, delimiteur=";")
+    resultat = _traduire_resultat(
+        taches_csv,
+        ressources_csv,
+        contraintes_csv,
+        commandes_csv,
+        estimateur_duree=_EstimateurFaux(25),
+        delimiteur=";",
+    )
 
     assert [t.id for t in resultat.instance.taches] == ["T1"]
     compatibilites = [c for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"]

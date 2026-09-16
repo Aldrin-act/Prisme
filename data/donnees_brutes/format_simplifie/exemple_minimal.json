@@ -2,13 +2,11 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Decoupe",
-      "duree_estimee_jours": 3
+      "nom": "Decoupe"
     },
     {
       "id": "T2",
-      "nom": "Assemblage",
-      "duree_estimee_jours": 2
+      "nom": "Assemblage"
     }
   ],
   "ressources": [
@@ -28,14 +26,16 @@
       "apres": "T2"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "decoupe"
+      "ressource": "R1",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "assemblage"
+      "ressource": "R1",
+      "duree": 2
     }
   ],
   "objectifs": [

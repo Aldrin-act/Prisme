@@ -2,33 +2,27 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Réception appel",
-      "duree_estimee_jours": 0.02
+      "nom": "Réception appel"
     },
     {
       "id": "T2",
-      "nom": "Qualification demande",
-      "duree_estimee_jours": 0.05
+      "nom": "Qualification demande"
     },
     {
       "id": "T3",
-      "nom": "Diagnostic technique",
-      "duree_estimee_jours": 0.1
+      "nom": "Diagnostic technique"
     },
     {
       "id": "T4",
-      "nom": "Escalade niveau 2",
-      "duree_estimee_jours": 0.15
+      "nom": "Escalade niveau 2"
     },
     {
       "id": "T5",
-      "nom": "Résolution",
-      "duree_estimee_jours": 0.2
+      "nom": "Résolution"
     },
     {
       "id": "T6",
-      "nom": "Confirmation client",
-      "duree_estimee_jours": 0.05
+      "nom": "Confirmation client"
     }
   ],
   "ressources": [
@@ -95,34 +89,64 @@
       "apres": "T6"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "reception"
+      "ressource": "R1",
+      "duree": 0.02
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "qualification"
+      "ressource": "R1",
+      "duree": 0.05
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R4",
+      "duree": 0.05
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "diagnostic"
+      "ressource": "R2",
+      "duree": 0.1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R3",
+      "duree": 0.1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "escalade"
+      "ressource": "R3",
+      "duree": 0.15
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R4",
+      "duree": 0.15
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "resolution_complexe"
+      "ressource": "R3",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "confirmation"
+      "ressource": "R1",
+      "duree": 0.05
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R4",
+      "duree": 0.05
     }
   ],
   "objectifs": [

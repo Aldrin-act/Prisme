@@ -2,43 +2,35 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Réception échantillon",
-      "duree_estimee_jours": 0.1
+      "nom": "Réception échantillon"
     },
     {
       "id": "T2",
-      "nom": "Préparation échantillon",
-      "duree_estimee_jours": 0.5
+      "nom": "Préparation échantillon"
     },
     {
       "id": "T3",
-      "nom": "Analyse chimique",
-      "duree_estimee_jours": 1
+      "nom": "Analyse chimique"
     },
     {
       "id": "T4",
-      "nom": "Analyse microbiologique",
-      "duree_estimee_jours": 2
+      "nom": "Analyse microbiologique"
     },
     {
       "id": "T5",
-      "nom": "Analyse physique",
-      "duree_estimee_jours": 1
+      "nom": "Analyse physique"
     },
     {
       "id": "T6",
-      "nom": "Compilation résultats",
-      "duree_estimee_jours": 0.5
+      "nom": "Compilation résultats"
     },
     {
       "id": "T7",
-      "nom": "Validation responsable",
-      "duree_estimee_jours": 0.3
+      "nom": "Validation responsable"
     },
     {
       "id": "T8",
-      "nom": "Rédaction rapport",
-      "duree_estimee_jours": 0.5
+      "nom": "Rédaction rapport"
     }
   ],
   "ressources": [
@@ -138,44 +130,76 @@
       "apres": "T8"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "reception"
+      "ressource": "R1",
+      "duree": 0.1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "preparation"
+      "ressource": "R1",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 0.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R3",
+      "duree": 0.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "analyse_chimique"
+      "ressource": "R2",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "analyse_microbiologique"
+      "ressource": "R3",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "analyse_physique"
+      "ressource": "R4",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "compilation"
+      "ressource": "R5",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R6",
+      "duree": 0.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "validation"
+      "ressource": "R6",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "redaction"
+      "ressource": "R5",
+      "duree": 0.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
+      "tache": "T8",
+      "ressource": "R6",
+      "duree": 0.5
     }
   ],
   "objectifs": [

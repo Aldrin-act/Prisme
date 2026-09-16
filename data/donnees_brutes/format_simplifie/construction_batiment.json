@@ -2,48 +2,39 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Fondations",
-      "duree_estimee_jours": 7
+      "nom": "Fondations"
     },
     {
       "id": "T2",
-      "nom": "Montage structure",
-      "duree_estimee_jours": 10
+      "nom": "Montage structure"
     },
     {
       "id": "T3",
-      "nom": "Toiture",
-      "duree_estimee_jours": 5
+      "nom": "Toiture"
     },
     {
       "id": "T4",
-      "nom": "Électricité",
-      "duree_estimee_jours": 4
+      "nom": "Électricité"
     },
     {
       "id": "T5",
-      "nom": "Plomberie",
-      "duree_estimee_jours": 4
+      "nom": "Plomberie"
     },
     {
       "id": "T6",
-      "nom": "Isolation",
-      "duree_estimee_jours": 3
+      "nom": "Isolation"
     },
     {
       "id": "T7",
-      "nom": "Plâtrerie",
-      "duree_estimee_jours": 5
+      "nom": "Plâtrerie"
     },
     {
       "id": "T8",
-      "nom": "Peinture",
-      "duree_estimee_jours": 3
+      "nom": "Peinture"
     },
     {
       "id": "T9",
-      "nom": "Finitions",
-      "duree_estimee_jours": 2
+      "nom": "Finitions"
     }
   ],
   "ressources": [
@@ -152,49 +143,64 @@
       "apres": "T9"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "fondations"
+      "ressource": "R1",
+      "duree": 7
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "structure"
+      "ressource": "R1",
+      "duree": 10
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R2",
+      "duree": 10
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "toiture"
+      "ressource": "R2",
+      "duree": 5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "electricite"
+      "ressource": "R3",
+      "duree": 4
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "plomberie"
+      "ressource": "R4",
+      "duree": 4
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "isolation"
+      "ressource": "R5",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "platrerie"
+      "ressource": "R6",
+      "duree": 5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "peinture"
+      "ressource": "R7",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T9",
-      "competence": "finitions"
+      "ressource": "R7",
+      "duree": 2
     }
   ],
   "objectifs": [

@@ -1,10 +1,10 @@
-id,nom,duree_estimee_jours
-PRE_PRESSE,Pre Presse,1
-CALAGE_PRESSE,Calage Presse,1
-IMPRESSION_RECTO,Impression Recto,2
-SECHAGE_RECTO,Sechage Recto,1
-IMPRESSION_VERSO,Impression Verso,2
-SECHAGE_VERSO,Sechage Verso,1
-VERNIS_SELECTIF,Vernis Selectif,1
-DECOUPE_PLIAGE,Decoupe Pliage,1
-FINITION,Finition,1
+id,nom
+PRE_PRESSE,Pre Presse
+CALAGE_PRESSE,Calage Presse
+IMPRESSION_RECTO,Impression Recto
+SECHAGE_RECTO,Sechage Recto
+IMPRESSION_VERSO,Impression Verso
+SECHAGE_VERSO,Sechage Verso
+VERNIS_SELECTIF,Vernis Selectif
+DECOUPE_PLIAGE,Decoupe Pliage
+FINITION,Finition

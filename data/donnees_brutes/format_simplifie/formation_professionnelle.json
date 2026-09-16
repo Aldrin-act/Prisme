@@ -2,43 +2,35 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Évaluation initiale",
-      "duree_estimee_jours": 0.5
+      "nom": "Évaluation initiale"
     },
     {
       "id": "T2",
-      "nom": "Module théorique 1",
-      "duree_estimee_jours": 2
+      "nom": "Module théorique 1"
     },
     {
       "id": "T3",
-      "nom": "Travaux pratiques 1",
-      "duree_estimee_jours": 1
+      "nom": "Travaux pratiques 1"
     },
     {
       "id": "T4",
-      "nom": "Module théorique 2",
-      "duree_estimee_jours": 2
+      "nom": "Module théorique 2"
     },
     {
       "id": "T5",
-      "nom": "Travaux pratiques 2",
-      "duree_estimee_jours": 1.5
+      "nom": "Travaux pratiques 2"
     },
     {
       "id": "T6",
-      "nom": "Projet fil rouge",
-      "duree_estimee_jours": 3
+      "nom": "Projet fil rouge"
     },
     {
       "id": "T7",
-      "nom": "Examen final",
-      "duree_estimee_jours": 0.5
+      "nom": "Examen final"
     },
     {
       "id": "T8",
-      "nom": "Certification",
-      "duree_estimee_jours": 0.3
+      "nom": "Certification"
     }
   ],
   "ressources": [
@@ -119,44 +111,82 @@
       "apres": "T8"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "evaluation"
+      "ressource": "R1",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R2",
+      "duree": 0.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "enseignement_theorique"
+      "ressource": "R2",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R5",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "enseignement_pratique"
+      "ressource": "R3",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T3",
+      "ressource": "R4",
+      "duree": 1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "enseignement_theorique"
+      "ressource": "R2",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T4",
+      "ressource": "R5",
+      "duree": 2
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "enseignement_pratique"
+      "ressource": "R3",
+      "duree": 1.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T5",
+      "ressource": "R4",
+      "duree": 1.5
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "encadrement_projet"
+      "ressource": "R3",
+      "duree": 3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "examen"
+      "ressource": "R5",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "certification"
+      "ressource": "R1",
+      "duree": 0.3
     }
   ],
   "objectifs": [

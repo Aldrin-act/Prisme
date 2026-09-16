@@ -1,9 +1,9 @@
-id,nom,duree_estimee_jours
-RECEPTION_APPEL,Reception Appel,1
-QUALIFICATION_DEMANDE,Qualification Demande,1
-CREATION_TICKET,Creation Ticket,1
-ESCALADE_N2,Escalade N2,1
-INVESTIGATION_TECHNIQUE,Investigation Technique,2
-RESOLUTION,Resolution,1
-RAPPEL_CLIENT,Rappel Client,1
-CLOTURE_TICKET,Cloture Ticket,1
+id,nom
+RECEPTION_APPEL,Reception Appel
+QUALIFICATION_DEMANDE,Qualification Demande
+CREATION_TICKET,Creation Ticket
+ESCALADE_N2,Escalade N2
+INVESTIGATION_TECHNIQUE,Investigation Technique
+RESOLUTION,Resolution
+RAPPEL_CLIENT,Rappel Client
+CLOTURE_TICKET,Cloture Ticket

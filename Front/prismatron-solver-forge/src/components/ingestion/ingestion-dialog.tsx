@@ -912,7 +912,7 @@ export function IngestionDialog({
                     />
                     <p className="text-xs text-muted-foreground">
                       Trois fichiers séparés, un par axe — colonnes attendues :{" "}
-                      <code className="font-mono">id,nom,duree_estimee_jours</code> pour Tâches,{" "}
+                      <code className="font-mono">id,nom</code> pour Tâches,{" "}
                       <code className="font-mono">id,nom,competences</code> (séparées par{" "}
                       <code className="font-mono">;</code>) pour Ressources,{" "}
                       <code className="font-mono">
@@ -926,9 +926,9 @@ export function IngestionDialog({
                     <p className="text-xs text-muted-foreground">
                       Plutôt que de saisir chaque compatibilité à la main, déclarez qu'une ressource
                       possède une compétence et qu'une tâche l'exige (
-                      <code className="font-mono">competence_requise</code>) — la compatibilité et
-                      sa durée (<code className="font-mono">duree_estimee_jours</code> de la tâche)
-                      sont calculées automatiquement pour chaque ressource qualifiée.
+                      <code className="font-mono">competence_requise</code>) — la compatibilité est
+                      calculée automatiquement pour chaque ressource qualifiée, sa durée comblée par
+                      apprentissage automatique si un estimateur est disponible.
                     </p>
                     <p className="text-xs">
                       Gabarits d'exemple :{" "}
@@ -1071,12 +1071,12 @@ export function IngestionDialog({
                     <p className="text-xs text-muted-foreground">
                       Déposez un fichier JSON au format T-R-C-O (mêmes champs que la saisie manuelle
                       : taches, ressources, contraintes, objectifs) — ingéré tel quel si déjà
-                      complet. Plutôt que de déclarer chaque compatibilité à la main, une tâche peut
-                      aussi porter une durée estimée (
-                      <code className="font-mono">duree_estimee_jours</code>) : sa compatibilité
-                      avec toute ressource dont les <code className="font-mono">competences</code>{" "}
-                      couvrent ses <code className="font-mono">competence_requise</code> est alors
-                      calculée automatiquement.
+                      complet. Plutôt que de déclarer chaque compatibilité à la main, une tâche
+                      peut exiger une compétence (<code className="font-mono">competence_requise</code>
+                      ) : sa compatibilité avec toute ressource dont les{" "}
+                      <code className="font-mono">competences</code> la couvrent est alors calculée
+                      automatiquement, sa durée comblée par apprentissage automatique si un
+                      estimateur est disponible.
                     </p>
                     <p className="text-xs">
                       Gabarit d'exemple :{" "}

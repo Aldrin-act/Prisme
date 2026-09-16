@@ -2,7 +2,15 @@
 """Génère des données brutes au format simplifié (similaire à instance_exemple.json).
 
 Ce script crée des données brutes qui utilisent directement le format simplifié
-avec compétences et durées sur les tâches, au lieu du format ERP operations/postes.
+(`taches`/`ressources`/`contraintes`), au lieu du format ERP operations/postes.
+
+Chaque scénario ci-dessous est *écrit* avec `duree_estimee_jours` sur la tâche et
+`competence_requise` dans les contraintes — un raccourci d'auteur pratique (une seule
+ligne par tâche plutôt que d'énumérer chaque paire tâche/ressource à la main) — puis
+`_vers_compatibilite_explicite` convertit ça en `compatibilite_ressource_tache` explicite
+avant l'écriture du fichier : aucun champ `duree_estimee_jours` ni `competence_requise`
+dans les JSON produits, qui sont donc des instances T-R-C-O prêtes à l'emploi, ingérables
+directement (aucune dérivation ni estimateur ML requis à l'ingestion).
 
 Usage:
     uv run python -m scripts.generer_donnees_brutes_format_simplifie
@@ -11,6 +19,37 @@ Usage:
 import json
 from pathlib import Path
 from typing import Any
+
+
+def _vers_compatibilite_explicite(donnee: dict[str, Any]) -> dict[str, Any]:
+    """Remplace `duree_estimee_jours` (tâches) + `competence_requise` (contraintes) par des
+    `compatibilite_ressource_tache` explicites — même logique que
+    `adapters/competence_derivation.py::deriver_compatibilites_par_competence`, appliquée ici
+    au moment de la génération plutôt qu'à l'ingestion."""
+    durees = {t["id"]: t.pop("duree_estimee_jours") for t in donnee["taches"] if "duree_estimee_jours" in t}
+    competences_par_ressource = {r["id"]: set(r.get("competences", [])) for r in donnee["ressources"]}
+
+    requises_par_tache: dict[str, set[str]] = {}
+    autres_contraintes = []
+    for contrainte in donnee["contraintes"]:
+        if contrainte["type"] == "competence_requise":
+            requises_par_tache.setdefault(contrainte["tache"], set()).add(contrainte["competence"])
+        else:
+            autres_contraintes.append(contrainte)
+
+    donnee["contraintes"] = autres_contraintes
+    for tache_id, requises in requises_par_tache.items():
+        for ressource_id, competences in competences_par_ressource.items():
+            if requises <= competences:
+                donnee["contraintes"].append(
+                    {
+                        "type": "compatibilite_ressource_tache",
+                        "tache": tache_id,
+                        "ressource": ressource_id,
+                        "duree": durees[tache_id],
+                    }
+                )
+    return donnee
 
 
 def generer_atelier_mecanique_petit() -> dict[str, Any]:
@@ -313,6 +352,7 @@ def main() -> None:
         "hopital": generer_hopital(),
         "restauration": generer_restauration(),
     }
+    donnees = {nom: _vers_compatibilite_explicite(donnee) for nom, donnee in donnees.items()}
 
     # Créer le répertoire de destination
     output_dir = Path("data/donnees_brutes/format_simplifie")
@@ -332,7 +372,7 @@ def main() -> None:
             """# Données Brutes au Format Simplifié
 
 Ce répertoire contient des données brutes au format simplifié, utilisant directement
-la structure taches/ressources/contraintes avec compétences.
+la structure taches/ressources/contraintes du T-R-C-O canonique.
 
 ## Différence avec les autres formats
 
@@ -343,8 +383,8 @@ la structure taches/ressources/contraintes avec compétences.
 
 **Format Simplifié** (ce répertoire):
 - Vocabulaire canonique: `taches` / `ressources`
-- Contraintes typées avec compétences
-- Prêt à l'emploi ou conversion légère vers TRCO complet
+- Compatibilité ressource-tâche déjà explicite (durée comprise)
+- Instances T-R-C-O prêtes à l'emploi, ingérables directement sans transformation
 
 ## Fichiers disponibles
 
@@ -363,14 +403,14 @@ la structure taches/ressources/contraintes avec compétences.
 ```json
 {
   "taches": [
-    {"id": "T1", "nom": "Nom de la tâche", "duree_estimee_jours": 3}
+    {"id": "T1", "nom": "Nom de la tâche"}
   ],
   "ressources": [
-    {"id": "R1", "nom": "Nom de la ressource", "competences": ["comp1", "comp2"]}
+    {"id": "R1", "nom": "Nom de la ressource"}
   ],
   "contraintes": [
     {"type": "precedence", "avant": "T1", "apres": "T2"},
-    {"type": "competence_requise", "tache": "T1", "competence": "comp1"}
+    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 3}
   ],
   "objectifs": [
     {"type": "minimiser_makespan"}
@@ -382,20 +422,10 @@ la structure taches/ressources/contraintes avec compétences.
 
 Ces données brutes peuvent être utilisées pour:
 
-1. **Ingestion directe**: Import via l'API avec conversion minimale
+1. **Ingestion directe**: Import via l'API, aucune transformation nécessaire
 2. **Prototypage**: Tests rapides sans adapter depuis un format ERP
 3. **Exemples**: Documentation et démonstrations
 4. **Tests**: Validation de la chaîne de traitement
-
-## Conversion vers TRCO complet
-
-Pour utiliser ces données dans PRISME, un adaptateur léger doit:
-
-1. Dériver les contraintes `compatibilite_ressource_tache` depuis les compétences
-2. Extraire les durées des tâches vers les contraintes de compatibilité
-3. Ajouter les métadonnées (priorite, statut, type_ressource)
-
-Voir `adapters/competence_derivation.py` pour la logique de dérivation.
 
 ## Regénération
 

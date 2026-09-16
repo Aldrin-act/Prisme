@@ -1,8 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { AlertCircle, RotateCcw, Save, Tag, ZoomIn, ZoomOut } from "lucide-react";
+import { AlertCircle, RotateCcw, Save, Search, Tag, ZoomIn, ZoomOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   prismeKeys,
   useAjusterPlanning,
@@ -19,6 +26,8 @@ import {
   formatDateRelative,
   formatEntreeDate,
   formatEntreeDateHeure,
+  formatHeure,
+  formatJour,
   jourDepuisAncrage,
   parseEntreeDate,
   parseEntreeDateHeure,
@@ -52,7 +61,8 @@ function segmentsNonOuvres(
     const date = dateDepuisAncrage(instant, ancrage, unite);
     const weekEnd = [0, 6].includes(date.getDay());
     const horsHeuresOuvrees =
-      unite === "heures" && (date.getHours() < HEURE_OUVERTURE || date.getHours() >= HEURE_FERMETURE);
+      unite === "heures" &&
+      (date.getHours() < HEURE_OUVERTURE || date.getHours() >= HEURE_FERMETURE);
     const nonOuvre = weekEnd || horsHeuresOuvrees;
     if (nonOuvre && debutCourant === null) {
       debutCourant = instant;
@@ -143,6 +153,14 @@ export function GanttChart({
   // (`formatEntreeDate`/`formatEntreeDateHeure`), vides par défaut (aucun filtre, vue complète).
   const [filtreDebut, setFiltreDebut] = useState("");
   const [filtreFin, setFiltreFin] = useState("");
+  // Recherche (tâche/produit/commande) : atténue les barres non correspondantes plutôt que de les
+  // masquer — garde le contexte (charge de la ressource, opérations voisines) visible.
+  const [recherche, setRecherche] = useState("");
+  // Opération choisie pour le panneau de détail (clic sur une barre) — identifiée par sa clé
+  // (tâche|ressource) plutôt que copiée en state, pour toujours refléter operationsLocales à
+  // jour (ex. après un glissement en mode éditable).
+  const [operationDetailCle, setOperationDetailCle] = useState<string | null>(null);
+  const conteneurScrollRef = useRef<HTMLDivElement>(null);
 
   // Toute nouvelle version du planning affiché (nouvelle exécution, bascule
   // original/ajusté...) réinitialise l'édition en cours et le zoom — jamais un mélange
@@ -155,6 +173,8 @@ export function GanttChart({
     setPxParJour(echelle.defaut);
     setFiltreDebut("");
     setFiltreFin("");
+    setRecherche("");
+    setOperationDetailCle(null);
     ajuster.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planning]);
@@ -210,12 +230,15 @@ export function GanttChart({
     );
   }
 
+  // Suivi du pointeur pour toute barre, éditable ou non — seule la réécriture réelle de
+  // `operationsLocales` (dans onPointerMoveBarre) reste conditionnée à `peutEditer` ; ce suivi
+  // sert aussi à distinguer un clic (ouvre le panneau de détail) d'un glissement, voir
+  // onPointerUpBarre ci-dessous.
   function onPointerDownBarre(
     e: React.PointerEvent<HTMLDivElement>,
     cleOp: string,
     debutActuel: number,
   ) {
-    if (!peutEditer) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     setDrag({ cle: cleOp, xDepart: e.clientX, debutDepart: debutActuel });
   }
@@ -224,7 +247,7 @@ export function GanttChart({
   // simple division par l'échelle courante suffit (et reste correcte si le zoom change en cours
   // de glissement, relu à chaque évènement plutôt que figé au pointerdown).
   function onPointerMoveBarre(e: React.PointerEvent<HTMLDivElement>) {
-    if (!drag) return;
+    if (!drag || !peutEditer) return;
     const deltaJours = Math.round((e.clientX - drag.xDepart) / pxParJour);
     const nouveauDebut = Math.max(0, drag.debutDepart + deltaJours);
     setOperationsLocales((ops) =>
@@ -232,7 +255,14 @@ export function GanttChart({
     );
   }
 
-  function onPointerUpBarre() {
+  // Un relâchement quasi sur place (jamais de vrai glissement, ou `editable` désactivé) ouvre le
+  // panneau de détail plutôt que de valider un déplacement — seuil de quelques pixels pour
+  // absorber le tremblement naturel d'un clic.
+  function onPointerUpBarre(e: React.PointerEvent<HTMLDivElement>, cleOp: string) {
+    const aReellementGlisse = drag !== null && Math.abs(e.clientX - drag.xDepart) > 3;
+    if (!aReellementGlisse) {
+      setOperationDetailCle(cleOp);
+    }
     setDrag(null);
   }
 
@@ -262,8 +292,12 @@ export function GanttChart({
   // Fenêtre visible (bornes en instants, jamais négatives ni au-delà du makespan) — un filtre
   // vide de chaque côté retombe sur la vue complète, comportement historique inchangé.
   const parseEntree = unite === "heures" ? parseEntreeDateHeure : parseEntreeDate;
-  const instantFiltreDebut = filtreDebut ? jourDepuisAncrage(parseEntree(filtreDebut)!, ancrage, unite) : null;
-  const instantFiltreFin = filtreFin ? jourDepuisAncrage(parseEntree(filtreFin)!, ancrage, unite) : null;
+  const instantFiltreDebut = filtreDebut
+    ? jourDepuisAncrage(parseEntree(filtreDebut)!, ancrage, unite)
+    : null;
+  const instantFiltreFin = filtreFin
+    ? jourDepuisAncrage(parseEntree(filtreFin)!, ancrage, unite)
+    : null;
   const bornDebut = Math.min(Math.max(instantFiltreDebut ?? 0, 0), makespan);
   const bornFin = Math.max(Math.min(instantFiltreFin ?? makespan, makespan), bornDebut + 1);
   const periodeFiltree = bornDebut > 0 || bornFin < makespan;
@@ -273,16 +307,123 @@ export function GanttChart({
   // (déjà `overflow-hidden`) tronque le reste, aucune barre/marqueur hors fenêtre ne dépasse.
   const decale = (instant: number) => (instant - bornDebut) * pxParJour;
 
+  // En mode heures, l'axe se lit sur deux lignes (comme un planificateur classique) — une ligne
+  // "jour" qui regroupe ses heures plutôt que de répéter la date entière sur chaque colonne, et
+  // une ligne "heure" en dessous. En mode jours, une colonne == un jour : une seule ligne suffit,
+  // ce regroupement n'est simplement pas rendu (voir plus bas).
+  const joursGroupesBruts: { debut: number; fin: number; cle: string }[] = [];
+  for (const j of joursAffiches) {
+    const cleJour = dateDepuisAncrage(j, ancrage, unite).toDateString();
+    const dernier = joursGroupesBruts[joursGroupesBruts.length - 1];
+    if (dernier && dernier.cle === cleJour) {
+      dernier.fin = j + 1;
+    } else {
+      joursGroupesBruts.push({ debut: j, fin: j + 1, cle: cleJour });
+    }
+  }
+  const joursGroupes = joursGroupesBruts.map((g) => ({
+    debut: g.debut,
+    fin: g.fin,
+    label: formatJour(dateDepuisAncrage(g.debut, ancrage, unite)),
+  }));
+
+  // Espace les étiquettes d'heure pour qu'elles ne se chevauchent jamais au zoom courant (un pas
+  // de 1h à 48px/h reste lisible, un pas de 1h à 8px/h ne le serait plus) — mêmes paliers qu'un
+  // planificateur classique (1/2/3/4/6/8/12/24h).
+  const PAS_HEURE_CANDIDATS = [1, 2, 3, 4, 6, 8, 12, 24];
+  const LARGEUR_MIN_ETIQUETTE_HEURE = 40;
+  const pasHeureEtiquette =
+    PAS_HEURE_CANDIDATS.find((p) => p * pxParJour >= LARGEUR_MIN_ETIQUETTE_HEURE) ?? 24;
+
   // Position (généralement fractionnaire) de l'instant présent sur l'axe du planning — masquée
   // si "maintenant" tombe hors de la plage affichée (planning entièrement passé, ou futur
   // au-delà de son propre horizon).
   const msParUnite = unite === "heures" ? 3_600_000 : 86_400_000;
   const joursDepuisAncrage = (Date.now() - ancrage.getTime()) / msParUnite;
-  const afficherMaintenant =
-    joursDepuisAncrage >= bornDebut && joursDepuisAncrage <= bornFin;
+  // Indépendante de la période filtrée (contrairement à `afficherMaintenant` ci-dessous, qui ne
+  // pilote que le rendu du trait dans la fenêtre courante) — sert à activer/désactiver le bouton
+  // "Aujourd'hui" et à savoir s'il y a quelque chose vers quoi défiler.
+  const maintenantDansPortee = joursDepuisAncrage >= 0 && joursDepuisAncrage <= makespan;
+  const afficherMaintenant = joursDepuisAncrage >= bornDebut && joursDepuisAncrage <= bornFin;
+
+  // Réinitialise le filtre de période (sinon "aujourd'hui" pourrait rester hors de la fenêtre
+  // filtrée) puis centre le scroll horizontal sur l'instant présent.
+  function allerAJourdhui() {
+    setFiltreDebut("");
+    setFiltreFin("");
+    requestAnimationFrame(() => {
+      const conteneur = conteneurScrollRef.current;
+      if (!conteneur || !maintenantDansPortee) return;
+      const cible =
+        joursDepuisAncrage * pxParJour - conteneur.clientWidth / 2 + LARGEUR_COL_RESSOURCE + 12;
+      conteneur.scrollTo({ left: Math.max(0, cible), behavior: "smooth" });
+    });
+  }
+
+  const rechercheNormalisee = recherche.trim().toLowerCase();
+  function correspondRecherche(op: { tache: string }): boolean {
+    if (!rechercheNormalisee) return true;
+    const produit = produitParTache.get(op.tache);
+    const commandesTache = commandesParTache.get(op.tache) ?? [];
+    const hay = [op.tache, produit ?? "", ...commandesTache.map((c) => c.commande_id)]
+      .join(" ")
+      .toLowerCase();
+    return hay.includes(rechercheNormalisee);
+  }
+
+  const operationDetail = operationDetailCle
+    ? (operations.find((op) => cle(op) === operationDetailCle) ?? null)
+    : null;
 
   return (
     <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={recherche}
+            onChange={(e) => setRecherche(e.target.value)}
+            placeholder="Rechercher (tâche, produit, commande)"
+            className="h-8 w-64 pl-7 text-xs"
+            aria-label="Rechercher une opération"
+          />
+        </div>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-8"
+          onClick={allerAJourdhui}
+          disabled={!maintenantDansPortee}
+        >
+          Aujourd'hui
+        </Button>
+        <div className="ml-auto flex items-center gap-1">
+          <Button
+            size="icon"
+            variant="outline"
+            className="h-7 w-7"
+            onClick={() => zoomer(-1)}
+            disabled={pxParJour <= echelle.min}
+            aria-label="Réduire le zoom"
+          >
+            <ZoomOut className="h-3.5 w-3.5" />
+          </Button>
+          <span className="w-12 text-center font-mono text-xs">
+            {pxParJour}px/{unite === "heures" ? "h" : "j"}
+          </span>
+          <Button
+            size="icon"
+            variant="outline"
+            className="h-7 w-7"
+            onClick={() => zoomer(1)}
+            disabled={pxParJour >= echelle.max}
+            aria-label="Augmenter le zoom"
+          >
+            <ZoomIn className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      </div>
+
       {peutEditer && (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
@@ -356,60 +497,33 @@ export function GanttChart({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] text-muted-foreground">
-        <div className="flex flex-wrap items-center gap-3">
-          {nonOuvres.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              <span className="inline-block h-2.5 w-2.5 rounded-sm bg-foreground/10" />
-              {unite === "heures"
-                ? `Heures non ouvrées (avant ${HEURE_OUVERTURE}h, après ${HEURE_FERMETURE}h, week-end)`
-                : "Jours non ouvrés (samedi, dimanche)"}
-            </div>
-          )}
-          {afficherMaintenant && (
-            <div className="flex items-center gap-1.5">
-              <span className="inline-block h-2.5 w-0.5 bg-blue-500" />
-              Aujourd'hui
-            </div>
-          )}
-          {commandesParEcheance.size > 0 && (
-            <div className="flex items-center gap-1.5">
-              <span className="inline-block h-2.5 w-0.5 border-l-2 border-dashed border-amber-500" />
-              Échéance commande
-            </div>
-          )}
-          {commandesParTache.size > 0 && (
-            <div className="flex items-center gap-1.5">
-              <Tag className="h-3 w-3" />
-              Tâche associée à une commande
-            </div>
-          )}
-        </div>
-        <div className="flex items-center gap-1">
-          <Button
-            size="icon"
-            variant="outline"
-            className="h-6 w-6"
-            onClick={() => zoomer(-1)}
-            disabled={pxParJour <= echelle.min}
-            aria-label="Réduire le zoom"
-          >
-            <ZoomOut className="h-3 w-3" />
-          </Button>
-          <span className="w-12 text-center font-mono">
-            {pxParJour}px/{unite === "heures" ? "h" : "j"}
-          </span>
-          <Button
-            size="icon"
-            variant="outline"
-            className="h-6 w-6"
-            onClick={() => zoomer(1)}
-            disabled={pxParJour >= echelle.max}
-            aria-label="Augmenter le zoom"
-          >
-            <ZoomIn className="h-3 w-3" />
-          </Button>
-        </div>
+      <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground">
+        {nonOuvres.length > 0 && (
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-sm bg-foreground/10" />
+            {unite === "heures"
+              ? `Heures non ouvrées (avant ${HEURE_OUVERTURE}h, après ${HEURE_FERMETURE}h, week-end)`
+              : "Jours non ouvrés (samedi, dimanche)"}
+          </div>
+        )}
+        {afficherMaintenant && (
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-0.5 bg-blue-500" />
+            Aujourd'hui
+          </div>
+        )}
+        {commandesParEcheance.size > 0 && (
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-0.5 border-l-2 border-dashed border-amber-500" />
+            Échéance commande
+          </div>
+        )}
+        {commandesParTache.size > 0 && (
+          <div className="flex items-center gap-1.5">
+            <Tag className="h-3 w-3" />
+            Tâche associée à une commande
+          </div>
+        )}
       </div>
 
       {(commandes ?? []).length > 0 && (
@@ -427,27 +541,64 @@ export function GanttChart({
         </div>
       )}
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" ref={conteneurScrollRef}>
         <div>
-          <div
-            className="mb-1 flex text-xs text-muted-foreground"
-            style={{ paddingLeft: LARGEUR_COL_RESSOURCE + 12 }}
-          >
-            {joursAffiches.map((j) => (
-              <div
-                key={j}
-                className="shrink-0 truncate border-r border-border/40 px-1 text-center first:border-l"
-                style={{ width: pxParJour }}
-              >
-                {formatAxe(j)}
+          {unite === "heures" ? (
+            <div className="mb-1" style={{ paddingLeft: LARGEUR_COL_RESSOURCE + 12 }}>
+              <div className="flex text-xs text-muted-foreground">
+                {joursGroupes.map((g) => (
+                  <div
+                    key={g.debut}
+                    className="shrink-0 truncate border-r border-border/40 px-1 text-center first:border-l"
+                    style={{ width: (g.fin - g.debut) * pxParJour }}
+                  >
+                    {g.label}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="space-y-2.5">
+              <div className="flex text-[10px] text-muted-foreground">
+                {joursAffiches.map((j) => {
+                  const dateJ = dateDepuisAncrage(j, ancrage, unite);
+                  const etiquette =
+                    dateJ.getHours() % pasHeureEtiquette === 0 ? formatHeure(dateJ) : "";
+                  return (
+                    <div
+                      key={j}
+                      className="shrink-0 truncate border-r border-border/20 text-center first:border-l"
+                      style={{ width: pxParJour }}
+                    >
+                      {etiquette}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div
+              className="mb-1 flex text-xs text-muted-foreground"
+              style={{ paddingLeft: LARGEUR_COL_RESSOURCE + 12 }}
+            >
+              {joursAffiches.map((j) => (
+                <div
+                  key={j}
+                  className="shrink-0 truncate border-r border-border/40 px-1 text-center first:border-l"
+                  style={{ width: pxParJour }}
+                >
+                  {formatAxe(j)}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="max-h-104 space-y-2.5 overflow-y-auto pr-1">
             {ressources.map((ressource) => {
               const operationsRessourceToutes = parRessource.get(ressource) ?? [];
               const taux = contraintes
-                ? tauxUtilisationRessource(ressource, operationsRessourceToutes, makespan, contraintes)
+                ? tauxUtilisationRessource(
+                    ressource,
+                    operationsRessourceToutes,
+                    makespan,
+                    contraintes,
+                  )
                 : null;
               // N'affiche que les opérations qui chevauchent la fenêtre visible — le reste
               // resterait de toute façon masqué par `overflow-hidden`, filtrer évite juste des
@@ -483,7 +634,8 @@ export function GanttChart({
                           className="absolute top-0 h-full bg-foreground/10"
                           style={{
                             left: decale(Math.max(s.debut, bornDebut)),
-                            width: (Math.min(s.fin, bornFin) - Math.max(s.debut, bornDebut)) * pxParJour,
+                            width:
+                              (Math.min(s.fin, bornFin) - Math.max(s.debut, bornDebut)) * pxParJour,
                           }}
                           title="Non ouvré"
                         />
@@ -496,7 +648,9 @@ export function GanttChart({
                       />
                     )}
                     {[...commandesParEcheance.entries()]
-                      .filter(([jourEcheance]) => jourEcheance >= bornDebut && jourEcheance <= bornFin)
+                      .filter(
+                        ([jourEcheance]) => jourEcheance >= bornDebut && jourEcheance <= bornFin,
+                      )
                       .map(([jourEcheance, cmds]) => (
                         <div
                           key={jourEcheance}
@@ -513,12 +667,10 @@ export function GanttChart({
                       const duree = op.fin - op.debut;
                       const produit = produitParTache.get(op.tache);
                       const commandesTache = commandesParTache.get(op.tache) ?? [];
-                      const libelleCommandes =
-                        commandesTache.length === 1
-                          ? ` · ${commandesTache[0].commande_id}`
-                          : commandesTache.length > 1
-                            ? ` · ${commandesTache.length} commandes`
-                            : "";
+                      // La première commande est déjà en tête du libellé (voir plus bas) — ce
+                      // suffixe ne signale que les suivantes, pour ne jamais la compter deux fois.
+                      const libelleCommandesSupplementaires =
+                        commandesTache.length > 1 ? ` +${commandesTache.length - 1}` : "";
                       return (
                         <div
                           key={cleOp}
@@ -531,21 +683,25 @@ export function GanttChart({
                           }`}
                           onPointerDown={(e) => onPointerDownBarre(e, cleOp, op.debut)}
                           onPointerMove={onPointerMoveBarre}
-                          onPointerUp={onPointerUpBarre}
-                          className={`absolute top-0 flex h-full items-center gap-1 overflow-hidden rounded px-1.5 text-xs font-medium text-primary-foreground ${
+                          onPointerUp={(e) => onPointerUpBarre(e, cleOp)}
+                          className={`absolute top-0 flex h-full items-center gap-1 overflow-hidden rounded px-1.5 text-xs font-medium text-primary-foreground transition-opacity ${
                             enRetard ? "bg-destructive" : "bg-gradient-to-r from-primary to-accent"
-                          } ${peutEditer ? "cursor-grab touch-none active:cursor-grabbing" : ""} ${
+                          } ${peutEditer ? "cursor-grab touch-none active:cursor-grabbing" : "cursor-pointer touch-none"} ${
                             clesModifiees.has(cleOp) ? "ring-2 ring-yellow-400" : ""
-                          }`}
+                          } ${correspondRecherche(op) ? "" : "opacity-25"}`}
                           style={{ left: decale(op.debut), width: duree * pxParJour }}
                         >
                           {commandesTache.length > 0 && (
-                            <Tag className="h-3 w-3 shrink-0" aria-label="Associée à une commande" />
+                            <Tag
+                              className="h-3 w-3 shrink-0"
+                              aria-label="Associée à une commande"
+                            />
                           )}
                           <span className="truncate">
+                            {commandesTache.length > 0 ? `${commandesTache[0].commande_id} · ` : ""}
+                            {produit ? `${produit} · ` : ""}
                             {op.tache} ({duree}
-                            {unite === "heures" ? "h" : "j"}){produit ? ` ${produit}` : ""}
-                            {libelleCommandes}
+                            {unite === "heures" ? "h" : "j"}){libelleCommandesSupplementaires}
                           </span>
                         </div>
                       );
@@ -570,6 +726,73 @@ export function GanttChart({
           </div>
         </div>
       </div>
+
+      <Sheet
+        open={operationDetail !== null}
+        onOpenChange={(open) => !open && setOperationDetailCle(null)}
+      >
+        <SheetContent>
+          {operationDetail && (
+            <>
+              <SheetHeader>
+                <SheetTitle>{operationDetail.tache}</SheetTitle>
+                <SheetDescription>Ressource : {operationDetail.ressource}</SheetDescription>
+              </SheetHeader>
+              <div className="mt-4 space-y-3 text-sm">
+                {(() => {
+                  const produitDetail = produitParTache.get(operationDetail.tache);
+                  const commandesDetail = commandesParTache.get(operationDetail.tache) ?? [];
+                  const dureeDetail = operationDetail.fin - operationDetail.debut;
+                  const enRetardDetail = tachesEnRetardIds.has(operationDetail.tache);
+                  return (
+                    <>
+                      {produitDetail && (
+                        <div>
+                          <span className="text-xs text-muted-foreground">Produit</span>
+                          <p>{produitDetail}</p>
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-xs text-muted-foreground">Début → fin</span>
+                        <p>
+                          {formatAxe(operationDetail.debut)} → {formatAxe(operationDetail.fin)}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted-foreground">Durée</span>
+                        <p>
+                          {dureeDetail} {unite === "heures" ? "heure(s)" : "jour(s)"}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted-foreground">Statut</span>
+                        <p>{enRetardDetail ? "En retard" : "À temps"}</p>
+                      </div>
+                      {commandesDetail.length > 0 && (
+                        <div>
+                          <span className="text-xs text-muted-foreground">
+                            Commande{commandesDetail.length > 1 ? "s" : ""}
+                          </span>
+                          <div className="mt-1 flex flex-wrap gap-1.5">
+                            {commandesDetail.map((c) => (
+                              <span
+                                key={c.commande_id}
+                                className="rounded-md border border-border/50 bg-muted/30 px-1.5 py-0.5 font-mono text-xs"
+                              >
+                                {c.commande_id}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

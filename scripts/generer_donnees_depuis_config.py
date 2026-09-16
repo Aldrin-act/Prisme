@@ -186,9 +186,9 @@ def sauvegarder_csv(
     chemin_taches = repertoire / f"{prefixe}_taches.csv"
     with open(chemin_taches, "w", encoding="utf-8", newline="") as f:
         ecrivain = csv.writer(f)
-        ecrivain.writerow(["id", "nom", "duree_estimee_jours"])
+        ecrivain.writerow(["id", "nom"])
         for op in payload["operations"]:
-            ecrivain.writerow([op["code_operation"], "", op["duree_jours"]])
+            ecrivain.writerow([op["code_operation"], ""])
 
     chemin_ressources = repertoire / f"{prefixe}_ressources.csv"
     with open(chemin_ressources, "w", encoding="utf-8", newline="") as f:

@@ -2,48 +2,39 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Diagnostic initial",
-      "duree_estimee_jours": 0.3
+      "nom": "Diagnostic initial"
     },
     {
       "id": "T2",
-      "nom": "Devis",
-      "duree_estimee_jours": 0.2
+      "nom": "Devis"
     },
     {
       "id": "T3",
-      "nom": "Commande pièces",
-      "duree_estimee_jours": 2
+      "nom": "Commande pièces"
     },
     {
       "id": "T4",
-      "nom": "Démontage",
-      "duree_estimee_jours": 0.5
+      "nom": "Démontage"
     },
     {
       "id": "T5",
-      "nom": "Réparation mécanique",
-      "duree_estimee_jours": 1
+      "nom": "Réparation mécanique"
     },
     {
       "id": "T6",
-      "nom": "Réparation électrique",
-      "duree_estimee_jours": 0.5
+      "nom": "Réparation électrique"
     },
     {
       "id": "T7",
-      "nom": "Remontage",
-      "duree_estimee_jours": 0.5
+      "nom": "Remontage"
     },
     {
       "id": "T8",
-      "nom": "Tests fonctionnels",
-      "duree_estimee_jours": 0.3
+      "nom": "Tests fonctionnels"
     },
     {
       "id": "T9",
-      "nom": "Nettoyage véhicule",
-      "duree_estimee_jours": 0.2
+      "nom": "Nettoyage véhicule"
     }
   ],
   "ressources": [
@@ -135,49 +126,64 @@
       "apres": "T9"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "diagnostic"
+      "ressource": "R1",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T1",
+      "ressource": "R4",
+      "duree": 0.3
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "devis"
+      "ressource": "R2",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "commande"
+      "ressource": "R2",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "demontage"
+      "ressource": "R3",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "reparation_mecanique"
+      "ressource": "R3",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "reparation_electrique"
+      "ressource": "R4",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "remontage"
+      "ressource": "R3",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "tests"
+      "ressource": "R1",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T9",
-      "competence": "nettoyage"
+      "ressource": "R5",
+      "duree": 0.2
     }
   ],
   "objectifs": [

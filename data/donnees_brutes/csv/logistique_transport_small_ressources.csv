@@ -1,9 +1,9 @@
 id,nom,competences
-POSTE_CONTROLE,,poste_controle
-QUAI_DECHARGEMENT,,quai_dechargement
+CAMION_10T,,camion_10t
 ZONE_PREPARATION,,zone_preparation
+QUAI_DECHARGEMENT,,quai_dechargement
 CHARIOT_ELEVATEUR,,chariot_elevateur
-CAMION_20T,,camion_20t
-QUAI_CHARGEMENT,,quai_chargement
-CAMIONNETTE,,camionnette
 ZONE_STOCKAGE,,zone_stockage
+POSTE_CONTROLE,,poste_controle
+CAMIONNETTE,,camionnette
+QUAI_CHARGEMENT,,quai_chargement

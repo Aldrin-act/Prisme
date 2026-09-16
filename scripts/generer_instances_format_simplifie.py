@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 """Génère des instances d'exemple au format simplifié (instance_exemple.json).
 
-Ce format simplifié diffère du format TRCO complet:
-- La durée est attachée directement à la tâche (duree_estimee_jours)
-- Les compétences sont utilisées pour dériver la compatibilité ressource-tâche
-- Utilise des contraintes competence_requise au lieu de compatibilite_ressource_tache
+Chaque scénario ci-dessous est *écrit* avec `duree_estimee_jours` sur la tâche et
+`competence_requise` dans les contraintes — un raccourci d'auteur pratique — puis
+`_vers_compatibilite_explicite` convertit ça en `compatibilite_ressource_tache` explicite
+avant l'écriture du fichier : les JSON produits sont des instances T-R-C-O canoniques,
+prêtes à l'emploi (voir la même fonction dans
+`scripts/generer_donnees_brutes_format_simplifie.py`).
 
 Usage:
     uv run python -m scripts.generer_instances_format_simplifie
@@ -13,6 +15,37 @@ Usage:
 import json
 from pathlib import Path
 from typing import Any
+
+
+def _vers_compatibilite_explicite(donnee: dict[str, Any]) -> dict[str, Any]:
+    """Remplace `duree_estimee_jours` (tâches) + `competence_requise` (contraintes) par des
+    `compatibilite_ressource_tache` explicites — même logique que
+    `adapters/competence_derivation.py::deriver_compatibilites_par_competence`, appliquée ici
+    au moment de la génération plutôt qu'à l'ingestion."""
+    durees = {t["id"]: t.pop("duree_estimee_jours") for t in donnee["taches"] if "duree_estimee_jours" in t}
+    competences_par_ressource = {r["id"]: set(r.get("competences", [])) for r in donnee["ressources"]}
+
+    requises_par_tache: dict[str, set[str]] = {}
+    autres_contraintes = []
+    for contrainte in donnee["contraintes"]:
+        if contrainte["type"] == "competence_requise":
+            requises_par_tache.setdefault(contrainte["tache"], set()).add(contrainte["competence"])
+        else:
+            autres_contraintes.append(contrainte)
+
+    donnee["contraintes"] = autres_contraintes
+    for tache_id, requises in requises_par_tache.items():
+        for ressource_id, competences in competences_par_ressource.items():
+            if requises <= competences:
+                donnee["contraintes"].append(
+                    {
+                        "type": "compatibilite_ressource_tache",
+                        "tache": tache_id,
+                        "ressource": ressource_id,
+                        "duree": durees[tache_id],
+                    }
+                )
+    return donnee
 
 
 def creer_instance_atelier_mecanique() -> dict[str, Any]:
@@ -306,6 +339,7 @@ def main() -> None:
         "hopital_bloc_operatoire": creer_instance_hopital_bloc_operatoire(),
         "logistique_transport": creer_instance_logistique_transport(),
     }
+    instances = {nom: _vers_compatibilite_explicite(instance) for nom, instance in instances.items()}
 
     # Créer le répertoire de destination
     output_dir = Path("data/instances_format_simplifie")
@@ -331,26 +365,20 @@ Ce répertoire contient des instances d'exemple au format simplifié, similaire 
 ```json
 {
   "taches": [
-    {"id": "T1", "nom": "Nom de la tâche", "duree_estimee_jours": 3}
+    {"id": "T1", "nom": "Nom de la tâche"}
   ],
   "ressources": [
-    {"id": "R1", "nom": "Nom de la ressource", "competences": ["comp1", "comp2"]}
+    {"id": "R1", "nom": "Nom de la ressource"}
   ],
   "contraintes": [
     {"type": "precedence", "avant": "T1", "apres": "T2"},
-    {"type": "competence_requise", "tache": "T1", "competence": "comp1"}
+    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 3}
   ],
   "objectifs": [
     {"type": "minimiser_makespan"}
   ]
 }
 ```
-
-## Différences avec le format TRCO complet
-
-- **Durée sur la tâche**: `duree_estimee_jours` directement dans la tâche, pas dans une contrainte
-- **Compétences**: utilise `competence_requise` pour lier tâches et ressources
-- **Compatibilité**: pas de contrainte `compatibilite_ressource_tache` explicite
 
 ## Instances disponibles
 
@@ -366,20 +394,11 @@ Ce répertoire contient des instances d'exemple au format simplifié, similaire 
             """
 ## Utilisation
 
-Ces instances peuvent être utilisées pour:
-1. Tester des adaptateurs d'ingestion
-2. Valider le format simplifié
+Ces instances (déjà au format T-R-C-O canonique) peuvent être utilisées pour:
+1. Ingestion directe, aucune transformation nécessaire
+2. Tester des adaptateurs d'ingestion
 3. Prototypage rapide de scénarios métier
 4. Documentation et exemples
-
-## Conversion vers TRCO
-
-Pour convertir ces instances au format TRCO complet, vous pouvez utiliser un adaptateur qui:
-1. Dérive les contraintes `compatibilite_ressource_tache` à partir des compétences
-2. Extrait la durée de la tâche vers les contraintes de compatibilité
-3. Ajoute les métadonnées manquantes (priorite, statut, etc.)
-
-Voir `adapters/competence_derivation.py` pour la logique de dérivation.
 """
         )
 

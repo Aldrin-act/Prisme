@@ -2,83 +2,67 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Réception commande",
-      "duree_estimee_jours": 0.2
+      "nom": "Réception commande"
     },
     {
       "id": "T2",
-      "nom": "Conception graphique",
-      "duree_estimee_jours": 1
+      "nom": "Conception graphique"
     },
     {
       "id": "T3",
-      "nom": "Validation client",
-      "duree_estimee_jours": 0.5
+      "nom": "Validation client"
     },
     {
       "id": "T4",
-      "nom": "Préparation plaques offset",
-      "duree_estimee_jours": 0.5
+      "nom": "Préparation plaques offset"
     },
     {
       "id": "T5",
-      "nom": "Calage presse",
-      "duree_estimee_jours": 0.3
+      "nom": "Calage presse"
     },
     {
       "id": "T6",
-      "nom": "Impression recto",
-      "duree_estimee_jours": 0.8
+      "nom": "Impression recto"
     },
     {
       "id": "T7",
-      "nom": "Séchage recto",
-      "duree_estimee_jours": 0.5
+      "nom": "Séchage recto"
     },
     {
       "id": "T8",
-      "nom": "Impression verso",
-      "duree_estimee_jours": 0.8
+      "nom": "Impression verso"
     },
     {
       "id": "T9",
-      "nom": "Séchage verso",
-      "duree_estimee_jours": 0.5
+      "nom": "Séchage verso"
     },
     {
       "id": "T10",
-      "nom": "Vernissage",
-      "duree_estimee_jours": 0.4
+      "nom": "Vernissage"
     },
     {
       "id": "T11",
-      "nom": "Séchage vernis",
-      "duree_estimee_jours": 0.6
+      "nom": "Séchage vernis"
     },
     {
       "id": "T12",
-      "nom": "Découpe",
-      "duree_estimee_jours": 0.3
+      "nom": "Découpe"
     },
     {
       "id": "T13",
-      "nom": "Pliage",
-      "duree_estimee_jours": 0.4
+      "nom": "Pliage"
     },
     {
       "id": "T14",
-      "nom": "Assemblage",
-      "duree_estimee_jours": 0.5
+      "nom": "Assemblage"
     },
     {
       "id": "T15",
-      "nom": "Contrôle qualité",
-      "duree_estimee_jours": 0.2
+      "nom": "Contrôle qualité"
     },
     {
       "id": "T16",
-      "nom": "Conditionnement",
-      "duree_estimee_jours": 0.3
+      "nom": "Conditionnement"
     }
   ],
   "ressources": [
@@ -240,84 +224,112 @@
       "apres": "T16"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "reception"
+      "ressource": "R1",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "conception"
+      "ressource": "R2",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "validation"
+      "ressource": "R1",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "preparation_plaques"
+      "ressource": "R3",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "calage"
+      "ressource": "R3",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "impression"
+      "ressource": "R4",
+      "duree": 0.8
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T6",
+      "ressource": "R5",
+      "duree": 0.8
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "sechage"
+      "ressource": "R6",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "impression"
+      "ressource": "R4",
+      "duree": 0.8
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T8",
+      "ressource": "R5",
+      "duree": 0.8
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T9",
-      "competence": "sechage"
+      "ressource": "R6",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T10",
-      "competence": "vernissage"
+      "ressource": "R7",
+      "duree": 0.4
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T11",
-      "competence": "sechage"
+      "ressource": "R6",
+      "duree": 0.6
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T12",
-      "competence": "decoupe"
+      "ressource": "R8",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T13",
-      "competence": "pliage"
+      "ressource": "R9",
+      "duree": 0.4
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T14",
-      "competence": "assemblage"
+      "ressource": "R10",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T15",
-      "competence": "controle"
+      "ressource": "R11",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T16",
-      "competence": "conditionnement"
+      "ressource": "R11",
+      "duree": 0.3
     }
   ],
   "objectifs": [

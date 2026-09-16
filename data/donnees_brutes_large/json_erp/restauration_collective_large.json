@@ -1,1516 +1,697 @@
 {
   "operations": [
     {
-      "code_operation": "PIZZA_MARGHERITA_CUISSON_0001",
-      "poste_id": "FOUR_CUISINE_5",
-      "operation_precedente": null,
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_PREP_VIANDES_0002",
-      "poste_id": "ZONE_PREPARATION_VIANDES_1",
-      "operation_precedente": "PIZZA_MARGHERITA_CUISSON_0001",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_DISTRIBUTION_0003",
-      "poste_id": "ZONE_DISTRIBUTION_3",
-      "operation_precedente": "PIZZA_MARGHERITA_PREP_VIANDES_0002",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_ASSEMBLAGE_0004",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_10",
-      "operation_precedente": "PIZZA_MARGHERITA_DISTRIBUTION_0003",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_RECEPTION_0005",
-      "poste_id": "ZONE_RECEPTION_5",
-      "operation_precedente": "PIZZA_MARGHERITA_ASSEMBLAGE_0004",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_CONDITIONNEMENT_0006",
-      "poste_id": "ZONE_CONDITIONNEMENT_3",
-      "operation_precedente": "PIZZA_MARGHERITA_RECEPTION_0005",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0007",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_9",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_PREP_VIANDES_0008",
-      "poste_id": "ZONE_PREPARATION_VIANDES_6",
-      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0007",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_STOCKAGE_0009",
-      "poste_id": "CHAMBRE_FROIDE_7",
-      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_VIANDES_0008",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_RECEPTION_0010",
+      "code_operation": "SALADE_CESAR_RECEPTION_0001",
+      "duree_jours": 1,
       "poste_id": "ZONE_RECEPTION_3",
-      "operation_precedente": "GRATIN_DAUPHINOIS_STOCKAGE_0009",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0011",
-      "poste_id": "ZONE_CONDITIONNEMENT_3",
-      "operation_precedente": "GRATIN_DAUPHINOIS_RECEPTION_0010",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CUISSON_0012",
-      "poste_id": "ZONE_CUISSON_6",
-      "operation_precedente": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0011",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_DISTRIBUTION_0013",
-      "poste_id": "ZONE_DISTRIBUTION_4",
-      "operation_precedente": "GRATIN_DAUPHINOIS_CUISSON_0012",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_PREP_VIANDES_0014",
-      "poste_id": "ZONE_PREPARATION_VIANDES_7",
       "operation_precedente": null,
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "competence_requise": "zone_reception"
     },
     {
-      "code_operation": "PIZZA_MARGHERITA_CONDITIONNEMENT_0015",
-      "poste_id": "ZONE_CONDITIONNEMENT_3",
-      "operation_precedente": "PIZZA_MARGHERITA_PREP_VIANDES_0014",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_STOCKAGE_0016",
-      "poste_id": "CHAMBRE_FROIDE_2",
-      "operation_precedente": "PIZZA_MARGHERITA_CONDITIONNEMENT_0015",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_DISTRIBUTION_0017",
-      "poste_id": "ZONE_DISTRIBUTION_2",
-      "operation_precedente": "PIZZA_MARGHERITA_STOCKAGE_0016",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_CUISSON_0018",
-      "poste_id": "FOUR_CUISINE_2",
-      "operation_precedente": "PIZZA_MARGHERITA_DISTRIBUTION_0017",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_RECEPTION_0019",
-      "poste_id": "ZONE_RECEPTION_2",
-      "operation_precedente": "PIZZA_MARGHERITA_CUISSON_0018",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_ASSEMBLAGE_0020",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_11",
-      "operation_precedente": "PIZZA_MARGHERITA_RECEPTION_0019",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_PREP_LEGUMES_0021",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_10",
-      "operation_precedente": "PIZZA_MARGHERITA_ASSEMBLAGE_0020",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_PREP_VIANDES_0022",
-      "poste_id": "ZONE_PREPARATION_VIANDES_7",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_PREP_LEGUMES_0023",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_9",
-      "operation_precedente": "DESSERT_TARTE_PREP_VIANDES_0022",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_RECEPTION_0024",
-      "poste_id": "ZONE_RECEPTION_2",
-      "operation_precedente": "DESSERT_TARTE_PREP_LEGUMES_0023",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_ASSEMBLAGE_0025",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_11",
-      "operation_precedente": "DESSERT_TARTE_RECEPTION_0024",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_CONDITIONNEMENT_0026",
-      "poste_id": "ZONE_CONDITIONNEMENT_7",
-      "operation_precedente": "DESSERT_TARTE_ASSEMBLAGE_0025",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_DISTRIBUTION_0027",
-      "poste_id": "ZONE_DISTRIBUTION_4",
-      "operation_precedente": "DESSERT_TARTE_CONDITIONNEMENT_0026",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_CUISSON_0028",
-      "poste_id": "ZONE_CUISSON_5",
-      "operation_precedente": null,
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_PREP_VIANDES_0029",
-      "poste_id": "ZONE_PREPARATION_VIANDES_2",
-      "operation_precedente": "SOUPE_JOUR_CUISSON_0028",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_STOCKAGE_0030",
-      "poste_id": "CHAMBRE_FROIDE_3",
-      "operation_precedente": "SOUPE_JOUR_PREP_VIANDES_0029",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_DISTRIBUTION_0031",
-      "poste_id": "ZONE_DISTRIBUTION_1",
-      "operation_precedente": "SOUPE_JOUR_STOCKAGE_0030",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_ASSEMBLAGE_0032",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_1",
-      "operation_precedente": "SOUPE_JOUR_DISTRIBUTION_0031",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_RECEPTION_0033",
-      "poste_id": "ZONE_RECEPTION_3",
-      "operation_precedente": "SOUPE_JOUR_ASSEMBLAGE_0032",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_STOCKAGE_0034",
-      "poste_id": "CHAMBRE_FROIDE_4",
-      "operation_precedente": null,
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_CONDITIONNEMENT_0035",
-      "poste_id": "ZONE_CONDITIONNEMENT_8",
-      "operation_precedente": "LASAGNES_MAISON_STOCKAGE_0034",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_ASSEMBLAGE_0036",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_1",
-      "operation_precedente": "LASAGNES_MAISON_CONDITIONNEMENT_0035",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_DISTRIBUTION_0037",
-      "poste_id": "ZONE_DISTRIBUTION_7",
-      "operation_precedente": "LASAGNES_MAISON_ASSEMBLAGE_0036",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_CUISSON_0038",
-      "poste_id": "ZONE_CUISSON_13",
-      "operation_precedente": "LASAGNES_MAISON_DISTRIBUTION_0037",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_RECEPTION_0039",
-      "poste_id": "ZONE_RECEPTION_5",
-      "operation_precedente": "LASAGNES_MAISON_CUISSON_0038",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_PREP_LEGUMES_0040",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_10",
-      "operation_precedente": "LASAGNES_MAISON_RECEPTION_0039",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "LASAGNES_MAISON_PREP_VIANDES_0041",
+      "code_operation": "SALADE_CESAR_PREP_VIANDES_0002",
+      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_VIANDES_5",
-      "operation_precedente": "LASAGNES_MAISON_PREP_LEGUMES_0040",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "operation_precedente": "SALADE_CESAR_RECEPTION_0001",
+      "competence_requise": "zone_preparation_viandes"
     },
     {
-      "code_operation": "DESSERT_TARTE_PREP_VIANDES_0042",
-      "poste_id": "ZONE_PREPARATION_VIANDES_6",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_PREP_LEGUMES_0043",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_6",
-      "operation_precedente": "DESSERT_TARTE_PREP_VIANDES_0042",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_RECEPTION_0044",
-      "poste_id": "ZONE_RECEPTION_1",
-      "operation_precedente": "DESSERT_TARTE_PREP_LEGUMES_0043",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_DISTRIBUTION_0045",
-      "poste_id": "ZONE_DISTRIBUTION_6",
-      "operation_precedente": "DESSERT_TARTE_RECEPTION_0044",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_STOCKAGE_0046",
-      "poste_id": "CHAMBRE_FROIDE_7",
-      "operation_precedente": "DESSERT_TARTE_DISTRIBUTION_0045",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_CUISSON_0047",
-      "poste_id": "ZONE_CUISSON_14",
-      "operation_precedente": "DESSERT_TARTE_STOCKAGE_0046",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_CONDITIONNEMENT_0048",
-      "poste_id": "ZONE_CONDITIONNEMENT_9",
-      "operation_precedente": "DESSERT_TARTE_CUISSON_0047",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_STOCKAGE_0049",
-      "poste_id": "CHAMBRE_FROIDE_3",
-      "operation_precedente": null,
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_CUISSON_0050",
-      "poste_id": "FOUR_CUISINE_3",
-      "operation_precedente": "DESSERT_TARTE_STOCKAGE_0049",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_DISTRIBUTION_0051",
-      "poste_id": "ZONE_DISTRIBUTION_5",
-      "operation_precedente": "DESSERT_TARTE_CUISSON_0050",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_CONDITIONNEMENT_0052",
-      "poste_id": "ZONE_CONDITIONNEMENT_8",
-      "operation_precedente": "DESSERT_TARTE_DISTRIBUTION_0051",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_PREP_LEGUMES_0053",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_3",
-      "operation_precedente": "DESSERT_TARTE_CONDITIONNEMENT_0052",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DESSERT_TARTE_PREP_VIANDES_0054",
-      "poste_id": "ZONE_PREPARATION_VIANDES_1",
-      "operation_precedente": "DESSERT_TARTE_PREP_LEGUMES_0053",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_DISTRIBUTION_0055",
-      "poste_id": "ZONE_DISTRIBUTION_1",
-      "operation_precedente": null,
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_PREP_VIANDES_0056",
-      "poste_id": "ZONE_PREPARATION_VIANDES_2",
-      "operation_precedente": "PIZZA_MARGHERITA_DISTRIBUTION_0055",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_RECEPTION_0057",
-      "poste_id": "ZONE_RECEPTION_2",
-      "operation_precedente": "PIZZA_MARGHERITA_PREP_VIANDES_0056",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_PREP_LEGUMES_0058",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_9",
-      "operation_precedente": "PIZZA_MARGHERITA_RECEPTION_0057",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_STOCKAGE_0059",
-      "poste_id": "CHAMBRE_FROIDE_2",
-      "operation_precedente": "PIZZA_MARGHERITA_PREP_LEGUMES_0058",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_CUISSON_0060",
-      "poste_id": "FOUR_CUISINE_3",
-      "operation_precedente": "PIZZA_MARGHERITA_STOCKAGE_0059",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PIZZA_MARGHERITA_CONDITIONNEMENT_0061",
-      "poste_id": "ZONE_CONDITIONNEMENT_4",
-      "operation_precedente": "PIZZA_MARGHERITA_CUISSON_0060",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RISOTTO_ASSEMBLAGE_0062",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_3",
-      "operation_precedente": null,
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RISOTTO_STOCKAGE_0063",
-      "poste_id": "CHAMBRE_FROIDE_3",
-      "operation_precedente": "RISOTTO_ASSEMBLAGE_0062",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "RISOTTO_PREP_LEGUMES_0064",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_4",
-      "operation_precedente": "RISOTTO_STOCKAGE_0063",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "RISOTTO_DISTRIBUTION_0065",
-      "poste_id": "ZONE_DISTRIBUTION_4",
-      "operation_precedente": "RISOTTO_PREP_LEGUMES_0064",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "RISOTTO_PREP_VIANDES_0066",
-      "poste_id": "ZONE_PREPARATION_VIANDES_4",
-      "operation_precedente": "RISOTTO_DISTRIBUTION_0065",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "RISOTTO_CONDITIONNEMENT_0067",
-      "poste_id": "ZONE_CONDITIONNEMENT_1",
-      "operation_precedente": "RISOTTO_PREP_VIANDES_0066",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_RECEPTION_0068",
-      "poste_id": "ZONE_RECEPTION_1",
-      "operation_precedente": null,
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_PREP_VIANDES_0069",
-      "poste_id": "ZONE_PREPARATION_VIANDES_1",
-      "operation_precedente": "SOUPE_JOUR_RECEPTION_0068",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_DISTRIBUTION_0070",
-      "poste_id": "ZONE_DISTRIBUTION_6",
-      "operation_precedente": "SOUPE_JOUR_PREP_VIANDES_0069",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_ASSEMBLAGE_0071",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_9",
-      "operation_precedente": "SOUPE_JOUR_DISTRIBUTION_0070",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_CONDITIONNEMENT_0072",
-      "poste_id": "ZONE_CONDITIONNEMENT_4",
-      "operation_precedente": "SOUPE_JOUR_ASSEMBLAGE_0071",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_PREP_LEGUMES_0073",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_8",
-      "operation_precedente": "SOUPE_JOUR_CONDITIONNEMENT_0072",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_STOCKAGE_0074",
-      "poste_id": "CHAMBRE_FROIDE_5",
-      "operation_precedente": "SOUPE_JOUR_PREP_LEGUMES_0073",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "POT_AU_FEU_STOCKAGE_0075",
-      "poste_id": "CHAMBRE_FROIDE_8",
-      "operation_precedente": null,
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "POT_AU_FEU_CUISSON_0076",
-      "poste_id": "FOUR_CUISINE_12",
-      "operation_precedente": "POT_AU_FEU_STOCKAGE_0075",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-09"
-    },
-    {
-      "code_operation": "POT_AU_FEU_DISTRIBUTION_0077",
-      "poste_id": "ZONE_DISTRIBUTION_3",
-      "operation_precedente": "POT_AU_FEU_CUISSON_0076",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "POT_AU_FEU_PREP_LEGUMES_0078",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_2",
-      "operation_precedente": "POT_AU_FEU_DISTRIBUTION_0077",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "POT_AU_FEU_ASSEMBLAGE_0079",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_3",
-      "operation_precedente": "POT_AU_FEU_PREP_LEGUMES_0078",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "POT_AU_FEU_RECEPTION_0080",
-      "poste_id": "ZONE_RECEPTION_2",
-      "operation_precedente": "POT_AU_FEU_ASSEMBLAGE_0079",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0081",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_2",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0082",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_4",
-      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0081",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_RECEPTION_0083",
-      "poste_id": "ZONE_RECEPTION_1",
-      "operation_precedente": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0082",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_PREP_VIANDES_0084",
-      "poste_id": "ZONE_PREPARATION_VIANDES_4",
-      "operation_precedente": "GRATIN_DAUPHINOIS_RECEPTION_0083",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0085",
-      "poste_id": "ZONE_CONDITIONNEMENT_5",
-      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_VIANDES_0084",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_DISTRIBUTION_0086",
-      "poste_id": "ZONE_DISTRIBUTION_1",
-      "operation_precedente": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0085",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CUISSON_0087",
+      "code_operation": "SALADE_CESAR_CUISSON_0003",
+      "duree_jours": 2,
       "poste_id": "ZONE_CUISSON_5",
-      "operation_precedente": "GRATIN_DAUPHINOIS_DISTRIBUTION_0086",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
+      "operation_precedente": "SALADE_CESAR_PREP_VIANDES_0002",
+      "competence_requise": "zone_cuisson"
     },
     {
-      "code_operation": "GRATIN_DAUPHINOIS_STOCKAGE_0088",
-      "poste_id": "CHAMBRE_FROIDE_4",
-      "operation_precedente": "GRATIN_DAUPHINOIS_CUISSON_0087",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CASSOULET_STOCKAGE_0089",
-      "poste_id": "CHAMBRE_FROIDE_2",
-      "operation_precedente": null,
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CASSOULET_PREP_LEGUMES_0090",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_7",
-      "operation_precedente": "CASSOULET_STOCKAGE_0089",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CASSOULET_ASSEMBLAGE_0091",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_2",
-      "operation_precedente": "CASSOULET_PREP_LEGUMES_0090",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CASSOULET_CUISSON_0092",
-      "poste_id": "ZONE_CUISSON_15",
-      "operation_precedente": "CASSOULET_ASSEMBLAGE_0091",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CASSOULET_CONDITIONNEMENT_0093",
-      "poste_id": "ZONE_CONDITIONNEMENT_1",
-      "operation_precedente": "CASSOULET_CUISSON_0092",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CASSOULET_DISTRIBUTION_0094",
-      "poste_id": "ZONE_DISTRIBUTION_1",
-      "operation_precedente": "CASSOULET_CONDITIONNEMENT_0093",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CASSOULET_RECEPTION_0095",
-      "poste_id": "ZONE_RECEPTION_5",
-      "operation_precedente": "CASSOULET_DISTRIBUTION_0094",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ENTREE_SALADE_PREP_LEGUMES_0096",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_1",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "ENTREE_SALADE_PREP_VIANDES_0097",
-      "poste_id": "ZONE_PREPARATION_VIANDES_1",
-      "operation_precedente": "ENTREE_SALADE_PREP_LEGUMES_0096",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ENTREE_SALADE_STOCKAGE_0098",
-      "poste_id": "CHAMBRE_FROIDE_6",
-      "operation_precedente": "ENTREE_SALADE_PREP_VIANDES_0097",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "ENTREE_SALADE_CONDITIONNEMENT_0099",
-      "poste_id": "ZONE_CONDITIONNEMENT_10",
-      "operation_precedente": "ENTREE_SALADE_STOCKAGE_0098",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ENTREE_SALADE_DISTRIBUTION_0100",
-      "poste_id": "ZONE_DISTRIBUTION_5",
-      "operation_precedente": "ENTREE_SALADE_CONDITIONNEMENT_0099",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "ENTREE_SALADE_RECEPTION_0101",
-      "poste_id": "ZONE_RECEPTION_1",
-      "operation_precedente": "ENTREE_SALADE_DISTRIBUTION_0100",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "ENTREE_SALADE_ASSEMBLAGE_0102",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_2",
-      "operation_precedente": "ENTREE_SALADE_RECEPTION_0101",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_CUISSON_0103",
-      "poste_id": "ZONE_CUISSON_5",
-      "operation_precedente": null,
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_CONDITIONNEMENT_0104",
-      "poste_id": "ZONE_CONDITIONNEMENT_10",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_CUISSON_0103",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_RECEPTION_0105",
-      "poste_id": "ZONE_RECEPTION_5",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_CONDITIONNEMENT_0104",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_PREP_VIANDES_0106",
-      "poste_id": "ZONE_PREPARATION_VIANDES_1",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_RECEPTION_0105",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_ASSEMBLAGE_0107",
+      "code_operation": "SALADE_CESAR_ASSEMBLAGE_0004",
+      "duree_jours": 1,
       "poste_id": "ZONE_ASSEMBLAGE_PLATS_4",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_PREP_VIANDES_0106",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "SALADE_CESAR_CUISSON_0003",
+      "competence_requise": "zone_assemblage_plats"
     },
     {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_PREP_LEGUMES_0108",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_10",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_ASSEMBLAGE_0107",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_DISTRIBUTION_0109",
-      "poste_id": "ZONE_DISTRIBUTION_4",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_PREP_LEGUMES_0108",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_STOCKAGE_0110",
-      "poste_id": "CHAMBRE_FROIDE_4",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_DISTRIBUTION_0109",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_PREP_LEGUMES_0111",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_1",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_RECEPTION_0112",
-      "poste_id": "ZONE_RECEPTION_1",
-      "operation_precedente": "PATES_BOLOGNAISE_PREP_LEGUMES_0111",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_CUISSON_0113",
-      "poste_id": "ZONE_CUISSON_12",
-      "operation_precedente": "PATES_BOLOGNAISE_RECEPTION_0112",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_PREP_VIANDES_0114",
-      "poste_id": "ZONE_PREPARATION_VIANDES_4",
-      "operation_precedente": "PATES_BOLOGNAISE_CUISSON_0113",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_STOCKAGE_0115",
-      "poste_id": "CHAMBRE_FROIDE_3",
-      "operation_precedente": "PATES_BOLOGNAISE_PREP_VIANDES_0114",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_ASSEMBLAGE_0116",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_5",
-      "operation_precedente": "PATES_BOLOGNAISE_STOCKAGE_0115",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_CUISSON_0117",
-      "poste_id": "FOUR_CUISINE_9",
-      "operation_precedente": null,
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_PREP_VIANDES_0118",
-      "poste_id": "ZONE_PREPARATION_VIANDES_8",
-      "operation_precedente": "SOUPE_JOUR_CUISSON_0117",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_PREP_LEGUMES_0119",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_4",
-      "operation_precedente": "SOUPE_JOUR_PREP_VIANDES_0118",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_ASSEMBLAGE_0120",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_3",
-      "operation_precedente": "SOUPE_JOUR_PREP_LEGUMES_0119",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_CONDITIONNEMENT_0121",
-      "poste_id": "ZONE_CONDITIONNEMENT_9",
-      "operation_precedente": "SOUPE_JOUR_ASSEMBLAGE_0120",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_DISTRIBUTION_0122",
-      "poste_id": "ZONE_DISTRIBUTION_3",
-      "operation_precedente": "SOUPE_JOUR_CONDITIONNEMENT_0121",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "SOUPE_JOUR_RECEPTION_0123",
-      "poste_id": "ZONE_RECEPTION_4",
-      "operation_precedente": "SOUPE_JOUR_DISTRIBUTION_0122",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_STOCKAGE_0124",
-      "poste_id": "CHAMBRE_FROIDE_8",
-      "operation_precedente": null,
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0125",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_5",
-      "operation_precedente": "GRATIN_DAUPHINOIS_STOCKAGE_0124",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_PREP_VIANDES_0126",
-      "poste_id": "ZONE_PREPARATION_VIANDES_3",
-      "operation_precedente": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0125",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_DISTRIBUTION_0127",
-      "poste_id": "ZONE_DISTRIBUTION_1",
-      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_VIANDES_0126",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CUISSON_0128",
-      "poste_id": "FOUR_CUISINE_5",
-      "operation_precedente": "GRATIN_DAUPHINOIS_DISTRIBUTION_0127",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0129",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_10",
-      "operation_precedente": "GRATIN_DAUPHINOIS_CUISSON_0128",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0130",
-      "poste_id": "ZONE_CONDITIONNEMENT_5",
-      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0129",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CURRY_LEGUMES_RECEPTION_0131",
-      "poste_id": "ZONE_RECEPTION_4",
-      "operation_precedente": null,
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CURRY_LEGUMES_PREP_VIANDES_0132",
-      "poste_id": "ZONE_PREPARATION_VIANDES_7",
-      "operation_precedente": "CURRY_LEGUMES_RECEPTION_0131",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CURRY_LEGUMES_CUISSON_0133",
-      "poste_id": "FOUR_CUISINE_10",
-      "operation_precedente": "CURRY_LEGUMES_PREP_VIANDES_0132",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CURRY_LEGUMES_STOCKAGE_0134",
-      "poste_id": "CHAMBRE_FROIDE_4",
-      "operation_precedente": "CURRY_LEGUMES_CUISSON_0133",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CURRY_LEGUMES_PREP_LEGUMES_0135",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_8",
-      "operation_precedente": "CURRY_LEGUMES_STOCKAGE_0134",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CURRY_LEGUMES_DISTRIBUTION_0136",
-      "poste_id": "ZONE_DISTRIBUTION_8",
-      "operation_precedente": "CURRY_LEGUMES_PREP_LEGUMES_0135",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CURRY_LEGUMES_CONDITIONNEMENT_0137",
-      "poste_id": "ZONE_CONDITIONNEMENT_6",
-      "operation_precedente": "CURRY_LEGUMES_DISTRIBUTION_0136",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_PREP_VIANDES_0138",
-      "poste_id": "ZONE_PREPARATION_VIANDES_8",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_STOCKAGE_0139",
-      "poste_id": "CHAMBRE_FROIDE_5",
-      "operation_precedente": "HAMBURGER_MAISON_PREP_VIANDES_0138",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_CUISSON_0140",
-      "poste_id": "FOUR_CUISINE_8",
-      "operation_precedente": "HAMBURGER_MAISON_STOCKAGE_0139",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_RECEPTION_0141",
-      "poste_id": "ZONE_RECEPTION_5",
-      "operation_precedente": "HAMBURGER_MAISON_CUISSON_0140",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_DISTRIBUTION_0142",
-      "poste_id": "ZONE_DISTRIBUTION_1",
-      "operation_precedente": "HAMBURGER_MAISON_RECEPTION_0141",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_PREP_LEGUMES_0143",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_7",
-      "operation_precedente": "HAMBURGER_MAISON_DISTRIBUTION_0142",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_PREP_LEGUMES_0144",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_8",
-      "operation_precedente": null,
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_RECEPTION_0145",
-      "poste_id": "ZONE_RECEPTION_3",
-      "operation_precedente": "CHILI_CON_CARNE_PREP_LEGUMES_0144",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_STOCKAGE_0146",
-      "poste_id": "CHAMBRE_FROIDE_7",
-      "operation_precedente": "CHILI_CON_CARNE_RECEPTION_0145",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_CONDITIONNEMENT_0147",
+      "code_operation": "SALADE_CESAR_CONDITIONNEMENT_0005",
+      "duree_jours": 1,
       "poste_id": "ZONE_CONDITIONNEMENT_8",
-      "operation_precedente": "CHILI_CON_CARNE_STOCKAGE_0146",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "SALADE_CESAR_ASSEMBLAGE_0004",
+      "competence_requise": "zone_conditionnement"
     },
     {
-      "code_operation": "CHILI_CON_CARNE_PREP_VIANDES_0148",
-      "poste_id": "ZONE_PREPARATION_VIANDES_4",
-      "operation_precedente": "CHILI_CON_CARNE_CONDITIONNEMENT_0147",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_ASSEMBLAGE_0149",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_1",
-      "operation_precedente": "CHILI_CON_CARNE_PREP_VIANDES_0148",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_DISTRIBUTION_0150",
-      "poste_id": "ZONE_DISTRIBUTION_2",
-      "operation_precedente": null,
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_ASSEMBLAGE_0151",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_1",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_DISTRIBUTION_0150",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_RECEPTION_0152",
-      "poste_id": "ZONE_RECEPTION_4",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_ASSEMBLAGE_0151",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_CUISSON_0153",
-      "poste_id": "ZONE_CUISSON_12",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_RECEPTION_0152",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_CONDITIONNEMENT_0154",
-      "poste_id": "ZONE_CONDITIONNEMENT_9",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_CUISSON_0153",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_PREP_VIANDES_0155",
-      "poste_id": "ZONE_PREPARATION_VIANDES_5",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_CONDITIONNEMENT_0154",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLAT_BOEUF_BOURGUIGNON_PREP_LEGUMES_0156",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_6",
-      "operation_precedente": "PLAT_BOEUF_BOURGUIGNON_PREP_VIANDES_0155",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_STOCKAGE_0157",
-      "poste_id": "CHAMBRE_FROIDE_4",
-      "operation_precedente": null,
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_DISTRIBUTION_0158",
-      "poste_id": "ZONE_DISTRIBUTION_3",
-      "operation_precedente": "HAMBURGER_MAISON_STOCKAGE_0157",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_PREP_LEGUMES_0159",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_6",
-      "operation_precedente": "HAMBURGER_MAISON_DISTRIBUTION_0158",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_ASSEMBLAGE_0160",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_7",
-      "operation_precedente": "HAMBURGER_MAISON_PREP_LEGUMES_0159",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_CUISSON_0161",
-      "poste_id": "FOUR_CUISINE_8",
-      "operation_precedente": "HAMBURGER_MAISON_ASSEMBLAGE_0160",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "HAMBURGER_MAISON_RECEPTION_0162",
-      "poste_id": "ZONE_RECEPTION_1",
-      "operation_precedente": "HAMBURGER_MAISON_CUISSON_0161",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_STOCKAGE_0163",
-      "poste_id": "CHAMBRE_FROIDE_7",
-      "operation_precedente": null,
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_CUISSON_0164",
-      "poste_id": "ZONE_CUISSON_3",
-      "operation_precedente": "CHILI_CON_CARNE_STOCKAGE_0163",
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_PREP_LEGUMES_0165",
+      "code_operation": "SALADE_CESAR_PREP_LEGUMES_0006",
+      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_LEGUMES_5",
-      "operation_precedente": "CHILI_CON_CARNE_CUISSON_0164",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "SALADE_CESAR_CONDITIONNEMENT_0005",
+      "competence_requise": "zone_preparation_legumes"
     },
     {
-      "code_operation": "CHILI_CON_CARNE_CONDITIONNEMENT_0166",
-      "poste_id": "ZONE_CONDITIONNEMENT_10",
-      "operation_precedente": "CHILI_CON_CARNE_PREP_LEGUMES_0165",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_PREP_VIANDES_0167",
-      "poste_id": "ZONE_PREPARATION_VIANDES_8",
-      "operation_precedente": "CHILI_CON_CARNE_CONDITIONNEMENT_0166",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_RECEPTION_0168",
-      "poste_id": "ZONE_RECEPTION_4",
-      "operation_precedente": "CHILI_CON_CARNE_PREP_VIANDES_0167",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CHILI_CON_CARNE_ASSEMBLAGE_0169",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_5",
-      "operation_precedente": "CHILI_CON_CARNE_RECEPTION_0168",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CUISSON_0170",
-      "poste_id": "ZONE_CUISSON_7",
+      "code_operation": "LASAGNES_MAISON_CONDITIONNEMENT_0007",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_1",
       "operation_precedente": null,
-      "competence_requise": "zone_cuisson",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
+      "competence_requise": "zone_conditionnement"
     },
     {
-      "code_operation": "GRATIN_DAUPHINOIS_DISTRIBUTION_0171",
-      "poste_id": "ZONE_DISTRIBUTION_2",
-      "operation_precedente": "GRATIN_DAUPHINOIS_CUISSON_0170",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0172",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_9",
-      "operation_precedente": "GRATIN_DAUPHINOIS_DISTRIBUTION_0171",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0173",
-      "poste_id": "ZONE_CONDITIONNEMENT_2",
-      "operation_precedente": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0172",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "GRATIN_DAUPHINOIS_STOCKAGE_0174",
+      "code_operation": "LASAGNES_MAISON_STOCKAGE_0008",
+      "duree_jours": 1,
       "poste_id": "CHAMBRE_FROIDE_6",
-      "operation_precedente": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0173",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
+      "operation_precedente": "LASAGNES_MAISON_CONDITIONNEMENT_0007",
+      "competence_requise": "chambre_froide"
     },
     {
-      "code_operation": "GRATIN_DAUPHINOIS_RECEPTION_0175",
-      "poste_id": "ZONE_RECEPTION_3",
-      "operation_precedente": "GRATIN_DAUPHINOIS_STOCKAGE_0174",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "LASAGNES_MAISON_PREP_VIANDES_0009",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_5",
+      "operation_precedente": "LASAGNES_MAISON_STOCKAGE_0008",
+      "competence_requise": "zone_preparation_viandes"
     },
     {
-      "code_operation": "PATES_BOLOGNAISE_CONDITIONNEMENT_0176",
-      "poste_id": "ZONE_CONDITIONNEMENT_10",
-      "operation_precedente": null,
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "LASAGNES_MAISON_PREP_LEGUMES_0010",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_8",
+      "operation_precedente": "LASAGNES_MAISON_PREP_VIANDES_0009",
+      "competence_requise": "zone_preparation_legumes"
     },
     {
-      "code_operation": "PATES_BOLOGNAISE_CUISSON_0177",
-      "poste_id": "FOUR_CUISINE_6",
-      "operation_precedente": "PATES_BOLOGNAISE_CONDITIONNEMENT_0176",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
+      "code_operation": "LASAGNES_MAISON_DISTRIBUTION_0011",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_7",
+      "operation_precedente": "LASAGNES_MAISON_PREP_LEGUMES_0010",
+      "competence_requise": "zone_distribution"
     },
     {
-      "code_operation": "PATES_BOLOGNAISE_PREP_LEGUMES_0178",
-      "poste_id": "ZONE_PREPARATION_LEGUMES_9",
-      "operation_precedente": "PATES_BOLOGNAISE_CUISSON_0177",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_DISTRIBUTION_0179",
-      "poste_id": "ZONE_DISTRIBUTION_2",
-      "operation_precedente": "PATES_BOLOGNAISE_PREP_LEGUMES_0178",
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_PREP_VIANDES_0180",
-      "poste_id": "ZONE_PREPARATION_VIANDES_3",
-      "operation_precedente": "PATES_BOLOGNAISE_DISTRIBUTION_0179",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PATES_BOLOGNAISE_RECEPTION_0181",
-      "poste_id": "ZONE_RECEPTION_3",
-      "operation_precedente": "PATES_BOLOGNAISE_PREP_VIANDES_0180",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RISOTTO_DISTRIBUTION_0182",
-      "poste_id": "ZONE_DISTRIBUTION_5",
-      "operation_precedente": null,
-      "competence_requise": "zone_distribution",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "RISOTTO_RECEPTION_0183",
+      "code_operation": "LASAGNES_MAISON_RECEPTION_0012",
+      "duree_jours": 1,
       "poste_id": "ZONE_RECEPTION_4",
-      "operation_precedente": "RISOTTO_DISTRIBUTION_0182",
-      "competence_requise": "zone_reception",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "LASAGNES_MAISON_DISTRIBUTION_0011",
+      "competence_requise": "zone_reception"
     },
     {
-      "code_operation": "RISOTTO_ASSEMBLAGE_0184",
-      "poste_id": "ZONE_ASSEMBLAGE_PLATS_3",
-      "operation_precedente": "RISOTTO_RECEPTION_0183",
-      "competence_requise": "zone_assemblage_plats",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "LASAGNES_MAISON_ASSEMBLAGE_0013",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_8",
+      "operation_precedente": "LASAGNES_MAISON_RECEPTION_0012",
+      "competence_requise": "zone_assemblage_plats"
     },
     {
-      "code_operation": "RISOTTO_PREP_VIANDES_0185",
-      "poste_id": "ZONE_PREPARATION_VIANDES_6",
-      "operation_precedente": "RISOTTO_ASSEMBLAGE_0184",
-      "competence_requise": "zone_preparation_viandes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "code_operation": "COUSCOUS_RECEPTION_0014",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_5",
+      "operation_precedente": null,
+      "competence_requise": "zone_reception"
     },
     {
-      "code_operation": "RISOTTO_CUISSON_0186",
-      "poste_id": "FOUR_CUISINE_9",
-      "operation_precedente": "RISOTTO_PREP_VIANDES_0185",
-      "competence_requise": "four_cuisine",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "COUSCOUS_ASSEMBLAGE_0015",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_10",
+      "operation_precedente": "COUSCOUS_RECEPTION_0014",
+      "competence_requise": "zone_assemblage_plats"
     },
     {
-      "code_operation": "RISOTTO_STOCKAGE_0187",
+      "code_operation": "COUSCOUS_STOCKAGE_0016",
+      "duree_jours": 2,
       "poste_id": "CHAMBRE_FROIDE_4",
-      "operation_precedente": "RISOTTO_CUISSON_0186",
-      "competence_requise": "chambre_froide",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "COUSCOUS_ASSEMBLAGE_0015",
+      "competence_requise": "chambre_froide"
     },
     {
-      "code_operation": "RISOTTO_PREP_LEGUMES_0188",
+      "code_operation": "COUSCOUS_CONDITIONNEMENT_0017",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_10",
+      "operation_precedente": "COUSCOUS_STOCKAGE_0016",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "COUSCOUS_PREP_LEGUMES_0018",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_1",
+      "operation_precedente": "COUSCOUS_CONDITIONNEMENT_0017",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "COUSCOUS_DISTRIBUTION_0019",
+      "duree_jours": 1,
+      "poste_id": "ZONE_DISTRIBUTION_1",
+      "operation_precedente": "COUSCOUS_PREP_LEGUMES_0018",
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "COUSCOUS_CUISSON_0020",
+      "duree_jours": 3,
+      "poste_id": "ZONE_CUISSON_6",
+      "operation_precedente": "COUSCOUS_DISTRIBUTION_0019",
+      "competence_requise": "zone_cuisson"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_DISTRIBUTION_0021",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_4",
+      "operation_precedente": null,
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_STOCKAGE_0022",
+      "duree_jours": 2,
+      "poste_id": "CHAMBRE_FROIDE_5",
+      "operation_precedente": "QUICHE_LORRAINE_DISTRIBUTION_0021",
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_CONDITIONNEMENT_0023",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_2",
+      "operation_precedente": "QUICHE_LORRAINE_STOCKAGE_0022",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_PREP_LEGUMES_0024",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_1",
+      "operation_precedente": "QUICHE_LORRAINE_CONDITIONNEMENT_0023",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_ASSEMBLAGE_0025",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_4",
+      "operation_precedente": "QUICHE_LORRAINE_PREP_LEGUMES_0024",
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_PREP_VIANDES_0026",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_5",
+      "operation_precedente": "QUICHE_LORRAINE_ASSEMBLAGE_0025",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_RECEPTION_0027",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_1",
+      "operation_precedente": "QUICHE_LORRAINE_PREP_VIANDES_0026",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "QUICHE_LORRAINE_CUISSON_0028",
+      "duree_jours": 2,
+      "poste_id": "FOUR_CUISINE_2",
+      "operation_precedente": "QUICHE_LORRAINE_RECEPTION_0027",
+      "competence_requise": "four_cuisine"
+    },
+    {
+      "code_operation": "CASSOULET_DISTRIBUTION_0029",
+      "duree_jours": 1,
+      "poste_id": "ZONE_DISTRIBUTION_8",
+      "operation_precedente": null,
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "CASSOULET_CONDITIONNEMENT_0030",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_3",
+      "operation_precedente": "CASSOULET_DISTRIBUTION_0029",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "CASSOULET_CUISSON_0031",
+      "duree_jours": 3,
+      "poste_id": "FOUR_CUISINE_8",
+      "operation_precedente": "CASSOULET_CONDITIONNEMENT_0030",
+      "competence_requise": "four_cuisine"
+    },
+    {
+      "code_operation": "CASSOULET_PREP_VIANDES_0032",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_VIANDES_3",
+      "operation_precedente": "CASSOULET_CUISSON_0031",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "CASSOULET_PREP_LEGUMES_0033",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_6",
+      "operation_precedente": "CASSOULET_PREP_VIANDES_0032",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "CASSOULET_STOCKAGE_0034",
+      "duree_jours": 1,
+      "poste_id": "CHAMBRE_FROIDE_2",
+      "operation_precedente": "CASSOULET_PREP_LEGUMES_0033",
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "MENU_POISSON_STOCKAGE_0035",
+      "duree_jours": 1,
+      "poste_id": "CHAMBRE_FROIDE_3",
+      "operation_precedente": null,
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "MENU_POISSON_PREP_VIANDES_0036",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_3",
+      "operation_precedente": "MENU_POISSON_STOCKAGE_0035",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "MENU_POISSON_ASSEMBLAGE_0037",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_5",
+      "operation_precedente": "MENU_POISSON_PREP_VIANDES_0036",
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "MENU_POISSON_PREP_LEGUMES_0038",
+      "duree_jours": 1,
       "poste_id": "ZONE_PREPARATION_LEGUMES_2",
-      "operation_precedente": "RISOTTO_STOCKAGE_0187",
-      "competence_requise": "zone_preparation_legumes",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "MENU_POISSON_ASSEMBLAGE_0037",
+      "competence_requise": "zone_preparation_legumes"
     },
     {
-      "code_operation": "RISOTTO_CONDITIONNEMENT_0189",
+      "code_operation": "MENU_POISSON_DISTRIBUTION_0039",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_7",
+      "operation_precedente": "MENU_POISSON_PREP_LEGUMES_0038",
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "MENU_POISSON_RECEPTION_0040",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_3",
+      "operation_precedente": "MENU_POISSON_DISTRIBUTION_0039",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "MENU_POISSON_CUISSON_0041",
+      "duree_jours": 4,
+      "poste_id": "FOUR_CUISINE_7",
+      "operation_precedente": "MENU_POISSON_RECEPTION_0040",
+      "competence_requise": "four_cuisine"
+    },
+    {
+      "code_operation": "MENU_POISSON_CONDITIONNEMENT_0042",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_2",
+      "operation_precedente": "MENU_POISSON_CUISSON_0041",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "PATES_BOLOGNAISE_ASSEMBLAGE_0043",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_4",
+      "operation_precedente": null,
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "PATES_BOLOGNAISE_DISTRIBUTION_0044",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_5",
+      "operation_precedente": "PATES_BOLOGNAISE_ASSEMBLAGE_0043",
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "PATES_BOLOGNAISE_CONDITIONNEMENT_0045",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_1",
+      "operation_precedente": "PATES_BOLOGNAISE_DISTRIBUTION_0044",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "PATES_BOLOGNAISE_RECEPTION_0046",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_5",
+      "operation_precedente": "PATES_BOLOGNAISE_CONDITIONNEMENT_0045",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "PATES_BOLOGNAISE_PREP_LEGUMES_0047",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_9",
+      "operation_precedente": "PATES_BOLOGNAISE_RECEPTION_0046",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "PATES_BOLOGNAISE_PREP_VIANDES_0048",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_1",
+      "operation_precedente": "PATES_BOLOGNAISE_PREP_LEGUMES_0047",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_PREP_VIANDES_0049",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_8",
+      "operation_precedente": null,
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_DISTRIBUTION_0050",
+      "duree_jours": 1,
+      "poste_id": "ZONE_DISTRIBUTION_8",
+      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_VIANDES_0049",
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0051",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_2",
+      "operation_precedente": "GRATIN_DAUPHINOIS_DISTRIBUTION_0050",
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0052",
+      "duree_jours": 1,
       "poste_id": "ZONE_CONDITIONNEMENT_4",
-      "operation_precedente": "RISOTTO_PREP_LEGUMES_0188",
-      "competence_requise": "zone_conditionnement",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "GRATIN_DAUPHINOIS_ASSEMBLAGE_0051",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0053",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_10",
+      "operation_precedente": "GRATIN_DAUPHINOIS_CONDITIONNEMENT_0052",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_STOCKAGE_0054",
+      "duree_jours": 3,
+      "poste_id": "CHAMBRE_FROIDE_1",
+      "operation_precedente": "GRATIN_DAUPHINOIS_PREP_LEGUMES_0053",
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_CUISSON_0055",
+      "duree_jours": 4,
+      "poste_id": "FOUR_CUISINE_7",
+      "operation_precedente": "GRATIN_DAUPHINOIS_STOCKAGE_0054",
+      "competence_requise": "four_cuisine"
+    },
+    {
+      "code_operation": "GRATIN_DAUPHINOIS_RECEPTION_0056",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_3",
+      "operation_precedente": "GRATIN_DAUPHINOIS_CUISSON_0055",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_DISTRIBUTION_0057",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_2",
+      "operation_precedente": null,
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_CONDITIONNEMENT_0058",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_3",
+      "operation_precedente": "MENU_VEGETARIEN_DISTRIBUTION_0057",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_PREP_LEGUMES_0059",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_8",
+      "operation_precedente": "MENU_VEGETARIEN_CONDITIONNEMENT_0058",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_ASSEMBLAGE_0060",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_4",
+      "operation_precedente": "MENU_VEGETARIEN_PREP_LEGUMES_0059",
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_RECEPTION_0061",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_4",
+      "operation_precedente": "MENU_VEGETARIEN_ASSEMBLAGE_0060",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_CUISSON_0062",
+      "duree_jours": 1,
+      "poste_id": "FOUR_CUISINE_4",
+      "operation_precedente": "MENU_VEGETARIEN_RECEPTION_0061",
+      "competence_requise": "four_cuisine"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_STOCKAGE_0063",
+      "duree_jours": 3,
+      "poste_id": "CHAMBRE_FROIDE_7",
+      "operation_precedente": "MENU_VEGETARIEN_CUISSON_0062",
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_PREP_VIANDES_0064",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_7",
+      "operation_precedente": "MENU_VEGETARIEN_STOCKAGE_0063",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_CUISSON_0065",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CUISSON_13",
+      "operation_precedente": null,
+      "competence_requise": "zone_cuisson"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_CONDITIONNEMENT_0066",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_4",
+      "operation_precedente": "SOUPE_JOUR_CUISSON_0065",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_PREP_VIANDES_0067",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_VIANDES_1",
+      "operation_precedente": "SOUPE_JOUR_CONDITIONNEMENT_0066",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_ASSEMBLAGE_0068",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_11",
+      "operation_precedente": "SOUPE_JOUR_PREP_VIANDES_0067",
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_PREP_LEGUMES_0069",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_2",
+      "operation_precedente": "SOUPE_JOUR_ASSEMBLAGE_0068",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_STOCKAGE_0070",
+      "duree_jours": 1,
+      "poste_id": "CHAMBRE_FROIDE_3",
+      "operation_precedente": "SOUPE_JOUR_PREP_LEGUMES_0069",
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_RECEPTION_0071",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_2",
+      "operation_precedente": "SOUPE_JOUR_STOCKAGE_0070",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "SOUPE_JOUR_DISTRIBUTION_0072",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_2",
+      "operation_precedente": "SOUPE_JOUR_RECEPTION_0071",
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "LASAGNES_MAISON_ASSEMBLAGE_0073",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_2",
+      "operation_precedente": null,
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "LASAGNES_MAISON_PREP_LEGUMES_0074",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_10",
+      "operation_precedente": "LASAGNES_MAISON_ASSEMBLAGE_0073",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "LASAGNES_MAISON_STOCKAGE_0075",
+      "duree_jours": 1,
+      "poste_id": "CHAMBRE_FROIDE_3",
+      "operation_precedente": "LASAGNES_MAISON_PREP_LEGUMES_0074",
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "LASAGNES_MAISON_RECEPTION_0076",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_2",
+      "operation_precedente": "LASAGNES_MAISON_STOCKAGE_0075",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "LASAGNES_MAISON_CUISSON_0077",
+      "duree_jours": 2,
+      "poste_id": "ZONE_CUISSON_7",
+      "operation_precedente": "LASAGNES_MAISON_RECEPTION_0076",
+      "competence_requise": "zone_cuisson"
+    },
+    {
+      "code_operation": "LASAGNES_MAISON_PREP_VIANDES_0078",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_7",
+      "operation_precedente": "LASAGNES_MAISON_CUISSON_0077",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "LASAGNES_MAISON_CONDITIONNEMENT_0079",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_7",
+      "operation_precedente": "LASAGNES_MAISON_PREP_VIANDES_0078",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "CURRY_LEGUMES_STOCKAGE_0080",
+      "duree_jours": 3,
+      "poste_id": "CHAMBRE_FROIDE_7",
+      "operation_precedente": null,
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "CURRY_LEGUMES_RECEPTION_0081",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_2",
+      "operation_precedente": "CURRY_LEGUMES_STOCKAGE_0080",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "CURRY_LEGUMES_DISTRIBUTION_0082",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_6",
+      "operation_precedente": "CURRY_LEGUMES_RECEPTION_0081",
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "CURRY_LEGUMES_ASSEMBLAGE_0083",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_5",
+      "operation_precedente": "CURRY_LEGUMES_DISTRIBUTION_0082",
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "CURRY_LEGUMES_PREP_LEGUMES_0084",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_8",
+      "operation_precedente": "CURRY_LEGUMES_ASSEMBLAGE_0083",
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "CURRY_LEGUMES_CUISSON_0085",
+      "duree_jours": 1,
+      "poste_id": "FOUR_CUISINE_8",
+      "operation_precedente": "CURRY_LEGUMES_PREP_LEGUMES_0084",
+      "competence_requise": "four_cuisine"
+    },
+    {
+      "code_operation": "CURRY_LEGUMES_PREP_VIANDES_0086",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_VIANDES_1",
+      "operation_precedente": "CURRY_LEGUMES_CUISSON_0085",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_PREP_LEGUMES_0087",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_2",
+      "operation_precedente": null,
+      "competence_requise": "zone_preparation_legumes"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_CUISSON_0088",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CUISSON_10",
+      "operation_precedente": "MENU_VEGETARIEN_PREP_LEGUMES_0087",
+      "competence_requise": "zone_cuisson"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_PREP_VIANDES_0089",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_VIANDES_3",
+      "operation_precedente": "MENU_VEGETARIEN_CUISSON_0088",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_CONDITIONNEMENT_0090",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_7",
+      "operation_precedente": "MENU_VEGETARIEN_PREP_VIANDES_0089",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_RECEPTION_0091",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_3",
+      "operation_precedente": "MENU_VEGETARIEN_CONDITIONNEMENT_0090",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "MENU_VEGETARIEN_DISTRIBUTION_0092",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_6",
+      "operation_precedente": "MENU_VEGETARIEN_RECEPTION_0091",
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "PLAT_POULET_ROTI_DISTRIBUTION_0093",
+      "duree_jours": 2,
+      "poste_id": "ZONE_DISTRIBUTION_8",
+      "operation_precedente": null,
+      "competence_requise": "zone_distribution"
+    },
+    {
+      "code_operation": "PLAT_POULET_ROTI_ASSEMBLAGE_0094",
+      "duree_jours": 1,
+      "poste_id": "ZONE_ASSEMBLAGE_PLATS_6",
+      "operation_precedente": "PLAT_POULET_ROTI_DISTRIBUTION_0093",
+      "competence_requise": "zone_assemblage_plats"
+    },
+    {
+      "code_operation": "PLAT_POULET_ROTI_RECEPTION_0095",
+      "duree_jours": 1,
+      "poste_id": "ZONE_RECEPTION_2",
+      "operation_precedente": "PLAT_POULET_ROTI_ASSEMBLAGE_0094",
+      "competence_requise": "zone_reception"
+    },
+    {
+      "code_operation": "PLAT_POULET_ROTI_STOCKAGE_0096",
+      "duree_jours": 2,
+      "poste_id": "CHAMBRE_FROIDE_1",
+      "operation_precedente": "PLAT_POULET_ROTI_RECEPTION_0095",
+      "competence_requise": "chambre_froide"
+    },
+    {
+      "code_operation": "PLAT_POULET_ROTI_CONDITIONNEMENT_0097",
+      "duree_jours": 1,
+      "poste_id": "ZONE_CONDITIONNEMENT_4",
+      "operation_precedente": "PLAT_POULET_ROTI_STOCKAGE_0096",
+      "competence_requise": "zone_conditionnement"
+    },
+    {
+      "code_operation": "PLAT_POULET_ROTI_PREP_VIANDES_0098",
+      "duree_jours": 2,
+      "poste_id": "ZONE_PREPARATION_VIANDES_1",
+      "operation_precedente": "PLAT_POULET_ROTI_CONDITIONNEMENT_0097",
+      "competence_requise": "zone_preparation_viandes"
+    },
+    {
+      "code_operation": "PLAT_POULET_ROTI_PREP_LEGUMES_0099",
+      "duree_jours": 1,
+      "poste_id": "ZONE_PREPARATION_LEGUMES_6",
+      "operation_precedente": "PLAT_POULET_ROTI_PREP_VIANDES_0098",
+      "competence_requise": "zone_preparation_legumes"
     }
   ],
   "postes": [

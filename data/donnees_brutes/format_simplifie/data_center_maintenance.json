@@ -2,63 +2,51 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Alerte système",
-      "duree_estimee_jours": 0.01
+      "nom": "Alerte système"
     },
     {
       "id": "T2",
-      "nom": "Diagnostic initial",
-      "duree_estimee_jours": 0.1
+      "nom": "Diagnostic initial"
     },
     {
       "id": "T3",
-      "nom": "Basculement redondance",
-      "duree_estimee_jours": 0.05
+      "nom": "Basculement redondance"
     },
     {
       "id": "T4",
-      "nom": "Arrêt serveur",
-      "duree_estimee_jours": 0.02
+      "nom": "Arrêt serveur"
     },
     {
       "id": "T5",
-      "nom": "Démontage composant",
-      "duree_estimee_jours": 0.2
+      "nom": "Démontage composant"
     },
     {
       "id": "T6",
-      "nom": "Commande pièce urgente",
-      "duree_estimee_jours": 1
+      "nom": "Commande pièce urgente"
     },
     {
       "id": "T7",
-      "nom": "Remplacement composant",
-      "duree_estimee_jours": 0.3
+      "nom": "Remplacement composant"
     },
     {
       "id": "T8",
-      "nom": "Mise sous tension",
-      "duree_estimee_jours": 0.1
+      "nom": "Mise sous tension"
     },
     {
       "id": "T9",
-      "nom": "Tests POST",
-      "duree_estimee_jours": 0.1
+      "nom": "Tests POST"
     },
     {
       "id": "T10",
-      "nom": "Tests charge",
-      "duree_estimee_jours": 0.5
+      "nom": "Tests charge"
     },
     {
       "id": "T11",
-      "nom": "Réintégration cluster",
-      "duree_estimee_jours": 0.2
+      "nom": "Réintégration cluster"
     },
     {
       "id": "T12",
-      "nom": "Vérification monitoring",
-      "duree_estimee_jours": 0.1
+      "nom": "Vérification monitoring"
     }
   ],
   "ressources": [
@@ -174,64 +162,82 @@
       "apres": "T12"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "alerte"
+      "ressource": "R1",
+      "duree": 0.01
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "diagnostic"
+      "ressource": "R2",
+      "duree": 0.1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
+      "tache": "T2",
+      "ressource": "R3",
+      "duree": 0.1
+    },
+    {
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "basculement"
+      "ressource": "R2",
+      "duree": 0.05
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "arret"
+      "ressource": "R3",
+      "duree": 0.02
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "demontage"
+      "ressource": "R4",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T6",
-      "competence": "commande"
+      "ressource": "R5",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T7",
-      "competence": "remplacement"
+      "ressource": "R4",
+      "duree": 0.3
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T8",
-      "competence": "demarrage"
+      "ressource": "R3",
+      "duree": 0.1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T9",
-      "competence": "tests_post"
+      "ressource": "R6",
+      "duree": 0.1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T10",
-      "competence": "tests_charge"
+      "ressource": "R6",
+      "duree": 0.5
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T11",
-      "competence": "reintegration"
+      "ressource": "R3",
+      "duree": 0.2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T12",
-      "competence": "verification_monitoring"
+      "ressource": "R1",
+      "duree": 0.1
     }
   ],
   "objectifs": [

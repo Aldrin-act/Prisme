@@ -996,11 +996,16 @@ class EtatPostgres:
             connexion.execute(
                 sql.SQL(
                     "UPDATE {} SET payload = %s::jsonb, structure_contraintes = %s, "
-                    "date_modification = %s WHERE id = %s"
+                    "unite_duree = %s, date_modification = %s WHERE id = %s"
                 ).format(self._table("instances_trco")),
                 (
                     instance.model_dump_json(),
                     structure_contraintes(instance),
+                    # Recalculée à chaque remplacement (même principe que `structure_contraintes`
+                    # ci-dessus) — sans ça, `unite_duree` reste figée sur sa valeur d'ingestion
+                    # même si `unite_temps`/les durées changent, un affichage cosmétique devenu
+                    # faux plutôt qu'absent (voir `api/unite_duree.py`).
+                    detecter_unite_duree(instance),
                     datetime.now(UTC).isoformat(),
                     instance_id,
                 ),

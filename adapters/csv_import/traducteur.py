@@ -12,9 +12,9 @@ Compatibilité dérivée par compétence : plutôt que de saisir à la main chaq
 couple (tâche, ressource, durée), on peut déclarer qu'une ressource possède
 une compétence (`ressources.csv`) et qu'une tâche l'exige (`competence_requise`
 dans `contraintes.csv`) — l'adaptateur calcule alors lui-même une
-`CompatibiliteRessourceTache` pour chaque ressource qualifiée, avec la durée
-estimée de la tâche (`taches.csv`, colonne `duree_estimee_jours`), appliquée
-telle quelle à toutes ces ressources — même principe que
+`CompatibiliteRessourceTache` pour chaque ressource qualifiée, avec sa durée
+comblée par apprentissage automatique (`estimateur_duree`, voir `traduire`),
+appliquée telle quelle à toutes ces ressources — même principe que
 `adapters/greensig/translator.py` (`equipes_compatibles_pour`/
 `duree_heures_pour`). Le DSL lui-même (`dsl/schema/instance.py`,
 `_competences_requises_respectees`) revérifie ensuite que chaque compatibilité
@@ -71,7 +71,7 @@ if TYPE_CHECKING:
     from estimation import EstimateurDuree
 
 COLONNES_TACHES_REQUISES = ("id",)
-COLONNES_TACHES_OPTIONNELLES = ("nom", "duree_estimee_jours")
+COLONNES_TACHES_OPTIONNELLES = ("nom",)
 COLONNES_RESSOURCES_REQUISES = ("id",)
 COLONNES_RESSOURCES_OPTIONNELLES = ("nom", "competences")
 COLONNES_CONTRAINTES_REQUISES = ("type",)
@@ -124,8 +124,8 @@ def _lire_lignes(
     colonne requise est vide (ligne d'exemple laissée telle quelle, ligne vide
     en fin de fichier...). Les colonnes optionnelles absentes du fichier valent
     simplement "" partout plutôt que de faire échouer la lecture — ex.
-    `competences`/`duree_estimee_jours`, inutiles tant qu'aucune compatibilité
-    n'est dérivée par compétence. `delimiteur` (un seul caractère, `,` par
+    `competences`, inutile tant qu'aucune compatibilité n'est dérivée par
+    compétence. `delimiteur` (un seul caractère, `,` par
     défaut) : certains exports européens (Excel FR notamment) utilisent `;`,
     la virgule étant déjà le séparateur décimal — jamais deviné automatiquement,
     l'appelant (ex. la page Données) le déclare explicitement."""
@@ -154,27 +154,15 @@ def _lire_lignes(
     ]
 
 
-def _lire_taches(contenu: bytes, delimiteur: str = ",") -> tuple[list[Tache], dict[str, int | None]]:
-    """Renvoie les tâches ainsi que, par id, leur durée estimée (colonne
-    `duree_estimee_jours`) — `None` si absente, seulement nécessaire pour
-    les tâches dont la compatibilité est dérivée par compétence. Même
-    structure que dans les autres adaptateurs pour cohérence."""
+def _lire_taches(contenu: bytes, delimiteur: str = ",") -> list[Tache]:
+    """Aucune durée sur la tâche elle-même (`Tache` n'en a délibérément aucun
+    champ, §4.2 — la durée dépend de la ressource en vrai FJSP flexible) : la
+    seule source de durée pour une compatibilité dérivée par compétence est
+    `estimateur_duree` (voir `traduire`)."""
     lignes = _lire_lignes(
         contenu, "taches.csv", COLONNES_TACHES_REQUISES, COLONNES_TACHES_OPTIONNELLES, delimiteur
     )
-    taches = [Tache(id=ligne["id"], **({"nom": ligne["nom"]} if ligne["nom"] else {})) for ligne in lignes]
-    durees_estimees: dict[str, int | None] = {}
-    for ligne in lignes:
-        if not ligne["duree_estimee_jours"]:
-            durees_estimees[ligne["id"]] = None
-            continue
-        try:
-            durees_estimees[ligne["id"]] = int(float(ligne["duree_estimee_jours"]))
-        except ValueError as erreur:
-            raise ErreurFichierInvalide(
-                f"taches.csv : durée estimée invalide « {ligne['duree_estimee_jours']} » pour {ligne['id']}"
-            ) from erreur
-    return taches, durees_estimees
+    return [Tache(id=ligne["id"], **({"nom": ligne["nom"]} if ligne["nom"] else {})) for ligne in lignes]
 
 
 def _lire_ressources(contenu: bytes, delimiteur: str = ",") -> list[Ressource]:
@@ -292,9 +280,9 @@ def traduire(
 ) -> ResultatTraduction:
     """Traduit trois fichiers CSV (Tâches, Ressources, Contraintes), plus un quatrième optionnel
     (Commandes), en une instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est
-    illisible, vide, ou qu'une colonne requise manque (y compris une durée estimée manquante
-    pour une dérivation par compétence, si `estimateur_duree` n'est pas fourni ou ne peut rien
-    estimer) ; `pydantic.ValidationError` si les données une fois lues ne forment pas une
+    illisible, vide, qu'une colonne requise manque, ou qu'une tâche à compétence requise reste
+    sans durée dérivable (`estimateur_duree` absent ou n'ayant rien pu estimer) ;
+    `pydantic.ValidationError` si les données une fois lues ne forment pas une
     instance valide (id dupliqué, référence inconnue, tâche sans compatibilité...).
 
     `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
@@ -313,10 +301,10 @@ def traduire(
     jours_semaine_indisponibles`, affichage frontend)."""
     if unite_temps == "heures":
         estimateur_duree = None
-    taches, durees_estimees = _lire_taches(taches_csv, delimiteur)
+    taches = _lire_taches(taches_csv, delimiteur)
     ressources = _lire_ressources(ressources_csv, delimiteur)
     contraintes = _lire_contraintes(contraintes_csv, delimiteur)
-    durees_estimees_connues = {t: d for t, d in durees_estimees.items() if d is not None}
+    durees_estimees_connues: dict[str, int] = {}
 
     avertissements: list[str] = []
     if estimateur_duree is not None:
@@ -329,7 +317,7 @@ def traduire(
             contraintes, ressources, durees_estimees_connues
         )
     except CompetenceSansDureeEstimee as erreur:
-        raise ErreurFichierInvalide(f"taches.csv : {erreur} (colonne duree_estimee_jours)") from erreur
+        raise ErreurFichierInvalide(f"taches.csv : {erreur} (fournir un estimateur_duree)") from erreur
 
     commandes = _lire_commandes(commandes_csv, delimiteur) if commandes_csv is not None else []
     echeances_derivees = deriver_echeances_par_commande(commandes, contraintes)

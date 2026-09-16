@@ -2,23 +2,19 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Picking",
-      "duree_estimee_jours": 1
+      "nom": "Picking"
     },
     {
       "id": "T2",
-      "nom": "Emballage",
-      "duree_estimee_jours": 1
+      "nom": "Emballage"
     },
     {
       "id": "T3",
-      "nom": "Étiquetage",
-      "duree_estimee_jours": 1
+      "nom": "Étiquetage"
     },
     {
       "id": "T4",
-      "nom": "Chargement",
-      "duree_estimee_jours": 1
+      "nom": "Chargement"
     }
   ],
   "ressources": [
@@ -68,24 +64,28 @@
       "apres": "T4"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "picking"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "emballage"
+      "ressource": "R2",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "etiquetage"
+      "ressource": "R3",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "chargement"
+      "ressource": "R4",
+      "duree": 1
     }
   ],
   "objectifs": [

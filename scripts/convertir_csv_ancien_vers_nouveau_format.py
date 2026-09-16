@@ -8,7 +8,7 @@ Ancien format:
 - <nom>_postes.csv (code_poste)
 
 Nouveau format:
-- taches.csv (id, nom, duree_estimee_jours)
+- taches.csv (id, nom)
 - ressources.csv (id, nom, competences)
 - contraintes.csv (type, tache_avant, tache_apres, tache, ressource, duree_jours, competence)
 """
@@ -42,12 +42,11 @@ def convertir_secteur(dossier: Path, nom_base: str):
     # Créer taches.csv
     with open(dossier / "taches.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["id", "nom", "duree_estimee_jours"])
+        writer.writerow(["id", "nom"])
         for op in operations:
             code = op["code_operation"]
             nom = op.get("nom", code.replace("_", " ").title())
-            duree = op["duree_jours"]
-            writer.writerow([code, nom, duree])
+            writer.writerow([code, nom])
 
     # Créer ressources.csv (avec compétences déduites du nom)
     with open(dossier / "ressources.csv", "w", newline="", encoding="utf-8") as f:

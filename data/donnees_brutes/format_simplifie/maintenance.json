@@ -2,28 +2,23 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Diagnostic",
-      "duree_estimee_jours": 1
+      "nom": "Diagnostic"
     },
     {
       "id": "T2",
-      "nom": "Démontage",
-      "duree_estimee_jours": 1
+      "nom": "Démontage"
     },
     {
       "id": "T3",
-      "nom": "Réparation",
-      "duree_estimee_jours": 2
+      "nom": "Réparation"
     },
     {
       "id": "T4",
-      "nom": "Remontage",
-      "duree_estimee_jours": 1
+      "nom": "Remontage"
     },
     {
       "id": "T5",
-      "nom": "Test",
-      "duree_estimee_jours": 1
+      "nom": "Test"
     }
   ],
   "ressources": [
@@ -67,29 +62,34 @@
       "apres": "T5"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "diagnostic"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "demontage"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "reparation"
+      "ressource": "R2",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "remontage"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T5",
-      "competence": "test"
+      "ressource": "R1",
+      "duree": 1
     }
   ],
   "objectifs": [

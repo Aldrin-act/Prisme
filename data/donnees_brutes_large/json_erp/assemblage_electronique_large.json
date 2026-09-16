@@ -1,1604 +1,704 @@
 {
   "operations": [
     {
-      "code_operation": "PLATINE_SMARTPHONE_DEPANEL_0001",
-      "poste_id": "POSTE_DEPANNELISATION_3",
+      "code_operation": "PCB_TEMPERATURE_TEST_FONC_0001",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_1",
       "operation_precedente": null,
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "competence_requise": "banc_test_fonctionnel"
     },
     {
-      "code_operation": "PLATINE_SMARTPHONE_POSE_CMS_A_0002",
-      "poste_id": "PICK_PLACE_1",
-      "operation_precedente": "PLATINE_SMARTPHONE_DEPANEL_0001",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
+      "code_operation": "PCB_TEMPERATURE_SOUDURE_THT_0002",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_4",
+      "operation_precedente": "PCB_TEMPERATURE_TEST_FONC_0001",
+      "competence_requise": "poste_soudure_manuel"
     },
     {
-      "code_operation": "PLATINE_SMARTPHONE_COATING_0003",
-      "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "PLATINE_SMARTPHONE_POSE_CMS_A_0002",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_TEST_FONC_0004",
-      "poste_id": "BANC_TEST_FONCTIONNEL_4",
-      "operation_precedente": "PLATINE_SMARTPHONE_COATING_0003",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_PACKAGE_0005",
-      "poste_id": "STATION_PACKAGING_1",
-      "operation_precedente": "PLATINE_SMARTPHONE_TEST_FONC_0004",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_AOI_A_0006",
-      "poste_id": "AOI_4",
-      "operation_precedente": "PLATINE_SMARTPHONE_PACKAGE_0005",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_POSE_CMS_B_0007",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "PLATINE_SMARTPHONE_AOI_A_0006",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_PREP_0008",
-      "poste_id": "STATION_ASSEMBLAGE_4",
-      "operation_precedente": "PLATINE_SMARTPHONE_POSE_CMS_B_0007",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_SOUDURE_THT_0009",
-      "poste_id": "POSTE_SOUDURE_MANUEL_3",
-      "operation_precedente": "PLATINE_SMARTPHONE_PREP_0008",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_REFUSION_A_0010",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PLATINE_SMARTPHONE_SOUDURE_THT_0009",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_TEST_ICT_0011",
-      "poste_id": "BANC_TEST_ICT_4",
-      "operation_precedente": "PLATINE_SMARTPHONE_REFUSION_A_0010",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_REFUSION_B_0012",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PLATINE_SMARTPHONE_TEST_ICT_0011",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_TEST_FONC_0013",
-      "poste_id": "BANC_TEST_FONCTIONNEL_2",
-      "operation_precedente": null,
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_DEPANEL_0014",
-      "poste_id": "POSTE_DEPANNELISATION_2",
-      "operation_precedente": "CARTE_MEMOIRE_TEST_FONC_0013",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_COATING_0015",
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "CARTE_MEMOIRE_DEPANEL_0014",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_SOUDURE_THT_0016",
-      "poste_id": "POSTE_SOUDURE_MANUEL_3",
-      "operation_precedente": "CARTE_MEMOIRE_COATING_0015",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_TEST_ICT_0017",
-      "poste_id": "BANC_TEST_ICT_7",
-      "operation_precedente": "CARTE_MEMOIRE_SOUDURE_THT_0016",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_PACKAGE_0018",
-      "poste_id": "STATION_PACKAGING_4",
-      "operation_precedente": "CARTE_MEMOIRE_TEST_ICT_0017",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_POSE_CMS_A_0019",
-      "poste_id": "PICK_PLACE_5",
-      "operation_precedente": "CARTE_MEMOIRE_PACKAGE_0018",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_POSE_CMS_B_0020",
-      "poste_id": "PICK_PLACE_4",
-      "operation_precedente": "CARTE_MEMOIRE_POSE_CMS_A_0019",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_REFUSION_A_0021",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "CARTE_MEMOIRE_POSE_CMS_B_0020",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_TEST_ICT_0022",
-      "poste_id": "BANC_TEST_ICT_5",
-      "operation_precedente": null,
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_SOUDURE_THT_0023",
-      "poste_id": "POSTE_SOUDURE_MANUEL_13",
-      "operation_precedente": "CONTROLEUR_MOTEUR_TEST_ICT_0022",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_REFUSION_A_0024",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "CONTROLEUR_MOTEUR_SOUDURE_THT_0023",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_POSE_CMS_A_0025",
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "CONTROLEUR_MOTEUR_REFUSION_A_0024",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_TEST_FONC_0026",
-      "poste_id": "BANC_TEST_FONCTIONNEL_6",
-      "operation_precedente": "CONTROLEUR_MOTEUR_POSE_CMS_A_0025",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_PACKAGE_0027",
-      "poste_id": "STATION_PACKAGING_5",
-      "operation_precedente": "CONTROLEUR_MOTEUR_TEST_FONC_0026",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_AOI_A_0028",
-      "poste_id": "AOI_2",
-      "operation_precedente": "CONTROLEUR_MOTEUR_PACKAGE_0027",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_PREP_0029",
-      "poste_id": "STATION_ASSEMBLAGE_2",
-      "operation_precedente": "CONTROLEUR_MOTEUR_AOI_A_0028",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_COATING_0030",
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "CONTROLEUR_MOTEUR_PREP_0029",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_REFUSION_B_0031",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": "CONTROLEUR_MOTEUR_COATING_0030",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_POSE_CMS_B_0032",
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "CONTROLEUR_MOTEUR_REFUSION_B_0031",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_TEST_FONC_0033",
-      "poste_id": "BANC_TEST_FONCTIONNEL_3",
-      "operation_precedente": null,
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_TEST_ICT_0034",
-      "poste_id": "BANC_TEST_ICT_1",
-      "operation_precedente": "CONTROLEUR_MOTEUR_TEST_FONC_0033",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_DEPANEL_0035",
-      "poste_id": "POSTE_DEPANNELISATION_3",
-      "operation_precedente": "CONTROLEUR_MOTEUR_TEST_ICT_0034",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_SOUDURE_THT_0036",
-      "poste_id": "POSTE_SOUDURE_MANUEL_1",
-      "operation_precedente": "CONTROLEUR_MOTEUR_DEPANEL_0035",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_POSE_CMS_A_0037",
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "CONTROLEUR_MOTEUR_SOUDURE_THT_0036",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_PACKAGE_0038",
-      "poste_id": "STATION_PACKAGING_8",
-      "operation_precedente": "CONTROLEUR_MOTEUR_POSE_CMS_A_0037",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_REFUSION_A_0039",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "CONTROLEUR_MOTEUR_PACKAGE_0038",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_POSE_CMS_B_0040",
-      "poste_id": "PICK_PLACE_4",
-      "operation_precedente": "CONTROLEUR_MOTEUR_REFUSION_A_0039",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_PREP_0041",
-      "poste_id": "STATION_ASSEMBLAGE_7",
-      "operation_precedente": "CONTROLEUR_MOTEUR_POSE_CMS_B_0040",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_COATING_0042",
-      "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "CONTROLEUR_MOTEUR_PREP_0041",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_REFUSION_B_0043",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "CONTROLEUR_MOTEUR_COATING_0042",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_AOI_A_0044",
-      "poste_id": "AOI_1",
-      "operation_precedente": "CONTROLEUR_MOTEUR_REFUSION_B_0043",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_REFUSION_B_0045",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": null,
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_SOUDURE_THT_0046",
-      "poste_id": "POSTE_SOUDURE_MANUEL_5",
-      "operation_precedente": "PLATINE_SMARTPHONE_REFUSION_B_0045",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_AOI_A_0047",
-      "poste_id": "AOI_5",
-      "operation_precedente": "PLATINE_SMARTPHONE_SOUDURE_THT_0046",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_TEST_FONC_0048",
-      "poste_id": "BANC_TEST_FONCTIONNEL_5",
-      "operation_precedente": "PLATINE_SMARTPHONE_AOI_A_0047",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_REFUSION_A_0049",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PLATINE_SMARTPHONE_TEST_FONC_0048",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_POSE_CMS_A_0050",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "PLATINE_SMARTPHONE_REFUSION_A_0049",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_POSE_CMS_B_0051",
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "PLATINE_SMARTPHONE_POSE_CMS_A_0050",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_COATING_0052",
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "PLATINE_SMARTPHONE_POSE_CMS_B_0051",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PLATINE_SMARTPHONE_DEPANEL_0053",
-      "poste_id": "POSTE_DEPANNELISATION_2",
-      "operation_precedente": "PLATINE_SMARTPHONE_COATING_0052",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_USB_PREP_0054",
-      "poste_id": "STATION_ASSEMBLAGE_6",
-      "operation_precedente": null,
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_USB_PACKAGE_0055",
-      "poste_id": "STATION_PACKAGING_6",
-      "operation_precedente": "INTERFACE_USB_PREP_0054",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_USB_DEPANEL_0056",
-      "poste_id": "POSTE_DEPANNELISATION_3",
-      "operation_precedente": "INTERFACE_USB_PACKAGE_0055",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_USB_AOI_A_0057",
-      "poste_id": "AOI_2",
-      "operation_precedente": "INTERFACE_USB_DEPANEL_0056",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_USB_COATING_0058",
-      "poste_id": "ROBOT_COATING_2",
-      "operation_precedente": "INTERFACE_USB_AOI_A_0057",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_USB_SOUDURE_THT_0059",
-      "poste_id": "POSTE_SOUDURE_MANUEL_1",
-      "operation_precedente": "INTERFACE_USB_COATING_0058",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_USB_POSE_CMS_B_0060",
-      "poste_id": "PICK_PLACE_4",
-      "operation_precedente": "INTERFACE_USB_SOUDURE_THT_0059",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "INTERFACE_USB_POSE_CMS_A_0061",
-      "poste_id": "PICK_PLACE_1",
-      "operation_precedente": "INTERFACE_USB_POSE_CMS_B_0060",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_POSE_CMS_A_0062",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": null,
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_REFUSION_B_0063",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "CONVERTISSEUR_DC_POSE_CMS_A_0062",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_TEST_ICT_0064",
-      "poste_id": "BANC_TEST_ICT_8",
-      "operation_precedente": "CONVERTISSEUR_DC_REFUSION_B_0063",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_DEPANEL_0065",
-      "poste_id": "POSTE_DEPANNELISATION_3",
-      "operation_precedente": "CONVERTISSEUR_DC_TEST_ICT_0064",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_PACKAGE_0066",
-      "poste_id": "STATION_PACKAGING_8",
-      "operation_precedente": "CONVERTISSEUR_DC_DEPANEL_0065",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_PREP_0067",
-      "poste_id": "STATION_ASSEMBLAGE_9",
-      "operation_precedente": "CONVERTISSEUR_DC_PACKAGE_0066",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_AOI_A_0068",
-      "poste_id": "AOI_4",
-      "operation_precedente": "CONVERTISSEUR_DC_PREP_0067",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_COATING_0069",
-      "poste_id": "ROBOT_COATING_2",
-      "operation_precedente": "CONVERTISSEUR_DC_AOI_A_0068",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_DEPANEL_0070",
-      "poste_id": "POSTE_DEPANNELISATION_2",
-      "operation_precedente": null,
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_TEST_ICT_0071",
-      "poste_id": "BANC_TEST_ICT_4",
-      "operation_precedente": "MODULE_WIFI_DEPANEL_0070",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_TEST_FONC_0072",
-      "poste_id": "BANC_TEST_FONCTIONNEL_2",
-      "operation_precedente": "MODULE_WIFI_TEST_ICT_0071",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_REFUSION_B_0073",
-      "poste_id": "FOUR_REFUSION_1",
-      "operation_precedente": "MODULE_WIFI_TEST_FONC_0072",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_POSE_CMS_B_0074",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "MODULE_WIFI_REFUSION_B_0073",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_COATING_0075",
-      "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "MODULE_WIFI_POSE_CMS_B_0074",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_PACKAGE_0076",
-      "poste_id": "STATION_PACKAGING_8",
-      "operation_precedente": "MODULE_WIFI_COATING_0075",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_AOI_A_0077",
-      "poste_id": "AOI_4",
-      "operation_precedente": "MODULE_WIFI_PACKAGE_0076",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_SOUDURE_THT_0078",
-      "poste_id": "POSTE_SOUDURE_MANUEL_14",
-      "operation_precedente": "MODULE_WIFI_AOI_A_0077",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_WIFI_POSE_CMS_A_0079",
-      "poste_id": "PICK_PLACE_4",
-      "operation_precedente": "MODULE_WIFI_SOUDURE_THT_0078",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "MODULE_GPS_REFUSION_B_0080",
-      "poste_id": "FOUR_REFUSION_1",
-      "operation_precedente": null,
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_GPS_PREP_0081",
-      "poste_id": "STATION_ASSEMBLAGE_9",
-      "operation_precedente": "MODULE_GPS_REFUSION_B_0080",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_GPS_TEST_ICT_0082",
+      "code_operation": "PCB_TEMPERATURE_TEST_ICT_0003",
+      "duree_jours": 2,
       "poste_id": "BANC_TEST_ICT_2",
-      "operation_precedente": "MODULE_GPS_PREP_0081",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "PCB_TEMPERATURE_SOUDURE_THT_0002",
+      "competence_requise": "banc_test_ict"
     },
     {
-      "code_operation": "MODULE_GPS_POSE_CMS_B_0083",
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "MODULE_GPS_TEST_ICT_0082",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "MODULE_GPS_REFUSION_A_0084",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "MODULE_GPS_POSE_CMS_B_0083",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_GPS_PACKAGE_0085",
-      "poste_id": "STATION_PACKAGING_8",
-      "operation_precedente": "MODULE_GPS_REFUSION_A_0084",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_GPS_COATING_0086",
-      "poste_id": "ROBOT_COATING_2",
-      "operation_precedente": "MODULE_GPS_PACKAGE_0085",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_GPS_POSE_CMS_A_0087",
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "MODULE_GPS_COATING_0086",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MODULE_GPS_SOUDURE_THT_0088",
-      "poste_id": "POSTE_SOUDURE_MANUEL_7",
-      "operation_precedente": "MODULE_GPS_POSE_CMS_A_0087",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MODULE_GPS_AOI_A_0089",
-      "poste_id": "AOI_2",
-      "operation_precedente": "MODULE_GPS_SOUDURE_THT_0088",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_GPS_TEST_FONC_0090",
-      "poste_id": "BANC_TEST_FONCTIONNEL_3",
-      "operation_precedente": "MODULE_GPS_AOI_A_0089",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_GPS_DEPANEL_0091",
-      "poste_id": "POSTE_DEPANNELISATION_3",
-      "operation_precedente": "MODULE_GPS_TEST_FONC_0090",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_DEPANEL_0092",
-      "poste_id": "POSTE_DEPANNELISATION_4",
-      "operation_precedente": null,
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_POSE_CMS_B_0093",
-      "poste_id": "PICK_PLACE_4",
-      "operation_precedente": "CARTE_MEMOIRE_DEPANEL_0092",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_AOI_A_0094",
-      "poste_id": "AOI_1",
-      "operation_precedente": "CARTE_MEMOIRE_POSE_CMS_B_0093",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_COATING_0095",
-      "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "CARTE_MEMOIRE_AOI_A_0094",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_SOUDURE_THT_0096",
-      "poste_id": "POSTE_SOUDURE_MANUEL_9",
-      "operation_precedente": "CARTE_MEMOIRE_COATING_0095",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_REFUSION_B_0097",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "CARTE_MEMOIRE_SOUDURE_THT_0096",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_REFUSION_A_0098",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": "CARTE_MEMOIRE_REFUSION_B_0097",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_POSE_CMS_A_0099",
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "CARTE_MEMOIRE_REFUSION_A_0098",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_PACKAGE_0100",
-      "poste_id": "STATION_PACKAGING_6",
-      "operation_precedente": "CARTE_MEMOIRE_POSE_CMS_A_0099",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_TEST_ICT_0101",
-      "poste_id": "BANC_TEST_ICT_1",
-      "operation_precedente": "CARTE_MEMOIRE_PACKAGE_0100",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_MEMOIRE_TEST_FONC_0102",
-      "poste_id": "BANC_TEST_FONCTIONNEL_5",
-      "operation_precedente": "CARTE_MEMOIRE_TEST_ICT_0101",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_REFUSION_A_0103",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": null,
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_AOI_A_0104",
-      "poste_id": "AOI_4",
-      "operation_precedente": "PCB_TEMPERATURE_REFUSION_A_0103",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_SOUDURE_THT_0105",
-      "poste_id": "POSTE_SOUDURE_MANUEL_14",
-      "operation_precedente": "PCB_TEMPERATURE_AOI_A_0104",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_REFUSION_B_0106",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PCB_TEMPERATURE_SOUDURE_THT_0105",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_TEST_ICT_0107",
-      "poste_id": "BANC_TEST_ICT_3",
-      "operation_precedente": "PCB_TEMPERATURE_REFUSION_B_0106",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_TEST_FONC_0108",
-      "poste_id": "BANC_TEST_FONCTIONNEL_6",
-      "operation_precedente": "PCB_TEMPERATURE_TEST_ICT_0107",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_COATING_0109",
-      "poste_id": "ROBOT_COATING_2",
-      "operation_precedente": "PCB_TEMPERATURE_TEST_FONC_0108",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_DEPANEL_0110",
-      "poste_id": "POSTE_DEPANNELISATION_4",
-      "operation_precedente": "PCB_TEMPERATURE_COATING_0109",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_PACKAGE_0111",
-      "poste_id": "STATION_PACKAGING_5",
-      "operation_precedente": "PCB_TEMPERATURE_DEPANEL_0110",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_POSE_CMS_B_0112",
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "PCB_TEMPERATURE_PACKAGE_0111",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_TEMPERATURE_PREP_0113",
-      "poste_id": "STATION_ASSEMBLAGE_8",
-      "operation_precedente": "PCB_TEMPERATURE_POSE_CMS_B_0112",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_POSE_CMS_A_0114",
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": null,
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_COATING_0115",
-      "poste_id": "ROBOT_COATING_3",
-      "operation_precedente": "CONTROLEUR_RGB_POSE_CMS_A_0114",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_AOI_A_0116",
-      "poste_id": "AOI_4",
-      "operation_precedente": "CONTROLEUR_RGB_COATING_0115",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_REFUSION_A_0117",
-      "poste_id": "FOUR_REFUSION_1",
-      "operation_precedente": "CONTROLEUR_RGB_AOI_A_0116",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_TEST_ICT_0118",
-      "poste_id": "BANC_TEST_ICT_8",
-      "operation_precedente": "CONTROLEUR_RGB_REFUSION_A_0117",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_SOUDURE_THT_0119",
-      "poste_id": "POSTE_SOUDURE_MANUEL_12",
-      "operation_precedente": "CONTROLEUR_RGB_TEST_ICT_0118",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_PACKAGE_0120",
-      "poste_id": "STATION_PACKAGING_3",
-      "operation_precedente": "CONTROLEUR_RGB_SOUDURE_THT_0119",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_DEPANEL_0121",
-      "poste_id": "POSTE_DEPANNELISATION_3",
-      "operation_precedente": "CONTROLEUR_RGB_PACKAGE_0120",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_PREP_0122",
-      "poste_id": "STATION_ASSEMBLAGE_10",
-      "operation_precedente": "CONTROLEUR_RGB_DEPANEL_0121",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_POSE_CMS_B_0123",
-      "poste_id": "PICK_PLACE_4",
-      "operation_precedente": "CONTROLEUR_RGB_PREP_0122",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_REFUSION_B_0124",
-      "poste_id": "FOUR_REFUSION_1",
-      "operation_precedente": "CONTROLEUR_RGB_POSE_CMS_B_0123",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_RGB_TEST_FONC_0125",
-      "poste_id": "BANC_TEST_FONCTIONNEL_3",
-      "operation_precedente": "CONTROLEUR_RGB_REFUSION_B_0124",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_PACKAGE_0126",
-      "poste_id": "STATION_PACKAGING_6",
-      "operation_precedente": null,
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_TEST_FONC_0127",
-      "poste_id": "BANC_TEST_FONCTIONNEL_2",
-      "operation_precedente": "PCB_PUISSANCE_PACKAGE_0126",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_AOI_A_0128",
-      "poste_id": "AOI_2",
-      "operation_precedente": "PCB_PUISSANCE_TEST_FONC_0127",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_REFUSION_B_0129",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "PCB_PUISSANCE_AOI_A_0128",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_POSE_CMS_B_0130",
-      "poste_id": "PICK_PLACE_1",
-      "operation_precedente": "PCB_PUISSANCE_REFUSION_B_0129",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_REFUSION_A_0131",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": "PCB_PUISSANCE_POSE_CMS_B_0130",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_DEPANEL_0132",
-      "poste_id": "POSTE_DEPANNELISATION_4",
-      "operation_precedente": "PCB_PUISSANCE_REFUSION_A_0131",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_COATING_0133",
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "PCB_PUISSANCE_DEPANEL_0132",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_POSE_CMS_A_0134",
-      "poste_id": "PICK_PLACE_5",
-      "operation_precedente": "PCB_PUISSANCE_COATING_0133",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_SOUDURE_THT_0135",
-      "poste_id": "POSTE_SOUDURE_MANUEL_13",
-      "operation_precedente": "PCB_PUISSANCE_POSE_CMS_A_0134",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "PCB_PUISSANCE_TEST_ICT_0136",
-      "poste_id": "BANC_TEST_ICT_8",
-      "operation_precedente": "PCB_PUISSANCE_SOUDURE_THT_0135",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_AOI_A_0137",
-      "poste_id": "AOI_1",
-      "operation_precedente": null,
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_TEST_FONC_0138",
-      "poste_id": "BANC_TEST_FONCTIONNEL_1",
-      "operation_precedente": "CONVERTISSEUR_DC_AOI_A_0137",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_POSE_CMS_B_0139",
-      "poste_id": "PICK_PLACE_1",
-      "operation_precedente": "CONVERTISSEUR_DC_TEST_FONC_0138",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_TEST_ICT_0140",
-      "poste_id": "BANC_TEST_ICT_1",
-      "operation_precedente": "CONVERTISSEUR_DC_POSE_CMS_B_0139",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_POSE_CMS_A_0141",
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "CONVERTISSEUR_DC_TEST_ICT_0140",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_PREP_0142",
+      "code_operation": "PCB_TEMPERATURE_PREP_0004",
+      "duree_jours": 2,
       "poste_id": "STATION_ASSEMBLAGE_1",
-      "operation_precedente": "CONVERTISSEUR_DC_POSE_CMS_A_0141",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "PCB_TEMPERATURE_TEST_ICT_0003",
+      "competence_requise": "station_assemblage"
     },
     {
-      "code_operation": "CONVERTISSEUR_DC_PACKAGE_0143",
-      "poste_id": "STATION_PACKAGING_7",
-      "operation_precedente": "CONVERTISSEUR_DC_PREP_0142",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "code_operation": "PCB_TEMPERATURE_COATING_0005",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_1",
+      "operation_precedente": "PCB_TEMPERATURE_PREP_0004",
+      "competence_requise": "robot_coating"
     },
     {
-      "code_operation": "CONVERTISSEUR_DC_SOUDURE_THT_0144",
-      "poste_id": "POSTE_SOUDURE_MANUEL_11",
-      "operation_precedente": "CONVERTISSEUR_DC_PACKAGE_0143",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONVERTISSEUR_DC_REFUSION_B_0145",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": "CONVERTISSEUR_DC_SOUDURE_THT_0144",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_REFUSION_A_0146",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": null,
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_DEPANEL_0147",
-      "poste_id": "POSTE_DEPANNELISATION_1",
-      "operation_precedente": "INTERFACE_CAN_REFUSION_A_0146",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_POSE_CMS_B_0148",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "INTERFACE_CAN_DEPANEL_0147",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_AOI_A_0149",
-      "poste_id": "AOI_5",
-      "operation_precedente": "INTERFACE_CAN_POSE_CMS_B_0148",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_PREP_0150",
-      "poste_id": "STATION_ASSEMBLAGE_4",
-      "operation_precedente": "INTERFACE_CAN_AOI_A_0149",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_SOUDURE_THT_0151",
-      "poste_id": "POSTE_SOUDURE_MANUEL_12",
-      "operation_precedente": "INTERFACE_CAN_PREP_0150",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_TEST_ICT_0152",
-      "poste_id": "BANC_TEST_ICT_7",
-      "operation_precedente": "INTERFACE_CAN_SOUDURE_THT_0151",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_PACKAGE_0153",
-      "poste_id": "STATION_PACKAGING_4",
-      "operation_precedente": "INTERFACE_CAN_TEST_ICT_0152",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_POSE_CMS_A_0154",
-      "poste_id": "PICK_PLACE_1",
-      "operation_precedente": "INTERFACE_CAN_PACKAGE_0153",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_COATING_0155",
-      "poste_id": "ROBOT_COATING_2",
-      "operation_precedente": "INTERFACE_CAN_POSE_CMS_A_0154",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_REFUSION_B_0156",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "INTERFACE_CAN_COATING_0155",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "INTERFACE_CAN_TEST_FONC_0157",
-      "poste_id": "BANC_TEST_FONCTIONNEL_4",
-      "operation_precedente": "INTERFACE_CAN_REFUSION_B_0156",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_REFUSION_B_0158",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": null,
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_TEST_ICT_0159",
-      "poste_id": "BANC_TEST_ICT_6",
-      "operation_precedente": "CARTE_AUDIO_REFUSION_B_0158",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_POSE_CMS_B_0160",
-      "poste_id": "PICK_PLACE_3",
-      "operation_precedente": "CARTE_AUDIO_TEST_ICT_0159",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_SOUDURE_THT_0161",
-      "poste_id": "POSTE_SOUDURE_MANUEL_1",
-      "operation_precedente": "CARTE_AUDIO_POSE_CMS_B_0160",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_PACKAGE_0162",
-      "poste_id": "STATION_PACKAGING_1",
-      "operation_precedente": "CARTE_AUDIO_SOUDURE_THT_0161",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_PREP_0163",
-      "poste_id": "STATION_ASSEMBLAGE_5",
-      "operation_precedente": "CARTE_AUDIO_PACKAGE_0162",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_TEST_FONC_0164",
-      "poste_id": "BANC_TEST_FONCTIONNEL_1",
-      "operation_precedente": "CARTE_AUDIO_PREP_0163",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_AOI_A_0165",
+      "code_operation": "PCB_TEMPERATURE_AOI_A_0006",
+      "duree_jours": 1,
       "poste_id": "AOI_1",
-      "operation_precedente": "CARTE_AUDIO_TEST_FONC_0164",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "PCB_TEMPERATURE_COATING_0005",
+      "competence_requise": "aoi"
     },
     {
-      "code_operation": "CARTE_AUDIO_DEPANEL_0166",
-      "poste_id": "POSTE_DEPANNELISATION_1",
-      "operation_precedente": "CARTE_AUDIO_AOI_A_0165",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_POSE_CMS_A_0167",
-      "poste_id": "PICK_PLACE_5",
-      "operation_precedente": "CARTE_AUDIO_DEPANEL_0166",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CARTE_AUDIO_REFUSION_A_0168",
-      "poste_id": "FOUR_REFUSION_4",
-      "operation_precedente": "CARTE_AUDIO_POSE_CMS_A_0167",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_LORA_DEPANEL_0169",
-      "poste_id": "POSTE_DEPANNELISATION_4",
-      "operation_precedente": null,
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_LORA_TEST_ICT_0170",
-      "poste_id": "BANC_TEST_ICT_6",
-      "operation_precedente": "MODULE_LORA_DEPANEL_0169",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MODULE_LORA_POSE_CMS_A_0171",
-      "poste_id": "PICK_PLACE_2",
-      "operation_precedente": "MODULE_LORA_TEST_ICT_0170",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-08"
-    },
-    {
-      "code_operation": "MODULE_LORA_REFUSION_A_0172",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "MODULE_LORA_POSE_CMS_A_0171",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_LORA_AOI_A_0173",
-      "poste_id": "AOI_5",
-      "operation_precedente": "MODULE_LORA_REFUSION_A_0172",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_LORA_PREP_0174",
-      "poste_id": "STATION_ASSEMBLAGE_2",
-      "operation_precedente": "MODULE_LORA_AOI_A_0173",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "MODULE_LORA_PACKAGE_0175",
-      "poste_id": "STATION_PACKAGING_2",
-      "operation_precedente": "MODULE_LORA_PREP_0174",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "MODULE_LORA_TEST_FONC_0176",
-      "poste_id": "BANC_TEST_FONCTIONNEL_3",
-      "operation_precedente": "MODULE_LORA_PACKAGE_0175",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_POSE_CMS_B_0177",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": null,
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_REFUSION_A_0178",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "DRIVER_LED_POSE_CMS_B_0177",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_SOUDURE_THT_0179",
-      "poste_id": "POSTE_SOUDURE_MANUEL_7",
-      "operation_precedente": "DRIVER_LED_REFUSION_A_0178",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DRIVER_LED_TEST_FONC_0180",
-      "poste_id": "BANC_TEST_FONCTIONNEL_2",
-      "operation_precedente": "DRIVER_LED_SOUDURE_THT_0179",
-      "competence_requise": "banc_test_fonctionnel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DRIVER_LED_PACKAGE_0181",
-      "poste_id": "STATION_PACKAGING_1",
-      "operation_precedente": "DRIVER_LED_TEST_FONC_0180",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_AOI_A_0182",
-      "poste_id": "AOI_2",
-      "operation_precedente": "DRIVER_LED_PACKAGE_0181",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_POSE_CMS_A_0183",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "DRIVER_LED_AOI_A_0182",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_PREP_0184",
-      "poste_id": "STATION_ASSEMBLAGE_8",
-      "operation_precedente": "DRIVER_LED_POSE_CMS_A_0183",
-      "competence_requise": "station_assemblage",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "DRIVER_LED_DEPANEL_0185",
-      "poste_id": "POSTE_DEPANNELISATION_2",
-      "operation_precedente": "DRIVER_LED_PREP_0184",
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_COATING_0186",
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "DRIVER_LED_DEPANEL_0185",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_REFUSION_B_0187",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": "DRIVER_LED_COATING_0186",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "DRIVER_LED_TEST_ICT_0188",
-      "poste_id": "BANC_TEST_ICT_8",
-      "operation_precedente": "DRIVER_LED_REFUSION_B_0187",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_DEPANEL_0189",
-      "poste_id": "POSTE_DEPANNELISATION_3",
-      "operation_precedente": null,
-      "competence_requise": "poste_depannelisation",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_TEST_ICT_0190",
-      "poste_id": "BANC_TEST_ICT_8",
-      "operation_precedente": "CONTROLEUR_MOTEUR_DEPANEL_0189",
-      "competence_requise": "banc_test_ict",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_PACKAGE_0191",
-      "poste_id": "STATION_PACKAGING_7",
-      "operation_precedente": "CONTROLEUR_MOTEUR_TEST_ICT_0190",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_REFUSION_B_0192",
-      "poste_id": "FOUR_REFUSION_3",
-      "operation_precedente": "CONTROLEUR_MOTEUR_PACKAGE_0191",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_POSE_CMS_A_0193",
-      "poste_id": "PICK_PLACE_6",
-      "operation_precedente": "CONTROLEUR_MOTEUR_REFUSION_B_0192",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_COATING_0194",
-      "poste_id": "ROBOT_COATING_1",
-      "operation_precedente": "CONTROLEUR_MOTEUR_POSE_CMS_A_0193",
-      "competence_requise": "robot_coating",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_SOUDURE_THT_0195",
-      "poste_id": "POSTE_SOUDURE_MANUEL_5",
-      "operation_precedente": "CONTROLEUR_MOTEUR_COATING_0194",
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-07"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_REFUSION_A_0196",
-      "poste_id": "FOUR_REFUSION_2",
-      "operation_precedente": "CONTROLEUR_MOTEUR_SOUDURE_THT_0195",
-      "competence_requise": "four_refusion",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_AOI_A_0197",
-      "poste_id": "AOI_5",
-      "operation_precedente": "CONTROLEUR_MOTEUR_REFUSION_A_0196",
-      "competence_requise": "aoi",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CONTROLEUR_MOTEUR_POSE_CMS_B_0198",
-      "poste_id": "PICK_PLACE_5",
-      "operation_precedente": "CONTROLEUR_MOTEUR_AOI_A_0197",
-      "competence_requise": "pick_place",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_ROUTEUR_SOUDURE_THT_0199",
-      "poste_id": "POSTE_SOUDURE_MANUEL_3",
-      "operation_precedente": null,
-      "competence_requise": "poste_soudure_manuel",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
-    },
-    {
-      "code_operation": "CARTE_ROUTEUR_PACKAGE_0200",
+      "code_operation": "PCB_TEMPERATURE_PACKAGE_0007",
+      "duree_jours": 1,
       "poste_id": "STATION_PACKAGING_3",
-      "operation_precedente": "CARTE_ROUTEUR_SOUDURE_THT_0199",
-      "competence_requise": "station_packaging",
-      "date_debut": "2026-01-05",
-      "date_fin": "2026-01-06"
+      "operation_precedente": "PCB_TEMPERATURE_AOI_A_0006",
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_DEPANEL_0008",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_3",
+      "operation_precedente": "PCB_TEMPERATURE_PACKAGE_0007",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_REFUSION_B_0009",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_4",
+      "operation_precedente": "PCB_TEMPERATURE_DEPANEL_0008",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_POSE_CMS_B_0010",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_3",
+      "operation_precedente": "PCB_TEMPERATURE_REFUSION_B_0009",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_POSE_CMS_A_0011",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_4",
+      "operation_precedente": "PCB_TEMPERATURE_POSE_CMS_B_0010",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_REFUSION_B_0012",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": null,
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_REFUSION_A_0013",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_3",
+      "operation_precedente": "CARTE_AFFICHAGE_REFUSION_B_0012",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_DEPANEL_0014",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_4",
+      "operation_precedente": "CARTE_AFFICHAGE_REFUSION_A_0013",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_PACKAGE_0015",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_8",
+      "operation_precedente": "CARTE_AFFICHAGE_DEPANEL_0014",
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_AOI_A_0016",
+      "duree_jours": 1,
+      "poste_id": "AOI_3",
+      "operation_precedente": "CARTE_AFFICHAGE_PACKAGE_0015",
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_TEST_ICT_0017",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_8",
+      "operation_precedente": "CARTE_AFFICHAGE_AOI_A_0016",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_PREP_0018",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_4",
+      "operation_precedente": "CARTE_AFFICHAGE_TEST_ICT_0017",
+      "competence_requise": "station_assemblage"
+    },
+    {
+      "code_operation": "CARTE_AFFICHAGE_POSE_CMS_B_0019",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "CARTE_AFFICHAGE_PREP_0018",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_POSE_CMS_A_0020",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_3",
+      "operation_precedente": null,
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_PACKAGE_0021",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_6",
+      "operation_precedente": "CARTE_ETHERNET_POSE_CMS_A_0020",
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_TEST_FONC_0022",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_1",
+      "operation_precedente": "CARTE_ETHERNET_PACKAGE_0021",
+      "competence_requise": "banc_test_fonctionnel"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_REFUSION_B_0023",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "CARTE_ETHERNET_TEST_FONC_0022",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_TEST_ICT_0024",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT_7",
+      "operation_precedente": "CARTE_ETHERNET_REFUSION_B_0023",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_COATING_0025",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_1",
+      "operation_precedente": "CARTE_ETHERNET_TEST_ICT_0024",
+      "competence_requise": "robot_coating"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_DEPANEL_0026",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_1",
+      "operation_precedente": "CARTE_ETHERNET_COATING_0025",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_PREP_0027",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE_7",
+      "operation_precedente": "CARTE_ETHERNET_DEPANEL_0026",
+      "competence_requise": "station_assemblage"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_SOUDURE_THT_0028",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_15",
+      "operation_precedente": "CARTE_ETHERNET_PREP_0027",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_REFUSION_A_0029",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_3",
+      "operation_precedente": "CARTE_ETHERNET_SOUDURE_THT_0028",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CARTE_ETHERNET_AOI_A_0030",
+      "duree_jours": 1,
+      "poste_id": "AOI_4",
+      "operation_precedente": "CARTE_ETHERNET_REFUSION_A_0029",
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_TEST_ICT_0031",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_6",
+      "operation_precedente": null,
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_REFUSION_B_0032",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "MODULE_ZIGBEE_TEST_ICT_0031",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_COATING_0033",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_1",
+      "operation_precedente": "MODULE_ZIGBEE_REFUSION_B_0032",
+      "competence_requise": "robot_coating"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_DEPANEL_0034",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_2",
+      "operation_precedente": "MODULE_ZIGBEE_COATING_0033",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_REFUSION_A_0035",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "MODULE_ZIGBEE_DEPANEL_0034",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_POSE_CMS_A_0036",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_3",
+      "operation_precedente": "MODULE_ZIGBEE_REFUSION_A_0035",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_SOUDURE_THT_0037",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL_5",
+      "operation_precedente": "MODULE_ZIGBEE_POSE_CMS_A_0036",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_POSE_CMS_B_0038",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "MODULE_ZIGBEE_SOUDURE_THT_0037",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_TEST_FONC_0039",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_5",
+      "operation_precedente": null,
+      "competence_requise": "banc_test_fonctionnel"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_POSE_CMS_A_0040",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_5",
+      "operation_precedente": "PCB_PUISSANCE_TEST_FONC_0039",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_POSE_CMS_B_0041",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_6",
+      "operation_precedente": "PCB_PUISSANCE_POSE_CMS_A_0040",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_TEST_ICT_0042",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_8",
+      "operation_precedente": "PCB_PUISSANCE_POSE_CMS_B_0041",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_SOUDURE_THT_0043",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_14",
+      "operation_precedente": "PCB_PUISSANCE_TEST_ICT_0042",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_DEPANEL_0044",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_4",
+      "operation_precedente": "PCB_PUISSANCE_SOUDURE_THT_0043",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_AOI_A_0045",
+      "duree_jours": 1,
+      "poste_id": "AOI_3",
+      "operation_precedente": "PCB_PUISSANCE_DEPANEL_0044",
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "PCB_PUISSANCE_PREP_0046",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE_4",
+      "operation_precedente": "PCB_PUISSANCE_AOI_A_0045",
+      "competence_requise": "station_assemblage"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_PREP_0047",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_9",
+      "operation_precedente": null,
+      "competence_requise": "station_assemblage"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_PACKAGE_0048",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_1",
+      "operation_precedente": "CARTE_ALIMENTATION_PREP_0047",
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_REFUSION_A_0049",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_4",
+      "operation_precedente": "CARTE_ALIMENTATION_PACKAGE_0048",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_POSE_CMS_A_0050",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_2",
+      "operation_precedente": "CARTE_ALIMENTATION_REFUSION_A_0049",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_POSE_CMS_B_0051",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_6",
+      "operation_precedente": "CARTE_ALIMENTATION_POSE_CMS_A_0050",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_SOUDURE_THT_0052",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL_8",
+      "operation_precedente": "CARTE_ALIMENTATION_POSE_CMS_B_0051",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_AOI_A_0053",
+      "duree_jours": 1,
+      "poste_id": "AOI_1",
+      "operation_precedente": "CARTE_ALIMENTATION_SOUDURE_THT_0052",
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_DEPANEL_0054",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_3",
+      "operation_precedente": "CARTE_ALIMENTATION_AOI_A_0053",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "CARTE_ALIMENTATION_COATING_0055",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_3",
+      "operation_precedente": "CARTE_ALIMENTATION_DEPANEL_0054",
+      "competence_requise": "robot_coating"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_AOI_A_0056",
+      "duree_jours": 1,
+      "poste_id": "AOI_1",
+      "operation_precedente": null,
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_SOUDURE_THT_0057",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL_2",
+      "operation_precedente": "CONVERTISSEUR_DC_AOI_A_0056",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_PACKAGE_0058",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_3",
+      "operation_precedente": "CONVERTISSEUR_DC_SOUDURE_THT_0057",
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_TEST_ICT_0059",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT_3",
+      "operation_precedente": "CONVERTISSEUR_DC_PACKAGE_0058",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_DEPANEL_0060",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_3",
+      "operation_precedente": "CONVERTISSEUR_DC_TEST_ICT_0059",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_POSE_CMS_B_0061",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_3",
+      "operation_precedente": "CONVERTISSEUR_DC_DEPANEL_0060",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_REFUSION_A_0062",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": "CONVERTISSEUR_DC_POSE_CMS_B_0061",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CONVERTISSEUR_DC_COATING_0063",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_1",
+      "operation_precedente": "CONVERTISSEUR_DC_REFUSION_A_0062",
+      "competence_requise": "robot_coating"
+    },
+    {
+      "code_operation": "PCB_LED_DEPANEL_0064",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_1",
+      "operation_precedente": null,
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "PCB_LED_REFUSION_B_0065",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_3",
+      "operation_precedente": "PCB_LED_DEPANEL_0064",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "PCB_LED_REFUSION_A_0066",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_3",
+      "operation_precedente": "PCB_LED_REFUSION_B_0065",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "PCB_LED_POSE_CMS_A_0067",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_4",
+      "operation_precedente": "PCB_LED_REFUSION_A_0066",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "PCB_LED_TEST_FONC_0068",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_5",
+      "operation_precedente": "PCB_LED_POSE_CMS_A_0067",
+      "competence_requise": "banc_test_fonctionnel"
+    },
+    {
+      "code_operation": "PCB_LED_TEST_ICT_0069",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_ICT_1",
+      "operation_precedente": "PCB_LED_TEST_FONC_0068",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "PCB_LED_PACKAGE_0070",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_1",
+      "operation_precedente": "PCB_LED_TEST_ICT_0069",
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "PCB_LED_POSE_CMS_B_0071",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_2",
+      "operation_precedente": "PCB_LED_PACKAGE_0070",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_PACKAGE_0072",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_8",
+      "operation_precedente": null,
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_TEST_FONC_0073",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_FONCTIONNEL_1",
+      "operation_precedente": "MODULE_ZIGBEE_PACKAGE_0072",
+      "competence_requise": "banc_test_fonctionnel"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_AOI_A_0074",
+      "duree_jours": 1,
+      "poste_id": "AOI_4",
+      "operation_precedente": "MODULE_ZIGBEE_TEST_FONC_0073",
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_SOUDURE_THT_0075",
+      "duree_jours": 2,
+      "poste_id": "POSTE_SOUDURE_MANUEL_4",
+      "operation_precedente": "MODULE_ZIGBEE_AOI_A_0074",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_COATING_0076",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_3",
+      "operation_precedente": "MODULE_ZIGBEE_SOUDURE_THT_0075",
+      "competence_requise": "robot_coating"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_POSE_CMS_B_0077",
+      "duree_jours": 3,
+      "poste_id": "PICK_PLACE_3",
+      "operation_precedente": "MODULE_ZIGBEE_COATING_0076",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_TEST_ICT_0078",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_7",
+      "operation_precedente": "MODULE_ZIGBEE_POSE_CMS_B_0077",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_REFUSION_A_0079",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_3",
+      "operation_precedente": "MODULE_ZIGBEE_TEST_ICT_0078",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_PREP_0080",
+      "duree_jours": 1,
+      "poste_id": "STATION_ASSEMBLAGE_8",
+      "operation_precedente": "MODULE_ZIGBEE_REFUSION_A_0079",
+      "competence_requise": "station_assemblage"
+    },
+    {
+      "code_operation": "MODULE_ZIGBEE_DEPANEL_0081",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_1",
+      "operation_precedente": "MODULE_ZIGBEE_PREP_0080",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_COATING_0082",
+      "duree_jours": 1,
+      "poste_id": "ROBOT_COATING_2",
+      "operation_precedente": null,
+      "competence_requise": "robot_coating"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_REFUSION_A_0083",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_4",
+      "operation_precedente": "CONTROLEUR_RGB_COATING_0082",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_REFUSION_B_0084",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "CONTROLEUR_RGB_REFUSION_A_0083",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_DEPANEL_0085",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_2",
+      "operation_precedente": "CONTROLEUR_RGB_REFUSION_B_0084",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_POSE_CMS_A_0086",
+      "duree_jours": 2,
+      "poste_id": "PICK_PLACE_2",
+      "operation_precedente": "CONTROLEUR_RGB_DEPANEL_0085",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_TEST_FONC_0087",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_4",
+      "operation_precedente": "CONTROLEUR_RGB_POSE_CMS_A_0086",
+      "competence_requise": "banc_test_fonctionnel"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_SOUDURE_THT_0088",
+      "duree_jours": 1,
+      "poste_id": "POSTE_SOUDURE_MANUEL_13",
+      "operation_precedente": "CONTROLEUR_RGB_TEST_FONC_0087",
+      "competence_requise": "poste_soudure_manuel"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_AOI_A_0089",
+      "duree_jours": 1,
+      "poste_id": "AOI_3",
+      "operation_precedente": "CONTROLEUR_RGB_SOUDURE_THT_0088",
+      "competence_requise": "aoi"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_TEST_ICT_0090",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_5",
+      "operation_precedente": "CONTROLEUR_RGB_AOI_A_0089",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "CONTROLEUR_RGB_PREP_0091",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_9",
+      "operation_precedente": "CONTROLEUR_RGB_TEST_ICT_0090",
+      "competence_requise": "station_assemblage"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_PACKAGE_0092",
+      "duree_jours": 1,
+      "poste_id": "STATION_PACKAGING_4",
+      "operation_precedente": null,
+      "competence_requise": "station_packaging"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_REFUSION_A_0093",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "PCB_TEMPERATURE_PACKAGE_0092",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_TEST_ICT_0094",
+      "duree_jours": 2,
+      "poste_id": "BANC_TEST_ICT_3",
+      "operation_precedente": "PCB_TEMPERATURE_REFUSION_A_0093",
+      "competence_requise": "banc_test_ict"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_POSE_CMS_B_0095",
+      "duree_jours": 1,
+      "poste_id": "PICK_PLACE_4",
+      "operation_precedente": "PCB_TEMPERATURE_TEST_ICT_0094",
+      "competence_requise": "pick_place"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_REFUSION_B_0096",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_2",
+      "operation_precedente": "PCB_TEMPERATURE_POSE_CMS_B_0095",
+      "competence_requise": "four_refusion"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_TEST_FONC_0097",
+      "duree_jours": 1,
+      "poste_id": "BANC_TEST_FONCTIONNEL_2",
+      "operation_precedente": "PCB_TEMPERATURE_REFUSION_B_0096",
+      "competence_requise": "banc_test_fonctionnel"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_PREP_0098",
+      "duree_jours": 2,
+      "poste_id": "STATION_ASSEMBLAGE_6",
+      "operation_precedente": "PCB_TEMPERATURE_TEST_FONC_0097",
+      "competence_requise": "station_assemblage"
+    },
+    {
+      "code_operation": "PCB_TEMPERATURE_DEPANEL_0099",
+      "duree_jours": 1,
+      "poste_id": "POSTE_DEPANNELISATION_3",
+      "operation_precedente": "PCB_TEMPERATURE_PREP_0098",
+      "competence_requise": "poste_depannelisation"
+    },
+    {
+      "code_operation": "CARTE_MERE_REFUSION_A_0100",
+      "duree_jours": 1,
+      "poste_id": "FOUR_REFUSION_1",
+      "operation_precedente": null,
+      "competence_requise": "four_refusion"
     }
   ],
   "postes": [

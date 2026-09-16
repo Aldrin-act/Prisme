@@ -2,23 +2,19 @@
   "taches": [
     {
       "id": "T1",
-      "nom": "Préparation ingrédients",
-      "duree_estimee_jours": 1
+      "nom": "Préparation ingrédients"
     },
     {
       "id": "T2",
-      "nom": "Cuisson",
-      "duree_estimee_jours": 2
+      "nom": "Cuisson"
     },
     {
       "id": "T3",
-      "nom": "Dressage",
-      "duree_estimee_jours": 1
+      "nom": "Dressage"
     },
     {
       "id": "T4",
-      "nom": "Service",
-      "duree_estimee_jours": 1
+      "nom": "Service"
     }
   ],
   "ressources": [
@@ -68,24 +64,28 @@
       "apres": "T4"
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T1",
-      "competence": "preparation"
+      "ressource": "R1",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T2",
-      "competence": "cuisson"
+      "ressource": "R2",
+      "duree": 2
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T3",
-      "competence": "dressage"
+      "ressource": "R3",
+      "duree": 1
     },
     {
-      "type": "competence_requise",
+      "type": "compatibilite_ressource_tache",
       "tache": "T4",
-      "competence": "service"
+      "ressource": "R4",
+      "duree": 1
     }
   ],
   "objectifs": [
