@@ -432,8 +432,9 @@ export const prismeClient = {
       null,
     ),
 
-  // Associe des tâches déjà présentes dans l'instance à une commande et en dérive une
-  // échéance — ne crée jamais de tâche (voir api/routes/ingestion.py).
+  // Associe des tâches à une commande et en dérive une échéance — deux sources combinables :
+  // taches (déjà présentes dans l'instance, jamais créées) et gammes (une ou plusieurs, chacune
+  // explosée en tâches fraîches — voir api/routes/ingestion.py).
   ajouterCommande: (instanceId: string, requete: Types.RequeteNouvelleCommande) =>
     apiFetch<Types.ResultatNouvelleCommande>(
       `${PRISME_CONFIG.routes.ingestion}/${instanceId}/commandes`,
@@ -443,6 +444,30 @@ export const prismeClient = {
   // Statut d'une commande, recalculé à la volée contre le dernier planning réussi.
   obtenirCommande: (commandeId: string) =>
     apiFetch<Types.StatutCommande>(`${PRISME_CONFIG.routes.ingestion}/commandes/${commandeId}`),
+
+  // GAMMES OPÉRATOIRES RÉUTILISABLES — décrites une fois par produit, explosées en tâches
+  // concrètes à chaque commande qui les référence (voir ajouterCommande ci-dessus,
+  // api/routes/gammes.py). Même convention clientId que creerSource : dérivé du compte
+  // authentifié, sauf admin ciblant un autre client.
+  creerGamme: (produit: string, etapes: Types.EtapeGamme[], nom?: string, clientId?: string) =>
+    apiFetch<{ gamme_id: string }>(PRISME_CONFIG.routes.gammes, {
+      method: "POST",
+      body: JSON.stringify({ produit, etapes, nom: nom ?? null, client_id: clientId ?? null }),
+    }),
+
+  listerGammes: () => apiFetch<Types.GammeProduit[]>(PRISME_CONFIG.routes.gammes),
+
+  obtenirGamme: (gammeId: string) =>
+    apiFetch<Types.GammeProduit>(`${PRISME_CONFIG.routes.gammes}/${gammeId}`),
+
+  modifierGamme: (gammeId: string, produit: string, etapes: Types.EtapeGamme[], nom?: string) =>
+    apiFetch<Types.GammeProduit>(`${PRISME_CONFIG.routes.gammes}/${gammeId}`, {
+      method: "PUT",
+      body: JSON.stringify({ produit, etapes, nom: nom ?? null }),
+    }),
+
+  supprimerGamme: (gammeId: string) =>
+    apiFetch<void>(`${PRISME_CONFIG.routes.gammes}/${gammeId}`, { method: "DELETE" }),
 
   // Toutes les commandes de cet atelier, chacune avec son statut recalculé à la volée.
   listerCommandes: (instanceId: string) =>

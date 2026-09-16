@@ -138,6 +138,47 @@ class SourceDonnees:
 
 
 @dataclass(frozen=True)
+class EtapeGamme:
+    """Une étape d'une `GammeProduit` — jamais vue par le solveur : purement
+    un gabarit, explosé en `Tache`/`Contrainte` DSL ordinaires par
+    `adapters/gamme_derivation.py::exploser_gamme` à l'arrivée d'une
+    commande. `competences` (>=1) plutôt qu'une ressource fixe : la
+    compatibilité réelle se dérive à l'explosion via
+    `adapters/competence_derivation.py`, donc la gamme reste valide même si
+    le parc de ressources évolue. `predecesseurs` référence d'autres `id`
+    d'étapes de la même gamme (jamais d'une autre) — plusieurs prédécesseurs
+    pour une même étape expriment une fusion (plusieurs sous-produits qui
+    convergent vers une étape commune), sans mécanisme dédié."""
+
+    id: str
+    competences: tuple[str, ...]
+    predecesseurs: tuple[str, ...] = ()
+    # Durée déclarée (jours) pour cette étape, appliquée à chaque tâche qu'elle produit —
+    # même rôle que `TacheAvecDureeEstimee.duree_estimee_jours` des adaptateurs CSV/JSON
+    # (`adapters/json_import/traducteur.py`) : source primaire de durée, l'estimateur ML
+    # (`estimation/`) ne comble que ce qui reste manquant. Sans elle ET sans estimateur
+    # configuré, l'explosion échoue explicitement (`CompetenceSansDureeEstimee`) plutôt que
+    # de deviner une durée.
+    duree_nominale: int | None = None
+
+
+@dataclass(frozen=True)
+class GammeProduit:
+    """Gamme opératoire réutilisable pour un produit d'un client — décrite
+    une fois, explosée à chaque commande qui la référence (une commande peut
+    en référencer plusieurs, voir `adapters/gamme_derivation.py::
+    traiter_nouvelle_commande`) en tâches concrètes plutôt que redéclarée à
+    la main à chaque fois. Comme `SourceDonnees`, volontairement minimale :
+    ne porte aucun historique d'exécution, aucune instance "courante"."""
+
+    id: str
+    client_id: str
+    produit: str
+    nom: str | None
+    etapes: tuple[EtapeGamme, ...]
+
+
+@dataclass(frozen=True)
 class CommandeEnregistree:
     """Une commande traitée via `POST /ingestion/{instance_id}/commandes`, persistée pour que son
     identité survive à la fusion dans l'instance — sans ça, elle est perdue dès la réponse HTTP.
@@ -158,6 +199,18 @@ class CommandeEnregistree:
     # métadonnée de traçabilité comme le reste de cette classe (voir docstring ci-dessus) : jamais
     # dérivée en Echeance, jamais lue par le DSL/solveur, affichée telle quelle.
     duree_heures: int | None = None
+    # Métadonnées de traçabilité supplémentaires (même principe que duree_heures ci-dessus —
+    # jamais lues par le DSL/solveur) :
+    # - numero : libellé métier saisi librement (ex. "P1"), distinct de `id` (identifiant système
+    #   stable utilisé pour le routage API/les clés étrangères, jamais exposé à la saisie).
+    # - date_debut_au_plus_tot : même référentiel que `date_limite` (jours/heures relatifs).
+    # - nom_client : le client *commercial* de la commande — sans rapport avec `client_id`
+    #   ci-dessus, qui reste le client PRISME (le tenant propriétaire de l'instance).
+    numero: str | None = None
+    date_debut_au_plus_tot: int | None = None
+    est_prospect: bool = False
+    description: str | None = None
+    nom_client: str | None = None
 
 
 @dataclass(frozen=True)
@@ -237,6 +290,7 @@ class EtatAPI:
     sources: dict[str, SourceDonnees] = field(default_factory=dict)
     source_par_instance: dict[str, str] = field(default_factory=dict)
     commandes: dict[str, CommandeEnregistree] = field(default_factory=dict)
+    gammes: dict[str, GammeProduit] = field(default_factory=dict)
     # Description métier proposée par l'agent de compréhension (§5.4 bis) —
     # absente (None) pour toute instance ingérée hors de ce chemin (payload
     # T-R-C-O direct, adaptateur écrit à la main...). Hors `InstanceTRCO`
@@ -403,6 +457,42 @@ class EtatAPI:
         for instance_id in [iid for iid, sid in self.source_par_instance.items() if sid == source_id]:
             del self.source_par_instance[instance_id]
 
+    def enregistrer_gamme(
+        self, client_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
+    ) -> str:
+        self.enregistrer_client(client_id)
+        gamme_id = str(uuid.uuid4())
+        self.gammes[gamme_id] = GammeProduit(
+            id=gamme_id, client_id=client_id, produit=produit, nom=nom, etapes=etapes
+        )
+        return gamme_id
+
+    def recuperer_gamme(self, gamme_id: str) -> GammeProduit:
+        if gamme_id not in self.gammes:
+            raise KeyError(gamme_id)
+        return self.gammes[gamme_id]
+
+    def lister_gammes(self, client_id: str | None = None) -> list[GammeProduit]:
+        return [g for g in self.gammes.values() if client_id is None or g.client_id == client_id]
+
+    def modifier_gamme(
+        self, gamme_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
+    ) -> GammeProduit:
+        """Remplace en place le contenu d'une gamme déjà enregistrée — même
+        `id`/`client_id`, comme `modifier_instance` pour une instance."""
+        if gamme_id not in self.gammes:
+            raise KeyError(gamme_id)
+        gamme = GammeProduit(
+            id=gamme_id, client_id=self.gammes[gamme_id].client_id, produit=produit, nom=nom, etapes=etapes
+        )
+        self.gammes[gamme_id] = gamme
+        return gamme
+
+    def supprimer_gamme(self, gamme_id: str) -> None:
+        if gamme_id not in self.gammes:
+            raise KeyError(gamme_id)
+        del self.gammes[gamme_id]
+
     def enregistrer_commande(
         self,
         commande_id: str,
@@ -411,6 +501,11 @@ class EtatAPI:
         date_limite: int | None,
         taches: tuple[str, ...],
         duree_heures: int | None = None,
+        numero: str | None = None,
+        date_debut_au_plus_tot: int | None = None,
+        est_prospect: bool = False,
+        description: str | None = None,
+        nom_client: str | None = None,
     ) -> None:
         """`commande_id` fourni par l'appelant (déjà généré avant la dérivation d'échéance —
         voir `api/routes/ingestion.py::ajouter_commande`)."""
@@ -422,6 +517,11 @@ class EtatAPI:
             taches=taches,
             date_creation=datetime.now(UTC).isoformat(),
             duree_heures=duree_heures,
+            numero=numero,
+            date_debut_au_plus_tot=date_debut_au_plus_tot,
+            est_prospect=est_prospect,
+            description=description,
+            nom_client=nom_client,
         )
 
     def recuperer_commande(self, commande_id: str) -> CommandeEnregistree:

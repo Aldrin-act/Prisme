@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -75,6 +76,7 @@ import {
   useComparaisonScenarios,
   useAjouterCommande,
   useCommandesInstance,
+  useGammes,
   usePropositionsSupervision,
   PrismeAPIError,
   type CompatibiliteRessourceTache,
@@ -655,7 +657,9 @@ function SectionScenarios({
                       {s.metriques ? formatDuree(s.metriques.makespan, instance.unite_duree) : "—"}
                     </TableCell>
                     <TableCell>{moyenne !== null ? `${moyenne.toFixed(0)}%` : "—"}</TableCell>
-                    <TableCell>{s.commandes_en_retard !== null ? s.commandes_en_retard : "—"}</TableCell>
+                    <TableCell>
+                      {s.commandes_en_retard !== null ? s.commandes_en_retard : "—"}
+                    </TableCell>
                     <TableCell className="text-xs text-muted-foreground">
                       {s.date_execution ? new Date(s.date_execution).toLocaleString() : "jamais"}
                     </TableCell>
@@ -785,8 +789,18 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
   const { data: commandes } = useCommandesInstance(instance.instance_id);
   const [ouvert, setOuvert] = useState(false);
   const [tachesChoisies, setTachesChoisies] = useState<string[]>([]);
+  // Produits (gammes) de la commande — coexiste avec la sélection directe de tâches ci-dessus :
+  // une commande peut mélanger les deux (une gamme s'explose en tâches fraîches, `quantite` reste
+  // du texte de saisie tant que le champ est vide/en cours d'édition).
+  const [gammesChoisies, setGammesChoisies] = useState<{ gammeId: string; quantite: string }[]>([]);
+  const { data: gammes } = useGammes();
   const [dateLimite, setDateLimite] = useState("");
+  const [dateDebutAuPlusTot, setDateDebutAuPlusTot] = useState("");
   const [dureeHeures, setDureeHeures] = useState("");
+  const [numero, setNumero] = useState("");
+  const [estProspect, setEstProspect] = useState(false);
+  const [description, setDescription] = useState("");
+  const [nomClient, setNomClient] = useState("");
   const uniteTemps: UniteTemps = instance.unite_temps === "heures" ? "heures" : "jours";
   const [dernierCommandeId, setDernierCommandeId] = useState<string | null>(null);
   // Résultat de l'exécution automatique déclenchée juste après l'ajout (best-effort, voir
@@ -796,15 +810,26 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
     reussie: boolean | null;
     erreur: string | null;
   } | null>(null);
+  // Avertissements de dérivation (§FC4) — ex. durée d'une étape de gamme comblée par
+  // apprentissage automatique plutôt que déclarée. Vide (jamais null) tant qu'aucune commande
+  // n'a encore été ajoutée dans cette ouverture du formulaire.
+  const [dernierAvertissements, setDernierAvertissements] = useState<string[]>([]);
 
   const erreur = ajouter.error as PrismeAPIError | null;
 
   function ouvrir() {
     setTachesChoisies([]);
+    setGammesChoisies([]);
     setDateLimite("");
+    setDateDebutAuPlusTot("");
     setDureeHeures("");
+    setNumero("");
+    setEstProspect(false);
+    setDescription("");
+    setNomClient("");
     setDernierCommandeId(null);
     setDernierResultatExecution(null);
+    setDernierAvertissements([]);
     ajouter.reset();
     setOuvert(true);
   }
@@ -815,21 +840,48 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
     );
   }
 
+  function basculerGamme(gammeId: string) {
+    setGammesChoisies((prev) =>
+      prev.some((g) => g.gammeId === gammeId)
+        ? prev.filter((g) => g.gammeId !== gammeId)
+        : [...prev, { gammeId, quantite: "" }],
+    );
+  }
+
+  function majQuantiteGamme(gammeId: string, quantite: string) {
+    setGammesChoisies((prev) => prev.map((g) => (g.gammeId === gammeId ? { ...g, quantite } : g)));
+  }
+
   function soumettre() {
     // "jours" ou "heures" selon instance.unite_temps — un input date perd toute précision
     // horaire pour une instance en mode heures (voir uniteTemps ci-dessus).
     const date =
       uniteTemps === "heures" ? parseEntreeDateHeure(dateLimite) : parseEntreeDate(dateLimite);
+    const dateDebut =
+      uniteTemps === "heures"
+        ? parseEntreeDateHeure(dateDebutAuPlusTot)
+        : parseEntreeDate(dateDebutAuPlusTot);
     ajouter.mutate(
       {
         instanceId: instance.instance_id,
         requete: {
           taches: tachesChoisies,
+          gammes: gammesChoisies.map((g) => ({
+            gamme_id: g.gammeId,
+            quantite: g.quantite !== "" ? Number(g.quantite) : undefined,
+          })),
           // Convertie en jours/heures relatifs à "aujourd'hui" — aucune exécution réelle n'existe
           // forcément encore pour ancrer sur autre chose au moment de la saisie (voir
           // src/lib/dates-relatives.ts). Le DSL/backend ne voit jamais que cet entier.
           date_limite: date ? jourDepuisAncrage(date, aujourdhui(), uniteTemps) : undefined,
+          date_debut_au_plus_tot: dateDebut
+            ? jourDepuisAncrage(dateDebut, aujourdhui(), uniteTemps)
+            : undefined,
           duree_heures: dureeHeures !== "" ? Number(dureeHeures) : undefined,
+          numero: numero !== "" ? numero : undefined,
+          est_prospect: estProspect,
+          description: description !== "" ? description : undefined,
+          nom_client: nomClient !== "" ? nomClient : undefined,
         },
       },
       {
@@ -849,6 +901,7 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
             reussie: resultat.execution_reussie,
             erreur: resultat.erreur_execution,
           });
+          setDernierAvertissements(resultat.avertissements);
           setOuvert(false);
         },
       },
@@ -871,6 +924,110 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
       {ouvert && (
         <div className="space-y-3 rounded-lg border border-border/50 p-3">
           <div className="space-y-1">
+            <Label>Numéro de commande</Label>
+            <Input
+              placeholder="Optionnel — libellé métier libre (ex. P1)"
+              value={numero}
+              onChange={(e) => setNumero(e.target.value)}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="space-y-1">
+              <Label>Date de début au plus tôt</Label>
+              <Input
+                type={uniteTemps === "heures" ? "datetime-local" : "date"}
+                min={
+                  uniteTemps === "heures"
+                    ? formatEntreeDateHeure(aujourdhui())
+                    : formatEntreeDate(aujourdhui())
+                }
+                value={dateDebutAuPlusTot}
+                onChange={(e) => setDateDebutAuPlusTot(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label>Échéance *</Label>
+              <Input
+                type={uniteTemps === "heures" ? "datetime-local" : "date"}
+                min={
+                  uniteTemps === "heures"
+                    ? formatEntreeDateHeure(aujourdhui())
+                    : formatEntreeDate(aujourdhui())
+                }
+                required
+                value={dateLimite}
+                onChange={(e) => setDateLimite(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <label className="flex items-center gap-2 text-sm">
+            <Checkbox checked={estProspect} onCheckedChange={(v) => setEstProspect(v === true)} />
+            Cette commande est-elle un prospect ?
+          </label>
+
+          <div className="space-y-1">
+            <Label>Description</Label>
+            <Textarea
+              placeholder="Optionnel"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <Label>Client</Label>
+            <Input
+              placeholder="Optionnel"
+              value={nomClient}
+              onChange={(e) => setNomClient(e.target.value)}
+            />
+          </div>
+
+          {gammes && gammes.length > 0 && (
+            <div className="space-y-1">
+              <Label>Produits (gammes)</Label>
+              <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 p-2">
+                {gammes.map((g) => {
+                  const choisie = gammesChoisies.find((c) => c.gammeId === g.gamme_id);
+                  return (
+                    <div key={g.gamme_id} className="flex items-center gap-2 text-sm">
+                      <label className="flex flex-1 items-center gap-2">
+                        <Checkbox
+                          checked={!!choisie}
+                          onCheckedChange={() => basculerGamme(g.gamme_id)}
+                        />
+                        <span>
+                          {g.produit}
+                          {g.nom ? ` — ${g.nom}` : ""}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          · {g.etapes.length} étape{g.etapes.length > 1 ? "s" : ""}
+                        </span>
+                      </label>
+                      {choisie && (
+                        <Input
+                          type="number"
+                          min={1}
+                          placeholder="Quantité"
+                          className="h-7 w-24 text-xs"
+                          value={choisie.quantite}
+                          onChange={(e) => majQuantiteGamme(g.gamme_id, e.target.value)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Chaque produit choisi ajoute sa propre séquence de tâches à la commande — gérer les
+                gammes depuis la page <span className="font-medium">Gammes</span>.
+              </p>
+            </div>
+          )}
+
+          <div className="space-y-1">
             <Label>Tâches concernées</Label>
             <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 p-2">
               {instance.taches.map((t) => {
@@ -888,20 +1045,7 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
               })}
             </div>
           </div>
-          <div className="space-y-1">
-            <Label>Échéance *</Label>
-            <Input
-              type={uniteTemps === "heures" ? "datetime-local" : "date"}
-              min={
-                uniteTemps === "heures"
-                  ? formatEntreeDateHeure(aujourdhui())
-                  : formatEntreeDate(aujourdhui())
-              }
-              required
-              value={dateLimite}
-              onChange={(e) => setDateLimite(e.target.value)}
-            />
-          </div>
+
           <div className="space-y-1">
             <Label>Durée globale prévue (heures)</Label>
             <Input
@@ -935,7 +1079,11 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
             <Button
               size="sm"
               onClick={soumettre}
-              disabled={tachesChoisies.length === 0 || !dateLimite || ajouter.isPending}
+              disabled={
+                (tachesChoisies.length === 0 && gammesChoisies.length === 0) ||
+                !dateLimite ||
+                ajouter.isPending
+              }
             >
               {ajouter.isPending ? "Ajout..." : "Ajouter la commande"}
             </Button>
@@ -961,26 +1109,44 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
               >
                 <div className="flex items-center justify-between">
                   <div className="text-sm">
-                    <span className="font-mono text-xs">{c.commande_id}</span>
+                    {c.numero ? (
+                      <>
+                        <span className="font-medium">{c.numero}</span>
+                        <span className="ml-1.5 font-mono text-xs text-muted-foreground">
+                          {c.commande_id}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="font-mono text-xs">{c.commande_id}</span>
+                    )}
+                    {c.nom_client && (
+                      <span className="ml-2 text-xs text-muted-foreground">· {c.nom_client}</span>
+                    )}
                     <span className="ml-2 text-xs text-muted-foreground">
                       {c.taches.length} tâche{c.taches.length > 1 ? "s" : ""}
+                      {c.date_debut_au_plus_tot !== null &&
+                        ` · début au plus tôt le ${formatDateRelative(c.date_debut_au_plus_tot, ancrageCommande, uniteTemps)}`}
                       {c.date_limite !== null &&
                         ` · échéance le ${formatDateRelative(c.date_limite, ancrageCommande, uniteTemps)}`}
                       {c.duree_heures !== null && ` · durée prévue ${c.duree_heures} h`}
                     </span>
                   </div>
-                  <Badge
-                    variant={c.en_retard ? "destructive" : c.planifiee ? "secondary" : "outline"}
-                  >
-                    {c.en_retard
-                      ? "En retard"
-                      : c.planifiee
-                        ? "Planifiée"
-                        : c.taches_manquantes.length > 0
-                          ? "Tâches manquantes au planning"
-                          : "En attente d'exécution"}
-                  </Badge>
+                  <div className="flex items-center gap-1.5">
+                    {c.est_prospect && <Badge variant="outline">Prospect</Badge>}
+                    <Badge
+                      variant={c.en_retard ? "destructive" : c.planifiee ? "secondary" : "outline"}
+                    >
+                      {c.en_retard
+                        ? "En retard"
+                        : c.planifiee
+                          ? "Planifiée"
+                          : c.taches_manquantes.length > 0
+                            ? "Tâches manquantes au planning"
+                            : "En attente d'exécution"}
+                    </Badge>
+                  </div>
                 </div>
+                {c.description && <p className="text-xs text-muted-foreground">{c.description}</p>}
                 <CommandeTimeline commande={c} uniteTemps={uniteTemps} />
               </div>
             );
@@ -1006,6 +1172,11 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
               Exécution automatique non disponible : {dernierResultatExecution.erreur}
             </p>
           )}
+          {dernierAvertissements.map((a, i) => (
+            <p key={i} className="text-xs text-amber-600">
+              {a}
+            </p>
+          ))}
         </div>
       )}
     </div>

@@ -241,24 +241,69 @@ export interface InstanceDetail extends InstanceTRCO {
 }
 
 // ============================================================================
+// GAMMES OPÉRATOIRES RÉUTILISABLES
+// ============================================================================
+
+// Une étape d'une gamme — jamais vue par le solveur, explosée en Tache/Precedence/
+// CompetenceRequise concrètes à l'arrivée d'une commande qui référence sa gamme (voir
+// api/routes/ingestion.py, POST /ingestion/{instance_id}/commandes — une commande peut
+// référencer plusieurs gammes). `predecesseurs` référence d'autres `id` d'étapes de la MÊME
+// gamme ; plusieurs prédécesseurs pour une étape = fusion (plusieurs sous-produits qui
+// convergent).
+export interface EtapeGamme {
+  id: string;
+  competences: string[];
+  predecesseurs: string[];
+  duree_nominale: number | null;
+}
+
+export interface GammeProduit {
+  gamme_id: string;
+  client_id: string;
+  produit: string;
+  nom: string | null;
+  etapes: EtapeGamme[];
+}
+
+// ============================================================================
 // COMMANDES
 // ============================================================================
 
-// Une commande référence des tâches déjà présentes dans l'instance et en dérive une
-// Echeance (voir api/routes/ingestion.py, POST /ingestion/{instance_id}/commandes) — ne
-// crée jamais de tâche.
+// Une commande combine librement deux sources de tâches : `taches` (déjà présentes dans
+// l'instance, jamais créées) et `gammes` (une ou plusieurs gammes réutilisables, chacune
+// explosée en tâches fraîches — une commande peut donc porter plusieurs produits). Dérive une
+// Echeance unique sur l'ensemble (voir api/routes/ingestion.py,
+// POST /ingestion/{instance_id}/commandes).
+export interface GammeAvecQuantiteRequete {
+  gamme_id: string;
+  quantite?: number;
+}
+
 export interface RequeteNouvelleCommande {
-  taches: string[];
+  taches?: string[];
+  gammes?: GammeAvecQuantiteRequete[];
   date_limite?: number;
   // Durée globale prévue pour la commande, saisie librement par l'utilisateur (heures) — pure
   // métadonnée de traçabilité, jamais dérivée en Echeance ni lue par le DSL/solveur.
   duree_heures?: number;
+  // Métadonnées de traçabilité supplémentaires (même principe que duree_heures ci-dessus) :
+  // numero est un libellé métier libre (ex. "P1"), distinct de commande_id (identifiant système,
+  // jamais saisi) ; nom_client est le client *commercial* de la commande, sans rapport avec
+  // client_id (le client PRISME propriétaire de l'instance).
+  numero?: string;
+  date_debut_au_plus_tot?: number;
+  est_prospect?: boolean;
+  description?: string;
+  nom_client?: string;
 }
 
 export interface ResultatNouvelleCommande {
   instance_id: string;
   commande_id: string;
   structure_contraintes: string;
+  // Avertissements de dérivation (§FC4) — ex. durée d'une étape de gamme comblée par
+  // apprentissage automatique plutôt que déclarée, jamais silencieux.
+  avertissements: string[];
   // Exécution automatique déclenchée juste après l'ajout (best-effort, voir
   // api/routes/ingestion.py::ajouter_commande) — jamais de génération à la volée : execution_id
   // reste null et erreur_execution porte le motif (ex. "aucun solveur validé") si aucun solveur
@@ -292,6 +337,12 @@ export interface StatutCommande {
   // Durée globale prévue pour la commande, saisie librement par l'utilisateur (heures) — pure
   // métadonnée de traçabilité, jamais dérivée en Echeance ni lue par le DSL/solveur.
   duree_heures: number | null;
+  // Métadonnées de traçabilité supplémentaires — voir RequeteNouvelleCommande ci-dessus.
+  numero: string | null;
+  date_debut_au_plus_tot: number | null;
+  est_prospect: boolean;
+  description: string | null;
+  nom_client: string | null;
   // Horodatage réel de la dernière exécution réussie de l'instance (même valeur que
   // PlanningAvecDurees.date_execution) — ancrage calendaire des jours relatifs de cette
   // commande (date_limite, operations[].debut/fin). `null` tant que l'instance n'a jamais été

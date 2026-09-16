@@ -330,6 +330,10 @@ function EditeurCanvas({
     };
     setNodes((ns) => [...ns, nouveau]);
     setNoeudSelectionneId(id);
+    // Sans ça, la nouvelle tâche peut atterrir hors du cadrage actuel (la vue reste centrée sur
+    // les tâches précédentes) — l'inspecteur s'ouvre alors sur une tâche invisible à l'écran,
+    // donnant l'impression trompeuse qu'une tâche déjà présente est en erreur.
+    requestAnimationFrame(() => fitView());
   }
 
   function reorganiser() {

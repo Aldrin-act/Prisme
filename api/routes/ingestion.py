@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from adapters.commande_derivation import Commande, deriver_echeances_par_commande
+from adapters.competence_derivation import CompetenceSansDureeEstimee
+from adapters.gamme_derivation import ErreurExplosionGamme, GammeAvecQuantite, traiter_nouvelle_commande
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
 from api.dependencies import obtenir_registre
@@ -19,6 +21,9 @@ from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
 from dsl.schema import InstanceTRCO, Objectif
 
+if TYPE_CHECKING:
+    from estimation import EstimateurDuree
+
 router = APIRouter(prefix="/ingestion", tags=["ingestion"])
 
 
@@ -26,12 +31,43 @@ class RequeteModificationObjectifs(BaseModel):
     objectifs: list[Objectif] = Field(min_length=1)
 
 
+class RequeteGammeCommande(BaseModel):
+    """Une entrée de `RequeteNouvelleCommande.gammes` — une commande peut référencer plusieurs
+    gammes (plusieurs produits), chacune avec sa propre quantité."""
+
+    gamme_id: str
+    quantite: int | None = Field(default=None, ge=1)
+
+
 class RequeteNouvelleCommande(BaseModel):
-    taches: list[str] = Field(min_length=1)
+    # Tâches déjà existantes, choisies directement — optionnel dès lors qu'au moins une gamme est
+    # fournie (validé plus bas, voir `_valider_taches_ou_gammes`). Les deux mécanismes coexistent :
+    # une commande peut mélanger tâches choisies à la main et gammes explosées.
+    taches: list[str] = Field(default_factory=list)
+    gammes: list[RequeteGammeCommande] = Field(default_factory=list)
     date_limite: int | None = Field(default=None, ge=0)
     # Durée globale prévue, saisie librement par l'utilisateur (heures) — pure métadonnée de
     # traçabilité (voir `CommandeEnregistree.duree_heures`), jamais dérivée en Echeance.
     duree_heures: int | None = Field(default=None, ge=0)
+    # Métadonnées de traçabilité supplémentaires (même principe que duree_heures ci-dessus — voir
+    # `CommandeEnregistree` dans `api/etat.py` pour le détail de chaque champ).
+    numero: str | None = None
+    date_debut_au_plus_tot: int | None = Field(default=None, ge=0)
+    est_prospect: bool = False
+    description: str | None = None
+    nom_client: str | None = None
+
+
+def _estimateur_duree_optionnel() -> EstimateurDuree | None:
+    """`estimation` (scikit-learn) est un extra optionnel (`uv sync --extra estimation`) — import
+    paresseux, même motif que dans `api/routes/adapters.py`/`sources.py`. Absent, une durée
+    d'étape de gamme manquante reste une erreur explicite (`CompetenceSansDureeEstimee`), jamais
+    devinée silencieusement."""
+    try:
+        from estimation import estimateur_par_defaut
+    except ImportError:
+        return None
+    return estimateur_par_defaut()
 
 
 def _ressources_manquantes_par_rapport_a_la_base(base: InstanceTRCO, scenario: InstanceTRCO) -> set[str]:
@@ -318,11 +354,14 @@ def ajouter_commande(
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
-    """Associe des tâches déjà présentes dans l'instance à une commande et en dérive une
-    `Echeance` (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`)
-    — ne crée jamais de tâche, contrairement à l'ancienne explosion de gamme (fonctionnalité
-    retirée). `commande_id` généré ici, jamais fourni par l'appelant : aucun risque de collision.
-    Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact).
+    """Associe des tâches à une commande et en dérive une `Echeance`
+    (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`) — deux
+    sources de tâches, combinables librement : `requete.taches` (déjà présentes dans l'instance,
+    ne crée jamais de tâche) et `requete.gammes` (une ou plusieurs gammes réutilisables, chacune
+    explosée en tâches fraîches — `adapters/gamme_derivation.py`, une commande pouvant référencer
+    plusieurs produits). `commande_id` généré ici, jamais fourni par l'appelant : aucun risque de
+    collision. Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique
+    d'exécution intact).
 
     Déclenche ensuite une exécution automatique (best-effort, même composition que
     `POST /planifier/...` via `executer_pour_instance`) plutôt que d'attendre qu'une analyse de
@@ -348,19 +387,56 @@ def ajouter_commande(
 
     verifier_acces_client(utilisateur, client_id)
 
+    if not requete.taches and not requete.gammes:
+        raise HTTPException(status_code=422, detail="une commande doit référencer au moins une tâche ou une gamme")
+
     ids_connus = {t.id for t in instance.taches}
     inconnues = [t for t in requete.taches if t not in ids_connus]
     if inconnues:
         raise HTTPException(status_code=422, detail=f"tâche(s) inconnue(s) de cette instance : {inconnues}")
 
     commande_id = f"cmd-{uuid.uuid4().hex[:8]}"
+
+    # Résout chaque gamme référencée avant toute explosion — 404/400 explicites plutôt que de
+    # fusionner partiellement une instance si une seule des gammes de la liste est invalide.
+    gammes_resolues: list[GammeAvecQuantite] = []
+    for entree in requete.gammes:
+        try:
+            gamme = etat.recuperer_gamme(entree.gamme_id)
+        except KeyError:
+            raise HTTPException(status_code=404, detail=f"gamme inconnue : {entree.gamme_id!r}") from None
+        if gamme.client_id != client_id:
+            raise HTTPException(
+                status_code=400, detail=f"la gamme {entree.gamme_id!r} n'appartient pas au client de l'instance"
+            )
+        gammes_resolues.append(GammeAvecQuantite(gamme=gamme, quantite=entree.quantite))
+
+    instance_avec_gammes = instance
+    taches_explodees: tuple[str, ...] = ()
+    avertissements: tuple[str, ...] = ()
+    if gammes_resolues:
+        try:
+            resultat_gammes = traiter_nouvelle_commande(
+                instance, gammes_resolues, commande_id, estimateur_duree=_estimateur_duree_optionnel()
+            )
+        except (ErreurExplosionGamme, CompetenceSansDureeEstimee) as erreur:
+            raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+        except ValidationError as erreur:
+            raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+        instance_avec_gammes = resultat_gammes.instance
+        taches_explodees = resultat_gammes.taches_explodees
+        avertissements = resultat_gammes.avertissements
+
+    # Échéance dérivée une seule fois, sur l'ensemble complet des tâches de la commande — choisies
+    # directement et/ou explosées depuis une gamme, sans distinction à ce stade.
+    toutes_taches_commande = (*requete.taches, *taches_explodees)
     try:
         nouvelles_echeances = deriver_echeances_par_commande(
-            [Commande(id=commande_id, taches=tuple(requete.taches), date_limite=requete.date_limite)],
-            instance.contraintes,
+            [Commande(id=commande_id, taches=toutes_taches_commande, date_limite=requete.date_limite)],
+            instance_avec_gammes.contraintes,
         )
-        instance_fusionnee_dsl = instance.model_copy(
-            update={"contraintes": [*instance.contraintes, *nouvelles_echeances]}
+        instance_fusionnee_dsl = instance_avec_gammes.model_copy(
+            update={"contraintes": [*instance_avec_gammes.contraintes, *nouvelles_echeances]}
         )
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
@@ -372,8 +448,13 @@ def ajouter_commande(
         instance_id,
         client_id,
         requete.date_limite,
-        tuple(requete.taches),
+        toutes_taches_commande,
         duree_heures=requete.duree_heures,
+        numero=requete.numero,
+        date_debut_au_plus_tot=requete.date_debut_au_plus_tot,
+        est_prospect=requete.est_prospect,
+        description=requete.description,
+        nom_client=requete.nom_client,
     )
 
     execution_id: str | None = None
@@ -393,6 +474,7 @@ def ajouter_commande(
         "instance_id": instance_id,
         "commande_id": commande_id,
         "structure_contraintes": structure_contraintes(instance_fusionnee),
+        "avertissements": list(avertissements),
         "execution_id": execution_id,
         "execution_reussie": execution_reussie,
         "erreur_execution": erreur_execution,
@@ -428,6 +510,11 @@ def lister_commandes_instance(
             "taches": list(commande.taches),
             "date_creation": commande.date_creation,
             "duree_heures": commande.duree_heures,
+            "numero": commande.numero,
+            "date_debut_au_plus_tot": commande.date_debut_au_plus_tot,
+            "est_prospect": commande.est_prospect,
+            "description": commande.description,
+            "nom_client": commande.nom_client,
             "date_execution": date_execution,
             **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
         }
@@ -464,6 +551,11 @@ def obtenir_commande(
         "taches": list(commande.taches),
         "date_creation": commande.date_creation,
         "duree_heures": commande.duree_heures,
+        "numero": commande.numero,
+        "date_debut_au_plus_tot": commande.date_debut_au_plus_tot,
+        "est_prospect": commande.est_prospect,
+        "description": commande.description,
+        "nom_client": commande.nom_client,
         "date_execution": etat.date_derniere_execution_reussie(commande.instance_id),
         **statut.en_dict(),
     }

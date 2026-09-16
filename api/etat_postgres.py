@@ -54,7 +54,9 @@ from api.etat import (
     CommandeEnregistree,
     Decision,
     DecisionHumaine,
+    EtapeGamme,
     EvenementGeneration,
+    GammeProduit,
     JobGeneration,
     Priorite,
     PropositionSupervision,
@@ -160,10 +162,22 @@ class EtatPostgres:
                     table=self._table("sources_donnees")
                 )
             )
-            # Ancienne table Gammes produit (gabarits de routage, fonctionnalité retirée) —
-            # les commandes référencent désormais des tâches déjà existantes plutôt que
-            # d'exploser une gamme (voir `commandes.gamme_id` retiré ci-dessous).
-            connexion.execute(sql.SQL("DROP TABLE IF EXISTS {} CASCADE").format(self._table("gammes_produit")))
+            # Gammes produit : gabarit d'étapes réutilisable par produit (compétences, ordre,
+            # durée), explosé en tâches concrètes à l'arrivée d'une commande qui le référence
+            # (une commande peut en référencer plusieurs — voir
+            # `adapters/gamme_derivation.py::traiter_nouvelle_commande`). Restaurée après un
+            # retrait temporaire (§ historique) : `CREATE TABLE IF NOT EXISTS`, idempotent comme
+            # toutes les migrations de ce fichier, la recrée si elle n'existe pas déjà.
+            connexion.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {table} ("
+                    "id TEXT PRIMARY KEY, "
+                    "client_id TEXT NOT NULL REFERENCES {clients}(id), "
+                    "produit TEXT NOT NULL, "
+                    "nom TEXT, "
+                    "etapes JSONB NOT NULL)"
+                ).format(table=self._table("gammes_produit"), clients=self._table("clients"))
+            )
 
             # Ancienne table Projet (portait un pointeur "instance courante" +
             # son propre historique d'exécution) — retirée, remplacée par
@@ -214,6 +228,18 @@ class EtatPostgres:
                 sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS duree_heures INTEGER").format(
                     table=self._table("commandes")
                 )
+            )
+            # Migration idempotente : métadonnées de traçabilité supplémentaires (même principe
+            # que duree_heures ci-dessus — voir docstring de CommandeEnregistree, api/etat.py).
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} "
+                    "ADD COLUMN IF NOT EXISTS numero TEXT, "
+                    "ADD COLUMN IF NOT EXISTS date_debut_au_plus_tot INTEGER, "
+                    "ADD COLUMN IF NOT EXISTS est_prospect BOOLEAN NOT NULL DEFAULT false, "
+                    "ADD COLUMN IF NOT EXISTS description TEXT, "
+                    "ADD COLUMN IF NOT EXISTS nom_client TEXT"
+                ).format(table=self._table("commandes"))
             )
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS quantite").format(
@@ -739,6 +765,118 @@ class EtatPostgres:
             )
             connexion.commit()
 
+    # --- Gammes produit ------------------------------------------------
+
+    @staticmethod
+    def _etapes_vers_json(etapes: tuple[EtapeGamme, ...]) -> str:
+        return json.dumps(
+            [
+                {
+                    "id": e.id,
+                    "competences": list(e.competences),
+                    "predecesseurs": list(e.predecesseurs),
+                    "duree_nominale": e.duree_nominale,
+                }
+                for e in etapes
+            ]
+        )
+
+    @staticmethod
+    def _etapes_depuis_json(donnees: list[dict]) -> tuple[EtapeGamme, ...]:
+        return tuple(
+            EtapeGamme(
+                id=d["id"],
+                competences=tuple(d["competences"]),
+                predecesseurs=tuple(d.get("predecesseurs", [])),
+                duree_nominale=d.get("duree_nominale"),
+            )
+            for d in donnees
+        )
+
+    def enregistrer_gamme(
+        self, client_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
+    ) -> str:
+        gamme_id = str(uuid.uuid4())
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(
+                    self._table("clients")
+                ),
+                (client_id,),
+            )
+            connexion.execute(
+                sql.SQL(
+                    "INSERT INTO {} (id, client_id, produit, nom, etapes) VALUES (%s, %s, %s, %s, %s::jsonb)"
+                ).format(self._table("gammes_produit")),
+                (gamme_id, client_id, produit, nom, self._etapes_vers_json(etapes)),
+            )
+            connexion.commit()
+        return gamme_id
+
+    def recuperer_gamme(self, gamme_id: str) -> GammeProduit:
+        with closing(self._connexion()) as connexion:
+            ligne = connexion.execute(
+                sql.SQL("SELECT id, client_id, produit, nom, etapes FROM {} WHERE id = %s").format(
+                    self._table("gammes_produit")
+                ),
+                (gamme_id,),
+            ).fetchone()
+        if ligne is None:
+            raise KeyError(gamme_id)
+        id_, client_id, produit, nom, etapes = ligne
+        return GammeProduit(
+            id=id_, client_id=client_id, produit=produit, nom=nom, etapes=self._etapes_depuis_json(etapes)
+        )
+
+    def lister_gammes(self, client_id: str | None = None) -> list[GammeProduit]:
+        requete = sql.SQL("SELECT id, client_id, produit, nom, etapes FROM {} WHERE 1 = 1").format(
+            self._table("gammes_produit")
+        )
+        parametres: list[str] = []
+        if client_id is not None:
+            requete += sql.SQL(" AND client_id = %s")
+            parametres.append(client_id)
+
+        with closing(self._connexion()) as connexion:
+            lignes = connexion.execute(requete, parametres).fetchall()
+        return [
+            GammeProduit(id=id_, client_id=cid, produit=produit, nom=nom, etapes=self._etapes_depuis_json(etapes))
+            for id_, cid, produit, nom, etapes in lignes
+        ]
+
+    def modifier_gamme(
+        self, gamme_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
+    ) -> GammeProduit:
+        with closing(self._connexion()) as connexion:
+            existe = connexion.execute(
+                sql.SQL("SELECT client_id FROM {} WHERE id = %s").format(self._table("gammes_produit")),
+                (gamme_id,),
+            ).fetchone()
+            if existe is None:
+                raise KeyError(gamme_id)
+            connexion.execute(
+                sql.SQL("UPDATE {} SET produit = %s, nom = %s, etapes = %s::jsonb WHERE id = %s").format(
+                    self._table("gammes_produit")
+                ),
+                (produit, nom, self._etapes_vers_json(etapes), gamme_id),
+            )
+            connexion.commit()
+        return GammeProduit(id=gamme_id, client_id=existe[0], produit=produit, nom=nom, etapes=etapes)
+
+    def supprimer_gamme(self, gamme_id: str) -> None:
+        with closing(self._connexion()) as connexion:
+            existe = connexion.execute(
+                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("gammes_produit")),
+                (gamme_id,),
+            ).fetchone()
+            if existe is None:
+                raise KeyError(gamme_id)
+            connexion.execute(
+                sql.SQL("DELETE FROM {} WHERE id = %s").format(self._table("gammes_produit")),
+                (gamme_id,),
+            )
+            connexion.commit()
+
     # --- Commandes -------------------------------------------------------
 
     def enregistrer_commande(
@@ -749,6 +887,11 @@ class EtatPostgres:
         date_limite: int | None,
         taches: tuple[str, ...],
         duree_heures: int | None = None,
+        numero: str | None = None,
+        date_debut_au_plus_tot: int | None = None,
+        est_prospect: bool = False,
+        description: str | None = None,
+        nom_client: str | None = None,
     ) -> None:
         with closing(self._connexion()) as connexion:
             connexion.execute(
@@ -760,7 +903,8 @@ class EtatPostgres:
             connexion.execute(
                 sql.SQL(
                     "INSERT INTO {} (id, instance_id, client_id, date_limite, taches, date_creation, "
-                    "duree_heures) VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s)"
+                    "duree_heures, numero, date_debut_au_plus_tot, est_prospect, description, nom_client) "
+                    "VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("commandes")),
                 (
                     commande_id,
@@ -770,6 +914,11 @@ class EtatPostgres:
                     json.dumps(list(taches)),
                     datetime.now(UTC).isoformat(),
                     duree_heures,
+                    numero,
+                    date_debut_au_plus_tot,
+                    est_prospect,
+                    description,
+                    nom_client,
                 ),
             )
             connexion.commit()
@@ -778,14 +927,28 @@ class EtatPostgres:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
                 sql.SQL(
-                    "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures "
+                    "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
+                    "numero, date_debut_au_plus_tot, est_prospect, description, nom_client "
                     "FROM {} WHERE id = %s"
                 ).format(self._table("commandes")),
                 (commande_id,),
             ).fetchone()
         if ligne is None:
             raise KeyError(commande_id)
-        id_, instance_id, client_id, date_limite, taches, date_creation, duree_heures = ligne
+        (
+            id_,
+            instance_id,
+            client_id,
+            date_limite,
+            taches,
+            date_creation,
+            duree_heures,
+            numero,
+            date_debut_au_plus_tot,
+            est_prospect,
+            description,
+            nom_client,
+        ) = ligne
         return CommandeEnregistree(
             id=id_,
             instance_id=instance_id,
@@ -794,11 +957,17 @@ class EtatPostgres:
             taches=tuple(taches),
             date_creation=date_creation,
             duree_heures=duree_heures,
+            numero=numero,
+            date_debut_au_plus_tot=date_debut_au_plus_tot,
+            est_prospect=est_prospect,
+            description=description,
+            nom_client=nom_client,
         )
 
     def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:
         requete = sql.SQL(
-            "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures "
+            "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
+            "numero, date_debut_au_plus_tot, est_prospect, description, nom_client "
             "FROM {} WHERE 1 = 1"
         ).format(self._table("commandes"))
         parametres: list[str] = []
@@ -817,8 +986,26 @@ class EtatPostgres:
                 taches=tuple(taches),
                 date_creation=date_creation,
                 duree_heures=duree_heures,
+                numero=numero,
+                date_debut_au_plus_tot=date_debut_au_plus_tot,
+                est_prospect=est_prospect,
+                description=description,
+                nom_client=nom_client,
             )
-            for id_, iid, cid, date_limite, taches, date_creation, duree_heures in lignes
+            for (
+                id_,
+                iid,
+                cid,
+                date_limite,
+                taches,
+                date_creation,
+                duree_heures,
+                numero,
+                date_debut_au_plus_tot,
+                est_prospect,
+                description,
+                nom_client,
+            ) in lignes
         ]
 
     # --- Instances -----------------------------------------------------

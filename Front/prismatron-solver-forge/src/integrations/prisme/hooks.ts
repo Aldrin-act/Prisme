@@ -45,6 +45,8 @@ export const prismeKeys = {
   commande: (commandeId: string) => [...prismeKeys.all, "commande", commandeId] as const,
   commandesInstance: (instanceId: string) =>
     [...prismeKeys.all, "commandesInstance", instanceId] as const,
+  gammes: () => [...prismeKeys.all, "gammes"] as const,
+  gamme: (gammeId: string) => [...prismeKeys.all, "gammes", gammeId] as const,
   commandes: () => [...prismeKeys.all, "commandes"] as const,
 } as const;
 
@@ -290,6 +292,35 @@ export function useCommande(
     queryKey: prismeKeys.commande(commandeId || ""),
     queryFn: () => prismeClient.obtenirCommande(commandeId!),
     enabled: !!commandeId,
+    ...options,
+  });
+}
+
+/**
+ * Liste les gammes opératoires réutilisables (par produit) d'un client — voir
+ * `Types.GammeProduit`, explosées en tâches concrètes par useAjouterCommande.
+ */
+export function useGammes(
+  options?: Omit<UseQueryOptions<Types.GammeProduit[]>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.gammes(),
+    queryFn: () => prismeClient.listerGammes(),
+    ...options,
+  });
+}
+
+/**
+ * Détail d'une gamme (étapes, compétences, précédences).
+ */
+export function useGamme(
+  gammeId: string | null,
+  options?: Omit<UseQueryOptions<Types.GammeProduit>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.gamme(gammeId || ""),
+    queryFn: () => prismeClient.obtenirGamme(gammeId!),
+    enabled: !!gammeId,
     ...options,
   });
 }
@@ -742,8 +773,59 @@ export function useSupprimerSource() {
 }
 
 /**
- * Mutation pour associer des tâches déjà présentes dans une instance à une commande et en
- * dériver une échéance — ne crée jamais de tâche (voir `api/routes/ingestion.py`).
+ * Mutation pour créer une gamme opératoire réutilisable (produit + étapes) —
+ * voir `Types.GammeProduit`.
+ */
+export function useCreerGamme() {
+  return useMutation({
+    mutationFn: ({
+      produit,
+      etapes,
+      nom,
+      clientId,
+    }: {
+      produit: string;
+      etapes: Types.EtapeGamme[];
+      nom?: string;
+      clientId?: string;
+    }) => prismeClient.creerGamme(produit, etapes, nom, clientId),
+  });
+}
+
+/**
+ * Mutation pour remplacer en place le contenu d'une gamme déjà créée — même
+ * gamme_id, même patron que useModifierInstance.
+ */
+export function useModifierGamme() {
+  return useMutation({
+    mutationFn: ({
+      gammeId,
+      produit,
+      etapes,
+      nom,
+    }: {
+      gammeId: string;
+      produit: string;
+      etapes: Types.EtapeGamme[];
+      nom?: string;
+    }) => prismeClient.modifierGamme(gammeId, produit, etapes, nom),
+  });
+}
+
+/**
+ * Mutation pour supprimer une gamme — n'affecte jamais les tâches déjà
+ * explosées à partir d'elle (elles vivent dans les instances, indépendantes).
+ */
+export function useSupprimerGamme() {
+  return useMutation({
+    mutationFn: (gammeId: string) => prismeClient.supprimerGamme(gammeId),
+  });
+}
+
+/**
+ * Mutation pour associer des tâches à une commande et en dériver une échéance — deux sources
+ * combinables : tâches déjà présentes dans l'instance et/ou une ou plusieurs gammes explosées
+ * en tâches fraîches (voir `api/routes/ingestion.py`).
  */
 export function useAjouterCommande() {
   return useMutation({
