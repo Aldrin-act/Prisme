@@ -95,11 +95,11 @@ function KpiTile({ label, valeur, detail }: { label: string; valeur: string; det
   );
 }
 
-function AnalyticsPage() {
+function AppDashboard() {
   return (
     <>
       <PageHeader
-        title="Analytique"
+        title="Tableau de bord"
         desc="Santé du pipeline de génération de solveurs et charge des ressources de planification — deux sujets distincts, chacun sur son onglet."
       />
 

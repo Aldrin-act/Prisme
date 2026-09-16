@@ -19,7 +19,6 @@ import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as PlatformRouteImport } from './routes/platform'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as UseCasesRouteImport } from './routes/use-cases'
-import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
@@ -81,11 +80,6 @@ const UseCasesRoute = UseCasesRouteImport.update({
   id: '/use-cases',
   path: '/use-cases',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedApiKeysRoute = AuthenticatedApiKeysRouteImport.update({
   id: '/api-keys',
@@ -160,7 +154,6 @@ export interface FileRoutesByFullPath {
   '/platform': typeof PlatformRoute
   '/pricing': typeof PricingRoute
   '/use-cases': typeof UseCasesRoute
-  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
   '/clients': typeof AuthenticatedClientsRoute
@@ -184,7 +177,6 @@ export interface FileRoutesByTo {
   '/platform': typeof PlatformRoute
   '/pricing': typeof PricingRoute
   '/use-cases': typeof UseCasesRoute
-  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
   '/app': typeof AuthenticatedAppRoute
   '/clients': typeof AuthenticatedClientsRoute
@@ -210,7 +202,6 @@ export interface FileRoutesById {
   '/platform': typeof PlatformRoute
   '/pricing': typeof PricingRoute
   '/use-cases': typeof UseCasesRoute
-  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
@@ -236,7 +227,6 @@ export interface FileRouteTypes {
     | '/platform'
     | '/pricing'
     | '/use-cases'
-    | '/analytics'
     | '/api-keys'
     | '/app'
     | '/clients'
@@ -260,7 +250,6 @@ export interface FileRouteTypes {
     | '/platform'
     | '/pricing'
     | '/use-cases'
-    | '/analytics'
     | '/api-keys'
     | '/app'
     | '/clients'
@@ -285,7 +274,6 @@ export interface FileRouteTypes {
     | '/platform'
     | '/pricing'
     | '/use-cases'
-    | '/_authenticated/analytics'
     | '/_authenticated/api-keys'
     | '/_authenticated/app'
     | '/_authenticated/clients'
@@ -385,13 +373,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UseCasesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/analytics': {
-      id: '/_authenticated/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/api-keys': {
       id: '/_authenticated/api-keys'
       path: '/api-keys'
@@ -480,7 +461,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedApiKeysRoute: typeof AuthenticatedApiKeysRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
@@ -496,7 +476,6 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedApiKeysRoute: AuthenticatedApiKeysRoute,
   AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
