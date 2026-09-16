@@ -445,6 +445,15 @@ export const prismeClient = {
   obtenirCommande: (commandeId: string) =>
     apiFetch<Types.StatutCommande>(`${PRISME_CONFIG.routes.ingestion}/commandes/${commandeId}`),
 
+  // Ajoute un produit (gamme) supplémentaire à une commande déjà créée — complète ajouterCommande
+  // ci-dessus, qui ne permet de référencer des gammes qu'à la création (voir
+  // api/routes/ingestion.py::ajouter_produit_a_commande).
+  ajouterProduitACommande: (commandeId: string, requete: Types.RequeteAjoutProduitCommande) =>
+    apiFetch<Types.ResultatAjoutProduitCommande>(
+      `${PRISME_CONFIG.routes.ingestion}/commandes/${commandeId}/produits`,
+      { method: "POST", body: JSON.stringify(requete) },
+    ),
+
   // GAMMES OPÉRATOIRES RÉUTILISABLES — décrites une fois par produit, explosées en tâches
   // concrètes à chaque commande qui les référence (voir ajouterCommande ci-dessus,
   // api/routes/gammes.py). Même convention clientId que creerSource : dérivé du compte

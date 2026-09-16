@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageHeader, EmptyState } from "@/components/app-page";
+import { AjouterProduitCommande } from "@/components/commandes/ajouter-produit-commande";
 import { FormulaireNouvelleCommande } from "@/components/commandes/formulaire-nouvelle-commande";
 import {
   useCommandes,
@@ -202,6 +203,7 @@ function CommandesPage() {
                 <TableHead>Échéance</TableHead>
                 <TableHead>Début d'exécution</TableHead>
                 <TableHead>Statut</TableHead>
+                <TableHead />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -232,6 +234,9 @@ function CommandesPage() {
                   <TableCell className="text-sm">{dateDebutExecution(commande) ?? "—"}</TableCell>
                   <TableCell>
                     <BadgeStatut commande={commande} />
+                  </TableCell>
+                  <TableCell>
+                    <AjouterProduitCommande commande={commande} />
                   </TableCell>
                 </TableRow>
               ))}

@@ -314,6 +314,23 @@ export interface ResultatNouvelleCommande {
   erreur_execution: string | null;
 }
 
+// POST /ingestion/commandes/{commande_id}/produits — ajoute un produit (gamme) supplémentaire à
+// une commande déjà créée (complète RequeteNouvelleCommande.gammes, qui ne joue qu'à la
+// création). Même forme que GammeAvecQuantiteRequete, un seul produit à la fois.
+export type RequeteAjoutProduitCommande = GammeAvecQuantiteRequete;
+
+export interface ResultatAjoutProduitCommande {
+  instance_id: string;
+  commande_id: string;
+  taches: string[];
+  gammes: GammeCommandeStatut[];
+  structure_contraintes: string;
+  avertissements: string[];
+  execution_id: string | null;
+  execution_reussie: boolean | null;
+  erreur_execution: string | null;
+}
+
 // Une tâche de la commande positionnée dans le temps (début/fin résolus contre le dernier
 // planning réussi) — de quoi tracer sa timeline. Absent tant que la commande n'est pas planifiee.
 export interface OperationCommande {

@@ -838,3 +838,19 @@ export function useAjouterCommande() {
     }) => prismeClient.ajouterCommande(instanceId, requete),
   });
 }
+
+/**
+ * Mutation pour ajouter un produit (gamme) supplémentaire à une commande déjà créée — complète
+ * useAjouterCommande ci-dessus, qui ne permet de référencer des gammes qu'à la création.
+ */
+export function useAjouterProduitACommande() {
+  return useMutation({
+    mutationFn: ({
+      commandeId,
+      requete,
+    }: {
+      commandeId: string;
+      requete: Types.RequeteAjoutProduitCommande;
+    }) => prismeClient.ajouterProduitACommande(commandeId, requete),
+  });
+}

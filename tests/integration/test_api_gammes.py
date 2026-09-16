@@ -312,3 +312,103 @@ def test_ajouter_commande_etape_non_couverte_ignoree_avec_avertissement() -> Non
         assert f"{commande_id}_0_fraisage" not in taches_ids
     finally:
         app.dependency_overrides.clear()
+
+
+# --- Ajout d'un produit à une commande déjà créée (POST /commandes/{commande_id}/produits) ------
+
+
+def test_ajouter_produit_a_commande_explose_dans_l_instance_et_complete_la_commande() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        gamme_id = _creer_gamme(client, nom="Gamme vanne")
+
+        reponse_creation = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        )
+        assert reponse_creation.status_code == 200, reponse_creation.json()
+        commande_id = reponse_creation.json()["commande_id"]
+        date_creation_avant = client.get(f"/ingestion/commandes/{commande_id}").json()["date_creation"]
+
+        reponse = client.post(
+            f"/ingestion/commandes/{commande_id}/produits", json={"gamme_id": gamme_id, "quantite": 5}
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        tache_id = f"{commande_id}_0_soudure"
+        assert corps["taches"] == ["EXISTANT", tache_id]
+        assert corps["gammes"] == [
+            {"gamme_id": gamme_id, "produit": "Vanne V12", "nom": "Gamme vanne", "quantite": 5}
+        ]
+
+        instance_json = client.get(f"/ingestion/{instance_id}").json()
+        assert any(t["id"] == tache_id and t["quantite"] == 5 for t in instance_json["taches"])
+        # L'échéance de la commande (10) s'applique aussi à la tâche fraîchement explosée.
+        echeances = {c["tache"]: c["echeance"] for c in instance_json["contraintes"] if c["type"] == "echeance"}
+        assert echeances == {"EXISTANT": 10, tache_id: 10}
+
+        detail = client.get(f"/ingestion/commandes/{commande_id}").json()
+        assert detail["taches"] == ["EXISTANT", tache_id]
+        assert detail["date_creation"] == date_creation_avant
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ajouter_produit_a_commande_deux_fois_n_entre_pas_en_collision() -> None:
+    """Deux produits ajoutés l'un après l'autre à la même commande, réutilisant le même id
+    d'étape ("soudure") — le préfixe de gamme doit continuer à progresser (0 puis 1) plutôt que
+    repartir de 0 à chaque appel, sous peine de collision d'id de tâche."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        gamme_id = _creer_gamme(client)
+
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"gammes": [{"gamme_id": gamme_id}], "date_limite": 10}
+        ).json()["commande_id"]
+
+        reponse = client.post(f"/ingestion/commandes/{commande_id}/produits", json={"gamme_id": gamme_id})
+
+        assert reponse.status_code == 200, reponse.json()
+        instance_json = client.get(f"/ingestion/{instance_id}").json()
+        taches_ids = {t["id"] for t in instance_json["taches"]}
+        assert f"{commande_id}_0_soudure" in taches_ids
+        assert f"{commande_id}_1_soudure" in taches_ids
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ajouter_produit_a_commande_inconnue_renvoie_404() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        gamme_id = _creer_gamme(client)
+
+        reponse = client.post("/ingestion/commandes/fantome/produits", json={"gamme_id": gamme_id})
+
+        assert reponse.status_code == 404
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ajouter_produit_a_commande_gamme_inconnue_renvoie_404() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        commande_id = client.post(f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"]}).json()[
+            "commande_id"
+        ]
+
+        reponse = client.post(f"/ingestion/commandes/{commande_id}/produits", json={"gamme_id": "fantome"})
+
+        assert reponse.status_code == 404
+    finally:
+        app.dependency_overrides.clear()
