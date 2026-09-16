@@ -281,6 +281,10 @@ export interface GammeAvecQuantiteRequete {
 
 export interface RequeteNouvelleCommande {
   taches?: string[];
+  // Durée propre à chaque tâche choisie, dans l'unité de l'instance (ex. { T1: 25, T2: 12 }) —
+  // remplace la durée de la tâche sur toutes ses ressources compatibles, donc le planning en
+  // tient compte. Une tâche absente garde ses durées actuelles.
+  durees_taches?: Record<string, number>;
   gammes?: GammeAvecQuantiteRequete[];
   date_limite?: number;
   // Durée globale prévue pour la commande, saisie librement par l'utilisateur (heures) — pure

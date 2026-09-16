@@ -47,6 +47,21 @@ function libelleDureeTache(tacheId: string, instance: InstanceDetail): string | 
     : `${formatDureeCourte(min, uniteTemps)}–${formatDureeCourte(max, uniteTemps)}`;
 }
 
+// Durée actuelle d'une tâche quand toutes ses ressources compatibles la partagent — sert à
+// préremplir le champ de durée de la tâche. `null` si elles diffèrent : le champ reste vide et
+// les durées par ressource de l'atelier sont conservées tant que rien n'est saisi.
+function dureeUniqueTache(tacheId: string, instance: InstanceDetail): number | null {
+  const durees = new Set(
+    instance.contraintes
+      .filter(
+        (c): c is CompatibiliteRessourceTache =>
+          c.type === "compatibilite_ressource_tache" && c.tache === tacheId,
+      )
+      .map((c) => c.duree),
+  );
+  return durees.size === 1 ? [...durees][0] : null;
+}
+
 /**
  * Formulaire d'ajout d'une commande à une instance donnée — une commande relie des tâches déjà
  * présentes dans l'instance à une échéance client. Partagé entre l'onglet Flux d'une instance
@@ -59,19 +74,28 @@ function libelleDureeTache(tacheId: string, instance: InstanceDetail): string | 
 export function FormulaireNouvelleCommande({
   instance,
   onCommandeAjoutee,
+  onAnnuler,
+  integre = false,
 }: {
   instance: InstanceDetail;
   /** Appelé en plus de l'invalidation déjà faite ici (instance, instances, commandes de
    * l'instance, commandes globales, exécutions) — ex. fermer un dialogue englobant. */
   onCommandeAjoutee?: (resultat: ResultatNouvelleCommande) => void;
+  /** Mode `integre` : appelé par « Annuler » à la place de replier le formulaire. */
+  onAnnuler?: () => void;
+  /** Formulaire déjà ouvert, sans titre ni bouton « Nouvelle commande » ni récapitulatif — pour
+   * un conteneur (ex. dialogue de la page Commandes) qui porte déjà ces éléments lui-même. */
+  integre?: boolean;
 }) {
   const queryClient = useQueryClient();
   const ajouter = useAjouterCommande();
-  const [ouvert, setOuvert] = useState(false);
+  const [ouvert, setOuvert] = useState(integre);
   const [tachesChoisies, setTachesChoisies] = useState<string[]>([]);
   const [dateLimite, setDateLimite] = useState("");
   const [dateDebutAuPlusTot, setDateDebutAuPlusTot] = useState("");
-  const [dureeHeures, setDureeHeures] = useState("");
+  // Durée saisie par tâche cochée (texte brut de l'input, unité de l'instance) — chaque tâche a la
+  // sienne, jamais une durée globale partagée par toute la commande.
+  const [dureesTaches, setDureesTaches] = useState<Record<string, string>>({});
   const [numero, setNumero] = useState("");
   const [estProspect, setEstProspect] = useState(false);
   const [description, setDescription] = useState("");
@@ -96,7 +120,7 @@ export function FormulaireNouvelleCommande({
     setTachesChoisies([]);
     setDateLimite("");
     setDateDebutAuPlusTot("");
-    setDureeHeures("");
+    setDureesTaches({});
     setNumero("");
     setEstProspect(false);
     setDescription("");
@@ -109,10 +133,38 @@ export function FormulaireNouvelleCommande({
   }
 
   function basculerTache(tacheId: string) {
+    const dejaChoisie = tachesChoisies.includes(tacheId);
     setTachesChoisies((prev) =>
-      prev.includes(tacheId) ? prev.filter((id) => id !== tacheId) : [...prev, tacheId],
+      dejaChoisie ? prev.filter((id) => id !== tacheId) : [...prev, tacheId],
     );
+    setDureesTaches((prev) => {
+      const suivant = { ...prev };
+      if (dejaChoisie) {
+        delete suivant[tacheId];
+      } else {
+        const actuelle = dureeUniqueTache(tacheId, instance);
+        suivant[tacheId] = actuelle !== null ? String(actuelle) : "";
+      }
+      return suivant;
+    });
   }
+
+  function dureeSaisieInvalide(valeur: string): boolean {
+    const v = valeur.trim();
+    return v !== "" && !(Number.isInteger(Number(v)) && Number(v) >= 1);
+  }
+
+  // Seules les durées réellement renseignées partent au serveur ; une durée identique à celle
+  // déjà en place est omise aussi — rien à remplacer, et une tâche à durées différentes selon la
+  // ressource n'est jamais uniformisée sans saisie explicite.
+  const dureesAEnvoyer: Record<string, number> = Object.fromEntries(
+    tachesChoisies
+      .map((id) => [id, (dureesTaches[id] ?? "").trim()] as const)
+      .filter(([id, v]) => v !== "" && Number(v) !== dureeUniqueTache(id, instance))
+      .map(([id, v]) => [id, Number(v)]),
+  );
+  const dureeInvalide = tachesChoisies.some((id) => dureeSaisieInvalide(dureesTaches[id] ?? ""));
+  const abreviationUnite = uniteTemps === "heures" ? "h" : "j";
 
   function soumettre() {
     // "jours" ou "heures" selon instance.unite_temps — un input date perd toute précision
@@ -135,7 +187,7 @@ export function FormulaireNouvelleCommande({
           date_debut_au_plus_tot: dateDebut
             ? jourDepuisAncrage(dateDebut, aujourdhui(), uniteTemps)
             : undefined,
-          duree_heures: dureeHeures !== "" ? Number(dureeHeures) : undefined,
+          durees_taches: Object.keys(dureesAEnvoyer).length > 0 ? dureesAEnvoyer : undefined,
           numero: numero !== "" ? numero : undefined,
           est_prospect: estProspect,
           description: description !== "" ? description : undefined,
@@ -172,17 +224,19 @@ export function FormulaireNouvelleCommande({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold">Commandes</h4>
-        {!ouvert && (
-          <Button size="sm" variant="outline" onClick={ouvrir}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Nouvelle commande
-          </Button>
-        )}
-      </div>
+      {!integre && (
+        <div className="flex items-center justify-between">
+          <h4 className="text-sm font-semibold">Commandes</h4>
+          {!ouvert && (
+            <Button size="sm" variant="outline" onClick={ouvrir}>
+              <Plus className="mr-1.5 h-3.5 w-3.5" /> Nouvelle commande
+            </Button>
+          )}
+        </div>
+      )}
 
-      {ouvert && (
-        <div className="space-y-3 rounded-lg border border-border/50 p-3">
+      {(ouvert || integre) && (
+        <div className={integre ? "space-y-3" : "space-y-3 rounded-lg border border-border/50 p-3"}>
           <div className="space-y-1">
             <Label>Numéro de commande</Label>
             <Input
@@ -246,34 +300,62 @@ export function FormulaireNouvelleCommande({
           </div>
 
           <div className="space-y-1">
-            <Label>Tâches concernées</Label>
-            <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 p-2">
+            <Label>Tâches concernées et durée de chacune</Label>
+            <div className="max-h-56 space-y-1 overflow-y-auto rounded-md border border-border/50 p-2">
               {instance.taches.map((t) => {
                 const duree = libelleDureeTache(t.id, instance);
+                const choisie = tachesChoisies.includes(t.id);
+                const valeur = dureesTaches[t.id] ?? "";
+                const invalide = dureeSaisieInvalide(valeur);
                 return (
-                  <label key={t.id} className="flex items-center gap-2 text-sm">
-                    <Checkbox
-                      checked={tachesChoisies.includes(t.id)}
-                      onCheckedChange={() => basculerTache(t.id)}
-                    />
-                    <span>{t.nom ? `${t.nom} (${t.id})` : t.id}</span>
-                    {duree && <span className="text-xs text-muted-foreground">· {duree}</span>}
-                  </label>
+                  <div
+                    key={t.id}
+                    className={`flex min-h-9 items-center gap-2 rounded px-1 text-sm ${
+                      choisie ? "bg-primary/5" : ""
+                    }`}
+                  >
+                    <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2">
+                      <Checkbox checked={choisie} onCheckedChange={() => basculerTache(t.id)} />
+                      <span className="truncate">{t.nom ? `${t.nom} (${t.id})` : t.id}</span>
+                      {!choisie && duree && (
+                        <span className="shrink-0 text-xs text-muted-foreground">· {duree}</span>
+                      )}
+                    </label>
+                    {choisie && (
+                      <div className="flex shrink-0 items-center gap-1">
+                        <Input
+                          type="number"
+                          min={1}
+                          step={1}
+                          inputMode="numeric"
+                          aria-label={`Durée de ${t.id} (${uniteTemps})`}
+                          aria-invalid={invalide}
+                          placeholder={duree ?? "durée"}
+                          value={valeur}
+                          onChange={(e) =>
+                            setDureesTaches((prev) => ({ ...prev, [t.id]: e.target.value }))
+                          }
+                          className={`h-8 w-24 text-right ${invalide ? "border-destructive" : ""}`}
+                        />
+                        <span className="w-3 text-xs text-muted-foreground">
+                          {abreviationUnite}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </div>
-          </div>
-
-          <div className="space-y-1">
-            <Label>Durée globale prévue (heures)</Label>
-            <Input
-              type="number"
-              min={0}
-              step={1}
-              placeholder="Optionnel — indicatif, sans effet sur la planification"
-              value={dureeHeures}
-              onChange={(e) => setDureeHeures(e.target.value)}
-            />
+            <p className="text-xs text-muted-foreground">
+              Chaque tâche cochée a sa propre durée, en {uniteTemps}. Elle remplace la durée de la
+              tâche dans l'atelier et le planning en tient compte. Laisser vide pour garder la durée
+              actuelle.
+            </p>
+            {dureeInvalide && (
+              <p className="text-xs text-destructive">
+                Une durée doit être un nombre entier supérieur ou égal à 1.
+              </p>
+            )}
           </div>
 
           {erreur && (
@@ -289,7 +371,7 @@ export function FormulaireNouvelleCommande({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setOuvert(false)}
+              onClick={() => (integre && onAnnuler ? onAnnuler() : setOuvert(false))}
               disabled={ajouter.isPending}
             >
               Annuler
@@ -297,7 +379,9 @@ export function FormulaireNouvelleCommande({
             <Button
               size="sm"
               onClick={soumettre}
-              disabled={tachesChoisies.length === 0 || !dateLimite || ajouter.isPending}
+              disabled={
+                tachesChoisies.length === 0 || !dateLimite || dureeInvalide || ajouter.isPending
+              }
             >
               {ajouter.isPending ? "Ajout..." : "Ajouter la commande"}
             </Button>
@@ -305,7 +389,7 @@ export function FormulaireNouvelleCommande({
         </div>
       )}
 
-      {dernierCommandeId && (
+      {!integre && dernierCommandeId && (
         <div className="space-y-1">
           <p className="text-xs text-muted-foreground">Commande {dernierCommandeId} créée.</p>
           {dernierResultatExecution?.reussie === true && (

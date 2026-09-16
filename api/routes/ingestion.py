@@ -19,7 +19,7 @@ from api.etat import CommandeEnregistree, EtatAPI, GammeCommandeEnregistree, obt
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
-from dsl.schema import InstanceTRCO, Objectif
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif
 
 if TYPE_CHECKING:
     from estimation import EstimateurDuree
@@ -44,6 +44,12 @@ class RequeteNouvelleCommande(BaseModel):
     # fournie (validé plus bas, voir `_valider_taches_ou_gammes`). Les deux mécanismes coexistent :
     # une commande peut mélanger tâches choisies à la main et gammes explosées.
     taches: list[str] = Field(default_factory=list)
+    # Durée propre à chaque tâche choisie directement, dans l'unité de l'instance
+    # (`InstanceTRCO.unite_temps`) — ex. {"T1": 25, "T2": 12}. Contrairement à `duree_heures`
+    # ci-dessous, ce n'est pas de la traçabilité : la valeur remplace la durée de la tâche sur
+    # toutes ses ressources compatibles (voir `_appliquer_durees_taches`), donc le planning en
+    # tient compte. Une tâche absente du dict garde ses durées actuelles.
+    durees_taches: dict[str, int] = Field(default_factory=dict)
     gammes: list[RequeteGammeCommande] = Field(default_factory=list)
     date_limite: int | None = Field(default=None, ge=0)
     # Durée globale prévue, saisie librement par l'utilisateur (heures) — pure métadonnée de
@@ -56,6 +62,23 @@ class RequeteNouvelleCommande(BaseModel):
     est_prospect: bool = False
     description: str | None = None
     nom_client: str | None = None
+
+
+def _appliquer_durees_taches(instance: InstanceTRCO, durees: dict[str, int]) -> InstanceTRCO:
+    """Remplace la durée de chaque tâche de `durees` sur **toutes** ses compatibilités
+    ressource-tâche : une commande dit combien dure la tâche, pas combien elle dure sur telle
+    ressource. Une durée différente par ressource (FJSP flexible) redevient donc uniforme pour ces
+    tâches-là — choix assumé, c'est ce que la saisie d'une durée unique par tâche exprime.
+    Revalide l'instance complète (garde-fou §6.7) plutôt qu'un `model_copy` qui ne valide rien."""
+    if not durees:
+        return instance
+    contraintes = [
+        {**c.model_dump(), "duree": durees[c.tache]}
+        if isinstance(c, CompatibiliteRessourceTache) and c.tache in durees
+        else c.model_dump()
+        for c in instance.contraintes
+    ]
+    return InstanceTRCO.model_validate({**instance.model_dump(), "contraintes": contraintes})
 
 
 def _estimateur_duree_optionnel() -> EstimateurDuree | None:
@@ -408,6 +431,22 @@ def ajouter_commande(
     inconnues = [t for t in requete.taches if t not in ids_connus]
     if inconnues:
         raise HTTPException(status_code=422, detail=f"tâche(s) inconnue(s) de cette instance : {inconnues}")
+
+    hors_commande = sorted(set(requete.durees_taches) - set(requete.taches))
+    if hors_commande:
+        raise HTTPException(
+            status_code=422,
+            detail=f"durée fournie pour des tâches absentes de la commande : {hors_commande}",
+        )
+    durees_invalides = sorted(t for t, d in requete.durees_taches.items() if d < 1)
+    if durees_invalides:
+        raise HTTPException(
+            status_code=422, detail=f"durée invalide (entier ≥ 1 attendu) pour : {durees_invalides}"
+        )
+    try:
+        instance = _appliquer_durees_taches(instance, requete.durees_taches)
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     commande_id = f"cmd-{uuid.uuid4().hex[:8]}"
 

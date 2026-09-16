@@ -8,6 +8,7 @@ mémoire (`EtatAPI`), aucun service externe requis.
 
 from __future__ import annotations
 
+import pytest
 from fastapi.testclient import TestClient
 
 from api.app import app
@@ -75,6 +76,96 @@ def test_ajouter_commande_derive_une_echeance_pour_des_taches_existantes() -> No
             c["type"] == "echeance" and c["tache"] == "EXISTANT" and c["echeance"] == 10
             for c in instance_json["contraintes"]
         )
+    finally:
+        app.dependency_overrides.clear()
+
+
+def _payload_deux_taches_multi_ressources() -> dict:
+    return {
+        "unite_temps": "heures",
+        "taches": [{"id": "T1"}, {"id": "T2"}],
+        "ressources": [{"id": "R1"}, {"id": "R2"}],
+        "contraintes": [
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 48},
+            {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R2", "duree": 60},
+            {"type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R1", "duree": 8},
+        ],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+
+
+def test_ajouter_commande_applique_une_duree_propre_a_chaque_tache() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        creation = client.post("/ingestion/client_test", json=_payload_deux_taches_multi_ressources())
+        assert creation.status_code == 200, creation.json()
+        instance_id = creation.json()["instance_id"]
+
+        reponse = client.post(
+            f"/ingestion/{instance_id}/commandes",
+            json={"taches": ["T1", "T2"], "durees_taches": {"T1": 25, "T2": 12}, "date_limite": 100},
+        )
+        assert reponse.status_code == 200, reponse.json()
+
+        contraintes = client.get(f"/ingestion/{instance_id}").json()["contraintes"]
+        durees = {
+            (c["tache"], c["ressource"]): c["duree"]
+            for c in contraintes
+            if c["type"] == "compatibilite_ressource_tache"
+        }
+        # T1 prend 25 sur ses deux ressources, T2 prend 12 : chaque tâche a sa propre durée.
+        assert durees == {("T1", "R1"): 25, ("T1", "R2"): 25, ("T2", "R1"): 12}
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ajouter_commande_sans_duree_garde_les_durees_de_l_atelier() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        creation = client.post("/ingestion/client_test", json=_payload_deux_taches_multi_ressources())
+        instance_id = creation.json()["instance_id"]
+
+        reponse = client.post(
+            f"/ingestion/{instance_id}/commandes",
+            json={"taches": ["T1", "T2"], "durees_taches": {"T2": 12}, "date_limite": 100},
+        )
+        assert reponse.status_code == 200, reponse.json()
+
+        contraintes = client.get(f"/ingestion/{instance_id}").json()["contraintes"]
+        durees_t1 = sorted(
+            c["duree"] for c in contraintes if c["type"] == "compatibilite_ressource_tache" and c["tache"] == "T1"
+        )
+        assert durees_t1 == [48, 60]
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.mark.parametrize(
+    ("durees", "extrait_erreur"),
+    [
+        ({"T2": 5}, "absentes de la commande"),
+        ({"T1": 0}, "durée invalide"),
+    ],
+)
+def test_ajouter_commande_durees_taches_invalides_renvoient_422(durees: dict, extrait_erreur: str) -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        creation = client.post("/ingestion/client_test", json=_payload_deux_taches_multi_ressources())
+        instance_id = creation.json()["instance_id"]
+
+        reponse = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["T1"], "durees_taches": durees}
+        )
+
+        assert reponse.status_code == 422
+        assert extrait_erreur in reponse.json()["detail"]
+        assert etat_test.lister_commandes(instance_id) == []
     finally:
         app.dependency_overrides.clear()
 
