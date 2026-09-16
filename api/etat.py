@@ -17,7 +17,7 @@ n'est donc pas figé dans le noyau.
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal
 
@@ -179,6 +179,20 @@ class GammeProduit:
 
 
 @dataclass(frozen=True)
+class GammeCommandeEnregistree:
+    """Un produit (gamme) référencé par une commande, tel que connu au moment de sa création —
+    `produit`/`nom` sont une *copie* (pas une lecture live de `GammeProduit`) : la gamme
+    elle-même est un gabarit modifiable/supprimable après coup (voir sa docstring) sans que ça
+    n'affecte la traçabilité d'une commande déjà passée. `gamme_id` reste utile pour retrouver la
+    gamme si elle existe encore, mais n'est jamais la source affichée."""
+
+    gamme_id: str
+    produit: str
+    nom: str | None
+    quantite: int | None
+
+
+@dataclass(frozen=True)
 class CommandeEnregistree:
     """Une commande traitée via `POST /ingestion/{instance_id}/commandes`, persistée pour que son
     identité survive à la fusion dans l'instance — sans ça, elle est perdue dès la réponse HTTP.
@@ -211,6 +225,12 @@ class CommandeEnregistree:
     est_prospect: bool = False
     description: str | None = None
     nom_client: str | None = None
+    # Produits (gammes) référencés par cette commande, avec leur quantité — `taches` ci-dessus
+    # reste la seule vérité pour l'explosion/échéance (union tâches choisies + explosées), ceci
+    # est une métadonnée de traçabilité pure supplémentaire (§FC4 : jamais lue par le DSL/solveur,
+    # ne rejoue jamais l'explosion). Vide pour une commande qui ne référence que des tâches
+    # choisies directement.
+    gammes: tuple[GammeCommandeEnregistree, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -506,6 +526,7 @@ class EtatAPI:
         est_prospect: bool = False,
         description: str | None = None,
         nom_client: str | None = None,
+        gammes: tuple[GammeCommandeEnregistree, ...] = (),
     ) -> None:
         """`commande_id` fourni par l'appelant (déjà généré avant la dérivation d'échéance —
         voir `api/routes/ingestion.py::ajouter_commande`)."""
@@ -522,11 +543,29 @@ class EtatAPI:
             est_prospect=est_prospect,
             description=description,
             nom_client=nom_client,
+            gammes=gammes,
         )
 
     def recuperer_commande(self, commande_id: str) -> CommandeEnregistree:
         if commande_id not in self.commandes:
             raise KeyError(commande_id)
+        return self.commandes[commande_id]
+
+    def ajouter_gamme_a_commande(
+        self, commande_id: str, taches_ajoutees: tuple[str, ...], gamme: GammeCommandeEnregistree
+    ) -> CommandeEnregistree:
+        """Ajoute un produit (gamme) supplémentaire à une commande déjà enregistrée — complète
+        `taches`/`gammes` en place (`date_creation` et le reste des champs inchangés), contrairement
+        à `enregistrer_commande` qui écraserait tout, `date_creation` incluse (voir
+        `api/routes/ingestion.py::ajouter_produit_a_commande`)."""
+        if commande_id not in self.commandes:
+            raise KeyError(commande_id)
+        commande = self.commandes[commande_id]
+        self.commandes[commande_id] = replace(
+            commande,
+            taches=(*commande.taches, *taches_ajoutees),
+            gammes=(*commande.gammes, gamme),
+        )
         return self.commandes[commande_id]
 
     def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:

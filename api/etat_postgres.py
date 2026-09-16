@@ -43,6 +43,7 @@ from __future__ import annotations
 import json
 import uuid
 from contextlib import closing
+from dataclasses import replace
 from datetime import UTC, datetime
 
 import psycopg
@@ -56,6 +57,7 @@ from api.etat import (
     DecisionHumaine,
     EtapeGamme,
     EvenementGeneration,
+    GammeCommandeEnregistree,
     GammeProduit,
     JobGeneration,
     Priorite,
@@ -239,6 +241,15 @@ class EtatPostgres:
                     "ADD COLUMN IF NOT EXISTS est_prospect BOOLEAN NOT NULL DEFAULT false, "
                     "ADD COLUMN IF NOT EXISTS description TEXT, "
                     "ADD COLUMN IF NOT EXISTS nom_client TEXT"
+                ).format(table=self._table("commandes"))
+            )
+            # Migration idempotente : produits (gammes) référencés par la commande, en copie
+            # figée au moment de la création (produit/nom, pas une lecture live de gammes_produit
+            # — voir docstring de GammeCommandeEnregistree, api/etat.py) : pure métadonnée de
+            # traçabilité, jamais lue par le DSL/solveur.
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS gammes JSONB NOT NULL DEFAULT '[]'::jsonb"
                 ).format(table=self._table("commandes"))
             )
             connexion.execute(
@@ -879,6 +890,21 @@ class EtatPostgres:
 
     # --- Commandes -------------------------------------------------------
 
+    @staticmethod
+    def _gammes_commande_vers_json(gammes: tuple[GammeCommandeEnregistree, ...]) -> str:
+        return json.dumps(
+            [{"gamme_id": g.gamme_id, "produit": g.produit, "nom": g.nom, "quantite": g.quantite} for g in gammes]
+        )
+
+    @staticmethod
+    def _gammes_commande_depuis_json(donnees: list[dict]) -> tuple[GammeCommandeEnregistree, ...]:
+        return tuple(
+            GammeCommandeEnregistree(
+                gamme_id=d["gamme_id"], produit=d["produit"], nom=d.get("nom"), quantite=d.get("quantite")
+            )
+            for d in donnees
+        )
+
     def enregistrer_commande(
         self,
         commande_id: str,
@@ -892,6 +918,7 @@ class EtatPostgres:
         est_prospect: bool = False,
         description: str | None = None,
         nom_client: str | None = None,
+        gammes: tuple[GammeCommandeEnregistree, ...] = (),
     ) -> None:
         with closing(self._connexion()) as connexion:
             connexion.execute(
@@ -903,8 +930,9 @@ class EtatPostgres:
             connexion.execute(
                 sql.SQL(
                     "INSERT INTO {} (id, instance_id, client_id, date_limite, taches, date_creation, "
-                    "duree_heures, numero, date_debut_au_plus_tot, est_prospect, description, nom_client) "
-                    "VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s)"
+                    "duree_heures, numero, date_debut_au_plus_tot, est_prospect, description, nom_client, "
+                    "gammes) "
+                    "VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)"
                 ).format(self._table("commandes")),
                 (
                     commande_id,
@@ -919,6 +947,7 @@ class EtatPostgres:
                     est_prospect,
                     description,
                     nom_client,
+                    self._gammes_commande_vers_json(gammes),
                 ),
             )
             connexion.commit()
@@ -928,7 +957,7 @@ class EtatPostgres:
             ligne = connexion.execute(
                 sql.SQL(
                     "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
-                    "numero, date_debut_au_plus_tot, est_prospect, description, nom_client "
+                    "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes "
                     "FROM {} WHERE id = %s"
                 ).format(self._table("commandes")),
                 (commande_id,),
@@ -948,6 +977,7 @@ class EtatPostgres:
             est_prospect,
             description,
             nom_client,
+            gammes,
         ) = ligne
         return CommandeEnregistree(
             id=id_,
@@ -962,12 +992,36 @@ class EtatPostgres:
             est_prospect=est_prospect,
             description=description,
             nom_client=nom_client,
+            gammes=self._gammes_commande_depuis_json(gammes),
         )
+
+    def ajouter_gamme_a_commande(
+        self, commande_id: str, taches_ajoutees: tuple[str, ...], gamme: GammeCommandeEnregistree
+    ) -> CommandeEnregistree:
+        """Voir `EtatAPI.ajouter_gamme_a_commande` (`api/etat.py`) — même contrat, `UPDATE` ciblé
+        plutôt qu'un ré-`INSERT` (qui violerait la clé primaire `id` et écraserait
+        `date_creation`)."""
+        commande = self.recuperer_commande(commande_id)
+        nouvelles_taches = (*commande.taches, *taches_ajoutees)
+        nouvelles_gammes = (*commande.gammes, gamme)
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("UPDATE {} SET taches = %s::jsonb, gammes = %s::jsonb WHERE id = %s").format(
+                    self._table("commandes")
+                ),
+                (
+                    json.dumps(list(nouvelles_taches)),
+                    self._gammes_commande_vers_json(nouvelles_gammes),
+                    commande_id,
+                ),
+            )
+            connexion.commit()
+        return replace(commande, taches=nouvelles_taches, gammes=nouvelles_gammes)
 
     def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:
         requete = sql.SQL(
             "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
-            "numero, date_debut_au_plus_tot, est_prospect, description, nom_client "
+            "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes "
             "FROM {} WHERE 1 = 1"
         ).format(self._table("commandes"))
         parametres: list[str] = []
@@ -991,6 +1045,7 @@ class EtatPostgres:
                 est_prospect=est_prospect,
                 description=description,
                 nom_client=nom_client,
+                gammes=self._gammes_commande_depuis_json(gammes),
             )
             for (
                 id_,
@@ -1005,6 +1060,7 @@ class EtatPostgres:
                 est_prospect,
                 description,
                 nom_client,
+                gammes,
             ) in lignes
         ]
 

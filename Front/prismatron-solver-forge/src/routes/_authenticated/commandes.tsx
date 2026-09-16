@@ -29,6 +29,7 @@ import {
   useLabelsInstances,
   type StatutCommande,
 } from "@/integrations/prisme";
+import { libelleProduitsCommande } from "@/lib/commande-produits";
 import { aujourdhui, debutJour, formatDateRelative } from "@/lib/dates-relatives";
 
 export const Route = createFileRoute("/_authenticated/commandes")({
@@ -196,6 +197,7 @@ function CommandesPage() {
                 <TableHead>Commande</TableHead>
                 <TableHead>Atelier</TableHead>
                 <TableHead>Client</TableHead>
+                <TableHead>Produits</TableHead>
                 <TableHead>Tâches</TableHead>
                 <TableHead>Échéance</TableHead>
                 <TableHead>Début d'exécution</TableHead>
@@ -212,6 +214,11 @@ function CommandesPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm">{commande.client_id}</TableCell>
+                  <TableCell className="text-sm">
+                    {libelleProduitsCommande(commande.gammes) ?? (
+                      <span className="text-muted-foreground">—</span>
+                    )}
+                  </TableCell>
                   <TableCell title={commande.taches.join(", ")}>
                     {commande.taches.length} tâche{commande.taches.length > 1 ? "s" : ""}
                     {commande.taches_manquantes.length > 0 && (

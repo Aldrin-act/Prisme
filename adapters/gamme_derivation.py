@@ -139,15 +139,22 @@ def traiter_nouvelle_commande(
     gammes: list[GammeAvecQuantite],
     commande_id: str,
     estimateur_duree: EstimateurDuree | None = None,
+    index_depart: int = 0,
 ) -> ResultatExplosionGammes:
     """Fusionne une ou plusieurs gammes (chacune avec sa propre quantité) dans `instance` —
-    explosion de chaque gamme (préfixée par son index dans `gammes`, voir `exploser_gamme`), puis
-    (si un estimateur est fourni) estimation des durées manquantes, puis dérivation des
-    compatibilités par compétence. Ne dérive **pas** d'échéance elle-même — contrairement à
-    l'ancienne version à une seule gamme : une commande pouvant désormais combiner plusieurs
-    gammes *et* des tâches choisies directement, la dérivation d'échéance se fait une seule fois,
-    côté appelant (`api/routes/ingestion.py::ajouter_commande`), sur l'ensemble complet des
-    tâches de la commande (explosées ici + choisies directement).
+    explosion de chaque gamme (préfixée par son index dans `gammes`, décalé de `index_depart`,
+    voir `exploser_gamme`), puis (si un estimateur est fourni) estimation des durées manquantes,
+    puis dérivation des compatibilités par compétence. Ne dérive **pas** d'échéance elle-même —
+    contrairement à l'ancienne version à une seule gamme : une commande pouvant désormais combiner
+    plusieurs gammes *et* des tâches choisies directement, la dérivation d'échéance se fait une
+    seule fois, côté appelant (`api/routes/ingestion.py::ajouter_commande`/
+    `ajouter_produit_a_commande`), sur l'ensemble complet des tâches de la commande (explosées ici
+    + choisies directement).
+
+    `index_depart` (par défaut 0, comportement inchangé pour une commande neuve) : le nombre de
+    gammes déjà explosées pour cette même commande lors d'appels précédents — évite toute
+    collision de préfixe quand un produit est ajouté après coup à une commande qui en a déjà
+    (`ajouter_produit_a_commande`, qui passe `len(commande.gammes)`).
 
     `instance` n'est jamais mutée : le résultat est une instance neuve, à faire persister par
     l'appelant (`EtatAPI.modifier_instance`)."""
@@ -157,8 +164,8 @@ def traiter_nouvelle_commande(
     durees_connues: dict[str, int] = {}
     avertissements: list[str] = []
 
-    for index, (gamme, quantite) in enumerate(gammes):
-        prefixe_gamme = str(index)
+    for decalage, (gamme, quantite) in enumerate(gammes):
+        prefixe_gamme = str(index_depart + decalage)
         taches_gamme, contraintes_gamme, avertissements_gamme = exploser_gamme(
             commande_id, prefixe_gamme, quantite, gamme, instance.ressources, ids_existants
         )
@@ -174,8 +181,7 @@ def traiter_nouvelle_commande(
         durees_connues |= {
             f"{commande_id}_{prefixe_gamme}_{etape.id}": etape.duree_nominale
             for etape in gamme.etapes
-            if etape.duree_nominale is not None
-            and f"{commande_id}_{prefixe_gamme}_{etape.id}" in ids_realisees
+            if etape.duree_nominale is not None and f"{commande_id}_{prefixe_gamme}_{etape.id}" in ids_realisees
         }
 
     taches = [*instance.taches, *nouvelles_taches]

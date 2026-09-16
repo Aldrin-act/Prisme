@@ -15,7 +15,7 @@ from adapters.gamme_derivation import ErreurExplosionGamme, GammeAvecQuantite, t
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
 from api.dependencies import obtenir_registre
-from api.etat import CommandeEnregistree, EtatAPI, obtenir_etat, structure_contraintes
+from api.etat import CommandeEnregistree, EtatAPI, GammeCommandeEnregistree, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
@@ -68,6 +68,13 @@ def _estimateur_duree_optionnel() -> EstimateurDuree | None:
     except ImportError:
         return None
     return estimateur_par_defaut()
+
+
+def _gammes_commande_en_dicts(gammes: tuple[GammeCommandeEnregistree, ...]) -> list[dict[str, object]]:
+    """Sérialisation de `CommandeEnregistree.gammes` pour les réponses JSON ci-dessous — même
+    forme que `RequeteGammeCommande` côté écriture, plus `produit`/`nom` (copie figée à la
+    création, voir docstring de `GammeCommandeEnregistree`)."""
+    return [{"gamme_id": g.gamme_id, "produit": g.produit, "nom": g.nom, "quantite": g.quantite} for g in gammes]
 
 
 def _ressources_manquantes_par_rapport_a_la_base(base: InstanceTRCO, scenario: InstanceTRCO) -> set[str]:
@@ -137,6 +144,13 @@ def lister_toutes_commandes(
                     "date_limite": commande.date_limite,
                     "taches": list(commande.taches),
                     "date_creation": commande.date_creation,
+                    "duree_heures": commande.duree_heures,
+                    "numero": commande.numero,
+                    "date_debut_au_plus_tot": commande.date_debut_au_plus_tot,
+                    "est_prospect": commande.est_prospect,
+                    "description": commande.description,
+                    "nom_client": commande.nom_client,
+                    "gammes": _gammes_commande_en_dicts(commande.gammes),
                     "date_execution": date_execution,
                     **calculer_statut_commande(
                         instance, planning, commande.taches, commande.date_limite
@@ -455,6 +469,12 @@ def ajouter_commande(
         est_prospect=requete.est_prospect,
         description=requete.description,
         nom_client=requete.nom_client,
+        gammes=tuple(
+            GammeCommandeEnregistree(
+                gamme_id=g.gamme.id, produit=g.gamme.produit, nom=g.gamme.nom, quantite=g.quantite
+            )
+            for g in gammes_resolues
+        ),
     )
 
     execution_id: str | None = None
@@ -475,6 +495,111 @@ def ajouter_commande(
         "commande_id": commande_id,
         "structure_contraintes": structure_contraintes(instance_fusionnee),
         "avertissements": list(avertissements),
+        "execution_id": execution_id,
+        "execution_reussie": execution_reussie,
+        "erreur_execution": erreur_execution,
+    }
+
+
+@router.post("/commandes/{commande_id}/produits")
+def ajouter_produit_a_commande(
+    commande_id: str,
+    requete: RequeteGammeCommande,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Ajoute un produit (gamme) supplémentaire à une commande déjà créée — complète
+    `POST /{instance_id}/commandes`, qui ne permet de référencer des gammes qu'à la création.
+    Explose la gamme en tâches fraîches (`adapters/gamme_derivation.py`, même mécanisme), fusionne
+    dans l'instance de la commande, et étend `CommandeEnregistree.taches`/`.gammes` en place —
+    `commande_id`/`date_creation`/`date_limite` inchangés. `index_depart=len(commande.gammes)`
+    (voir `traiter_nouvelle_commande`) évite toute collision de préfixe de tâche avec les produits
+    déjà explosés pour cette même commande.
+
+    Échéance dérivée uniquement pour les tâches fraîchement explosées : les tâches déjà présentes
+    dans la commande ont déjà la leur (ou aucune), `deriver_echeances_par_commande` ne touche
+    jamais une tâche à échéance explicite (voir sa docstring) — pas de re-dérivation sur l'existant.
+
+    Même best-effort d'exécution automatique post-fusion que `ajouter_commande` ci-dessus, pour
+    les mêmes raisons (409 si aucun solveur ne correspond encore à la structure de contraintes
+    résultante — jamais une génération à la volée)."""
+    try:
+        commande = etat.recuperer_commande(commande_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="commande inconnue") from None
+
+    verifier_acces_client(utilisateur, commande.client_id)
+
+    try:
+        client_id, instance = etat.recuperer_instance(commande.instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+
+    try:
+        gamme = etat.recuperer_gamme(requete.gamme_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"gamme inconnue : {requete.gamme_id!r}") from None
+    if gamme.client_id != client_id:
+        raise HTTPException(
+            status_code=400, detail=f"la gamme {requete.gamme_id!r} n'appartient pas au client de l'instance"
+        )
+
+    try:
+        resultat_gamme = traiter_nouvelle_commande(
+            instance,
+            [GammeAvecQuantite(gamme=gamme, quantite=requete.quantite)],
+            commande_id,
+            estimateur_duree=_estimateur_duree_optionnel(),
+            index_depart=len(commande.gammes),
+        )
+    except (ErreurExplosionGamme, CompetenceSansDureeEstimee) as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    try:
+        nouvelles_echeances = deriver_echeances_par_commande(
+            [Commande(id=commande_id, taches=resultat_gamme.taches_explodees, date_limite=commande.date_limite)],
+            resultat_gamme.instance.contraintes,
+        )
+        instance_fusionnee_dsl = resultat_gamme.instance.model_copy(
+            update={"contraintes": [*resultat_gamme.instance.contraintes, *nouvelles_echeances]}
+        )
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    instance_fusionnee = etat.modifier_instance(commande.instance_id, instance_fusionnee_dsl)
+
+    commande_mise_a_jour = etat.ajouter_gamme_a_commande(
+        commande_id,
+        resultat_gamme.taches_explodees,
+        GammeCommandeEnregistree(
+            gamme_id=gamme.id, produit=gamme.produit, nom=gamme.nom, quantite=requete.quantite
+        ),
+    )
+
+    execution_id: str | None = None
+    execution_reussie: bool | None = None
+    erreur_execution: str | None = None
+    try:
+        registre = obtenir_registre()
+        execution_id, resultat_execution, _ = executer_pour_instance(
+            etat, registre, commande.instance_id, utilisateur
+        )
+        execution_reussie = resultat_execution.reussi
+        erreur_execution = resultat_execution.erreur
+    except HTTPException as erreur:
+        erreur_execution = str(erreur.detail)
+    except psycopg.OperationalError as erreur:
+        erreur_execution = f"exécution automatique indisponible (Postgres injoignable) : {erreur}"
+
+    return {
+        "instance_id": commande.instance_id,
+        "commande_id": commande_id,
+        "taches": list(commande_mise_a_jour.taches),
+        "gammes": _gammes_commande_en_dicts(commande_mise_a_jour.gammes),
+        "structure_contraintes": structure_contraintes(instance_fusionnee),
+        "avertissements": list(resultat_gamme.avertissements),
         "execution_id": execution_id,
         "execution_reussie": execution_reussie,
         "erreur_execution": erreur_execution,
@@ -515,6 +640,7 @@ def lister_commandes_instance(
             "est_prospect": commande.est_prospect,
             "description": commande.description,
             "nom_client": commande.nom_client,
+            "gammes": _gammes_commande_en_dicts(commande.gammes),
             "date_execution": date_execution,
             **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
         }
@@ -556,6 +682,7 @@ def obtenir_commande(
         "est_prospect": commande.est_prospect,
         "description": commande.description,
         "nom_client": commande.nom_client,
+        "gammes": _gammes_commande_en_dicts(commande.gammes),
         "date_execution": etat.date_derniere_execution_reussie(commande.instance_id),
         **statut.en_dict(),
     }

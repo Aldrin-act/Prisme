@@ -111,6 +111,48 @@ def test_ajouter_commande_explose_la_gamme_dans_l_instance() -> None:
         app.dependency_overrides.clear()
 
 
+def test_ajouter_commande_persiste_et_affiche_les_gammes_referencees() -> None:
+    """Le lien vers les gammes utilisées survit à la création — visible dans les trois lectures
+    (liste par instance, liste transverse, détail d'une commande), en copie figée (produit/nom au
+    moment de la création, indépendante d'une modification ultérieure de la gamme elle-même)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        gamme_id = _creer_gamme(client, nom="Gamme vanne")
+
+        reponse = client.post(
+            f"/ingestion/{instance_id}/commandes",
+            json={"gammes": [{"gamme_id": gamme_id, "quantite": 5}], "date_limite": 10},
+        )
+        assert reponse.status_code == 200, reponse.json()
+        commande_id = reponse.json()["commande_id"]
+
+        gamme_attendue = {"gamme_id": gamme_id, "produit": "Vanne V12", "nom": "Gamme vanne", "quantite": 5}
+
+        par_instance = client.get(f"/ingestion/{instance_id}/commandes").json()
+        commande_par_instance = next(c for c in par_instance if c["commande_id"] == commande_id)
+        assert commande_par_instance["gammes"] == [gamme_attendue]
+
+        toutes = client.get("/ingestion/commandes").json()
+        commande_globale = next(c for c in toutes if c["commande_id"] == commande_id)
+        assert commande_globale["gammes"] == [gamme_attendue]
+
+        detail = client.get(f"/ingestion/commandes/{commande_id}").json()
+        assert detail["gammes"] == [gamme_attendue]
+
+        # Modifier la gamme après coup ne réécrit pas la traçabilité déjà persistée.
+        client.put(
+            f"/gammes/{gamme_id}",
+            json={"produit": "Vanne V13", "etapes": [{"id": "soudure", "competences": ["soudure"]}]},
+        )
+        detail_apres_modif = client.get(f"/ingestion/commandes/{commande_id}").json()
+        assert detail_apres_modif["gammes"] == [gamme_attendue]
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_ajouter_commande_deux_gammes_fusionne_les_deux_produits() -> None:
     """Une commande peut référencer plusieurs gammes (plusieurs produits) dans la même requête —
     nouveau comportement par rapport à l'ancienne version (une seule gamme par commande)."""

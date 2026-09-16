@@ -6,6 +6,7 @@ vraie base Postgres plutôt que par un dict en mémoire.
 
 from __future__ import annotations
 
+from api.etat import GammeCommandeEnregistree
 from api.etat_postgres import EtatPostgres
 from dsl.schema import InstanceTRCO, MinimiserMakespan, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
@@ -660,6 +661,30 @@ def test_commande_round_trip(etat_postgres_test: EtatPostgres) -> None:
     assert commande.date_limite == 10
     assert commande.taches == ("T1", "T2")
     assert commande.date_creation
+
+
+def test_commande_gammes_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    """`CommandeEnregistree.gammes` (produits référencés, copie figée à la création — voir
+    docstring de `GammeCommandeEnregistree`) survit à un aller-retour Postgres."""
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    gammes = (
+        GammeCommandeEnregistree(gamme_id="g1", produit="Vanne V12", nom="Gamme vanne", quantite=5),
+        GammeCommandeEnregistree(gamme_id="g2", produit="Bride B7", nom=None, quantite=None),
+    )
+    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", 10, ("T1",), gammes=gammes)
+
+    commande = etat_postgres_test.recuperer_commande("cmd-1")
+
+    assert commande.gammes == gammes
+
+
+def test_commande_sans_gammes_est_vide(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", 10, ("T1", "T2"))
+
+    commande = etat_postgres_test.recuperer_commande("cmd-1")
+
+    assert commande.gammes == ()
 
 
 def test_commande_date_limite_optionnelle(etat_postgres_test: EtatPostgres) -> None:

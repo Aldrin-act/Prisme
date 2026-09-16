@@ -322,6 +322,17 @@ export interface OperationCommande {
   fin: number;
 }
 
+// Un produit (gamme) référencé par une commande, tel que connu au moment de sa création —
+// `produit`/`nom` sont une copie figée (pas une lecture live de GammeProduit) : modifier ou
+// supprimer la gamme elle-même après coup n'affecte jamais la traçabilité d'une commande déjà
+// passée. `gamme_id` reste utile pour retrouver la gamme si elle existe encore.
+export interface GammeCommandeStatut {
+  gamme_id: string;
+  produit: string;
+  nom: string | null;
+  quantite: number | null;
+}
+
 // GET /ingestion/commandes/{commande_id} — statut recalculé à la volée contre le dernier
 // planning réussi de l'instance, jamais mis en cache.
 export interface StatutCommande {
@@ -343,6 +354,9 @@ export interface StatutCommande {
   est_prospect: boolean;
   description: string | null;
   nom_client: string | null;
+  // Produits (gammes) référencés par cette commande, avec leur quantité — vide pour une commande
+  // qui ne référence que des tâches choisies directement (voir `taches` ci-dessus).
+  gammes: GammeCommandeStatut[];
   // Horodatage réel de la dernière exécution réussie de l'instance (même valeur que
   // PlanningAvecDurees.date_execution) — ancrage calendaire des jours relatifs de cette
   // commande (date_limite, operations[].debut/fin). `null` tant que l'instance n'a jamais été

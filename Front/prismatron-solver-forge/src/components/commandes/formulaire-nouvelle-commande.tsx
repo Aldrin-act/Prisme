@@ -10,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   prismeKeys,
   useAjouterCommande,
-  useGammes,
   PrismeAPIError,
   type CompatibiliteRessourceTache,
   type InstanceDetail,
@@ -50,11 +49,12 @@ function libelleDureeTache(tacheId: string, instance: InstanceDetail): string | 
 
 /**
  * Formulaire d'ajout d'une commande à une instance donnée — une commande relie des tâches déjà
- * présentes dans l'instance et/ou une ou plusieurs gammes (explosées en tâches fraîches) à une
- * échéance client. Partagé entre l'onglet Flux d'une instance (`routes/_authenticated/
- * instances.tsx::SectionNouvelleCommande`, `instance` déjà fixée par le contexte) et la page
- * Commandes (`routes/_authenticated/commandes.tsx`, `instance` choisie via un sélecteur
- * d'atelier) — même formulaire, jamais dupliqué.
+ * présentes dans l'instance à une échéance client. Partagé entre l'onglet Flux d'une instance
+ * (`routes/_authenticated/instances.tsx::SectionNouvelleCommande`, `instance` déjà fixée par le
+ * contexte) et la page Commandes (`routes/_authenticated/commandes.tsx`, `instance` choisie via
+ * un sélecteur d'atelier) — même formulaire, jamais dupliqué. Les gammes (produits → suite de
+ * tâches) restent gérables depuis la page Gammes et consommables via l'API, mais volontairement
+ * absentes de ce formulaire.
  */
 export function FormulaireNouvelleCommande({
   instance,
@@ -69,11 +69,6 @@ export function FormulaireNouvelleCommande({
   const ajouter = useAjouterCommande();
   const [ouvert, setOuvert] = useState(false);
   const [tachesChoisies, setTachesChoisies] = useState<string[]>([]);
-  // Produits (gammes) de la commande — coexiste avec la sélection directe de tâches ci-dessus :
-  // une commande peut mélanger les deux (une gamme s'explose en tâches fraîches, `quantite` reste
-  // du texte de saisie tant que le champ est vide/en cours d'édition).
-  const [gammesChoisies, setGammesChoisies] = useState<{ gammeId: string; quantite: string }[]>([]);
-  const { data: gammes } = useGammes();
   const [dateLimite, setDateLimite] = useState("");
   const [dateDebutAuPlusTot, setDateDebutAuPlusTot] = useState("");
   const [dureeHeures, setDureeHeures] = useState("");
@@ -99,7 +94,6 @@ export function FormulaireNouvelleCommande({
 
   function ouvrir() {
     setTachesChoisies([]);
-    setGammesChoisies([]);
     setDateLimite("");
     setDateDebutAuPlusTot("");
     setDureeHeures("");
@@ -120,18 +114,6 @@ export function FormulaireNouvelleCommande({
     );
   }
 
-  function basculerGamme(gammeId: string) {
-    setGammesChoisies((prev) =>
-      prev.some((g) => g.gammeId === gammeId)
-        ? prev.filter((g) => g.gammeId !== gammeId)
-        : [...prev, { gammeId, quantite: "" }],
-    );
-  }
-
-  function majQuantiteGamme(gammeId: string, quantite: string) {
-    setGammesChoisies((prev) => prev.map((g) => (g.gammeId === gammeId ? { ...g, quantite } : g)));
-  }
-
   function soumettre() {
     // "jours" ou "heures" selon instance.unite_temps — un input date perd toute précision
     // horaire pour une instance en mode heures (voir uniteTemps ci-dessus).
@@ -146,10 +128,6 @@ export function FormulaireNouvelleCommande({
         instanceId: instance.instance_id,
         requete: {
           taches: tachesChoisies,
-          gammes: gammesChoisies.map((g) => ({
-            gamme_id: g.gammeId,
-            quantite: g.quantite !== "" ? Number(g.quantite) : undefined,
-          })),
           // Convertie en jours/heures relatifs à "aujourd'hui" — aucune exécution réelle n'existe
           // forcément encore pour ancrer sur autre chose au moment de la saisie (voir
           // src/lib/dates-relatives.ts). Le DSL/backend ne voit jamais que cet entier.
@@ -267,48 +245,6 @@ export function FormulaireNouvelleCommande({
             />
           </div>
 
-          {gammes && gammes.length > 0 && (
-            <div className="space-y-1">
-              <Label>Produits (gammes)</Label>
-              <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 p-2">
-                {gammes.map((g) => {
-                  const choisie = gammesChoisies.find((c) => c.gammeId === g.gamme_id);
-                  return (
-                    <div key={g.gamme_id} className="flex items-center gap-2 text-sm">
-                      <label className="flex flex-1 items-center gap-2">
-                        <Checkbox
-                          checked={!!choisie}
-                          onCheckedChange={() => basculerGamme(g.gamme_id)}
-                        />
-                        <span>
-                          {g.produit}
-                          {g.nom ? ` — ${g.nom}` : ""}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          · {g.etapes.length} étape{g.etapes.length > 1 ? "s" : ""}
-                        </span>
-                      </label>
-                      {choisie && (
-                        <Input
-                          type="number"
-                          min={1}
-                          placeholder="Quantité"
-                          className="h-7 w-24 text-xs"
-                          value={choisie.quantite}
-                          onChange={(e) => majQuantiteGamme(g.gamme_id, e.target.value)}
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Chaque produit choisi ajoute sa propre séquence de tâches à la commande — gérer les
-                gammes depuis la page <span className="font-medium">Gammes</span>.
-              </p>
-            </div>
-          )}
-
           <div className="space-y-1">
             <Label>Tâches concernées</Label>
             <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 p-2">
@@ -361,11 +297,7 @@ export function FormulaireNouvelleCommande({
             <Button
               size="sm"
               onClick={soumettre}
-              disabled={
-                (tachesChoisies.length === 0 && gammesChoisies.length === 0) ||
-                !dateLimite ||
-                ajouter.isPending
-              }
+              disabled={tachesChoisies.length === 0 || !dateLimite || ajouter.isPending}
             >
               {ajouter.isPending ? "Ajout..." : "Ajouter la commande"}
             </Button>

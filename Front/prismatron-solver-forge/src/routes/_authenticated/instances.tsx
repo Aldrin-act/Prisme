@@ -80,6 +80,7 @@ import {
   type Objectif,
   type StatutCommande,
 } from "@/integrations/prisme";
+import { libelleProduitsCommande } from "@/lib/commande-produits";
 import { aujourdhui, debutJour, formatDateRelative, type UniteTemps } from "@/lib/dates-relatives";
 import { formatDuree } from "@/lib/unite-duree";
 import { BadgeTypeSignal } from "./supervision";
@@ -811,6 +812,11 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
                     </Badge>
                   </div>
                 </div>
+                {libelleProduitsCommande(c.gammes) && (
+                  <p className="text-xs text-muted-foreground">
+                    Produits : {libelleProduitsCommande(c.gammes)}
+                  </p>
+                )}
                 {c.description && <p className="text-xs text-muted-foreground">{c.description}</p>}
                 <CommandeTimeline commande={c} uniteTemps={uniteTemps} />
               </div>
