@@ -150,6 +150,7 @@ async def ingerer_depuis_csv(
 def ingerer_depuis_json_avec_competences(
     client_id: str,
     payload: dict[str, Any] = Body(...),
+    unite_temps: Literal["jours", "heures"] | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
@@ -158,8 +159,14 @@ def ingerer_depuis_json_avec_competences(
     porter une durée estimée (`duree_estimee_minutes`), permettant de dériver
     sa compatibilité depuis des `CompetenceRequise`/`Ressource.competences`
     plutôt que de la déclarer à la main. Un payload sans rien de tout ça est
-    ingéré tel quel, sans transformation."""
+    ingéré tel quel, sans transformation.
+
+    `unite_temps` (optionnel) l'emporte sur le `"unite_temps"` éventuellement déclaré dans le
+    payload : c'est le choix fait à l'import (formulaire d'ingestion) qui tranche, un fichier
+    d'exemple ne portant souvent aucune unité. Absent, le payload décide seul, comme avant."""
     verifier_acces_client(utilisateur, client_id)
+    if unite_temps is not None:
+        payload = {**payload, "unite_temps": unite_temps}
     try:
         resultat = traduire_json(payload, estimateur_duree=_estimateur_duree_optionnel())
     except ErreurPayloadJsonInvalide as erreur:
@@ -293,6 +300,10 @@ class RequeteCsvLocal(BaseModel):
     chemin_dossier: str
     client_id: str
     delimiteur: str = ","
+    # Même rôle exactement que sur `POST /adapters/csv/{client_id}` ci-dessus : devient
+    # `InstanceTRCO.unite_temps` et fixe la colonne de durée attendue dans contraintes.csv
+    # (`duree_jours`/`duree_heures`) — aucune conversion des entiers lus.
+    unite_temps: Literal["jours", "heures"] = "jours"
 
 
 @router.post("/csv-local/ingerer")
@@ -369,6 +380,7 @@ def ingerer_depuis_csv_local(
             contraintes_octets,
             estimateur_duree=_estimateur_duree_optionnel(),
             delimiteur=requete.delimiteur,
+            unite_temps=requete.unite_temps,
         )
     except ErreurFichierCsvInvalide as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur

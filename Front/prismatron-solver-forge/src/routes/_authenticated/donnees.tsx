@@ -68,6 +68,13 @@ import {
   type TypeAuthentificationAPI,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
+import type { UniteTemps } from "@/lib/dates-relatives";
+import {
+  colonneDureeCsv,
+  hrefGabaritCsv,
+  libelleUnite,
+  nomGabaritCsv,
+} from "@/lib/unite-ingestion";
 
 const searchSchema = z.object({
   source: z.string().optional(),
@@ -712,18 +719,12 @@ const LABELS_ENTITE_CSV: Record<EntiteCsv, string> = {
   commandes: "Commandes",
 };
 
-const GABARITS_ENTITE_CSV: Record<EntiteCsv, string> = {
-  taches: "/gabarits/taches.csv",
-  ressources: "/gabarits/ressources.csv",
-  contraintes: "/gabarits/contraintes.csv",
-  commandes: "/gabarits/commandes.csv",
-};
-
 // Documentation des colonnes attendues par fichier — reflète exactement
 // adapters/csv_import/traducteur.py (COLONNES_*_REQUISES/OPTIONNELLES,
 // TYPES_CONTRAINTE_SUPPORTES) : une deuxième source de vérité délibérée côté
-// frontend, comme GABARITS_ENTITE_CSV ci-dessus — à relire si le schéma
-// backend change.
+// frontend, comme les gabarits de src/lib/unite-ingestion.ts — à relire si le
+// schéma backend change. Fonction de l'unité de temps : le nom de la colonne de
+// durée et le sens de date_limite en dépendent.
 interface ChampDocCsv {
   champ: string;
   requis: boolean;
@@ -731,80 +732,86 @@ interface ChampDocCsv {
   valeursAttendues: string;
 }
 
-const DOC_CHAMPS_CSV: Record<EntiteCsv, ChampDocCsv[]> = {
-  taches: [
-    {
-      champ: "id",
-      requis: true,
-      type: "Texte",
-      valeursAttendues: "Identifiant unique de la tâche",
-    },
-    { champ: "nom", requis: false, type: "Texte", valeursAttendues: "Libellé affiché" },
-  ],
-  ressources: [
-    {
-      champ: "id",
-      requis: true,
-      type: "Texte",
-      valeursAttendues: "Identifiant unique de la ressource",
-    },
-    { champ: "nom", requis: false, type: "Texte", valeursAttendues: "Libellé affiché" },
-    {
-      champ: "competences",
-      requis: false,
-      type: "Liste",
-      valeursAttendues: "Séparées par ; (ex. decoupe;assemblage)",
-    },
-  ],
-  contraintes: [
-    {
-      champ: "type",
-      requis: true,
-      type: "Texte",
-      valeursAttendues: "precedence | compatibilite_ressource_tache | competence_requise",
-    },
-    {
-      champ: "tache_avant, tache_apres",
-      requis: false,
-      type: "Texte",
-      valeursAttendues: "Requis si type = precedence",
-    },
-    {
-      champ: "tache, ressource, duree_jours",
-      requis: false,
-      type: "Texte / Texte / Entier",
-      valeursAttendues: "Requis si type = compatibilite_ressource_tache",
-    },
-    {
-      champ: "tache, competence",
-      requis: false,
-      type: "Texte",
-      valeursAttendues: "Requis si type = competence_requise",
-    },
-  ],
-  commandes: [
-    {
-      champ: "id",
-      requis: true,
-      type: "Texte",
-      valeursAttendues: "Identifiant unique de la commande",
-    },
-    {
-      champ: "taches",
-      requis: true,
-      type: "Liste",
-      valeursAttendues: "Séparées par ; (ex. T1;T2)",
-    },
-    { champ: "client", requis: false, type: "Texte", valeursAttendues: "Nom du client" },
-    {
-      champ: "date_limite",
-      requis: false,
-      type: "Entier",
-      valeursAttendues:
-        "Jours relatifs — dérive une échéance par tâche liée, jamais une date calendaire",
-    },
-  ],
-};
+function docChampsCsv(unite: UniteTemps): Record<EntiteCsv, ChampDocCsv[]> {
+  return {
+    taches: [
+      {
+        champ: "id",
+        requis: true,
+        type: "Texte",
+        valeursAttendues: "Identifiant unique de la tâche",
+      },
+      { champ: "nom", requis: false, type: "Texte", valeursAttendues: "Libellé affiché" },
+    ],
+    ressources: [
+      {
+        champ: "id",
+        requis: true,
+        type: "Texte",
+        valeursAttendues: "Identifiant unique de la ressource",
+      },
+      { champ: "nom", requis: false, type: "Texte", valeursAttendues: "Libellé affiché" },
+      {
+        champ: "competences",
+        requis: false,
+        type: "Liste",
+        valeursAttendues: "Séparées par ; (ex. decoupe;assemblage)",
+      },
+    ],
+    contraintes: [
+      {
+        champ: "type",
+        requis: true,
+        type: "Texte",
+        valeursAttendues: "precedence | compatibilite_ressource_tache | competence_requise",
+      },
+      {
+        champ: "tache_avant, tache_apres",
+        requis: false,
+        type: "Texte",
+        valeursAttendues: "Requis si type = precedence",
+      },
+      {
+        champ: `tache, ressource, ${colonneDureeCsv(unite)}`,
+        requis: false,
+        type: "Texte / Texte / Entier",
+        valeursAttendues: `Requis si type = compatibilite_ressource_tache — durée en ${libelleUnite(unite)}`,
+      },
+      {
+        champ: "tache, competence",
+        requis: false,
+        type: "Texte",
+        valeursAttendues: "Requis si type = competence_requise",
+      },
+    ],
+    commandes: [
+      {
+        champ: "id",
+        requis: true,
+        type: "Texte",
+        valeursAttendues: "Identifiant unique de la commande",
+      },
+      {
+        champ: "taches",
+        requis: true,
+        type: "Liste",
+        valeursAttendues: "Séparées par ; (ex. T1;T2)",
+      },
+      { champ: "client", requis: false, type: "Texte", valeursAttendues: "Nom du client" },
+      {
+        champ: "date_limite",
+        requis: false,
+        type: "Entier",
+        valeursAttendues: `${unite === "heures" ? "Heures" : "Jours"} relatifs — dérive une échéance par tâche liée, jamais une date calendaire`,
+      },
+    ],
+  };
+}
+
+const OPTIONS_UNITE_TEMPS: { valeur: UniteTemps; label: string }[] = [
+  { valeur: "heures", label: "Heures" },
+  { valeur: "jours", label: "Jours" },
+];
 
 const OPTIONS_DELIMITEUR_CSV: { valeur: string; label: string }[] = [
   { valeur: ",", label: "Virgule (,)" },
@@ -830,6 +837,11 @@ function ImporteurCsvDirect() {
 
   const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
   const [delimiteur, setDelimiteur] = useState(",");
+  // Unité des entiers écrits dans les fichiers (durées, date_limite) — transmise telle quelle au
+  // backend (unite_temps), qui ne convertit rien : elle fixe aussi la colonne de durée attendue et
+  // le gabarit proposé au téléchargement.
+  const [uniteTemps, setUniteTemps] = useState<UniteTemps>("heures");
+  const docChamps = docChampsCsv(uniteTemps);
   const [fichiers, setFichiers] = useState<Partial<Record<EntiteCsv, File>>>({});
   const inputRefs: Record<EntiteCsv, RefObject<HTMLInputElement | null>> = {
     taches: useRef<HTMLInputElement>(null),
@@ -870,6 +882,7 @@ function ImporteurCsvDirect() {
           commandes: fichiers.commandes,
         },
         delimiteur,
+        uniteTemps,
       },
       {
         onSuccess: (data) => {
@@ -914,6 +927,28 @@ function ImporteurCsvDirect() {
         </p>
       </div>
 
+      <div className="space-y-1.5">
+        <Label htmlFor="import_csv_unite_temps">Unité de temps</Label>
+        <Select value={uniteTemps} onValueChange={(v) => setUniteTemps(v as UniteTemps)}>
+          <SelectTrigger id="import_csv_unite_temps" className="max-w-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {OPTIONS_UNITE_TEMPS.map((o) => (
+              <SelectItem key={o.valeur} value={o.valeur}>
+                {o.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-muted-foreground">
+          Unité dans laquelle les durées et dates limites des fichiers sont écrites — lues telles
+          quelles, sans conversion. Colonne de durée attendue :{" "}
+          <code className="font-mono">{colonneDureeCsv(uniteTemps)}</code>. Les gabarits ci-dessous
+          suivent ce choix.
+        </p>
+      </div>
+
       <div className="space-y-3">
         {ENTITES_CSV.map((entite) => {
           const requis = ENTITES_CSV_REQUISES.includes(entite);
@@ -939,7 +974,7 @@ function ImporteurCsvDirect() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {DOC_CHAMPS_CSV[entite].map((c) => (
+                      {docChamps[entite].map((c) => (
                         <TableRow key={c.champ}>
                           <TableCell className="font-mono text-xs">{c.champ}</TableCell>
                           <TableCell className="text-xs">{c.requis ? "X" : ""}</TableCell>
@@ -954,11 +989,12 @@ function ImporteurCsvDirect() {
                 </div>
 
                 <a
-                  href={GABARITS_ENTITE_CSV[entite]}
+                  href={hrefGabaritCsv(entite, uniteTemps)}
                   download
                   className="inline-flex items-center gap-1 text-xs text-primary underline-offset-2 hover:underline"
                 >
-                  <Download className="h-3 w-3" /> Télécharger le gabarit {entite}.csv
+                  <Download className="h-3 w-3" /> Télécharger le gabarit{" "}
+                  {nomGabaritCsv(entite, uniteTemps)}
                 </a>
 
                 <ChampFichierUnique

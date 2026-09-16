@@ -68,6 +68,18 @@ import {
   parseEntreeDateHeure,
   type UniteTemps,
 } from "@/lib/dates-relatives";
+import {
+  colonneDureeCsv,
+  convertirDateSaisie,
+  convertirDatesIndisponibles,
+  convertirDureeSaisie,
+  convertirMotifHebdomadaire,
+  hrefGabaritCsv,
+  hrefGabaritJson,
+  libelleUnite,
+  nomGabaritCsv,
+  nomGabaritJson,
+} from "@/lib/unite-ingestion";
 
 // Adaptateurs ERP réellement branchés côté backend (POST /adapters/{id}/ingerer).
 // Ajouter un adaptateur = ajouter une entrée ici, aucun autre changement de composant.
@@ -223,6 +235,24 @@ export function construireObjectifs(objectifs: ObjectifLigne[]): Objectif[] {
 // dsl/schema/instance.py::InstanceTRCO._disponibilite_dans_le_cycle, même constante côté serveur).
 function longueurCycle(unite: UniteTemps): number {
   return unite === "heures" ? 168 : 7;
+}
+
+// Réexprime une contrainte déjà saisie dans l'autre unité quand l'utilisateur change d'unité en
+// cours de route — sans ça, "3" saisi en jours devenait silencieusement "3 heures", et les champs
+// date/datetime-local perdaient leur valeur au changement de type d'input. Règles de conversion
+// détaillées (arrondis, dépliage jour ↔ 24 créneaux) dans src/lib/unite-ingestion.ts.
+function convertirLigneContrainte(
+  c: ContrainteLigne,
+  de: UniteTemps,
+  vers: UniteTemps,
+): ContrainteLigne {
+  return {
+    ...c,
+    duree: convertirDureeSaisie(c.duree, de, vers),
+    echeance: convertirDateSaisie(c.echeance, de, vers),
+    joursIndisponibles: convertirDatesIndisponibles(c.joursIndisponibles, de, vers),
+    joursSemaineIndisponibles: convertirMotifHebdomadaire(c.joursSemaineIndisponibles, de, vers),
+  };
 }
 
 function construireInstance(
@@ -381,11 +411,14 @@ export function IngestionDialog({
   const [clientId, setClientId] = useState(
     instanceDepart?.client_id ?? utilisateur?.client_id ?? "",
   );
-  // "Unité de temps" (jours/heures) — un seul état partagé par les onglets Saisie T-R-C-O et
-  // Fichiers CSV (voir CLIENT_CONFIG.routes.adapters, POST .../csv/{client_id}?unite_temps=...) :
-  // les deux produisent une seule instance, l'unité ne peut pas différer entre les deux.
+  // "Unité de temps" (jours/heures) — un seul état partagé par tous les onglets qui produisent
+  // une instance (Saisie T-R-C-O, Fichiers CSV, CSV Local, Fichier JSON — chacun transmet
+  // unite_temps au backend) : changer d'onglet ne remet jamais l'unité à zéro. Toujours modifié
+  // via changerUniteTemps ci-dessous, qui convertit les valeurs déjà saisies.
   const [uniteTemps, setUniteTemps] = useState<UniteTemps>(
-    instanceDepart?.unite_temps === "heures" ? "heures" : "jours",
+    // Nouvelle instance : heures par défaut. Instance existante (modification, scénario) : on
+    // garde son unité — une instance sans unite_temps est en jours (défaut historique du DSL).
+    instanceDepart ? (instanceDepart.unite_temps === "heures" ? "heures" : "jours") : "heures",
   );
   // Jours fermés par défaut (correction post-solveur, dsl/schema/instance.py::jours_fermes) —
   // défaut serveur si l'instance de départ ne le précise pas (samedi+dimanche, 0=dimanche..6=samedi).
@@ -412,6 +445,22 @@ export function IngestionDialog({
   const [objectifs, setObjectifs] = useState<ObjectifLigne[]>(
     instanceDepart ? instanceDepart.objectifs.map(objectifVersLigne) : [nouvelObjectif()],
   );
+  // Changer d'unité convertit les valeurs déjà saisies dans le formulaire T-R-C-O (durées,
+  // échéances, indisponibilités) plutôt que de les réinterpréter telles quelles. Pour les onglets
+  // fichier (CSV, JSON), rien n'est saisi ici : l'unité choisie dit seulement comment lire les
+  // entiers du fichier, et quel gabarit télécharger.
+  function changerUniteTemps(nouvelle: UniteTemps) {
+    if (nouvelle === uniteTemps) return;
+    const precedente = uniteTemps;
+    setContraintes((arr) => arr.map((c) => convertirLigneContrainte(c, precedente, nouvelle)));
+    setObjectifs((arr) =>
+      arr.map((o) => ({
+        ...o,
+        seuilGrace: convertirDureeSaisie(o.seuilGrace, precedente, nouvelle),
+      })),
+    );
+    setUniteTemps(nouvelle);
+  }
   const [source, setSource] = useState<string>(SOURCES_IMPORT[0].id);
   const [fichier, setFichier] = useState<File | null>(null);
   const inputFichierRef = useRef<HTMLInputElement>(null);
@@ -434,7 +483,7 @@ export function IngestionDialog({
 
   function reinitialiser() {
     setClientId(utilisateur?.client_id ?? "");
-    setUniteTemps("jours");
+    setUniteTemps("heures");
     setTaches([nouvelleTache()]);
     setRessources([nouvelleRessource()]);
     setContraintes([]);
@@ -553,13 +602,13 @@ export function IngestionDialog({
       setErreurParseJson("Le fichier n'est pas un JSON valide.");
       return;
     }
-    importerJson.mutate({ clientId, payload }, { onSuccess: onIngestionReussie });
+    importerJson.mutate({ clientId, payload, uniteTemps }, { onSuccess: onIngestionReussie });
   }
 
   function soumettreCsvLocal() {
     if (!cheminDossierCsvLocal.trim()) return;
     importerCsvLocal.mutate(
-      { clientId, cheminDossier: cheminDossierCsvLocal },
+      { clientId, cheminDossier: cheminDossierCsvLocal, uniteTemps },
       { onSuccess: onIngestionReussie },
     );
   }
@@ -702,7 +751,11 @@ export function IngestionDialog({
                   </p>
                 )}
 
-                <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
+                <SelecteurUniteTemps
+                  valeur={uniteTemps}
+                  onChange={changerUniteTemps}
+                  contexte="saisie"
+                />
                 <SelecteurJoursFermes valeurs={joursFermes} onChange={setJoursFermes} />
 
                 <OngletsTRCO
@@ -756,7 +809,11 @@ export function IngestionDialog({
                     idChamp="client_id"
                   />
 
-                  <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
+                  <SelecteurUniteTemps
+                    valeur={uniteTemps}
+                    onChange={changerUniteTemps}
+                    contexte="saisie"
+                  />
                   <SelecteurJoursFermes valeurs={joursFermes} onChange={setJoursFermes} />
 
                   <OngletsTRCO
@@ -877,7 +934,11 @@ export function IngestionDialog({
                     idChamp="client_id_csv"
                   />
 
-                  <SelecteurUniteTemps valeur={uniteTemps} onChange={setUniteTemps} />
+                  <SelecteurUniteTemps
+                    valeur={uniteTemps}
+                    onChange={changerUniteTemps}
+                    contexte="fichier"
+                  />
 
                   <div className="space-y-1.5">
                     <Label htmlFor="fichier_csv_taches">Tâches (.csv)</Label>
@@ -916,12 +977,15 @@ export function IngestionDialog({
                       <code className="font-mono">id,nom,competences</code> (séparées par{" "}
                       <code className="font-mono">;</code>) pour Ressources,{" "}
                       <code className="font-mono">
-                        type,tache_avant,tache_apres,tache,ressource,duree_jours,competence
+                        type,tache_avant,tache_apres,tache,ressource,{colonneDureeCsv(uniteTemps)}
+                        ,competence
                       </code>{" "}
                       pour Contraintes (<code className="font-mono">type</code> vaut{" "}
                       <code className="font-mono">precedence</code>,{" "}
                       <code className="font-mono">compatibilite_ressource_tache</code> ou{" "}
-                      <code className="font-mono">competence_requise</code>).
+                      <code className="font-mono">competence_requise</code>). La colonne{" "}
+                      <code className="font-mono">{colonneDureeCsv(uniteTemps)}</code> contient un
+                      nombre entier de {libelleUnite(uniteTemps)}, lu tel quel.
                     </p>
                     <p className="text-xs text-muted-foreground">
                       Plutôt que de saisir chaque compatibilité à la main, déclarez qu'une ressource
@@ -932,22 +996,23 @@ export function IngestionDialog({
                     </p>
                     <p className="text-xs">
                       Gabarits d'exemple :{" "}
-                      {[
-                        { nom: "taches.csv", href: "/gabarits/taches.csv" },
-                        { nom: "ressources.csv", href: "/gabarits/ressources.csv" },
-                        { nom: "contraintes.csv", href: "/gabarits/contraintes.csv" },
-                      ].map((gabarit, i) => (
-                        <span key={gabarit.href}>
-                          {i > 0 && ", "}
-                          <a
-                            href={gabarit.href}
-                            download
-                            className="text-primary underline-offset-2 hover:underline"
-                          >
-                            {gabarit.nom}
-                          </a>
-                        </span>
-                      ))}
+                      {(["taches", "ressources", "contraintes", "commandes"] as const)
+                        .map((entite) => ({
+                          nom: nomGabaritCsv(entite, uniteTemps),
+                          href: hrefGabaritCsv(entite, uniteTemps),
+                        }))
+                        .map((gabarit, i) => (
+                          <span key={gabarit.href}>
+                            {i > 0 && ", "}
+                            <a
+                              href={gabarit.href}
+                              download
+                              className="text-primary underline-offset-2 hover:underline"
+                            >
+                              {gabarit.nom}
+                            </a>
+                          </span>
+                        ))}
                     </p>
                   </div>
 
@@ -965,10 +1030,11 @@ export function IngestionDialog({
                       <code className="font-mono">id,taches</code> (
                       <code className="font-mono">taches</code> séparées par{" "}
                       <code className="font-mono">;</code>), optionnelles :{" "}
-                      <code className="font-mono">client,date_limite</code>. Dérive une échéance par
-                      tâche liée (la plus contraignante si une tâche appartient à plusieurs
-                      commandes) — une échéance déjà déclarée dans le fichier Contraintes l'emporte
-                      toujours.
+                      <code className="font-mono">client,date_limite</code> (
+                      <code className="font-mono">date_limite</code> en {libelleUnite(uniteTemps)}{" "}
+                      relatifs). Dérive une échéance par tâche liée (la plus contraignante si une
+                      tâche appartient à plusieurs commandes) — une échéance déjà déclarée dans le
+                      fichier Contraintes l'emporte toujours.
                     </p>
                   </div>
 
@@ -1001,6 +1067,12 @@ export function IngestionDialog({
                     idChamp="client_id_csvlocal"
                   />
 
+                  <SelecteurUniteTemps
+                    valeur={uniteTemps}
+                    onChange={changerUniteTemps}
+                    contexte="fichier"
+                  />
+
                   <div className="space-y-1.5">
                     <Label htmlFor="chemin_dossier_csv">Chemin du dossier CSV (côté serveur)</Label>
                     <Input
@@ -1012,8 +1084,9 @@ export function IngestionDialog({
                     />
                     <p className="text-xs text-muted-foreground">
                       Spécifiez le chemin d'un dossier présent sur le serveur contenant les trois
-                      fichiers CSV requis (taches.csv, ressources.csv, contraintes.csv). Utile pour
-                      imports en masse, tests avec données de référence, ou intégrations
+                      fichiers CSV requis (taches.csv, ressources.csv, contraintes.csv — colonne de
+                      durée <code className="font-mono">{colonneDureeCsv(uniteTemps)}</code>). Utile
+                      pour imports en masse, tests avec données de référence, ou intégrations
                       automatisées.
                     </p>
                     <p className="text-xs text-muted-foreground">
@@ -1056,6 +1129,12 @@ export function IngestionDialog({
                     idChamp="client_id_json"
                   />
 
+                  <SelecteurUniteTemps
+                    valeur={uniteTemps}
+                    onChange={changerUniteTemps}
+                    contexte="fichier"
+                  />
+
                   <div className="space-y-1.5">
                     <Label htmlFor="fichier_json">Fichier JSON (.json)</Label>
                     <Input
@@ -1071,21 +1150,24 @@ export function IngestionDialog({
                     <p className="text-xs text-muted-foreground">
                       Déposez un fichier JSON au format T-R-C-O (mêmes champs que la saisie manuelle
                       : taches, ressources, contraintes, objectifs) — ingéré tel quel si déjà
-                      complet. Plutôt que de déclarer chaque compatibilité à la main, une tâche
-                      peut exiger une compétence (<code className="font-mono">competence_requise</code>
-                      ) : sa compatibilité avec toute ressource dont les{" "}
+                      complet. Plutôt que de déclarer chaque compatibilité à la main, une tâche peut
+                      exiger une compétence (<code className="font-mono">competence_requise</code>)
+                      : sa compatibilité avec toute ressource dont les{" "}
                       <code className="font-mono">competences</code> la couvrent est alors calculée
                       automatiquement, sa durée comblée par apprentissage automatique si un
-                      estimateur est disponible.
+                      estimateur est disponible. Les champs <code className="font-mono">duree</code>{" "}
+                      et échéances sont lus en {libelleUnite(uniteTemps)} : l'unité choisie
+                      ci-dessus remplace le champ <code className="font-mono">unite_temps</code> du
+                      fichier s'il en contient un.
                     </p>
                     <p className="text-xs">
                       Gabarit d'exemple :{" "}
                       <a
-                        href="/gabarits/instance_exemple.json"
+                        href={hrefGabaritJson(uniteTemps)}
                         download
                         className="text-primary underline-offset-2 hover:underline"
                       >
-                        instance_exemple.json
+                        {nomGabaritJson(uniteTemps)}
                       </a>
                     </p>
                   </div>
@@ -1172,7 +1254,11 @@ function OngletsTRCO({
         />
       </TabsContent>
       <TabsContent value="objectifs" className="pt-3">
-        <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />
+        <SectionObjectifs
+          objectifs={objectifs}
+          setObjectifs={setObjectifs}
+          uniteTemps={uniteTemps}
+        />
       </TabsContent>
     </Tabs>
   );
@@ -1425,7 +1511,7 @@ function SectionContraintes({
                   onChange={(v) => majLigne(i, { ressource: v })}
                 />
                 <Input
-                  placeholder="durée (jours)"
+                  placeholder={`durée (${libelleUnite(uniteTemps)})`}
                   type="number"
                   min={1}
                   value={c.duree}
@@ -1492,7 +1578,7 @@ function SectionContraintes({
                   onChange={(v) => majLigne(i, { apres: v })}
                 />
                 <Input
-                  placeholder="durée setup (jours)"
+                  placeholder={`durée setup (${libelleUnite(uniteTemps)})`}
                   type="number"
                   min={0}
                   value={c.duree}
@@ -1792,9 +1878,13 @@ export function objectifVersLigne(o: Objectif): ObjectifLigne {
 export function SectionObjectifs({
   objectifs,
   setObjectifs,
+  uniteTemps = "jours",
 }: {
   objectifs: ObjectifLigne[];
   setObjectifs: React.Dispatch<React.SetStateAction<ObjectifLigne[]>>;
+  // Unité de l'instance, pour le libellé du seuil de grâce (minimiser_retards) — optionnelle,
+  // "jours" par défaut comme InstanceTRCO.unite_temps.
+  uniteTemps?: UniteTemps;
 }) {
   function majLigne(i: number, patch: Partial<ObjectifLigne>) {
     setObjectifs((arr) => arr.map((x, j) => (j === i ? { ...x, ...patch } : x)));
@@ -1893,7 +1983,7 @@ export function SectionObjectifs({
                   </SelectContent>
                 </Select>
                 <Input
-                  placeholder="seuil de grâce (jours)"
+                  placeholder={`seuil de grâce (${libelleUnite(uniteTemps)})`}
                   type="number"
                   min={0}
                   value={o.seuilGrace}
@@ -1967,9 +2057,14 @@ function ChampClient({
 function SelecteurUniteTemps({
   valeur,
   onChange,
+  contexte,
 }: {
   valeur: UniteTemps;
   onChange: (v: UniteTemps) => void;
+  // "saisie" : le formulaire T-R-C-O, dont les valeurs déjà tapées sont converties au changement.
+  // "fichier" : un import (CSV, JSON) — l'unité dit comment lire les entiers du fichier, rien n'est
+  // converti, et le gabarit proposé suit ce choix.
+  contexte: "saisie" | "fichier";
 }) {
   return (
     <div className="space-y-1.5">
@@ -1979,12 +2074,17 @@ function SelecteurUniteTemps({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="jours">Jours</SelectItem>
           <SelectItem value="heures">Heures</SelectItem>
+          <SelectItem value="jours">Jours</SelectItem>
         </SelectContent>
       </Select>
       <p className="text-xs text-muted-foreground">
-        Unité des durées/échéances de cette instance — jamais un mélange des deux.
+        {contexte === "saisie"
+          ? "Unité des durées/échéances de cette instance — jamais un mélange des deux. Changer " +
+            "d'unité convertit les valeurs déjà saisies (1 jour = 24 heures ; en repassant en " +
+            "jours, une durée est arrondie au jour supérieur)."
+          : "Unité dans laquelle les durées et échéances du fichier sont écrites — elles sont " +
+            "lues telles quelles, sans conversion. Le gabarit proposé suit ce choix."}
       </p>
     </div>
   );
@@ -2005,7 +2105,10 @@ function SelecteurJoursFermes({
   return (
     <div className="space-y-1.5">
       <Label>Jours fermés par défaut</Label>
-      <div className="flex items-center gap-1" title="Jours fermés par défaut pour toutes les ressources">
+      <div
+        className="flex items-center gap-1"
+        title="Jours fermés par défaut pour toutes les ressources"
+      >
         {NOMS_JOURS_SEMAINE_COURTS.map((nom, jourSemaine) => {
           const actif = valeurs.includes(jourSemaine);
           return (
@@ -2013,7 +2116,9 @@ function SelecteurJoursFermes({
               key={jourSemaine}
               type="button"
               onClick={() =>
-                onChange(actif ? valeurs.filter((j) => j !== jourSemaine) : [...valeurs, jourSemaine])
+                onChange(
+                  actif ? valeurs.filter((j) => j !== jourSemaine) : [...valeurs, jourSemaine],
+                )
               }
               className={`rounded px-1.5 py-1 text-xs ${
                 actif ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"

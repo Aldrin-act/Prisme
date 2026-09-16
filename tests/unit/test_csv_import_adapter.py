@@ -98,7 +98,9 @@ def test_compatibilite_derivee_pour_chaque_ressource_competente() -> None:
     ressources_csv = b"id,nom,competences\nR1,Decoupeuse,decoupe;affutage\nR2,Assembleuse,assemblage\n"
     contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
 
-    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25))
+    resultat = _traduire_resultat(
+        taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25)
+    )
     instance = resultat.instance
 
     compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
@@ -121,7 +123,9 @@ def test_compatibilite_derivee_exige_toutes_les_competences_requises() -> None:
     ressources_csv = b"id,competences\nR1,decoupe\nR2,decoupe;affutage\n"
     contraintes_csv = b"type,tache,competence\ncompetence_requise,T1,decoupe\ncompetence_requise,T1,affutage\n"
 
-    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25))
+    resultat = _traduire_resultat(
+        taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25)
+    )
     instance = resultat.instance
 
     compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
@@ -152,7 +156,9 @@ def test_compatibilite_explicite_et_derivee_par_competence_coexistent() -> None:
         b"competence_requise,T1,,,decoupe\n"
     )
 
-    resultat = _traduire_resultat(taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25))
+    resultat = _traduire_resultat(
+        taches_csv, ressources_csv, contraintes_csv, estimateur_duree=_EstimateurFaux(25)
+    )
     instance = resultat.instance
 
     compatibilites = {
@@ -331,3 +337,96 @@ def test_delimiteur_par_defaut_reste_la_virgule() -> None:
     """Comportement inchangé pour tout appelant existant qui ne déclare rien."""
     instance = traduire(TACHES_CSV, RESSOURCES_CSV, CONTRAINTES_CSV)
     assert [t.id for t in instance.taches] == ["T1", "T2"]
+
+
+# --- Colonne de durée selon l'unité de temps (duree_jours / duree_heures / duree) ---
+
+_TACHES_UNE = b"id\nT1\n"
+_RESSOURCES_UNE = b"id\nR1\n"
+
+
+def _contraintes_avec_colonne(colonne: str, valeur: str = "6") -> bytes:
+    return f"type,tache,ressource,{colonne}\ncompatibilite_ressource_tache,T1,R1,{valeur}\n".encode()
+
+
+def test_colonne_duree_heures_lue_telle_quelle_en_mode_heures() -> None:
+    resultat = _traduire_resultat(
+        _TACHES_UNE, _RESSOURCES_UNE, _contraintes_avec_colonne("duree_heures"), unite_temps="heures"
+    )
+
+    assert resultat.instance.unite_temps == "heures"
+    assert [c.duree for c in resultat.instance.contraintes] == [6]
+    assert resultat.avertissements == ()
+
+
+def test_colonne_duree_neutre_acceptee_dans_les_deux_unites() -> None:
+    for unite in ("jours", "heures"):
+        resultat = _traduire_resultat(
+            _TACHES_UNE, _RESSOURCES_UNE, _contraintes_avec_colonne("duree"), unite_temps=unite
+        )
+        assert [c.duree for c in resultat.instance.contraintes] == [6]
+        assert resultat.avertissements == ()
+
+
+def test_colonne_duree_d_une_autre_unite_avertit_sans_convertir() -> None:
+    """Un nom de colonne n'est qu'une étiquette : jamais de conversion silencieuse, mais
+    l'incohérence probable (mauvaise unité choisie à l'import) est signalée à l'humain."""
+    resultat = _traduire_resultat(
+        _TACHES_UNE, _RESSOURCES_UNE, _contraintes_avec_colonne("duree_heures"), unite_temps="jours"
+    )
+
+    assert [c.duree for c in resultat.instance.contraintes] == [6]
+    assert len(resultat.avertissements) == 1
+    assert "duree_heures" in resultat.avertissements[0]
+    assert "duree_jours" in resultat.avertissements[0]
+
+
+def test_colonne_duree_jours_historique_inchangee_en_mode_jours() -> None:
+    resultat = _traduire_resultat(_TACHES_UNE, _RESSOURCES_UNE, _contraintes_avec_colonne("duree_jours"))
+    assert [c.duree for c in resultat.instance.contraintes] == [6]
+    assert resultat.avertissements == ()
+
+
+def test_plusieurs_colonnes_de_duree_levent_erreur_fichier_invalide() -> None:
+    contraintes = b"type,tache,ressource,duree_jours,duree_heures\ncompatibilite_ressource_tache,T1,R1,1,24\n"
+    with pytest.raises(ErreurFichierInvalide, match="colonnes de durée multiples"):
+        traduire(_TACHES_UNE, _RESSOURCES_UNE, contraintes)
+
+
+def test_duree_invalide_en_mode_heures_nomme_l_unite_et_la_colonne() -> None:
+    with pytest.raises(ErreurFichierInvalide, match="nombre entier de heures, colonne « duree_heures »"):
+        traduire(
+            _TACHES_UNE,
+            _RESSOURCES_UNE,
+            _contraintes_avec_colonne("duree_heures", "abc"),
+            unite_temps="heures",
+        )
+
+
+@pytest.mark.parametrize(
+    ("dossier", "unite", "suffixe"),
+    [
+        ("docs/dsl/gabarit_csv", "jours", ""),
+        ("docs/dsl/gabarit_csv", "heures", "_heures"),
+        ("Front/prismatron-solver-forge/public/gabarits", "jours", ""),
+        ("Front/prismatron-solver-forge/public/gabarits", "heures", "_heures"),
+    ],
+)
+def test_gabarits_csv_de_chaque_unite_s_ingerent_sans_avertissement(
+    dossier: str, unite: str, suffixe: str
+) -> None:
+    """Les gabarits téléchargeables (générés par `scripts/generer_gabarit_csv.py`, recopiés côté
+    frontend) doivent rester lisibles par l'adaptateur dans l'unité qu'ils annoncent."""
+    from pathlib import Path
+
+    racine = Path(__file__).resolve().parents[2] / dossier
+    resultat = _traduire_resultat(
+        (racine / "taches.csv").read_bytes(),
+        (racine / "ressources.csv").read_bytes(),
+        (racine / f"contraintes{suffixe}.csv").read_bytes(),
+        (racine / f"commandes{suffixe}.csv").read_bytes(),
+        unite_temps=unite,  # type: ignore[arg-type]
+    )
+
+    assert resultat.instance.unite_temps == unite
+    assert resultat.avertissements == ()

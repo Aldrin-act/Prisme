@@ -1,0 +1,4 @@
+type,tache_avant,tache_apres,tache,ressource,duree_heures,competence
+precedence,T1,T2,,,,
+compatibilite_ressource_tache,,,T1,R1,6,
+compatibilite_ressource_tache,,,T2,R1,4,

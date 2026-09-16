@@ -966,6 +966,7 @@ function DialogDetailInstance({
                     <SectionObjectifs
                       objectifs={objectifsEdition}
                       setObjectifs={setObjectifsEdition}
+                      uniteTemps={instance.unite_temps === "heures" ? "heures" : "jours"}
                     />
 
                     {erreurModification && (

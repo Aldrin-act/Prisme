@@ -642,8 +642,15 @@ export function useImporterFichiersCsv() {
  */
 export function useImporterJsonAvecCompetences() {
   return useMutation({
-    mutationFn: ({ clientId, payload }: { clientId: string; payload: Record<string, unknown> }) =>
-      prismeClient.importerJsonAvecCompetences(clientId, payload),
+    mutationFn: ({
+      clientId,
+      payload,
+      uniteTemps,
+    }: {
+      clientId: string;
+      payload: Record<string, unknown>;
+      uniteTemps?: string;
+    }) => prismeClient.importerJsonAvecCompetences(clientId, payload, uniteTemps),
   });
 }
 
@@ -653,8 +660,15 @@ export function useImporterJsonAvecCompetences() {
  */
 export function useImporterCsvLocal() {
   return useMutation({
-    mutationFn: ({ clientId, cheminDossier }: { clientId: string; cheminDossier: string }) =>
-      prismeClient.importerCsvLocal(clientId, cheminDossier),
+    mutationFn: ({
+      clientId,
+      cheminDossier,
+      uniteTemps,
+    }: {
+      clientId: string;
+      cheminDossier: string;
+      uniteTemps?: string;
+    }) => prismeClient.importerCsvLocal(clientId, cheminDossier, uniteTemps),
   });
 }
 

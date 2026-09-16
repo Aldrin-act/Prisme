@@ -9,11 +9,18 @@ exactement les colonnes produites ici.
 colonnes changent, mettre à jour `adapters/csv_import/traducteur.py` en même
 temps, les deux doivent rester en accord.
 
-Le frontend (page Données, import de données brutes) sert sa propre copie de
+Deux variantes d'unité : seuls `contraintes.csv` (colonne de durée) et
+`commandes.csv` (`date_limite`) portent un nombre de jours ou d'heures — les
+variantes heures s'écrivent `contraintes_heures.csv`/`commandes_heures.csv`
+(colonne `duree_heures`, valeurs d'exemple en heures), à ingérer avec
+`unite_temps=heures`. Tâches et ressources n'ont aucune durée, une seule
+version sert les deux unités.
+
+Le frontend (page Données, formulaire d'ingestion) sert sa propre copie de
 ces gabarits en téléchargement direct — `Front/prismatron-solver-forge/public/
-gabarits/{taches,ressources,contraintes}.csv` — jamais lue dynamiquement
-depuis `docs/dsl/` (le frontend peut être déployé sans le dépôt Python à côté).
-Recopier manuellement après régénération, ce script ne le fait pas lui-même.
+gabarits/` — jamais lue dynamiquement depuis `docs/dsl/` (le frontend peut être
+déployé sans le dépôt Python à côté). Recopier manuellement après
+régénération, ce script ne le fait pas lui-même.
 
     uv run python -m scripts.generer_gabarit_csv
 """
@@ -24,6 +31,14 @@ import csv
 from pathlib import Path
 
 DOSSIER_SORTIE = Path(__file__).resolve().parent.parent / "docs" / "dsl" / "gabarit_csv"
+
+# Valeurs d'exemple par unité : la variante heures n'est pas la variante jours ×24 (des tâches
+# de 72 h n'aident personne à comprendre le format), juste un ordre de grandeur plausible en
+# heures, avec la même logique — la date limite laisse de la marge après T1 puis T2.
+EXEMPLES_PAR_UNITE = {
+    "jours": {"duree_t1": "3", "duree_t2": "2", "date_limite": "10"},
+    "heures": {"duree_t1": "6", "duree_t2": "4", "date_limite": "24"},
+}
 
 
 def construire(dossier_sortie: Path) -> None:
@@ -48,26 +63,31 @@ def construire(dossier_sortie: Path) -> None:
         ecrivain.writerow(["id", "nom", "competences"])
         ecrivain.writerow(["R1", "Decoupeuse", ""])
 
-    # Compatibilité déclarée explicitement (avec sa durée) pour T1 et T2 —
-    # voie fiable et toujours valide, contrairement à la dérivation par
-    # compétence qui dépend d'un estimateur ML fourni à l'ingestion.
-    with (dossier_sortie / "contraintes.csv").open("w", newline="", encoding="utf-8") as f:
-        ecrivain = csv.writer(f)
-        ecrivain.writerow(
-            ["type", "tache_avant", "tache_apres", "tache", "ressource", "duree_jours", "competence"]
-        )
-        ecrivain.writerow(["precedence", "T1", "T2", "", "", "", ""])
-        ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T1", "R1", "3", ""])
-        ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T2", "R1", "2", ""])
+    for unite, suffixe in (("jours", ""), ("heures", "_heures")):
+        exemple = EXEMPLES_PAR_UNITE[unite]
 
-    # `taches` : liste de tâches liées séparée par `;`, même convention que
-    # `competences` sur ressources.csv. `date_limite` en jours relatifs (jamais
-    # une date calendaire, voir CLAUDE.md) — dérive une Echeance par tâche
-    # liée, sauf si déjà explicite dans contraintes.csv pour cette tâche.
-    with (dossier_sortie / "commandes.csv").open("w", newline="", encoding="utf-8") as f:
-        ecrivain = csv.writer(f)
-        ecrivain.writerow(["id", "taches", "client", "date_limite"])
-        ecrivain.writerow(["CMD1", "T1;T2", "Client A", "10"])
+        # Compatibilité déclarée explicitement (avec sa durée) pour T1 et T2 —
+        # voie fiable et toujours valide, contrairement à la dérivation par
+        # compétence qui dépend d'un estimateur ML fourni à l'ingestion. Le nom de
+        # la colonne de durée suit l'unité (voir `adapters/csv_import/traducteur.py::
+        # _colonne_duree`).
+        with (dossier_sortie / f"contraintes{suffixe}.csv").open("w", newline="", encoding="utf-8") as f:
+            ecrivain = csv.writer(f)
+            ecrivain.writerow(
+                ["type", "tache_avant", "tache_apres", "tache", "ressource", f"duree_{unite}", "competence"]
+            )
+            ecrivain.writerow(["precedence", "T1", "T2", "", "", "", ""])
+            ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T1", "R1", exemple["duree_t1"], ""])
+            ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T2", "R1", exemple["duree_t2"], ""])
+
+        # `taches` : liste de tâches liées séparée par `;`, même convention que
+        # `competences` sur ressources.csv. `date_limite` relative, dans l'unité de
+        # l'instance (jamais une date calendaire, voir CLAUDE.md) — dérive une
+        # Echeance par tâche liée, sauf si déjà explicite dans contraintes.csv.
+        with (dossier_sortie / f"commandes{suffixe}.csv").open("w", newline="", encoding="utf-8") as f:
+            ecrivain = csv.writer(f)
+            ecrivain.writerow(["id", "taches", "client", "date_limite"])
+            ecrivain.writerow(["CMD1", "T1;T2", "Client A", exemple["date_limite"]])
 
 
 def main() -> None:

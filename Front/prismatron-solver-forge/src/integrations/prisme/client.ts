@@ -336,20 +336,33 @@ export const prismeClient = {
   // voir adapters/json_import/) — sur-ensemble du format T-R-C-O canonique :
   // une tâche peut porter une durée estimée, permettant de dériver sa
   // compatibilité depuis des compétences plutôt que de la déclarer à la main.
-  importerJsonAvecCompetences: (clientId: string, payload: Record<string, unknown>) =>
-    apiFetch<Types.ReponseImportAdaptateur>(`${PRISME_CONFIG.routes.adapters}/json/${clientId}`, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
+  // `uniteTemps` (optionnel) l'emporte sur le "unite_temps" éventuellement présent dans le
+  // payload (query param unite_temps) — absent, le payload décide seul.
+  importerJsonAvecCompetences: (
+    clientId: string,
+    payload: Record<string, unknown>,
+    uniteTemps?: string,
+  ) =>
+    apiFetch<Types.ReponseImportAdaptateur>(
+      `${PRISME_CONFIG.routes.adapters}/json/${clientId}${
+        uniteTemps ? `?${new URLSearchParams({ unite_temps: uniteTemps }).toString()}` : ""
+      }`,
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+    ),
 
   // Import CSV local : convertit des fichiers CSV présents sur le serveur en instance TRCO
   // (POST /adapters/csv-local/ingerer) — utile pour imports en masse, tests, ou scripts automatisés.
-  importerCsvLocal: (clientId: string, cheminDossier: string) =>
+  // `uniteTemps` : même rôle que pour importerFichiersCsv ci-dessus.
+  importerCsvLocal: (clientId: string, cheminDossier: string, uniteTemps?: string) =>
     apiFetch<Types.ReponseImportCsvLocal>(`${PRISME_CONFIG.routes.adapters}/csv-local/ingerer`, {
       method: "POST",
       body: JSON.stringify({
         client_id: clientId,
         chemin_dossier: cheminDossier,
+        ...(uniteTemps ? { unite_temps: uniteTemps } : {}),
       }),
     }),
 

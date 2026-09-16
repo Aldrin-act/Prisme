@@ -421,6 +421,59 @@ def test_ingestion_depuis_json_avec_unite_temps_heures() -> None:
         app.dependency_overrides.clear()
 
 
+def test_ingestion_depuis_json_unite_temps_en_parametre_l_emporte_sur_le_payload() -> None:
+    """Le formulaire d'ingestion transmet l'unité choisie en paramètre de requête : c'est elle
+    qui tranche, même si le fichier JSON déposé déclare autre chose (ou rien du tout)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/json/client_test",
+            params={"unite_temps": "heures"},
+            json={
+                "taches": [{"id": "T1"}],
+                "ressources": [{"id": "R1"}],
+                "contraintes": [
+                    {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 8}
+                ],
+                "unite_temps": "jours",
+            },
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        _, instance = etat_test.recuperer_instance(reponse.json()["instance_id"])
+        assert instance.unite_temps == "heures"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ingestion_depuis_csv_local_avec_unite_temps_heures(tmp_path) -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    (tmp_path / "taches.csv").write_bytes(b"id\nT1\n")
+    (tmp_path / "ressources.csv").write_bytes(b"id\nR1\n")
+    (tmp_path / "contraintes.csv").write_bytes(
+        b"type,tache,ressource,duree_heures\ncompatibilite_ressource_tache,T1,R1,8\n"
+    )
+
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/adapters/csv-local/ingerer",
+            json={"client_id": "client_test", "chemin_dossier": str(tmp_path), "unite_temps": "heures"},
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["avertissements"] == []
+        _, instance = etat_test.recuperer_instance(reponse.json()["instance_id"])
+        assert instance.unite_temps == "heures"
+        assert [c.duree for c in instance.contraintes] == [8]
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_ingestion_depuis_json_comble_une_duree_manquante_par_estimation_ml() -> None:
     """`estimation` (scikit-learn) est branché par défaut sur cette route
     (`_estimateur_duree_optionnel`, `api/routes/adapters.py`) — une tâche à

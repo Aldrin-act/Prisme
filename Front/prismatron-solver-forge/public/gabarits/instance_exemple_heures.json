@@ -1,0 +1,33 @@
+{
+  "unite_temps": "heures",
+  "taches": [
+    { "id": "T1", "nom": "Decoupe" },
+    { "id": "T2", "nom": "Poncage" },
+    { "id": "T3", "nom": "Assemblage" },
+    { "id": "T4", "nom": "Peinture" },
+    { "id": "T5", "nom": "Controle_Qualite" }
+  ],
+  "ressources": [
+    { "id": "R1", "nom": "Decoupeuse_CNC" },
+    { "id": "R2", "nom": "Poste_Polyvalent" },
+    { "id": "R3", "nom": "Atelier_Assemblage" },
+    { "id": "R4", "nom": "Cabine_Peinture" },
+    { "id": "R5", "nom": "Controleur_Senior" },
+    { "id": "R6", "nom": "Controleur_Junior" }
+  ],
+  "contraintes": [
+    { "type": "precedence", "avant": "T1", "apres": "T2" },
+    { "type": "precedence", "avant": "T2", "apres": "T3" },
+    { "type": "precedence", "avant": "T3", "apres": "T4" },
+    { "type": "precedence", "avant": "T4", "apres": "T5" },
+    { "type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 4 },
+    { "type": "compatibilite_ressource_tache", "tache": "T2", "ressource": "R2", "duree": 2 },
+    { "type": "compatibilite_ressource_tache", "tache": "T3", "ressource": "R2", "duree": 6 },
+    { "type": "compatibilite_ressource_tache", "tache": "T3", "ressource": "R3", "duree": 5 },
+    { "type": "compatibilite_ressource_tache", "tache": "T4", "ressource": "R4", "duree": 3 },
+    { "type": "compatibilite_ressource_tache", "tache": "T5", "ressource": "R5", "duree": 1 }
+  ],
+  "objectifs": [
+    { "type": "minimiser_makespan" }
+  ]
+}
