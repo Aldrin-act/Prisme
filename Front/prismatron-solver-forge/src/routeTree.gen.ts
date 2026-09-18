@@ -24,7 +24,6 @@ import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/ap
 import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
 import { Route as AuthenticatedCommandesRouteImport } from './routes/_authenticated/commandes'
 import { Route as AuthenticatedDonneesRouteImport } from './routes/_authenticated/donnees'
-import { Route as AuthenticatedExecutionRouteImport } from './routes/_authenticated/execution'
 import { Route as AuthenticatedGammesRouteImport } from './routes/_authenticated/gammes'
 import { Route as AuthenticatedInstancesRouteImport } from './routes/_authenticated/instances'
 import { Route as AuthenticatedSchedulesRouteImport } from './routes/_authenticated/schedules'
@@ -107,11 +106,6 @@ const AuthenticatedDonneesRoute = AuthenticatedDonneesRouteImport.update({
   path: '/donnees',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedExecutionRoute = AuthenticatedExecutionRouteImport.update({
-  id: '/execution',
-  path: '/execution',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedGammesRoute = AuthenticatedGammesRouteImport.update({
   id: '/gammes',
   path: '/gammes',
@@ -165,7 +159,6 @@ export interface FileRoutesByFullPath {
   '/clients': typeof AuthenticatedClientsRoute
   '/commandes': typeof AuthenticatedCommandesRoute
   '/donnees': typeof AuthenticatedDonneesRoute
-  '/execution': typeof AuthenticatedExecutionRoute
   '/gammes': typeof AuthenticatedGammesRoute
   '/instances': typeof AuthenticatedInstancesRoute
   '/schedules': typeof AuthenticatedSchedulesRoute
@@ -189,7 +182,6 @@ export interface FileRoutesByTo {
   '/clients': typeof AuthenticatedClientsRoute
   '/commandes': typeof AuthenticatedCommandesRoute
   '/donnees': typeof AuthenticatedDonneesRoute
-  '/execution': typeof AuthenticatedExecutionRoute
   '/gammes': typeof AuthenticatedGammesRoute
   '/instances': typeof AuthenticatedInstancesRoute
   '/schedules': typeof AuthenticatedSchedulesRoute
@@ -215,7 +207,6 @@ export interface FileRoutesById {
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/commandes': typeof AuthenticatedCommandesRoute
   '/_authenticated/donnees': typeof AuthenticatedDonneesRoute
-  '/_authenticated/execution': typeof AuthenticatedExecutionRoute
   '/_authenticated/gammes': typeof AuthenticatedGammesRoute
   '/_authenticated/instances': typeof AuthenticatedInstancesRoute
   '/_authenticated/schedules': typeof AuthenticatedSchedulesRoute
@@ -241,7 +232,6 @@ export interface FileRouteTypes {
     | '/clients'
     | '/commandes'
     | '/donnees'
-    | '/execution'
     | '/gammes'
     | '/instances'
     | '/schedules'
@@ -265,7 +255,6 @@ export interface FileRouteTypes {
     | '/clients'
     | '/commandes'
     | '/donnees'
-    | '/execution'
     | '/gammes'
     | '/instances'
     | '/schedules'
@@ -290,7 +279,6 @@ export interface FileRouteTypes {
     | '/_authenticated/clients'
     | '/_authenticated/commandes'
     | '/_authenticated/donnees'
-    | '/_authenticated/execution'
     | '/_authenticated/gammes'
     | '/_authenticated/instances'
     | '/_authenticated/schedules'
@@ -420,13 +408,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDonneesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/execution': {
-      id: '/_authenticated/execution'
-      path: '/execution'
-      fullPath: '/execution'
-      preLoaderRoute: typeof AuthenticatedExecutionRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/gammes': {
       id: '/_authenticated/gammes'
       path: '/gammes'
@@ -485,7 +466,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedCommandesRoute: typeof AuthenticatedCommandesRoute
   AuthenticatedDonneesRoute: typeof AuthenticatedDonneesRoute
-  AuthenticatedExecutionRoute: typeof AuthenticatedExecutionRoute
   AuthenticatedGammesRoute: typeof AuthenticatedGammesRoute
   AuthenticatedInstancesRoute: typeof AuthenticatedInstancesRoute
   AuthenticatedSchedulesRoute: typeof AuthenticatedSchedulesRoute
@@ -501,7 +481,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedCommandesRoute: AuthenticatedCommandesRoute,
   AuthenticatedDonneesRoute: AuthenticatedDonneesRoute,
-  AuthenticatedExecutionRoute: AuthenticatedExecutionRoute,
   AuthenticatedGammesRoute: AuthenticatedGammesRoute,
   AuthenticatedInstancesRoute: AuthenticatedInstancesRoute,
   AuthenticatedSchedulesRoute: AuthenticatedSchedulesRoute,

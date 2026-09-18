@@ -1,0 +1,88 @@
+{
+  "export_signapro": {
+    "genere_le": "2026-09-18T07:12:00",
+    "auteur": "export automatique nocturne",
+    "commandes": [
+      {
+        "ref": "CMD-2291",
+        "client": "Enseignes du Nord",
+        "operations": [
+          {
+            "libelle": "Découpe vinyle adhésif",
+            "poste_habituel": "DEC-01",
+            "duree_estimee": "45 min"
+          },
+          {
+            "libelle": "Impression numérique grand format",
+            "poste_habituel": "IMP-02",
+            "duree_estimee": "2h",
+            "remarque": "doit passer après la découpe, jamais avant"
+          },
+          {
+            "libelle": "Laminage à chaud",
+            "poste_habituel": "LAM-01",
+            "duree_estimee": "30min",
+            "remarque": "seulement après impression ; nécessite un opérateur qualifié laminage, pas n'importe qui"
+          },
+          {
+            "libelle": "Contrôle qualité avant expédition",
+            "poste_habituel": "CTRL",
+            "duree_estimee": null,
+            "remarque": "environ 20 minutes en général, dernière étape du dossier"
+          }
+        ]
+      },
+      {
+        "ref": "CMD-2304",
+        "client": "Mairie de Valcourt",
+        "operations": [
+          {
+            "libelle": "Découpe vinyle adhésif",
+            "poste_habituel": "DEC-01",
+            "duree_estimee": "1h"
+          },
+          {
+            "libelle": "Pose sur support rigide",
+            "poste_habituel": "POSE-01",
+            "duree_estimee": "1h30",
+            "remarque": "après découpe uniquement ; compagnonnage pose obligatoire, tout le monde n'est pas formé"
+          },
+          {
+            "libelle": "Contrôle qualité avant expédition",
+            "poste_habituel": "CTRL",
+            "duree_estimee": "15 min",
+            "remarque": "toujours en tout dernier"
+          }
+        ]
+      }
+    ]
+  },
+  "ateliers": [
+    {
+      "code": "DEC-01",
+      "nom": "Table de découpe vinyle",
+      "operateurs_habilites": "découpe vinyle, plotter"
+    },
+    {
+      "code": "IMP-02",
+      "nom": "Presse numérique grand format",
+      "operateurs_habilites": ["impression numérique"]
+    },
+    {
+      "code": "LAM-01",
+      "nom": "Laminoir",
+      "operateurs_habilites": "laminage à chaud, laminage à froid"
+    },
+    {
+      "code": "POSE-01",
+      "nom": "Atelier de pose",
+      "operateurs_habilites": ["compagnonnage pose"]
+    },
+    {
+      "code": "CTRL",
+      "nom": "Poste de contrôle visuel",
+      "operateurs_habilites": null,
+      "note": "n'importe quel opérateur de l'atelier peut faire le contrôle visuel, aucune formation spécifique requise"
+    }
+  ]
+}

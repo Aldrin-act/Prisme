@@ -8,9 +8,10 @@ import type { UniteTemps } from "./dates-relatives";
 
 export type EntiteGabaritCsv = "taches" | "ressources" | "contraintes" | "commandes";
 
-// Seuls contraintes.csv (durée) et commandes.csv (date_limite) portent un nombre de jours ou
-// d'heures : ce sont les seuls à avoir une variante "_heures" (scripts/generer_gabarit_csv.py,
-// recopiés dans public/gabarits/). Tâches et ressources servent les deux unités tels quels.
+// Aucun gabarit ne porte de durée (elle se fixe à la commande) : seule commandes.csv dépend de
+// l'unité, par sa date_limite. contraintes.csv garde une variante "_heures" par simple cohérence
+// de nommage, son contenu étant identique (scripts/generer_gabarit_csv.py, recopiés dans
+// public/gabarits/). taches.csv et ressources.csv servent les deux unités tels quels.
 const ENTITES_AVEC_VARIANTE_UNITE: EntiteGabaritCsv[] = ["contraintes", "commandes"];
 
 export function nomGabaritCsv(entite: EntiteGabaritCsv, unite: UniteTemps): string {

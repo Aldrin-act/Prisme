@@ -35,6 +35,7 @@ from pydantic import BaseModel, ValidationError
 
 from adapters.agent_comprehension import (
     comprendre_donnees_erp,
+    construire_prompt_comprehension,
     dsn_lecture_seule_pour_client,
     explorer_base_de_donnees,
 )
@@ -246,6 +247,46 @@ def supprimer_source(
 
     verifier_acces_client(utilisateur, source.client_id)
     etat.supprimer_source(source_id)
+
+
+@router.get("/{source_id}/prompt-comprehension")
+def previsualiser_prompt_comprehension(
+    source_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, str]:
+    """Aperçu du prompt système + utilisateur que `POST /{source_id}/generer-instance`
+    enverrait réellement à l'agent de compréhension — construit via
+    `adapters.agent_comprehension.construire_prompt_comprehension`, sans jamais appeler le LLM
+    (gratuit, immédiat), pour qu'un humain puisse vérifier ce qui sera envoyé avant de
+    déclencher une génération qui, elle, a un vrai coût en tokens."""
+    try:
+        source = etat.recuperer_source(source_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="source inconnue") from None
+
+    verifier_acces_client(utilisateur, source.client_id)
+
+    prompt_systeme, prompt_utilisateur = construire_prompt_comprehension(source.donnees_brutes)
+    return {"prompt_systeme": prompt_systeme, "prompt_utilisateur": prompt_utilisateur}
+
+
+class RequetePromptComprehension(BaseModel):
+    donnees_brutes: str
+
+
+@router.post("/prompt-comprehension")
+def previsualiser_prompt_comprehension_sans_source(
+    requete: RequetePromptComprehension,
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, str]:
+    """Même aperçu que `GET /{source_id}/prompt-comprehension` ci-dessus, mais pour des données
+    brutes pas encore enregistrées en source — utilisé par le formulaire de création (avant
+    toute soumission), là où la route ci-dessus exige un `source_id` déjà persistant. Rien n'est
+    lu depuis l'état (aucune fuite de données d'un autre client possible), seule
+    l'authentification est requise, pas de vérification de propriété."""
+    prompt_systeme, prompt_utilisateur = construire_prompt_comprehension(requete.donnees_brutes)
+    return {"prompt_systeme": prompt_systeme, "prompt_utilisateur": prompt_utilisateur}
 
 
 @router.post("/{source_id}/generer-instance")

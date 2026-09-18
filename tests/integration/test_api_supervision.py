@@ -452,3 +452,55 @@ def test_deux_commandes_en_retard_meme_instance_via_lapi(image_sandbox: str, reg
         assert commande_ids_proposees == {commande_id_1, commande_id_2}
     finally:
         app.dependency_overrides.clear()
+
+
+def test_analyser_un_atelier_avec_son_solveur_via_lapi(registre_test: Registre) -> None:
+    """Entrée (instance_id, id_solveur) : seul cet atelier est analysé, jamais les autres ateliers
+    du client ; un solveur d'un autre atelier est refusé ; id_solveur sans instance_id aussi."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[obtenir_registre] = lambda: registre_test
+
+    try:
+        client = TestClient(app)
+        instance = InstanceTRCO(
+            taches=[Tache(id="T1"), Tache(id="T2")],
+            ressources=[Ressource(id="R1")],
+            contraintes=[
+                Precedence(avant="T1", apres="T2"),
+                CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10),
+                CompatibiliteRessourceTache(tache="T2", ressource="R1", duree=5),
+            ],
+            objectifs=[MinimiserMakespan()],
+        )
+        payload = instance.model_dump(mode="json")
+        atelier_a = client.post("/ingestion/client_test", json=payload).json()["instance_id"]
+        atelier_b = client.post("/ingestion/client_test", json=payload).json()["instance_id"]
+        solveur_a = enregistrer(registre_test, instance_id=atelier_a, client_id="client_test")
+        solveur_b = enregistrer(registre_test, instance_id=atelier_b, client_id="client_test")
+
+        reference = f"instance_a_replanifier:{atelier_a}"
+        app.dependency_overrides[construire_modele_supervision] = lambda: _modele_factice_detection_et_redaction(
+            {
+                "instance_id": atelier_a,
+                "type_signal": "instance_a_replanifier",
+                "raison": "jamais_executee",
+                "id_solveur_disponible": solveur_a,
+            },
+            reference,
+        )
+
+        reponse = client.post("/supervision/analyser", json={"instance_id": atelier_a, "id_solveur": solveur_a})
+        assert reponse.status_code == 200, reponse.json()
+        propositions = reponse.json()
+        assert [p["instance_id"] for p in propositions] == [atelier_a]
+        assert propositions[0]["action_suggeree"] == "executer"
+
+        refus = client.post("/supervision/analyser", json={"instance_id": atelier_a, "id_solveur": solveur_b})
+        assert refus.status_code == 422
+        assert "n'est pas un solveur actif" in refus.json()["detail"]
+
+        sans_atelier = client.post("/supervision/analyser", json={"id_solveur": solveur_a})
+        assert sans_atelier.status_code == 422
+    finally:
+        app.dependency_overrides.clear()

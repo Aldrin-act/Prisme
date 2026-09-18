@@ -262,12 +262,23 @@ export const prismeClient = {
       `${PRISME_CONFIG.routes.supervision}/propositions${enAttente ? "?en_attente=true" : ""}`,
     ),
 
-  // Un ou plusieurs appels LLM (un par client analysé) : même budget de
-  // temps que l'agent de compréhension.
+  // Analyse atelier par atelier — deux appels LLM par atelier au plus (détection puis
+  // rédaction) : même budget de temps que l'agent de compréhension.
   declencherAnalyseSupervision: (requete: Types.RequeteAnalyseSupervision) =>
     apiFetch<Types.PropositionSupervision[]>(
       `${PRISME_CONFIG.routes.supervision}/analyser`,
       { method: "POST", body: JSON.stringify(requete) },
+      PRISME_CONFIG.timeoutComprehension,
+    ),
+
+  // Verdict « faut-il régénérer ce solveur ? » — un appel LLM (Benchmarker) au plus.
+  evaluerSolveurSupervision: (instanceId: string, idSolveur?: string) =>
+    apiFetch<Types.EvaluationSolveurSupervision>(
+      `${PRISME_CONFIG.routes.supervision}/evaluer-solveur`,
+      {
+        method: "POST",
+        body: JSON.stringify({ instance_id: instanceId, id_solveur: idSolveur }),
+      },
       PRISME_CONFIG.timeoutComprehension,
     ),
 
@@ -436,6 +447,22 @@ export const prismeClient = {
     apiFetch<Types.ReponseConversionDeterministe>(
       `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance-deterministe`,
       { method: "POST" },
+    ),
+
+  // Aperçu du prompt système + utilisateur réel de l'agent de compréhension, sans appeler le
+  // LLM (gratuit) — voir genererInstanceDepuisSource ci-dessus, ce que la génération réelle
+  // enverrait.
+  obtenirApercuPromptComprehension: (sourceId: string) =>
+    apiFetch<Types.ApercuPromptComprehension>(
+      `${PRISME_CONFIG.routes.sources}/${sourceId}/prompt-comprehension`,
+    ),
+
+  // Même aperçu, mais sur des données brutes pas encore enregistrées en source — pour le
+  // formulaire de création, avant toute soumission.
+  obtenirApercuPromptComprehensionSansSource: (donneesBrutes: string) =>
+    apiFetch<Types.ApercuPromptComprehension>(
+      `${PRISME_CONFIG.routes.sources}/prompt-comprehension`,
+      { method: "POST", body: JSON.stringify({ donnees_brutes: donneesBrutes }) },
     ),
 
   // GÉNÉRATION DE SOLVEUR — génération LLM + exécution sandboxée + cascade

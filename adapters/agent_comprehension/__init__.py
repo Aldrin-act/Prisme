@@ -15,13 +15,14 @@ lecture seule, et produit le JSON que `comprendre_donnees_erp` consomme
 ensuite tel quel — deux étapes indépendantes, pas fusionnées.
 """
 
-from .agent import ResultatComprehension, comprendre_donnees_erp, decrire_atelier
+from .agent import ResultatComprehension, comprendre_donnees_erp, construire_prompt_comprehension, decrire_atelier
 from .exploration_bdd import ResultatExplorationBDD, dsn_lecture_seule_pour_client, explorer_base_de_donnees
 
 __all__ = [
     "ResultatComprehension",
     "ResultatExplorationBDD",
     "comprendre_donnees_erp",
+    "construire_prompt_comprehension",
     "decrire_atelier",
     "dsn_lecture_seule_pour_client",
     "explorer_base_de_donnees",

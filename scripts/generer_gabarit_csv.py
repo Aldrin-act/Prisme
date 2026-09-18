@@ -9,12 +9,12 @@ exactement les colonnes produites ici.
 colonnes changent, mettre à jour `adapters/csv_import/traducteur.py` en même
 temps, les deux doivent rester en accord.
 
-Deux variantes d'unité : seuls `contraintes.csv` (colonne de durée) et
-`commandes.csv` (`date_limite`) portent un nombre de jours ou d'heures — les
-variantes heures s'écrivent `contraintes_heures.csv`/`commandes_heures.csv`
-(colonne `duree_heures`, valeurs d'exemple en heures), à ingérer avec
-`unite_temps=heures`. Tâches et ressources n'ont aucune durée, une seule
-version sert les deux unités.
+Aucun gabarit ne porte de durée : elle se fixe à la commande, tâche par tâche
+(`durees_taches`). Seul `commandes.csv` (`date_limite`) porte un nombre de
+jours ou d'heures, d'où sa variante `commandes_heures.csv`, à ingérer avec
+`unite_temps=heures` ; `contraintes.csv` existe en deux variantes par simple
+cohérence de nommage, son contenu étant identique. `taches.csv` et
+`ressources.csv` servent les deux unités tels quels.
 
 Le frontend (page Données, formulaire d'ingestion) sert sa propre copie de
 ces gabarits en téléchargement direct — `Front/prismatron-solver-forge/public/
@@ -32,53 +32,49 @@ from pathlib import Path
 
 DOSSIER_SORTIE = Path(__file__).resolve().parent.parent / "docs" / "dsl" / "gabarit_csv"
 
-# Valeurs d'exemple par unité : la variante heures n'est pas la variante jours ×24 (des tâches
-# de 72 h n'aident personne à comprendre le format), juste un ordre de grandeur plausible en
-# heures, avec la même logique — la date limite laisse de la marge après T1 puis T2.
+# Seule la date limite d'une commande dépend de l'unité — la variante heures n'est pas la
+# variante jours ×24, juste un ordre de grandeur plausible en heures.
 EXEMPLES_PAR_UNITE = {
-    "jours": {"duree_t1": "3", "duree_t2": "2", "date_limite": "10"},
-    "heures": {"duree_t1": "6", "duree_t2": "4", "date_limite": "24"},
+    "jours": {"date_limite": "10"},
+    "heures": {"date_limite": "24"},
 }
 
 
 def construire(dossier_sortie: Path) -> None:
     dossier_sortie.mkdir(parents=True, exist_ok=True)
 
-    # Aucune durée sur la tâche elle-même (`Tache` n'en a délibérément aucun
-    # champ, §4.2 — la durée dépend de la ressource en vrai FJSP flexible) :
-    # elle se déclare via compatibilite_ressource_tache, dans contraintes.csv.
+    # `competences` optionnel, laissé vide ici : une compatibilité dérivée par compétence reprend
+    # la durée déclarée sur la tâche (l'estimation automatique a été retirée de l'ingestion), d'où
+    # la compatibilité explicite plus bas plutôt qu'une dérivation dans ce gabarit.
+    # `heures_par_jour` optionnel : durée de travail quotidienne (1 à 24 h). Vide = ressource
+    # disponible en continu ; renseignée, l'ingestion en dérive une indisponibilité récurrente
+    # (`adapters/heures_travail.py`), uniquement pour une instance en heures.
+    with (dossier_sortie / "ressources.csv").open("w", newline="", encoding="utf-8") as f:
+        ecrivain = csv.writer(f)
+        ecrivain.writerow(["id", "nom", "competences", "heures_par_jour"])
+        # Valeur laissée vide : un gabarit de départ documente la colonne sans imposer un horaire
+        # (renseignée, elle dériverait aussitôt une indisponibilité et un avertissement).
+        ecrivain.writerow(["R1", "Decoupeuse", "", ""])
+
+    # Aucune durée sur la tâche : l'atelier décrit ce qui peut s'exécuter où, la commande dit
+    # combien de temps ça prend.
     with (dossier_sortie / "taches.csv").open("w", newline="", encoding="utf-8") as f:
         ecrivain = csv.writer(f)
         ecrivain.writerow(["id", "nom"])
         ecrivain.writerow(["T1", "Decoupe"])
         ecrivain.writerow(["T2", "Assemblage"])
 
-    # `competences` optionnel, laissé vide ici : la dérivation par compétence
-    # (voir `adapters/csv_import/traducteur.py`) a besoin d'un estimateur ML
-    # pour combler la durée d'une tâche sans compatibilité déjà explicite —
-    # un gabarit de départ doit rester valide sans en fournir un, d'où la
-    # compatibilité explicite ci-dessous plutôt qu'une dérivation ici.
-    with (dossier_sortie / "ressources.csv").open("w", newline="", encoding="utf-8") as f:
-        ecrivain = csv.writer(f)
-        ecrivain.writerow(["id", "nom", "competences"])
-        ecrivain.writerow(["R1", "Decoupeuse", ""])
-
     for unite, suffixe in (("jours", ""), ("heures", "_heures")):
         exemple = EXEMPLES_PAR_UNITE[unite]
 
-        # Compatibilité déclarée explicitement (avec sa durée) pour T1 et T2 —
-        # voie fiable et toujours valide, contrairement à la dérivation par
-        # compétence qui dépend d'un estimateur ML fourni à l'ingestion. Le nom de
-        # la colonne de durée suit l'unité (voir `adapters/csv_import/traducteur.py::
-        # _colonne_duree`).
+        # Compatibilité déclarée sans durée : aucun fichier d'ingestion n'en porte, elle se fixe
+        # à la commande, tâche par tâche (voir `adapters/csv_import/traducteur.py`).
         with (dossier_sortie / f"contraintes{suffixe}.csv").open("w", newline="", encoding="utf-8") as f:
             ecrivain = csv.writer(f)
-            ecrivain.writerow(
-                ["type", "tache_avant", "tache_apres", "tache", "ressource", f"duree_{unite}", "competence"]
-            )
-            ecrivain.writerow(["precedence", "T1", "T2", "", "", "", ""])
-            ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T1", "R1", exemple["duree_t1"], ""])
-            ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T2", "R1", exemple["duree_t2"], ""])
+            ecrivain.writerow(["type", "tache_avant", "tache_apres", "tache", "ressource", "competence"])
+            ecrivain.writerow(["precedence", "T1", "T2", "", "", ""])
+            ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T1", "R1", ""])
+            ecrivain.writerow(["compatibilite_ressource_tache", "", "", "T2", "R1", ""])
 
         # `taches` : liste de tâches liées séparée par `;`, même convention que
         # `competences` sur ressources.csv. `date_limite` relative, dans l'unité de

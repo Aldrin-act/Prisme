@@ -2,13 +2,13 @@
 même logique de séparation des responsabilités que le pipeline de génération (Benchmarker,
 Architecte, Développeur... chacun un rôle) :
 
-1. `detecter_signaux_llm` — reçoit les données brutes d'un client (instances, solveurs
-   enregistrés, historique d'exécutions, assemblées par `supervision/detecteurs.py`) et décide
-   lui-même quel signal (signature orpheline / instance à replanifier / échecs répétés, voir
+1. `detecter_signaux_llm` — reçoit les données brutes d'**un seul atelier** (l'instance, ses
+   solveurs enregistrés, son historique d'exécutions, assemblées par `supervision/detecteurs.py`)
+   et décide lui-même quel signal (signature orpheline / instance à replanifier / échecs répétés, voir
    `supervision/prompts/detection.md`) s'applique à quelle instance — comparaisons de signatures,
    de dates, d'historique d'échecs, tout est fait par le LLM, rien n'est précalculé côté Python
    au-delà de l'assemblage des faits bruts.
-2. `proposer_actions` — reçoit les signaux déjà détectés (peu importe qui les a détectés) et se
+2. `proposer_actions` — reçoit les signaux déjà détectés pour ce même atelier et se
    contente de les prioriser et de les rédiger en langage naturel pour un humain non technicien.
 
 `supervision/detecteurs.py` ne fait confiance à aucun des deux aveuglément : tout identifiant
@@ -216,8 +216,9 @@ def detecter_signaux_llm(
     solveurs: tuple[SolveurSupervision, ...],
     executions: tuple[ExecutionSupervision, ...],
 ) -> tuple[SignalBrutLLM, ...]:
-    """Un seul appel LLM examine toutes les instances d'un client à la fois — même principe que
-    `proposer_actions` : jamais un appel par instance. Renvoie la sortie du LLM telle quelle,
+    """Un appel LLM par atelier : `supervision.detecteurs.detecter_signaux_instance` ne passe
+    jamais que l'instance analysée, ses propres solveurs et ses propres exécutions — jamais les
+    données d'un autre atelier dans le même prompt. Renvoie la sortie du LLM telle quelle,
     non validée contre les données réelles (voir `SignalBrutLLM`) ; c'est
     `supervision.detecteurs.detecter_signaux` qui s'en charge avant de construire les signaux
     typés persistables."""

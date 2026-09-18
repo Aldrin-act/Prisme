@@ -144,10 +144,9 @@ def test_compatibilite_derivee_sans_duree_estimee_leve_erreur_fichier_invalide()
 def test_compatibilite_explicite_et_derivee_par_competence_coexistent() -> None:
     """Une même tâche peut combiner compatibilité déclarée à la main et
     compatibilité dérivée par compétence — les deux mécanismes s'additionnent.
-    R2 possède aussi la compétence requise (le garde-fou DSL l'exige pour
-    toute compatibilité, explicite ou dérivée, dès qu'une compétence est
-    requise) mais avec une durée déclarée à la main, différente de celle,
-    dérivée par l'estimateur, appliquée à R1."""
+    La durée déclarée pour la tâche (40 sur R2) sert aussi à la compatibilité dérivée (R1) :
+    une durée réelle l'emporte toujours sur une estimation, qui ne comble que les tâches sans
+    aucune durée connue (`durees_declarees_par_tache`, `completer_durees_par_estimation`)."""
     taches_csv = b"id\nT1\n"
     ressources_csv = b"id,competences\nR1,decoupe\nR2,decoupe\n"
     contraintes_csv = (
@@ -164,7 +163,7 @@ def test_compatibilite_explicite_et_derivee_par_competence_coexistent() -> None:
     compatibilites = {
         (c.tache, c.ressource, c.duree) for c in instance.contraintes if c.type == "compatibilite_ressource_tache"
     }
-    assert compatibilites == {("T1", "R2", 40), ("T1", "R1", 25)}
+    assert compatibilites == {("T1", "R2", 40), ("T1", "R1", 40)}
 
 
 # --- Commandes (quatrième fichier optionnel, dérive des échéances) ---
@@ -429,4 +428,158 @@ def test_gabarits_csv_de_chaque_unite_s_ingerent_sans_avertissement(
     )
 
     assert resultat.instance.unite_temps == unite
+    # Aucun gabarit ne porte de durée (elle se fixe à la commande) : le seul avertissement attendu
+    # est celui qui annonce la durée d'attente, jamais un autre.
+    assert all(a.startswith("aucune durée déclarée") for a in resultat.avertissements)
+
+
+# --- Durée de travail quotidienne d'une ressource (heures_par_jour) ---
+
+
+def test_heures_par_jour_derive_une_indisponibilite_en_mode_heures() -> None:
+    """8 h travaillées par jour = indisponible les 16 autres heures de chaque journée du cycle
+    (7 × 24). Dérivé à l'ingestion en `ContrainteDisponibiliteRessource` — le DSL et le solveur
+    n'ont rien de nouveau à connaître."""
+    ressources = b"id,nom,competences,heures_par_jour\nR1,Scie,,8\n"
+    contraintes = b"type,tache,ressource,duree_heures\ncompatibilite_ressource_tache,T1,R1,6\n"
+
+    resultat = _traduire_resultat(_TACHES_UNE, ressources, contraintes, unite_temps="heures")
+
+    assert resultat.instance.ressources[0].heures_par_jour == 8
+    disponibilites = [c for c in resultat.instance.contraintes if c.type == "disponibilite_ressource"]
+    assert len(disponibilites) == 1
+    positions = disponibilites[0].jours_semaine_indisponibles
+    assert len(positions) == 7 * 16
+    assert positions[:3] == [8, 9, 10]  # la journée commence à la position 0 de chaque journée
+    assert all(p % 24 >= 8 for p in positions)
+    assert any("journée de travail de 8 h" in a for a in resultat.avertissements)
+
+
+def test_heures_par_jour_en_mode_jours_reste_informatif_et_previent() -> None:
+    ressources = b"id,nom,competences,heures_par_jour\nR1,Scie,,8\n"
+    contraintes = b"type,tache,ressource,duree_jours\ncompatibilite_ressource_tache,T1,R1,3\n"
+
+    resultat = _traduire_resultat(_TACHES_UNE, ressources, contraintes)
+
+    assert resultat.instance.ressources[0].heures_par_jour == 8
+    assert not [c for c in resultat.instance.contraintes if c.type == "disponibilite_ressource"]
+    assert any("n'est pas appliqué" in a for a in resultat.avertissements)
+
+
+def test_heures_par_jour_absent_ne_derive_rien() -> None:
+    contraintes = b"type,tache,ressource,duree_heures\ncompatibilite_ressource_tache,T1,R1,6\n"
+
+    resultat = _traduire_resultat(_TACHES_UNE, _RESSOURCES_UNE, contraintes, unite_temps="heures")
+
+    assert resultat.instance.ressources[0].heures_par_jour is None
+    assert not [c for c in resultat.instance.contraintes if c.type == "disponibilite_ressource"]
     assert resultat.avertissements == ()
+
+
+def test_heures_par_jour_non_numerique_leve_erreur_fichier_invalide() -> None:
+    ressources = b"id,nom,competences,heures_par_jour\nR1,Scie,,huit\n"
+    contraintes = b"type,tache,ressource,duree_heures\ncompatibilite_ressource_tache,T1,R1,6\n"
+
+    with pytest.raises(ErreurFichierInvalide, match="durée de travail quotidienne invalide"):
+        traduire(_TACHES_UNE, ressources, contraintes, unite_temps="heures")
+
+
+def test_heures_par_jour_hors_bornes_rejete_par_le_dsl() -> None:
+    ressources = b"id,nom,competences,heures_par_jour\nR1,Scie,,30\n"
+    contraintes = b"type,tache,ressource,duree_heures\ncompatibilite_ressource_tache,T1,R1,6\n"
+
+    with pytest.raises(ValidationError):
+        traduire(_TACHES_UNE, ressources, contraintes, unite_temps="heures")
+
+
+# --- Durée déclarée sur la tâche (taches.csv), plus sur la compatibilité ---
+
+_TACHES_AVEC_DUREE = b"id,nom,duree_heures\nT1,Decoupe,6\nT2,Assemblage,4\n"
+_RESSOURCES_DEUX = b"id,nom\nR1,Scie\nR2,Fraise\n"
+_COMPATIBILITES_SANS_DUREE = (
+    b"type,tache,ressource\n"
+    b"compatibilite_ressource_tache,T1,R1\n"
+    b"compatibilite_ressource_tache,T1,R2\n"
+    b"compatibilite_ressource_tache,T2,R1\n"
+)
+
+
+def test_duree_de_la_tache_s_applique_a_chacune_de_ses_ressources() -> None:
+    resultat = _traduire_resultat(
+        _TACHES_AVEC_DUREE, _RESSOURCES_DEUX, _COMPATIBILITES_SANS_DUREE, unite_temps="heures"
+    )
+
+    durees = {
+        (c.tache, c.ressource): c.duree
+        for c in resultat.instance.contraintes
+        if c.type == "compatibilite_ressource_tache"
+    }
+    assert durees == {("T1", "R1"): 6, ("T1", "R2"): 6, ("T2", "R1"): 4}
+    assert resultat.avertissements == ()
+
+
+def test_duree_absente_partout_prend_la_duree_d_attente_et_previent() -> None:
+    """Le cas normal désormais : aucun fichier ne déclare de durée, elle se fixe à la commande.
+    L'instance existe quand même (le DSL exige une durée) avec la plus petite valeur valide,
+    annoncée — jamais une estimation déguisée."""
+    taches_sans_duree = b"id,nom\nT1,Decoupe\n"
+    contraintes = b"type,tache,ressource\ncompatibilite_ressource_tache,T1,R1\n"
+
+    resultat = _traduire_resultat(taches_sans_duree, _RESSOURCES_DEUX, contraintes, unite_temps="heures")
+
+    assert [c.duree for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"] == [1]
+    assert any("aucune durée déclarée pour T1" in a for a in resultat.avertissements)
+    assert any("commande" in a for a in resultat.avertissements)
+
+
+def test_duree_encore_sur_la_compatibilite_reste_acceptee() -> None:
+    """Fichiers écrits dans l'ancien format (durée sur la ligne de compatibilité) : toujours lus,
+    sans rien exiger de neuf."""
+    taches = b"id\nT1\n"
+    contraintes = b"type,tache,ressource,duree_jours\ncompatibilite_ressource_tache,T1,R1,3\n"
+
+    resultat = _traduire_resultat(taches, _RESSOURCES_DEUX, contraintes)
+
+    assert [c.duree for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"] == [3]
+    assert resultat.avertissements == ()
+
+
+def test_duree_sur_la_compatibilite_lemporte_sur_celle_de_la_tache_et_previent() -> None:
+    contraintes = (
+        b"type,tache,ressource,duree_heures\n"
+        b"compatibilite_ressource_tache,T1,R1,9\n"
+        b"compatibilite_ressource_tache,T1,R2\n"
+    )
+
+    taches = b"id,duree_heures\nT1,6\n"
+
+    resultat = _traduire_resultat(taches, _RESSOURCES_DEUX, contraintes, unite_temps="heures")
+
+    durees = {
+        c.ressource: c.duree for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"
+    }
+    assert durees == {"R1": 9, "R2": 6}  # R1 garde sa durée propre, R2 reprend celle de la tâche
+    assert any("elle l'emporte sur la durée 6" in a for a in resultat.avertissements)
+
+
+def test_duree_de_tache_non_numerique_leve_erreur_fichier_invalide() -> None:
+    taches = b"id,duree_heures\nT1,six\n"
+    contraintes = b"type,tache,ressource\ncompatibilite_ressource_tache,T1,R1\n"
+
+    with pytest.raises(ErreurFichierInvalide, match="taches.csv : durée invalide"):
+        traduire(taches, _RESSOURCES_DEUX, contraintes, unite_temps="heures")
+
+
+def test_duree_de_tache_alimente_la_derivation_par_competence() -> None:
+    """Déclarer la durée une fois sur la tâche suffit à dériver ses compatibilités par compétence,
+    sans estimation automatique."""
+    taches = b"id,duree_heures\nT1,6\n"
+    ressources = b"id,competences\nR1,decoupe\nR2,decoupe\n"
+    contraintes = b"type,tache,competence\ncompetence_requise,T1,decoupe\n"
+
+    resultat = _traduire_resultat(taches, ressources, contraintes, unite_temps="heures")
+
+    compatibilites = {
+        (c.ressource, c.duree) for c in resultat.instance.contraintes if c.type == "compatibilite_ressource_tache"
+    }
+    assert compatibilites == {("R1", 6), ("R2", 6)}

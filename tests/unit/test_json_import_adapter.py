@@ -219,3 +219,21 @@ def test_sans_estimateur_duree_manquante_leve_toujours_erreur() -> None:
 
     with pytest.raises(ErreurPayloadInvalide, match="durée estimée manquante"):
         _traduire_resultat(payload)
+
+
+def test_heures_par_jour_derive_une_indisponibilite_en_mode_heures() -> None:
+    """Même dérivation que côté CSV (`adapters/heures_travail.py`) : la durée de travail
+    quotidienne d'une ressource devient une indisponibilité récurrente."""
+    payload = {
+        "unite_temps": "heures",
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1", "heures_par_jour": 8}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 6}],
+    }
+
+    resultat = _traduire_resultat(payload)
+
+    disponibilites = [c for c in resultat.instance.contraintes if c.type == "disponibilite_ressource"]
+    assert len(disponibilites) == 1
+    assert len(disponibilites[0].jours_semaine_indisponibles) == 7 * 16
+    assert any("journée de travail de 8 h" in a for a in resultat.avertissements)

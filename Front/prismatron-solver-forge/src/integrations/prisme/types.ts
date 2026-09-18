@@ -27,6 +27,10 @@ export interface Ressource {
   id: string;
   nom?: string;
   competences: string[];
+  // Durée de travail quotidienne, en heures (1 à 24) — optionnel. L'ingestion en dérive une
+  // indisponibilité récurrente (le reste de chaque journée), uniquement pour un atelier en heures :
+  // voir adapters/heures_travail.py.
+  heures_par_jour?: number;
 }
 
 export type TypeContrainte =
@@ -537,7 +541,42 @@ export interface Sante {
 // n'a pas accepté ou refusé via POST /supervision/propositions/{id}/decision.
 
 export type TypeSignalSupervision =
-  "signature_orpheline" | "echecs_repetes" | "instance_a_replanifier" | "commande_en_retard";
+  | "signature_orpheline"
+  | "echecs_repetes"
+  | "instance_a_replanifier"
+  | "commande_en_retard"
+  | "solveur_a_regenerer"
+  | "instance_jugee_infaisable";
+
+// Faut-il régénérer le solveur d'un atelier ? (POST /supervision/evaluer-solveur, voir
+// supervision/adequation.py) — un constat argumenté par changement, jamais une règle mécanique.
+// Seul un constat "bloquant" recommande de régénérer. Indication seulement, rien n'est lancé.
+export type VerdictConstatSolveur = "bloquant" | "a_surveiller" | "sans_impact" | "non_verifie";
+
+export interface ConstatSolveur {
+  categorie: "contraintes" | "objectifs" | "algorithme" | "essai";
+  sujet: string;
+  verdict: VerdictConstatSolveur;
+  argument: string;
+  preuves: string[];
+}
+
+export interface EvaluationSolveurSupervision {
+  instance_id: string;
+  id_solveur: string;
+  a_regenerer: boolean;
+  raisons: string[];
+  constats: ConstatSolveur[];
+  contraintes_ajoutees: string[];
+  contraintes_retirees: string[];
+  objectifs_ajoutes: string[];
+  objectifs_retires: string[];
+  algorithme_utilise: string | null;
+  algorithme_recommande: string | null;
+  // Essai réel du solveur sur l'instance actuelle — null s'il n'a pas été lancé (contraintes
+  // inchangées, ou bac à sable injoignable).
+  essai: { reussi: boolean; erreur: string | null; nb_violations: number } | null;
+}
 // "aucune" : commande_en_retard — purement informatif, aucune route système déclenchée sur
 // acceptation (voir api/routes/supervision.py::_dispatcher_action).
 export type ActionSuggereeSupervision =
@@ -567,6 +606,11 @@ export interface PropositionSupervision {
 
 export interface RequeteAnalyseSupervision {
   client_id?: string;
+  // Analyse d'un seul atelier : l'instance et le solveur de cet atelier à superviser.
+  // `id_solveur` peut être omis pour un atelier qui n'a encore aucun solveur ; il exige toujours
+  // `instance_id`. Sans `instance_id`, tous les ateliers sont analysés, l'un après l'autre.
+  instance_id?: string;
+  id_solveur?: string;
 }
 
 export interface RequeteDecisionProposition {
@@ -666,6 +710,15 @@ export interface ReponseComprehension {
 export interface ReponseConversionDeterministe {
   instance_id: string;
   structure_contraintes: string;
+}
+
+// Aperçu du prompt système + utilisateur réel qu'enverrait `genererInstanceDepuisSource` à
+// l'agent de compréhension — construit sans jamais appeler le LLM (gratuit, voir
+// GET /sources/{id}/prompt-comprehension), pour vérifier ce qui sera envoyé avant de
+// déclencher une génération qui, elle, a un vrai coût en tokens.
+export interface ApercuPromptComprehension {
+  prompt_systeme: string;
+  prompt_utilisateur: string;
 }
 
 // ============================================================================

@@ -57,16 +57,16 @@ router = APIRouter(prefix="/adapters", tags=["adapters"])
 
 
 def _estimateur_duree_optionnel() -> EstimateurDuree | None:
-    """`estimation` (scikit-learn) est un extra optionnel (`uv sync --extra
-    estimation`) — import paresseux, même motif que `docker` dans
-    `sandbox/runner.py`. Absent, l'ingestion se comporte comme avant : une
-    durée manquante reste une erreur explicite (`CompetenceSansDureeEstimee`),
-    jamais devinée silencieusement."""
-    try:
-        from estimation import estimateur_par_defaut
-    except ImportError:
-        return None
-    return estimateur_par_defaut()
+    """Toujours `None` : l'estimation de durée par apprentissage automatique a été **retirée des
+    imports CSV/JSON** (décision produit). Une durée manquante redevient donc une erreur explicite
+    (`CompetenceSansDureeEstimee` → 422), jamais une valeur devinée — mieux vaut un rejet clair
+    qu'une durée plausible mais fausse dans un planning.
+
+    Le module `estimation/` reste dans le dépôt et `adapters/*/traduire(estimateur_duree=...)`
+    continue de l'accepter : seul ce canal d'ingestion ne le branche plus. Cette fonction survit
+    (plutôt que d'être supprimée) comme point de rebranchement unique, et parce que les tests
+    d'ingestion la substituent pour vérifier les deux comportements."""
+    return None
 
 
 def _description_metier_optionnelle(

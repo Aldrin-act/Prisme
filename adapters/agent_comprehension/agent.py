@@ -118,10 +118,20 @@ class ResultatComprehension:
     justifications: tuple[Justification, ...]
 
 
-def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> ResultatComprehension:
+def construire_prompt_comprehension(donnees_brutes: str) -> tuple[str, str]:
+    """(prompt_systeme, prompt_utilisateur) — la construction réelle utilisée par
+    `comprendre_donnees_erp` ci-dessous, exposée séparément pour un aperçu **sans appeler le
+    LLM** (gratuit) : `api/routes/sources.py::previsualiser_prompt_comprehension` (aperçu
+    frontend) et `scripts/afficher_prompt_comprehension.py` (CLI) la réutilisent toutes deux
+    plutôt que de dupliquer cette construction chacun de son côté."""
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     regles_dsl = CHEMIN_REGLES_DSL.read_text(encoding="utf-8")
-    prompt = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes)
+    prompt_utilisateur = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes)
+    return _PROMPT_SYSTEME, prompt_utilisateur
+
+
+def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> ResultatComprehension:
+    prompt_systeme, prompt = construire_prompt_comprehension(donnees_brutes)
 
     # `method="json_mode"` explicite plutôt que `methode_sortie_structuree(modele)` — même valeur
     # aujourd'hui (Kimi, comme le reste du pipeline), mais gardé en dur ici volontairement :
@@ -132,7 +142,7 @@ def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> Result
     # d'être rempli. Pas revérifié contre Kimi ; `json_mode`, sans contrainte de grammaire token
     # par token, reste le choix le plus sûr ici tant que ce n'est pas revalidé par un appel réel.
     structure = modele.with_structured_output(_SchemaComprehension, include_raw=True, method="json_mode")
-    sortie = _avec_retry(structure.invoke)([SystemMessage(content=_PROMPT_SYSTEME), HumanMessage(content=prompt)])
+    sortie = _avec_retry(structure.invoke)([SystemMessage(content=prompt_systeme), HumanMessage(content=prompt)])
     reponse_brute = extraire_texte_brut(sortie["raw"])
     if sortie["parsing_error"] is not None:
         raise ErreurReponseAgentInvalide(

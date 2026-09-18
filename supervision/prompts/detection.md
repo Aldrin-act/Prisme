@@ -4,7 +4,7 @@ Tu es un expert en supervision de systèmes d'ordonnancement industriel (FJSP �
 
 ## Mission
 
-Examine les données brutes ci-dessous (instances, solveurs enregistrés et historique d'exécutions d'un même client) et détecte, pour chaque instance concernée, lequel des trois signaux définis plus bas s'applique. Rien n'a été précalculé ou présélectionné pour toi : c'est toi qui compares les identifiants d'instance, les dates, et l'historique d'échecs.
+Tu analyses **un seul atelier** (une instance) à la fois. Examine les données brutes ci-dessous — l'instance, les solveurs enregistrés pour elle et son historique d'exécutions — et détecte lequel des trois signaux définis plus bas s'applique à cette instance. Les données d'autres ateliers ne te sont jamais fournies : ne raisonne que sur celles-ci. Rien n'a été précalculé ou présélectionné pour toi : c'est toi qui compares les identifiants d'instance, les dates, et l'historique d'échecs.
 
 Un solveur ne sert que l'instance pour laquelle il a été généré (`instance_id` sur chaque solveur) — jamais une autre instance, même de `structure_contraintes`/`signature_objectifs` identique. Ces deux derniers champs restent affichés à titre d'information (pour comprendre le problème traité), jamais comme critère de correspondance entre une instance et un solveur.
 
@@ -19,13 +19,13 @@ Un solveur ne sert que l'instance pour laquelle il a été généré (`instance_
 
 ## Données
 
-### Instances
+### Instance analysée (atelier)
 {instances}
 
-### Solveurs enregistrés (actifs, ce client)
+### Solveurs enregistrés (actifs, pour cet atelier)
 {solveurs}
 
-### Historique d'exécutions (ce client)
+### Historique d'exécutions (cet atelier)
 {executions}
 
 ## Format de réponse (JSON strict)

@@ -17,7 +17,7 @@ import threading
 from api.dependencies import obtenir_registre
 from api.etat import obtenir_etat
 from generation.agents.client_llm import construire_modele_pour_agent
-from supervision.orchestrateur import analyser_et_proposer
+from supervision.orchestrateur import analyser_instance
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,12 +38,15 @@ def _boucle(arret: threading.Event, intervalle: float) -> None:
     registre = obtenir_registre()
     while not arret.wait(intervalle):
         modele = construire_modele_pour_agent("supervision")
+        # Atelier par atelier : un atelier en échec (LLM, réseau, instance supprimée entre-temps...)
+        # n'empêche jamais l'analyse des ateliers suivants, du même client ou d'un autre.
         for client in etat.lister_clients():
-            client_id = client["client_id"]
-            try:
-                analyser_et_proposer(etat, registre, modele, client_id)
-            except Exception:  # noqa: BLE001 — un client en échec (LLM, réseau...) ne doit jamais arrêter la boucle
-                _LOGGER.exception("analyse de supervision en échec pour client_id=%r", client_id)
+            for info in etat.lister_instances(client_id=client["client_id"]):
+                instance_id = info["instance_id"]
+                try:
+                    analyser_instance(etat, registre, modele, instance_id)
+                except Exception:  # noqa: BLE001
+                    _LOGGER.exception("analyse de supervision en échec pour l'atelier instance_id=%r", instance_id)
 
 
 def demarrer_planificateur() -> threading.Event:

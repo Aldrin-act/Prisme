@@ -53,7 +53,9 @@ from adapters.competence_derivation import (
     ResultatTraduction,
     completer_durees_par_estimation,
     deriver_compatibilites_par_competence,
+    durees_declarees_par_tache,
 )
+from adapters.heures_travail import deriver_disponibilites_horaires
 from dsl.schema import (
     CompatibiliteRessourceTache,
     CompetenceRequise,
@@ -71,18 +73,29 @@ if TYPE_CHECKING:
     from estimation import EstimateurDuree
 
 COLONNES_TACHES_REQUISES = ("id",)
-COLONNES_TACHES_OPTIONNELLES = ("nom",)
-COLONNES_RESSOURCES_REQUISES = ("id",)
-COLONNES_RESSOURCES_OPTIONNELLES = ("nom", "competences")
-COLONNES_CONTRAINTES_REQUISES = ("type",)
-# Colonne de durée d'une `compatibilite_ressource_tache` : son nom déclare l'unité du fichier,
-# jamais une conversion — l'entier est repris tel quel, c'est `unite_temps` (paramètre de
-# `traduire`, repris dans `InstanceTRCO.unite_temps`) qui dit ce qu'il signifie. `duree_jours`
-# reste le nom historique (tous les fichiers CSV du dépôt l'utilisent), `duree_heures` son
-# équivalent pour un fichier en heures, `duree` la forme neutre pour qui ne veut pas nommer
-# l'unité deux fois. Un fichier n'en déclare qu'une seule à la fois (voir `_colonne_duree`).
+# Colonne de durée : son nom déclare l'unité du fichier, jamais une conversion — l'entier est
+# repris tel quel, c'est `unite_temps` (paramètre de `traduire`, repris dans
+# `InstanceTRCO.unite_temps`) qui dit ce qu'il signifie. `duree_jours` est le nom historique,
+# `duree_heures` son équivalent pour un fichier en heures, `duree` la forme neutre. Un fichier
+# n'en déclare qu'une seule à la fois (voir `_colonne_duree`).
 COLONNE_DUREE_PAR_UNITE = {"jours": "duree_jours", "heures": "duree_heures"}
 COLONNES_DUREE_ACCEPTEES = ("duree_jours", "duree_heures", "duree")
+# Aucun fichier d'ingestion ne déclare de durée : elle se fixe **à la commande**, tâche par tâche
+# (`POST /ingestion/{instance_id}/commandes`, champ `durees_taches`) — l'atelier décrit ce qui peut
+# s'exécuter où, la commande dit combien de temps ça prend. Les colonnes de durée restent lues si
+# elles sont présentes, pour les fichiers déjà écrits dans l'ancien format (taches.csv comme
+# contraintes.csv), jamais exigées.
+COLONNES_TACHES_OPTIONNELLES = ("nom", *COLONNES_DUREE_ACCEPTEES)
+
+# Durée d'attente d'une compatibilité dont aucune durée n'est déclarée nulle part. `duree` est
+# obligatoire côté DSL (`CompatibiliteRessourceTache`) : il faut bien une valeur pour que
+# l'instance existe avant sa première commande. 1 (la plus petite valeur valide) est une valeur
+# d'attente reconnaissable, jamais une estimation — chaque tâche concernée ressort dans les
+# avertissements, et la première commande qui la référence fixe sa vraie durée.
+DUREE_EN_ATTENTE_DE_COMMANDE = 1
+COLONNES_RESSOURCES_REQUISES = ("id",)
+COLONNES_RESSOURCES_OPTIONNELLES = ("nom", "competences", "heures_par_jour")
+COLONNES_CONTRAINTES_REQUISES = ("type",)
 COLONNES_CONTRAINTES_OPTIONNELLES = (
     "tache_avant",
     "tache_apres",
@@ -177,38 +190,74 @@ def _lire_lignes(
     return lignes
 
 
-def _lire_taches(contenu: bytes, delimiteur: str = ",") -> list[Tache]:
-    """Aucune durée sur la tâche elle-même (`Tache` n'en a délibérément aucun
-    champ, §4.2 — la durée dépend de la ressource en vrai FJSP flexible) : la
-    seule source de durée pour une compatibilité dérivée par compétence est
-    `estimateur_duree` (voir `traduire`)."""
-    lignes = _lire_lignes(
+def _lire_taches(
+    contenu: bytes, delimiteur: str = ",", unite_temps: Literal["jours", "heures"] = "jours"
+) -> tuple[list[Tache], dict[str, int]]:
+    """Renvoie `(tâches, durée par tâche)`. La durée n'est pas un champ de `Tache` (`dsl/schema` n'en
+    a délibérément aucun, §4.2 — en FJSP flexible elle appartient au couple tâche-ressource) :
+    elle est lue ici puis reportée sur chaque `CompatibiliteRessourceTache` de cette tâche (voir
+    `traduire`). Une tâche sans durée déclarée reste possible tant que ses compatibilités en
+    portent une (ancien format) ; sinon l'instance est rejetée explicitement."""
+    lignes, entetes = _lire_lignes_et_entetes(
         contenu, "taches.csv", COLONNES_TACHES_REQUISES, COLONNES_TACHES_OPTIONNELLES, delimiteur
     )
-    return [Tache(id=ligne["id"], **({"nom": ligne["nom"]} if ligne["nom"] else {})) for ligne in lignes]
+    colonne_duree, _ = _colonne_duree(entetes, unite_temps, "taches.csv")
+
+    taches: list[Tache] = []
+    durees: dict[str, int] = {}
+    for ligne in lignes:
+        taches.append(Tache(id=ligne["id"], **({"nom": ligne["nom"]} if ligne["nom"] else {})))
+        brut = ligne[colonne_duree]
+        if not brut:
+            continue
+        try:
+            durees[ligne["id"]] = int(float(brut))
+        except ValueError as erreur:
+            raise ErreurFichierInvalide(
+                f"taches.csv : durée invalide « {brut} » pour {ligne['id']} — doit être un nombre "
+                f"entier de {unite_temps}, colonne « {colonne_duree} »."
+            ) from erreur
+    return taches, durees
 
 
 def _lire_ressources(contenu: bytes, delimiteur: str = ",") -> list[Ressource]:
     """`competences` (séparées par `;`) va directement sur `Ressource` — c'est
     déjà un champ réel du DSL, utilisé tel quel par la dérivation partagée
-    (`adapters/competence_derivation.py`)."""
+    (`adapters/competence_derivation.py`). `heures_par_jour` (durée de travail
+    quotidienne, 1 à 24) de même : champ réel du DSL, d'où `adapters/heures_travail.py`
+    dérive une indisponibilité récurrente (voir `traduire`)."""
     lignes = _lire_lignes(
         contenu, "ressources.csv", COLONNES_RESSOURCES_REQUISES, COLONNES_RESSOURCES_OPTIONNELLES, delimiteur
     )
-    return [
-        Ressource(
-            id=ligne["id"],
-            **({"nom": ligne["nom"]} if ligne["nom"] else {}),
-            competences=sorted(
-                {c.strip() for c in ligne["competences"].split(SEPARATEUR_COMPETENCES) if c.strip()}
-            ),
+    ressources: list[Ressource] = []
+    for ligne in lignes:
+        heures_par_jour: int | None = None
+        if ligne["heures_par_jour"]:
+            try:
+                heures_par_jour = int(float(ligne["heures_par_jour"]))
+            except ValueError as erreur:
+                raise ErreurFichierInvalide(
+                    f"ressources.csv : durée de travail quotidienne invalide "
+                    f"« {ligne['heures_par_jour']} » pour {ligne['id']} — doit être un nombre entier "
+                    f"d'heures entre 1 et 24."
+                ) from erreur
+        ressources.append(
+            Ressource(
+                id=ligne["id"],
+                **({"nom": ligne["nom"]} if ligne["nom"] else {}),
+                competences=sorted(
+                    {c.strip() for c in ligne["competences"].split(SEPARATEUR_COMPETENCES) if c.strip()}
+                ),
+                **({"heures_par_jour": heures_par_jour} if heures_par_jour is not None else {}),
+            )
         )
-        for ligne in lignes
-    ]
+    return ressources
 
 
-def _colonne_duree(entetes: tuple[str, ...], unite_temps: Literal["jours", "heures"]) -> tuple[str, list[str]]:
-    """Choisit la colonne de durée déclarée par `contraintes.csv` parmi
+def _colonne_duree(
+    entetes: tuple[str, ...], unite_temps: Literal["jours", "heures"], nom_fichier: str = "contraintes.csv"
+) -> tuple[str, list[str]]:
+    """Choisit la colonne de durée déclarée par `nom_fichier` parmi
     `COLONNES_DUREE_ACCEPTEES`, et avertit si son nom contredit `unite_temps`.
 
     Aucune conversion n'a lieu ici : un fichier en heures se lit en déclarant
@@ -222,7 +271,7 @@ def _colonne_duree(entetes: tuple[str, ...], unite_temps: Literal["jours", "heur
     attendue = COLONNE_DUREE_PAR_UNITE[unite_temps]
     if len(presentes) > 1:
         raise ErreurFichierInvalide(
-            f"contraintes.csv : colonnes de durée multiples ({', '.join(presentes)}) — "
+            f"{nom_fichier} : colonnes de durée multiples ({', '.join(presentes)}) — "
             f"n'en garder qu'une seule ({attendue} pour une instance en {unite_temps})."
         )
     if not presentes:
@@ -231,7 +280,7 @@ def _colonne_duree(entetes: tuple[str, ...], unite_temps: Literal["jours", "heur
     autre_unite = COLONNE_DUREE_PAR_UNITE["heures" if unite_temps == "jours" else "jours"]
     avertissements = (
         [
-            f"contraintes.csv déclare la colonne « {colonne} » alors que l'instance est ingérée "
+            f"{nom_fichier} déclare la colonne « {colonne} » alors que l'instance est ingérée "
             f"en {unite_temps} : les durées sont reprises telles quelles, sans conversion. "
             f"Renommer la colonne en « {attendue} », ou ré-importer en "
             f"{'heures' if unite_temps == 'jours' else 'jours'}."
@@ -243,7 +292,10 @@ def _colonne_duree(entetes: tuple[str, ...], unite_temps: Literal["jours", "heur
 
 
 def _lire_contraintes(
-    contenu: bytes, delimiteur: str = ",", unite_temps: Literal["jours", "heures"] = "jours"
+    contenu: bytes,
+    delimiteur: str = ",",
+    unite_temps: Literal["jours", "heures"] = "jours",
+    durees_par_tache: dict[str, int] | None = None,
 ) -> tuple[list[Contrainte], list[str]]:
     """Renvoie les contraintes explicites (precedence, compatibilite_ressource_tache
     et competence_requise, ces dernières incluses telles quelles — la
@@ -253,20 +305,37 @@ def _lire_contraintes(
         contenu, "contraintes.csv", COLONNES_CONTRAINTES_REQUISES, COLONNES_CONTRAINTES_OPTIONNELLES, delimiteur
     )
     colonne_duree, avertissements = _colonne_duree(entetes, unite_temps)
+    durees_par_tache = durees_par_tache or {}
+    taches_sans_duree: set[str] = set()
     contraintes: list[Contrainte] = []
     for ligne in lignes:
         type_ = ligne["type"]
         if type_ == "precedence":
             contraintes.append(Precedence(avant=ligne["tache_avant"], apres=ligne["tache_apres"]))
         elif type_ == "compatibilite_ressource_tache":
-            try:
-                duree = int(float(ligne[colonne_duree]))
-            except ValueError as erreur:
-                raise ErreurFichierInvalide(
-                    f"contraintes.csv : durée invalide « {ligne[colonne_duree]} » pour "
-                    f"{ligne['tache']}/{ligne['ressource']} — doit être un nombre entier de "
-                    f"{unite_temps}, colonne « {colonne_duree} »."
-                ) from erreur
+            # La durée vient de la tâche (`taches.csv`). Une durée encore présente sur la ligne
+            # (ancien format) l'emporte pour ce couple précis, et la divergence est signalée.
+            brut = ligne[colonne_duree]
+            if brut:
+                try:
+                    duree = int(float(brut))
+                except ValueError as erreur:
+                    raise ErreurFichierInvalide(
+                        f"contraintes.csv : durée invalide « {brut} » pour "
+                        f"{ligne['tache']}/{ligne['ressource']} — doit être un nombre entier de "
+                        f"{unite_temps}, colonne « {colonne_duree} »."
+                    ) from erreur
+                if ligne["tache"] in durees_par_tache and durees_par_tache[ligne["tache"]] != duree:
+                    avertissements.append(
+                        f"contraintes.csv : durée {duree} déclarée pour {ligne['tache']}/"
+                        f"{ligne['ressource']} — elle l'emporte sur la durée {durees_par_tache[ligne['tache']]} "
+                        f"déclarée pour cette tâche dans taches.csv."
+                    )
+            elif ligne["tache"] in durees_par_tache:
+                duree = durees_par_tache[ligne["tache"]]
+            else:
+                duree = DUREE_EN_ATTENTE_DE_COMMANDE
+                taches_sans_duree.add(ligne["tache"])
             contraintes.append(
                 CompatibiliteRessourceTache(tache=ligne["tache"], ressource=ligne["ressource"], duree=duree)
             )
@@ -303,6 +372,12 @@ def _lire_contraintes(
                 f"contraintes.csv : type de contrainte inconnu « {type_} » "
                 f"(attendu : {', '.join(TYPES_CONTRAINTE_SUPPORTES)})"
             )
+    if taches_sans_duree:
+        avertissements.append(
+            f"aucune durée déclarée pour {', '.join(sorted(taches_sans_duree))} : "
+            f"{DUREE_EN_ATTENTE_DE_COMMANDE} {unite_temps} par défaut en attendant qu'une commande "
+            f"fixe la durée de ces tâches — le planning produit d'ici là ne veut rien dire."
+        )
     return contraintes, avertissements
 
 
@@ -341,34 +416,46 @@ def traduire(
     unite_temps: Literal["jours", "heures"] = "jours",
 ) -> ResultatTraduction:
     """Traduit trois fichiers CSV (Tâches, Ressources, Contraintes), plus un quatrième optionnel
-    (Commandes), en une instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est
-    illisible, vide, qu'une colonne requise manque, ou qu'une tâche à compétence requise reste
-    sans durée dérivable (`estimateur_duree` absent ou n'ayant rien pu estimer) ;
-    `pydantic.ValidationError` si les données une fois lues ne forment pas une
-    instance valide (id dupliqué, référence inconnue, tâche sans compatibilité...).
+        (Commandes), en une instance T-R-C-O. Lève `ErreurFichierInvalide` si un fichier est
+        illisible, vide, qu'une colonne requise manque, ou qu'une tâche à compétence requise reste
+        sans durée dérivable (`estimateur_duree` absent ou n'ayant rien pu estimer) ;
+        `pydantic.ValidationError` si les données une fois lues ne forment pas une
+        instance valide (id dupliqué, référence inconnue, tâche sans compatibilité...).
 
-    `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
-    automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
-    aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
-    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée). Ignoré
-    (comme si absent) si `unite_temps == "heures"` : entraîné sur une échelle jours
-    (`estimation/donnees_historique.py`), une estimation à cette échelle serait fausse pour des
-    durées en heures — limitation documentée, pas un ré-entraînement dans ce chantier.
+        `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
+        automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
+        aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
+        avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée). Ignoré
+        (comme si absent) si `unite_temps == "heures"` : entraîné sur une échelle jours
+        (`estimation/donnees_historique.py`), une estimation à cette échelle serait fausse pour des
+        durées en heures — limitation documentée, pas un ré-entraînement dans ce chantier.
 
-    `delimiteur` (un seul caractère, `,` par défaut) s'applique identiquement aux quatre
-    fichiers — un export cohérent utilise toujours le même séparateur partout.
+        `delimiteur` (un seul caractère, `,` par défaut) s'applique identiquement aux quatre
+        fichiers — un export cohérent utilise toujours le même séparateur partout.
 
-    `unite_temps` ("jours" par défaut) devient `InstanceTRCO.unite_temps` tel quel — voir
-    `dsl/schema/instance.py` pour ce que ça change (cycle de `ContrainteDisponibiliteRessource.
-    jours_semaine_indisponibles`, affichage frontend). Il fixe aussi la colonne de durée attendue
-    dans `contraintes.csv` (`duree_jours` ou `duree_heures`, voir `_colonne_duree`) : les entiers
-    lus ne sont jamais convertis, c'est cette unité qui dit ce qu'ils valent."""
+    Aucun fichier ne déclare de durée : elle se fixe à la commande, tâche par tâche (voir
+    `DUREE_EN_ATTENTE_DE_COMMANDE`). Une durée encore présente dans un fichier (`taches.csv` ou
+    `contraintes.csv`, ancien format) reste lue et appliquée telle quelle, jamais exigée.
+
+    `Ressource.heures_par_jour` (colonne optionnelle `heures_par_jour` de ressources.csv) devient
+        une indisponibilité récurrente dérivée (`adapters/heures_travail.py`), signalée elle aussi par
+        un avertissement — appliquée uniquement à une instance en heures.
+
+        `unite_temps` ("jours" par défaut) devient `InstanceTRCO.unite_temps` tel quel — voir
+        `dsl/schema/instance.py` pour ce que ça change (cycle de `ContrainteDisponibiliteRessource.
+        jours_semaine_indisponibles`, affichage frontend). Il fixe aussi la colonne de durée attendue
+        dans `contraintes.csv` (`duree_jours` ou `duree_heures`, voir `_colonne_duree`) : les entiers
+        lus ne sont jamais convertis, c'est cette unité qui dit ce qu'ils valent."""
     if unite_temps == "heures":
         estimateur_duree = None
-    taches = _lire_taches(taches_csv, delimiteur)
+    taches, durees_par_tache = _lire_taches(taches_csv, delimiteur, unite_temps)
     ressources = _lire_ressources(ressources_csv, delimiteur)
-    contraintes, avertissements_lecture = _lire_contraintes(contraintes_csv, delimiteur, unite_temps)
-    durees_estimees_connues: dict[str, int] = {}
+    contraintes, avertissements_lecture = _lire_contraintes(
+        contraintes_csv, delimiteur, unite_temps, durees_par_tache
+    )
+    # Durées déjà déclarées à la main : seule source de durée d'une compatibilité dérivée par
+    # compétence depuis le retrait de l'estimation automatique de l'ingestion.
+    durees_estimees_connues: dict[str, int] = {**durees_declarees_par_tache(contraintes), **durees_par_tache}
 
     avertissements: list[str] = list(avertissements_lecture)
     if estimateur_duree is not None:
@@ -387,10 +474,15 @@ def traduire(
     commandes = _lire_commandes(commandes_csv, delimiteur) if commandes_csv is not None else []
     echeances_derivees = deriver_echeances_par_commande(commandes, contraintes)
 
+    disponibilites_derivees, avertissements_horaires = deriver_disponibilites_horaires(
+        ressources, contraintes, unite_temps
+    )
+    avertissements += avertissements_horaires
+
     instance = InstanceTRCO(
         taches=taches,
         ressources=ressources,
-        contraintes=[*contraintes, *compatibilites_derivees, *echeances_derivees],
+        contraintes=[*contraintes, *compatibilites_derivees, *echeances_derivees, *disponibilites_derivees],
         objectifs=[MinimiserMakespan()],
         unite_temps=unite_temps,
     )

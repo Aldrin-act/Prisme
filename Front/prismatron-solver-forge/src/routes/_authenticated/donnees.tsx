@@ -8,6 +8,7 @@ import {
   AlertCircle,
   AlertTriangle,
   Download,
+  Eye,
   Factory,
   FolderOpen,
   Lightbulb,
@@ -53,6 +54,8 @@ import {
 import { PageHeader, EmptyState } from "@/components/app-page";
 import {
   prismeKeys,
+  useApercuPromptComprehension,
+  useApercuPromptComprehensionSansSource,
   useCreerSource,
   useExplorerAPI,
   useGenererInstanceDepuisSource,
@@ -69,12 +72,7 @@ import {
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
 import type { UniteTemps } from "@/lib/dates-relatives";
-import {
-  colonneDureeCsv,
-  hrefGabaritCsv,
-  libelleUnite,
-  nomGabaritCsv,
-} from "@/lib/unite-ingestion";
+import { hrefGabaritCsv, libelleUnite, nomGabaritCsv } from "@/lib/unite-ingestion";
 
 const searchSchema = z.object({
   source: z.string().optional(),
@@ -252,6 +250,7 @@ function ChampFichierUnique({
 
 function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => void }) {
   const creer = useCreerSource();
+  const apercuPrompt = useApercuPromptComprehensionSansSource();
   const inputFichierRef = useRef<HTMLInputElement>(null);
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
@@ -385,6 +384,60 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
           className="min-h-64 font-mono text-xs"
         />
       </div>
+
+      {donneesBrutes.trim() && (
+        <details
+          className="rounded-lg border border-border/50 p-3 text-xs"
+          onToggle={(e) => {
+            if (e.currentTarget.open) apercuPrompt.mutate(donneesBrutes);
+          }}
+        >
+          <summary className="flex cursor-pointer items-center gap-1.5 font-medium text-muted-foreground">
+            <Eye className="h-3.5 w-3.5" /> Voir le prompt envoyé à l'IA sur ce texte
+          </summary>
+          <p className="mt-2 text-muted-foreground">
+            Le prompt exact que "Générer une instance" enverrait à l'agent de compréhension sur les
+            données brutes ci-dessus — construit sans appeler le LLM, gratuit.
+          </p>
+          {apercuPrompt.isPending && (
+            <p className="mt-2 text-muted-foreground">Construction du prompt...</p>
+          )}
+          {apercuPrompt.error && (
+            <p className="mt-2 text-destructive">
+              {(apercuPrompt.error as PrismeAPIError).message}
+            </p>
+          )}
+          {apercuPrompt.data && (
+            <div className="mt-2 space-y-2">
+              <button
+                type="button"
+                className="flex items-center gap-1 text-primary hover:underline"
+                onClick={() =>
+                  telechargerTexte(
+                    "gabarit_prompt_comprehension.txt",
+                    `--- PROMPT SYSTÈME ---\n\n${apercuPrompt.data!.prompt_systeme}\n\n` +
+                      `--- PROMPT UTILISATEUR ---\n\n${apercuPrompt.data!.prompt_utilisateur}`,
+                  )
+                }
+              >
+                <Download className="h-3 w-3" /> Télécharger le gabarit de prompt
+              </button>
+              <div>
+                <div className="mb-1 font-medium text-foreground">Prompt système</div>
+                <pre className="max-h-32 overflow-auto whitespace-pre-wrap rounded-md bg-muted/30 p-2 font-mono">
+                  {apercuPrompt.data.prompt_systeme}
+                </pre>
+              </div>
+              <div>
+                <div className="mb-1 font-medium text-foreground">Prompt utilisateur</div>
+                <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-md bg-muted/30 p-2 font-mono">
+                  {apercuPrompt.data.prompt_utilisateur}
+                </pre>
+              </div>
+            </div>
+          )}
+        </details>
+      )}
 
       {erreur && (
         <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
@@ -757,6 +810,14 @@ function docChampsCsv(unite: UniteTemps): Record<EntiteCsv, ChampDocCsv[]> {
         type: "Liste",
         valeursAttendues: "Séparées par ; (ex. decoupe;assemblage)",
       },
+      {
+        champ: "heures_par_jour",
+        requis: false,
+        type: "Entier",
+        valeursAttendues:
+          "Durée de travail quotidienne, 1 à 24 h — vide : disponible en continu. La ressource " +
+          "devient indisponible le reste de chaque journée.",
+      },
     ],
     contraintes: [
       {
@@ -772,10 +833,12 @@ function docChampsCsv(unite: UniteTemps): Record<EntiteCsv, ChampDocCsv[]> {
         valeursAttendues: "Requis si type = precedence",
       },
       {
-        champ: `tache, ressource, ${colonneDureeCsv(unite)}`,
+        champ: "tache, ressource",
         requis: false,
-        type: "Texte / Texte / Entier",
-        valeursAttendues: `Requis si type = compatibilite_ressource_tache — durée en ${libelleUnite(unite)}`,
+        type: "Texte",
+        valeursAttendues:
+          "Requis si type = compatibilite_ressource_tache — aucune durée ici : elle se fixe à la " +
+          "commande, tâche par tâche",
       },
       {
         champ: "tache, competence",
@@ -808,10 +871,10 @@ function docChampsCsv(unite: UniteTemps): Record<EntiteCsv, ChampDocCsv[]> {
   };
 }
 
-const OPTIONS_UNITE_TEMPS: { valeur: UniteTemps; label: string }[] = [
-  { valeur: "heures", label: "Heures" },
-  { valeur: "jours", label: "Jours" },
-];
+// Unité fixe de cet import : les fichiers déposés ici sont toujours lus en heures (aucun choix
+// demandé à l'écran). Le formulaire d'ingestion, lui, laisse le choix — voir
+// `components/ingestion/ingestion-dialog.tsx::SelecteurUniteTemps`.
+const UNITE_TEMPS_IMPORT: UniteTemps = "heures";
 
 const OPTIONS_DELIMITEUR_CSV: { valeur: string; label: string }[] = [
   { valeur: ",", label: "Virgule (,)" },
@@ -840,8 +903,7 @@ function ImporteurCsvDirect() {
   // Unité des entiers écrits dans les fichiers (durées, date_limite) — transmise telle quelle au
   // backend (unite_temps), qui ne convertit rien : elle fixe aussi la colonne de durée attendue et
   // le gabarit proposé au téléchargement.
-  const [uniteTemps, setUniteTemps] = useState<UniteTemps>("heures");
-  const docChamps = docChampsCsv(uniteTemps);
+  const docChamps = docChampsCsv(UNITE_TEMPS_IMPORT);
   const [fichiers, setFichiers] = useState<Partial<Record<EntiteCsv, File>>>({});
   const inputRefs: Record<EntiteCsv, RefObject<HTMLInputElement | null>> = {
     taches: useRef<HTMLInputElement>(null),
@@ -882,7 +944,7 @@ function ImporteurCsvDirect() {
           commandes: fichiers.commandes,
         },
         delimiteur,
-        uniteTemps,
+        uniteTemps: UNITE_TEMPS_IMPORT,
       },
       {
         onSuccess: (data) => {
@@ -923,29 +985,9 @@ function ImporteurCsvDirect() {
           </SelectContent>
         </Select>
         <p className="text-xs text-muted-foreground">
-          S'applique identiquement aux quatre fichiers — jamais deviné automatiquement.
-        </p>
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="import_csv_unite_temps">Unité de temps</Label>
-        <Select value={uniteTemps} onValueChange={(v) => setUniteTemps(v as UniteTemps)}>
-          <SelectTrigger id="import_csv_unite_temps" className="max-w-xs">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {OPTIONS_UNITE_TEMPS.map((o) => (
-              <SelectItem key={o.valeur} value={o.valeur}>
-                {o.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <p className="text-xs text-muted-foreground">
-          Unité dans laquelle les durées et dates limites des fichiers sont écrites — lues telles
-          quelles, sans conversion. Colonne de durée attendue :{" "}
-          <code className="font-mono">{colonneDureeCsv(uniteTemps)}</code>. Les gabarits ci-dessous
-          suivent ce choix.
+          S'applique identiquement aux quatre fichiers — jamais deviné automatiquement. Les dates
+          limites sont lues en heures, sans conversion. Aucun fichier ne porte de durée : elle se
+          fixe à la commande, tâche par tâche.
         </p>
       </div>
 
@@ -989,12 +1031,12 @@ function ImporteurCsvDirect() {
                 </div>
 
                 <a
-                  href={hrefGabaritCsv(entite, uniteTemps)}
+                  href={hrefGabaritCsv(entite, UNITE_TEMPS_IMPORT)}
                   download
                   className="inline-flex items-center gap-1 text-xs text-primary underline-offset-2 hover:underline"
                 >
                   <Download className="h-3 w-3" /> Télécharger le gabarit{" "}
-                  {nomGabaritCsv(entite, uniteTemps)}
+                  {nomGabaritCsv(entite, UNITE_TEMPS_IMPORT)}
                 </a>
 
                 <ChampFichierUnique
@@ -1067,12 +1109,27 @@ function ImporteurCsvDirect() {
   );
 }
 
+// Téléchargement client (Blob + lien programmatique) — contrairement aux gabarits CSV/JSON
+// (fichiers statiques sous public/gabarits/, voir src/lib/unite-ingestion.ts), le prompt dépend
+// des données brutes de CETTE source : rien de statique à servir, le contenu vient de ce qui est
+// déjà affiché à l'écran (apercuPrompt.data), jamais reconstruit ici.
+function telechargerTexte(nomFichier: string, contenu: string) {
+  const lien = document.createElement("a");
+  lien.href = URL.createObjectURL(new Blob([contenu], { type: "text/plain;charset=utf-8" }));
+  lien.download = nomFichier;
+  lien.click();
+  URL.revokeObjectURL(lien.href);
+}
+
 function SourceActivePanel({ sourceId }: { sourceId: string }) {
   const queryClient = useQueryClient();
   const { data: source, isLoading } = useSource(sourceId);
   const generer = useGenererInstanceDepuisSource();
   const genererDeterministe = useGenererInstanceDeterministeDepuisSource();
   const executer = useDeclencherExecution();
+  // Aperçu du prompt IA — chargé seulement à l'ouverture du <details> ci-dessous (refetch
+  // manuel), jamais automatiquement : gratuit mais inutile tant que personne ne le consulte.
+  const apercuPrompt = useApercuPromptComprehension(sourceId);
   const [dernier, setDernier] = useState<{
     instance_id: string;
     // Résumé en langage naturel de ce que fait l'atelier — absent (null) pour une conversion
@@ -1184,6 +1241,60 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
           <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap font-mono">
             {source.donnees_brutes}
           </pre>
+        </details>
+
+        <details
+          className="rounded-lg border border-border/50 p-3 text-xs"
+          onToggle={(e) => {
+            if (e.currentTarget.open && !apercuPrompt.data && !apercuPrompt.isFetching) {
+              apercuPrompt.refetch();
+            }
+          }}
+        >
+          <summary className="flex cursor-pointer items-center gap-1.5 font-medium text-muted-foreground">
+            <Eye className="h-3.5 w-3.5" /> Voir le prompt envoyé à l'IA
+          </summary>
+          <p className="mt-2 text-muted-foreground">
+            Le prompt exact que "Générer une instance" enverrait à l'agent de compréhension —
+            construit sans appeler le LLM, gratuit, rien n'est déclenché en le consultant.
+          </p>
+          {apercuPrompt.isFetching && (
+            <p className="mt-2 text-muted-foreground">Construction du prompt...</p>
+          )}
+          {apercuPrompt.error && (
+            <p className="mt-2 text-destructive">
+              {(apercuPrompt.error as PrismeAPIError).message}
+            </p>
+          )}
+          {apercuPrompt.data && (
+            <div className="mt-2 space-y-2">
+              <button
+                type="button"
+                className="flex items-center gap-1 text-primary hover:underline"
+                onClick={() =>
+                  telechargerTexte(
+                    `gabarit_prompt_comprehension_${sourceId}.txt`,
+                    `--- PROMPT SYSTÈME ---\n\n${apercuPrompt.data!.prompt_systeme}\n\n` +
+                      `--- PROMPT UTILISATEUR ---\n\n${apercuPrompt.data!.prompt_utilisateur}`,
+                  )
+                }
+              >
+                <Download className="h-3 w-3" /> Télécharger le gabarit de prompt
+              </button>
+              <div>
+                <div className="mb-1 font-medium text-foreground">Prompt système</div>
+                <pre className="max-h-32 overflow-auto whitespace-pre-wrap rounded-md bg-muted/30 p-2 font-mono">
+                  {apercuPrompt.data.prompt_systeme}
+                </pre>
+              </div>
+              <div>
+                <div className="mb-1 font-medium text-foreground">Prompt utilisateur</div>
+                <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-md bg-muted/30 p-2 font-mono">
+                  {apercuPrompt.data.prompt_utilisateur}
+                </pre>
+              </div>
+            </div>
+          )}
         </details>
 
         {erreur && (

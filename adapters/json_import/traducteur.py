@@ -40,7 +40,9 @@ from adapters.competence_derivation import (
     ResultatTraduction,
     completer_durees_par_estimation,
     deriver_compatibilites_par_competence,
+    durees_declarees_par_tache,
 )
+from adapters.heures_travail import deriver_disponibilites_horaires
 from dsl.schema import Contrainte, InstanceTRCO, MinimiserMakespan, Objectif, Ressource, Tache
 
 if TYPE_CHECKING:
@@ -84,23 +86,27 @@ class InstanceBrute(BaseModel):
 
 def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None = None) -> ResultatTraduction:
     """Traduit un payload JSON « brut avec compétences » en instance T-R-C-O.
-    Lève `ErreurPayloadInvalide` si la structure ne correspond pas au format
-    attendu, ou qu'une tâche à compétence requise reste sans durée dérivable
-    (`estimateur_duree` absent ou n'ayant rien pu estimer) ;
-    `pydantic.ValidationError` si l'instance finale, compatibilités dérivées
-    comprises, reste invalide au sens du DSL (id dupliqué, référence
-    inconnue, tâche sans compatibilité...).
+        Lève `ErreurPayloadInvalide` si la structure ne correspond pas au format
+        attendu, ou qu'une tâche à compétence requise reste sans durée dérivable
+        (`estimateur_duree` absent ou n'ayant rien pu estimer) ;
+        `pydantic.ValidationError` si l'instance finale, compatibilités dérivées
+        comprises, reste invalide au sens du DSL (id dupliqué, référence
+        inconnue, tâche sans compatibilité...).
 
-    `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
-    automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
-    aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
-    avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée). Ignoré
-    (comme si absent) si le payload déclare `"unite_temps": "heures"` : entraîné sur une échelle
-    jours (`estimation/donnees_historique.py`), une estimation à cette échelle serait fausse pour
-    des durées en heures.
+        `estimateur_duree` (optionnel, `estimation.EstimateurDuree`) comble, via apprentissage
+        automatique (`estimation/`), la durée des tâches à compétence requise qui n'en ont
+        aucune de connue — jamais silencieusement : chaque durée ainsi comblée ajoute un
+        avertissement au `ResultatTraduction` renvoyé (§FC4, décision humaine préservée). Ignoré
+        (comme si absent) si le payload déclare `"unite_temps": "heures"` : entraîné sur une échelle
+        jours (`estimation/donnees_historique.py`), une estimation à cette échelle serait fausse pour
+        des durées en heures.
 
-    `unite_temps` (optionnel dans le payload, "jours" par défaut) devient `InstanceTRCO.
-    unite_temps` tel quel — voir `dsl/schema/instance.py`."""
+    `Ressource.heures_par_jour` (durée de travail quotidienne) devient une indisponibilité
+        récurrente dérivée (`adapters/heures_travail.py`), signalée par un avertissement — appliquée
+        uniquement à une instance en heures.
+
+        `unite_temps` (optionnel dans le payload, "jours" par défaut) devient `InstanceTRCO.
+        unite_temps` tel quel — voir `dsl/schema/instance.py`."""
     try:
         brute = InstanceBrute.model_validate(payload)
     except ValidationError as erreur:
@@ -110,7 +116,9 @@ def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None =
         estimateur_duree = None
 
     taches = list(brute.taches)
-    durees_estimees: dict[str, int] = {}
+    # Durées déjà déclarées à la main : seule source de durée d'une compatibilité dérivée par
+    # compétence depuis le retrait de l'estimation automatique de l'ingestion.
+    durees_estimees: dict[str, int] = durees_declarees_par_tache(list(brute.contraintes))
 
     avertissements: list[str] = []
     if estimateur_duree is not None:
@@ -131,10 +139,20 @@ def traduire(payload: dict[str, Any], estimateur_duree: EstimateurDuree | None =
     ]
     echeances_derivees = deriver_echeances_par_commande(commandes, brute.contraintes)
 
+    disponibilites_derivees, avertissements_horaires = deriver_disponibilites_horaires(
+        list(brute.ressources), list(brute.contraintes), brute.unite_temps
+    )
+    avertissements += avertissements_horaires
+
     instance = InstanceTRCO(
         taches=taches,
         ressources=brute.ressources,
-        contraintes=[*brute.contraintes, *compatibilites_derivees, *echeances_derivees],
+        contraintes=[
+            *brute.contraintes,
+            *compatibilites_derivees,
+            *echeances_derivees,
+            *disponibilites_derivees,
+        ],
         objectifs=brute.objectifs,
         unite_temps=brute.unite_temps,
     )

@@ -56,6 +56,21 @@ class CompetenceSansDureeEstimee(Exception):
         )
 
 
+def durees_declarees_par_tache(contraintes: list[Contrainte]) -> dict[str, int]:
+    """Durée déjà déclarée à la main pour chaque tâche, reprise des `CompatibiliteRessourceTache`
+    explicites — la source de durée d'une compatibilité dérivée par compétence depuis que
+    l'estimation par apprentissage automatique a été retirée de l'ingestion. Déclarer la durée
+    d'une tâche sur une seule ressource suffit donc à la dériver sur toutes les ressources
+    qualifiées. Plusieurs durées explicites pour la même tâche (une par ressource, vrai FJSP
+    flexible) : la plus longue est retenue, choix conservateur — une ressource dérivée n'est
+    jamais supposée plus rapide que la plus lente des ressources déjà déclarées."""
+    durees: dict[str, int] = {}
+    for contrainte in contraintes:
+        if isinstance(contrainte, CompatibiliteRessourceTache):
+            durees[contrainte.tache] = max(durees.get(contrainte.tache, 0), contrainte.duree)
+    return durees
+
+
 def deriver_compatibilites_par_competence(
     contraintes: list[Contrainte],
     ressources: list[Ressource],

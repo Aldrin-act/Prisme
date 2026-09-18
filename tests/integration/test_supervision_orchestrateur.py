@@ -25,7 +25,7 @@ from sandbox.runner import ResultatExecution
 from scripts.enregistrer_solveur_reference import enregistrer
 from solver_store.registry import Registre
 from supervision import agent as agent_module
-from supervision.orchestrateur import analyser_et_proposer
+from supervision.orchestrateur import analyser_et_proposer, analyser_instance
 from tests.unit.aides_test_agents import ModeleFactice
 from validation_engine.feasibility_checker import ResultatFaisabilite
 
@@ -210,3 +210,144 @@ def test_commande_en_retard_dedoublonnee_par_commande_id(registre_test: Registre
     assert len(deuxieme_passe) == 1
     assert deuxieme_passe[0].type_signal == "commande_en_retard"
     assert deuxieme_passe[0].commande_id == "cmd_2"
+
+
+def test_solveur_dont_l_algorithme_n_est_plus_le_meilleur_propose_une_regeneration(
+    registre_test: Registre,
+) -> None:
+    """Le Benchmarker, rejoué sur l'instance actuelle, recommande un autre algorithme que celui du
+    solveur : la supervision doit proposer de régénérer, et ne plus proposer de simplement
+    ré-exécuter ce même solveur (deux actions contradictoires)."""
+    from pathlib import Path
+
+    import scripts._solveur_minimal as module_solveur
+    from generation.agents import benchmarker
+    from scripts._solveur_minimal import resoudre
+    from scripts.enregistrer_solveur_reference import STRUCTURE_MINIMALE
+    from validation_engine.cascade import evaluer_cascade
+
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur = registre_test.enregistrer_solveur(
+        code_source=Path(module_solveur.__file__).read_text(encoding="utf-8"),
+        structure_contraintes=STRUCTURE_MINIMALE,
+        verdict_cascade=evaluer_cascade(resoudre),
+        instance_id=instance_id,
+        client_id="client_test",
+        algorithme="cp_sat",
+        algorithme_raison="petite instance",
+    )
+
+    modele = _modele(
+        signaux_detection=[
+            {
+                "instance_id": instance_id,
+                "type_signal": "instance_a_replanifier",
+                "raison": "jamais_executee",
+                "id_solveur_disponible": id_solveur,
+            }
+        ],
+        propositions=[],
+    )
+    schema_benchmark = benchmarker._SchemaBenchmark(
+        recommandation=benchmarker._SchemaRecommandation(
+            algorithme="genetic", raison="instance devenue très grande"
+        )
+    )
+    modele._reponses_par_schema[benchmarker._SchemaBenchmark] = (
+        json.dumps(schema_benchmark.model_dump()),
+        schema_benchmark,
+        None,
+    )
+
+    propositions = analyser_instance(etat, registre_test, modele, instance_id, id_solveur)
+
+    assert [p.type_signal for p in propositions] == ["solveur_a_regenerer"]
+    assert propositions[0].action_suggeree == "regenerer_solveur"
+    assert f"solveur={id_solveur}" in propositions[0].details
+    # Le détail porte l'argument bloquant et ses preuves, pas un simple champ.
+    argument = next(d for d in propositions[0].details if d.startswith("Algorithme :"))
+    assert "genetic" in argument
+    assert any("instance devenue très grande" in d for d in propositions[0].details)
+
+
+def test_solveur_adapte_ne_propose_aucune_regeneration(registre_test: Registre) -> None:
+    from pathlib import Path
+
+    import scripts._solveur_minimal as module_solveur
+    from generation.agents import benchmarker
+    from scripts._solveur_minimal import resoudre
+    from scripts.enregistrer_solveur_reference import STRUCTURE_MINIMALE
+    from validation_engine.cascade import evaluer_cascade
+
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur = registre_test.enregistrer_solveur(
+        code_source=Path(module_solveur.__file__).read_text(encoding="utf-8"),
+        structure_contraintes=STRUCTURE_MINIMALE,
+        verdict_cascade=evaluer_cascade(resoudre),
+        instance_id=instance_id,
+        client_id="client_test",
+        algorithme="cp_sat",
+    )
+    modele = _modele(signaux_detection=[], propositions=[])
+    schema_benchmark = benchmarker._SchemaBenchmark(
+        recommandation=benchmarker._SchemaRecommandation(algorithme="cp_sat", raison="petite instance")
+    )
+    modele._reponses_par_schema[benchmarker._SchemaBenchmark] = (
+        json.dumps(schema_benchmark.model_dump()),
+        schema_benchmark,
+        None,
+    )
+
+    assert analyser_instance(etat, registre_test, modele, instance_id, id_solveur) == []
+
+
+def test_instance_jugee_infaisable_est_signalee_sans_regeneration(registre_test: Registre, monkeypatch) -> None:
+    """Une échéance ajoutée depuis la génération, et l'essai réel répond « aucune solution » : la
+    supervision le signale (données à vérifier), sans jamais proposer de régénérer le solveur."""
+    from pathlib import Path
+
+    import scripts._solveur_minimal as module_solveur
+    from dsl.schema import Echeance
+    from generation.agents import benchmarker
+    from scripts._solveur_minimal import resoudre
+    from scripts.enregistrer_solveur_reference import STRUCTURE_MINIMALE
+    from supervision import adequation
+    from validation_engine.cascade import evaluer_cascade
+
+    etat = EtatAPI()
+    instance = _INSTANCE_STRUCTURE_MINIMALE.model_copy(
+        update={"contraintes": [*_INSTANCE_STRUCTURE_MINIMALE.contraintes, Echeance(tache="T2", echeance=1)]}
+    )
+    instance_id = etat.enregistrer_instance("client_test", instance)
+    id_solveur = registre_test.enregistrer_solveur(
+        code_source=Path(module_solveur.__file__).read_text(encoding="utf-8") + "\n# Echeance\n",
+        structure_contraintes=STRUCTURE_MINIMALE,
+        verdict_cascade=evaluer_cascade(resoudre),
+        instance_id=instance_id,
+        client_id="client_test",
+        algorithme="cp_sat",
+    )
+    monkeypatch.setattr(adequation, "sandbox_disponible", lambda: True)
+    monkeypatch.setattr(
+        adequation,
+        "executer_solveur_valide",
+        lambda *_: ResultatExecution(None, None, adequation.MESSAGE_INFAISABLE),
+    )
+
+    modele = _modele(signaux_detection=[], propositions=[])
+    schema_benchmark = benchmarker._SchemaBenchmark(
+        recommandation=benchmarker._SchemaRecommandation(algorithme="cp_sat", raison="petite instance")
+    )
+    modele._reponses_par_schema[benchmarker._SchemaBenchmark] = (
+        json.dumps(schema_benchmark.model_dump()),
+        schema_benchmark,
+        None,
+    )
+
+    propositions = analyser_instance(etat, registre_test, modele, instance_id, id_solveur)
+
+    assert [p.type_signal for p in propositions] == ["instance_jugee_infaisable"]
+    assert propositions[0].action_suggeree == "aucune"
+    assert "données" in propositions[0].resume

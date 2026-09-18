@@ -1,0 +1,41 @@
+{
+  "usine": "Fonderie Meurthe & Moselle - Atelier 3",
+  "extraction_date": "2026-09-18",
+  "work_orders": [
+    {
+      "of_id": "OF-88231",
+      "produit": "Carter moteur ref. CM-450",
+      "steps": [
+        {"step": "Fusion", "machine_code": "FOUR-02", "duration": "PT4H", "certif_requise": "CACES-FOUR-B"},
+        {"step": "Coulée", "machine_code": "COUL-01", "duration": "PT45M", "depends_on": "Fusion", "certif_requise": "HAB-COULEE"},
+        {"step": "Démoulage", "machine_code": "DEMOULE-01", "duration": 30, "depends_on": "Coulée"},
+        {"step": "Ebavurage", "machine_code": "EBAV-02", "duration": "PT1H30M", "depends_on": "Démoulage", "certif_requise": null},
+        {"step": "Contrôle dimensionnel", "machine_code": "CTRL-3D", "duration": null, "depends_on": "Ebavurage", "note": "environ 20min, obligatoire avant expédition, opérateur métrologie certifié uniquement"}
+      ]
+    },
+    {
+      "of_id": "OF-88245",
+      "produit": "Bride hydraulique ref. BH-120",
+      "steps": [
+        {"step": "Fusion", "machine_code": "FOUR-01", "duration": "PT3H30M", "certif_requise": "CACES-FOUR-A"},
+        {"step": "Coulée", "machine_code": "COUL-02", "duration": "PT40M", "depends_on": "Fusion", "certif_requise": "HAB-COULEE"},
+        {"step": "Démoulage", "machine_code": "DEMOULE-02", "duration": 25, "depends_on": "Coulée"},
+        {"step": "Contrôle dimensionnel", "machine_code": "CTRL-3D", "duration": "PT15M", "depends_on": "Démoulage", "note": "opérateur métrologie certifié uniquement"}
+      ]
+    }
+  ],
+  "machines": [
+    {"code": "FOUR-01", "type": "four induction", "certifs_operateurs": ["CACES-FOUR-A"]},
+    {"code": "FOUR-02", "type": "four induction", "certifs_operateurs": ["CACES-FOUR-B", "CACES-FOUR-A"]},
+    {"code": "COUL-01", "type": "poste coulée", "certifs_operateurs": ["HAB-COULEE"]},
+    {"code": "COUL-02", "type": "poste coulée", "certifs_operateurs": ["HAB-COULEE"]},
+    {"code": "DEMOULE-01", "type": "poste démoulage", "certifs_operateurs": null, "note": "aucune certification requise, tout opérateur atelier"},
+    {"code": "DEMOULE-02", "type": "poste démoulage", "certifs_operateurs": null},
+    {"code": "EBAV-02", "type": "poste ébavurage", "certifs_operateurs": null},
+    {"code": "CTRL-3D", "type": "station de métrologie", "certifs_operateurs": ["CERT-METROLOGIE"]}
+  ],
+  "historique_maintenance": [
+    {"machine": "FOUR-01", "date": "2026-08-02", "intervention": "remplacement résistance"},
+    {"machine": "COUL-01", "date": "2026-07-15", "intervention": "révision annuelle"}
+  ]
+}

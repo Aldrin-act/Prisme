@@ -2,7 +2,7 @@
 attente, historique des exécutions, solveurs enregistrés, santé API/sandbox)
 plus l'agent de supervision (§2, MT7) — détecte des signaux (signature
 orpheline, échecs répétés, instance en attente de replanification) sur
-l'historique d'un client et **propose** une action, jamais ne l'applique
+l'historique d'un client, atelier par atelier, et **propose** une action, jamais ne l'applique
 elle-même : `POST /analyser` déclenche une passe (aussi joignable en
 périodique, voir `supervision/planificateur.py`), `GET /propositions` liste
 ce qui attend une décision, `POST /propositions/{id}/decision` enregistre
@@ -30,7 +30,13 @@ from diagnostics import construire_solveur_sandbox, diagnostiquer
 from generation.agents.client_llm import construire_modele_supervision
 from sandbox.runner import sandbox_disponible
 from solver_store.registry import Registre
-from supervision import analyser_et_proposer
+from supervision import (
+    SolveurHorsAtelier,
+    analyser_et_proposer,
+    analyser_instance,
+    evaluer_solveur,
+    solveur_a_evaluer,
+)
 
 if TYPE_CHECKING:
     from langchain_core.language_models.chat_models import BaseChatModel
@@ -106,6 +112,12 @@ def _proposition_en_dict(p: PropositionSupervision) -> dict[str, Any]:
 
 class RequeteAnalyseSupervision(BaseModel):
     client_id: str | None = None
+    # Entrée de l'analyse d'un atelier : `instance_id` + `id_solveur` (le solveur de cet atelier
+    # dont on veut superviser les exécutions). `id_solveur` peut rester vide pour un atelier qui
+    # n'a encore aucun solveur — c'est justement ce que l'analyse doit signaler. Sans
+    # `instance_id`, tous les ateliers du ou des clients visés sont analysés un par un.
+    instance_id: str | None = None
+    id_solveur: str | None = None
 
 
 class RequeteDecisionProposition(BaseModel):
@@ -139,11 +151,65 @@ def analyser(
     modele: BaseChatModel = Depends(construire_modele_supervision),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> list[dict[str, Any]]:
+    """Analyse atelier par atelier. `instance_id` fourni : ce seul atelier (accès vérifié sur le
+    client propriétaire de l'instance). Sinon, chaque atelier du ou des clients visés, l'un après
+    l'autre — chacun avec sa propre détection et sa propre rédaction LLM."""
+    if requete.id_solveur is not None and requete.instance_id is None:
+        raise HTTPException(status_code=422, detail="id_solveur exige instance_id (l'atelier de ce solveur)")
+
+    if requete.instance_id is not None:
+        try:
+            client_id, _ = etat.recuperer_instance(requete.instance_id)
+        except KeyError:
+            raise HTTPException(status_code=404, detail="instance inconnue") from None
+        verifier_acces_client(utilisateur, client_id)
+        try:
+            propositions = analyser_instance(etat, registre, modele, requete.instance_id, requete.id_solveur)
+        except SolveurHorsAtelier as erreur:
+            raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+        return [_proposition_en_dict(p) for p in propositions]
+
     clients = _clients_a_analyser(requete.client_id, utilisateur, etat)
     propositions: list[PropositionSupervision] = []
     for client_id in clients:
         propositions.extend(analyser_et_proposer(etat, registre, modele, client_id))
     return [_proposition_en_dict(p) for p in propositions]
+
+
+class RequeteEvaluationSolveur(BaseModel):
+    instance_id: str
+    # Absent : le solveur actif le plus récent de l'atelier.
+    id_solveur: str | None = None
+
+
+@router.post("/evaluer-solveur")
+def evaluer_solveur_atelier(
+    requete: RequeteEvaluationSolveur,
+    etat: EtatAPI = Depends(obtenir_etat),
+    registre: Registre = Depends(obtenir_registre),
+    modele: BaseChatModel = Depends(construire_modele_supervision),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, Any]:
+    """Faut-il régénérer le solveur de cet atelier ? Renvoie un constat argumenté par changement
+    (contrainte ou objectif ajouté/retiré, algorithme) — preuves à l'appui : essai réel en bac à
+    sable, lecture du code, Benchmarker (voir `supervision/adequation.py`). Seul un constat
+    « bloquant » recommande de régénérer. Rien n'est enregistré ni déclenché : c'est une
+    indication pour un humain. `POST /analyser` fait la même vérification et en tire une
+    proposition « solveur à régénérer » quand il le faut."""
+    try:
+        client_id, _ = etat.recuperer_instance(requete.instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+    verifier_acces_client(utilisateur, client_id)
+    try:
+        solveur = solveur_a_evaluer(registre, client_id, requete.instance_id, requete.id_solveur)
+    except SolveurHorsAtelier as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    if solveur is None:
+        raise HTTPException(
+            status_code=404, detail="aucun solveur actif pour cet atelier — un solveur doit d'abord être généré"
+        )
+    return evaluer_solveur(etat, registre, modele, requete.instance_id, solveur).en_dict()
 
 
 @router.get("/propositions")

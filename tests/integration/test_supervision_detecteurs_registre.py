@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from api.etat import EtatAPI
 from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, MinimiserMakespan, Precedence, Ressource, Tache
 from sandbox.runner import ResultatExecution
@@ -18,7 +20,9 @@ from supervision.detecteurs import (
     SignalEchecsRepetes,
     SignalInstanceAReplanifier,
     SignalSignatureOrpheline,
+    SolveurHorsAtelier,
     detecter_signaux,
+    detecter_signaux_instance,
 )
 from tests.unit.aides_test_agents import ModeleFactice
 
@@ -221,3 +225,82 @@ def test_deux_instances_meme_structure_solveur_ne_se_partage_pas(registre_test: 
     assert isinstance(signaux[0], SignalSignatureOrpheline)
     assert signaux[0].instance_id == instance_sans_solveur
     assert id_solveur  # le solveur existe bien, juste jamais proposé pour l'autre instance
+
+
+# --- Analyse atelier par atelier, entrée (instance_id, id_solveur) ---
+
+
+def test_un_appel_llm_par_atelier_jamais_un_seul_pour_tout_le_client(registre_test: Registre) -> None:
+    """Deux ateliers du même client : la détection doit interroger le LLM une fois par atelier, et
+    un signal renvoyé pour l'autre atelier dans la réponse d'un atelier ne doit jamais être propagé
+    deux fois."""
+    etat = EtatAPI()
+    instance_a = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    instance_b = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    # Le faux modèle renvoie la même réponse à chaque appel, citant les deux ateliers : chaque
+    # analyse ne doit garder que le signal de son propre atelier.
+    modele = _modele_avec_signaux(
+        [
+            {"instance_id": instance_a, "type_signal": "signature_orpheline"},
+            {"instance_id": instance_b, "type_signal": "signature_orpheline"},
+        ]
+    )
+
+    signaux = detecter_signaux(etat, registre_test, modele, "client_test")
+
+    assert modele.appels == 2
+    assert sorted(s.instance_id for s in signaux) == sorted([instance_a, instance_b])
+
+
+def test_detection_d_un_seul_atelier_ignore_les_autres(registre_test: Registre) -> None:
+    etat = EtatAPI()
+    instance_a = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    instance_b = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    modele = _modele_avec_signaux(
+        [
+            {"instance_id": instance_a, "type_signal": "signature_orpheline"},
+            {"instance_id": instance_b, "type_signal": "signature_orpheline"},
+        ]
+    )
+
+    signaux = detecter_signaux_instance(etat, registre_test, modele, instance_a)
+
+    assert modele.appels == 1
+    assert [s.instance_id for s in signaux] == [instance_a]
+
+
+def test_solveur_d_un_autre_atelier_refuse_en_entree(registre_test: Registre) -> None:
+    etat = EtatAPI()
+    instance_a = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    instance_b = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur_b = enregistrer(registre_test, instance_id=instance_b, client_id="client_test")
+
+    # `modele=None` : le refus doit arriver avant tout appel LLM.
+    with pytest.raises(SolveurHorsAtelier):
+        detecter_signaux_instance(etat, registre_test, None, instance_a, id_solveur_b)
+
+
+def test_id_solveur_limite_les_executions_a_ce_solveur(registre_test: Registre) -> None:
+    """Échecs répétés d'un ancien solveur, puis un nouveau solveur analysé : les exécutions de
+    l'ancien ne sont jamais montrées au LLM ni acceptées en retour."""
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_STRUCTURE_MINIMALE)
+    id_solveur = enregistrer(registre_test, instance_id=instance_id, client_id="client_test")
+    echec = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="boom")
+    anciennes = tuple(etat.enregistrer_execution("ancien-solveur", instance_id, echec) for _ in range(3))
+    modele = _modele_avec_signaux(
+        [
+            {
+                "instance_id": instance_id,
+                "type_signal": "echecs_repetes",
+                "id_solveur": "ancien-solveur",
+                "execution_ids": list(anciennes),
+            },
+            # Signal impossible : l'atelier a justement le solveur analysé.
+            {"instance_id": instance_id, "type_signal": "signature_orpheline"},
+        ]
+    )
+
+    signaux = detecter_signaux_instance(etat, registre_test, modele, instance_id, id_solveur)
+
+    assert signaux == ()

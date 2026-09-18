@@ -37,3 +37,13 @@ class Ressource(BaseModel):
         default_factory=list,
         description="Compétences détenues par cette ressource — optionnel, liste vide si non renseigné.",
     )
+    heures_par_jour: int | None = Field(
+        default=None,
+        ge=1,
+        le=24,
+        description="Durée de travail quotidienne de cette ressource, en heures (ex. 8 pour une "
+        "journée de 8 h) — optionnel. Attribut propre à la ressource, comme `competences` : "
+        "l'indisponibilité qui en découle reste une contrainte (axe C), dérivée à l'ingestion en "
+        "`ContrainteDisponibiliteRessource` (voir `adapters/heures_travail.py`), jamais lue "
+        "directement par le solveur ni par le vérificateur de faisabilité.",
+    )

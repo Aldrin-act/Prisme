@@ -70,7 +70,6 @@ import {
   type UniteTemps,
 } from "@/lib/dates-relatives";
 import {
-  colonneDureeCsv,
   convertirDateSaisie,
   convertirDatesIndisponibles,
   convertirDureeSaisie,
@@ -103,6 +102,8 @@ interface TacheLigne extends Tache {
 interface RessourceLigne extends Ressource {
   clef: string;
   competencesTexte: string;
+  // Texte brut de l'input — vide = ressource disponible en continu.
+  heuresParJourTexte: string;
 }
 interface ContrainteLigne {
   clef: string;
@@ -148,7 +149,14 @@ function nouvelleTache(): TacheLigne {
   return { clef: idLocal(), id: "", nom: "" };
 }
 function nouvelleRessource(): RessourceLigne {
-  return { clef: idLocal(), id: "", nom: "", competences: [], competencesTexte: "" };
+  return {
+    clef: idLocal(),
+    id: "",
+    nom: "",
+    competences: [],
+    competencesTexte: "",
+    heuresParJourTexte: "",
+  };
 }
 function nouvelleContrainte(): ContrainteLigne {
   return {
@@ -280,13 +288,14 @@ function construireInstance(
       ...(nom ? { nom } : {}),
       ...(priorite ? { priorite } : {}),
     })),
-    ressources: ressources.map(({ id, nom, competencesTexte }) => ({
+    ressources: ressources.map(({ id, nom, competencesTexte, heuresParJourTexte }) => ({
       id,
       ...(nom ? { nom } : {}),
       competences: competencesTexte
         .split(",")
         .map((c) => c.trim())
         .filter(Boolean),
+      ...(heuresParJourTexte.trim() ? { heures_par_jour: Number(heuresParJourTexte) } : {}),
     })),
     contraintes: contraintes
       .map((c): Contrainte => {
@@ -980,25 +989,27 @@ export function IngestionDialog({
                     <p className="text-xs text-muted-foreground">
                       Trois fichiers séparés, un par axe — colonnes attendues :{" "}
                       <code className="font-mono">id,nom</code> pour Tâches,{" "}
-                      <code className="font-mono">id,nom,competences</code> (séparées par{" "}
-                      <code className="font-mono">;</code>) pour Ressources,{" "}
+                      <code className="font-mono">id,nom,competences,heures_par_jour</code> (
+                      compétences séparées par <code className="font-mono">;</code> ;{" "}
+                      <code className="font-mono">heures_par_jour</code> = durée de travail
+                      quotidienne, optionnelle) pour Ressources,{" "}
                       <code className="font-mono">
-                        type,tache_avant,tache_apres,tache,ressource,{colonneDureeCsv(uniteTemps)}
-                        ,competence
+                        type,tache_avant,tache_apres,tache,ressource,competence
                       </code>{" "}
                       pour Contraintes (<code className="font-mono">type</code> vaut{" "}
                       <code className="font-mono">precedence</code>,{" "}
                       <code className="font-mono">compatibilite_ressource_tache</code> ou{" "}
-                      <code className="font-mono">competence_requise</code>). La colonne{" "}
-                      <code className="font-mono">{colonneDureeCsv(uniteTemps)}</code> contient un
-                      nombre entier de {libelleUnite(uniteTemps)}, lu tel quel.
+                      <code className="font-mono">competence_requise</code>). Aucun fichier ne porte
+                      de durée : elle se fixe à la commande, tâche par tâche. En attendant, une
+                      tâche sans durée vaut 1 {libelleUnite(uniteTemps)}, signalé à l'import.
                     </p>
                     <p className="text-xs text-muted-foreground">
                       Plutôt que de saisir chaque compatibilité à la main, déclarez qu'une ressource
                       possède une compétence et qu'une tâche l'exige (
                       <code className="font-mono">competence_requise</code>) — la compatibilité est
-                      calculée automatiquement pour chaque ressource qualifiée, sa durée comblée par
-                      apprentissage automatique si un estimateur est disponible.
+                      calculée automatiquement pour chaque ressource qualifiée, à la durée déjà
+                      déclarée pour cette tâche. Une tâche sans aucune durée déclarée est refusée :
+                      aucune durée n'est devinée.
                     </p>
                     <p className="text-xs">
                       Gabarits d'exemple :{" "}
@@ -1103,9 +1114,8 @@ export function IngestionDialog({
                     />
                     <p className="text-xs text-muted-foreground">
                       Spécifiez le chemin d'un dossier présent sur le serveur contenant les trois
-                      fichiers CSV requis (taches.csv, ressources.csv, contraintes.csv — colonne de
-                      durée <code className="font-mono">{colonneDureeCsv(uniteTemps)}</code>). Utile
-                      pour imports en masse, tests avec données de référence, ou intégrations
+                      fichiers CSV requis (taches.csv, ressources.csv, contraintes.csv). Utile pour
+                      imports en masse, tests avec données de référence, ou intégrations
                       automatisées.
                     </p>
                     <p className="text-xs text-muted-foreground">
@@ -1173,11 +1183,11 @@ export function IngestionDialog({
                       exiger une compétence (<code className="font-mono">competence_requise</code>)
                       : sa compatibilité avec toute ressource dont les{" "}
                       <code className="font-mono">competences</code> la couvrent est alors calculée
-                      automatiquement, sa durée comblée par apprentissage automatique si un
-                      estimateur est disponible. Les champs <code className="font-mono">duree</code>{" "}
-                      et échéances sont lus en {libelleUnite(uniteTemps)} : l'unité choisie
-                      ci-dessus remplace le champ <code className="font-mono">unite_temps</code> du
-                      fichier s'il en contient un.
+                      automatiquement, à la durée déjà déclarée pour cette tâche — aucune durée
+                      n'est devinée. Les champs <code className="font-mono">duree</code> et
+                      échéances sont lus en {libelleUnite(uniteTemps)} : l'unité choisie ci-dessus
+                      remplace le champ <code className="font-mono">unite_temps</code> du fichier
+                      s'il en contient un.
                     </p>
                     <p className="text-xs">
                       Gabarit d'exemple :{" "}
@@ -1410,6 +1420,20 @@ function SectionRessources({
                 )
               }
               className="min-w-40 flex-1"
+            />
+            <Input
+              placeholder="h. travaillées / jour"
+              title="Durée de travail quotidienne (1 à 24 h) — vide : disponible en continu. Prise en compte pour un atelier en heures."
+              type="number"
+              min={1}
+              max={24}
+              value={r.heuresParJourTexte}
+              onChange={(e) =>
+                setRessources((arr) =>
+                  arr.map((x, j) => (j === i ? { ...x, heuresParJourTexte: e.target.value } : x)),
+                )
+              }
+              className="w-36"
             />
             {setContraintes && (
               <Button
@@ -1770,6 +1794,7 @@ function ressourceVersLigne(r: Ressource): RessourceLigne {
     nom: r.nom,
     competences: r.competences,
     competencesTexte: r.competences.join(", "),
+    heuresParJourTexte: r.heures_par_jour !== undefined ? String(r.heures_par_jour) : "",
   };
 }
 

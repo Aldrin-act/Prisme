@@ -1,0 +1,43 @@
+{
+  "site": "Usine Vernier - Atelier Usinage",
+  "cellules": [
+    {
+      "cellule": "CELLULE-A",
+      "machines": [
+        {
+          "machine": "CNC-TOUR-01",
+          "competence_operateur": "REGLAGE_TOUR_CN",
+          "file_attente": [
+            {"piece": "AXE-4402", "debut_prevu": "2026-09-21T08:00", "fin_prevue": "2026-09-21T11:30"},
+            {"piece": "AXE-4403", "debut_prevu": "2026-09-21T11:30", "fin_prevue": "2026-09-21T14:00", "apres": "AXE-4402 sur la même machine, enchaînement direct"}
+          ]
+        },
+        {
+          "machine": "CNC-FRAISEUSE-02",
+          "competence_operateur": "REGLAGE_FRAISEUSE_CN",
+          "file_attente": [
+            {"piece": "AXE-4402", "debut_prevu": "2026-09-21T11:45", "fin_prevue": "2026-09-21T13:15", "apres": "tournage AXE-4402 terminé (transfert cellule)"}
+          ]
+        }
+      ]
+    },
+    {
+      "cellule": "CELLULE-B",
+      "machines": [
+        {
+          "machine": "CNC-TOUR-03",
+          "competence_operateur": "REGLAGE_TOUR_CN",
+          "file_attente": [
+            {"piece": "AXE-4402", "debut_prevu": "2026-09-21T08:00", "fin_prevue": "2026-09-21T11:00"}
+          ],
+          "remarque": "machine de secours, même réglage que CNC-TOUR-01, un régleur qualifié tour peut basculer dessus"
+        }
+      ]
+    }
+  ],
+  "operateurs": [
+    {"nom": "Nadia B.", "qualifications": ["REGLAGE_TOUR_CN", "REGLAGE_FRAISEUSE_CN"]},
+    {"nom": "Julien R.", "qualifications": ["REGLAGE_TOUR_CN"]},
+    {"nom": "Marc D.", "qualifications": []}
+  ]
+}

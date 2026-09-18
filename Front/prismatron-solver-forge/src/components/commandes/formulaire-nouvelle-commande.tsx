@@ -204,7 +204,7 @@ export function FormulaireNouvelleCommande({
           queryClient.invalidateQueries({ queryKey: prismeKeys.commandes() });
           // L'ajout vient de déclencher une exécution automatique best-effort côté serveur (voir
           // api/routes/ingestion.py::ajouter_commande) — rafraîchit les vues qui affichent des
-          // exécutions/plannings (Centre d'exécution, Plannings) pour qu'elles la montrent sans
+          // exécutions/plannings (Plannings) pour qu'elles la montrent sans
           // attendre une action séparée.
           queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
           setDernierCommandeId(resultat.commande_id);

@@ -75,6 +75,52 @@ def test_generer_instance_deterministe_reconnait_un_csv_multi_blocs() -> None:
         app.dependency_overrides.clear()
 
 
+def test_previsualiser_prompt_comprehension_construit_le_prompt_sans_appeler_le_llm() -> None:
+    """Aucun `app.dependency_overrides[construire_modele_comprehension]` ici — la route
+    n'invoque jamais `construire_modele_comprehension`/le LLM, seulement
+    `construire_prompt_comprehension` (lecture de fichiers gabarit, pure)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, "des données brutes quelconques, non structurées")
+
+        reponse = client.get(f"/sources/{source_id}/prompt-comprehension")
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert "analyste d'intégration de données" in corps["prompt_systeme"]
+        assert "des données brutes quelconques, non structurées" in corps["prompt_utilisateur"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_previsualiser_prompt_comprehension_source_inconnue_404() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+
+        reponse = client.get("/sources/id-inexistant/prompt-comprehension")
+
+        assert reponse.status_code == 404
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_previsualiser_prompt_comprehension_sans_source_ne_necessite_aucune_source() -> None:
+    """Utilisable avant toute création de source — le formulaire de création peut prévisualiser
+    le prompt sur ce que l'utilisateur est en train de coller/charger, sans rien persister."""
+    client = TestClient(app)
+
+    reponse = client.post("/sources/prompt-comprehension", json={"donnees_brutes": "un export ERP quelconque"})
+
+    assert reponse.status_code == 200, reponse.json()
+    corps = reponse.json()
+    assert "analyste d'intégration de données" in corps["prompt_systeme"]
+    assert "un export ERP quelconque" in corps["prompt_utilisateur"]
+
+
 def test_generer_instance_deterministe_rejette_un_texte_non_structure() -> None:
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test

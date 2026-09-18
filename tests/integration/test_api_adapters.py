@@ -317,13 +317,12 @@ def test_ingestion_depuis_csv_rejette_un_delimiteur_multi_caracteres() -> None:
 
 
 def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
-    """Bout en bout (§5.4) : plutôt que de saisir tache/ressource/duree à la
-    main, une ressource déclare une compétence et une tâche l'exige — la
-    compatibilité est calculée par l'adaptateur, sa durée comblée par
-    l'estimateur ML branché par défaut sur cette route
-    (`_estimateur_duree_optionnel`, `api/routes/adapters.py` — voir aussi
-    `test_ingestion_depuis_json_comble_une_duree_manquante_par_estimation_ml`,
-    même mécanisme côté JSON)."""
+    """Bout en bout (§5.4) : plutôt que de saisir chaque couple tache/ressource à la main, une
+    ressource déclare une compétence et une tâche l'exige — l'adaptateur calcule la compatibilité
+    pour chaque ressource qualifiée, en reprenant la durée déjà déclarée pour cette tâche
+    (`durees_declarees_par_tache`). L'estimation automatique de durée a été retirée de
+    l'ingestion : une tâche sans aucune durée déclarée est désormais rejetée, voir
+    `test_ingestion_depuis_json_sans_aucune_duree_est_rejetee`."""
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
 
@@ -333,10 +332,16 @@ def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
             "/adapters/csv/client_test",
             files={
                 "taches": ("taches.csv", b"id\nT1\n", "text/csv"),
-                "ressources": ("ressources.csv", b"id,competences\nR1,decoupe\nR2,assemblage\n", "text/csv"),
+                "ressources": (
+                    "ressources.csv",
+                    b"id,competences\nR1,decoupe\nR2,decoupe\nR3,assemblage\n",
+                    "text/csv",
+                ),
                 "contraintes": (
                     "contraintes.csv",
-                    b"type,tache,competence\ncompetence_requise,T1,decoupe\n",
+                    b"type,tache,ressource,duree_jours,competence\n"
+                    b"compatibilite_ressource_tache,T1,R1,4,\n"
+                    b"competence_requise,T1,,,decoupe\n",
                     "text/csv",
                 ),
             },
@@ -345,14 +350,14 @@ def test_ingestion_depuis_csv_derive_la_compatibilite_par_competence() -> None:
         assert reponse.status_code == 200, reponse.json()
         corps = reponse.json()
         assert corps["structure_contraintes"] == "compatibilite_ressource_tache,competence_requise"
-        assert any("estimée par apprentissage automatique" in a for a in corps["avertissements"])
+        assert corps["avertissements"] == []  # plus aucune durée devinée, donc rien à signaler
         instance_id = corps["instance_id"]
         _, instance = etat_test.instances[instance_id]
-        compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
-        assert len(compatibilites) == 1
-        assert compatibilites[0].tache == "T1"
-        assert compatibilites[0].ressource == "R1"
-        assert compatibilites[0].duree >= 1
+        compatibilites = {
+            (c.ressource, c.duree) for c in instance.contraintes if c.type == "compatibilite_ressource_tache"
+        }
+        # R2 est qualifiée : compatibilité dérivée, à la durée déclarée pour R1. R3 ne l'est pas.
+        assert compatibilites == {("R1", 4), ("R2", 4)}
     finally:
         app.dependency_overrides.clear()
 
@@ -557,16 +562,12 @@ def test_ingestion_depuis_csv_local_avec_unite_temps_heures(tmp_path) -> None:
         app.dependency_overrides.clear()
 
 
-def test_ingestion_depuis_json_comble_une_duree_manquante_par_estimation_ml() -> None:
-    """`estimation` (scikit-learn) est branché par défaut sur cette route
-    (`_estimateur_duree_optionnel`, `api/routes/adapters.py`) — une tâche à
-    compétence requise sans compatibilité déjà explicite n'est donc jamais
-    rejetée faute de durée : elle est comblée par apprentissage automatique,
-    signalée par un avertissement explicite (§FC4), jamais silencieusement
-    (même mécanisme côté CSV, voir
-    `test_ingestion_depuis_csv_derive_la_compatibilite_par_competence`). Voir
-    le test suivant pour le comportement de repli quand `estimation` n'est
-    pas installé."""
+def test_ingestion_depuis_json_sans_aucune_duree_est_rejetee() -> None:
+    """L'estimation de durée par apprentissage automatique a été retirée de l'ingestion : une
+    tâche à compétence requise sans aucune durée déclarée n'a plus de durée dérivable, et le rejet
+    est explicite (422) plutôt qu'une valeur devinée. Déclarer la durée une fois suffit à dériver
+    les autres ressources qualifiées — voir
+    `test_ingestion_depuis_csv_derive_la_compatibilite_par_competence`."""
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test
 
@@ -581,23 +582,16 @@ def test_ingestion_depuis_json_comble_une_duree_manquante_par_estimation_ml() ->
             },
         )
 
-        assert reponse.status_code == 200, reponse.json()
-        corps = reponse.json()
-        assert any("estimée par apprentissage automatique" in a for a in corps["avertissements"])
-        _, instance = etat_test.instances[corps["instance_id"]]
-        compatibilites = [c for c in instance.contraintes if c.type == "compatibilite_ressource_tache"]
-        assert len(compatibilites) == 1
-        assert compatibilites[0].tache == "T1"
-        assert compatibilites[0].duree >= 1
+        assert reponse.status_code == 422
+        assert "durée estimée manquante" in reponse.json()["detail"]
+        assert etat_test.instances == {}
     finally:
         app.dependency_overrides.clear()
 
 
 def test_ingestion_depuis_json_signale_une_duree_manquante_sans_estimateur(monkeypatch) -> None:
-    """Comportement de repli quand `estimation` n'est pas installé
-    (`uv sync` sans `--extra estimation`) — `_estimateur_duree_optionnel`
-    renvoie alors `None` et une durée manquante reste un rejet explicite,
-    exactement comme avant le branchement de l'estimateur."""
+    """Même rejet si un estimateur est explicitement absent — `_estimateur_duree_optionnel`
+    renvoie `None` en permanence depuis le retrait de l'estimation, ce que ce test fige."""
     monkeypatch.setattr(routes_adapters, "_estimateur_duree_optionnel", lambda: None)
     etat_test = EtatAPI()
     app.dependency_overrides[obtenir_etat] = lambda: etat_test

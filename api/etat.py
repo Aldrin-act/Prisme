@@ -29,7 +29,14 @@ if TYPE_CHECKING:
     from api.etat_postgres import EtatPostgres
 
 Decision = Literal["acceptee", "refusee"]
-TypeSignal = Literal["signature_orpheline", "echecs_repetes", "instance_a_replanifier", "commande_en_retard"]
+TypeSignal = Literal[
+    "signature_orpheline",
+    "echecs_repetes",
+    "instance_a_replanifier",
+    "commande_en_retard",
+    "solveur_a_regenerer",
+    "instance_jugee_infaisable",
+]
 ActionSuggeree = Literal["regenerer_solveur", "executer", "diagnostiquer", "aucune"]
 Priorite = Literal["haute", "moyenne", "basse"]
 

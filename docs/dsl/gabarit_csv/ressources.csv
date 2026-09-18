@@ -1,2 +1,2 @@
-id,nom,competences
-R1,Decoupeuse,
+id,nom,competences,heures_par_jour
+R1,Decoupeuse,,

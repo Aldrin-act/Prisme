@@ -29,6 +29,8 @@ export const prismeKeys = {
     [...prismeKeys.all, "codeSourceSolveur", idSolveur] as const,
   sources: () => [...prismeKeys.all, "sources"] as const,
   source: (sourceId: string) => [...prismeKeys.all, "sources", sourceId] as const,
+  apercuPromptComprehension: (sourceId: string) =>
+    [...prismeKeys.all, "apercuPromptComprehension", sourceId] as const,
   clients: () => [...prismeKeys.all, "clients"] as const,
   instance: (instanceId: string) => [...prismeKeys.all, "instance", instanceId] as const,
   jobsGeneration: (instanceId?: string) =>
@@ -381,7 +383,7 @@ export interface LabelInstance {
  * /supervision/instances ne relie pas les instances à leur source, seul
  * GET /sources/{id} le fait (`instances: [{instance_id, ...}]`). Centralise
  * un calcul autrement dupliqué dans plusieurs pages (Instances, Générateur
- * de solveurs, Solveurs générés, Plannings, Centre d'exécution) pour tout
+ * de solveurs, Solveurs générés, Plannings) pour tout
  * endroit affichant une instance ou une exécution par un nom lisible plutôt
  * que son UUID brut — une exécution n'a que `instance_id` (une source n'a
  * jamais d'historique d'exécution propre), donc le label se retrouve
@@ -571,6 +573,17 @@ export function useDeclencherAnalyseSupervision() {
   return useMutation({
     mutationFn: (requete: Types.RequeteAnalyseSupervision) =>
       prismeClient.declencherAnalyseSupervision(requete),
+  });
+}
+
+/**
+ * Mutation (et non requête) : chaque vérification rejoue le Benchmarker, un appel LLM — lancée
+ * uniquement sur clic, jamais automatiquement au changement d'atelier.
+ */
+export function useEvaluerSolveurSupervision() {
+  return useMutation({
+    mutationFn: ({ instanceId, idSolveur }: { instanceId: string; idSolveur?: string }) =>
+      prismeClient.evaluerSolveurSupervision(instanceId, idSolveur),
   });
 }
 
@@ -771,6 +784,37 @@ export function useGenererInstanceDeterministeDepuisSource() {
   return useMutation({
     mutationFn: ({ sourceId }: { sourceId: string }) =>
       prismeClient.genererInstanceDeterministeDepuisSource(sourceId),
+  });
+}
+
+/**
+ * Aperçu du prompt système + utilisateur réel de l'agent de compréhension pour une source —
+ * gratuit (aucun appel LLM), `enabled: false` par défaut : à activer explicitement (ex. quand
+ * l'utilisateur ouvre le panneau d'aperçu), jamais chargé automatiquement à l'affichage de la
+ * source.
+ */
+export function useApercuPromptComprehension(
+  sourceId: string | null,
+  options?: Omit<UseQueryOptions<Types.ApercuPromptComprehension>, "queryKey" | "queryFn">,
+) {
+  return useQuery({
+    queryKey: prismeKeys.apercuPromptComprehension(sourceId || ""),
+    queryFn: () => prismeClient.obtenirApercuPromptComprehension(sourceId!),
+    enabled: false,
+    ...options,
+  });
+}
+
+/**
+ * Même aperçu que useApercuPromptComprehension ci-dessus, mais pour le formulaire de création —
+ * avant toute source enregistrée, sur le texte actuellement saisi/collé. Mutation plutôt que
+ * requête : pas d'id de ressource persistée à quoi rattacher une clé de cache, déclenchée à la
+ * demande sur le contenu courant du champ.
+ */
+export function useApercuPromptComprehensionSansSource() {
+  return useMutation({
+    mutationFn: (donneesBrutes: string) =>
+      prismeClient.obtenirApercuPromptComprehensionSansSource(donneesBrutes),
   });
 }
 
