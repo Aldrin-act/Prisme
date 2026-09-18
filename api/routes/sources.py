@@ -252,6 +252,7 @@ def supprimer_source(
 @router.get("/{source_id}/prompt-comprehension")
 def previsualiser_prompt_comprehension(
     source_id: str,
+    instructions_complementaires: str | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
@@ -259,7 +260,10 @@ def previsualiser_prompt_comprehension(
     enverrait réellement à l'agent de compréhension — construit via
     `adapters.agent_comprehension.construire_prompt_comprehension`, sans jamais appeler le LLM
     (gratuit, immédiat), pour qu'un humain puisse vérifier ce qui sera envoyé avant de
-    déclencher une génération qui, elle, a un vrai coût en tokens."""
+    déclencher une génération qui, elle, a un vrai coût en tokens. `instructions_complementaires`
+    (paramètre de requête, optionnel) : mêmes instructions que celles qu'on passerait à
+    `POST /{source_id}/generer-instance`, pour que l'aperçu reflète vraiment ce qui serait
+    envoyé."""
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -267,12 +271,17 @@ def previsualiser_prompt_comprehension(
 
     verifier_acces_client(utilisateur, source.client_id)
 
-    prompt_systeme, prompt_utilisateur = construire_prompt_comprehension(source.donnees_brutes)
+    prompt_systeme, prompt_utilisateur = construire_prompt_comprehension(
+        source.donnees_brutes, instructions_complementaires
+    )
     return {"prompt_systeme": prompt_systeme, "prompt_utilisateur": prompt_utilisateur}
 
 
 class RequetePromptComprehension(BaseModel):
     donnees_brutes: str
+    # Contexte métier libre optionnel — voir construire_prompt_comprehension. Jamais un moyen de
+    # réécrire les règles de traduction elles-mêmes, seulement un aperçu de ce qui serait envoyé.
+    instructions_complementaires: str | None = None
 
 
 @router.post("/prompt-comprehension")
@@ -285,13 +294,22 @@ def previsualiser_prompt_comprehension_sans_source(
     toute soumission), là où la route ci-dessus exige un `source_id` déjà persistant. Rien n'est
     lu depuis l'état (aucune fuite de données d'un autre client possible), seule
     l'authentification est requise, pas de vérification de propriété."""
-    prompt_systeme, prompt_utilisateur = construire_prompt_comprehension(requete.donnees_brutes)
+    prompt_systeme, prompt_utilisateur = construire_prompt_comprehension(
+        requete.donnees_brutes, requete.instructions_complementaires
+    )
     return {"prompt_systeme": prompt_systeme, "prompt_utilisateur": prompt_utilisateur}
+
+
+class RequeteGenererInstance(BaseModel):
+    # Optionnel, corps de requête lui-même optionnel (voir `generer_instance` ci-dessous) —
+    # aucun appelant existant n'a besoin de changer quoi que ce soit.
+    instructions_complementaires: str | None = None
 
 
 @router.post("/{source_id}/generer-instance")
 def generer_instance(
     source_id: str,
+    requete: RequeteGenererInstance | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     modele: BaseChatModel = Depends(construire_modele_comprehension),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
@@ -299,7 +317,11 @@ def generer_instance(
     """Rejouable à volonté sur la même source : chaque appel ajoute une
     instance à son historique de provenance, il ne remplace jamais les
     précédentes. L'instance produite s'exécute directement par son propre
-    `instance_id` — aucune association supplémentaire n'est nécessaire."""
+    `instance_id` — aucune association supplémentaire n'est nécessaire.
+
+    `requete.instructions_complementaires` (optionnel, jamais persisté sur la source elle-même —
+    une tentative peut vouloir des instructions différentes de la précédente) : voir
+    `construire_prompt_comprehension`."""
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -307,8 +329,9 @@ def generer_instance(
 
     verifier_acces_client(utilisateur, source.client_id)
 
+    instructions = requete.instructions_complementaires if requete else None
     try:
-        resultat = comprendre_donnees_erp(modele, source.donnees_brutes)
+        resultat = comprendre_donnees_erp(modele, source.donnees_brutes, instructions)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 

@@ -432,10 +432,17 @@ export const prismeClient = {
   // Pas de timeout (null) : demande explicite — une conversion sur un gros
   // volume de données brutes peut prendre plusieurs minutes, on laisse
   // l'utilisateur attendre plutôt que d'abandonner arbitrairement.
-  genererInstanceDepuisSource: (sourceId: string) =>
+  // `instructionsComplementaires` (optionnel) : contexte métier libre injecté dans une section
+  // dédiée du prompt — jamais un moyen de réécrire les règles de traduction elles-mêmes.
+  genererInstanceDepuisSource: (sourceId: string, instructionsComplementaires?: string) =>
     apiFetch<Types.ReponseComprehension>(
       `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance`,
-      { method: "POST" },
+      {
+        method: "POST",
+        body: JSON.stringify({
+          instructions_complementaires: instructionsComplementaires || null,
+        }),
+      },
       null,
     ),
 
@@ -451,18 +458,32 @@ export const prismeClient = {
 
   // Aperçu du prompt système + utilisateur réel de l'agent de compréhension, sans appeler le
   // LLM (gratuit) — voir genererInstanceDepuisSource ci-dessus, ce que la génération réelle
-  // enverrait.
-  obtenirApercuPromptComprehension: (sourceId: string) =>
+  // enverrait. `instructionsComplementaires` : mêmes instructions que celles qu'on passerait à
+  // genererInstanceDepuisSource, pour que l'aperçu reflète vraiment ce qui serait envoyé.
+  obtenirApercuPromptComprehension: (sourceId: string, instructionsComplementaires?: string) =>
     apiFetch<Types.ApercuPromptComprehension>(
-      `${PRISME_CONFIG.routes.sources}/${sourceId}/prompt-comprehension`,
+      `${PRISME_CONFIG.routes.sources}/${sourceId}/prompt-comprehension${
+        instructionsComplementaires
+          ? `?${new URLSearchParams({ instructions_complementaires: instructionsComplementaires }).toString()}`
+          : ""
+      }`,
     ),
 
   // Même aperçu, mais sur des données brutes pas encore enregistrées en source — pour le
   // formulaire de création, avant toute soumission.
-  obtenirApercuPromptComprehensionSansSource: (donneesBrutes: string) =>
+  obtenirApercuPromptComprehensionSansSource: (
+    donneesBrutes: string,
+    instructionsComplementaires?: string,
+  ) =>
     apiFetch<Types.ApercuPromptComprehension>(
       `${PRISME_CONFIG.routes.sources}/prompt-comprehension`,
-      { method: "POST", body: JSON.stringify({ donnees_brutes: donneesBrutes }) },
+      {
+        method: "POST",
+        body: JSON.stringify({
+          donnees_brutes: donneesBrutes,
+          instructions_complementaires: instructionsComplementaires || null,
+        }),
+      },
     ),
 
   // GÉNÉRATION DE SOLVEUR — génération LLM + exécution sandboxée + cascade

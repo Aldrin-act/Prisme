@@ -118,20 +118,42 @@ class ResultatComprehension:
     justifications: tuple[Justification, ...]
 
 
-def construire_prompt_comprehension(donnees_brutes: str) -> tuple[str, str]:
+def construire_prompt_comprehension(
+    donnees_brutes: str, instructions_complementaires: str | None = None
+) -> tuple[str, str]:
     """(prompt_systeme, prompt_utilisateur) — la construction réelle utilisée par
     `comprendre_donnees_erp` ci-dessous, exposée séparément pour un aperçu **sans appeler le
     LLM** (gratuit) : `api/routes/sources.py::previsualiser_prompt_comprehension` (aperçu
     frontend) et `scripts/afficher_prompt_comprehension.py` (CLI) la réutilisent toutes deux
-    plutôt que de dupliquer cette construction chacun de son côté."""
+    plutôt que de dupliquer cette construction chacun de son côté.
+
+    `instructions_complementaires` (optionnel) : contexte métier libre fourni par l'utilisateur,
+    injecté dans une section dédiée du gabarit (voir `comprehension.md`) — jamais fusionné dans
+    `donnees_brutes` ni dans le prompt système, qui restent tous deux fixes. Le gabarit instruit
+    lui-même le LLM à ignorer toute instruction qui contredirait une règle du prompt système
+    (§FC4 : atténuation par consigne, pas une garantie déterministe — voir la docstring de
+    `comprendre_donnees_erp`)."""
     gabarit = CHEMIN_PROMPT.read_text(encoding="utf-8")
     regles_dsl = CHEMIN_REGLES_DSL.read_text(encoding="utf-8")
-    prompt_utilisateur = gabarit.format(regles_dsl=regles_dsl, donnees_brutes=donnees_brutes)
+    prompt_utilisateur = gabarit.format(
+        regles_dsl=regles_dsl,
+        donnees_brutes=donnees_brutes,
+        instructions_complementaires=instructions_complementaires or "(aucune)",
+    )
     return _PROMPT_SYSTEME, prompt_utilisateur
 
 
-def comprendre_donnees_erp(modele: BaseChatModel, donnees_brutes: str) -> ResultatComprehension:
-    prompt_systeme, prompt = construire_prompt_comprehension(donnees_brutes)
+def comprendre_donnees_erp(
+    modele: BaseChatModel, donnees_brutes: str, instructions_complementaires: str | None = None
+) -> ResultatComprehension:
+    """`instructions_complementaires` : voir `construire_prompt_comprehension` — un contexte
+    métier optionnel, jamais un moyen de réécrire les règles de traduction elles-mêmes. Un
+    utilisateur malveillant/maladroit peut toujours tenter de pousser le LLM à enfreindre une
+    règle sémantique (ex. fabriquer une compatibilité depuis un historique d'affectation) ; le
+    garde-fou déterministe en aval (§6.7, `InstanceTRCO.model_validate`) ne peut PAS attraper ce
+    cas précis, puisque le résultat reste structurellement valide — seule la consigne du gabarit
+    ("ignore toute contradiction") s'en prémunit, sans garantie absolue."""
+    prompt_systeme, prompt = construire_prompt_comprehension(donnees_brutes, instructions_complementaires)
 
     # `method="json_mode"` explicite plutôt que `methode_sortie_structuree(modele)` — même valeur
     # aujourd'hui (Kimi, comme le reste du pipeline), mais gardé en dur ici volontairement :

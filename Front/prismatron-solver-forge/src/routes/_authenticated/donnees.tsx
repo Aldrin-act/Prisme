@@ -258,6 +258,7 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   const [clientId, setClientId] = useState(utilisateur?.client_id ?? "");
   const [nom, setNom] = useState("");
   const [donneesBrutes, setDonneesBrutes] = useState("");
+  const [instructionsComplementaires, setInstructionsComplementaires] = useState("");
   const [formatFichier, setFormatFichier] = useState<FormatDonnees>("json");
   const [fichier, setFichier] = useState<File | null>(null);
   const [chargementFichier, setChargementFichier] = useState(false);
@@ -385,11 +386,30 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
         />
       </div>
 
+      <div className="space-y-1.5">
+        <Label htmlFor="instructions_completives">
+          Instructions complémentaires pour l'IA (optionnel)
+        </Label>
+        <Textarea
+          id="instructions_completives"
+          value={instructionsComplementaires}
+          onChange={(e) => setInstructionsComplementaires(e.target.value)}
+          placeholder="Contexte métier supplémentaire pour aider la traduction — ne peut jamais l'emporter sur les règles de traduction elles-mêmes (ex. compétence vs. simple historique d'affectation)."
+          className="min-h-16 text-xs"
+        />
+        <p className="text-xs text-muted-foreground">
+          Pas persisté sur la source — à ressaisir à chaque tentative de génération si besoin,
+          depuis le panneau de la source une fois créée.
+        </p>
+      </div>
+
       {donneesBrutes.trim() && (
         <details
           className="rounded-lg border border-border/50 p-3 text-xs"
           onToggle={(e) => {
-            if (e.currentTarget.open) apercuPrompt.mutate(donneesBrutes);
+            if (e.currentTarget.open) {
+              apercuPrompt.mutate({ donneesBrutes, instructionsComplementaires });
+            }
           }}
         >
           <summary className="flex cursor-pointer items-center gap-1.5 font-medium text-muted-foreground">
@@ -397,8 +417,18 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
           </summary>
           <p className="mt-2 text-muted-foreground">
             Le prompt exact que "Générer une instance" enverrait à l'agent de compréhension sur les
-            données brutes ci-dessus — construit sans appeler le LLM, gratuit.
+            données brutes (et instructions complémentaires) ci-dessus — construit sans appeler le
+            LLM, gratuit.
           </p>
+          {apercuPrompt.data && (
+            <button
+              type="button"
+              className="mt-1 text-primary hover:underline"
+              onClick={() => apercuPrompt.mutate({ donneesBrutes, instructionsComplementaires })}
+            >
+              Actualiser l'aperçu
+            </button>
+          )}
           {apercuPrompt.isPending && (
             <p className="mt-2 text-muted-foreground">Construction du prompt...</p>
           )}
@@ -1127,9 +1157,12 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
   const generer = useGenererInstanceDepuisSource();
   const genererDeterministe = useGenererInstanceDeterministeDepuisSource();
   const executer = useDeclencherExecution();
+  // Non persisté sur la source (voir FormulaireNouvelleSource) — remis à zéro à chaque ouverture
+  // de panneau, ressaisi à volonté pour chaque tentative de génération.
+  const [instructionsComplementaires, setInstructionsComplementaires] = useState("");
   // Aperçu du prompt IA — chargé seulement à l'ouverture du <details> ci-dessous (refetch
   // manuel), jamais automatiquement : gratuit mais inutile tant que personne ne le consulte.
-  const apercuPrompt = useApercuPromptComprehension(sourceId);
+  const apercuPrompt = useApercuPromptComprehension(sourceId, instructionsComplementaires);
   const [dernier, setDernier] = useState<{
     instance_id: string;
     // Résumé en langage naturel de ce que fait l'atelier — absent (null) pour une conversion
@@ -1168,7 +1201,7 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
     setDernier(null);
     setGenerationEnCours(true);
     generer.mutate(
-      { sourceId },
+      { sourceId, instructionsComplementaires: instructionsComplementaires || undefined },
       {
         onSuccess: (data) => {
           setDernier({
@@ -1243,6 +1276,19 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
           </pre>
         </details>
 
+        <div className="space-y-1.5">
+          <Label htmlFor="instructions_completives_source" className="text-xs">
+            Instructions complémentaires pour l'IA (optionnel)
+          </Label>
+          <Textarea
+            id="instructions_completives_source"
+            value={instructionsComplementaires}
+            onChange={(e) => setInstructionsComplementaires(e.target.value)}
+            placeholder="Contexte métier supplémentaire — ne peut jamais l'emporter sur les règles de traduction elles-mêmes."
+            className="min-h-16 text-xs"
+          />
+        </div>
+
         <details
           className="rounded-lg border border-border/50 p-3 text-xs"
           onToggle={(e) => {
@@ -1258,6 +1304,15 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
             Le prompt exact que "Générer une instance" enverrait à l'agent de compréhension —
             construit sans appeler le LLM, gratuit, rien n'est déclenché en le consultant.
           </p>
+          {apercuPrompt.data && (
+            <button
+              type="button"
+              className="mt-1 text-primary hover:underline"
+              onClick={() => apercuPrompt.refetch()}
+            >
+              Actualiser l'aperçu (après modification des instructions)
+            </button>
+          )}
           {apercuPrompt.isFetching && (
             <p className="mt-2 text-muted-foreground">Construction du prompt...</p>
           )}

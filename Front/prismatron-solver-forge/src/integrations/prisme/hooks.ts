@@ -769,8 +769,13 @@ export function useExplorerAPI() {
  */
 export function useGenererInstanceDepuisSource() {
   return useMutation({
-    mutationFn: ({ sourceId }: { sourceId: string }) =>
-      prismeClient.genererInstanceDepuisSource(sourceId),
+    mutationFn: ({
+      sourceId,
+      instructionsComplementaires,
+    }: {
+      sourceId: string;
+      instructionsComplementaires?: string;
+    }) => prismeClient.genererInstanceDepuisSource(sourceId, instructionsComplementaires),
   });
 }
 
@@ -795,11 +800,13 @@ export function useGenererInstanceDeterministeDepuisSource() {
  */
 export function useApercuPromptComprehension(
   sourceId: string | null,
+  instructionsComplementaires?: string,
   options?: Omit<UseQueryOptions<Types.ApercuPromptComprehension>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: prismeKeys.apercuPromptComprehension(sourceId || ""),
-    queryFn: () => prismeClient.obtenirApercuPromptComprehension(sourceId!),
+    queryFn: () =>
+      prismeClient.obtenirApercuPromptComprehension(sourceId!, instructionsComplementaires),
     enabled: false,
     ...options,
   });
@@ -813,8 +820,17 @@ export function useApercuPromptComprehension(
  */
 export function useApercuPromptComprehensionSansSource() {
   return useMutation({
-    mutationFn: (donneesBrutes: string) =>
-      prismeClient.obtenirApercuPromptComprehensionSansSource(donneesBrutes),
+    mutationFn: ({
+      donneesBrutes,
+      instructionsComplementaires,
+    }: {
+      donneesBrutes: string;
+      instructionsComplementaires?: string;
+    }) =>
+      prismeClient.obtenirApercuPromptComprehensionSansSource(
+        donneesBrutes,
+        instructionsComplementaires,
+      ),
   });
 }
 

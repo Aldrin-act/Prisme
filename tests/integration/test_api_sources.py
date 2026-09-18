@@ -10,6 +10,7 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
+from adapters.agent_comprehension.agent import _SchemaComprehension
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
@@ -119,6 +120,94 @@ def test_previsualiser_prompt_comprehension_sans_source_ne_necessite_aucune_sour
     corps = reponse.json()
     assert "analyste d'intégration de données" in corps["prompt_systeme"]
     assert "un export ERP quelconque" in corps["prompt_utilisateur"]
+
+
+def test_previsualiser_prompt_comprehension_sans_source_avec_instructions() -> None:
+    client = TestClient(app)
+
+    reponse = client.post(
+        "/sources/prompt-comprehension",
+        json={"donnees_brutes": "un export ERP", "instructions_complementaires": "Le poste CTRL tourne 24/7"},
+    )
+
+    assert reponse.status_code == 200, reponse.json()
+    assert "Le poste CTRL tourne 24/7" in reponse.json()["prompt_utilisateur"]
+
+
+def test_previsualiser_prompt_comprehension_avec_source_reflete_les_instructions() -> None:
+    """`GET /{source_id}/prompt-comprehension?instructions_complementaires=...` doit refléter le
+    même aperçu que `POST /{source_id}/generer-instance` enverrait réellement avec ces mêmes
+    instructions."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, "des données brutes quelconques")
+
+        reponse = client.get(
+            f"/sources/{source_id}/prompt-comprehension",
+            params={"instructions_complementaires": "Priorité aux commandes urgentes"},
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        assert "Priorité aux commandes urgentes" in reponse.json()["prompt_utilisateur"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def _schema_comprehension_factice() -> _SchemaComprehension:
+    return _SchemaComprehension(
+        instance={
+            "taches": [{"id": "T1"}],
+            "ressources": [{"id": "R1"}],
+            "contraintes": [
+                {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10}
+            ],
+            "objectifs": [{"type": "minimiser_makespan"}],
+        },
+        description_metier="Une tâche T1 exécutée sur la ressource R1.",
+    )
+
+
+def test_generer_instance_sans_corps_fonctionne_comme_avant() -> None:
+    """`requete: RequeteGenererInstance | None = None` — aucun corps du tout doit continuer à
+    marcher exactement comme avant l'ajout d'`instructions_complementaires` (rétrocompatibilité)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=_schema_comprehension_factice()
+    )
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, "T1;R1;10min")
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance")
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["structure_contraintes"] == "compatibilite_ressource_tache"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_generer_instance_avec_instructions_complementaires() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    app.dependency_overrides[construire_modele_comprehension] = lambda: ModeleFactice(
+        raw_content="{}", parsed=_schema_comprehension_factice()
+    )
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, "T1;R1;10min")
+
+        reponse = client.post(
+            f"/sources/{source_id}/generer-instance",
+            json={"instructions_complementaires": "Le poste CTRL tourne 24/7"},
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["instance_id"] in etat_test.instances
+    finally:
+        app.dependency_overrides.clear()
 
 
 def test_generer_instance_deterministe_rejette_un_texte_non_structure() -> None:
