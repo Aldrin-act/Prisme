@@ -1,15 +1,17 @@
 """Client LLM générique pour les agents du pipeline (§5.6).
 
-**Fournisseur unique : OpenRouter** (`OPENROUTER_API_KEY`, jamais lue/manipulée/journalisée
-directement ici, uniquement passée telle quelle à `ChatOpenAI`, voir `_construire_modele_openrouter`
-pour pourquoi `ChatOpenAI` plutôt qu'un package dédié) — une passerelle compatible OpenAI vers
-Kimi K2 (Moonshot AI) et d'autres modèles, plutôt qu'un appel direct à l'API Moonshot. `PRISME_LLM_MODEL`
-(défaut `moonshotai/kimi-k2.6`) et les surcharges par agent
-(`PRISME_LLM_MODEL_<AGENT>`/`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>`) restent disponibles ;
-il n'existe plus de variable de choix de fournisseur — les autres fournisseurs
-(qwen/together/nvidia/minimax/deepseek/nemotron, puis Mistral, puis l'appel direct à Moonshot)
-ont été retirés du code au fil du temps, jugés une complexité non nécessaire pour un seul
-fournisseur réellement utilisé en production.
+**Fournisseur : Kimi (Moonshot AI) en direct**, dès que `KIMI_API_KEY` est renseignée — l'API
+Moonshot est compatible OpenAI (`_construire_modele_kimi`), modèle par défaut `kimi-k2.6`.
+**OpenRouter** (`OPENROUTER_API_KEY`) reste le repli quand aucune clé Kimi n'est configurée.
+`PRISME_LLM_FOURNISSEUR` (`kimi` / `openrouter`) force l'un ou l'autre ; absente, la présence de
+la clé Kimi tranche (`fournisseur_llm`). Aucune clé n'est jamais lue ailleurs, manipulée ni
+journalisée ici : elle est passée telle quelle à `ChatOpenAI`.
+
+`PRISME_LLM_MODEL` et les surcharges par agent (`PRISME_LLM_MODEL_<AGENT>`/
+`PRISME_LLM_TIMEOUT_SECONDES_<AGENT>`) valent pour les deux fournisseurs. Un nom de modèle au
+format OpenRouter (`moonshotai/kimi-k2.6`) est accepté tel quel en mode Kimi : le préfixe du
+fournisseur est retiré (`_nom_modele_kimi`). Les autres fournisseurs historiques
+(qwen/together/nvidia/minimax/deepseek/nemotron, Mistral) restent retirés.
 
 Construit sur LangChain (`langchain-core`/`langchain-openai`, `extra` optionnel
 `llm` du projet) plutôt que sur le SDK brut : donne un timeout HTTP réel par appel
@@ -206,6 +208,27 @@ def invoquer_agent_avec_outils(
 
 _MODELE_PAR_DEFAUT = "moonshotai/kimi-k2.6"
 _OPENROUTER_API_BASE_URL_PAR_DEFAUT = "https://openrouter.ai/api/v1"
+# API Moonshot internationale — la plateforme chinoise (`api.moonshot.cn`) a ses propres clés,
+# refusées ici (« Invalid Authentication ») ; surchargeable via `KIMI_API_BASE_URL`.
+_KIMI_API_BASE_URL_PAR_DEFAUT = "https://api.moonshot.ai/v1"
+_PREFIXE_MODELE_KIMI_OPENROUTER = "moonshotai/"
+
+
+def fournisseur_llm() -> str:
+    """`"kimi"` ou `"openrouter"`. `PRISME_LLM_FOURNISSEUR` force le choix ; absente (ou
+    inconnue), Kimi en direct dès que `KIMI_API_KEY` est renseignée, OpenRouter sinon."""
+    choix = (os.environ.get("PRISME_LLM_FOURNISSEUR") or "").strip().lower()
+    if choix in ("kimi", "openrouter"):
+        return choix
+    return "kimi" if os.environ.get("KIMI_API_KEY") else "openrouter"
+
+
+def _nom_modele_kimi(modele: str) -> str:
+    """`moonshotai/kimi-k2.6` (nommage OpenRouter) → `kimi-k2.6` (nommage de l'API Moonshot) :
+    un même `PRISME_LLM_MODEL` sert les deux fournisseurs."""
+    if modele.startswith(_PREFIXE_MODELE_KIMI_OPENROUTER):
+        return modele[len(_PREFIXE_MODELE_KIMI_OPENROUTER) :]
+    return modele
 
 
 def _timeout_pour_agent(nom_agent: str | None) -> float:
@@ -232,6 +255,26 @@ def _construire_modele_openrouter(modele: str, timeout: float) -> BaseChatModel:
     )
 
 
+def _construire_modele_kimi(modele: str, timeout: float) -> BaseChatModel:
+    """Kimi (Moonshot AI) en direct — API compatible OpenAI, même patron `ChatOpenAI` + `base_url`
+    qu'OpenRouter, sans intermédiaire (une passerelle de moins, donc une source de panne et de
+    latence de moins)."""
+    from langchain_openai import ChatOpenAI
+
+    return ChatOpenAI(
+        model=_nom_modele_kimi(modele),
+        api_key=os.environ.get("KIMI_API_KEY"),
+        base_url=os.environ.get("KIMI_API_BASE_URL") or _KIMI_API_BASE_URL_PAR_DEFAUT,
+        timeout=timeout,
+    )
+
+
+def _construire_modele_fournisseur(modele: str, timeout: float) -> BaseChatModel:
+    if fournisseur_llm() == "kimi":
+        return _construire_modele_kimi(modele, timeout)
+    return _construire_modele_openrouter(modele, timeout)
+
+
 def methode_sortie_structuree(modele: BaseChatModel) -> str:
     """`method=` à passer à `modele.with_structured_output(schema, method=...)`.
 
@@ -252,22 +295,23 @@ def construire_modele() -> BaseChatModel:
     # sans le `or` : le fournisseur rejette alors l'appel avec une erreur "modèle manquant"
     # plutôt que d'utiliser son propre défaut, l'erreur n'a rien d'évident depuis l'appelant.
     modele_nom = os.environ.get("PRISME_LLM_MODEL") or _MODELE_PAR_DEFAUT
-    return _construire_modele_openrouter(modele_nom, _timeout_pour_agent(None))
+    return _construire_modele_fournisseur(modele_nom, _timeout_pour_agent(None))
 
 
 def construire_modele_pour_agent(nom_agent: str) -> BaseChatModel:
-    """Construit le `BaseChatModel` LangChain (OpenRouter) pour un agent spécifique. Le retry
+    """Construit le `BaseChatModel` LangChain (Kimi ou OpenRouter, voir `fournisseur_llm`) pour
+    un agent spécifique. Le retry
     (`_avec_retry` pour les erreurs réseau transitoires, `invoquer_agent_structure` pour une
     sortie structurée non conforme) reste à la charge de l'appelant, qui l'applique au point
     d'appel réel (`.invoke(...)` sur le `Runnable` structuré ou brut), puisque le modèle
     renvoyé ici n'est pas encore l'objet invoqué.
 
     Permet une surcharge par variable d'environnement `PRISME_LLM_MODEL_<AGENT>` /
-    `PRISME_LLM_TIMEOUT_SECONDES_<AGENT>` — jamais de choix de fournisseur, il n'y en a qu'un.
+    `PRISME_LLM_TIMEOUT_SECONDES_<AGENT>` — le fournisseur, lui, est le même pour tous les agents.
     """
     var_modele = f"PRISME_LLM_MODEL_{nom_agent.upper()}"
     modele_nom = os.environ.get(var_modele) or os.environ.get("PRISME_LLM_MODEL") or _MODELE_PAR_DEFAUT
-    return _construire_modele_openrouter(modele_nom, _timeout_pour_agent(nom_agent))
+    return _construire_modele_fournisseur(modele_nom, _timeout_pour_agent(nom_agent))
 
 
 def construire_modele_comprehension() -> BaseChatModel:

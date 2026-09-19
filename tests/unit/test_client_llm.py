@@ -23,7 +23,7 @@ def test_modele_vide_dans_env_retombe_sur_le_defaut(monkeypatch: pytest.MonkeyPa
     monkeypatch.setenv("PRISME_LLM_MODEL", "")  # présent mais vide, comme dans .env par défaut
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele()
@@ -35,7 +35,7 @@ def test_modele_explicite_dans_env_est_respecte(monkeypatch: pytest.MonkeyPatch)
     monkeypatch.setenv("PRISME_LLM_MODEL", "mon-modele-precis")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele()
@@ -83,7 +83,7 @@ def test_construire_modele_pour_agent_respecte_la_surcharge_de_modele(monkeypatc
     monkeypatch.setenv("PRISME_LLM_MODEL_DOCUMENTATION", "un-modele-precis")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele_pour_agent("documentation")
@@ -103,7 +103,7 @@ def test_construire_modele_pour_agent_retombe_sur_le_modele_global_sans_surcharg
     monkeypatch.setenv("PRISME_LLM_MODEL", "mon-modele-global")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_openrouter", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
     )
 
     client_llm.construire_modele_pour_agent("analyste")
@@ -372,3 +372,48 @@ class TestInvoquerAgentAvecOutils:
 
         assert donnees is parsed
         assert appels == ["outil_fantome({})"]
+
+
+# --- Choix du fournisseur : Kimi en direct ou OpenRouter ---
+
+
+def test_kimi_choisi_des_que_sa_cle_est_renseignee(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("PRISME_LLM_FOURNISSEUR", raising=False)
+    monkeypatch.setenv("KIMI_API_KEY", "sk-test")
+    assert client_llm.fournisseur_llm() == "kimi"
+
+
+def test_openrouter_en_repli_sans_cle_kimi(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("PRISME_LLM_FOURNISSEUR", raising=False)
+    monkeypatch.delenv("KIMI_API_KEY", raising=False)
+    assert client_llm.fournisseur_llm() == "openrouter"
+
+
+def test_fournisseur_force_par_variable(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("KIMI_API_KEY", "sk-test")
+    monkeypatch.setenv("PRISME_LLM_FOURNISSEUR", "openrouter")
+    assert client_llm.fournisseur_llm() == "openrouter"
+
+
+def test_construire_modele_kimi_vise_l_api_moonshot(monkeypatch: pytest.MonkeyPatch) -> None:
+    pytest.importorskip("langchain_openai")
+    monkeypatch.setenv("KIMI_API_KEY", "sk-test")
+    monkeypatch.delenv("KIMI_API_BASE_URL", raising=False)
+
+    modele = client_llm._construire_modele_kimi("moonshotai/kimi-k2.6", 120.0)
+
+    assert modele.model_name == "kimi-k2.6"  # préfixe OpenRouter retiré
+    assert str(modele.openai_api_base).rstrip("/") == "https://api.moonshot.ai/v1"
+
+
+def test_aiguillage_vers_kimi_quand_il_est_le_fournisseur(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PRISME_LLM_FOURNISSEUR", "kimi")
+    appels: list[str] = []
+    monkeypatch.setattr(client_llm, "_construire_modele_kimi", lambda modele, timeout: appels.append("kimi"))
+    monkeypatch.setattr(
+        client_llm, "_construire_modele_openrouter", lambda modele, timeout: appels.append("openrouter")
+    )
+
+    client_llm.construire_modele_pour_agent("analyste")
+
+    assert appels == ["kimi"]
