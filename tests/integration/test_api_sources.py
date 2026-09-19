@@ -6,6 +6,8 @@ de Postgres).
 
 from __future__ import annotations
 
+import json
+
 import httpx
 import pytest
 from fastapi.testclient import TestClient
@@ -14,6 +16,7 @@ from adapters.agent_comprehension.agent import _SchemaComprehension
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
+from api.routes.sources import RequeteExplorationAPI, _appeler_api
 from generation.agents.client_llm import construire_modele_comprehension
 from tests.unit.aides_test_agents import ModeleFactice
 
@@ -623,3 +626,85 @@ def test_explorer_bdd_non_admin_est_contraint_a_son_propre_client(monkeypatch: p
         assert captures["client_id"] == "mon_client"
     finally:
         app.dependency_overrides.clear()
+
+
+def test_explorer_api_sans_taille_lot_fait_un_seul_appel() -> None:
+    """Comportement historique inchangé : un appel, le corps renvoyé tel quel — une API paginée
+    ne rend alors que sa première page."""
+    appels: list[dict] = []
+
+    def transport(requete: httpx.Request) -> httpx.Response:
+        appels.append(dict(requete.url.params))
+        return httpx.Response(200, json=[{"id": 0}, {"id": 1}])
+
+    client = httpx.Client(transport=httpx.MockTransport(transport))
+    corps = _appeler_api(RequeteExplorationAPI(url="https://erp.test/taches"), client)
+
+    assert appels == [{}]
+    assert json.loads(corps) == [{"id": 0}, {"id": 1}]
+
+
+def test_explorer_api_avec_taille_lot_enchaine_les_pages_et_concatene() -> None:
+    pages = {"0": [{"id": 0}, {"id": 1}], "2": [{"id": 2}, {"id": 3}], "4": [{"id": 4}]}
+    appels: list[dict] = []
+
+    def transport(requete: httpx.Request) -> httpx.Response:
+        params = dict(requete.url.params)
+        appels.append(params)
+        return httpx.Response(200, json=pages.get(params["offset"], []))
+
+    client = httpx.Client(transport=httpx.MockTransport(transport))
+    corps = _appeler_api(RequeteExplorationAPI(url="https://erp.test/taches", taille_lot=2), client)
+
+    # S'arrête sur la page incomplète (1 élément < 2), jamais une page de plus.
+    assert [a["offset"] for a in appels] == ["0", "2", "4"]
+    assert all(a["limit"] == "2" for a in appels)
+    assert json.loads(corps) == [{"id": i} for i in range(5)]
+
+
+def test_explorer_api_pagination_respecte_les_noms_de_parametres() -> None:
+    appels: list[dict] = []
+
+    def transport(requete: httpx.Request) -> httpx.Response:
+        appels.append(dict(requete.url.params))
+        return httpx.Response(200, json={"results": [{"id": 0}]})
+
+    client = httpx.Client(transport=httpx.MockTransport(transport))
+    corps = _appeler_api(
+        RequeteExplorationAPI(
+            url="https://erp.test/taches",
+            taille_lot=50,
+            param_taille="per_page",
+            param_decalage="page",
+        ),
+        client,
+    )
+
+    assert appels == [{"per_page": "50", "page": "0"}]
+    # Éléments trouvés sous une clé courante ("results"), pas au premier niveau.
+    assert json.loads(corps) == [{"id": 0}]
+
+
+def test_explorer_api_reponse_non_paginable_est_renvoyee_telle_quelle() -> None:
+    """Texte libre ou objet sans liste : renvoyé tel quel plutôt que concaténé de travers."""
+    client = httpx.Client(
+        transport=httpx.MockTransport(lambda _: httpx.Response(200, text="id;nom\nT1;Decoupe\n"))
+    )
+
+    corps = _appeler_api(RequeteExplorationAPI(url="https://erp.test/export", taille_lot=100), client)
+
+    assert corps == "id;nom\nT1;Decoupe\n"
+
+
+def test_explorer_api_pagination_bornee_par_lots_max() -> None:
+    """Une API qui ne renvoie jamais de page incomplète ne boucle pas indéfiniment."""
+    appels: list[dict] = []
+
+    def transport(requete: httpx.Request) -> httpx.Response:
+        appels.append(dict(requete.url.params))
+        return httpx.Response(200, json=[{"id": 0}, {"id": 1}])
+
+    client = httpx.Client(transport=httpx.MockTransport(transport))
+    _appeler_api(RequeteExplorationAPI(url="https://erp.test/taches", taille_lot=2, lots_max=3), client)
+
+    assert len(appels) == 3

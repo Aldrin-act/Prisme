@@ -908,10 +908,18 @@ export interface AuthentificationAPI {
 
 export interface RequeteExplorationAPI {
   url: string;
+  // Toujours GET depuis l'interface ; le serveur accepte encore POST pour un appelant direct.
   methode?: "GET" | "POST";
   authentification?: AuthentificationAPI;
   corps?: string; // POST uniquement
   en_tetes?: Record<string, string>;
+  // Pagination par lots : absent, un seul appel est fait (une API paginée ne rend alors que sa
+  // première page). Renseigné, le serveur réclame les pages les unes après les autres et
+  // concatène leurs éléments en un seul tableau JSON.
+  taille_lot?: number;
+  lots_max?: number;
+  param_taille?: string;
+  param_decalage?: string;
 }
 
 export interface ReponseExplorationAPI {

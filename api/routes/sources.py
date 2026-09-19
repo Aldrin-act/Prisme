@@ -31,7 +31,7 @@ import httpx
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException
 from langchain_core.language_models.chat_models import BaseChatModel
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, Field, ValidationError
 
 from adapters.agent_comprehension import (
     comprendre_donnees_erp,
@@ -402,6 +402,13 @@ def generer_instance_deterministe(
 
 
 _TIMEOUT_EXPLORATION_API_SECONDES = 15.0
+# Pagination par lots : jamais illimitée — une API qui ne renvoie jamais de page incomplète
+# (paramètre ignoré, curseur différent...) boucle sinon jusqu'à la limite de taille seulement.
+_LOTS_MAX_PAR_DEFAUT = 20
+_LOTS_MAX_ABSOLU = 500
+# Clés sous lesquelles une API range habituellement ses éléments quand la réponse est un objet
+# plutôt qu'un tableau — la première trouvée sert à concaténer les lots.
+_CLES_LISTE_COURANTES = ("data", "results", "items", "records", "rows", "content", "elements")
 # Garde-fou taille — évite qu'une réponse gigantesque (mauvaise URL, endpoint
 # non paginé sur un gros jeu de données) ne remonte telle quelle jusqu'au
 # textarea "Données brutes" du navigateur.
@@ -423,6 +430,14 @@ class RequeteExplorationAPI(BaseModel):
     authentification: AuthentificationAPI = AuthentificationAPI()
     corps: str | None = None  # POST uniquement ; ignoré en GET
     en_tetes: dict[str, str] | None = None
+    # Pagination par lots : absent (ou 0), un seul appel est fait et le corps est renvoyé tel quel
+    # — comportement historique, inchangé. Renseigné, l'exploration réclame les pages les unes
+    # après les autres (`limit`/`offset` par défaut, renommables ci-dessous) et concatène leurs
+    # éléments jusqu'à une page incomplète, `lots_max` lots, ou la limite de taille.
+    taille_lot: int | None = Field(default=None, ge=1, le=10_000)
+    lots_max: int = Field(default=_LOTS_MAX_PAR_DEFAUT, ge=1, le=_LOTS_MAX_ABSOLU)
+    param_taille: str = "limit"
+    param_decalage: str = "offset"
 
 
 class ErreurReponseAPITropVolumineuse(Exception):
@@ -430,6 +445,25 @@ class ErreurReponseAPITropVolumineuse(Exception):
         super().__init__(
             f"réponse trop volumineuse ({taille_octets} octets, max {_TAILLE_MAX_REPONSE_API_OCTETS})"
         )
+
+
+def _elements_de_page(texte: str) -> list | None:
+    """Les éléments d'une page, si la réponse en est une : un tableau JSON, ou un objet dont une
+    clé courante (`data`, `results`...) porte le tableau. `None` si la réponse n'a pas cette forme
+    (texte libre, CSV, objet sans liste) — l'appelant s'arrête alors après la première page plutôt
+    que de deviner comment concaténer."""
+    try:
+        donnees = json.loads(texte)
+    except ValueError:
+        return None
+    if isinstance(donnees, list):
+        return donnees
+    if isinstance(donnees, dict):
+        for cle in _CLES_LISTE_COURANTES:
+            valeur = donnees.get(cle)
+            if isinstance(valeur, list):
+                return valeur
+    return None
 
 
 def _appeler_api(requete: RequeteExplorationAPI, client: httpx.Client | None = None) -> str:
@@ -453,23 +487,48 @@ def _appeler_api(requete: RequeteExplorationAPI, client: httpx.Client | None = N
     )
 
     client_reel = client or httpx.Client(timeout=_TIMEOUT_EXPLORATION_API_SECONDES)
+    elements: list = []
+    octets_cumules = 0
     try:
-        reponse = client_reel.request(
-            requete.methode,
-            requete.url,
-            headers=en_tetes or None,
-            content=requete.corps.encode("utf-8") if requete.corps else None,
-            auth=auth_basique,
-        )
-        reponse.raise_for_status()
+        for lot in range(requete.lots_max if requete.taille_lot else 1):
+            parametres = (
+                {
+                    requete.param_taille: str(requete.taille_lot),
+                    requete.param_decalage: str(lot * requete.taille_lot),
+                }
+                if requete.taille_lot
+                else None
+            )
+            reponse = client_reel.request(
+                requete.methode,
+                requete.url,
+                params=parametres,
+                headers=en_tetes or None,
+                content=requete.corps.encode("utf-8") if requete.corps else None,
+                auth=auth_basique,
+            )
+            reponse.raise_for_status()
+
+            octets_cumules += len(reponse.content)
+            if octets_cumules > _TAILLE_MAX_REPONSE_API_OCTETS:
+                raise ErreurReponseAPITropVolumineuse(octets_cumules)
+
+            if not requete.taille_lot:
+                return reponse.text
+
+            page = _elements_de_page(reponse.text)
+            if page is None:
+                # Réponse non paginable (texte libre, objet sans liste) : renvoyée telle quelle
+                # plutôt que concaténée de travers.
+                return reponse.text
+            elements.extend(page)
+            if len(page) < requete.taille_lot:
+                break
     finally:
         if client is None:
             client_reel.close()
 
-    corps_octets = len(reponse.content)
-    if corps_octets > _TAILLE_MAX_REPONSE_API_OCTETS:
-        raise ErreurReponseAPITropVolumineuse(corps_octets)
-    return reponse.text
+    return json.dumps(elements, ensure_ascii=False)
 
 
 @router.post("/explorer-api")
@@ -487,9 +546,13 @@ def explorer_api(
     Ne persiste rien : le texte renvoyé est destiné à remplir le champ
     « Données brutes » du formulaire de création de source, pour relecture
     humaine avant tout enregistrement — exactement comme le contenu d'un
-    fichier CSV/JSON déposé à la main. Une réponse paginée ne renvoie que sa
-    première page ; visez directement l'URL/les paramètres qui renvoient tout
-    en un seul appel si l'API le permet."""
+    fichier CSV/JSON déposé à la main.
+
+    `taille_lot` déclenche la pagination : les pages sont réclamées les unes après les autres
+    (`limit`/`offset` par défaut, renommables via `param_taille`/`param_decalage`) et leurs
+    éléments concaténés en un seul tableau JSON, jusqu'à une page incomplète, `lots_max` lots ou
+    la limite de taille. Absent, un seul appel est fait et la réponse est renvoyée telle quelle —
+    une API paginée ne rend alors que sa première page."""
     try:
         corps = _appeler_api(requete)
     except httpx.HTTPStatusError as erreur:

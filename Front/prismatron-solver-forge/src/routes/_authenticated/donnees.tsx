@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import {
@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   AlertCircle,
   AlertTriangle,
+  Copy,
   Download,
   Eye,
   Factory,
@@ -57,7 +58,6 @@ import {
   useApercuPromptComprehension,
   useApercuPromptComprehensionSansSource,
   useCreerSource,
-  useExplorerAPI,
   useGenererInstanceDepuisSource,
   useGenererInstanceDeterministeDepuisSource,
   useImporterFichiersCsv,
@@ -68,8 +68,8 @@ import {
   PrismeAPIError,
   type AuthentificationAPI,
   type Justification,
-  type TypeAuthentificationAPI,
 } from "@/integrations/prisme";
+import { PRISME_CONFIG } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
 import type { UniteTemps } from "@/lib/dates-relatives";
 import { hrefGabaritCsv, libelleUnite, nomGabaritCsv } from "@/lib/unite-ingestion";
@@ -331,13 +331,13 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
               JSON
             </TabsTrigger>
             <TabsTrigger value="api" className="text-xs">
-              API
+              API (réception)
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
         {formatFichier === "api" ? (
-          <FormulaireConnexionAPI onExtrait={setDonneesBrutes} />
+          <InstructionsReceptionAPI clientId={clientId} />
         ) : (
           <>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
@@ -492,260 +492,85 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   );
 }
 
-// Connexion à une API HTTP quelconque (POST /sources/explorer-api) — un seul
-// appel, jamais les identifiants saisis ici, qui ne servent qu'à cet appel.
-// Ne crée jamais de source elle-même : remplit seulement le champ "Données
-// brutes" du formulaire parent, pour relecture avant "Enregistrer la source".
-function FormulaireConnexionAPI({ onExtrait }: { onExtrait: (donneesBrutes: string) => void }) {
-  const explorer = useExplorerAPI();
-  const [url, setUrl] = useState("");
-  const [methode, setMethode] = useState<"GET" | "POST">("GET");
-  const [typeAuth, setTypeAuth] = useState<TypeAuthentificationAPI>("aucune");
-  const [enTeteCle, setEnTeteCle] = useState("X-API-Key");
-  const [valeurCle, setValeurCle] = useState("");
-  const [jeton, setJeton] = useState("");
-  const [utilisateurApi, setUtilisateurApi] = useState("");
-  const [motDePasseApi, setMotDePasseApi] = useState("");
-  const [corps, setCorps] = useState("");
-  // Validée côté client avant tout appel réseau — sinon une URL incomplète
-  // (protocole manquant, oubli fréquent) ne remonte qu'un message d'erreur
-  // brut de la librairie HTTP serveur, en anglais, une fois l'appel déjà
-  // parti pour rien.
-  const [erreurUrl, setErreurUrl] = useState<string | null>(null);
+// Réception : c'est l'ERP du client qui envoie ses données à PRISME, jamais PRISME qui va les
+// chercher. Rien à saisir ici donc — l'écran donne l'adresse à appeler, l'en-tête d'authentification
+// et un exemple prêt à copier ; le jeton est une clé PRISME, créée dans « Clés API » (jamais
+// réaffichée après sa création, d'où le lien plutôt qu'une valeur ici).
+function InstructionsReceptionAPI({ clientId }: { clientId: string }) {
+  const [copie, setCopie] = useState<string | null>(null);
+  const url = `${PRISME_CONFIG.baseURL}${PRISME_CONFIG.routes.sources}`;
+  const client = clientId.trim() || "VOTRE_CLIENT";
+  const exemple = [
+    `curl -X POST ${url} \\`,
+    `  -H "Authorization: Bearer pk_live_VOTRE_CLE" \\`,
+    `  -H "Content-Type: application/json" \\`,
+    `  -d '{"nom": "Export ERP", "client_id": "${client}", "donnees_brutes": "..." }'`,
+  ].join("\n");
 
-  const erreur = explorer.error as PrismeAPIError | null;
-
-  function urlValide(valeur: string): boolean {
+  async function copier(texte: string, quoi: string) {
     try {
-      const analysee = new URL(valeur);
-      return analysee.protocol === "http:" || analysee.protocol === "https:";
+      await navigator.clipboard.writeText(texte);
+      setCopie(quoi);
+      setTimeout(() => setCopie(null), 2000);
     } catch {
-      return false;
+      setCopie(null); // presse-papiers refusé (navigateur/permission) : l'utilisateur copie à la main
     }
-  }
-
-  function extraire() {
-    const urlSaisie = url.trim();
-    if (!urlValide(urlSaisie)) {
-      setErreurUrl(
-        "L'URL doit être complète et commencer par http:// ou https:// (ex. https://erp.exemple.com/api/taches).",
-      );
-      return;
-    }
-    setErreurUrl(null);
-
-    const authentification: AuthentificationAPI =
-      typeAuth === "cle_api"
-        ? {
-            type: "cle_api",
-            en_tete: enTeteCle.trim() || undefined,
-            valeur: valeurCle || undefined,
-          }
-        : typeAuth === "porteur"
-          ? { type: "porteur", jeton: jeton || undefined }
-          : typeAuth === "basique"
-            ? {
-                type: "basique",
-                utilisateur: utilisateurApi.trim() || undefined,
-                mot_de_passe: motDePasseApi || undefined,
-              }
-            : { type: "aucune" };
-
-    explorer.mutate(
-      {
-        url: urlSaisie,
-        methode,
-        authentification,
-        corps: methode === "POST" && corps.trim() ? corps : undefined,
-      },
-      { onSuccess: (data) => onExtrait(data.donnees_brutes) },
-    );
   }
 
   return (
     <div className="space-y-3 rounded-lg border border-border/50 p-3">
       <p className="text-xs text-muted-foreground">
-        Un seul appel HTTP — l'URL et les identifiants ne sont jamais enregistrés, seule la réponse
-        remplit le champ « Données brutes » ci-dessous, pour relecture avant d'enregistrer la
-        source. Une réponse paginée ne renvoie que sa première page.
+        Votre ERP envoie ses données à PRISME — rien à saisir ici. Il s'identifie avec un jeton
+        PRISME, et le corps de l'envoi remplit le champ « Données brutes » d'une nouvelle source,
+        exactement comme un export collé à la main.
       </p>
 
-      <div className="grid gap-3 sm:grid-cols-4">
-        <div className="space-y-1 sm:col-span-3">
-          <Label htmlFor="api_url" className="text-xs text-muted-foreground">
-            URL
-          </Label>
-          <Input
-            id="api_url"
-            value={url}
-            onChange={(e) => {
-              setUrl(e.target.value);
-              setErreurUrl(null);
-            }}
-            placeholder="https://erp.exemple.com/api/taches"
-            className="h-9 text-sm"
-          />
+      <div className="space-y-1">
+        <Label className="text-xs text-muted-foreground">Adresse de réception</Label>
+        <div className="flex items-center gap-2">
+          <code className="flex-1 truncate rounded-md border border-border/50 bg-muted/30 px-2 py-1.5 font-mono text-xs">
+            POST {url}
+          </code>
+          <Button variant="outline" size="sm" onClick={() => copier(url, "url")}>
+            {copie === "url" ? "Copié" : "Copier"}
+          </Button>
         </div>
-        <div className="space-y-1">
-          <Label htmlFor="api_methode" className="text-xs text-muted-foreground">
-            Méthode
-          </Label>
-          <Select value={methode} onValueChange={(v) => setMethode(v as "GET" | "POST")}>
-            <SelectTrigger id="api_methode" className="h-9 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="GET">GET</SelectItem>
-              <SelectItem value="POST">POST</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1 sm:col-span-4">
-          <Label htmlFor="api_auth" className="text-xs text-muted-foreground">
-            Authentification
-          </Label>
-          <Select value={typeAuth} onValueChange={(v) => setTypeAuth(v as TypeAuthentificationAPI)}>
-            <SelectTrigger id="api_auth" className="h-9 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="aucune">Aucune</SelectItem>
-              <SelectItem value="cle_api">Clé API (en-tête)</SelectItem>
-              <SelectItem value="porteur">Jeton porteur (Bearer)</SelectItem>
-              <SelectItem value="basique">Utilisateur / mot de passe</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {typeAuth === "cle_api" && (
-          <>
-            <div className="space-y-1 sm:col-span-2">
-              <Label htmlFor="api_en_tete" className="text-xs text-muted-foreground">
-                Nom de l'en-tête
-              </Label>
-              <Input
-                id="api_en_tete"
-                value={enTeteCle}
-                onChange={(e) => setEnTeteCle(e.target.value)}
-                className="h-9 text-sm"
-              />
-            </div>
-            <div className="space-y-1 sm:col-span-2">
-              <Label htmlFor="api_valeur_cle" className="text-xs text-muted-foreground">
-                Valeur
-              </Label>
-              <Input
-                id="api_valeur_cle"
-                type="password"
-                value={valeurCle}
-                onChange={(e) => setValeurCle(e.target.value)}
-                className="h-9 text-sm"
-                autoComplete="off"
-              />
-            </div>
-          </>
-        )}
-
-        {typeAuth === "porteur" && (
-          <div className="space-y-1 sm:col-span-4">
-            <Label htmlFor="api_jeton" className="text-xs text-muted-foreground">
-              Jeton
-            </Label>
-            <Input
-              id="api_jeton"
-              type="password"
-              value={jeton}
-              onChange={(e) => setJeton(e.target.value)}
-              className="h-9 text-sm"
-              autoComplete="off"
-            />
-          </div>
-        )}
-
-        {typeAuth === "basique" && (
-          <>
-            <div className="space-y-1 sm:col-span-2">
-              <Label htmlFor="api_utilisateur" className="text-xs text-muted-foreground">
-                Utilisateur
-              </Label>
-              <Input
-                id="api_utilisateur"
-                value={utilisateurApi}
-                onChange={(e) => setUtilisateurApi(e.target.value)}
-                className="h-9 text-sm"
-                autoComplete="off"
-              />
-            </div>
-            <div className="space-y-1 sm:col-span-2">
-              <Label htmlFor="api_mot_de_passe" className="text-xs text-muted-foreground">
-                Mot de passe
-              </Label>
-              <Input
-                id="api_mot_de_passe"
-                type="password"
-                value={motDePasseApi}
-                onChange={(e) => setMotDePasseApi(e.target.value)}
-                className="h-9 text-sm"
-                autoComplete="off"
-              />
-            </div>
-          </>
-        )}
-
-        {methode === "POST" && (
-          <div className="space-y-1 sm:col-span-4">
-            <Label htmlFor="api_corps" className="text-xs text-muted-foreground">
-              Corps de la requête (optionnel)
-            </Label>
-            <Textarea
-              id="api_corps"
-              value={corps}
-              onChange={(e) => setCorps(e.target.value)}
-              placeholder='{"depuis": "2026-01-01"}'
-              className="min-h-20 font-mono text-xs"
-            />
-          </div>
-        )}
       </div>
 
-      {(erreurUrl || erreur) && (
-        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-          <div className="flex items-center gap-2 font-medium">
-            <AlertCircle className="h-4 w-4" /> {erreurUrl ? "URL invalide" : "Échec de l'appel"}
-          </div>
-          <p className="mt-1">{erreurUrl ?? erreur?.message}</p>
-        </div>
-      )}
+      <div className="space-y-1">
+        <Label className="text-xs text-muted-foreground">Authentification</Label>
+        <code className="block rounded-md border border-border/50 bg-muted/30 px-2 py-1.5 font-mono text-xs">
+          Authorization: Bearer pk_live_...
+        </code>
+        <p className="text-xs text-muted-foreground">
+          Créez ce jeton dans{" "}
+          <Link to="/api-keys" className="text-primary underline-offset-2 hover:underline">
+            Clés API
+          </Link>{" "}
+          — il n'est affiché qu'à sa création, notez-le à ce moment-là.
+        </p>
+      </div>
 
-      {explorer.isSuccess && (
-        <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-xs">
-          <div className="flex items-center gap-2 font-medium text-primary">
-            <CheckCircle2 className="h-3.5 w-3.5" /> Données récupérées ci-dessous — relisez-les
-            avant d'enregistrer la source.
-          </div>
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <Label className="text-xs text-muted-foreground">Exemple d'envoi</Label>
+          <Button variant="ghost" size="sm" onClick={() => copier(exemple, "exemple")}>
+            <Copy className="mr-1.5 h-3 w-3" />
+            {copie === "exemple" ? "Copié" : "Copier"}
+          </Button>
         </div>
-      )}
-
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          size="sm"
-          onClick={extraire}
-          disabled={!url.trim() || explorer.isPending}
-        >
-          <Plug className="mr-2 h-3.5 w-3.5" />
-          {explorer.isPending ? "Appel en cours..." : "Appeler l'API"}
-        </Button>
+        <pre className="overflow-x-auto rounded-md border border-border/50 bg-muted/30 p-2 font-mono text-[11px] leading-relaxed">
+          {exemple}
+        </pre>
+        <p className="text-xs text-muted-foreground">
+          Un export volumineux s'envoie en plusieurs appels : chacun crée sa propre source,
+          reconvertible indépendamment. Cinq mégaoctets par envoi au maximum.
+        </p>
       </div>
     </div>
   );
 }
 
-// Bloc de statut de l'exécution automatique déclenchée après conversion —
-// partagé entre SourceActivePanel (après "Générer une instance"/"Convertir
-// sans IA") et ImporteurCsvDirect (après "Importer") : même geste "generate
-// once" dans les deux flux, un seul endroit qui sait comment l'afficher.
 function ResultatExecutionAuto({
   executer,
 }: {
