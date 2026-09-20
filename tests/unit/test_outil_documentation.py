@@ -51,7 +51,7 @@ def test_consulter_si_utile_sujet_valide_renvoie_le_contenu_formate() -> None:
 def test_consulter_si_utile_sans_besoin_renvoie_chaine_vide() -> None:
     modele = ModeleFactice(raw_content="{}", parsed=outil._SchemaBesoinDocumentation(sujet=None))
 
-    resultat = outil.consulter_si_utile(modele, "écrire le code du solveur", "cp_sat")
+    resultat = outil.consulter_si_utile(modele, "écrire le code du solveur", "tabu_search")
 
     assert resultat == ""
 
@@ -61,7 +61,7 @@ def test_consulter_si_utile_sujet_inconnu_renvoie_chaine_vide() -> None:
         raw_content='{"sujet": "quantique"}', parsed=outil._SchemaBesoinDocumentation(sujet="quantique")
     )
 
-    resultat = outil.consulter_si_utile(modele, "écrire le code du solveur", "cp_sat")
+    resultat = outil.consulter_si_utile(modele, "écrire le code du solveur", "tabu_search")
 
     assert resultat == ""
 
@@ -71,7 +71,7 @@ def test_consulter_si_utile_echec_de_l_appel_ne_propage_jamais() -> None:
     `invoquer_agent_structure`."""
     modele = ModeleFactice(raw_content="pas du JSON valide", parsed=None, parsing_error=ValueError("mal formé"))
 
-    resultat = outil.consulter_si_utile(modele, "concevoir le plan technique du solveur", "cp_sat")
+    resultat = outil.consulter_si_utile(modele, "concevoir le plan technique du solveur", "tabu_search")
 
     assert resultat == ""
 
@@ -86,6 +86,6 @@ def test_consulter_si_utile_forme_inattendue_ne_leve_pas() -> None:
 
     modele = ModeleFactice(raw_content="{}", parsed=_AutreSchema())
 
-    resultat = outil.consulter_si_utile(modele, "concevoir le plan technique du solveur", "cp_sat")
+    resultat = outil.consulter_si_utile(modele, "concevoir le plan technique du solveur", "tabu_search")
 
     assert resultat == ""

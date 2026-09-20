@@ -1,6 +1,6 @@
 """Agent Architecte (pipeline multi-agents, §5.6) — planifie la structure
-interne du module (variables/contraintes CP-SAT, ou l'équivalent pour un
-algorithme alternatif — encodage de solution, opérateurs...) à partir de la
+interne du module (représentation de la solution, décodeur, opérateurs de
+recherche de l'heuristique recommandée) à partir de la
 spécification de l'agent Analyste et de l'algorithme recommandé par l'agent
 Benchmarker (qui s'exécute avant lui dans le pipeline, voir
 `generation.graph` — le Benchmarker ne dépend que des
@@ -30,8 +30,8 @@ if TYPE_CHECKING:
 CHEMIN_PROMPT = Path(__file__).resolve().parents[1] / "prompts" / "architecte.md"
 
 _PROMPT_SYSTEME = (
-    "Tu es un architecte logiciel spécialisé en optimisation combinatoire (CP-SAT/OR-Tools et "
-    "métaheuristiques d'ordonnancement — génétique, ACO, recuit simulé, tabou, dispatching). "
+    "Tu es un architecte logiciel spécialisé en optimisation combinatoire (métaheuristiques "
+    "d'ordonnancement — génétique, ACO, recuit simulé, tabou, dispatching). "
     "Tu réponds toujours en JSON strict, jamais en texte libre."
 )
 
@@ -53,8 +53,8 @@ class ResultatConception:
 
     def en_texte(self) -> str:
         """Rendu lisible, pour l'injecter dans le prompt de l'agent Développeur.
-        Titres génériques (pas "CP-SAT" en dur) car le contenu peut décrire un
-        algorithme alternatif recommandé par le Benchmarker."""
+        Titres génériques car le contenu dépend de l'heuristique recommandée par le
+        Benchmarker."""
         fonctions = self.fonctions_internes or "aucune — une seule fonction resoudre() suffit"
         return (
             f"### Représentation de la solution\n{self.variables}\n\n"
@@ -73,15 +73,15 @@ def _rendre_parametres(parametres: dict | None) -> str:
 def concevoir_modele(
     modele: BaseChatModel,
     analyse: ResultatAnalyse,
-    algorithme: str = "cp_sat",
+    algorithme: str = "tabu_search",
     parametres: dict | None = None,
     autoriser_documentation: bool = False,
 ) -> ResultatConception:
     """Args:
     modele: `BaseChatModel` LangChain (voir `client_llm.construire_modele_pour_agent`).
     analyse: Spécification produite par l'agent Analyste.
-    algorithme: Algorithme recommandé par l'agent Benchmarker (ex. "cp_sat",
-        "genetic", "tabu_search"...) — "cp_sat" par défaut si l'appelant
+    algorithme: Algorithme recommandé par l'agent Benchmarker (ex. "genetic",
+        "tabu_search"...) — "tabu_search" par défaut si l'appelant
         n'exécute pas le Benchmarker (ex. rétrocompatibilité, tests).
     parametres: Paramètres suggérés par le Benchmarker pour cet algorithme.
     autoriser_documentation: si vrai, un petit appel préalable laisse l'agent demander lui-même

@@ -30,17 +30,18 @@ vérificateur de faisabilité, cas de référence) : c'est toujours le solveur q
 Avant de chercher ailleurs, vérifie d'abord les pièges connus de la mission, qui expliquent la
 plupart des échecs :
 
-- `None` renvoyé sur une instance faisable : `horizon` trop court (section « Horizon »), réservoir
-  de matières sans événement initial `+stock_initial` à l'instant 0 (section « Matières »),
-  échéance encodée sur le début au lieu de la fin ;
+- `None` renvoyé sur une instance faisable : `horizon` trop court (section « Horizon »),
+  décodeur qui rejette tous les placements (stock de matières, indisponibilités), échéance
+  comptée sur le début au lieu de la fin, solution initiale non réalisable ;
 - délai dépassé ou planning absent sur une grande instance : recherche répétée dans
   `instance.contraintes` à l'intérieur d'une boucle (section « Précalcule tout »), trop
-  d'itérations pour 30 s sur 1 vCPU, `max_time_in_seconds` au lieu de `max_deterministic_time` ;
-- résultat différent d'un appel à l'autre : hasard global, plusieurs workers CP-SAT, arrêt au
-  temps réel ;
-- `KeyError`/mauvais accès : clés de `debut`/`presence` mélangées (section « Noms des variables
-  CP-SAT »), identifiant supposé d'un format particulier (les commandes génèrent des ids comme
-  `cmd-1a2b3c4d_0_DECOUPE`).
+  d'itérations pour 30 s sur 1 vCPU, arrêt au temps réel au lieu d'un nombre fixe d'itérations ;
+- résultat différent d'un appel à l'autre : hasard global (`random.random()` au lieu d'un
+  `random.Random(graine)` local), itération sur un `set` d'identifiants (ordre variable d'un
+  processus à l'autre), égalité départagée par l'ordre d'itération, arrêt au temps réel ;
+- `KeyError`/mauvais accès : identifiant supposé d'un format particulier (les commandes
+  génèrent des ids comme `cmd-1a2b3c4d_0_DECOUPE`), couple `(tache, ressource)` absent des tables
+  précalculées.
 
 Si des tentatives précédentes sont listées ci-dessus, ne rejoue jamais un correctif déjà tenté et
 déjà resté en échec — un même symptôme après un même correctif signale que la cause identifiée
@@ -63,8 +64,8 @@ Exemple de réponse valide :
 
 ```json
 {{
-  "cause": "le réservoir de matières démarrait au niveau 0 : la première consommation le rendait négatif, le modèle était toujours infaisable",
-  "correctif": "ajout d'un événement +stock_initial à l'instant 0 en tête de la liste passée à AddReservoirConstraint",
-  "code": "from __future__ import annotations\n\nfrom ortools.sat.python import cp_model\n\nfrom dsl.schema import InstanceTRCO, Planning\n\n\ndef resoudre(instance: InstanceTRCO, planning_precedent: Planning | None = None, horizon_gele_jours: int = 0) -> Planning | None:\n    ...\n"
+  "cause": "le décodeur itérait sur un set d'identifiants de tâches : l'ordre variait d'un processus à l'autre et le makespan n'était pas reproductible",
+  "correctif": "parcours de sorted(ids) au lieu du set, égalités départagées par identifiant",
+  "code": "from __future__ import annotations\n\nimport random\n\nfrom dsl.schema import InstanceTRCO, Planning\n\n\ndef resoudre(instance: InstanceTRCO, planning_precedent: Planning | None = None, horizon_gele_jours: int = 0) -> Planning | None:\n    ...\n"
 }}
 ```

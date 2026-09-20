@@ -291,8 +291,8 @@ class ConsommationMatiere(BaseModel):
 
     Contrainte **dure** : le solveur ne doit jamais produire un planning où, à un instant
     donné, le cumul des consommations dépasse le stock disponible du matériau (vérifié par
-    `validation_engine/feasibility_checker.py`, encodé côté solveur généré via
-    `AddReservoirConstraint` en CP-SAT — voir `generation/prompts/generation_solveur.md`).
+    `validation_engine/feasibility_checker.py`, respecté côté solveur généré par un
+    compteur de stock dans le décodeur — voir `generation/prompts/generation_solveur.md`).
     Aucune notion de réapprovisionnement dans ce v1 : `stock_initial` couvre tout l'horizon.
 
     Une tâche consommant plusieurs matériaux est décrite par plusieurs contraintes de ce

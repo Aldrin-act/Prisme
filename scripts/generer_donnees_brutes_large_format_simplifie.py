@@ -478,7 +478,7 @@ Identique au format simplifié standard (voir `instance_exemple.json`):
 
 Ces données permettent de tester:
 1. **Scalabilité** du système de génération de solveur
-2. **Choix d'algorithme** (CP-SAT vs heuristiques) par le Benchmarker
+2. **Choix d'algorithme** (entre heuristiques) par le Benchmarker
 3. **Performance** des solveurs générés sur problèmes réalistes
 4. **Limites** du sandbox et timeouts
 

@@ -19,13 +19,16 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs OR-Tools prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
+          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs d'ordonnancement heuristiques prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
       },
-      { property: "og:title", content: "PRISME — Générez des solveurs de planification industrielle avec l'IA" },
+      {
+        property: "og:title",
+        content: "PRISME — Générez des solveurs de planification industrielle avec l'IA",
+      },
       {
         property: "og:description",
         content:
-          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs OR-Tools prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
+          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs d'ordonnancement heuristiques prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
       },
     ],
   }),
@@ -67,8 +70,9 @@ function Hero() {
           <span className="gradient-text">industrielle avec l'IA</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-          PRISME transforme vos contraintes métier de planification en solveurs OR-Tools
-          CP-SAT prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.
+          PRISME transforme vos contraintes métier de planification en solveurs heuristiques prêts
+          pour la production — validés, isolés en bac à sable, auditables et supervisés par un
+          humain.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Button
@@ -108,7 +112,7 @@ function GridBackdrop() {
 
 function FloatingCards() {
   const cards = [
-    { icon: Cpu, label: "Générateur IA", value: "GPT + OR-Tools" },
+    { icon: Cpu, label: "Générateur IA", value: "Agents IA + heuristiques" },
     { icon: ShieldCheck, label: "Validation", value: "100% couvert" },
     { icon: Workflow, label: "Bac à sable", value: "Exécutions isolées" },
     { icon: LineChart, label: "Plannings", value: "Optimisés" },
@@ -170,8 +174,16 @@ function SectionHead({ eyebrow, title, desc }: { eyebrow: string; title: string;
 function Platform() {
   const steps = [
     { icon: Boxes, title: "Ingestion", desc: "Données ERP et contraintes métier en DSL." },
-    { icon: Cpu, title: "Génération IA", desc: "Génération multi-agents de solveurs CP-SAT." },
-    { icon: ShieldCheck, title: "Validation", desc: "Vérifications automatiques et explicabilité." },
+    {
+      icon: Cpu,
+      title: "Génération IA",
+      desc: "Génération multi-agents de solveurs heuristiques.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Validation",
+      desc: "Vérifications automatiques et explicabilité.",
+    },
     { icon: Workflow, title: "Bac à sable", desc: "Exécution de code isolée et sécurisée." },
     { icon: LineChart, title: "Planification", desc: "Plans de production optimisés." },
     { icon: Sparkles, title: "Audit", desc: "Chaque décision est traçable." },
@@ -208,12 +220,36 @@ function Platform() {
 
 function Features() {
   const items = [
-    { icon: Cpu, title: "Génération de solveurs par IA", desc: "Transformez des contraintes métier en langage naturel en solveurs OR-Tools CP-SAT." },
-    { icon: LineChart, title: "Planification industrielle", desc: "Plans de production optimisés, fenêtres de maintenance, allocation des ressources." },
-    { icon: ShieldCheck, title: "Moteur de validation", desc: "Validation automatique des solveurs générés avant leur mise en production." },
-    { icon: Workflow, title: "Bac à sable sécurisé", desc: "Chaque solveur s'exécute dans des conteneurs isolés — rien ne fuite." },
-    { icon: Sparkles, title: "Auditabilité complète", desc: "Décisions traçables et explicables, du prompt jusqu'au planning." },
-    { icon: Boxes, title: "Pipeline multi-agents", desc: "Visualisez le rôle de chaque agent dans le flux de génération." },
+    {
+      icon: Cpu,
+      title: "Génération de solveurs par IA",
+      desc: "Transformez des contraintes métier en langage naturel en solveurs heuristiques d'ordonnancement.",
+    },
+    {
+      icon: LineChart,
+      title: "Planification industrielle",
+      desc: "Plans de production optimisés, fenêtres de maintenance, allocation des ressources.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Moteur de validation",
+      desc: "Validation automatique des solveurs générés avant leur mise en production.",
+    },
+    {
+      icon: Workflow,
+      title: "Bac à sable sécurisé",
+      desc: "Chaque solveur s'exécute dans des conteneurs isolés — rien ne fuite.",
+    },
+    {
+      icon: Sparkles,
+      title: "Auditabilité complète",
+      desc: "Décisions traçables et explicables, du prompt jusqu'au planning.",
+    },
+    {
+      icon: Boxes,
+      title: "Pipeline multi-agents",
+      desc: "Visualisez le rôle de chaque agent dans le flux de génération.",
+    },
   ];
   return (
     <section id="features" className="mx-auto max-w-7xl px-4 py-28">
@@ -291,7 +327,12 @@ function Pricing() {
     {
       name: "Professionnel",
       price: "1 490 €/mois",
-      features: ["Instances illimitées", "Quotas de génération IA", "Exécution en bac à sable", "Journaux d'audit"],
+      features: [
+        "Instances illimitées",
+        "Quotas de génération IA",
+        "Exécution en bac à sable",
+        "Journaux d'audit",
+      ],
       highlight: true,
     },
     {
@@ -344,15 +385,34 @@ function Pricing() {
 
 function FAQ() {
   const faqs = [
-    { q: "Comment l'IA génère-t-elle les solveurs ?", a: "Un pipeline multi-agents transforme vos contraintes DSL en code CP-SAT (OR-Tools), puis le valide et l'exécute en bac à sable avant sa mise en service." },
-    { q: "Quels algorithmes d'optimisation sont utilisés ?", a: "La programmation par contraintes (CP-SAT), la programmation en nombres entiers mixtes, et des heuristiques spécifiques au problème — générés pour chaque instance." },
-    { q: "L'exécution est-elle sécurisée ?", a: "Chaque solveur généré s'exécute dans un conteneur isolé sans accès réseau sortant, avec des limites de ressources strictes et des journaux d'audit complets." },
-    { q: "Puis-je déployer sur site ?", a: "Oui. Les clients Entreprise peuvent déployer PRISME sur leur propre infrastructure avec SSO et leurs propres modèles." },
-    { q: "Puis-je exporter le code généré ?", a: "Absolument — chaque solveur est du Python entièrement lisible et exportable à tout moment." },
+    {
+      q: "Comment l'IA génère-t-elle les solveurs ?",
+      a: "Un pipeline multi-agents transforme vos contraintes DSL en code de solveur heuristique (Python pur), puis le valide et l'exécute en bac à sable avant sa mise en service.",
+    },
+    {
+      q: "Quels algorithmes d'optimisation sont utilisés ?",
+      a: "Des heuristiques d'ordonnancement (tabou, recuit simulé, génétique, colonies de fourmis, règles de dispatching) — choisies et générées pour chaque instance.",
+    },
+    {
+      q: "L'exécution est-elle sécurisée ?",
+      a: "Chaque solveur généré s'exécute dans un conteneur isolé sans accès réseau sortant, avec des limites de ressources strictes et des journaux d'audit complets.",
+    },
+    {
+      q: "Puis-je déployer sur site ?",
+      a: "Oui. Les clients Entreprise peuvent déployer PRISME sur leur propre infrastructure avec SSO et leurs propres modèles.",
+    },
+    {
+      q: "Puis-je exporter le code généré ?",
+      a: "Absolument — chaque solveur est du Python entièrement lisible et exportable à tout moment.",
+    },
   ];
   return (
     <section className="mx-auto max-w-3xl px-4 py-28">
-      <SectionHead eyebrow="FAQ" title="Les réponses, tout de suite" desc="Tout ce qu'il vous faut pour évaluer PRISME." />
+      <SectionHead
+        eyebrow="FAQ"
+        title="Les réponses, tout de suite"
+        desc="Tout ce qu'il vous faut pour évaluer PRISME."
+      />
       <div className="mt-10 space-y-3">
         {faqs.map((f) => (
           <details key={f.q} className="glass group rounded-2xl p-5">

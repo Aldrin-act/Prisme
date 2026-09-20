@@ -66,7 +66,7 @@ def demo_flow():
     print("   B) Solveur N'EXISTE PAS → Génération nécessaire (ci-dessous)\n")
 
     print("⚠️  GÉNÉRATION (si nécessaire) :")
-    print("   1. LLM reçoit l'InstanceTRCO et génère du code Python CP-SAT")
+    print("   1. LLM reçoit l'InstanceTRCO et génère du code Python (heuristique)")
     print("   2. Validation statique (AST allowlist)")
     print("   3. Exécution test sur l'instance source")
     print("   4. Cascade de validation (faisabilité, optimalité, fidélité)")

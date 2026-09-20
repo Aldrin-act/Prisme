@@ -15,14 +15,14 @@ AST, exécution, cascade de faisabilité/optimalité/fidélité). Vérifie :
   imports autorisés uniquement) ;
 - cohérence du modèle/algorithme (variables, contraintes, objectif tels que
   décrits dans la mission et le plan technique) ;
-- **si l'algorithme n'est pas CP-SAT : les contraintes dures (précédence,
+- **les contraintes dures (précédence,
   compatibilité ressource-tâche, non-chevauchement d'une ressource)
   sont-elles impossibles à violer par construction du planning (décodeur),
   ou seulement pénalisées dans une fitness/un score ?** Une pénalité laisse
   passer des individus qui violent quand même la règle — signale-le comme
   problème même si le code "a l'air de marcher", ça fait échouer la brique
   faisabilité de la cascade, pas juste la qualité du résultat ;
-- **si l'algorithme n'est pas CP-SAT : la fonction de décodage/fitness
+- **la fonction de décodage/fitness
   parcourt-elle `instance.contraintes` (ou une liste de taille
   proportionnelle à l'instance) à chaque appel, au lieu d'utiliser une
   table précalculée une seule fois avant la recherche ?** Invisible sur le

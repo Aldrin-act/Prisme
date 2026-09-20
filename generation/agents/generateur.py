@@ -89,7 +89,7 @@ def generer_code_depuis_plan(
     Args:
         modele: `BaseChatModel` LangChain (voir `client_llm.construire_modele_pour_agent`).
         plan_technique: Plan de l'agent Architecte
-        algorithme: Algorithme recommandé par le Benchmarker (ex: "cp_sat", "genetic")
+        algorithme: Algorithme recommandé par le Benchmarker (ex: "tabu_search", "genetic")
         parametres: Paramètres suggérés pour l'algorithme
         autoriser_documentation: si vrai, un petit appel préalable laisse l'agent demander
             lui-même un sujet de `outil_documentation` avant d'écrire le code — désactivé par
@@ -97,7 +97,7 @@ def generer_code_depuis_plan(
             `generation/graph.py::_noeud_developpeur`.
     """
     documentation = (
-        consulter_si_utile(modele, "écrire le code du solveur", algorithme or "cp_sat")
+        consulter_si_utile(modele, "écrire le code du solveur", algorithme or "tabu_search")
         if autoriser_documentation
         else ""
     )

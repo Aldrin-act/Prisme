@@ -13,8 +13,8 @@ Le code du solveur est **généré une seule fois** par une boucle multi-agent (
 **persisté** (`solver_store/`) et **réexécuté** à chaque itération dans un conteneur éphémère
 (`sandbox/`), sans nouvelle sollicitation de l'IA. Le problème résolu est le *Flexible Job-Shop
 Scheduling Problem* (FJSP) ; l'agent Benchmarker choisit dynamiquement l'algorithme par instance
-(OR-Tools CP-SAT, exact, ou une heuristique — génétique, ACO, tabu, recuit simulé, dispatching,
-greedy — pour les instances trop grandes pour CP-SAT), jamais un algorithme fixé en dur.
+(une heuristique — tabu, recuit simulé, génétique, ACO, dispatching, greedy ; CP-SAT/OR-Tools
+est retiré du projet), jamais un algorithme fixé en dur.
 
 ## État du projet
 
@@ -42,14 +42,14 @@ La gestion de dépendances utilise **uv** plutôt que Poetry : le projet expose 
 `pyproject.toml` au format standard PEP 621 (`[project]`, backend `hatchling`), qu'uv consomme
 directement sans table `[tool.poetry]` propriétaire ni migration de format.
 
-- `.python-version` épingle l'interpréteur à **3.11** — `ortools` ne publie pas encore de wheel
-  pour les versions de Python plus récentes (vérifié : la résolution échoue sous Python 3.14, la
+- `.python-version` épingle l'interpréteur à **3.11** — pin historique (dû à `ortools`, désormais retiré du projet,
+  qui n'avait pas de wheel pour les versions de Python plus récentes : la résolution échouait sous Python 3.14, la
   version présente sur ce poste). `uv` télécharge et utilise 3.11 automatiquement, indépendamment
   du Python système.
 - `uv.lock` fige les versions exactes de toutes les dépendances, y compris transitives — il est
   versionné dans le dépôt et doit être régénéré (`uv lock`) après toute modification des
   dépendances dans `pyproject.toml`.
-- Les dépendances cœur (`ortools`, `pydantic`, `fastapi`, `pytest`) sont épinglées avec `==` dans
+- Les dépendances cœur (`pydantic`, `fastapi`, `pytest`) sont épinglées avec `==` dans
   `pyproject.toml` ; les autres dépendances gardent une borne `>=`.
 
 ### Reconstruire l'environnement complet (une seule commande)
@@ -61,7 +61,7 @@ uv sync --all-extras
 ## Installation
 
 ```bash
-uv sync                 # dépendances de base (pydantic, ortools, fastapi, httpx)
+uv sync                 # dépendances de base (pydantic, fastapi, httpx)
 uv sync --extra dev     # + pytest, uvicorn
 uv sync --extra llm     # + anthropic, openai — pour appeler le générateur
 uv sync --extra sandbox # + docker SDK — pour l'exécution en conteneur
@@ -77,7 +77,7 @@ synchronisé.
 ```bash
 # Tests
 uv run pytest                                              # suite complète (tests Docker auto-ignorés si Docker indisponible)
-uv run pytest tests/unit                                   # tests de couche 1 uniquement — ni OR-Tools ni Docker requis
+uv run pytest tests/unit                                   # tests de couche 1 uniquement — pas de Docker requis
 uv run pytest tests/unit/test_cascade.py::<nom_test>       # un seul test
 
 # Lint / format (ruff)

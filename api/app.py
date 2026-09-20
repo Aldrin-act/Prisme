@@ -49,7 +49,7 @@ app = FastAPI(
     title="PRISME",
     description=(
         "Génération et exécution de solveurs d'ordonnancement pilotée par IA "
-        "(Flexible Job-Shop Scheduling, OR-Tools CP-SAT)."
+        "(Flexible Job-Shop Scheduling, heuristiques d'ordonnancement)."
     ),
     version="0.1.0",
     lifespan=_lifespan,

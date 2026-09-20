@@ -1,11 +1,13 @@
 """Couche 1 (§6.1) : `generation.graph` exécute réellement du code Python
-via OR-Tools (comme `test_executer.py`), d'où `integration/` plutôt que
+(comme `test_executer.py`), d'où `integration/` plutôt que
 `unit/`. Aucun appel LLM réel — un faux modèle par agent (voir
 `tests/unit/aides_test_agents.py`), injecté via `config["configurable"]
 ["fabrique_modele"]` (voir `generation.graph._modele`), remplace
 `construire_modele_pour_agent` sans reconstruire le graphe."""
 
 from __future__ import annotations
+
+from pathlib import Path
 
 import pytest
 
@@ -20,90 +22,22 @@ from generation.agents import (
     testeur,
 )
 from sandbox.runner import ErreurExecutionSandbox, RapportTestsSandbox, ResultatTestUnitaire
+from scripts import _solveur_minimal
 from tests.unit.aides_test_agents import ModeleFactice
 
 # Respecte l'allowlist AST (generation/validation_statique.py) et résout
-# réellement le FJSP (CP-SAT) — un stub qui renverrait juste un Planning
-# vide échouerait légitimement la cascade réelle contre le banc synthétique.
-# Même fixture que tests/integration/test_pipeline_multi_agents.py (fichier
-# supprimé avec cette migration).
-CODE_BON = """
-from __future__ import annotations
-
-from collections import defaultdict
-
-from ortools.sat.python import cp_model
-
-from dsl.schema import CompatibiliteRessourceTache, OperationPlanifiee, Planning, Precedence
-
-
-def resoudre(instance):
-    modele = cp_model.CpModel()
-
-    compat = defaultdict(set)
-    duree = {}
-    for contrainte in instance.contraintes:
-        if isinstance(contrainte, CompatibiliteRessourceTache):
-            compat[contrainte.tache].add(contrainte.ressource)
-            duree[(contrainte.tache, contrainte.ressource)] = contrainte.duree
-
-    horizon = sum(max(duree[(tache.id, r)] for r in compat[tache.id]) for tache in instance.taches)
-
-    debut = {}
-    fin = {}
-    presence = {}
-    intervalles = defaultdict(list)
-
-    for tache in instance.taches:
-        candidats = compat[tache.id]
-        d_var = modele.NewIntVar(0, horizon, f"debut_{tache.id}")
-        f_var = modele.NewIntVar(0, horizon, f"fin_{tache.id}")
-        debut[tache.id] = d_var
-        fin[tache.id] = f_var
-
-        presences_tache = []
-        for ressource_id in candidats:
-            d = duree[(tache.id, ressource_id)]
-            p = modele.NewBoolVar(f"presence_{tache.id}_{ressource_id}")
-            intervalle = modele.NewOptionalIntervalVar(d_var, d, f_var, p, f"iv_{tache.id}_{ressource_id}")
-            intervalles[ressource_id].append(intervalle)
-            presence[(tache.id, ressource_id)] = p
-            presences_tache.append(p)
-        modele.AddExactlyOne(presences_tache)
-
-    for ressource in instance.ressources:
-        modele.AddNoOverlap(intervalles[ressource.id])
-
-    for contrainte in instance.contraintes:
-        if isinstance(contrainte, Precedence):
-            modele.Add(fin[contrainte.avant] <= debut[contrainte.apres])
-
-    makespan = modele.NewIntVar(0, horizon, "makespan")
-    modele.AddMaxEquality(makespan, list(fin.values()))
-    modele.Minimize(makespan)
-
-    solveur = cp_model.CpSolver()
-    statut = solveur.Solve(modele)
-    if statut not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-        return None
-
-    operations = []
-    for tache in instance.taches:
-        candidats = compat[tache.id]
-        ressource_choisie = next(r for r in candidats if solveur.Value(presence[(tache.id, r)]))
-        operations.append(
-            OperationPlanifiee(tache=tache.id, ressource=ressource_choisie, debut=solveur.Value(debut[tache.id]))
-        )
-    return Planning(operations=operations)
-"""
+# réellement le FJSP (ordonnancement par liste heuristique, `scripts/_solveur_minimal.py`) — un
+# stub qui renverrait juste un Planning vide échouerait légitimement la cascade réelle contre le
+# banc synthétique.
+CODE_BON = Path(_solveur_minimal.__file__).read_text(encoding="utf-8")
 
 CODE_INVALIDE = "import os\n\n\ndef resoudre(instance):\n    return None\n"
 
 
 @pytest.fixture(autouse=True)
 def _registre_analyste_indisponible(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Ce fichier ne teste que le câblage du graphe et l'exécution CP-SAT
-    réelle (voir docstring de module) — jamais la persistance. Sans ce
+    """Ce fichier ne teste que le câblage du graphe et l'exécution
+    heuristique réelle (voir docstring de module) — jamais la persistance. Sans ce
     fixture, l'outil `rechercher_instances_similaires` de l'Analyste (voir
     `generation/agents/analyste.py`) toucherait pour de vrai le schéma
     `public` de Postgres dès qu'il est joignable sur la machine de test ;
@@ -130,7 +64,9 @@ def _reponses_communes() -> dict[str, object]:
         "benchmarker": ModeleFactice(
             raw_content="{}",
             parsed=benchmarker._SchemaBenchmark(
-                recommandation=benchmarker._SchemaRecommandation(algorithme="cp_sat", raison="petite instance")
+                recommandation=benchmarker._SchemaRecommandation(
+                    algorithme="tabu_search", raison="petite instance"
+                )
             ),
         ),
         "architecte": ModeleFactice(
@@ -451,7 +387,7 @@ def test_stream_persiste_les_champs_deja_produits_avant_un_plantage(monkeypatch:
 
     champs = {e.champ: e.valeur for e in elements if isinstance(e, g.ResultatPartiel)}
     assert champs["specification"]
-    assert champs["algorithme"] == "cp_sat"
+    assert champs["algorithme"] == "tabu_search"
     assert champs["plan_technique"]
     assert champs["code_genere"].strip() == CODE_BON.strip()
     assert "tests_generes" not in champs  # le testeur n'a jamais eu la chance de produire ça

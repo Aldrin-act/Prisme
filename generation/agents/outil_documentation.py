@@ -36,10 +36,6 @@ _PROMPT_SYSTEME_DECISION = (
 # Catalogue volontairement plat et restreint (§ voir docstring module) — un sujet = un fichier
 # markdown sous prompts/reference/. Ajouter un sujet : une entrée ici + un fichier, rien d'autre.
 _DESCRIPTIONS: dict[str, str] = {
-    "cp_sat_avance": (
-        "API CP-SAT au-delà des contraintes DSL déjà couvertes par la mission — AddCircuit, "
-        "NewOptionalIntervalVar, paramètres du solveur, AddHint, statuts."
-    ),
     "genetic": "Opérateurs d'algorithme génétique — croisement, mutation, sélection, élitisme.",
     "aco": "Optimisation par colonies de fourmis — matrice de phéromones, mise à jour, désirabilité heuristique.",
     "tabu_search": "Recherche tabou — liste taboue, tenure, voisinage, critère d'aspiration.",

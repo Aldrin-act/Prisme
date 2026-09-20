@@ -1,6 +1,6 @@
 """Algorithme génétique pour le FJSP.
 
-Recommandé pour grandes instances (>200 tâches) où CP-SAT timeout.
+Recommandé pour grandes instances (>200 tâches) (squelette non branché sur le pipeline).
 
 Encodage : Chromosome = (assignations ressources, ordre tâches)
 Opérateurs : Crossover partiel, mutation par swap, sélection par tournoi

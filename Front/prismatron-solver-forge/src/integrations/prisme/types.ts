@@ -456,7 +456,7 @@ export interface ResultatExecution {
 export interface CodeSource {
   id_solveur: string;
   code_source: string;
-  // Choix de l'agent Benchmarker (ex. "cp_sat") + sa justification — `null` pour tout solveur
+  // Choix de l'agent Benchmarker (ex. "tabu_search") + sa justification — `null` pour tout solveur
   // enregistré avant l'ajout de ces deux champs (voir solver_store/registry.py).
   algorithme: string | null;
   algorithme_raison: string | null;

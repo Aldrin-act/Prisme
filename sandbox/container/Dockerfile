@@ -9,6 +9,10 @@ FROM python:3.11-slim
 # tests générés par l'agent Testeur, voir sandbox/runner.py::executer_tests_dans_sandbox
 # — jamais de plugin tiers (pytest-json-report ou équivalent), le harnais collecte les
 # résultats lui-même via un plugin en process.
+# `ortools` : LEGACY — uniquement pour les solveurs CP-SAT déjà figés dans
+# `solver_store/artifacts/` avant le retrait de CP-SAT du projet (ils continuent de tourner).
+# PRISME ne génère plus rien qui l'importe (allowlist AST de `generation/validation_statique.py`) ;
+# à retirer d'ici quand ces anciens solveurs auront été régénérés ou désactivés.
 RUN pip install --no-cache-dir "ortools>=9.9" "pydantic>=2.6" "pytest==9.1.1" \
     && useradd --no-create-home --uid 10001 --shell /usr/sbin/nologin executant
 

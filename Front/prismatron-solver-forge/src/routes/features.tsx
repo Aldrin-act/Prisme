@@ -39,7 +39,7 @@ const FEATURES = [
   {
     icon: Cpu,
     title: "Génération de solveurs par IA",
-    desc: "Transformez des contraintes métier en solveurs OR-Tools CP-SAT, revus et expliqués par des agents IA.",
+    desc: "Transformez des contraintes métier en solveurs heuristiques, revus et expliqués par des agents IA.",
   },
   {
     icon: LineChart,
@@ -114,10 +114,7 @@ function FeaturesPage() {
       <section className="mx-auto max-w-7xl px-4 py-20">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div
-              key={f.title}
-              className="glass rounded-2xl p-6 transition hover:-translate-y-0.5"
-            >
+            <div key={f.title} className="glass rounded-2xl p-6 transition hover:-translate-y-0.5">
               <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/30 to-accent/30">
                 <f.icon className="h-5 w-5 text-primary" />
               </div>

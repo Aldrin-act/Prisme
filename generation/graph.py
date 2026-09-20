@@ -801,13 +801,12 @@ def tenter_generation_avec_boucle_stream(
     `InstanceTRCO.model_dump(mode="json")`) transmise à l'agent Benchmarker,
     désormais **toujours appelé** — aucun seuil de taille, aucun raccourci
     déterministe : il choisit le meilleur algorithme de son catalogue entier
-    (cp_sat, genetic, aco, simulated_annealing, tabu_search, dispatching,
+    (genetic, aco, simulated_annealing, tabu_search, dispatching,
     greedy_local), quel que soit le nombre de tâches. Si `None` (appelants
     historiques sans instance sous la main — scripts, tests), une petite
     instance par défaut est utilisée
     (`generation.agents.benchmarker.creer_instance_exemple_defaut`),
-    orientant presque toujours vers cp_sat et préservant leur comportement
-    d'avant cette fonctionnalité. Le solveur figé produit sera ensuite
+    orientant presque toujours vers tabu_search. Le solveur figé produit sera ensuite
     réexécuté (§5.2, « generate once ») sur d'autres instances de la même clé
     (client + structure_contraintes + signature_objectifs) potentiellement de
     taille très différente — accepté, pas quelque chose à corriger ici.

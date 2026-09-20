@@ -7,7 +7,6 @@ Ce module contient les implémentations des différents algorithmes d'ordonnance
 ```
 generation/algorithms/
 ├── README.md                    # Ce fichier
-├── cp_sat.py                    # CP-SAT (OR-Tools) - référence actuelle
 ├── genetic.py                   # Algorithmes génétiques (GA)
 ├── aco.py                       # Ant Colony Optimization
 ├── tabu_search.py               # Recherche tabou
@@ -18,7 +17,7 @@ generation/algorithms/
 
 ## Implémentation actuelle
 
-- ✅ **cp_sat.py** : Référence `scripts._solveur_minimal.py` (existe déjà)
+- ✅ Référence heuristique de test : `scripts/_solveur_minimal.py` (ordonnancement par liste, déterministe)
 - 🚧 **genetic.py** : Squelette créé, à compléter
 - ⏳ **aco.py** : À créer
 - ⏳ **tabu_search.py** : À créer
@@ -45,11 +44,6 @@ def resoudre(instance: InstanceTRCO, **params) -> Planning | None:
 ```
 
 ## Paramètres par algorithme
-
-### CP-SAT
-```python
-resoudre(instance, limite_temps_s=300)
-```
 
 ### Genetic Algorithm
 ```python
@@ -104,47 +98,10 @@ resoudre(instance,
 
 ## Utilisation
 
-```python
-from dsl.schema import InstanceTRCO
-from generation.algorithms import genetic, cp_sat
-
-# Charger instance
-instance = InstanceTRCO.model_validate(...)
-
-# Choisir algorithme selon la taille
-if len(instance.taches) < 500:
-    # Petite/moyenne : CP-SAT optimal
-    planning = cp_sat.resoudre(instance, limite_temps_s=300)
-else:
-    # Grande : GA approché
-    planning = genetic.resoudre(
-        instance,
-        population_size=300,
-        generations=500
-    )
-```
-
-## Avec agent Benchmarker
-
-```python
-from generation.agents.benchmarker import benchmarker_algorithmes
-from generation.algorithms import genetic, cp_sat, aco
-
-# Recommandation automatique
-resultat = benchmarker_algorithmes(appel_llm, instance.model_dump())
-algo = resultat.recommandation.algorithme
-
-# Dispatcher
-ALGORITHMS = {
-    "cp_sat": cp_sat,
-    "genetic": genetic,
-    "aco": aco,
-    # ...
-}
-
-solveur = ALGORITHMS[algo]
-planning = solveur.resoudre(instance, **resultat.recommandation.parametres_suggeres)
-```
+Ces modules sont des squelettes de référence, non branchés sur le pipeline : les solveurs
+réellement exécutés sont générés par les agents (`generation/graph.py`) et figés dans
+`solver_store/`. PRISME n'utilise aucun moteur exact (CP-SAT retiré) : toutes les recommandations
+du Benchmarker sont des heuristiques.
 
 ## Critères de qualité
 

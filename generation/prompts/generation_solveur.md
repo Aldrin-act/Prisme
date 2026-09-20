@@ -50,55 +50,45 @@ comme si ces deux paramètres n'existaient pas.
   "planning légal de makespan minimal", comme avant.
 - L'algorithme à utiliser est celui recommandé par l'agent Benchmarker en
   amont dans le pipeline (repris par le plan technique de l'agent Architecte,
-  fourni aux agents qui écrivent ou corrigent le code) :
-  `ortools.sat.python.cp_model` (CP-SAT) par défaut, ou un
-  algorithme alternatif (génétique, ACO, recuit simulé, tabou, glouton +
-  recherche locale, règles de dispatching) pour les instances où CP-SAT ne
-  passe pas à l'échelle. N'utilise jamais un autre algorithme que celui
-  indiqué dans le plan technique. Quel que soit l'algorithme, le contrat de
-  sortie ne change pas : `resoudre` renvoie un planning légal et optimal (ou
-  le meilleur trouvé si l'algorithme est approché) au sens des objectifs de
-  l'instance, ou `None` si l'instance est infaisable.
+  fourni aux agents qui écrivent ou corrigent le code) : une **heuristique**
+  parmi tabou, recuit simulé, génétique, ACO, glouton + recherche locale,
+  règles de dispatching. PRISME n'utilise aucun moteur exact : `ortools` n'est
+  ni disponible ni autorisé. N'utilise jamais un autre algorithme que celui
+  indiqué dans le plan technique. Le contrat de sortie ne change pas :
+  `resoudre` renvoie le meilleur planning légal trouvé au sens des objectifs de
+  l'instance, ou `None` si aucun planning légal n'a été trouvé.
 - **Déterminisme obligatoire** (§6.5) : `resoudre` doit renvoyer le même
   makespan à chaque appel sur la même instance. Si l'algorithme utilise du
-  hasard (génétique, ACO, recuit simulé), instancie un générateur local avec
-  une graine fixe (`random.Random(<graine>)`), jamais l'état global du
-  module `random`. Borne les itérations par un nombre fixe (générations,
-  itérations...), jamais par une limite de temps écoulé — non reproductible
-  d'une machine à l'autre, et de toute façon appliquée par le bac à sable
-  d'exécution (Étape 7, limites CPU/mémoire, kill au dépassement).
-  **En CP-SAT**, jamais `max_time_in_seconds` (temps réel, donc résultat
-  variable selon la charge de la machine) : configure le solveur ainsi, pour
-  une recherche reproductible et bornée (le bac à sable n'a qu'**un seul
-  vCPU** et 512 Mo de mémoire — plusieurs workers ne feraient que se
-  partager ce cœur) :
-  ```python
-  solveur = cp_model.CpSolver()
-  solveur.parameters.num_workers = 1                # déterministe, un seul vCPU disponible
-  solveur.parameters.random_seed = 0
-  solveur.parameters.max_deterministic_time = 10.0  # temps déterministe, indépendant de la machine
-  ```
-  Si la limite est atteinte avec une solution (`FEASIBLE`), renvoie-la : ce
-  n'est pas un échec. Renvoie `None` seulement pour `INFEASIBLE`, ou si
-  aucune solution n'a été trouvée.
+  hasard (génétique, ACO, recuit simulé, tabou avec départage aléatoire...),
+  instancie un générateur local avec une graine fixe (`random.Random(<graine>)`),
+  jamais l'état global du module `random`. Borne les itérations par un nombre
+  fixe (générations, itérations...), jamais par une limite de temps écoulé —
+  non reproductible d'une machine à l'autre, et de toute façon appliquée par le
+  bac à sable d'exécution (Étape 7, limites CPU/mémoire, kill au dépassement).
+  **Ordre de parcours** : n'itère jamais directement sur un `set` (ou un
+  `frozenset`) d'identifiants — l'ordre d'une chaîne dans un `set` change d'un
+  processus Python à l'autre (`PYTHONHASHSEED`) et rendrait le résultat non
+  reproductible même avec une graine fixe. Parcours des listes, des `dict`
+  (ordre d'insertion garanti) ou `sorted(...)` ; réserve les `set` aux tests
+  d'appartenance (`x in ensemble`). Départage toujours les égalités de façon
+  déterministe (par exemple par identifiant trié), jamais par l'ordre
+  d'itération d'une structure non ordonnée.
 - **Budget d'exécution** : chaque exécution tourne dans un conteneur tué au
   bout de **30 secondes** (réelles, 1 vCPU, 512 Mo). Tout algorithme doit rendre
   la main bien avant — un nombre fixe d'itérations/générations dimensionné
   pour une instance de plusieurs centaines de tâches, pas seulement pour le
   petit banc de validation.
-- **Contraintes dures = construction, jamais pénalité** : que l'algorithme
-  soit CP-SAT ou un algorithme alternatif, une contrainte dure (précédence,
-  compatibilité ressource-tâche, non-chevauchement d'une ressource) doit
-  être **impossible à violer par construction** du planning — jamais un
-  terme de pénalité dans une fonction de fitness/coût qu'un individu
-  pourrait quand même faire gagner malgré la violation. Pour un algorithme
-  non-CP-SAT, cela veut dire un décodeur qui construit le planning en
-  respectant ces règles au moment même où il place chaque tâche (schéma
-  *serial schedule generation scheme* détaillé dans le plan technique de
-  l'agent Architecte) — la recherche (génétique, ACO, recuit...) n'optimise
-  alors que l'objectif du planning déjà légal, jamais un score composite
-  mêlant faisabilité et qualité. Seule exception encadrée : `Echeance`, voir
-  la section dédiée plus bas.
+- **Contraintes dures = construction, jamais pénalité** : une contrainte dure
+  (précédence, compatibilité ressource-tâche, non-chevauchement d'une
+  ressource) doit être **impossible à violer par construction** du planning —
+  jamais un terme de pénalité dans une fonction de fitness/coût qu'un individu
+  pourrait quand même faire gagner malgré la violation. Cela veut dire un
+  décodeur qui construit le planning en respectant ces règles au moment même
+  où il place chaque tâche (schéma *serial schedule generation scheme* détaillé
+  dans le plan technique de l'agent Architecte) — la recherche (tabou, recuit,
+  génétique, ACO...) n'optimise alors que l'objectif du planning déjà légal,
+  jamais un score composite mêlant faisabilité et qualité. Seule exception
+  encadrée : `Echeance`, voir la section dédiée plus bas.
 - `CompetenceRequise`/`ContrainteCapacite`/`ContrainteIncompatibilite`/
   `ContrainteDisponibiliteRessource`/`ContrainteTailleLot`/`ContrainteChangementSerie`
   sont des extensions optionnelles du noyau minimal : si l'instance n'en
@@ -112,28 +102,20 @@ comme si ces deux paramètres n'existaient pas.
   ni une date) entre `lot_min`/`lot_max`, entièrement vérifiée par
   `validation_engine/feasibility_checker.py` avant même que le planning
   existe — `Tache.quantite`/`ContrainteTailleLot` ne doivent jamais
-  apparaître dans le modèle CP-SAT ni dans une heuristique, ni comme borne de
-  décision, ni comme poids d'objectif.
+  apparaître dans le solveur, ni comme borne de décision, ni comme poids
+  d'objectif.
 - `ContrainteCapacite(ressource, capacite)` : sans elle, une ressource a une
-  capacité implicite de **1** (jamais deux opérations en même temps —
-  `AddNoOverlap`/décodeur qui refuse tout chevauchement). Pour une ressource
-  couverte par une `ContrainteCapacite`, jusqu'à `capacite` opérations
-  peuvent s'y chevaucher : en CP-SAT, remplace `AddNoOverlap` par
-  `modele.AddCumulative(intervalles, demandes=[1] * len(intervalles),
-  capacite)` sur les intervalles de cette ressource (une "demande" de 1 par
-  opération) ; pour un décodeur non-CP-SAT, remplace la disponibilité
-  "libre/occupée" par un compteur d'opérations actives sur la ressource à
-  l'instant considéré, autorisant un nouveau départ tant que ce compteur est
-  strictement inférieur à `capacite`.
+  capacité implicite de **1** (jamais deux opérations en même temps — le
+  décodeur refuse tout chevauchement). Pour une ressource couverte par une
+  `ContrainteCapacite`, jusqu'à `capacite` opérations peuvent s'y chevaucher :
+  remplace la disponibilité "libre/occupée" par un compteur d'opérations
+  actives sur la ressource à l'instant considéré, autorisant un nouveau départ
+  tant que ce compteur est strictement inférieur à `capacite`.
 - `ContrainteIncompatibilite(tache, tache_incompatible)` : les deux tâches
   citées ne peuvent **jamais** être affectées à la même ressource, quelle que
-  soit l'heure — indépendant de tout chevauchement temporel. En CP-SAT, pour
-  chaque ressource compatible avec les deux tâches, ajoute
-  `modele.Add(litteral_presence_tache + litteral_presence_tache_incompatible
-  <= 1)` sur les littéraux de présence des intervalles optionnels
-  correspondants ; pour un décodeur non-CP-SAT, exclut simplement toute
-  ressource déjà occupée (à n'importe quel instant) par la tâche incompatible
-  au moment de choisir une ressource pour l'autre tâche.
+  soit l'heure — indépendant de tout chevauchement temporel. Le décodeur exclut
+  simplement toute ressource déjà occupée (à n'importe quel instant) par la
+  tâche incompatible au moment de choisir une ressource pour l'autre tâche.
 - `ContrainteDisponibiliteRessource(ressource, jours_indisponibles,
   jours_semaine_indisponibles)` : la ressource citée est indisponible durant
   chacun des instants (relatifs) listés dans `jours_indisponibles`, **et/ou**
@@ -151,58 +133,36 @@ comme si ces deux paramètres n'existaient pas.
   ressource (additionne, ne prends jamais seulement la dernière rencontrée).
   Un calendrier global d'atelier (jours fériés/repos hebdomadaire communs à
   toutes les ressources) n'est pas un mécanisme séparé : c'est la même
-  contrainte déclarée identiquement pour chaque ressource de l'instance. En
-  CP-SAT : matérialise d'abord `jours_semaine_indisponibles` en instants
+  contrainte déclarée identiquement pour chaque ressource de l'instance. Le
+  décodeur matérialise d'abord `jours_semaine_indisponibles` en instants
   concrets sur tout l'horizon (`longueur_cycle = 7 if instance.unite_temps ==
   "jours" else 168` puis `{instant for instant in range(horizon) if instant %
   longueur_cycle in motif}`), fusionne avec `jours_indisponibles` dans le
-  **même** ensemble par ressource, puis pour
-  chaque jour indisponible (peu importe son origine) ajoute un intervalle
-  **fixe** (obligatoire, pas optionnel, `NewIntervalVar` couvrant `[jour,
-  jour + 1)`) dans la **même** liste d'intervalles déjà passée à
-  `AddNoOverlap`/`AddCumulative` de cette ressource, avec une demande égale
-  à sa capacité complète (`capacite_par_ressource.get(ressource, 1)` — voir
-  `ContrainteCapacite` ci-dessus) : ça bloque tout le reste ce jour-là sans
-  code de contrainte séparé, et ça compose naturellement si la ressource a
-  aussi une `ContrainteCapacite`. Pour un décodeur non-CP-SAT : même
-  matérialisation en amont (une seule fois, jamais recalculée par appel),
-  puis au moment de choisir un jour de début sur cette ressource, rejette
-  tout choix dont l'intervalle `[debut, fin)` intersecte les jours
+  **même** ensemble par ressource (une seule fois, jamais recalculé par appel),
+  puis, au moment de choisir un instant de début sur cette ressource, rejette
+  tout choix dont l'intervalle `[debut, fin)` intersecte les instants
   indisponibles de la ressource (table précalculée, jamais une recherche
   dans `instance.contraintes` à l'intérieur du décodeur — voir "Précalcule
-  tout" plus bas).
+  tout" plus bas). Une ressource qui a aussi une `ContrainteCapacite`
+  combine naturellement les deux règles : indisponible = capacité nulle à cet
+  instant.
 - `ContrainteChangementSerie(ressource, tache_avant, tache_apres, duree_setup)` :
   contrainte **dirigée**, propre à `ressource` — si le solveur affecte à la
   fois `tache_avant` et `tache_apres` à `ressource` **et** que `tache_avant`
-  finit avant que `tache_apres` ne commence (peu importe si une autre tâche
-  s'intercale entre les deux), impose `debut[tache_apres] >= fin[tache_avant]
-  + duree_setup`. Volontairement **conservateur** par rapport à la définition
-  exacte du vérificateur de faisabilité (qui n'exige le délai que si les deux
-  sont *directement* consécutives, sans aucune tâche intercalée) : cette
-  simplification ne produit jamais un planning illégal, juste parfois un
-  planning légèrement plus prudent qu'absolument nécessaire — bien plus
-  simple et fiable à générer qu'un séquencement explicite par ressource
-  (`AddCircuit`), qui resterait la seule façon d'atteindre l'exigence exacte.
-  En CP-SAT, pour chaque `ContrainteChangementSerie` dont les deux tâches
-  sont compatibles avec `ressource` (sinon, incompatibilité déjà signalée
-  ailleurs, rien à faire ici) :
-  ```python
-  ordre = modele.NewBoolVar(f"ordre_{tache_avant}_{tache_apres}_{ressource}")
-  p_avant = presence[(tache_avant, ressource)]
-  p_apres = presence[(tache_apres, ressource)]
-  modele.Add(debut[tache_apres] >= fin[tache_avant] + duree_setup).OnlyEnforceIf([p_avant, p_apres, ordre])
-  modele.Add(debut[tache_avant] >= fin[tache_apres]).OnlyEnforceIf([p_avant, p_apres, ordre.Not()])
-  ```
-  (`presence[(tache, ressource)]`/`debut`/`fin` : les mêmes variables déjà
-  construites pour `AddNoOverlap`/`AddCumulative` plus haut — jamais
-  redéfinies.) Pour un décodeur non-CP-SAT (liste/glouton qui place les
-  tâches sur une ressource dans l'ordre où il les décide) : au moment
-  d'ajouter une tâche à la fin de la liste déjà placée sur une ressource, si
-  la dernière tâche placée sur cette ressource et la nouvelle forment une
-  paire déclarée, impose `debut >= fin_derniere + duree_setup` avant de
-  fixer le début — le concept de "dernière tâche placée sur cette ressource"
-  existe déjà naturellement dans ce type de décodeur, rien de nouveau à
-  construire.
+  finit avant que `tache_apres` ne commence, impose `debut[tache_apres] >=
+  fin[tache_avant] + duree_setup`. Le vérificateur de faisabilité n'exige le
+  délai que si les deux tâches sont *directement* consécutives sur la ressource
+  (sans tâche intercalée). Pour respecter exactement cette règle avec un
+  décodeur : **sur une ressource qui porte au moins une
+  `ContrainteChangementSerie`, place les tâches en ajout seulement** (jamais
+  dans un trou antérieur à la dernière tâche déjà placée — le décodeur reste
+  alors dans l'ordre chronologique de la ressource). Au moment d'ajouter une
+  tâche à la fin de la liste déjà placée sur cette ressource, si la dernière
+  tâche placée et la nouvelle forment une paire déclarée
+  (`(ressource, tache_avant, tache_apres)` précalculé en dictionnaire
+  `duree_setup_par_paire`, jamais recherché dans `instance.contraintes`), impose
+  `debut >= fin_derniere + duree_setup` avant de fixer le début. Sur une
+  ressource sans changement de série, l'insertion dans les trous reste permise.
 
 ## Instance vivante : les commandes font grossir l'instance entre deux exécutions
 
@@ -238,21 +198,20 @@ unité que les durées). C'est une contrainte **dure**, vérifiée comme telle p
 faisabilité en aval : un planning qui en dépasse une est rejeté. Si aucune `Echeance` n'est
 présente, ignore cette section.
 
-- **CP-SAT** : `modele.Add(fin[tache] <= echeance)` pour chaque `Echeance`. Si le modèle devient
-  infaisable (une commande impossible à tenir), renvoie `None` — c'est le comportement attendu,
-  l'humain décide ensuite ; ne relâche jamais une échéance toi-même.
-- **Décodeur non-CP-SAT** : une échéance ne peut pas être garantie au moment où l'on place une
-  tâche (la placer au plus tôt est déjà le mieux possible pour elle). Procède ainsi :
-  1. le décodeur place les tâches comme d'habitude, puis compte `nb_echeances_depassees` sur le
-     planning obtenu ;
-  2. la fitness renvoie un **tuple** `(nb_echeances_depassees, objectif_principal,
-     terme_priorite)` — la comparaison lexicographique des tuples Python fait qu'un planning qui
-     respecte toutes les échéances bat toujours un planning qui en dépasse une, quel que soit son
-     objectif ;
-  3. oriente la recherche vers les échéances : au moins un individu/une solution initiale trié par
-     échéance croissante (règle EDD, tâches sans échéance en dernier) ;
-  4. à la fin, si la meilleure solution trouvée a `nb_echeances_depassees > 0`, renvoie `None` —
-     jamais un planning qui dépasse une échéance.
+Une échéance ne peut pas être garantie au moment où l'on place une tâche (la placer au plus tôt
+est déjà le mieux possible pour elle). Procède ainsi :
+
+1. le décodeur place les tâches comme d'habitude, puis compte `nb_echeances_depassees` sur le
+   planning obtenu ;
+2. la fitness renvoie un **tuple** `(nb_echeances_depassees, objectif_principal,
+   terme_priorite)` — la comparaison lexicographique des tuples Python fait qu'un planning qui
+   respecte toutes les échéances bat toujours un planning qui en dépasse une, quel que soit son
+   objectif ;
+3. oriente la recherche vers les échéances : au moins une solution initiale triée par échéance
+   croissante (règle EDD, tâches sans échéance en dernier, départage par identifiant) ;
+4. à la fin, si la meilleure solution trouvée a `nb_echeances_depassees > 0`, renvoie `None` —
+   jamais un planning qui dépasse une échéance ; l'humain décide ensuite, ne relâche jamais une
+   échéance toi-même.
 
 ## Matières (`DeclarationMateriau` + `ConsommationMatiere`)
 
@@ -267,43 +226,19 @@ stock d'un matériau ne doit **jamais** passer sous zéro à aucun instant du pl
 un objectif, pas une pénalité, aucune notion de "pénurie tolérée" à ce stade. Aucun
 réapprovisionnement à modéliser : `stock_initial` couvre tout l'horizon de planification.
 
-- **CP-SAT** : utilise la primitive dédiée `AddReservoirConstraint`, faite exactement pour ce
-  cas (un niveau qui varie par événements datés, jamais négatif). Pour chaque `DeclarationMateriau`,
-  construit la liste des événements de consommation à partir des `ConsommationMatiere` qui le
-  citent et des variables `debut` déjà créées pour les tâches concernées. **Attention : le
-  réservoir de CP-SAT démarre toujours au niveau 0** — sans événement initial qui apporte le
-  stock à l'instant 0, la toute première consommation fait passer le niveau sous zéro et le
-  modèle est infaisable. Ajoute donc toujours cet événement de départ :
-  ```python
-  # Une seule fois, avant la construction des contraintes (voir "Précalcule tout").
-  consommations_par_materiau: dict[str, list[ConsommationMatiere]] = {}
-  for c in instance.contraintes:
-      if isinstance(c, ConsommationMatiere):
-          consommations_par_materiau.setdefault(c.materiau, []).append(c)
-
-  for declaration in (c for c in instance.contraintes if isinstance(c, DeclarationMateriau)):
-      consommations = consommations_par_materiau.get(declaration.materiau, [])
-      if not consommations:
-          continue
-      stock = int(declaration.stock_initial)
-      temps = [0] + [debut[c.tache] for c in consommations]  # événement initial à l'instant 0
-      changements_niveau = [stock] + [-int(c.quantite) for c in consommations]
-      modele.AddReservoirConstraint(temps, changements_niveau, min_level=0, max_level=stock)
-  ```
-  (`AddReservoirConstraint` exige des niveaux entiers — si `stock_initial`/`quantite` ne sont pas
-  entiers dans l'instance, multiplie **tous** les niveaux, stock initial compris, par le même
-  facteur d'échelle avant `int(...)`.) Pas de `max_level` au-delà de `stock_initial` : le stock ne
-  peut que décroître dans ce v1.
-- **Décodeur non-CP-SAT** (génétique/ACO/glouton/dispatching) : maintiens un compteur de stock
-  courant par matériau (initialisé à `stock_initial`), précalculé une seule fois en table
-  `consommations_par_tache` (jamais une recherche dans `instance.contraintes` à l'intérieur de la
-  boucle de décision — voir "Précalcule tout" plus bas). Au moment de fixer le `debut` d'une
-  tâche, si elle consomme un ou plusieurs matériaux, vérifie que chaque stock concerné a assez de
-  marge une fois la consommation appliquée ; si un stock manquerait, ce placement est **rejeté par
-  construction** (retente un autre `debut`/une autre ressource, jamais un individu "illégal" gardé
-  avec une pénalité de fitness — même principe que "contraintes dures = construction, jamais
-  pénalité" plus haut). Une fois un placement accepté, décrémente réellement le compteur de stock
-  du matériau concerné avant de continuer le décodage des tâches suivantes.
+- **Décodeur** : maintiens un compteur de stock courant par matériau (initialisé à
+  `stock_initial`), précalculé une seule fois en table `consommations_par_tache` (jamais une
+  recherche dans `instance.contraintes` à l'intérieur de la boucle de décision — voir
+  "Précalcule tout" plus bas). Au moment de fixer le `debut` d'une tâche, si elle consomme un ou
+  plusieurs matériaux, vérifie que chaque stock concerné a assez de marge une fois la
+  consommation appliquée ; si un stock manquerait, ce placement est **rejeté par construction**
+  (retente un autre `debut`/une autre ressource, jamais une solution "illégale" gardée avec une
+  pénalité de fitness — même principe que "contraintes dures = construction, jamais pénalité"
+  plus haut). Une fois un placement accepté, décrémente réellement le compteur de stock du
+  matériau concerné avant de continuer le décodage des tâches suivantes. Le stock ne peut que
+  décroître : le décodage suit l'ordre chronologique des `debut` des tâches consommatrices, pas
+  l'ordre de placement — si le décodeur peut placer une tâche à un `debut` antérieur à une
+  consommation déjà appliquée, revérifie le stock sur la chronologie complète.
 
 ## Replanification à horizon glissant (`planning_precedent`, `horizon_gele_jours`)
 
@@ -320,23 +255,12 @@ Objectif métier : un atelier qui a déjà commencé à exécuter le planning pr
 les prochains jours perturbés par une replanification ; seul le reste de l'horizon (au-delà de
 `horizon_gele_jours`) reste librement optimisable.
 
-En CP-SAT :
-
-```python
-if planning_precedent is not None and horizon_gele_jours > 0:
-    for op in planning_precedent.operations:
-        if op.debut < horizon_gele_jours and (op.tache, op.ressource) in presence:  # compatibilité toujours valide
-            modele.Add(presence[(op.tache, op.ressource)] == 1)
-            modele.Add(debut[op.tache] == op.debut)
-```
-
-(`presence`/`debut` : les mêmes variables déjà construites plus haut, avec les clés décrites dans
-« Noms des variables CP-SAT » — jamais redéfinies.) Pour un décodeur non-CP-SAT : avant de lancer le décodeur normal,
-place d'abord toutes les opérations gelées (dans leur `(ressource, debut)` fixe, en marquant la
-ressource occupée jusqu'à `debut + duree`), puis laisse le décodeur traiter les tâches restantes
-normalement — le mécanisme "contraintes dures = construction, jamais pénalité" (voir plus haut)
-s'applique ici aussi : une opération gelée n'est jamais un simple biais de coût, c'est une donnée
-d'entrée déjà décidée.
+Avant de lancer le décodeur normal, place d'abord toutes les opérations gelées (dans leur
+`(ressource, debut)` fixe, en marquant la ressource occupée jusqu'à `debut + duree`), puis laisse le
+décodeur traiter les tâches restantes normalement — le mécanisme "contraintes dures = construction,
+jamais pénalité" (voir plus haut) s'applique ici aussi : une opération gelée n'est jamais un simple
+biais de coût, c'est une donnée d'entrée déjà décidée. La recherche (tabou, recuit...) ne doit
+jamais déplacer une opération gelée.
 
 ## Objectifs (`instance.objectifs`, liste polymorphe — jamais un seul supposé)
 
@@ -349,8 +273,7 @@ objectifs_equilibrage = [o for o in instance.objectifs if isinstance(o, Equilibr
 ```
 
 Si plusieurs objectifs sont présents, combine-les par **somme pondérée** (chaque
-`Objectif` porte un `poids`) dans le `Minimize(...)` final (ou la fonction de
-fitness pour un algorithme non-CP-SAT) — jamais un seul objectif choisi en
+`Objectif` porte un `poids`) dans la fonction de fitness — jamais un seul objectif choisi en
 ignorant les autres. `objectif.poids`, `objectif.methode`,
 `objectif.ressources_cibles` sont des **valeurs lues à l'exécution**, jamais
 des constantes que tu figerais toi-même au moment d'écrire le code : le
@@ -362,38 +285,22 @@ régénéré.
 - `MinimiserMakespan(poids, makespan_cible, penalite_depassement)` : le cas
   par défaut. `makespan_cible`/`penalite_depassement` sont optionnels
   (souvent absents) — si absents, minimise simplement le makespan
-  (`AddMaxEquality(makespan, fins_des_taches)` en CP-SAT ; `max(fins)` pour
-  un décodeur non-CP-SAT), sans traitement spécial.
+  (`max(fins)` du planning décodé), sans traitement spécial.
 - `EquilibrerCharge(poids, methode, ressources_cibles)` : équilibre la charge
   de travail entre ressources. Calcule d'abord une **charge par ressource** —
-  somme des `duree` des tâches qui lui sont affectées (en CP-SAT : somme des
-  `duree × littéral de présence` sur les couples (tâche, ressource)
-  compatibles pour cette ressource) — restreinte aux ressources listées dans
-  `ressources_cibles` si fourni, sinon toutes les ressources qui apparaissent
-  dans au moins une `CompatibiliteRessourceTache`. Puis, selon `methode` :
-  - `"ecart_max"` (valeur par défaut du schéma) : minimise l'écart entre la
-    ressource la plus chargée et la moins chargée. En CP-SAT :
-    `modele.AddMaxEquality(charge_max, charges)` et
-    `modele.AddMinEquality(charge_min, charges)` sur les variables de charge,
-    puis `poids * (charge_max - charge_min)` comme terme du `Minimize(...)`.
-    Pour un décodeur non-CP-SAT : `poids * (max(charges.values()) -
-    min(charges.values()))` dans la fitness, `charges` étant le dict
-    ressource→charge accumulé en construisant le planning.
-  - `"variance"`/`"gini"` : pour un décodeur non-CP-SAT, calcule la formule
-    exacte en Python pur (aucun nouvel import requis — pas de module
-    `statistics`) : variance = `sum((c - moyenne) ** 2 for c in
-    charges.values()) / len(charges)` avec `moyenne = sum(charges.values()) /
-    len(charges)` ; Gini = `sum(abs(a - b) for a in charges.values() for b in
-    charges.values()) / (2 * len(charges) * sum(charges.values()))` (ou 0 si
-    la somme des charges est nulle). En CP-SAT en revanche, une variance ou
-    un Gini exacts demandent des termes quadratiques ou des comparaisons par
-    paires disproportionnés pour du code généré qui doit rester rapide et
-    fiable dans le bac à sable (§7, limite CPU) : réutilise la même
-    linéarisation `ecart_max` que ci-dessus comme approximation délibérée
-    (minimiser l'écart tire aussi la variance/le Gini vers le bas en
-    pratique), **avec un commentaire dans le code généré expliquant que
-    c'est une approximation volontaire de `methode="variance"`/`"gini"` en
-    CP-SAT, pas une omission**.
+  somme des `duree` des tâches qui lui sont affectées dans le planning décodé
+  (dict ressource→charge accumulé en construisant le planning) — restreinte
+  aux ressources listées dans `ressources_cibles` si fourni, sinon toutes les
+  ressources qui apparaissent dans au moins une `CompatibiliteRessourceTache`.
+  Puis, selon `methode`, la fitness calcule la valeur **exacte** (Python pur,
+  aucun nouvel import requis — pas de module `statistics`) :
+  - `"ecart_max"` (valeur par défaut du schéma) : `poids * (max(charges.values()) -
+    min(charges.values()))`.
+  - `"variance"` : `poids * sum((c - moyenne) ** 2 for c in charges.values()) /
+    len(charges)` avec `moyenne = sum(charges.values()) / len(charges)`.
+  - `"gini"` : `poids * sum(abs(a - b) for a in charges.values() for b in
+    charges.values()) / (2 * len(charges) * sum(charges.values()))` (ou 0 si la
+    somme des charges est nulle).
 
 ## Priorité des tâches (`Tache.priorite`, départage uniquement)
 
@@ -403,21 +310,13 @@ qu'entre plusieurs plannings de même valeur d'objectif (celui ou ceux de
 `instance.objectifs`, voir ci-dessus). Jamais un poids ajouté à l'objectif
 principal, jamais une contrainte.
 
-- CP-SAT (une seule résolution, pas de solve en deux phases) : calcule
-  `terme_priorite = somme((6 - t.priorite) * fin_tache)` sur les seules
-  tâches ayant une `priorite` déclarée (poids 5 pour priorité 1/critique,
-  poids 1 pour priorité 5/faible ; tâches sans `priorite` exclues de la
-  somme, aucune contribution). Choisis une `ECHELLE` strictement supérieure
-  au maximum possible de `terme_priorite` (ex. `5 * nb_taches * horizon + 1`,
-  `horizon` étant la borne décrite dans la section « Horizon » plus bas), puis
-  `modele.Minimize(objectif_principal * ECHELLE + terme_priorite)`. Avec ce
-  choix d'échelle, `terme_priorite` ne peut jamais faire préférer un
-  planning de moins bonne valeur d'objectif principal — il ne fait que
-  départager entre plannings à égalité sur celui-ci.
-- Décodeur non-CP-SAT : fais renvoyer à la fitness un **tuple**
-  `(objectif_principal, terme_priorite)` plutôt qu'un seul nombre — la
-  comparaison lexicographique native des tuples Python fait exactement ce
-  départage, sans aucune échelle à calculer ni risque de dépassement.
+- Fais renvoyer à la fitness un **tuple** `(objectif_principal, terme_priorite)` plutôt qu'un
+  seul nombre, avec `terme_priorite = somme((6 - t.priorite) * fin_tache)` sur les seules tâches
+  ayant une `priorite` déclarée (poids 5 pour priorité 1/critique, poids 1 pour priorité 5/faible ;
+  tâches sans `priorite` exclues de la somme) — la comparaison lexicographique native des tuples
+  Python fait exactement ce départage, sans aucune échelle à calculer ni risque de dépassement.
+  Quand des échéances sont présentes, le tuple complet est celui de la section « Échéances » :
+  `(nb_echeances_depassees, objectif_principal, terme_priorite)`.
 
 ## Accès aux données de l'instance (noms de champs exacts — ne pas en deviner d'autres)
 
@@ -487,22 +386,10 @@ accède, ne les devine jamais par analogie avec un autre projet :
   uniques — ne jamais les utiliser comme identifiant, seulement pour de
   l'affichage.
 
-## Noms des variables CP-SAT (une seule convention dans tout le module)
-
-Tous les extraits de ce document supposent exactement ces noms et ces clés — ne les mélange
-jamais avec une autre convention :
-
-- `debut[tache_id]`, `fin[tache_id]` : une variable entière par **tâche** (clé = `Tache.id`) ;
-- `presence[(tache_id, ressource_id)]` : un booléen par couple **compatible** ;
-- `intervalle[(tache_id, ressource_id)]` : l'intervalle optionnel de ce couple
-  (`NewOptionalIntervalVar(debut[tache_id], duree, fin[tache_id], presence[(tache_id, ressource_id)], ...)`) ;
-- `AddExactlyOne(presence[(tache_id, r)] for r in ressources compatibles)` pour chaque tâche.
-
 ## Horizon (borne supérieure du temps)
 
-`horizon` borne toutes les variables de temps, la matérialisation des indisponibilités
-récurrentes et l'échelle de la priorité. Trop court, il rend infaisable une instance qui ne l'est
-pas (le solveur renvoie `None` à tort) ; la « somme des durées » seule ne suffit **pas** dès qu'il
+`horizon` borne le temps, en particulier la matérialisation des indisponibilités récurrentes.
+Trop court, il rend infaisable une instance qui ne l'est pas (le solveur renvoie `None` à tort) ; la « somme des durées » seule ne suffit **pas** dès qu'il
 y a des jours d'indisponibilité, des temps de changement de série ou des opérations gelées.
 Calcule-le une fois, au début de `resoudre`, ainsi :
 
@@ -536,7 +423,7 @@ c'est une vraie infaisabilité (renvoie `None`), pas un problème d'horizon.
 
 ## Précalcule tout, jamais de recherche répétée dans `instance.contraintes`
 
-Que l'algorithme soit CP-SAT ou une métaheuristique, **parcourir
+**Parcourir
 `instance.contraintes` (ou toute liste de taille proportionnelle à
 l'instance) à l'intérieur d'une fonction appelée par tâche, par opération,
 ou par évaluation est interdit** — ça transforme un algorithme censé être
@@ -561,7 +448,8 @@ for c in instance.contraintes:
     if isinstance(c, CompatibiliteRessourceTache):
         compatibilites_par_tache.setdefault(c.tache, []).append((c.ressource, c.duree))
 
-# Capacité implicite de 1 si absente de cette table.
+# Capacité implicite de 1 si absente de cette table. Ces `set` ne servent qu'à des tests
+# d'appartenance (`x in ...`) — jamais itérés directement (voir « Déterminisme obligatoire »).
 capacite_par_ressource = {
     c.ressource: c.capacite for c in instance.contraintes if isinstance(c, ContrainteCapacite)
 }
@@ -590,19 +478,20 @@ for c in instance.contraintes:
         jours.update(jour for jour in range(horizon) if jour % longueur_cycle in c.jours_semaine_indisponibles)
 ```
 
-Pour un algorithme non-CP-SAT dont le décodeur/la fitness est appelé des
-dizaines ou centaines de milliers de fois (population × générations,
-itérations...) : toute recherche de durée, de compatibilité ou de
+Le décodeur/la fitness est appelé des dizaines ou centaines de milliers de
+fois (population × générations, itérations...) : toute recherche de durée, de compatibilité ou de
 précédence dans cette fonction doit être un accès de dictionnaire `O(1)`
 sur une table construite en dehors de la boucle — jamais un `for c in
 instance.contraintes: ...` réévalué à chaque appel.
 
 ## Contraintes de sécurité (impératives — le code est exécuté automatiquement)
 
-- Imports autorisés, et seulement ceux-là : `ortools.sat.python.cp_model`,
-  `dsl.schema`, `collections`, `collections.abc`, `dataclasses`, `typing`,
-  `__future__`, `random`, `math` (les deux derniers seulement utiles pour un
-  algorithme non-CP-SAT — génération/mutation, recuit...).
+- Imports autorisés, et seulement ceux-là : `dsl.schema`, `collections`,
+  `collections.abc`, `dataclasses`, `typing`, `__future__`, `random`, `math`,
+  `heapq`, `itertools`, `bisect`, `functools`, `copy` (`random` et `math` pour la
+  génération/mutation, le recuit ; `heapq`/`bisect` pour les files d'événements et
+  l'insertion dans les trous ; `time` reste interdit — jamais de limite en temps
+  réel).
 - Interdit, sans exception : `eval`, `exec`, `compile`, `__import__`,
   `open`, `input`, tout accès réseau ou fichier, tout import hors de la
   liste ci-dessus (notamment `os`, `sys`, `subprocess`, `socket`, `shutil`,

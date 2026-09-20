@@ -41,7 +41,7 @@ Détermine **lequel des deux est réellement fautif**, dans cet ordre :
    retire ce test) et laisse le solveur inchangé. C'est le cas si le test :
    - utilise un type de contrainte ou d'objectif que le plan technique ne couvre pas (ex. une
      `Echeance` pour prouver l'infaisabilité alors que le solveur n'a pas eu d'échéance à gérer) ;
-   - affirme un makespan optimal exact alors que l'algorithme imposé n'est pas `cp_sat` ;
+   - affirme un makespan optimal exact alors que le solveur est une heuristique (approchée par nature) ;
    - construit une instance que `InstanceTRCO` refuse (`ValidationError` avant même l'appel à
      `resoudre()`) ;
    - calcule mal sa propre valeur attendue, ou suppose un format d'identifiant de tâche.

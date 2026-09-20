@@ -8,8 +8,9 @@ PRISME is a PFE (EIGSI Casablanca × BARAA Consult): an API that **generates the
 scheduling solver from a business description, then re-executes that frozen code repeatedly**
 without calling the AI again. The problem is the **Flexible Job-Shop Scheduling Problem (FJSP)**;
 no algorithm is hardcoded — the generation pipeline's Benchmarker agent always runs first and picks
-one per instance: `cp_sat` (OR-Tools CP-SAT, the only *exact* one, for small/medium instances) or a
-genetic/ACO/tabu/simulated-annealing/dispatching/greedy heuristic for very large ones (Étape 6).
+one per instance among genetic/ACO/tabu/simulated-annealing/dispatching/greedy heuristics (Étape 6).
+**CP-SAT/OR-Tools is removed from the project** (no exact engine: generated solvers are always
+heuristics, judged in approximate mode — 10 % tolerance, no exact assignment match).
 The authoritative spec is
 [`PRISME_Note_de_Cadrage (2).md`](<./PRISME_Note_de_Cadrage (2).md>) (French) — source of truth for
 every design decision, read before architectural changes. Code comments cite sections as `§N`.
@@ -17,17 +18,17 @@ every design decision, read before architectural changes. Code comments cite sec
 ## Commands
 
 Dependency management is **uv** (see `CONTRIBUTING.md` PH0-T2). `.python-version` pins **3.11** —
-`ortools` has no wheels for newer CPython (3.14 resolution fails); `uv` downloads 3.11
-transparently regardless of system Python. `uv.lock` is the source of truth for exact dependency
-versions — regenerate with `uv lock` after any `pyproject.toml` change. Core deps (`ortools`,
-`pydantic`, `fastapi`, `pytest`) are pinned `==`; others keep `>=`.
+the pin dates from when `ortools` had no wheels for newer CPython (no longer a dependency, kept
+as is); `uv` downloads 3.11 transparently regardless of system Python. `uv.lock` is the source of truth for exact dependency
+versions — regenerate with `uv lock` after any `pyproject.toml` change. Core deps (`pydantic`,
+`fastapi`, `pytest`) are pinned `==`; others keep `>=`.
 
 ```bash
 uv sync --all-extras   # rebuilds the whole environment (downloads Python 3.11 if needed)
 uv sync --extra llm    # + anthropic, langchain (multi-agent); uv sync --extra sandbox  # + docker SDK
 uv sync --extra estimation                                 # + scikit-learn/numpy (estimation/, MT3)
 uv run pytest                                              # full suite (Docker/Postgres tests self-skip if unreachable)
-uv run pytest tests/unit                                   # Layer-1 only — no OR-Tools/Docker needed
+uv run pytest tests/unit                                   # Layer-1 only — no Docker needed
 uv run pytest tests/unit/test_cascade.py::<name> -k <expr> # single test / filter
 uv run ruff check . && uv run ruff format --check .        # lint + format check (drop --check to apply)
 # Dev scripts (always as modules from repo root, never `python path/to/file.py`):
@@ -78,12 +79,13 @@ found and fixed then.
   builds instances *around* a chosen-optimal `Planning` — each "job" a precedence chain on
   dedicated resources (never shared), so the optimum is provable by arithmetic, no solver needed.
   `catalogue.py` (1→80 tasks), `stockage.py` (JSON); regenerate via `generer_banc_synthetique.py`.
-  `scripts/_solveur_minimal.py` is a hand-written CP-SAT solver, a dev/demo/test fixture only —
-  never imported by production code.
+  `scripts/_solveur_minimal.py` is a hand-written deterministic list-scheduling heuristic, a
+  dev/demo/test fixture only — never imported by production code.
 - **Étape 4 — single-shot generator** (`generation/tentative_unique.py`): one LLM call, no repair
   loop — still used by dev scripts (`generer_solveur_simple.py`, `mesurer_taux_succes_generation.py`)
   for quick/cheap iteration, but no longer what the API calls. `validation_statique.py` is an AST
-  **allowlist** (only `ortools`/`dsl`/`collections`/`dataclasses`/`typing`/`__future__`; rejects
+  **allowlist** (only `dsl`/`collections`/`dataclasses`/`typing`/`__future__`/`random`/`math`/`heapq`/`itertools`/`bisect`/`functools`/`copy`;
+  `ortools` and `time` are rejected; rejects
   `eval`/`exec`/`__import__`/`open`/dunder escapes) run *before* `executer.py`'s `exec()`, which
   gives no real isolation — **actual sandboxing is Étape 7**.
 - **Étape 5 — validation cascade** (`validation_engine/cascade.py`): `evaluer_cascade(solveur)`
@@ -94,9 +96,8 @@ found and fixed then.
   (`tester_stabilite.__test__ = False` needed — pytest's `python_functions` bare-matches `"test"`).
 - **Étape 6 — bounded repair loop** (`generation/graph.py`), the pipeline wired to the API
   (`api/routes/generation.py`): a LangGraph `StateGraph` — analyste → benchmarker (always runs,
-  picks an algorithm; only `cp_sat` is *exact*, the rest of its catalogue are heuristics for very
-  large instances, mostly generated inline since `generation/algorithms/` only has a `genetic.py`
-  skeleton) → architecte → développeur → testeur → **test_sandbox/validation/debugger loop, max 10
+  picks a heuristic (`tabu_search` by default; no exact algorithm exists any more), generated
+  inline since `generation/algorithms/` only has a `genetic.py` skeleton) → architecte → développeur → testeur → **test_sandbox/validation/debugger loop, max 10
   tentatives** (`MAX_TENTATIVES_REPARATION`) → documentation (best-effort). Each attempt runs the
   Testeur's generated pytest module for real inside the Docker sandbox first (§6.6bis,
   `sandbox/runner.py::executer_tests_dans_sandbox`) — a failure routes straight to the Debugger,
@@ -193,24 +194,23 @@ subtypes with no effect on an instance that doesn't use them, taught to the gene
 `feasibility_checker.py`): `Echeance` (deadline in relative days, never a calendar date),
 `CompetenceRequise` (task↔resource skill match — can also *derive* `CompatibiliteRessourceTache`
 at the ingestion layer only, see `adapters/competence_derivation.py`), `ContrainteCapacite` (a
-resource processes up to N operations concurrently — `AddCumulative` in generated CP-SAT code
-instead of `AddNoOverlap`; implicit capacity 1, i.e. today's behavior, if absent),
+resource processes up to N operations concurrently — an active-operation counter in the generated
+decoder instead of a free/busy flag; implicit capacity 1, i.e. today's behavior, if absent),
 `ContrainteIncompatibilite` (two named tasks can never share a resource, regardless of time —
 independent of any temporal overlap check), `ContrainteDisponibiliteRessource` (a resource is
 unavailable on listed relative days and/or on a recurring `jours_semaine_indisponibles` weekly
 pattern — never a calendar date, converting a real calendar/holiday list to days stays an
 adapter's job upstream of ingestion; a global workshop calendar is *not* a separate mechanism,
-it's the same constraint declared identically for every resource — in generated CP-SAT code, a
-fixed interval per unavailable day added to that resource's own `AddNoOverlap`/`AddCumulative`
-list, at full capacity demand), `ContrainteTailleLot` (bound-checks `Tache.quantite` against
+it's the same constraint declared identically for every resource — in the generated decoder,
+any placement whose `[debut, fin)` hits a precomputed unavailable instant of that resource is
+rejected), `ContrainteTailleLot` (bound-checks `Tache.quantite` against
 `lot_min`/`lot_max` — a static value check, no solver encoding: verified entirely by
 `feasibility_checker.py`, never read by generated code), `ContrainteChangementSerie` (setup time: a
 directed `ressource`/`tache_avant`/`tache_apres`/`duree_setup` — an extra gap required between the
 two only if the solver chooses to sequence them back-to-back on that resource, never an ordering
-constraint itself, that stays `Precedence`'s job; generated CP-SAT code encodes it deliberately
-**conservatively** via a reified order boolean — the setup gap is enforced whenever `tache_avant`
-precedes `tache_apres` in time on the resource at all, not only when strictly adjacent, traded off
-against exact `AddCircuit`-based sequencing for LLM-generation reliability).
+constraint itself, that stays `Precedence`'s job; the generated decoder places tasks append-only on a
+resource that carries one and pushes `debut` past the last placed task's end plus `duree_setup`
+when the pair matches).
 `DeclarationMateriau`/`ConsommationMatiere` (materials/stock: `DeclarationMateriau(materiau,
 stock_initial, ...)` declares a raw material/component — its *only* way to exist in an instance,
 there's no top-level entity list for it the way `Tache`/`Ressource` get one;
@@ -218,7 +218,7 @@ there's no top-level entity list for it the way `Tache`/`Ressource` get one;
 stock, at the task's `debut`) is the one exception to "no effect if unused" being a *soft*
 default: it's a **hard** constraint a generated solver must actually respect — a solver must
 never produce a planning that drives a material's stock below zero
-(`AddReservoirConstraint` in CP-SAT, an equivalent running-stock guard in heuristic decoders — see
+(a running-stock guard in the generated decoder, rejecting any placement that would go negative — see
 `generation/prompts/generation_solveur.md`), and `feasibility_checker.py` re-checks it
 deterministically (`stock_insuffisant`) — the module's one **chronological/stateful** check,
 everything else there being pairwise/sweep-line per resource or a static aggregate. No
@@ -248,7 +248,7 @@ and to `SourceDonnees`; purely an API/storage-layer grouping, never touches the 
 | Module | Role |
 |---|---|
 | `dsl/` | T-R-C-O canonical model: typed `schema/`, payload `validation/`, `examples/` |
-| `generation/` | `tentative_unique.py` (legacy single-shot) + `graph.py` (production: LangGraph multi-agent + bounded repair, Étape 6) → CP-SAT or heuristic code; `algorithms/` catalogue mostly unimplemented |
+| `generation/` | `tentative_unique.py` (legacy single-shot) + `graph.py` (production: LangGraph multi-agent + bounded repair, Étape 6) → heuristic code (no CP-SAT); `algorithms/` catalogue mostly unimplemented |
 | `validation_engine/` | Validation cascade + `stability_test.py` |
 | `solver_store/` + `sandbox/` | Persistent registry (`registry.py`) + frozen `artifacts/`; ephemeral disposable-container execution (`runner.py`, `container/`) |
 | `api/` | `auth`/`clients` (JWT, multi-tenant), `sources`/`ingestion`/`adapters`, `generation` (SSE), `execution`/`planning`/`planifier`/`audit`/`validation`/`diagnostics`/`supervision`; state via `etat.py` (in-memory, tests) or `etat_postgres.py` (prod), same interface |

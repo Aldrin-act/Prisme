@@ -1,6 +1,6 @@
 """Exécution du solveur sur les VRAIES données GreenSig (2165 tâches).
 
-⚠️ ATTENTION : Résoudre 2165 tâches avec CP-SAT peut prendre beaucoup de temps
+⚠️ ATTENTION : Résoudre 2165 tâches avec le solveur de référence peut prendre beaucoup de temps
 (minutes à heures selon la complexité). Un timeout est configuré par défaut.
 
 Workflow:
@@ -91,7 +91,7 @@ def analyser_instance(instance):
     # Estimation de difficulté
     if len(instance.taches) > 1000:
         print("⚠️  INSTANCE TRÈS GRANDE (>1000 tâches)")
-        print("   • CP-SAT peut prendre plusieurs minutes/heures")
+        print("   • le solveur de référence peut prendre plusieurs minutes")
         print("   • Un timeout est fortement recommandé")
         print("   • Considérez filtrer un sous-ensemble pour tester")
         print()
@@ -100,7 +100,7 @@ def analyser_instance(instance):
 def resoudre_avec_timeout(instance, timeout_seconds: int = 300):
     """Résout l'instance avec un timeout."""
     print("=" * 70)
-    print("  RÉSOLUTION CP-SAT")
+    print("  RÉSOLUTION (solveur de référence)")
     print("=" * 70 + "\n")
 
     print(f"⏱️  Timeout configuré : {timeout_seconds}s ({timeout_seconds / 60:.1f} min)\n")
@@ -114,7 +114,7 @@ def resoudre_avec_timeout(instance, timeout_seconds: int = 300):
         sys.exit(1)
 
     print("🚀 Démarrage de la résolution...\n")
-    print("   CP-SAT va explorer l'espace de recherche jusqu'à trouver une solution")
+    print("   le solveur de référence construit un planning par liste")
     print("   ou atteindre le timeout. Patience...\n")
 
     debut = time.time()
@@ -146,7 +146,7 @@ def afficher_resultats(instance, planning, duree):
         print("Raisons possibles :")
         print("  • Instance infaisable (contraintes contradictoires)")
         print("  • Timeout atteint avant de trouver une solution")
-        print("  • CP-SAT n'a pas pu explorer assez l'espace de recherche")
+        print("  • le solveur de référence n'a pas trouvé de planning légal")
         print()
         print("💡 Suggestions :")
         print("  • Augmenter le timeout")
@@ -243,7 +243,7 @@ def main():
     print("  CONFIRMATION")
     print("=" * 70 + "\n")
 
-    print("⚠️  Vous allez résoudre une instance de production avec CP-SAT.")
+    print("⚠️  Vous allez résoudre une instance de production avec le solveur de référence.")
     print("   Cela peut prendre du temps selon la complexité.\n")
 
     reponse = input("Continuer ? [o/N] : ").strip().lower()

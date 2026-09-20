@@ -234,7 +234,7 @@ def test_solveur_dont_l_algorithme_n_est_plus_le_meilleur_propose_une_regenerati
         verdict_cascade=evaluer_cascade(resoudre),
         instance_id=instance_id,
         client_id="client_test",
-        algorithme="cp_sat",
+        algorithme="tabu_search",
         algorithme_raison="petite instance",
     )
 
@@ -288,11 +288,11 @@ def test_solveur_adapte_ne_propose_aucune_regeneration(registre_test: Registre) 
         verdict_cascade=evaluer_cascade(resoudre),
         instance_id=instance_id,
         client_id="client_test",
-        algorithme="cp_sat",
+        algorithme="tabu_search",
     )
     modele = _modele(signaux_detection=[], propositions=[])
     schema_benchmark = benchmarker._SchemaBenchmark(
-        recommandation=benchmarker._SchemaRecommandation(algorithme="cp_sat", raison="petite instance")
+        recommandation=benchmarker._SchemaRecommandation(algorithme="tabu_search", raison="petite instance")
     )
     modele._reponses_par_schema[benchmarker._SchemaBenchmark] = (
         json.dumps(schema_benchmark.model_dump()),
@@ -327,7 +327,7 @@ def test_instance_jugee_infaisable_est_signalee_sans_regeneration(registre_test:
         verdict_cascade=evaluer_cascade(resoudre),
         instance_id=instance_id,
         client_id="client_test",
-        algorithme="cp_sat",
+        algorithme="tabu_search",
     )
     monkeypatch.setattr(adequation, "sandbox_disponible", lambda: True)
     monkeypatch.setattr(
@@ -338,7 +338,7 @@ def test_instance_jugee_infaisable_est_signalee_sans_regeneration(registre_test:
 
     modele = _modele(signaux_detection=[], propositions=[])
     schema_benchmark = benchmarker._SchemaBenchmark(
-        recommandation=benchmarker._SchemaRecommandation(algorithme="cp_sat", raison="petite instance")
+        recommandation=benchmarker._SchemaRecommandation(algorithme="tabu_search", raison="petite instance")
     )
     modele._reponses_par_schema[benchmarker._SchemaBenchmark] = (
         json.dumps(schema_benchmark.model_dump()),

@@ -143,7 +143,7 @@ def demo_workflow_complet():
 
     except ImportError:
         print("ATTENTION: Solveur de reference non disponible")
-        print("           Installez OR-Tools : pip install ortools")
+        print("           Vérifiez scripts/_solveur_minimal.py")
         print()
 
     # =========================================================================
@@ -156,7 +156,7 @@ def demo_workflow_complet():
     print("1. Donnees brutes (ERP)        ->  Format proprietaire (JSON/CSV)")
     print("2. Traduction (Adaptateur)     ->  Instance TRCO (canonique)")
     print("3. Validation (Pydantic)       ->  Garde-fou amont (§6.7)")
-    print("4. Generation (LLM)            ->  Code solveur CP-SAT")
+    print("4. Generation (LLM)            ->  Code solveur heuristique")
     print("5. Validation (Cascade)        ->  Tests faisabilite/optimalite")
     print("6. Persistance (Registre)      ->  Artifact freeze")
     print("7. Execution (Sandbox)         ->  Planning optimise")

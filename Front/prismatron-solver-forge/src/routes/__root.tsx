@@ -67,20 +67,38 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs OR-Tools prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
+          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs d'ordonnancement heuristiques prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
       },
-      { property: "og:title", content: "PRISME — Générez des solveurs de planification industrielle avec l'IA" },
+      {
+        property: "og:title",
+        content: "PRISME — Générez des solveurs de planification industrielle avec l'IA",
+      },
       {
         property: "og:description",
         content:
-          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs OR-Tools prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
+          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs d'ordonnancement heuristiques prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "PRISME — Générez des solveurs de planification industrielle avec l'IA" },
-      { name: "twitter:description", content: "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs OR-Tools prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bdc92518-1c30-43d3-9585-6a2a9c642f06/id-preview-0dcc1210--bbfa06f5-360d-45fb-99eb-0ac3538f13c2.lovable.app-1784718421526.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bdc92518-1c30-43d3-9585-6a2a9c642f06/id-preview-0dcc1210--bbfa06f5-360d-45fb-99eb-0ac3538f13c2.lovable.app-1784718421526.png" },
+      {
+        name: "twitter:title",
+        content: "PRISME — Générez des solveurs de planification industrielle avec l'IA",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "PRISME est une plateforme propulsée par l'IA qui transforme vos contraintes métier de planification en solveurs d'ordonnancement heuristiques prêts pour la production — validés, isolés en bac à sable, auditables et supervisés par un humain.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bdc92518-1c30-43d3-9585-6a2a9c642f06/id-preview-0dcc1210--bbfa06f5-360d-45fb-99eb-0ac3538f13c2.lovable.app-1784718421526.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bdc92518-1c30-43d3-9585-6a2a9c642f06/id-preview-0dcc1210--bbfa06f5-360d-45fb-99eb-0ac3538f13c2.lovable.app-1784718421526.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

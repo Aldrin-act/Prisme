@@ -44,48 +44,13 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   `planning_precedent` est absent ou `horizon_gele_jours` vaut 0.
 - Quel que soit l'algorithme, le plan reprend le calcul d'`horizon` de la section « Horizon » de
   la mission (jamais la seule somme des durées) et, si l'instance contient des `Echeance`, la
-  section « Échéances » (contrainte dure en CP-SAT ; tuple de fitness qui fait passer le nombre
-  d'échéances dépassées avant l'objectif, puis `None` si la meilleure solution en dépasse encore
-  une, pour une heuristique).
-- Si l'algorithme recommandé est `cp_sat` : conçois un modèle CP-SAT
-  classique avec `ortools.sat.python.cp_model`, en reprenant exactement les
-  noms de variables de la section « Noms des variables CP-SAT » de la mission
-  (`debut[tache]`, `fin[tache]`, `presence[(tache, ressource)]`,
-  `intervalle[(tache, ressource)]`) et les paramètres de solveur de la
-  section « Déterminisme » (`num_workers = 1`, `random_seed = 0`,
-  `max_deterministic_time`, jamais `max_time_in_seconds`) — variables d'intervalle,
-  contraintes de précédence/non-chevauchement, objectif combinant par somme
-  pondérée chaque élément de `instance.objectifs` présent — makespan si
-  `MinimiserMakespan`, écart de charge entre ressources si
-  `EquilibrerCharge`, etc.). Si l'instance contient des `ContrainteCapacite`,
-  remplace `AddNoOverlap` par `AddCumulative` pour les ressources concernées
-  (capacité implicite de 1 sinon) ; si elle contient des
-  `ContrainteIncompatibilite`, ajoute une contrainte de somme `<= 1` sur les
-  littéraux de présence des deux tâches pour chaque ressource candidate
-  commune ; si elle contient des `ContrainteDisponibiliteRessource`, ajoute
-  un intervalle fixe par jour indisponible dans la même liste que
-  `AddNoOverlap`/`AddCumulative` de la ressource concernée. Si elle contient
-  des `ContrainteChangementSerie`, ajoute pour chaque paire (`tache_avant`,
-  `tache_apres`, `ressource`) un booléen d'ordre réifié qui force
-  `debut(tache_apres) >= fin(tache_avant) + duree_setup` quand les deux sont
-  présentes sur cette ressource dans cet ordre (encodage volontairement
-  conservateur — un délai est imposé dès que `tache_avant` précède
-  `tache_apres` dans le temps sur la ressource, pas seulement si elles sont
-  strictement consécutives ; voir la mission pour l'exemple CP-SAT complet).
-  Si des tâches ont une `priorite` déclarée, ajoute un terme de départage à
-  l'objectif (jamais au détriment de sa valeur principale — voir la mission).
-  Si l'instance contient des `DeclarationMateriau`, ajoute pour chacune couverte par au moins une
-  `ConsommationMatiere` un `AddReservoirConstraint` dont la liste d'événements **commence par
-  l'apport du stock initial à l'instant 0** (`+stock_initial`), suivi d'un événement
-  `-quantite` au `debut` de chaque tâche consommatrice, avec `min_level=0` et
-  `max_level=stock_initial` — sans cet événement initial, le réservoir CP-SAT démarre à 0 et le
-  modèle est toujours infaisable (voir la section "Matières" de la mission) ; sans effet si
-  l'instance n'en contient aucune.
-- Pour tout autre algorithme (génétique, ACO, recuit simulé, tabou,
-  glouton + recherche locale, règles de dispatching) : adapte les mêmes
-  champs à cet algorithme — `variables` devient la représentation de la
-  solution, `objectif` reste la même somme pondérée sur `instance.objectifs`,
-  encodée cette fois comme fonction de fitness/coût.
+  section « Échéances » (tuple de fitness qui fait passer le nombre d'échéances dépassées
+  avant l'objectif, puis `None` si la meilleure solution en dépasse encore une).
+- Pour l'algorithme recommandé (génétique, ACO, recuit simulé, tabou,
+  glouton + recherche locale, règles de dispatching — PRISME n'utilise aucun
+  moteur exact) : `variables` décrit la représentation de la solution,
+  `objectif` est la somme pondérée sur `instance.objectifs`, encodée comme
+  fonction de fitness/coût.
 
   **`contraintes_modele` doit obligatoirement décrire un décodeur qui
   garantit la légalité du planning par construction — jamais une pénalité
@@ -115,7 +80,10 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
      placée sur la ressource candidate est `tache_avant` d'une de ces
      contraintes pour la tâche courante (`tache_apres`), repousse l'heure de
      début la plus tôt possible d'au moins `duree_setup` après la fin de
-     cette dernière tâche. Si elle contient des
+     cette dernière tâche ; sur une telle ressource, place les tâches en
+     ajout seulement (jamais dans un trou antérieur à la dernière tâche
+     placée), pour que « dernière tâche placée » reste « dernière dans le
+     temps ». Si elle contient des
      `ContrainteDisponibiliteRessource`, rejette tout début dont l'intervalle
      `[debut, fin)` touche un instant indisponible de la ressource (table
      précalculée) et essaie l'instant libre suivant. Si l'instance contient des `DeclarationMateriau` et que la
@@ -135,7 +103,10 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   Précise aussi **comment obtenir un résultat déterministe** : une seule
   graine fixe pour un générateur aléatoire local (`random.Random(<graine>)`),
   jamais l'état global du module `random` — le solveur doit produire le
-  même makespan à chaque exécution sur la même instance. Et un critère
+  même makespan à chaque exécution sur la même instance. Aucune itération
+  directe sur un `set` d'identifiants (ordre variable d'un processus à
+  l'autre) : listes, `dict` ou `sorted(...)`, égalités départagées par
+  identifiant. Et un critère
   d'arrêt déterministe et indépendant de la machine (nombre fixe
   d'itérations ou de générations), jamais une limite de temps écoulé —
   dimensionné pour finir largement sous les **30 secondes sur 1 vCPU** du
@@ -167,19 +138,8 @@ pas comme un objet `{{"nom_fonction": "description", ...}}` :
 {{
   "variables": "quelles variables/quelle représentation de solution créer, et sur quels domaines",
   "contraintes_modele": "comment chaque contrainte métier identifiée par l'Analyste est respectée par le modèle ou l'algorithme choisi",
-  "objectif": "comment lire instance.objectifs à l'exécution et combiner par somme pondérée (poids) chaque type présent — makespan, équilibrage de charge, ou plusieurs à la fois — dans le Minimize(...) ou la fonction de fitness/coût",
+  "objectif": "comment lire instance.objectifs à l'exécution et combiner par somme pondérée (poids) chaque type présent — makespan, équilibrage de charge, ou plusieurs à la fois — dans la fonction de fitness/coût",
   "fonctions_internes": "une décomposition en petites fonctions privées si utile, sinon null"
-}}
-```
-
-Exemple de réponse valide (cas `cp_sat`) :
-
-```json
-{{
-  "variables": "un intervalle optionnel par (tâche, ressource compatible) via NewOptionalIntervalVar, plus une variable début/fin par tâche et une variable makespan bornée par la somme des durées",
-  "contraintes_modele": "AddExactlyOne sur les intervalles optionnels d'une même tâche (une seule ressource choisie) ; AddNoOverlap par ressource (ou AddCumulative si une ContrainteCapacite couvre cette ressource) ; Add(fin <= debut_suivante) pour chaque Precedence ; pour chaque ContrainteIncompatibilite, Add(litteral_presence_1 + litteral_presence_2 <= 1) sur chaque ressource candidate commune aux deux tâches",
-  "objectif": "Minimize(makespan) avec makespan >= fin de chaque tâche",
-  "fonctions_internes": null
 }}
 ```
 
@@ -194,15 +154,26 @@ Exemple de réponse valide (cas `genetic`, décodeur constructif — pas de pén
 }}
 ```
 
-Exemple de réponse valide (cas `cp_sat`, instance dont `instance.objectifs`
-contient à la fois `EquilibrerCharge(methode="ecart_max")` et
+Exemple de réponse valide (cas `tabu_search`, avec échéances) :
+
+```json
+{{
+  "variables": "solution = permutation des identifiants de tâches (ordre de priorité) ; solution initiale triée par échéance croissante (EDD, tâches sans échéance en dernier, départage par identifiant)",
+  "contraintes_modele": "décodeur constructif : parcourir la permutation, reporter une tâche tant qu'une de ses Precedence n'est pas planifiée, choisir la ressource compatible à la fin la plus tôt (tables durée/compatibilité précalculées une fois), rejeter tout début qui chevauche une opération ou tombe sur un instant indisponible — aucune pénalité sur les contraintes dures ; les Echeance sont comptées après décodage",
+  "objectif": "fitness = tuple (nb_echeances_depassees, makespan, terme_priorite) comparé lexicographiquement ; voisinage = échange de deux tâches voisines dans la permutation ; liste tabou de longueur fixe ; nombre d'itérations fixe ; renvoie None si la meilleure solution dépasse encore une échéance",
+  "fonctions_internes": "_preprocess(instance) -> tables ; _decoder(perm, tables) -> Planning ; _fitness(planning, tables) -> tuple ; _recherche_tabou(tables, rng) -> perm"
+}}
+```
+
+Exemple de réponse valide (cas `simulated_annealing`, instance dont `instance.objectifs`
+contient à la fois `EquilibrerCharge(methode="variance")` et
 `MinimiserMakespan` — deux objectifs combinés, ni l'un ni l'autre ignoré) :
 
 ```json
 {{
-  "variables": "un intervalle optionnel par (tâche, ressource compatible) via NewOptionalIntervalVar, plus une variable début/fin par tâche, une variable makespan, et une variable de charge par ressource cible (somme des durées × littéraux de présence des tâches qui lui sont affectées)",
-  "contraintes_modele": "AddExactlyOne sur les intervalles optionnels d'une même tâche ; AddNoOverlap par ressource (ou AddCumulative si ContrainteCapacite) ; Add(fin <= debut_suivante) pour chaque Precedence ; charge_r == somme des durée × littéral de présence pour chaque ressource r",
-  "objectif": "pour chaque objectif de instance.objectifs : si EquilibrerCharge, AddMaxEquality(charge_max, charges) et AddMinEquality(charge_min, charges) puis terme poids_equilibrage * (charge_max - charge_min) ; si MinimiserMakespan, terme poids_makespan * makespan ; Minimize(somme pondérée des deux termes) — les deux poids viennent de instance.objectifs, jamais figés en dur",
-  "fonctions_internes": null
+  "variables": "solution = permutation des tâches + choix de ressource par tâche (parmi les compatibles) ; température initiale et coefficient de refroidissement fixes",
+  "contraintes_modele": "décodeur constructif identique à celui du tabou : respect par construction des précédences, compatibilités, non-chevauchement ; charge par ressource accumulée pendant le décodage (dict ressource -> somme des durées)",
+  "objectif": "fitness = poids_makespan * makespan + poids_equilibrage * variance des charges, où variance = somme((charge - moyenne)**2) / nombre de ressources ciblées — valeur exacte, calculée en Python pur ; les deux poids sont lus dans instance.objectifs à l'exécution, jamais figés ; acceptation de Metropolis avec random.Random(42), nombre d'itérations fixe",
+  "fonctions_internes": "_decoder(solution, tables) -> (Planning, charges) ; _fitness(planning, charges, objectifs) -> float"
 }}
 ```

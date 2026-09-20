@@ -1,13 +1,13 @@
 """Agent Benchmarker (nouveau) — compare plusieurs algorithmes d'ordonnancement
 et sélectionne le meilleur pour l'instance donnée.
 
-Au lieu de forcer CP-SAT systématiquement, cet agent :
+PRISME ne génère que des solveurs heuristiques (aucun moteur exact : CP-SAT est retiré du
+projet). Cet agent :
 1. Analyse les caractéristiques de l'instance (taille, contraintes, structure)
 2. Benchmark plusieurs algorithmes sur un échantillon
 3. Recommande le meilleur selon des critères (qualité, temps, scalabilité)
 
 Algorithmes candidats :
-- CP-SAT (OR-Tools) : Optimal pour petites/moyennes instances (<500 tâches)
 - Algorithmes génétiques (GA) : Bon pour grandes instances, solutions approchées
 - Ant Colony Optimization (ACO) : Exploite la structure du problème
 - Simulated Annealing : Rapide, solutions acceptables
@@ -44,7 +44,7 @@ _PROMPT_SYSTEME = (
 
 
 AlgorithmeCatalogue = Literal[
-    "cp_sat", "genetic", "aco", "simulated_annealing", "tabu_search", "dispatching", "greedy_local"
+    "genetic", "aco", "simulated_annealing", "tabu_search", "dispatching", "greedy_local"
 ]
 
 
@@ -53,7 +53,7 @@ class _SchemaRecommandation(BaseModel):
     # `parametres_cascade_pour_algorithme` ni par `outil_documentation` — mieux vaut une réponse
     # non conforme, retentée par `invoquer_agent_structure`, qu'un algorithme mal orthographié
     # qui passerait silencieusement en aval.
-    algorithme: AlgorithmeCatalogue = Field(description="Une des sept valeurs du catalogue, exactement.")
+    algorithme: AlgorithmeCatalogue = Field(description="Une des six valeurs du catalogue, exactement.")
     raison: str = Field(description="Justification du choix.")
     parametres: dict = Field(default_factory=dict, description="Paramètres recommandés pour cet algorithme.")
     temps_estime: str = Field(default="inconnu", description='"secondes", "dizaines de secondes"')
@@ -79,14 +79,8 @@ class CaracteristiquesInstance:
     densite_contraintes: float  # Ratio contraintes / (tâches × ressources)
     types_objectifs: tuple[str, ...]  # Types distincts présents dans instance.objectifs, triés
     nb_objectifs: int  # Nombre d'objectifs combinés (somme pondérée si > 1)
-    # True si un EquilibrerCharge à méthode "variance"/"gini" est demandé —
-    # en CP-SAT, cette méthode n'est qu'une approximation linéarisée (voir
-    # la section "Objectifs" de generation_solveur.md, la mission commune) ;
-    # un algorithme non-CP-SAT peut calculer la vraie variance/le vrai Gini
-    # exactement dans sa fonction de fitness, signal pertinent pour ce choix.
-    equilibrage_methode_approchee_en_cpsat: bool
     # Types distincts présents dans instance.contraintes, triés — échéances, matières,
-    # indisponibilités... pèsent lourd dans le choix CP-SAT/heuristique (une heuristique ne
+    # indisponibilités... pèsent lourd dans le choix de l'heuristique (un décodeur constructif ne
     # garantit pas une échéance par construction), invisibles dans les seuls compteurs ci-dessus.
     types_contraintes: tuple[str, ...] = ()
 
@@ -95,7 +89,7 @@ class CaracteristiquesInstance:
 class RecommandationAlgorithme:
     """Recommandation d'algorithme par le benchmarker."""
 
-    algorithme: str  # "cp_sat", "genetic", "aco", "simulated_annealing", etc.
+    algorithme: str  # "tabu_search", "genetic", "aco", "simulated_annealing", etc.
     raison: str  # Justification du choix
     parametres_suggeres: dict[str, any]  # Paramètres recommandés
     temps_execution_estime: str  # "secondes", "minutes", "dizaines de minutes"
@@ -117,13 +111,10 @@ class ResultatBenchmark:
     appels_outils: tuple[str, ...] = ()
 
 
-# Seul CP-SAT est jugé à l'identique (exactitude requise) ; tout autre
-# algorithme recommandé par le Benchmarker est approché par nature et n'a
-# aucune raison de retomber exactement sur l'optimum du banc synthétique ni
-# sur l'affectation tâche→ressource des cas de référence. Lieu naturel pour
-# tout appelant (`graph.py`, `loop.py`, `scripts/`) puisque
-# c'est ce module qui produit les chaînes `algorithme`.
-_ALGORITHMES_EXACTS = frozenset({"cp_sat"})
+# Tout algorithme du catalogue est une heuristique, approchée par nature : aucune raison de
+# retomber exactement sur l'optimum du banc synthétique ni sur l'affectation tâche→ressource
+# des cas de référence. Lieu naturel pour tout appelant (`graph.py`, `scripts/`) puisque c'est
+# ce module qui produit les chaînes `algorithme`.
 TOLERANCE_MAKESPAN_ALGORITHME_APPROCHE = 0.10  # 10 % au-dessus de l'optimum/de la référence
 
 
@@ -163,18 +154,17 @@ def _construire_outil_recherche_heuristiques():
 
 def parametres_cascade_pour_algorithme(algorithme: str) -> tuple[float, bool]:
     """Renvoie `(tolerance_relative, comparer_affectation)` à passer à
-    `evaluer_cascade` selon l'algorithme choisi par le Benchmarker."""
-    if algorithme in _ALGORITHMES_EXACTS:
-        return 0.0, True
+    `evaluer_cascade` pour l'algorithme choisi par le Benchmarker — toujours le mode approché
+    (`algorithme` est conservé dans la signature : les appelants le passent, un futur jugement
+    par algorithme reste possible sans les modifier)."""
     return TOLERANCE_MAKESPAN_ALGORITHME_APPROCHE, False
 
 
 def creer_instance_exemple_defaut() -> dict:
     """Petite instance par défaut (10 tâches, 5 ressources, pas de
     précédences) pour le Benchmarker quand l'appelant n'a pas d'instance
-    réelle sous la main (scripts, tests) — typiquement classée « petite »,
-    oriente vers cp_sat, préservant le comportement de ces appelants
-    d'avant le branchement du Benchmarker sur le pipeline."""
+    réelle sous la main (scripts, tests) — typiquement classée « petite »
+    (donc orientée vers `tabu_search`)."""
     return {
         "taches": [{"id": f"T{i}"} for i in range(1, 11)],
         "ressources": [{"id": f"R{i}"} for i in range(1, 6)],
@@ -228,10 +218,6 @@ def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesI
     objectifs = instance_json.get("objectifs", [])
     types_objectifs = tuple(sorted({o.get("type", "?") for o in objectifs}))
     nb_objectifs = len(objectifs)
-    equilibrage_methode_approchee_en_cpsat = any(
-        o.get("type") == "equilibrer_charge" and o.get("methode", "ecart_max") in {"variance", "gini"}
-        for o in objectifs
-    )
 
     return CaracteristiquesInstance(
         nb_taches=nb_taches,
@@ -243,7 +229,6 @@ def analyser_caracteristiques_instance(instance_json: dict) -> CaracteristiquesI
         densite_contraintes=densite_contraintes,
         types_objectifs=types_objectifs,
         nb_objectifs=nb_objectifs,
-        equilibrage_methode_approchee_en_cpsat=equilibrage_methode_approchee_en_cpsat,
         types_contraintes=tuple(sorted({c.get("type", "?") for c in instance_json["contraintes"]})),
     )
 
@@ -282,7 +267,6 @@ def benchmarker_algorithmes(
         types_objectifs=", ".join(carac.types_objectifs) if carac.types_objectifs else "aucun",
         nb_objectifs=carac.nb_objectifs,
         types_contraintes=", ".join(carac.types_contraintes) if carac.types_contraintes else "aucun",
-        equilibrage_methode_approchee_en_cpsat="Oui" if carac.equilibrage_methode_approchee_en_cpsat else "Non",
     )
 
     outils = [_construire_outil_recherche_heuristiques()] if avec_outils else []

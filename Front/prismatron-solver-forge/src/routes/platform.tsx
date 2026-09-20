@@ -26,7 +26,8 @@ export const Route = createFileRoute("/platform")({
       { property: "og:title", content: "La plateforme PRISME" },
       {
         property: "og:description",
-        content: "Séparation des responsabilités pour des pipelines d'optimisation de qualité industrielle.",
+        content:
+          "Séparation des responsabilités pour des pipelines d'optimisation de qualité industrielle.",
       },
     ],
   }),
@@ -47,7 +48,7 @@ const STAGES = [
   {
     icon: Cpu,
     title: "Génération IA",
-    desc: "Un pipeline multi-agents transforme le DSL en solveurs OR-Tools CP-SAT avec des explications complètes.",
+    desc: "Un pipeline multi-agents transforme le DSL en solveurs heuristiques avec des explications complètes.",
   },
   {
     icon: ShieldCheck,
@@ -111,7 +112,8 @@ function PlatformPage() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
             Aucun solveur n'atteint la production sans une approbation humaine explicite. PRISME
-            expose le raisonnement de l'IA, le diff, et les résultats des tests en bac à sable — vous décidez.
+            expose le raisonnement de l'IA, le diff, et les résultats des tests en bac à sable —
+            vous décidez.
           </p>
           <Button asChild size="lg" className="mt-8 bg-gradient-to-r from-primary to-accent glow">
             <Link to="/architecture">

@@ -29,7 +29,7 @@ Exemple de réponse valide :
 
 ```json
 {{
-  "resume": "Résout le FJSP par un modèle CP-SAT : une variable d'intervalle optionnelle par (tâche, ressource compatible), une contrainte de non-chevauchement par ressource, minimisation du makespan.",
+  "resume": "Résout le FJSP par une recherche tabou sur une permutation de tâches : un décodeur constructif place chaque tâche sur la ressource compatible qui finit le plus tôt, sans jamais violer une contrainte, et la recherche minimise le makespan.",
   "limites_connues": "aucune"
 }}
 ```

@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from generation.agents.benchmarker import parametres_cascade_pour_algorithme
 from generation.agents.generateur import generer_code_solveur
 from generation.executer import ErreurExecutionGeneree, executer_code_genere
 from generation.validation_statique import ResultatValidationStatique, valider_code_genere
@@ -53,7 +54,9 @@ def tenter_generation_unique(modele: BaseChatModel) -> ResultatTentative:
         return ResultatTentative(brut.code_source, validation, str(erreur), None)
 
     try:
-        verdict = evaluer_cascade(solveur)
+        # Toute heuristique est jugée en mode approché (voir `parametres_cascade_pour_algorithme`).
+        tolerance, comparer_affectation = parametres_cascade_pour_algorithme("tabu_search")
+        verdict = evaluer_cascade(solveur, tolerance, comparer_affectation)
     except Exception as erreur:  # le code généré peut lever n'importe quoi à l'exécution
         return ResultatTentative(brut.code_source, validation, str(erreur), None)
 

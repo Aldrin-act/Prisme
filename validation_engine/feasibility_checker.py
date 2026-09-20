@@ -34,7 +34,7 @@ planifiée, planifiée deux fois, référence inconnue), devient une entrée de
 `ResultatFaisabilite.violations`.
 
 Règle de compatibilité ressource-tâche (à garder synchronisée avec tout
-solveur CP-SAT du dépôt, ex. `scripts/_solveur_minimal.py`) :
+solveur du dépôt, ex. `scripts/_solveur_minimal.py`) :
 `CompatibiliteRessourceTache` est obligatoire — une tâche sans aucune n'est
 pas rejetée ici (ce garde-fou-là
 vit dans `InstanceTRCO`, §6.7), mais la contrainte porte aussi la durée

@@ -20,10 +20,6 @@ from generation.agents.benchmarker import (
 from tests.unit.aides_test_agents import ModeleFactice
 
 
-def test_parametres_cascade_pour_algorithme_cp_sat_est_strict() -> None:
-    assert parametres_cascade_pour_algorithme("cp_sat") == (0.0, True)
-
-
 @pytest.mark.parametrize(
     "algorithme",
     ["genetic", "aco", "simulated_annealing", "tabu_search", "dispatching", "greedy_local", "inconnu"],
@@ -76,7 +72,6 @@ def test_analyser_caracteristiques_instance_sans_objectifs() -> None:
     carac = analyser_caracteristiques_instance(_instance_minimale_avec_objectifs([]))
     assert carac.types_objectifs == ()
     assert carac.nb_objectifs == 0
-    assert carac.equilibrage_methode_approchee_en_cpsat is False
 
 
 def test_analyser_caracteristiques_instance_objectifs_combines_tries_et_distincts() -> None:
@@ -89,27 +84,13 @@ def test_analyser_caracteristiques_instance_objectifs_combines_tries_et_distinct
     carac = analyser_caracteristiques_instance(instance_json)
     assert carac.types_objectifs == ("equilibrer_charge", "minimiser_makespan")
     assert carac.nb_objectifs == 2
-    assert carac.equilibrage_methode_approchee_en_cpsat is False
-
-
-@pytest.mark.parametrize("methode", ["variance", "gini"])
-def test_analyser_caracteristiques_instance_detecte_equilibrage_approche_en_cpsat(methode: str) -> None:
-    instance_json = _instance_minimale_avec_objectifs([{"type": "equilibrer_charge", "methode": methode}])
-    carac = analyser_caracteristiques_instance(instance_json)
-    assert carac.equilibrage_methode_approchee_en_cpsat is True
-
-
-def test_analyser_caracteristiques_instance_equilibrage_ecart_max_nest_pas_approche() -> None:
-    instance_json = _instance_minimale_avec_objectifs([{"type": "equilibrer_charge", "methode": "ecart_max"}])
-    carac = analyser_caracteristiques_instance(instance_json)
-    assert carac.equilibrage_methode_approchee_en_cpsat is False
 
 
 def test_benchmarker_algorithmes_construit_le_resultat_depuis_le_schema() -> None:
     schema = benchmarker._SchemaBenchmark(
         recommandation=benchmarker._SchemaRecommandation(
             algorithme="genetic",
-            raison="Instance trop grande pour CP-SAT.",
+            raison="Instance trop grande pour une recherche exhaustive.",
             parametres={"population_size": 300},
             temps_estime="minutes",
             qualite_attendue="très bonne (>95%)",
@@ -141,7 +122,7 @@ def test_benchmarker_algorithmes_sans_appel_d_outil_a_une_trace_vide() -> None:
     pas planter ni inventer un appel."""
     schema = benchmarker._SchemaBenchmark(
         recommandation=benchmarker._SchemaRecommandation(
-            algorithme="cp_sat",
+            algorithme="tabu_search",
             raison="Petite instance.",
             parametres={},
             temps_estime="secondes",
@@ -162,7 +143,7 @@ def test_benchmarker_algorithmes_sans_outils_fonctionne_toujours() -> None:
     aucun outil construit ni proposé au modèle."""
     schema = benchmarker._SchemaBenchmark(
         recommandation=benchmarker._SchemaRecommandation(
-            algorithme="cp_sat",
+            algorithme="tabu_search",
             raison="Petite instance.",
             parametres={},
             temps_estime="secondes",
@@ -176,7 +157,7 @@ def test_benchmarker_algorithmes_sans_outils_fonctionne_toujours() -> None:
     resultat = benchmarker.benchmarker_algorithmes(modele, creer_instance_exemple_defaut(), avec_outils=False)
 
     assert resultat.appels_outils == ()
-    assert resultat.recommandation.algorithme == "cp_sat"
+    assert resultat.recommandation.algorithme == "tabu_search"
 
 
 class TestRechercheHeuristiquesWeb:

@@ -1,4 +1,4 @@
-# generation — Traduction du DSL en code de solveur CP-SAT (§5.6)
+# generation — Traduction du DSL en code de solveur heuristique (§5.6)
 
 **Deux chemins de génération** :
 

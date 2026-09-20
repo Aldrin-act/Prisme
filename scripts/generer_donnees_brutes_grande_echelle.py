@@ -1135,7 +1135,7 @@ python -m scripts.generer_donnees_brutes_grande_echelle --taille 200
 
 Ces instances volumineuses permettent de :
 - Tester les performances du générateur LLM sur de grandes instances
-- Valider la scalabilité du solveur CP-SAT
+- Valider la scalabilité du solveur
 - Évaluer les temps d'exécution dans le sandbox
 - Benchmarker la cascade de validation
 

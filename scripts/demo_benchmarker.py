@@ -1,11 +1,11 @@
 """Démonstration de l'agent Benchmarker.
 
 Analyse une instance T-R-C-O et recommande le meilleur algorithme
-d'ordonnancement au lieu de forcer CP-SAT systématiquement.
+d'ordonnancement parmi un catalogue d'heuristiques.
 
 Exemples testés :
-1. Petite instance (10 tâches) → CP-SAT optimal
-2. Moyenne instance (100 tâches) → CP-SAT ou Tabu
+1. Petite instance (10 tâches) → Tabu
+2. Moyenne instance (100 tâches) → Tabu ou Recuit simulé
 3. Grande instance (500 tâches) → GA ou ACO
 4. Très grande instance (2165 tâches GreenSig) → GA obligatoire
 """
@@ -34,7 +34,7 @@ def main():
     print("🔬" * 35 + "\n")
 
     print("🎯 Objectif : Recommander le MEILLEUR algorithme pour une instance")
-    print("   au lieu de forcer CP-SAT systématiquement.\n")
+    print("   parmi un catalogue d'heuristiques.\n")
 
     # Choisir une instance
     print("=" * 70)

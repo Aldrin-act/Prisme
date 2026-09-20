@@ -4,7 +4,7 @@ d'exécution ou de cascade). Appelé jusqu'à `generation.graph.MAX_TENTATIVES_R
 fois par tentative de génération (boucle de réparation bornée, Étape 6). Doit
 rester algorithme-agnostique comme l'Architecte/le Développeur : le code à
 corriger peut implémenter n'importe quel algorithme choisi par le Benchmarker
-(cp_sat ou une heuristique), jamais uniquement CP-SAT.
+(tabou, recuit simulé, génétique...).
 
 `corriger_code` (le chemin historique, cascade/reviewer) suppose toujours que
 le solveur a tort — vrai par construction, la cascade juge contre une vérité
@@ -36,7 +36,7 @@ CHEMIN_PROMPT_TESTS_SANDBOX = Path(__file__).resolve().parents[1] / "prompts" / 
 
 _PROMPT_SYSTEME = (
     "Tu es un développeur Python expert en débogage de modèles d'optimisation combinatoire "
-    "(CP-SAT/OR-Tools et métaheuristiques d'ordonnancement — génétique, ACO, recuit simulé, "
+    "(métaheuristiques d'ordonnancement — génétique, ACO, recuit simulé, "
     "tabou, dispatching). Tu réponds toujours en JSON strict, jamais en texte libre."
 )
 

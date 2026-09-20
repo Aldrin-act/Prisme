@@ -24,21 +24,27 @@ PREFIXES_AUTORISES = (
     "collections",
     "dataclasses",
     "typing",
-    "ortools",
     "dsl",
-    # `random`/`math` : uniquement utiles à un algorithme non-CP-SAT recommandé
-    # par l'agent Benchmarker (génétique, ACO, recuit simulé...) — voir
-    # generation/prompts/generation_solveur.md. Aucun des deux ne permet
-    # d'accès réseau/fichier/système, donc pas de risque de sécurité ajouté.
+    # `random`/`math` et les utilitaires purs ci-dessous : nécessaires aux heuristiques
+    # recommandées par l'agent Benchmarker (génétique, ACO, recuit simulé, tabou...) — voir
+    # generation/prompts/generation_solveur.md. Aucun ne permet d'accès réseau/fichier/système,
+    # donc pas de risque de sécurité ajouté. `time` reste volontairement absent : il ne
+    # servirait qu'à une limite en temps réel, contraire au déterminisme (§6.5). `ortools` est
+    # retiré : PRISME n'utilise plus de moteur exact.
     "random",
     "math",
+    "heapq",
+    "itertools",
+    "bisect",
+    "functools",
+    "copy",
 )
 
 
 def _prefixe_autorise(chemin: str) -> bool:
     """`chemin` est autorisé s'il est l'un des préfixes, ou un sous-module —
-    ce qui couvre aussi bien `import ortools.sat.python.cp_model` que
-    `from ortools.sat.python import cp_model` (module = `ortools.sat.python`)."""
+    ce qui couvre aussi bien `import collections.abc` que
+    `from collections import abc` (module = `collections`)."""
     return any(chemin == prefixe or chemin.startswith(f"{prefixe}.") for prefixe in PREFIXES_AUTORISES)
 
 

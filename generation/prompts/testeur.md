@@ -32,7 +32,7 @@ types de contraintes et d'objectifs** (plus `compatibilite_ressource_tache`, tou
 `ContrainteCapacite`...) teste un comportement que personne n'a demandé et échouera sur un solveur
 correct.
 
-Si l'algorithme n'est pas `cp_sat`, le solveur est **approché** : n'affirme jamais un makespan
+Le solveur est une heuristique, donc **approché** : n'affirme jamais un makespan
 optimal exact, sauf sur une instance si petite que l'optimum est évident (une tâche, ou une chaîne
 de tâches sur des ressources dédiées). Vérifie plutôt la légalité du planning.
 

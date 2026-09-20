@@ -53,7 +53,7 @@ _PLANNING = Planning(
 def _solveur(
     structure: str = _STRUCTURE_INITIALE,
     objectifs: str = "minimiser_makespan",
-    algorithme: str | None = "cp_sat",
+    algorithme: str | None = "tabu_search",
     code: str = "def resoudre(instance):\n    ...\n",
 ) -> ArtefactSolveur:
     return ArtefactSolveur(
@@ -72,7 +72,7 @@ def _solveur(
     )
 
 
-def _modele(algorithme: str = "cp_sat", alternatives: list[str] | None = None) -> ModeleFactice:
+def _modele(algorithme: str = "tabu_search", alternatives: list[str] | None = None) -> ModeleFactice:
     schema = benchmarker._SchemaBenchmark(
         recommandation=benchmarker._SchemaRecommandation(
             algorithme=algorithme, raison="raison de test", alternatives=alternatives or []
@@ -265,7 +265,9 @@ def test_objectif_retire_encore_code_est_a_surveiller_sans_regenerer() -> None:
 
 
 def test_autre_algorithme_prefere_mais_actuel_encore_valable_ne_regenere_pas() -> None:
-    evaluation = _evaluer(_INSTANCE, _solveur(algorithme="cp_sat"), modele=_modele("genetic", ["cp_sat"]))
+    evaluation = _evaluer(
+        _INSTANCE, _solveur(algorithme="tabu_search"), modele=_modele("genetic", ["tabu_search"])
+    )
 
     constat = _constat(evaluation, "Algorithme")
     assert constat.verdict == "sans_impact"
@@ -275,7 +277,7 @@ def test_autre_algorithme_prefere_mais_actuel_encore_valable_ne_regenere_pas() -
 
 def test_algorithme_ni_recommande_ni_alternative_est_bloquant_avec_les_faits() -> None:
     evaluation = _evaluer(
-        _INSTANCE, _solveur(algorithme="greedy_local"), modele=_modele("cp_sat", ["tabu_search"])
+        _INSTANCE, _solveur(algorithme="greedy_local"), modele=_modele("simulated_annealing", ["tabu_search"])
     )
 
     constat = _constat(evaluation, "Algorithme")

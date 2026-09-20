@@ -18,7 +18,7 @@ def test_generer_code_depuis_plan_construit_le_resultat_depuis_le_schema() -> No
     schema = generateur._SchemaGenerationCode(code="def resoudre(instance):\n    return None\n")
     modele = ModeleFactice(raw_content=json.dumps(schema.model_dump()), parsed=schema)
 
-    resultat = generateur.generer_code_depuis_plan(modele, "plan technique", algorithme="cp_sat")
+    resultat = generateur.generer_code_depuis_plan(modele, "plan technique", algorithme="tabu_search")
 
     assert resultat.code_source == "def resoudre(instance):\n    return None\n"
 

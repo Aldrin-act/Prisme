@@ -89,7 +89,7 @@ def generer_tests(
     *,
     avec_outils: bool = True,
     instance_json: dict | None = None,
-    algorithme: str = "cp_sat",
+    algorithme: str = "tabu_search",
 ) -> ResultatTests:
     """`avec_outils` : si vrai (défaut), l'agent peut consulter
     `consulter_cas_limites_banc_synthetique` (voir plus haut) avant de

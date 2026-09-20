@@ -145,7 +145,7 @@ def _resultat_pipeline_minimal(**overrides: object) -> g.ResultatPipelineAvecBou
     champs: dict[str, object] = {
         "specification": "s",
         "plan_technique": "p",
-        "algorithme_recommande": "cp_sat",
+        "algorithme_recommande": "tabu_search",
         "justification_algorithme": "petite instance",
         "parametres_algorithme": {},
         "code_genere": CODE_BON,

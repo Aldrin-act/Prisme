@@ -18,13 +18,16 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal
 
-from ortools.sat.python import cp_model
+import heapq
+import random
 
 from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, OperationPlanifiee, Planning, Precedence
 
 
 def resoudre(instance: InstanceTRCO) -> Planning | None:
-    modele = cp_model.CpModel()
+    rng = random.Random(42)
+    file_evenements: list[int] = []
+    heapq.heappush(file_evenements, rng.randint(0, 9))
     return Planning(operations=[])
 """
 
@@ -39,6 +42,9 @@ def resoudre(instance: InstanceTRCO) -> Planning | None:
         "from os import path\n",
         "import shutil\n",
         "import importlib\n",
+        "import time\n",
+        "import ortools.sat.python.cp_model\n",
+        "from ortools.sat.python import cp_model\n",
     ],
 )
 def test_import_interdit_est_rejete(code: str) -> None:
@@ -94,10 +100,13 @@ def test_code_legitime_avec_imports_autorises_est_accepte() -> None:
     assert resultat.violations == ()
 
 
-def test_import_dsl_schema_et_ortools_variantes_sont_acceptes() -> None:
+def test_import_dsl_schema_et_utilitaires_purs_sont_acceptes() -> None:
     code = (
-        "import ortools.sat.python.cp_model\n"
-        "from ortools.sat.python import cp_model\n"
+        "import heapq\n"
+        "import itertools\n"
+        "import bisect\n"
+        "import functools\n"
+        "import copy\n"
         "from dsl.schema import InstanceTRCO\n"
         "from dsl import schema\n"
     )

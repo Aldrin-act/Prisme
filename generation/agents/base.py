@@ -35,7 +35,7 @@ class ErreurReponseAgentInvalide(Exception):
 
 
 def charger_mission() -> str:
-    """Le contrat T-R-C-O/CP-SAT commun à tous les agents — inputs, outputs,
+    """Le contrat T-R-C-O commun à tous les agents — inputs, outputs,
     contraintes de sécurité (voir `prompts/generation_solveur.md`)."""
     return CHEMIN_MISSION.read_text(encoding="utf-8")
 

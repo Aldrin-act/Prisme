@@ -78,7 +78,7 @@ class ArtefactSolveur:
     date_validation: str
     code_source: str
     actif: bool
-    # Choix de l'agent Benchmarker (§6.6, "cp_sat" ou une heuristique du catalogue) et sa
+    # Choix de l'agent Benchmarker (§6.6, une heuristique du catalogue ; "cp_sat" pour les anciens solveurs) et sa
     # justification — capturés une fois à la génération (`ResultatPipelineAvecBoucle`,
     # `generation/graph.py`), jamais recalculés ici. `None` pour tout solveur enregistré avant
     # l'ajout de ces deux colonnes (migration idempotente ci-dessous).

@@ -13,7 +13,7 @@ algorithmes de ce catalogue — pas de recherche, une seule construction déterm
 - **LPT (Longest Processing Time)** : privilégier la tâche la plus longue — tend à mieux équilibrer
   la charge de fin de planning sur les ressources, utile si l'objectif inclut `EquilibrerCharge`.
 - **EDD (Earliest Due Date)** : privilégier la tâche à l'échéance la plus proche (`Echeance`) —
-  pertinent si `instance.objectifs` contient `MinimiserRetards`.
+  pertinent si des `Echeance` sont présentes.
 - **Ratio critique** : `(echeance - instant_courant) / duree_restante_estimee` — plus le ratio est
   bas, plus la tâche est urgente ; combine échéance et durée, utile en présence des deux signaux.
 

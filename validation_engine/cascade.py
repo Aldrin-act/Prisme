@@ -15,10 +15,10 @@ brique 3). Un même défaut peut donc, selon où il se manifeste, être classé
 « optimalite » ou « fidelite » — ce n'est pas une ambiguïté, c'est le
 découpage des responsabilités entre les deux bancs.
 
-`tolerance_relative` et `comparer_affectation` existent pour les algorithmes
-non-CP-SAT recommandés par l'agent Benchmarker (§5.6) : CP-SAT reste jugé
-strictement (valeurs par défaut, exactitude requise) ; un algorithme approché
-est jugé sur la qualité de son makespan à une tolérance explicite près, sans
+`tolerance_relative` et `comparer_affectation` existent pour les heuristiques
+recommandées par l'agent Benchmarker (§5.6) : les valeurs par défaut sont strictes
+(exactitude requise) ; un algorithme approché — tout algorithme généré par PRISME,
+qui n'a plus de moteur exact — est jugé sur la qualité de son makespan à une tolérance explicite près, sans
 exiger l'affectation tâche→ressource exacte d'un cas écrit à la main pour un
 autre algorithme. `evaluer_cascade` reste agnostique de *quel* algorithme a
 produit le solveur — c'est à l'appelant (`generation/graph.py`,
@@ -125,12 +125,12 @@ def evaluer_un_cas_reference(
     peuvent être également valides.
 
     `comparer_affectation` et `tolerance_relative` existent pour les
-    algorithmes non-CP-SAT recommandés par l'agent Benchmarker
+    heuristiques recommandées par l'agent Benchmarker
     (`generation/agents/benchmarker.py`) : un algorithme approché (génétique,
     ACO, recuit simulé, tabou, heuristiques de dispatching) n'a aucune raison
     de reproduire l'affectation exacte écrite à la main pour ce cas — seule
-    la qualité du makespan compte alors, à `tolerance_relative` près. CP-SAT
-    reste jugé sur les deux critères stricts (valeurs par défaut).
+    la qualité du makespan compte alors, à `tolerance_relative` près. Les
+    valeurs par défaut restent strictes (les deux critères).
     """
     planning = solveur(cas.instance)
     echec_faisabilite = _diagnostiquer_faisabilite(cas.nom, cas.instance, planning)
@@ -183,7 +183,7 @@ def evaluer_cascade(
     """Les trois briques bout à bout (§6.3) : faisabilité → optimalité → fidélité.
 
     Par défaut (`tolerance_relative=0.0`, `comparer_affectation=True`) le
-    comportement est celui, strict, attendu d'un solveur CP-SAT — inchangé
+    comportement est celui, strict, d'un solveur exact — inchangé
     pour tous les appelants existants. Un algorithme approché recommandé par
     l'agent Benchmarker doit être évalué avec une tolérance non nulle et
     `comparer_affectation=False` (voir `generation/graph.py`,
