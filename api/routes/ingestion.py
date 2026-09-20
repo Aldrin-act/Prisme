@@ -15,11 +15,18 @@ from adapters.gamme_derivation import ErreurExplosionGamme, GammeAvecQuantite, t
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
 from api.dependencies import obtenir_registre
-from api.etat import CommandeEnregistree, EtatAPI, GammeCommandeEnregistree, obtenir_etat, structure_contraintes
+from api.etat import (
+    CommandeEnregistree,
+    EtatAPI,
+    GammeCommandeEnregistree,
+    StatutRealisationCommande,
+    obtenir_etat,
+    structure_contraintes,
+)
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
-from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif
+from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif, Planning
 
 if TYPE_CHECKING:
     from estimation import EstimateurDuree
@@ -93,6 +100,40 @@ def _estimateur_duree_optionnel() -> EstimateurDuree | None:
     return estimateur_par_defaut()
 
 
+def _commande_en_dict(
+    commande: CommandeEnregistree,
+    instance: InstanceTRCO,
+    planning: Planning | None,
+    date_execution: str | None,
+) -> dict[str, object]:
+    """Représentation JSON d'une commande, partagée par les trois routes qui en renvoient une —
+    elle croise deux statuts qui ne disent pas la même chose et ne doivent jamais être confondus :
+    `statut_realisation`/`date_realisation`, **déclarés par un humain** (l'atelier a-t-il fait le
+    travail ?), et le reste (`planifiee`/`date_fin_prevue`/`en_retard`), **recalculé à la volée**
+    contre le dernier planning réussi (que prévoit l'ordonnancement ?). Une commande dont la fin
+    prévue est dépassée reste `non_debutee` tant que personne ne l'a confirmée : le système ne
+    déduit jamais une réalisation de l'écoulement du temps."""
+    return {
+        "commande_id": commande.id,
+        "instance_id": commande.instance_id,
+        "client_id": commande.client_id,
+        "date_limite": commande.date_limite,
+        "taches": list(commande.taches),
+        "date_creation": commande.date_creation,
+        "duree_heures": commande.duree_heures,
+        "numero": commande.numero,
+        "date_debut_au_plus_tot": commande.date_debut_au_plus_tot,
+        "est_prospect": commande.est_prospect,
+        "description": commande.description,
+        "nom_client": commande.nom_client,
+        "gammes": _gammes_commande_en_dicts(commande.gammes),
+        "statut_realisation": commande.statut_realisation,
+        "date_realisation": commande.date_realisation,
+        "date_execution": date_execution,
+        **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
+    }
+
+
 def _gammes_commande_en_dicts(gammes: tuple[GammeCommandeEnregistree, ...]) -> list[dict[str, object]]:
     """Sérialisation de `CommandeEnregistree.gammes` pour les réponses JSON ci-dessous — même
     forme que `RequeteGammeCommande` côté écriture, plus `produit`/`nom` (copie figée à la
@@ -159,27 +200,7 @@ def lister_toutes_commandes(
         planning = etat.dernier_planning_pour_instance(instance_id)
         date_execution = etat.date_derniere_execution_reussie(instance_id)
         for commande in commandes_instance:
-            resultats.append(
-                {
-                    "commande_id": commande.id,
-                    "instance_id": commande.instance_id,
-                    "client_id": commande.client_id,
-                    "date_limite": commande.date_limite,
-                    "taches": list(commande.taches),
-                    "date_creation": commande.date_creation,
-                    "duree_heures": commande.duree_heures,
-                    "numero": commande.numero,
-                    "date_debut_au_plus_tot": commande.date_debut_au_plus_tot,
-                    "est_prospect": commande.est_prospect,
-                    "description": commande.description,
-                    "nom_client": commande.nom_client,
-                    "gammes": _gammes_commande_en_dicts(commande.gammes),
-                    "date_execution": date_execution,
-                    **calculer_statut_commande(
-                        instance, planning, commande.taches, commande.date_limite
-                    ).en_dict(),
-                }
-            )
+            resultats.append(_commande_en_dict(commande, instance, planning, date_execution))
     return resultats
 
 
@@ -666,23 +687,7 @@ def lister_commandes_instance(
     planning = etat.dernier_planning_pour_instance(instance_id)
     date_execution = etat.date_derniere_execution_reussie(instance_id)
     return [
-        {
-            "commande_id": commande.id,
-            "instance_id": commande.instance_id,
-            "client_id": commande.client_id,
-            "date_limite": commande.date_limite,
-            "taches": list(commande.taches),
-            "date_creation": commande.date_creation,
-            "duree_heures": commande.duree_heures,
-            "numero": commande.numero,
-            "date_debut_au_plus_tot": commande.date_debut_au_plus_tot,
-            "est_prospect": commande.est_prospect,
-            "description": commande.description,
-            "nom_client": commande.nom_client,
-            "gammes": _gammes_commande_en_dicts(commande.gammes),
-            "date_execution": date_execution,
-            **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
-        }
+        _commande_en_dict(commande, instance, planning, date_execution)
         for commande in etat.lister_commandes(instance_id=instance_id)
     ]
 
@@ -706,25 +711,48 @@ def obtenir_commande(
 
     _, instance = etat.recuperer_instance(commande.instance_id)
     planning = etat.dernier_planning_pour_instance(commande.instance_id)
-    statut = calculer_statut_commande(instance, planning, commande.taches, commande.date_limite)
+    date_execution = etat.date_derniere_execution_reussie(commande.instance_id)
 
-    return {
-        "commande_id": commande.id,
-        "instance_id": commande.instance_id,
-        "client_id": commande.client_id,
-        "date_limite": commande.date_limite,
-        "taches": list(commande.taches),
-        "date_creation": commande.date_creation,
-        "duree_heures": commande.duree_heures,
-        "numero": commande.numero,
-        "date_debut_au_plus_tot": commande.date_debut_au_plus_tot,
-        "est_prospect": commande.est_prospect,
-        "description": commande.description,
-        "nom_client": commande.nom_client,
-        "gammes": _gammes_commande_en_dicts(commande.gammes),
-        "date_execution": etat.date_derniere_execution_reussie(commande.instance_id),
-        **statut.en_dict(),
-    }
+    return _commande_en_dict(commande, instance, planning, date_execution)
+
+
+class RequeteStatutCommande(BaseModel):
+    """`date_realisation` n'est lue que pour `statut="realisee"` (déclaration rétroactive :
+    « finie mardi dernier ») — ignorée sinon, jamais une date de réalisation sur une commande
+    qu'on vient de remettre en cours."""
+
+    statut: StatutRealisationCommande
+    date_realisation: str | None = None
+
+
+@router.patch("/commandes/{commande_id}/statut")
+def changer_statut_commande(
+    commande_id: str,
+    requete: RequeteStatutCommande,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Avancement réel de la commande dans l'atelier, **déclaré par un humain** : non débutée,
+    en cours, ou réalisée (§ human-in-the-loop). C'est la seule façon pour PRISME de savoir
+    qu'un travail a été fait — le planning ne dit que ce qui *devrait* arriver, et une date de
+    fin prévue dépassée ne prouve rien (panne, absence, matière manquante...).
+
+    `PATCH` et non `POST` : on modifie un champ d'une commande existante, jamais on n'en crée
+    une. Deux segments après le préfixe `/ingestion` comme `GET /commandes/{commande_id}` :
+    aucune collision avec `GET /{instance_id}`."""
+    try:
+        commande = etat.recuperer_commande(commande_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="commande inconnue") from None
+
+    verifier_acces_client(utilisateur, commande.client_id)
+
+    commande = etat.mettre_a_jour_statut_commande(commande_id, requete.statut, requete.date_realisation)
+    _, instance = etat.recuperer_instance(commande.instance_id)
+    planning = etat.dernier_planning_pour_instance(commande.instance_id)
+    date_execution = etat.date_derniere_execution_reussie(commande.instance_id)
+
+    return _commande_en_dict(commande, instance, planning, date_execution)
 
 
 @router.delete("/{instance_id}", status_code=204)

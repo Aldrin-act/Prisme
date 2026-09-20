@@ -64,6 +64,7 @@ from api.etat import (
     Priorite,
     PropositionSupervision,
     SourceDonnees,
+    StatutRealisationCommande,
     TentativeGeneration,
     TypeSignal,
     structure_contraintes,
@@ -263,6 +264,18 @@ class EtatPostgres:
             connexion.execute(
                 sql.SQL(
                     "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS gammes JSONB NOT NULL DEFAULT '[]'::jsonb"
+                ).format(table=self._table("commandes"))
+            )
+            # Migration idempotente : avancement réel déclaré par un humain (non_debutee /
+            # en_cours / realisee) et horodatage de la déclaration de réalisation — voir
+            # `CommandeEnregistree.statut_realisation`, api/etat.py. Toute commande antérieure
+            # démarre à 'non_debutee' : jamais "réalisée" rétroactivement sans que personne ne
+            # l'ait confirmé.
+            connexion.execute(
+                sql.SQL(
+                    "ALTER TABLE {table} "
+                    "ADD COLUMN IF NOT EXISTS statut_realisation TEXT NOT NULL DEFAULT 'non_debutee', "
+                    "ADD COLUMN IF NOT EXISTS date_realisation TEXT"
                 ).format(table=self._table("commandes"))
             )
             connexion.execute(
@@ -973,7 +986,8 @@ class EtatPostgres:
             ligne = connexion.execute(
                 sql.SQL(
                     "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
-                    "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes "
+                    "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes, "
+                    "statut_realisation, date_realisation "
                     "FROM {} WHERE id = %s"
                 ).format(self._table("commandes")),
                 (commande_id,),
@@ -994,6 +1008,8 @@ class EtatPostgres:
             description,
             nom_client,
             gammes,
+            statut_realisation,
+            date_realisation,
         ) = ligne
         return CommandeEnregistree(
             id=id_,
@@ -1009,7 +1025,26 @@ class EtatPostgres:
             description=description,
             nom_client=nom_client,
             gammes=self._gammes_commande_depuis_json(gammes),
+            statut_realisation=statut_realisation,
+            date_realisation=date_realisation,
         )
+
+    def mettre_a_jour_statut_commande(
+        self, commande_id: str, statut: StatutRealisationCommande, date_realisation: str | None = None
+    ) -> CommandeEnregistree:
+        """Voir `EtatAPI.mettre_a_jour_statut_commande` (`api/etat.py`) — même contrat, dont
+        l'effacement de `date_realisation` dès que la commande n'est plus `realisee`."""
+        commande = self.recuperer_commande(commande_id)
+        horodatage = (date_realisation or datetime.now(UTC).isoformat()) if statut == "realisee" else None
+        with closing(self._connexion()) as connexion:
+            connexion.execute(
+                sql.SQL("UPDATE {} SET statut_realisation = %s, date_realisation = %s WHERE id = %s").format(
+                    self._table("commandes")
+                ),
+                (statut, horodatage, commande_id),
+            )
+            connexion.commit()
+        return replace(commande, statut_realisation=statut, date_realisation=horodatage)
 
     def ajouter_gamme_a_commande(
         self, commande_id: str, taches_ajoutees: tuple[str, ...], gamme: GammeCommandeEnregistree
@@ -1037,7 +1072,8 @@ class EtatPostgres:
     def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:
         requete = sql.SQL(
             "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
-            "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes "
+            "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes, "
+            "statut_realisation, date_realisation "
             "FROM {} WHERE 1 = 1"
         ).format(self._table("commandes"))
         parametres: list[str] = []
@@ -1062,6 +1098,8 @@ class EtatPostgres:
                 description=description,
                 nom_client=nom_client,
                 gammes=self._gammes_commande_depuis_json(gammes),
+                statut_realisation=statut_realisation,
+                date_realisation=date_realisation,
             )
             for (
                 id_,
@@ -1077,6 +1115,8 @@ class EtatPostgres:
                 description,
                 nom_client,
                 gammes,
+                statut_realisation,
+                date_realisation,
             ) in lignes
         ]
 

@@ -2,7 +2,13 @@
  * React hooks pour l'API PRISME (avec TanStack Query)
  */
 
-import { useMutation, useQueries, useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+  type UseQueryOptions,
+} from "@tanstack/react-query";
 import {
   prismeClient,
   listerJobsGeneration,
@@ -921,6 +927,31 @@ export function useAjouterCommande() {
       instanceId: string;
       requete: Types.RequeteNouvelleCommande;
     }) => prismeClient.ajouterCommande(instanceId, requete),
+  });
+}
+
+/**
+ * Mutation pour déclarer l'avancement réel d'une commande (non débutée / en cours / réalisée).
+ * Invalide les trois vues qui affichent une commande, pour qu'un statut déclaré depuis la page
+ * Commandes se voie aussi dans la page de l'atelier concerné, sans rechargement.
+ */
+export function useChangerStatutCommande() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      commandeId,
+      requete,
+    }: {
+      commandeId: string;
+      requete: Types.RequeteStatutCommande;
+    }) => prismeClient.changerStatutCommande(commandeId, requete),
+    onSuccess: (commande) => {
+      queryClient.invalidateQueries({ queryKey: prismeKeys.commandes() });
+      queryClient.invalidateQueries({
+        queryKey: prismeKeys.commandesInstance(commande.instance_id),
+      });
+      queryClient.invalidateQueries({ queryKey: prismeKeys.commande(commande.commande_id) });
+    },
   });
 }
 

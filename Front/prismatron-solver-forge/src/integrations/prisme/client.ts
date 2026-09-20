@@ -517,6 +517,15 @@ export const prismeClient = {
   obtenirCommande: (commandeId: string) =>
     apiFetch<Types.StatutCommande>(`${PRISME_CONFIG.routes.ingestion}/commandes/${commandeId}`),
 
+  // Avancement réel de la commande dans l'atelier, déclaré par un humain (non débutée, en
+  // cours, réalisée) — la seule source possible : le planning ne dit que ce qui devrait
+  // arriver (voir api/routes/ingestion.py::changer_statut_commande).
+  changerStatutCommande: (commandeId: string, requete: Types.RequeteStatutCommande) =>
+    apiFetch<Types.StatutCommande>(
+      `${PRISME_CONFIG.routes.ingestion}/commandes/${commandeId}/statut`,
+      { method: "PATCH", body: JSON.stringify(requete) },
+    ),
+
   // Ajoute un produit (gamme) supplémentaire à une commande déjà créée — complète ajouterCommande
   // ci-dessus, qui ne permet de référencer des gammes qu'à la création (voir
   // api/routes/ingestion.py::ajouter_produit_a_commande).

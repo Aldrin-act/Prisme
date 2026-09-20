@@ -388,11 +388,28 @@ export interface StatutCommande {
   // exécutée avec succès (toujours le cas quand `planifiee` est faux) : le frontend retombe
   // alors sur une prévisualisation ancrée sur "aujourd'hui".
   date_execution: string | null;
+  // Avancement réel dans l'atelier, DÉCLARÉ par un humain — à ne jamais confondre avec les
+  // champs prévisionnels ci-dessous, calculés contre le planning. Une commande dont la fin
+  // prévue est dépassée reste "non_debutee" tant que personne ne l'a confirmée : le système
+  // ne déduit jamais une réalisation de l'écoulement du temps.
+  statut_realisation: StatutRealisationCommande;
+  // Horodatage de la déclaration "realisee" (ou date rétroactive saisie) — null pour tout
+  // autre statut. C'est lui, comparé à date_limite, qui donne un vrai taux de service.
+  date_realisation: string | null;
   planifiee: boolean;
   date_fin_prevue: number | null;
   en_retard: boolean | null;
   taches_manquantes: string[];
   operations: OperationCommande[];
+}
+
+export type StatutRealisationCommande = "non_debutee" | "en_cours" | "realisee";
+
+export interface RequeteStatutCommande {
+  statut: StatutRealisationCommande;
+  // Déclaration rétroactive ("finie mardi dernier") — ignorée par l'API pour tout statut
+  // autre que "realisee".
+  date_realisation?: string | null;
 }
 
 // ============================================================================

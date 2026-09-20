@@ -509,3 +509,148 @@ def test_lister_toutes_commandes_vide_sans_aucune_commande() -> None:
         assert reponse.json() == []
     finally:
         app.dependency_overrides.clear()
+
+
+def test_commande_demarre_non_debutee() -> None:
+    """Une commande fraîchement créée n'est jamais supposée avoir commencé — l'avancement réel
+    ne peut venir que d'une déclaration humaine (voir `PATCH .../statut`)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+
+        reponse = client.get(f"/ingestion/commandes/{commande_id}")
+
+        assert reponse.status_code == 200, reponse.json()
+        corps = reponse.json()
+        assert corps["statut_realisation"] == "non_debutee"
+        assert corps["date_realisation"] is None
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_changer_statut_commande_en_cours_puis_realisee() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+
+        en_cours = client.patch(f"/ingestion/commandes/{commande_id}/statut", json={"statut": "en_cours"})
+        assert en_cours.status_code == 200, en_cours.json()
+        assert en_cours.json()["statut_realisation"] == "en_cours"
+        # Horodatage réservé à la réalisation : rien à dater tant que le travail n'est pas fini.
+        assert en_cours.json()["date_realisation"] is None
+
+        realisee = client.patch(f"/ingestion/commandes/{commande_id}/statut", json={"statut": "realisee"})
+        assert realisee.status_code == 200, realisee.json()
+        assert realisee.json()["statut_realisation"] == "realisee"
+        assert realisee.json()["date_realisation"] is not None
+
+        # Le statut déclaré survit à la relecture, et voisine le statut prévisionnel sans
+        # jamais l'écraser (voir `_commande_en_dict`).
+        relu = client.get(f"/ingestion/commandes/{commande_id}").json()
+        assert relu["statut_realisation"] == "realisee"
+        assert relu["planifiee"] is False  # aucune exécution : la prévision reste indépendante
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_changer_statut_commande_accepte_une_date_de_realisation_retroactive() -> None:
+    """« Elle a été finie mardi dernier » — la date déclarée prime sur l'instant de la saisie,
+    sinon tout taux de service calculé après coup serait faux."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+
+        reponse = client.patch(
+            f"/ingestion/commandes/{commande_id}/statut",
+            json={"statut": "realisee", "date_realisation": "2026-09-15T08:00:00+00:00"},
+        )
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["date_realisation"] == "2026-09-15T08:00:00+00:00"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_revenir_en_arriere_efface_la_date_de_realisation() -> None:
+    """Correction d'une fausse manipulation : une commande qui n'est plus réalisée ne doit pas
+    garder une date de réalisation qui la ferait compter comme livrée."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+        client.patch(f"/ingestion/commandes/{commande_id}/statut", json={"statut": "realisee"})
+
+        reponse = client.patch(f"/ingestion/commandes/{commande_id}/statut", json={"statut": "en_cours"})
+
+        assert reponse.status_code == 200, reponse.json()
+        assert reponse.json()["statut_realisation"] == "en_cours"
+        assert reponse.json()["date_realisation"] is None
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_changer_statut_refuse_un_statut_inconnu() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+
+        reponse = client.patch(f"/ingestion/commandes/{commande_id}/statut", json={"statut": "livree"})
+
+        assert reponse.status_code == 422
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_changer_statut_commande_inconnue_renvoie_404() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        reponse = client.patch("/ingestion/commandes/inexistante/statut", json={"statut": "en_cours"})
+
+        assert reponse.status_code == 404
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_changer_statut_refuse_un_client_etranger() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client, client_id="client_a")
+        commande_id = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 10}
+        ).json()["commande_id"]
+
+        app.dependency_overrides[obtenir_utilisateur_courant] = lambda: _utilisateur_scope("client_b")
+        reponse = client.patch(f"/ingestion/commandes/{commande_id}/statut", json={"statut": "realisee"})
+
+        assert reponse.status_code == 403
+    finally:
+        app.dependency_overrides.clear()

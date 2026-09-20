@@ -663,6 +663,29 @@ def test_commande_round_trip(etat_postgres_test: EtatPostgres) -> None:
     assert commande.date_creation
 
 
+def test_commande_statut_realisation_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    """L'avancement déclaré par un humain (non_debutee / en_cours / realisee) et l'horodatage de
+    la réalisation survivent à un aller-retour Postgres — y compris son effacement au retour
+    arrière, voir `EtatAPI.mettre_a_jour_statut_commande`."""
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", 10, ("T1",))
+
+    assert etat_postgres_test.recuperer_commande("cmd-1").statut_realisation == "non_debutee"
+
+    etat_postgres_test.mettre_a_jour_statut_commande("cmd-1", "realisee", "2026-09-15T08:00:00+00:00")
+    realisee = etat_postgres_test.recuperer_commande("cmd-1")
+    assert realisee.statut_realisation == "realisee"
+    assert realisee.date_realisation == "2026-09-15T08:00:00+00:00"
+    assert etat_postgres_test.lister_commandes(instance_id=instance_id)[0].date_realisation == (
+        "2026-09-15T08:00:00+00:00"
+    )
+
+    etat_postgres_test.mettre_a_jour_statut_commande("cmd-1", "en_cours")
+    en_cours = etat_postgres_test.recuperer_commande("cmd-1")
+    assert en_cours.statut_realisation == "en_cours"
+    assert en_cours.date_realisation is None
+
+
 def test_commande_gammes_round_trip(etat_postgres_test: EtatPostgres) -> None:
     """`CommandeEnregistree.gammes` (produits référencés, copie figée à la création — voir
     docstring de `GammeCommandeEnregistree`) survit à un aller-retour Postgres."""

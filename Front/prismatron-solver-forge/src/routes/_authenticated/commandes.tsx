@@ -44,12 +44,14 @@ import { PageHeader, EmptyState } from "@/components/app-page";
 import { AjouterProduitCommande } from "@/components/commandes/ajouter-produit-commande";
 import { FormulaireNouvelleCommande } from "@/components/commandes/formulaire-nouvelle-commande";
 import {
+  useChangerStatutCommande,
   useCommandes,
   useInstance,
   useInstances,
   useLabelsInstances,
   type InstanceInfo,
   type StatutCommande,
+  type StatutRealisationCommande,
 } from "@/integrations/prisme";
 import { libelleProduitsCommande } from "@/lib/commande-produits";
 import {
@@ -182,6 +184,83 @@ function BadgeStatut({ statut }: { statut: Statut }) {
     <Badge variant="outline" className={`gap-1 whitespace-nowrap ${badge}`}>
       <Icone className="h-3 w-3" /> {label}
     </Badge>
+  );
+}
+
+// Avancement réel dans l'atelier, déclaré par un humain — jamais déduit du planning, qui ne
+// dit que ce qui devrait arriver (voir api/routes/ingestion.py::changer_statut_commande).
+const LIBELLE_AVANCEMENT: Record<StatutRealisationCommande, string> = {
+  non_debutee: "Non débutée",
+  en_cours: "En cours",
+  realisee: "Réalisée",
+};
+
+const STYLE_AVANCEMENT: Record<StatutRealisationCommande, string> = {
+  non_debutee: "text-muted-foreground",
+  en_cours: "text-sky-600 dark:text-sky-400",
+  realisee: "text-emerald-600 dark:text-emerald-400",
+};
+
+function SelecteurAvancement({ commande, unite }: { commande: StatutCommande; unite: UniteTemps }) {
+  const changer = useChangerStatutCommande();
+
+  // Fin prévue dépassée sans confirmation humaine : on le signale, on ne conclut rien. Une
+  // date passée ne prouve pas que le travail a été fait (panne, absence, matière manquante).
+  const finPrevuePassee =
+    commande.date_fin_prevue !== null &&
+    dateDepuisAncrage(commande.date_fin_prevue, ancrage(commande, unite), unite).getTime() <
+      Date.now();
+  const aConfirmer = commande.statut_realisation !== "realisee" && finPrevuePassee;
+
+  return (
+    <div className="min-w-36">
+      <Select
+        value={commande.statut_realisation}
+        disabled={changer.isPending}
+        onValueChange={(statut) =>
+          changer.mutate(
+            {
+              commandeId: commande.commande_id,
+              requete: { statut: statut as StatutRealisationCommande },
+            },
+            {
+              onSuccess: (maj) =>
+                toast.success(
+                  `Commande ${maj.numero ?? maj.commande_id} : ${LIBELLE_AVANCEMENT[
+                    maj.statut_realisation
+                  ].toLowerCase()}`,
+                ),
+              onError: (erreur: Error) =>
+                toast.error("Statut non enregistré", { description: erreur.message }),
+            },
+          )
+        }
+      >
+        <SelectTrigger
+          className={`h-8 text-xs ${STYLE_AVANCEMENT[commande.statut_realisation]}`}
+          aria-label="Avancement déclaré"
+        >
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {(Object.keys(LIBELLE_AVANCEMENT) as StatutRealisationCommande[]).map((statut) => (
+            <SelectItem key={statut} value={statut}>
+              {LIBELLE_AVANCEMENT[statut]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {aConfirmer && (
+        <div className="mt-1 text-[11px] text-amber-600 dark:text-amber-400">
+          Échue — à confirmer
+        </div>
+      )}
+      {commande.statut_realisation === "realisee" && commande.date_realisation && (
+        <div className="mt-1 text-[11px] text-muted-foreground">
+          Le {new Date(commande.date_realisation).toLocaleDateString("fr-FR")}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -517,7 +596,8 @@ function CommandesPage() {
                     <TableHead>Contenu</TableHead>
                     <TableHead>Début prévu</TableHead>
                     <TableHead>Échéance</TableHead>
-                    <TableHead>Statut</TableHead>
+                    <TableHead>Statut prévu</TableHead>
+                    <TableHead>Avancement réel</TableHead>
                     <TableHead className="w-10">
                       <span className="sr-only">Actions</span>
                     </TableHead>
@@ -527,7 +607,7 @@ function CommandesPage() {
                   {isLoading &&
                     Array.from({ length: 5 }, (_, i) => (
                       <TableRow key={`squelette-${i}`}>
-                        {Array.from({ length: 8 }, (_, j) => (
+                        {Array.from({ length: 9 }, (_, j) => (
                           <TableCell key={j}>
                             <Skeleton className="h-5 w-full" />
                           </TableCell>
@@ -546,7 +626,7 @@ function CommandesPage() {
                     ))}
                   {!isLoading && commandesFiltrees.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={8} className="py-10 text-center">
+                      <TableCell colSpan={9} className="py-10 text-center">
                         <p className="text-sm text-muted-foreground">
                           Aucune commande ne correspond à ces filtres.
                         </p>
@@ -729,6 +809,10 @@ function LigneCommande({
               : `Marge ${formatEcart(marge, unite)}`}
           </div>
         )}
+      </TableCell>
+
+      <TableCell>
+        <SelecteurAvancement commande={commande} unite={unite} />
       </TableCell>
 
       <TableCell>

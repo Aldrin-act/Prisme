@@ -39,6 +39,10 @@ TypeSignal = Literal[
 ]
 ActionSuggeree = Literal["regenerer_solveur", "executer", "diagnostiquer", "aucune"]
 Priorite = Literal["haute", "moyenne", "basse"]
+# Avancement réel d'une commande dans l'atelier, déclaré par un humain (voir
+# `CommandeEnregistree.statut_realisation`) — distinct du statut *prévisionnel* calculé contre le
+# planning (`api/comparaison_scenarios.py::calculer_statut_commande`), qui reste une prédiction.
+StatutRealisationCommande = Literal["non_debutee", "en_cours", "realisee"]
 
 
 def structure_contraintes(instance: InstanceTRCO) -> str:
@@ -243,6 +247,16 @@ class CommandeEnregistree:
     # ne rejoue jamais l'explosion). Vide pour une commande qui ne référence que des tâches
     # choisies directement.
     gammes: tuple[GammeCommandeEnregistree, ...] = ()
+    # Avancement réel de la commande dans l'atelier, **déclaré par un humain** — la seule source
+    # possible : le planning ne dit que ce qui *devrait* se passer (voir
+    # `api/comparaison_scenarios.py::calculer_statut_commande`, qui reste purement prévisionnel).
+    # Une commande dont la fin prévue est dépassée n'est donc jamais "réalisée" d'office : c'est
+    # un humain qui le confirme (§ human-in-the-loop). Jamais lu par le DSL/solveur.
+    statut_realisation: StatutRealisationCommande = "non_debutee"
+    # Horodatage ISO de la déclaration `realisee`, remis à `None` dès que la commande repasse en
+    # `non_debutee`/`en_cours` (correction d'une fausse manipulation) — c'est lui, comparé à
+    # `date_limite`, qui permet enfin de mesurer un vrai taux de service, jamais `date_fin_prevue`.
+    date_realisation: str | None = None
 
 
 @dataclass(frozen=True)
@@ -579,6 +593,22 @@ class EtatAPI:
             commande,
             taches=(*commande.taches, *taches_ajoutees),
             gammes=(*commande.gammes, gamme),
+        )
+        return self.commandes[commande_id]
+
+    def mettre_a_jour_statut_commande(
+        self, commande_id: str, statut: StatutRealisationCommande, date_realisation: str | None = None
+    ) -> CommandeEnregistree:
+        """Avancement déclaré par un humain (voir `CommandeEnregistree.statut_realisation`).
+        `date_realisation` n'a de sens que pour `realisee` : fournie par l'appelant (déclaration
+        rétroactive d'une commande finie la semaine dernière) ou posée à maintenant par défaut,
+        et toujours effacée si la commande repasse en `non_debutee`/`en_cours` — jamais une date
+        de réalisation qui survivrait à l'annulation de la réalisation elle-même."""
+        if commande_id not in self.commandes:
+            raise KeyError(commande_id)
+        horodatage = (date_realisation or datetime.now(UTC).isoformat()) if statut == "realisee" else None
+        self.commandes[commande_id] = replace(
+            self.commandes[commande_id], statut_realisation=statut, date_realisation=horodatage
         )
         return self.commandes[commande_id]
 
