@@ -708,3 +708,122 @@ def test_explorer_api_pagination_bornee_par_lots_max() -> None:
     _appeler_api(RequeteExplorationAPI(url="https://erp.test/taches", taille_lot=2, lots_max=3), client)
 
     assert len(appels) == 3
+
+
+# --- Objectifs déclarés avec les données ---
+
+_JSON_CANONIQUE_DEUX_RESSOURCES = (
+    '{"taches": [{"id": "T1"}], "ressources": [{"id": "R1"}, {"id": "R2"}], '
+    '"contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", '
+    '"ressource": "R1", "duree": 10}], "objectifs": [{"type": "minimiser_makespan"}]}'
+)
+
+
+def test_objectifs_declares_avec_les_donnees_sont_conserves_sur_la_source() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/sources",
+            json={
+                "donnees_brutes": _JSON_CANONIQUE_DEUX_RESSOURCES,
+                "client_id": "client_test",
+                "objectifs": [{"type": "equilibrer_charge", "poids": 2.0}],
+            },
+        )
+        assert reponse.status_code == 200, reponse.json()
+
+        detail = client.get(f"/sources/{reponse.json()['source_id']}").json()
+
+        assert [o["type"] for o in detail["objectifs"]] == ["equilibrer_charge"]
+        assert detail["objectifs"][0]["poids"] == 2.0
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_objectifs_de_la_source_remplacent_ceux_du_fichier_a_la_conversion() -> None:
+    """Le fichier propose minimiser_makespan, l'utilisateur a déclaré equilibrer_charge : c'est
+    son choix qui s'applique, et le remplacement est annoncé."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = client.post(
+            "/sources",
+            json={
+                "donnees_brutes": _JSON_CANONIQUE_DEUX_RESSOURCES,
+                "client_id": "client_test",
+                "objectifs": [{"type": "equilibrer_charge"}, {"type": "minimiser_retards"}],
+            },
+        ).json()["source_id"]
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe")
+
+        assert reponse.status_code == 200, reponse.json()
+        _, instance = etat_test.recuperer_instance(reponse.json()["instance_id"])
+        assert sorted(o.type for o in instance.objectifs) == ["equilibrer_charge", "minimiser_retards"]
+        assert any("remplacent ceux proposés (minimiser_makespan)" in a for a in reponse.json()["avertissements"])
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_sans_objectifs_declares_ceux_du_fichier_restent() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, _JSON_CANONIQUE_DEUX_RESSOURCES)
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe")
+
+        assert reponse.status_code == 200, reponse.json()
+        _, instance = etat_test.recuperer_instance(reponse.json()["instance_id"])
+        assert [o.type for o in instance.objectifs] == ["minimiser_makespan"]
+        assert reponse.json()["avertissements"] == []
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_objectif_qui_cible_une_ressource_absente_est_signale_a_la_conversion() -> None:
+    """Les objectifs sont saisis avant que les données soient interprétées : une ressource ciblée
+    qui n'existe pas dans l'instance produite est signalée, jamais silencieuse ni bloquante."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = client.post(
+            "/sources",
+            json={
+                "donnees_brutes": _JSON_CANONIQUE_DEUX_RESSOURCES,
+                "client_id": "client_test",
+                "objectifs": [{"type": "equilibrer_charge", "ressources_cibles": ["R_INCONNUE"]}],
+            },
+        ).json()["source_id"]
+
+        reponse = client.post(f"/sources/{source_id}/generer-instance-deterministe")
+
+        assert reponse.status_code == 200, reponse.json()
+        assert any("R_INCONNUE" in a for a in reponse.json()["avertissements"])
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_objectif_inconnu_est_refuse_a_la_creation_de_la_source() -> None:
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        reponse = client.post(
+            "/sources",
+            json={
+                "donnees_brutes": _JSON_CANONIQUE_DEUX_RESSOURCES,
+                "client_id": "client_test",
+                "objectifs": [{"type": "maximiser_le_bonheur"}],
+            },
+        )
+
+        assert reponse.status_code == 422
+        assert etat_test.sources == {}
+    finally:
+        app.dependency_overrides.clear()

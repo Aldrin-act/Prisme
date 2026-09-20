@@ -142,6 +142,11 @@ class SourceDonnees:
     nom: str | None
     donnees_brutes: str
     date_creation: str
+    # Objectifs déclarés par l'utilisateur avec ses données (formulaire « Données ») — appliqués à
+    # chaque instance générée depuis cette source, à la place de ceux que l'agent de compréhension
+    # ou le fichier proposeraient (voir `api/routes/sources.py::_appliquer_objectifs_source`).
+    # Vide : rien n'est imposé, comportement historique.
+    objectifs: tuple[Objectif, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -428,6 +433,7 @@ class EtatAPI:
         client_id: str,
         donnees_brutes: str,
         nom: str | None = None,
+        objectifs: list[Objectif] | None = None,
     ) -> str:
         self.enregistrer_client(client_id)
         source_id = str(uuid.uuid4())
@@ -437,6 +443,7 @@ class EtatAPI:
             nom=nom,
             donnees_brutes=donnees_brutes,
             date_creation=datetime.now(UTC).isoformat(),
+            objectifs=tuple(objectifs or ()),
         )
         return source_id
 

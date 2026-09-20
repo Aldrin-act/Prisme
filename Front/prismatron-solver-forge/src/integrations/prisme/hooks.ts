@@ -744,11 +744,13 @@ export function useCreerSource() {
       donneesBrutes,
       nom,
       clientId,
+      objectifs,
     }: {
       donneesBrutes: string;
       nom?: string;
       clientId?: string;
-    }) => prismeClient.creerSource(donneesBrutes, nom, clientId),
+      objectifs?: Types.Objectif[];
+    }) => prismeClient.creerSource(donneesBrutes, nom, clientId, objectifs),
   });
 }
 

@@ -728,3 +728,18 @@ def test_supprimer_instance_cascade_supprime_ses_commandes(etat_postgres_test: E
     except KeyError:
         return
     raise AssertionError("KeyError attendu — commande supprimée en cascade avec son instance")
+
+
+def test_objectifs_de_source_survivent_a_un_aller_retour_en_base(etat_postgres_test: EtatPostgres) -> None:
+    from dsl.schema import EquilibrerCharge, MinimiserRetards
+
+    source_id = etat_postgres_test.enregistrer_source(
+        "client_test", "donnees", objectifs=[EquilibrerCharge(poids=2.0), MinimiserRetards()]
+    )
+    sans_objectif = etat_postgres_test.enregistrer_source("client_test", "donnees")
+
+    source = etat_postgres_test.recuperer_source(source_id)
+
+    assert [o.type for o in source.objectifs] == ["equilibrer_charge", "minimiser_retards"]
+    assert source.objectifs[0].poids == 2.0
+    assert etat_postgres_test.recuperer_source(sans_objectif).objectifs == ()

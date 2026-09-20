@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -70,6 +71,13 @@ import {
   type Justification,
 } from "@/integrations/prisme";
 import { PRISME_CONFIG } from "@/integrations/prisme";
+import {
+  LABELS_OBJECTIF,
+  SectionObjectifs,
+  construireObjectifs,
+  nouvelObjectif,
+  type ObjectifLigne,
+} from "@/components/ingestion/ingestion-dialog";
 import { useAuth } from "@/integrations/prisme/auth";
 import type { UniteTemps } from "@/lib/dates-relatives";
 import { hrefGabaritCsv, libelleUnite, nomGabaritCsv } from "@/lib/unite-ingestion";
@@ -259,6 +267,10 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
   const [nom, setNom] = useState("");
   const [donneesBrutes, setDonneesBrutes] = useState("");
   const [instructionsComplementaires, setInstructionsComplementaires] = useState("");
+  // Objectifs déclarés avec les données — désactivés par défaut : l'agent (ou le fichier) décide
+  // alors, comme avant. Activés, ils s'imposent à chaque instance générée depuis cette source.
+  const [imposerObjectifs, setImposerObjectifs] = useState(false);
+  const [objectifs, setObjectifs] = useState<ObjectifLigne[]>([nouvelObjectif()]);
   const [formatFichier, setFormatFichier] = useState<FormatDonnees>("json");
   const [fichier, setFichier] = useState<File | null>(null);
   const [chargementFichier, setChargementFichier] = useState(false);
@@ -298,6 +310,7 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
         donneesBrutes,
         nom: nom.trim() || undefined,
         clientId: estAdmin ? clientId : undefined,
+        objectifs: imposerObjectifs ? construireObjectifs(objectifs) : undefined,
       },
       { onSuccess: (data) => onCree(data.source_id) },
     );
@@ -384,6 +397,22 @@ function FormulaireNouvelleSource({ onCree }: { onCree: (sourceId: string) => vo
           placeholder="Collez ici l'export brut de votre ERP (n'importe quel format texte)..."
           className="min-h-64 font-mono text-xs"
         />
+      </div>
+
+      <div className="space-y-2 rounded-lg border border-border/50 p-3">
+        <label className="flex items-center gap-2 text-sm font-medium">
+          <Checkbox
+            checked={imposerObjectifs}
+            onCheckedChange={(v) => setImposerObjectifs(v === true)}
+          />
+          Définir les objectifs de planification
+        </label>
+        <p className="text-xs text-muted-foreground">
+          {imposerObjectifs
+            ? "Ces objectifs s'appliquent à chaque instance générée depuis ces données, à la place de ceux que l'IA ou le fichier proposeraient."
+            : "Non coché : l'IA (ou le fichier) choisit les objectifs à partir des données."}
+        </p>
+        {imposerObjectifs && <SectionObjectifs objectifs={objectifs} setObjectifs={setObjectifs} />}
       </div>
 
       <div className="space-y-1.5">
@@ -1090,6 +1119,19 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
               {source.source_id}
             </Badge>
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <span className="text-muted-foreground">Objectifs :</span>
+          {source.objectifs.length > 0 ? (
+            source.objectifs.map((o, i) => (
+              <Badge key={i} variant="secondary">
+                {LABELS_OBJECTIF[o.type]}
+              </Badge>
+            ))
+          ) : (
+            <span className="text-muted-foreground">choisis par l'IA à chaque conversion</span>
+          )}
         </div>
 
         <details className="rounded-lg border border-border/50 p-3 text-xs">

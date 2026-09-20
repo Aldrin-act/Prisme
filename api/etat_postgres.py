@@ -48,6 +48,7 @@ from datetime import UTC, datetime
 
 import psycopg
 from psycopg import sql
+from pydantic import TypeAdapter
 
 from api.etat import (
     ActionSuggeree,
@@ -73,6 +74,10 @@ from sandbox.runner import ResultatExecution
 from solver_store.registry import SCHEMA_PAR_DEFAUT, dsn_par_defaut
 from validation_engine.feasibility_checker import ResultatFaisabilite, Violation
 from validation_engine.makespan import calculer_makespan
+
+# Relecture de `sources_donnees.objectifs` (JSON) en objectifs DSL typés — l'union discriminée
+# `Objectif` revalide chaque entrée, jamais un dict brut remis tel quel à l'appelant.
+_ADAPTATEUR_OBJECTIFS = TypeAdapter(list[Objectif])
 
 
 def _table(schema: str, nom: str) -> sql.Composed:
@@ -161,6 +166,14 @@ class EtatPostgres:
             # sur `instances_trco` ci-dessous, conservée).
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS unite_duree").format(
+                    table=self._table("sources_donnees")
+                )
+            )
+            # Migration idempotente : objectifs déclarés avec les données (JSON, liste d'`Objectif`
+            # DSL) — NULL pour toute source antérieure, qui n'impose alors rien (voir
+            # `SourceDonnees.objectifs`).
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS objectifs TEXT").format(
                     table=self._table("sources_donnees")
                 )
             )
@@ -677,6 +690,7 @@ class EtatPostgres:
         client_id: str,
         donnees_brutes: str,
         nom: str | None = None,
+        objectifs: list[Objectif] | None = None,
     ) -> str:
         source_id = str(uuid.uuid4())
         with closing(self._connexion()) as connexion:
@@ -688,8 +702,8 @@ class EtatPostgres:
             )
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation) "
-                    "VALUES (%s, %s, %s, %s, %s)"
+                    "INSERT INTO {} (id, client_id, nom, donnees_brutes, date_creation, objectifs) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)"
                 ).format(self._table("sources_donnees")),
                 (
                     source_id,
@@ -697,6 +711,7 @@ class EtatPostgres:
                     nom,
                     donnees_brutes,
                     datetime.now(UTC).isoformat(),
+                    json.dumps([o.model_dump(mode="json") for o in objectifs]) if objectifs else None,
                 ),
             )
             connexion.commit()
@@ -705,20 +720,21 @@ class EtatPostgres:
     def recuperer_source(self, source_id: str) -> SourceDonnees:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
-                sql.SQL("SELECT id, client_id, nom, donnees_brutes, date_creation FROM {} WHERE id = %s").format(
-                    self._table("sources_donnees")
-                ),
+                sql.SQL(
+                    "SELECT id, client_id, nom, donnees_brutes, date_creation, objectifs FROM {} WHERE id = %s"
+                ).format(self._table("sources_donnees")),
                 (source_id,),
             ).fetchone()
         if ligne is None:
             raise KeyError(source_id)
-        id_, client_id, nom, donnees_brutes, date_creation = ligne
+        id_, client_id, nom, donnees_brutes, date_creation, objectifs_json = ligne
         return SourceDonnees(
             id=id_,
             client_id=client_id,
             nom=nom,
             donnees_brutes=donnees_brutes,
             date_creation=date_creation,
+            objectifs=tuple(_ADAPTATEUR_OBJECTIFS.validate_json(objectifs_json)) if objectifs_json else (),
         )
 
     def lister_sources(self, client_id: str | None = None) -> list[dict[str, object]]:

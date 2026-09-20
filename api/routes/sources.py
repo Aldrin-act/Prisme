@@ -45,9 +45,10 @@ from adapters.csv_import import traduire as traduire_csv
 from adapters.json_import import ErreurPayloadInvalide as ErreurPayloadJsonInvalide
 from adapters.json_import import traduire as traduire_json
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
-from api.etat import EtatAPI, obtenir_etat, structure_contraintes
+from api.etat import EtatAPI, SourceDonnees, obtenir_etat, structure_contraintes
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
+from dsl.schema import InstanceTRCO, Objectif
 from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.client_llm import construire_modele_comprehension
 
@@ -178,6 +179,9 @@ class RequeteCreationSource(BaseModel):
     donnees_brutes: str
     nom: str | None = None
     client_id: str | None = None  # admin uniquement : cible un client autre que le sien
+    # Objectifs déclarés avec les données — imposés à chaque instance générée depuis cette source
+    # (voir `_appliquer_objectifs_source`). Absents : l'agent ou le fichier décident, comme avant.
+    objectifs: list[Objectif] | None = None
 
 
 def _client_id_effectif(requete_client_id: str | None, utilisateur: dict) -> str:
@@ -196,7 +200,7 @@ def creer_source(
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, str]:
     client_id = _client_id_effectif(requete.client_id, utilisateur)
-    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom)
+    source_id = etat.enregistrer_source(client_id, requete.donnees_brutes, requete.nom, requete.objectifs)
     return {"source_id": source_id}
 
 
@@ -227,6 +231,7 @@ def obtenir_source(
         "nom": source.nom,
         "donnees_brutes": source.donnees_brutes,
         "date_creation": source.date_creation,
+        "objectifs": [o.model_dump(mode="json") for o in source.objectifs],
         "instances": etat.lister_instances_pour_source(source_id),
     }
 
@@ -300,6 +305,44 @@ def previsualiser_prompt_comprehension_sans_source(
     return {"prompt_systeme": prompt_systeme, "prompt_utilisateur": prompt_utilisateur}
 
 
+def _appliquer_objectifs_source(instance: InstanceTRCO, source: SourceDonnees) -> tuple[InstanceTRCO, list[str]]:
+    """Impose les objectifs déclarés avec les données à l'instance produite — l'utilisateur sait ce
+    qu'il veut optimiser, l'agent de compréhension ou le fichier ne font que le deviner. Revalide
+    l'instance complète (garde-fou §6.7). Sans objectif déclaré, l'instance est inchangée.
+
+    Un objectif peut cibler des ressources par identifiant (`ressources_cibles`,
+    `ressources_prioritaires`), saisi *avant* que les données soient interprétées : l'agent peut
+    produire d'autres identifiants. Le DSL ne vérifie pas ces références ; ici, toute ressource
+    ciblée absente de l'instance est signalée (jamais un rejet — la conversion reste utile, et
+    l'utilisateur corrige l'objectif en connaissance de cause). Renvoie les avertissements qui
+    rendent le remplacement et ces écarts visibles (§FC4)."""
+    if not source.objectifs:
+        return instance, []
+    types_proposes = sorted({o.type for o in instance.objectifs})
+    instance = InstanceTRCO.model_validate(
+        {**instance.model_dump(mode="json"), "objectifs": [o.model_dump(mode="json") for o in source.objectifs]}
+    )
+    types_imposes = sorted({o.type for o in source.objectifs})
+    avertissements = [
+        f"objectifs déclarés avec les données appliqués ({', '.join(types_imposes)}) — ils remplacent "
+        f"ceux proposés ({', '.join(types_proposes) or 'aucun'})."
+    ]
+
+    ids_ressources = {r.id for r in instance.ressources}
+    for objectif in source.objectifs:
+        ciblees = [
+            *(getattr(objectif, "ressources_cibles", None) or []),
+            *(getattr(objectif, "ressources_prioritaires", None) or []),
+        ]
+        inconnues = sorted({r for r in ciblees if r not in ids_ressources})
+        if inconnues:
+            avertissements.append(
+                f"objectif {objectif.type} : ressource(s) ciblée(s) absente(s) de l'instance "
+                f"({', '.join(inconnues)}) — sans effet tant que l'objectif n'est pas corrigé."
+            )
+    return instance, avertissements
+
+
 class RequeteGenererInstance(BaseModel):
     # Optionnel, corps de requête lui-même optionnel (voir `generer_instance` ci-dessous) —
     # aucun appelant existant n'a besoin de changer quoi que ce soit.
@@ -336,6 +379,10 @@ def generer_instance(
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
 
     instance = valider_payload_trco(resultat.instance_brute)  # lève déjà un 422 si invalide
+    try:
+        instance, avertissements_objectifs = _appliquer_objectifs_source(instance, source)
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     instance_id = etat.enregistrer_instance(
         source.client_id,
@@ -348,7 +395,7 @@ def generer_instance(
         "instance_id": instance_id,
         "structure_contraintes": structure_contraintes(instance),
         "description_metier": resultat.description_metier,
-        "avertissements": list(resultat.avertissements),
+        "avertissements": [*resultat.avertissements, *avertissements_objectifs],
         "justifications": [{"contrainte": j.contrainte, "raison": j.raison} for j in resultat.justifications],
     }
 
@@ -385,19 +432,24 @@ def generer_instance_deterministe(
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
 
     try:
+        instance, avertissements_objectifs = _appliquer_objectifs_source(resultat.instance, source)
+    except ValidationError as erreur:
+        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+
+    try:
         est_json = isinstance(json.loads(source.donnees_brutes.strip()), dict)
     except (json.JSONDecodeError, ValueError):
         est_json = False
     instance_id = etat.enregistrer_instance(
         source.client_id,
-        resultat.instance,
+        instance,
         source_id=source_id,
         canal_ingestion="json" if est_json else "csv",
     )
     return {
         "instance_id": instance_id,
-        "structure_contraintes": structure_contraintes(resultat.instance),
-        "avertissements": list(resultat.avertissements),
+        "structure_contraintes": structure_contraintes(instance),
+        "avertissements": [*resultat.avertissements, *avertissements_objectifs],
     }
 
 

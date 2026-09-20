@@ -883,6 +883,9 @@ export interface InstanceDeSource {
 
 export interface SourceDetail extends SourceDonnees {
   donnees_brutes: string;
+  // Objectifs déclarés avec les données : imposés à chaque instance générée depuis cette source,
+  // à la place de ceux proposés par l'agent ou le fichier. Vide : rien n'est imposé.
+  objectifs: Objectif[];
   instances: InstanceDeSource[];
 }
 
