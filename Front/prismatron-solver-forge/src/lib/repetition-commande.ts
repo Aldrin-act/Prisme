@@ -1,23 +1,9 @@
 import type { StatutCommande } from "@/integrations/prisme";
 import { dateDepuisAncrage, type UniteTemps } from "@/lib/dates-relatives";
+import { estInstantOuvre } from "@/lib/calendrier-ouvre";
 
-// Heures ouvrées fixes 8h-22h — purement une convention d'affichage (comme le week-end), jamais
-// lue par le DSL/solveur ; sans effet en mode jours, où la granularité ne descend pas sous la
-// journée entière.
-export const HEURE_OUVERTURE = 8;
-export const HEURE_FERMETURE = 22;
-
-// Ouvré = ni samedi/dimanche ni — en mode heures — hors 8h-22h. Purement visuel, ancré sur la même
-// date que les graduations ; le DSL/solveur ne connaît aucune notion de jour/heure ouvré(e) (voir
-// `ContrainteDisponibiliteRessource.jours_semaine_indisponibles`/`jours_indisponibles` pour la
-// vraie contrainte de planification, une notion distincte de cet affichage).
-export function estInstantOuvre(instant: number, ancrage: Date, unite: UniteTemps): boolean {
-  const date = dateDepuisAncrage(instant, ancrage, unite);
-  const weekEnd = [0, 6].includes(date.getDay());
-  const horsHeuresOuvrees =
-    unite === "heures" && (date.getHours() < HEURE_OUVERTURE || date.getHours() >= HEURE_FERMETURE);
-  return !weekEnd && !horsHeuresOuvrees;
-}
+// Réexport : le calendrier ouvré vit désormais dans `calendrier-ouvre.ts`.
+export { HEURE_FERMETURE, HEURE_OUVERTURE, estInstantOuvre } from "@/lib/calendrier-ouvre";
 
 // Répétition d'une tâche de commande : un segment par jour ouvré entre `debut` et `fin` (jamais
 // fusionnés d'un jour au suivant, pour que chaque jour se lise comme un bloc à lui) — en mode

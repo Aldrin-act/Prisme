@@ -19,6 +19,7 @@ from api.etat import (
     EtapeProcessus,
     EtatAPI,
     StatutRealisationCommande,
+    instance_a_la_date,
     obtenir_etat,
     structure_contraintes,
 )
@@ -120,7 +121,9 @@ def _commande_en_dict(
         "statut_realisation": commande.statut_realisation,
         "date_realisation": commande.date_realisation,
         "date_execution": date_execution,
-        **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
+        **calculer_statut_commande(
+            instance_a_la_date(instance, date_execution), planning, commande.taches, commande.date_limite
+        ).en_dict(),
     }
 
 
@@ -307,6 +310,7 @@ def comparer_scenarios(
         if derniere is not None:
             _, _, resultat = etat.recuperer_execution(derniere["execution_id"])
             if resultat.reussi and resultat.planning is not None:
+                instance_membre = instance_a_la_date(instance_membre, derniere["date_execution"])
                 metriques = calculer_metriques(instance_membre, resultat.planning).en_dict()
                 commandes_en_retard = sum(
                     1

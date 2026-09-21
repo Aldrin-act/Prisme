@@ -27,6 +27,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from dsl.calendrier import avec_calendrier
 from dsl.schema import InstanceTRCO, Planning
 from solver_store.registry import ErreurIntegriteSolveur, Registre
 from validation_engine.feasibility_checker import ResultatFaisabilite, verifier_faisabilite
@@ -154,6 +155,19 @@ def _executer_et_recuperer_logs(
     return code_sortie, sortie_brute
 
 
+def _instance_en_json_pour_conteneur(instance: InstanceTRCO) -> str:
+    """JSON de l'instance pour le conteneur. Les champs de calendrier (`heure_ouverture`/
+    `heure_fermeture`/`position_zero_semaine`) ne sont émis que s'ils ne valent pas leur défaut : une
+    image de sandbox construite avant leur ajout (`extra="forbid"`) continue ainsi d'accepter toute
+    instance qui n'utilise pas le calendrier ouvré. Une instance en mode heures exécutée avec
+    calendrier exige, elle, une image reconstruite (`docker build -t prisme-sandbox ...`)."""
+    donnees = instance.model_dump(mode="json")
+    for champ, defaut in (("heure_ouverture", 8), ("heure_fermeture", 22), ("position_zero_semaine", None)):
+        if donnees.get(champ) == defaut:
+            donnees.pop(champ, None)
+    return json.dumps(donnees)
+
+
 def executer_dans_sandbox(
     chemin_code: Path,
     instance: InstanceTRCO,
@@ -182,7 +196,7 @@ def executer_dans_sandbox(
 
     with tempfile.TemporaryDirectory() as dossier_temp:
         chemin_instance_hote = Path(dossier_temp) / "instance.json"
-        chemin_instance_hote.write_text(instance.model_dump_json(), encoding="utf-8")
+        chemin_instance_hote.write_text(_instance_en_json_pour_conteneur(instance), encoding="utf-8")
 
         command = [_CHEMIN_CODE_CONTENEUR, _CHEMIN_INSTANCE_CONTENEUR]
         volumes = {
@@ -339,6 +353,7 @@ def executer_solveur_valide(
     limites: LimitesSandbox = LimitesSandbox(),
     planning_precedent: Planning | None = None,
     horizon_gele_jours: int = 0,
+    reference: datetime | None = None,
 ) -> ResultatExecution:
     """Récupère `id_solveur` dans le store, l'exécute en sandbox sur
     `instance`, puis applique le garde-fou de faisabilité en aval (§6.7).
@@ -351,7 +366,14 @@ def executer_solveur_valide(
     explicitement ici — jamais une dégradation silencieuse vers un solve normal, jamais un
     conteneur lancé pour rien (décision confirmée : les solveurs déjà enregistrés continuent de
     fonctionner normalement pour toute exécution *sans* horizon gelé, mais n'apprennent jamais à
-    en gérer un sans être régénérés)."""
+    en gérer un sans être régénérés).
+
+    `reference` : l'instant réel de l'exécution, le même que celui enregistré comme `date_execution`
+    (voir `api/routes/execution.py`) — c'est lui qui ancre l'instant 0 dans la semaine. En mode
+    heures, l'instance passée au solveur, à la correction et au garde-fou porte alors
+    `position_zero_semaine` : calendrier ouvré actif (`dsl/calendrier.py`). Absent : maintenant."""
+    moment = (reference or datetime.now(UTC)).astimezone()
+    instance = avec_calendrier(instance, moment)
     try:
         artefact = registre.recuperer_solveur(id_solveur)
     except (KeyError, ErreurIntegriteSolveur) as erreur:
@@ -389,9 +411,7 @@ def executer_solveur_valide(
     )
     # Heure locale du serveur (et non UTC) : les heures ouvrées se lisent sur l'horloge de l'atelier,
     # la même que celle du navigateur qui affiche le planning (l'ancrage du jour 0).
-    planning = repousser_hors_jours_non_ouvres(
-        instance, planning, datetime.now(UTC).astimezone(), operations_gelees
-    )
+    planning = repousser_hors_jours_non_ouvres(instance, planning, moment, operations_gelees)
 
     verdict = verifier_faisabilite(instance, planning)
     return ResultatExecution(planning, verdict, None)

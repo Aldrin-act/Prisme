@@ -22,6 +22,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal
 
 from api.unite_duree import detecter_unite_duree
+from dsl.calendrier import avec_calendrier
 from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif, Planning
 from sandbox.runner import ResultatExecution
 
@@ -60,6 +61,15 @@ def signature_objectifs(instance: InstanceTRCO) -> str:
     silencieusement sur une instance visant `equilibrer_charge`."""
     types = sorted({objectif.type for objectif in instance.objectifs})
     return ",".join(types)
+
+
+def instance_a_la_date(instance: InstanceTRCO, date_execution: str | None) -> InstanceTRCO:
+    """`instance` avec son calendrier ouvré ancré sur l'instant d'une exécution (`date_execution`,
+    ISO 8601, telle qu'enregistrée) — pour relire les fins d'opération avec la même règle que le
+    solveur (`dsl/calendrier.py`). Sans date, ou en mode jours : `instance` inchangée."""
+    if not date_execution:
+        return instance
+    return avec_calendrier(instance, datetime.fromisoformat(date_execution).astimezone())
 
 
 def durees_par_contrainte(instance: InstanceTRCO) -> dict[str, int]:
@@ -652,10 +662,19 @@ class EtatAPI:
             if proposition.instance_id == instance_id:
                 proposition.instance_id = None
 
-    def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
+    def enregistrer_execution(
+        self,
+        id_solveur: str,
+        instance_id: str,
+        resultat: ResultatExecution,
+        date_execution: datetime | None = None,
+    ) -> str:
+        """`date_execution` : l'instant réel utilisé pour ancrer le calendrier ouvré à l'exécution
+        (`sandbox/runner.py`) — le même doit être enregistré ici, sinon les heures lues à l'écran ne
+        correspondraient plus à celles du solveur. Absent : maintenant."""
         execution_id = str(uuid.uuid4())
         self.executions[execution_id] = (id_solveur, instance_id, resultat)
-        self.dates_execution[execution_id] = datetime.now(UTC).isoformat()
+        self.dates_execution[execution_id] = (date_execution or datetime.now(UTC)).isoformat()
         return execution_id
 
     def recuperer_execution(self, execution_id: str) -> tuple[str, str, ResultatExecution]:

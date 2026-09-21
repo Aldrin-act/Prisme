@@ -213,6 +213,40 @@ est déjà le mieux possible pour elle). Procède ainsi :
    jamais un planning qui dépasse une échéance ; l'humain décide ensuite, ne relâche jamais une
    échéance toi-même.
 
+## Calendrier ouvré (`instance.position_zero_semaine`, mode heures)
+
+Quand `instance.unite_temps == "heures"` **et** `instance.position_zero_semaine is not None`, l'atelier
+n'est ouvert que certaines heures (`instance.heure_ouverture` à `instance.heure_fermeture`, jours de
+`instance.jours_fermes` exclus — week-end par défaut). **Une opération ne travaille que pendant les
+heures ouvrées** : démarrée à 19h avec 5 h de travail, elle travaille jusqu'à 22h, s'arrête, puis
+reprend le lendemain à 8h et finit à 10h. Sa `duree` compte les heures *travaillées*, jamais les
+heures fermées traversées. Sinon (jours, ou `position_zero_semaine is None`), ignore toute cette
+section : `fin = debut + duree`, comme partout ailleurs.
+
+Le module `dsl.calendrier` fournit la règle exacte — **utilise-la telle quelle, ne la réécris jamais** :
+
+```python
+from dsl.calendrier import fin_calendaire, premier_instant_ouvert
+
+debut = premier_instant_ouvert(instance, plus_tot)      # une opération ne démarre qu'à une heure ouvrée
+fin = fin_calendaire(instance, debut, duree)            # fin réelle, pauses (nuit, week-end) comprises
+```
+
+Ces deux fonctions valent `debut` et `debut + duree` quand aucun calendrier n'est actif : appelle-les
+donc **toujours**, sans test `if` de ta part. Partout où tu écrirais `debut + duree`, écris
+`fin_calendaire(instance, debut, duree)` :
+
+- fin d'un prédécesseur (la tâche suivante démarre à `premier_instant_ouvert(instance, fin_avant)`) ;
+- libération de la ressource (la tâche suivante sur la même ressource attend la fin calendaire) ;
+- comparaison à une `Echeance`, calcul du makespan, occupation d'une ressource à capacité > 1 ;
+- calcul de l'horizon : après l'avoir calculé comme d'habitude, prends
+  `horizon = fin_calendaire(instance, 0, horizon) + 168` (une semaine de marge).
+
+Le garde-fou de faisabilité utilise exactement la même règle et rejette un planning dont une
+opération démarre hors des heures ouvrées (`debut_hors_heures_ouvrees`), ou dont la fin réelle
+chevauche la suivante. Un temps de changement de série (`duree_setup`) reste un écart en heures
+écoulées entre la fin calendaire d'une tâche et le début de la suivante.
+
 ## Matières (`DeclarationMateriau` + `ConsommationMatiere`)
 
 Aucune `DeclarationMateriau` dans `instance.contraintes` sur la très grande majorité des
@@ -486,7 +520,7 @@ instance.contraintes: ...` réévalué à chaque appel.
 
 ## Contraintes de sécurité (impératives — le code est exécuté automatiquement)
 
-- Imports autorisés, et seulement ceux-là : `dsl.schema`, `collections`,
+- Imports autorisés, et seulement ceux-là : `dsl.schema`, `dsl.calendrier`, `collections`,
   `collections.abc`, `dataclasses`, `typing`, `__future__`, `random`, `math`,
   `heapq`, `itertools`, `bisect`, `functools`, `copy` (`random` et `math` pour la
   génération/mutation, le recuit ; `heapq`/`bisect` pour les files d'événements et

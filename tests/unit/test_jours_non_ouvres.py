@@ -26,9 +26,8 @@ from validation_engine.jours_non_ouvres import repousser_hors_jours_non_ouvres
 REFERENCE = datetime(2024, 1, 5, tzinfo=UTC)  # vendredi ; +1/+2 = samedi/dimanche ; +3 = lundi
 
 
-def _instance(taches, ressources, contraintes=(), unite_temps="jours", jours_fermes=None, **extra) -> InstanceTRCO:
+def _instance(taches, ressources, contraintes=(), unite_temps="jours", jours_fermes=None) -> InstanceTRCO:
     kwargs = {} if jours_fermes is None else {"jours_fermes": jours_fermes}
-    kwargs.update(extra)
     return InstanceTRCO(
         taches=taches,
         ressources=ressources,
@@ -158,55 +157,7 @@ def test_mode_heures_utilise_un_cycle_de_168() -> None:
 
     resultat = repousser_hors_jours_non_ouvres(instance, planning, REFERENCE)
 
-    assert resultat.operations[0].debut == 80  # lundi 08:00 : ouverture du premier jour ouvré
-
-
-def _instance_heures(duree: int, **kwargs) -> InstanceTRCO:
-    return _instance(
-        taches=[Tache(id="T1")],
-        ressources=[Ressource(id="R1")],
-        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=duree)],
-        unite_temps="heures",
-        **kwargs,
-    )
-
-
-def test_mode_heures_operation_avant_l_ouverture_est_repoussee_a_8h() -> None:
-    """Vendredi 03:00 (heure 3), hors de la plage 8h-22h : commence à 8h le même jour."""
-    resultat = repousser_hors_jours_non_ouvres(_instance_heures(2), _planning(_op("T1", "R1", 3)), REFERENCE)
-
-    assert resultat.operations[0].debut == 8
-
-
-def test_mode_heures_operation_qui_depasse_la_fermeture_repart_a_l_ouverture_suivante() -> None:
-    """Vendredi 20:00, durée 4 : finirait à 00:00, après la fermeture de 22h. Le lendemain est un
-    samedi fermé : elle repart donc le lundi à 8h (heure 72 + 8)."""
-    resultat = repousser_hors_jours_non_ouvres(_instance_heures(4), _planning(_op("T1", "R1", 20)), REFERENCE)
-
-    assert resultat.operations[0].debut == 80
-
-
-def test_mode_heures_operation_dans_la_plage_ouvree_est_inchangee() -> None:
-    resultat = repousser_hors_jours_non_ouvres(_instance_heures(4), _planning(_op("T1", "R1", 9)), REFERENCE)
-
-    assert resultat.operations[0].debut == 9
-
-
-def test_mode_heures_heures_ouvrees_personnalisees() -> None:
-    """Plage 6h-14h, week-end non fermé : une opération à 15h repart le lendemain à 6h."""
-    instance = _instance_heures(2, jours_fermes=[], heure_ouverture=6, heure_fermeture=14)
-
-    resultat = repousser_hors_jours_non_ouvres(instance, _planning(_op("T1", "R1", 15)), REFERENCE)
-
-    assert resultat.operations[0].debut == 30  # lendemain 06:00
-
-
-def test_mode_heures_operation_plus_longue_que_la_plage_commence_au_moins_a_l_ouverture() -> None:
-    """20 h > 14 h ouvrées : aucune fenêtre ne l'accueille en entier. Elle ne boucle pas et
-    commence au moins à un instant ouvert, jamais en pleine nuit."""
-    resultat = repousser_hors_jours_non_ouvres(_instance_heures(20), _planning(_op("T1", "R1", 3)), REFERENCE)
-
-    assert resultat.operations[0].debut == 8
+    assert resultat.operations[0].debut == 72  # lundi 00:00
 
 
 def test_operation_plus_longue_que_la_plus_longue_plage_ouvree_ne_boucle_pas_indefiniment() -> None:

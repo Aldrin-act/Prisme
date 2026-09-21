@@ -17,6 +17,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from api.etat import durees_par_contrainte
+from dsl.calendrier import fin_calendaire
 from dsl.schema import Echeance, InstanceTRCO, Planning
 
 
@@ -37,14 +38,15 @@ class MetriquesPlanning:
 def intervalle_par_tache(instance: InstanceTRCO, planning: Planning) -> dict[str, tuple[int, int]]:
     """Intervalle (début, fin) de chaque tâche planifiée — fin = `début + durée`, durée résolue
     depuis la `CompatibiliteRessourceTache` réellement choisie par le planning (`operation.tache|
-    operation.ressource`), 0 si absente (ne devrait pas arriver sur un planning légal). Factorisé
-    hors de `calculer_metriques` : réutilisé par `fin_par_tache` (fin seule) et
+    operation.ressource`) et fin calendaire si l'instance porte un calendrier ouvré (voir
+    `api/etat.py::instance_a_la_date`, `dsl/calendrier.py`), 0 si absente (ne devrait pas arriver sur
+    un planning légal). Factorisé hors de `calculer_metriques` : réutilisé par `fin_par_tache` (fin seule) et
     `calculer_statut_commande` (timeline complète d'une commande, §visualisation)."""
     durees = durees_par_contrainte(instance)
     resultat: dict[str, tuple[int, int]] = {}
     for operation in planning.operations:
         duree = durees.get(f"{operation.tache}|{operation.ressource}", 0)
-        resultat[operation.tache] = (operation.debut, operation.debut + duree)
+        resultat[operation.tache] = (operation.debut, fin_calendaire(instance, operation.debut, duree))
     return resultat
 
 

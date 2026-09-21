@@ -14,7 +14,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.autorisation import verifier_acces_client
-from api.etat import EtatAPI, durees_par_contrainte, obtenir_etat
+from api.etat import EtatAPI, durees_par_contrainte, instance_a_la_date, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
 from dsl.schema import Planning
 from validation_engine.feasibility_checker import verifier_faisabilite
@@ -74,6 +74,9 @@ def ajuster_planning(
     client_id, instance = etat.recuperer_instance(instance_id)
     verifier_acces_client(utilisateur, client_id)
 
+    # Le calendrier ouvré (heures, week-end) est ancré sur l'instant de CETTE exécution : la même
+    # règle que celle appliquée par le solveur, jamais celle de « maintenant ».
+    instance = instance_a_la_date(instance, etat.recuperer_date_execution(execution_id))
     verdict = verifier_faisabilite(instance, planning)
     if not verdict.legal:
         return {"legal": False, "violations": [asdict(v) for v in verdict.violations], "planning": None}

@@ -40,7 +40,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from api.comparaison_scenarios import calculer_statut_commande
-from api.etat import CommandeEnregistree, EtatAPI, signature_objectifs, structure_contraintes
+from api.etat import CommandeEnregistree, EtatAPI, instance_a_la_date, signature_objectifs, structure_contraintes
 from solver_store.registry import Registre
 from supervision.adequation import EvaluationSolveur, SolveurHorsAtelier
 from supervision.agent import (
@@ -280,6 +280,7 @@ def detecter_commandes_en_retard(
     for instance_id, commandes_instance in par_instance.items():
         _, instance = etat.recuperer_instance(instance_id)
         planning = etat.dernier_planning_pour_instance(instance_id)
+        instance = instance_a_la_date(instance, etat.date_derniere_execution_reussie(instance_id))
         for commande in commandes_instance:
             statut = calculer_statut_commande(instance, planning, commande.taches, commande.date_limite)
             if statut.en_retard is True:

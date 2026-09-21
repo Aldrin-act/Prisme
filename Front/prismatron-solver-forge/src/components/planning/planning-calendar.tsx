@@ -16,6 +16,7 @@ import {
 } from "@/integrations/prisme";
 import { tachesEnRetard } from "@/lib/charge-ressources";
 import { dateDepuisAncrage, debutJour, type UniteTemps } from "@/lib/dates-relatives";
+import { finCalendaire, segmentsTravailles } from "@/lib/calendrier-ouvre";
 import { finRepetitionParTache, segmentsRepetition } from "@/lib/repetition-commande";
 
 const COULEUR_A_TEMPS = "#4f46e5"; // indigo-600, cohérent avec le dégradé primary/accent du Gantt fait main
@@ -97,10 +98,11 @@ export function PlanningCalendar({
       }
     }
 
-    const operationsAvecFin = planning.operations.map((op) => ({
-      ...op,
-      fin: op.debut + (planning.durees[cle(op)] ?? 0),
-    }));
+    // `duree` = heures travaillées ; `fin` = fin réelle avec pauses (nuit, week-end) en mode heures.
+    const operationsAvecFin = planning.operations.map((op) => {
+      const duree = planning.durees[cle(op)] ?? 0;
+      return { ...op, duree, fin: finCalendaire(op.debut, duree, ancrage, unite) };
+    });
     const tachesEnRetardIds = new Set(
       (contraintes ? tachesEnRetard(operationsAvecFin, contraintes) : []).map((r) => r.tache),
     );
@@ -113,16 +115,20 @@ export function PlanningCalendar({
         commandesTache.length > 0
           ? ` · ${commandesTache.map((c) => c.commande_id).join(", ")}`
           : "";
-      evenements.push({
-        id: cle(op),
-        title: `${op.tache} · ${op.ressource}${produit ? ` (${produit})` : ""}${libelleCommandes}`,
-        start: dateDepuisAncrage(op.debut, ancrage, unite),
-        // Fin exclusive en mode jours (comportement standard "all-day event"), exacte en mode
-        // heures (l'instant réel de fin, positionné sur la grille horaire de la vue Semaine/Jour).
-        end: dateDepuisAncrage(op.fin, ancrage, unite),
-        allDay: unite === "jours",
-        enRetard,
-      });
+      // Une plage par jour ouvré traversé (19h-22h puis 8h-10h) : jamais d'événement qui recouvre
+      // la nuit ou le week-end. En mode jours : une seule plage, comme avant.
+      for (const segment of segmentsTravailles(op.debut, op.duree, ancrage, unite)) {
+        evenements.push({
+          id: `${cle(op)}|${segment.debut}`,
+          title: `${op.tache} · ${op.ressource}${produit ? ` (${produit})` : ""}${libelleCommandes}`,
+          start: dateDepuisAncrage(segment.debut, ancrage, unite),
+          // Fin exclusive en mode jours (comportement standard "all-day event"), exacte en mode
+          // heures (positionnée sur la grille horaire de la vue Semaine/Jour).
+          end: dateDepuisAncrage(segment.fin, ancrage, unite),
+          allDay: unite === "jours",
+          enRetard,
+        });
+      }
     }
 
     // Chaque tâche liée à une commande se répète chaque jour ouvré (heures ouvrées en mode heures)

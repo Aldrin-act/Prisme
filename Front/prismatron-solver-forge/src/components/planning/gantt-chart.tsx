@@ -37,9 +37,9 @@ import {
   HEURE_FERMETURE,
   HEURE_OUVERTURE,
   estInstantOuvre,
-  finRepetitionParTache,
-  segmentsRepetition,
-} from "@/lib/repetition-commande";
+} from "@/lib/calendrier-ouvre";
+import { finCalendaire, segmentsTravailles } from "@/lib/calendrier-ouvre";
+import { finRepetitionParTache, segmentsRepetition } from "@/lib/repetition-commande";
 
 function cle(op: { tache: string; ressource: string }): string {
   return `${op.tache}|${op.ressource}`;
@@ -69,8 +69,18 @@ function segmentsNonOuvres(
 
 // Ni `fin` ni `makespan` n'existent sur le fil (`dsl/schema/planning.py` est
 // volontairement permissif) — `fin` se déduit de `debut + durees["tache|ressource"]`.
-function operationsAvecFin(operations: OperationPlanifiee[], durees: Record<string, number>) {
-  return operations.map((op) => ({ ...op, fin: op.debut + (durees[cle(op)] ?? 0) }));
+// `duree` = heures travaillées ; `fin` = fin réelle, pauses (nuit, week-end) comprises en mode heures
+// (voir `lib/calendrier-ouvre.ts`) — égale à `debut + duree` en mode jours.
+function operationsAvecFin(
+  operations: OperationPlanifiee[],
+  durees: Record<string, number>,
+  ancrage: Date,
+  unite: UniteTemps,
+) {
+  return operations.map((op) => {
+    const duree = durees[cle(op)] ?? 0;
+    return { ...op, duree, fin: finCalendaire(op.debut, duree, ancrage, unite) };
+  });
 }
 
 interface EtatDrag {
@@ -184,7 +194,7 @@ export function GanttChart({
   }, [planning]);
 
   const peutEditer = editable && !!executionId;
-  const operations = operationsAvecFin(operationsLocales, planning.durees);
+  const operations = operationsAvecFin(operationsLocales, planning.durees, ancrage, unite);
   const makespan = operations.length > 0 ? Math.max(...operations.map((op) => op.fin)) : 0;
   // Recalculé sur `operationsLocales` (pas `planning.operations`) : glisser une barre au-delà de
   // son échéance la fait passer au rouge immédiatement, avant même d'enregistrer l'ajustement —
@@ -220,7 +230,7 @@ export function GanttChart({
 
   // Horizon servant à l'ajustement : celui du planning d'origine (pas de `operationsLocales`), pour
   // que glisser une barre ne fasse jamais sauter l'échelle.
-  const operationsOrigine = operationsAvecFin(planning.operations, planning.durees);
+  const operationsOrigine = operationsAvecFin(planning.operations, planning.durees, ancrage, unite);
   const horizonAjustement = Math.max(
     1,
     ...operationsOrigine.map((op) => op.fin),
@@ -666,7 +676,8 @@ export function GanttChart({
               const taux = contraintes
                 ? tauxUtilisationRessource(
                     ressource,
-                    operationsRessourceToutes,
+                    // Charge = heures travaillées, pas le temps écoulé (les pauses ne comptent pas).
+                    operationsRessourceToutes.map((op) => ({ debut: op.debut, fin: op.debut + op.duree })),
                     makespan,
                     contraintes,
                   )
@@ -764,16 +775,24 @@ export function GanttChart({
                     {operationsRessource.map((op) => {
                       const cleOp = cle(op);
                       const enRetard = tachesEnRetardIds.has(op.tache);
-                      const duree = op.fin - op.debut;
+                      const duree = op.duree;
                       const produit = produitParTache.get(op.tache);
                       const commandesTache = commandesParTache.get(op.tache) ?? [];
                       // La première commande est déjà en tête du libellé (voir plus bas) — ce
                       // suffixe ne signale que les suivantes, pour ne jamais la compter deux fois.
                       const libelleCommandesSupplementaires =
                         commandesTache.length > 1 ? ` +${commandesTache.length - 1}` : "";
-                      return (
+                      // Une plage par jour ouvré traversé (19h-22h puis 8h-10h) : jamais de barre
+                      // qui recouvre la nuit ou le week-end. Le libellé n'est écrit que sur la première.
+                      const segmentsBarre = segmentsTravailles(
+                        op.debut,
+                        op.duree,
+                        ancrage,
+                        unite,
+                      ).filter((seg) => seg.fin > bornDebut && seg.debut < bornFin);
+                      return segmentsBarre.map((seg, indexSegment) => (
                         <div
-                          key={cleOp}
+                          key={`${cleOp}|${seg.debut}`}
                           title={`${op.tache} : ${formatAxe(op.debut)} → ${formatAxe(op.fin)}${
                             enRetard ? " (en retard)" : ""
                           }${
@@ -789,22 +808,29 @@ export function GanttChart({
                           } ${peutEditer ? "cursor-grab touch-none active:cursor-grabbing" : "cursor-pointer touch-none"} ${
                             clesModifiees.has(cleOp) ? "ring-2 ring-yellow-400" : ""
                           } ${correspondRecherche(op) ? "" : "opacity-25"}`}
-                          style={{ left: decale(op.debut), width: duree * pxParJour }}
+                          style={{
+                            left: decale(seg.debut),
+                            width: (seg.fin - seg.debut) * pxParJour,
+                          }}
                         >
-                          {commandesTache.length > 0 && (
+                          {indexSegment === 0 && commandesTache.length > 0 && (
                             <Tag
                               className="h-3 w-3 shrink-0"
                               aria-label="Associée à une commande"
                             />
                           )}
-                          <span className="truncate">
-                            {commandesTache.length > 0 ? `${commandesTache[0].commande_id} · ` : ""}
-                            {produit ? `${produit} · ` : ""}
-                            {op.tache} ({duree}
-                            {unite === "heures" ? "h" : "j"}){libelleCommandesSupplementaires}
-                          </span>
+                          {indexSegment === 0 && (
+                            <span className="truncate">
+                              {commandesTache.length > 0
+                                ? `${commandesTache[0].commande_id} · `
+                                : ""}
+                              {produit ? `${produit} · ` : ""}
+                              {op.tache} ({duree}
+                              {unite === "heures" ? "h" : "j"}){libelleCommandesSupplementaires}
+                            </span>
+                          )}
                         </div>
-                      );
+                      ));
                     })}
                   </div>
                   {taux !== null && (
@@ -842,7 +868,7 @@ export function GanttChart({
                 {(() => {
                   const produitDetail = produitParTache.get(operationDetail.tache);
                   const commandesDetail = commandesParTache.get(operationDetail.tache) ?? [];
-                  const dureeDetail = operationDetail.fin - operationDetail.debut;
+                  const dureeDetail = operationDetail.duree;
                   const enRetardDetail = tachesEnRetardIds.has(operationDetail.tache);
                   return (
                     <>

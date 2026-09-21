@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from api.autorisation import verifier_acces_client
@@ -63,14 +65,18 @@ def executer_pour_instance(
 
     planning_precedent = etat.dernier_planning_pour_instance(instance_id) if horizon_gele_jours > 0 else None
 
+    # Un seul instant pour l'exécution ET pour la date enregistrée : il ancre le calendrier ouvré
+    # (heures ouvrées, week-end) du solveur, et doit se relire à l'identique à l'affichage.
+    date_execution = datetime.now(UTC)
     resultat = executer_solveur_valide(
         registre,
         artefact.id,
         instance,
         planning_precedent=planning_precedent,
         horizon_gele_jours=horizon_gele_jours,
+        reference=date_execution,
     )
-    execution_id = etat.enregistrer_execution(artefact.id, instance_id, resultat)
+    execution_id = etat.enregistrer_execution(artefact.id, instance_id, resultat, date_execution=date_execution)
     return execution_id, resultat, planning_precedent is not None
 
 

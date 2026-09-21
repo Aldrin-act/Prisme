@@ -68,6 +68,7 @@ from api.etat import (
     structure_contraintes,
 )
 from api.unite_duree import detecter_unite_duree
+from dsl.calendrier import avec_calendrier
 from dsl.schema import InstanceTRCO, Objectif, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
 from solver_store.registry import SCHEMA_PAR_DEFAUT, dsn_par_defaut
@@ -1324,7 +1325,14 @@ class EtatPostgres:
 
     # --- Exécutions ------------------------------------------------------
 
-    def enregistrer_execution(self, id_solveur: str, instance_id: str, resultat: ResultatExecution) -> str:
+    def enregistrer_execution(
+        self,
+        id_solveur: str,
+        instance_id: str,
+        resultat: ResultatExecution,
+        date_execution: datetime | None = None,
+    ) -> str:
+        date_execution = date_execution or datetime.now(UTC)
         execution_id = str(uuid.uuid4())
         statut = "reussi" if resultat.reussi else "echec"
 
@@ -1340,7 +1348,7 @@ class EtatPostgres:
         makespan: int | None = None
         if resultat.planning is not None:
             _, instance = self.recuperer_instance(instance_id)
-            makespan = calculer_makespan(instance, resultat.planning)
+            makespan = calculer_makespan(avec_calendrier(instance, date_execution.astimezone()), resultat.planning)
 
         with closing(self._connexion()) as connexion:
             connexion.execute(
@@ -1353,7 +1361,7 @@ class EtatPostgres:
                     execution_id,
                     instance_id,
                     id_solveur,
-                    datetime.now(UTC).isoformat(),
+                    date_execution.isoformat(),
                     statut,
                     resultat.erreur,
                     violations_json,
