@@ -53,8 +53,7 @@ export const prismeKeys = {
   commande: (commandeId: string) => [...prismeKeys.all, "commande", commandeId] as const,
   commandesInstance: (instanceId: string) =>
     [...prismeKeys.all, "commandesInstance", instanceId] as const,
-  gammes: () => [...prismeKeys.all, "gammes"] as const,
-  gamme: (gammeId: string) => [...prismeKeys.all, "gammes", gammeId] as const,
+  processus: (instanceId: string) => [...prismeKeys.all, "processus", instanceId] as const,
   commandes: () => [...prismeKeys.all, "commandes"] as const,
 } as const;
 
@@ -305,30 +304,16 @@ export function useCommande(
 }
 
 /**
- * Liste les gammes opératoires réutilisables (par produit) d'un client — voir
- * `Types.GammeProduit`, explosées en tâches concrètes par useAjouterCommande.
+ * Processus unique de l'atelier — `etapes` vide tant qu'il n'a jamais été défini.
  */
-export function useGammes(
-  options?: Omit<UseQueryOptions<Types.GammeProduit[]>, "queryKey" | "queryFn">,
+export function useProcessus(
+  instanceId: string | null,
+  options?: Omit<UseQueryOptions<Types.ProcessusAtelier>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: prismeKeys.gammes(),
-    queryFn: () => prismeClient.listerGammes(),
-    ...options,
-  });
-}
-
-/**
- * Détail d'une gamme (étapes, compétences, précédences).
- */
-export function useGamme(
-  gammeId: string | null,
-  options?: Omit<UseQueryOptions<Types.GammeProduit>, "queryKey" | "queryFn">,
-) {
-  return useQuery({
-    queryKey: prismeKeys.gamme(gammeId || ""),
-    queryFn: () => prismeClient.obtenirGamme(gammeId!),
-    enabled: !!gammeId,
+    queryKey: prismeKeys.processus(instanceId || ""),
+    queryFn: () => prismeClient.obtenirProcessus(instanceId!),
+    enabled: !!instanceId,
     ...options,
   });
 }
@@ -866,59 +851,23 @@ export function useSupprimerSource() {
 }
 
 /**
- * Mutation pour créer une gamme opératoire réutilisable (produit + étapes) —
- * voir `Types.GammeProduit`.
+ * Mutation pour définir (ou remplacer) le processus de l'atelier. Les commandes déjà passées ne
+ * sont jamais réécrites : seules les suivantes suivent le nouveau processus.
  */
-export function useCreerGamme() {
+export function useDefinirProcessus() {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      produit,
-      etapes,
-      nom,
-      clientId,
-    }: {
-      produit: string;
-      etapes: Types.EtapeGamme[];
-      nom?: string;
-      clientId?: string;
-    }) => prismeClient.creerGamme(produit, etapes, nom, clientId),
+    mutationFn: ({ instanceId, etapes }: { instanceId: string; etapes: Types.EtapeProcessus[] }) =>
+      prismeClient.definirProcessus(instanceId, etapes),
+    onSuccess: (processus, { instanceId }) => {
+      queryClient.setQueryData(prismeKeys.processus(instanceId), processus);
+    },
   });
 }
 
 /**
- * Mutation pour remplacer en place le contenu d'une gamme déjà créée — même
- * gamme_id, même patron que useModifierInstance.
- */
-export function useModifierGamme() {
-  return useMutation({
-    mutationFn: ({
-      gammeId,
-      produit,
-      etapes,
-      nom,
-    }: {
-      gammeId: string;
-      produit: string;
-      etapes: Types.EtapeGamme[];
-      nom?: string;
-    }) => prismeClient.modifierGamme(gammeId, produit, etapes, nom),
-  });
-}
-
-/**
- * Mutation pour supprimer une gamme — n'affecte jamais les tâches déjà
- * explosées à partir d'elle (elles vivent dans les instances, indépendantes).
- */
-export function useSupprimerGamme() {
-  return useMutation({
-    mutationFn: (gammeId: string) => prismeClient.supprimerGamme(gammeId),
-  });
-}
-
-/**
- * Mutation pour associer des tâches à une commande et en dériver une échéance — deux sources
- * combinables : tâches déjà présentes dans l'instance et/ou une ou plusieurs gammes explosées
- * en tâches fraîches (voir `api/routes/ingestion.py`).
+ * Mutation pour créer une commande : éclate le processus de l'atelier (cas normal) ou référence
+ * des tâches déjà présentes, et en dérive une échéance commune (voir `api/routes/ingestion.py`).
  */
 export function useAjouterCommande() {
   return useMutation({
@@ -954,21 +903,5 @@ export function useChangerStatutCommande() {
       });
       queryClient.invalidateQueries({ queryKey: prismeKeys.commande(commande.commande_id) });
     },
-  });
-}
-
-/**
- * Mutation pour ajouter un produit (gamme) supplémentaire à une commande déjà créée — complète
- * useAjouterCommande ci-dessus, qui ne permet de référencer des gammes qu'à la création.
- */
-export function useAjouterProduitACommande() {
-  return useMutation({
-    mutationFn: ({
-      commandeId,
-      requete,
-    }: {
-      commandeId: string;
-      requete: Types.RequeteAjoutProduitCommande;
-    }) => prismeClient.ajouterProduitACommande(commandeId, requete),
   });
 }

@@ -6,7 +6,9 @@ vraie base Postgres plutôt que par un dict en mémoire.
 
 from __future__ import annotations
 
-from api.etat import GammeCommandeEnregistree
+import pytest
+
+from api.etat import EtapeProcessus
 from api.etat_postgres import EtatPostgres
 from dsl.schema import InstanceTRCO, MinimiserMakespan, OperationPlanifiee, Planning
 from sandbox.runner import ResultatExecution
@@ -686,28 +688,51 @@ def test_commande_statut_realisation_round_trip(etat_postgres_test: EtatPostgres
     assert en_cours.date_realisation is None
 
 
-def test_commande_gammes_round_trip(etat_postgres_test: EtatPostgres) -> None:
-    """`CommandeEnregistree.gammes` (produits référencés, copie figée à la création — voir
-    docstring de `GammeCommandeEnregistree`) survit à un aller-retour Postgres."""
+def test_commande_quantite_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    """`CommandeEnregistree.quantite` (pièces d'une commande éclatée depuis le processus de
+    l'atelier) survit à un aller-retour Postgres — et reste `None` pour une commande sur tâches
+    existantes."""
     instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
-    gammes = (
-        GammeCommandeEnregistree(gamme_id="g1", produit="Vanne V12", nom="Gamme vanne", quantite=5),
-        GammeCommandeEnregistree(gamme_id="g2", produit="Bride B7", nom=None, quantite=None),
+    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", 10, ("T1",), quantite=5)
+    etat_postgres_test.enregistrer_commande("cmd-2", instance_id, "client-test", 10, ("T2",))
+
+    assert etat_postgres_test.recuperer_commande("cmd-1").quantite == 5
+    assert etat_postgres_test.recuperer_commande("cmd-2").quantite is None
+    par_id = {c.id: c for c in etat_postgres_test.lister_commandes(instance_id=instance_id)}
+    assert par_id["cmd-1"].quantite == 5
+
+
+def test_processus_round_trip(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etapes = (
+        EtapeProcessus(id="TOURNAGE", nom="Tournage", competences=("REGLAGE_TOUR",), duree_par_piece=2),
+        EtapeProcessus(
+            id="FRAISAGE",
+            nom=None,
+            competences=("REGLAGE_FRAISE", "CONTROLE"),
+            duree_par_piece=1,
+            predecesseurs=("TOURNAGE",),
+        ),
     )
-    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", 10, ("T1",), gammes=gammes)
 
-    commande = etat_postgres_test.recuperer_commande("cmd-1")
+    etat_postgres_test.definir_processus(instance_id, etapes)
 
-    assert commande.gammes == gammes
+    assert etat_postgres_test.recuperer_processus(instance_id) == etapes
 
 
-def test_commande_sans_gammes_est_vide(etat_postgres_test: EtatPostgres) -> None:
+def test_processus_absent_est_vide(etat_postgres_test: EtatPostgres) -> None:
     instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
-    etat_postgres_test.enregistrer_commande("cmd-1", instance_id, "client-test", 10, ("T1", "T2"))
 
-    commande = etat_postgres_test.recuperer_commande("cmd-1")
+    assert etat_postgres_test.recuperer_processus(instance_id) == ()
 
-    assert commande.gammes == ()
+
+def test_processus_atelier_inconnu_leve_keyerror(etat_postgres_test: EtatPostgres) -> None:
+    etape = EtapeProcessus(id="A", competences=("X",), duree_par_piece=1)
+
+    with pytest.raises(KeyError):
+        etat_postgres_test.definir_processus("atelier-inexistant", (etape,))
+    with pytest.raises(KeyError):
+        etat_postgres_test.recuperer_processus("atelier-inexistant")
 
 
 def test_commande_date_limite_optionnelle(etat_postgres_test: EtatPostgres) -> None:

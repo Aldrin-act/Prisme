@@ -154,58 +154,26 @@ class SourceDonnees:
 
 
 @dataclass(frozen=True)
-class EtapeGamme:
-    """Une étape d'une `GammeProduit` — jamais vue par le solveur : purement
-    un gabarit, explosé en `Tache`/`Contrainte` DSL ordinaires par
-    `adapters/gamme_derivation.py::exploser_gamme` à l'arrivée d'une
-    commande. `competences` (>=1) plutôt qu'une ressource fixe : la
-    compatibilité réelle se dérive à l'explosion via
-    `adapters/competence_derivation.py`, donc la gamme reste valide même si
-    le parc de ressources évolue. `predecesseurs` référence d'autres `id`
-    d'étapes de la même gamme (jamais d'une autre) — plusieurs prédécesseurs
-    pour une même étape expriment une fusion (plusieurs sous-produits qui
-    convergent vers une étape commune), sans mécanisme dédié."""
+class EtapeProcessus:
+    """Une étape du processus d'un atelier — jamais vue par le solveur : purement un gabarit,
+    éclaté en `Tache`/`Contrainte` DSL ordinaires par `adapters/processus_derivation.py` à chaque
+    nouvelle commande. `competences` (>=1) plutôt qu'une ressource fixe : la compatibilité réelle
+    se dérive à l'éclatement via `adapters/competence_derivation.py`, donc le processus reste
+    valable même si le parc de ressources de l'atelier évolue. `predecesseurs` référence d'autres
+    `id` d'étapes du même processus — plusieurs prédécesseurs pour une même étape expriment une
+    fusion (plusieurs sous-ensembles qui convergent vers une étape commune), sans mécanisme dédié.
+
+    `duree_par_piece` est obligatoire et exprimée dans l'unité de temps de l'atelier : la tâche
+    produite pour une commande de N pièces dure `duree_par_piece × N`. Jamais d'estimation
+    automatique ici — une durée devinée, multipliée par une quantité, amplifierait l'erreur."""
 
     id: str
     competences: tuple[str, ...]
+    duree_par_piece: int
     predecesseurs: tuple[str, ...] = ()
-    # Durée déclarée (jours) pour cette étape, appliquée à chaque tâche qu'elle produit —
-    # même rôle que `TacheAvecDureeEstimee.duree_estimee_jours` des adaptateurs CSV/JSON
-    # (`adapters/json_import/traducteur.py`) : source primaire de durée, l'estimateur ML
-    # (`estimation/`) ne comble que ce qui reste manquant. Sans elle ET sans estimateur
-    # configuré, l'explosion échoue explicitement (`CompetenceSansDureeEstimee`) plutôt que
-    # de deviner une durée.
-    duree_nominale: int | None = None
-
-
-@dataclass(frozen=True)
-class GammeProduit:
-    """Gamme opératoire réutilisable pour un produit d'un client — décrite
-    une fois, explosée à chaque commande qui la référence (une commande peut
-    en référencer plusieurs, voir `adapters/gamme_derivation.py::
-    traiter_nouvelle_commande`) en tâches concrètes plutôt que redéclarée à
-    la main à chaque fois. Comme `SourceDonnees`, volontairement minimale :
-    ne porte aucun historique d'exécution, aucune instance "courante"."""
-
-    id: str
-    client_id: str
-    produit: str
-    nom: str | None
-    etapes: tuple[EtapeGamme, ...]
-
-
-@dataclass(frozen=True)
-class GammeCommandeEnregistree:
-    """Un produit (gamme) référencé par une commande, tel que connu au moment de sa création —
-    `produit`/`nom` sont une *copie* (pas une lecture live de `GammeProduit`) : la gamme
-    elle-même est un gabarit modifiable/supprimable après coup (voir sa docstring) sans que ça
-    n'affecte la traçabilité d'une commande déjà passée. `gamme_id` reste utile pour retrouver la
-    gamme si elle existe encore, mais n'est jamais la source affichée."""
-
-    gamme_id: str
-    produit: str
-    nom: str | None
-    quantite: int | None
+    # Libellé lisible (ex. "Tournage") repris comme `Tache.nom` à l'éclatement — `id` reste
+    # l'identifiant technique, contraint par le motif `Identifiant` du DSL.
+    nom: str | None = None
 
 
 @dataclass(frozen=True)
@@ -241,12 +209,11 @@ class CommandeEnregistree:
     est_prospect: bool = False
     description: str | None = None
     nom_client: str | None = None
-    # Produits (gammes) référencés par cette commande, avec leur quantité — `taches` ci-dessus
-    # reste la seule vérité pour l'explosion/échéance (union tâches choisies + explosées), ceci
-    # est une métadonnée de traçabilité pure supplémentaire (§FC4 : jamais lue par le DSL/solveur,
-    # ne rejoue jamais l'explosion). Vide pour une commande qui ne référence que des tâches
-    # choisies directement.
-    gammes: tuple[GammeCommandeEnregistree, ...] = ()
+    # Nombre de pièces de la commande quand elle a été créée depuis le processus de l'atelier —
+    # déjà appliqué aux durées de ses tâches au moment de l'éclatement (durée × quantité), gardé
+    # ici pour l'affichage et la traçabilité uniquement : ne rejoue jamais l'éclatement. `None`
+    # pour une commande qui référence des tâches déjà présentes dans l'atelier.
+    quantite: int | None = None
     # Avancement réel de la commande dans l'atelier, **déclaré par un humain** — la seule source
     # possible : le planning ne dit que ce qui *devrait* se passer (voir
     # `api/comparaison_scenarios.py::calculer_statut_commande`, qui reste purement prévisionnel).
@@ -339,7 +306,10 @@ class EtatAPI:
     sources: dict[str, SourceDonnees] = field(default_factory=dict)
     source_par_instance: dict[str, str] = field(default_factory=dict)
     commandes: dict[str, CommandeEnregistree] = field(default_factory=dict)
-    gammes: dict[str, GammeProduit] = field(default_factory=dict)
+    # Processus de chaque atelier (instance_id → étapes), un seul par atelier — hors
+    # `InstanceTRCO` pour la même raison que `descriptions_metier` ci-dessous : un gabarit côté
+    # API, jamais un axe du problème d'ordonnancement. Absent = atelier sans processus défini.
+    processus: dict[str, tuple[EtapeProcessus, ...]] = field(default_factory=dict)
     # Description métier proposée par l'agent de compréhension (§5.4 bis) —
     # absente (None) pour toute instance ingérée hors de ce chemin (payload
     # T-R-C-O direct, adaptateur écrit à la main...). Hors `InstanceTRCO`
@@ -508,41 +478,23 @@ class EtatAPI:
         for instance_id in [iid for iid, sid in self.source_par_instance.items() if sid == source_id]:
             del self.source_par_instance[instance_id]
 
-    def enregistrer_gamme(
-        self, client_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> str:
-        self.enregistrer_client(client_id)
-        gamme_id = str(uuid.uuid4())
-        self.gammes[gamme_id] = GammeProduit(
-            id=gamme_id, client_id=client_id, produit=produit, nom=nom, etapes=etapes
-        )
-        return gamme_id
+    def definir_processus(
+        self, instance_id: str, etapes: tuple[EtapeProcessus, ...]
+    ) -> tuple[EtapeProcessus, ...]:
+        """Remplace le processus de l'atelier (un seul par atelier). Ne touche jamais aux tâches
+        déjà présentes dans l'instance : les commandes passées gardent les étapes avec lesquelles
+        elles ont été éclatées, seules les commandes suivantes suivent le nouveau processus."""
+        if instance_id not in self.instances:
+            raise KeyError(instance_id)
+        self.processus[instance_id] = etapes
+        return etapes
 
-    def recuperer_gamme(self, gamme_id: str) -> GammeProduit:
-        if gamme_id not in self.gammes:
-            raise KeyError(gamme_id)
-        return self.gammes[gamme_id]
-
-    def lister_gammes(self, client_id: str | None = None) -> list[GammeProduit]:
-        return [g for g in self.gammes.values() if client_id is None or g.client_id == client_id]
-
-    def modifier_gamme(
-        self, gamme_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> GammeProduit:
-        """Remplace en place le contenu d'une gamme déjà enregistrée — même
-        `id`/`client_id`, comme `modifier_instance` pour une instance."""
-        if gamme_id not in self.gammes:
-            raise KeyError(gamme_id)
-        gamme = GammeProduit(
-            id=gamme_id, client_id=self.gammes[gamme_id].client_id, produit=produit, nom=nom, etapes=etapes
-        )
-        self.gammes[gamme_id] = gamme
-        return gamme
-
-    def supprimer_gamme(self, gamme_id: str) -> None:
-        if gamme_id not in self.gammes:
-            raise KeyError(gamme_id)
-        del self.gammes[gamme_id]
+    def recuperer_processus(self, instance_id: str) -> tuple[EtapeProcessus, ...]:
+        """Tuple vide pour un atelier dont le processus n'a jamais été défini — `KeyError` pour
+        un atelier inconnu seulement (même contrat que `recuperer_description_metier`)."""
+        if instance_id not in self.instances:
+            raise KeyError(instance_id)
+        return self.processus.get(instance_id, ())
 
     def enregistrer_commande(
         self,
@@ -557,7 +509,7 @@ class EtatAPI:
         est_prospect: bool = False,
         description: str | None = None,
         nom_client: str | None = None,
-        gammes: tuple[GammeCommandeEnregistree, ...] = (),
+        quantite: int | None = None,
     ) -> None:
         """`commande_id` fourni par l'appelant (déjà généré avant la dérivation d'échéance —
         voir `api/routes/ingestion.py::ajouter_commande`)."""
@@ -574,29 +526,12 @@ class EtatAPI:
             est_prospect=est_prospect,
             description=description,
             nom_client=nom_client,
-            gammes=gammes,
+            quantite=quantite,
         )
 
     def recuperer_commande(self, commande_id: str) -> CommandeEnregistree:
         if commande_id not in self.commandes:
             raise KeyError(commande_id)
-        return self.commandes[commande_id]
-
-    def ajouter_gamme_a_commande(
-        self, commande_id: str, taches_ajoutees: tuple[str, ...], gamme: GammeCommandeEnregistree
-    ) -> CommandeEnregistree:
-        """Ajoute un produit (gamme) supplémentaire à une commande déjà enregistrée — complète
-        `taches`/`gammes` en place (`date_creation` et le reste des champs inchangés), contrairement
-        à `enregistrer_commande` qui écraserait tout, `date_creation` incluse (voir
-        `api/routes/ingestion.py::ajouter_produit_a_commande`)."""
-        if commande_id not in self.commandes:
-            raise KeyError(commande_id)
-        commande = self.commandes[commande_id]
-        self.commandes[commande_id] = replace(
-            commande,
-            taches=(*commande.taches, *taches_ajoutees),
-            gammes=(*commande.gammes, gamme),
-        )
         return self.commandes[commande_id]
 
     def mettre_a_jour_statut_commande(
@@ -702,6 +637,7 @@ class EtatAPI:
         self.unites_duree.pop(instance_id, None)
         self.dates_modification.pop(instance_id, None)
         self.groupes_scenario.pop(instance_id, None)
+        self.processus.pop(instance_id, None)
         for commande_id in [cid for cid, c in self.commandes.items() if c.instance_id == instance_id]:
             del self.commandes[commande_id]
         for execution_id in [eid for eid, (_, iid, _) in self.executions.items() if iid == instance_id]:

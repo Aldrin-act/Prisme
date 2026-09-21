@@ -41,7 +41,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PageHeader, EmptyState } from "@/components/app-page";
-import { AjouterProduitCommande } from "@/components/commandes/ajouter-produit-commande";
 import { FormulaireNouvelleCommande } from "@/components/commandes/formulaire-nouvelle-commande";
 import {
   useChangerStatutCommande,
@@ -53,7 +52,6 @@ import {
   type StatutCommande,
   type StatutRealisationCommande,
 } from "@/integrations/prisme";
-import { libelleProduitsCommande } from "@/lib/commande-produits";
 import {
   aujourdhui,
   dateDepuisAncrage,
@@ -320,27 +318,39 @@ function DialogueNouvelleCommande({
   labels: ReturnType<typeof useLabelsInstances>;
 }) {
   const [instanceId, setInstanceId] = useState<string | null>(null);
+  const [editionProcessus, setEditionProcessus] = useState(false);
   const { data: instance, isLoading } = useInstance(instanceId);
 
   function changerOuverture(v: boolean) {
-    if (!v) setInstanceId(null);
+    if (!v) {
+      setInstanceId(null);
+      setEditionProcessus(false);
+    }
     onOpenChange(v);
   }
 
   return (
     <Dialog open={ouvert} onOpenChange={changerOuverture}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
+      {/* L'éditeur de processus (graphe + panneau d'étape) a besoin de bien plus de largeur que
+          le formulaire : le dialogue s'élargit le temps de l'édition. */}
+      <DialogContent
+        className={`max-h-[90vh] overflow-y-auto ${editionProcessus ? "sm:max-w-5xl" : "sm:max-w-xl"}`}
+      >
         <DialogHeader>
           <DialogTitle>Nouvelle commande</DialogTitle>
           <DialogDescription>
-            Une commande relie des tâches d'un atelier à une échéance client. Le planning de
-            l'atelier est recalculé automatiquement après l'ajout.
+            Une commande reprend le processus de l'atelier pour une quantité et une échéance. Le
+            planning de l'atelier est recalculé automatiquement après l'ajout.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-1.5">
           <Label htmlFor="commande_atelier">Atelier</Label>
-          <Select value={instanceId ?? undefined} onValueChange={setInstanceId}>
+          <Select
+            value={instanceId ?? undefined}
+            onValueChange={setInstanceId}
+            disabled={editionProcessus}
+          >
             <SelectTrigger id="commande_atelier">
               <SelectValue placeholder="Choisir l'atelier concerné" />
             </SelectTrigger>
@@ -361,16 +371,12 @@ function DialogueNouvelleCommande({
             <Skeleton className="h-24 w-full" />
           </div>
         )}
-        {instance && instance.taches.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            Cet atelier ne contient encore aucune tâche — impossible d'y rattacher une commande.
-          </p>
-        )}
-        {instance && instance.taches.length > 0 && (
+        {instance && (
           <FormulaireNouvelleCommande
             key={instance.instance_id}
             instance={instance}
             integre
+            onEditionProcessus={setEditionProcessus}
             onAnnuler={() => changerOuverture(false)}
             onCommandeAjoutee={(resultat) => {
               changerOuverture(false);
@@ -450,7 +456,6 @@ function CommandesPage() {
           c.client_id,
           c.description,
           libelleAtelier(c.instance_id, labels),
-          libelleProduitsCommande(c.gammes),
           ...c.taches,
         ]
           .filter(Boolean)
@@ -545,7 +550,7 @@ function CommandesPage() {
                 <Input
                   value={recherche}
                   onChange={(e) => setRecherche(e.target.value)}
-                  placeholder="Rechercher une commande, un client, un produit, une tâche..."
+                  placeholder="Rechercher une commande, un client, une tâche..."
                   className="pl-8"
                   aria-label="Rechercher une commande"
                 />
@@ -598,16 +603,13 @@ function CommandesPage() {
                     <TableHead>Échéance</TableHead>
                     <TableHead>Statut prévu</TableHead>
                     <TableHead>Avancement réel</TableHead>
-                    <TableHead className="w-10">
-                      <span className="sr-only">Actions</span>
-                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {isLoading &&
                     Array.from({ length: 5 }, (_, i) => (
                       <TableRow key={`squelette-${i}`}>
-                        {Array.from({ length: 9 }, (_, j) => (
+                        {Array.from({ length: 8 }, (_, j) => (
                           <TableCell key={j}>
                             <Skeleton className="h-5 w-full" />
                           </TableCell>
@@ -626,7 +628,7 @@ function CommandesPage() {
                     ))}
                   {!isLoading && commandesFiltrees.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={9} className="py-10 text-center">
+                      <TableCell colSpan={8} className="py-10 text-center">
                         <p className="text-sm text-muted-foreground">
                           Aucune commande ne correspond à ces filtres.
                         </p>
@@ -694,7 +696,12 @@ function LigneCommande({
       ? commande.date_limite - commande.date_fin_prevue
       : null;
 
-  const produits = libelleProduitsCommande(commande.gammes);
+  // Pièces commandées (commande éclatée depuis le processus de l'atelier) — déjà appliquées aux
+  // durées de ses tâches ; absent pour une commande sur tâches existantes.
+  const pieces =
+    commande.quantite !== null
+      ? `${commande.quantite} pièce${commande.quantite > 1 ? "s" : ""}`
+      : null;
   const client = commande.nom_client ?? commande.client_id;
   const nbTaches = commande.taches.length;
   const nbManquantes = commande.taches_manquantes.length;
@@ -747,13 +754,9 @@ function LigneCommande({
       </TableCell>
 
       <TableCell className="min-w-40">
-        {produits && (
-          <div className="max-w-56 truncate text-sm" title={produits}>
-            {produits}
-          </div>
-        )}
+        {pieces && <div className="text-sm tabular-nums">{pieces}</div>}
         <div
-          className={produits ? "text-xs text-muted-foreground" : "text-sm"}
+          className={pieces ? "text-xs text-muted-foreground" : "text-sm"}
           title={commande.taches.join(", ")}
         >
           {nbTaches} tâche{nbTaches > 1 ? "s" : ""}
@@ -813,10 +816,6 @@ function LigneCommande({
 
       <TableCell>
         <SelecteurAvancement commande={commande} unite={unite} />
-      </TableCell>
-
-      <TableCell>
-        <AjouterProduitCommande commande={commande} />
       </TableCell>
     </TableRow>
   );

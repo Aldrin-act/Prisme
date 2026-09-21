@@ -51,7 +51,7 @@ class Tache(BaseModel):
     )
     produit: str | None = Field(
         default=None,
-        description="Étiquette de regroupement produit/sous-produit (ex. affichage de gammes) — "
+        description="Étiquette de regroupement produit/sous-produit (affichage uniquement) — "
         "optionnel, purement informatif : ni le solveur ni le vérificateur de faisabilité n'en "
         "dépendent.",
     )

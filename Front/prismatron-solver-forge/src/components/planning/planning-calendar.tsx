@@ -16,6 +16,7 @@ import {
 } from "@/integrations/prisme";
 import { tachesEnRetard } from "@/lib/charge-ressources";
 import { dateDepuisAncrage, debutJour, type UniteTemps } from "@/lib/dates-relatives";
+import { finRepetitionParTache, segmentsRepetition } from "@/lib/repetition-commande";
 
 const COULEUR_A_TEMPS = "#4f46e5"; // indigo-600, cohérent avec le dégradé primary/accent du Gantt fait main
 const COULEUR_EN_RETARD = "#dc2626"; // red-600, même sémantique que la barre rouge du Gantt fait main
@@ -40,6 +41,8 @@ interface EvenementPlanning extends EvenementRBC {
   id: string;
   enRetard?: boolean;
   estEcheance?: boolean;
+  // Occurrence quotidienne répétée d'une tâche de commande (voir segmentsRepetition), pas l'opération planifiée elle-même.
+  estRepetition?: boolean;
 }
 
 // Vue calendrier (react-big-calendar, gratuite, MIT — aucune fonctionnalité "resource" premium
@@ -122,6 +125,32 @@ export function PlanningCalendar({
       });
     }
 
+    // Chaque tâche liée à une commande se répète chaque jour ouvré (heures ouvrées en mode heures)
+    // après son opération planifiée, jusqu'à la réalisation de la commande — purement visuel, le
+    // planning ne contient qu'une opération par tâche (mêmes règles que le Gantt).
+    const finRepetition = finRepetitionParTache(commandes ?? [], operationsAvecFin);
+    for (const op of operationsAvecFin) {
+      const commandesTache = commandesParTache.get(op.tache) ?? [];
+      if (commandesTache.length === 0) continue;
+      const produit = produitParTache.get(op.tache);
+      const libelleCommandes = ` · ${commandesTache.map((c) => c.commande_id).join(", ")}`;
+      for (const segment of segmentsRepetition(
+        op.fin,
+        finRepetition.get(op.tache) ?? op.fin,
+        ancrage,
+        unite,
+      )) {
+        evenements.push({
+          id: `${cle(op)}|rep|${segment.debut}`,
+          title: `Projection · ${op.tache} · ${op.ressource}${produit ? ` (${produit})` : ""}${libelleCommandes}`,
+          start: dateDepuisAncrage(segment.debut, ancrage, unite),
+          end: dateDepuisAncrage(segment.fin, ancrage, unite),
+          allDay: unite === "jours",
+          estRepetition: true,
+        });
+      }
+    }
+
     const echeancesVues = new Set<number>();
     for (const commande of commandes ?? []) {
       if (commande.date_limite === null || echeancesVues.has(commande.date_limite)) continue;
@@ -164,6 +193,9 @@ export function PlanningCalendar({
                 : e.enRetard
                   ? COULEUR_EN_RETARD
                   : COULEUR_A_TEMPS,
+              // Occurrence répétée : même couleur, plus pâle et en pointillés, pour la distinguer
+              // de l'opération réellement planifiée.
+              ...(e.estRepetition ? { opacity: 0.55, border: "1px dashed #c7d2fe" } : {}),
             },
           };
         }}
@@ -180,6 +212,12 @@ export function PlanningCalendar({
           noEventsInRange: "Aucune tâche sur cette période.",
         }}
       />
+      {evenements.some((e) => e.estRepetition) && (
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          « Projection » (pâle, pointillés) : tâche répétée chaque jour ouvré jusqu'à la réalisation
+          de la commande — visuel seulement, aucune capacité n'est réservée dans le planning.
+        </p>
+      )}
       {!planning && (
         <p className="mt-2 text-center text-xs text-muted-foreground">
           Aucun planning sélectionné pour l'instant — choisis une exécution ci-dessous.

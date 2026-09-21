@@ -245,51 +245,43 @@ export interface InstanceDetail extends InstanceTRCO {
 }
 
 // ============================================================================
-// GAMMES OPÉRATOIRES RÉUTILISABLES
+// PROCESSUS D'ATELIER
 // ============================================================================
 
-// Une étape d'une gamme — jamais vue par le solveur, explosée en Tache/Precedence/
-// CompetenceRequise concrètes à l'arrivée d'une commande qui référence sa gamme (voir
-// api/routes/ingestion.py, POST /ingestion/{instance_id}/commandes — une commande peut
-// référencer plusieurs gammes). `predecesseurs` référence d'autres `id` d'étapes de la MÊME
-// gamme ; plusieurs prédécesseurs pour une étape = fusion (plusieurs sous-produits qui
-// convergent).
-export interface EtapeGamme {
+// Une étape du processus unique d'un atelier — jamais vue par le solveur : chaque nouvelle
+// commande en reçoit sa propre copie en tâches concrètes (voir api/routes/ingestion.py,
+// POST /ingestion/{instance_id}/commandes). `predecesseurs` référence d'autres `id` d'étapes du
+// même processus ; plusieurs prédécesseurs pour une étape = fusion. `duree_par_piece` est dans
+// l'unité de temps de l'atelier : une commande de N pièces la multiplie par N.
+export interface EtapeProcessus {
   id: string;
+  nom: string | null;
   competences: string[];
   predecesseurs: string[];
-  duree_nominale: number | null;
+  duree_par_piece: number;
 }
 
-export interface GammeProduit {
-  gamme_id: string;
-  client_id: string;
-  produit: string;
-  nom: string | null;
-  etapes: EtapeGamme[];
+// GET/PUT /ingestion/{instance_id}/processus — `etapes` vide tant qu'il n'a jamais été défini.
+export interface ProcessusAtelier {
+  etapes: EtapeProcessus[];
 }
 
 // ============================================================================
 // COMMANDES
 // ============================================================================
 
-// Une commande combine librement deux sources de tâches : `taches` (déjà présentes dans
-// l'instance, jamais créées) et `gammes` (une ou plusieurs gammes réutilisables, chacune
-// explosée en tâches fraîches — une commande peut donc porter plusieurs produits). Dérive une
-// Echeance unique sur l'ensemble (voir api/routes/ingestion.py,
-// POST /ingestion/{instance_id}/commandes).
-export interface GammeAvecQuantiteRequete {
-  gamme_id: string;
-  quantite?: number;
-}
-
+// Une commande éclate le processus de l'atelier (cas normal, `taches` absent) ou référence des
+// tâches déjà présentes dans l'atelier (`taches`, import de données existantes) — jamais les deux.
+// Dérive une Echeance commune à toutes ses tâches (api/routes/ingestion.py).
 export interface RequeteNouvelleCommande {
   taches?: string[];
   // Durée propre à chaque tâche choisie, dans l'unité de l'instance (ex. { T1: 25, T2: 12 }) —
   // remplace la durée de la tâche sur toutes ses ressources compatibles, donc le planning en
   // tient compte. Une tâche absente garde ses durées actuelles.
   durees_taches?: Record<string, number>;
-  gammes?: GammeAvecQuantiteRequete[];
+  // Nombre de pièces quand la commande éclate le processus de l'atelier (1 par défaut) : chaque
+  // étape dure duree_par_piece × quantite. Ignoré pour une commande sur tâches existantes.
+  quantite?: number;
   date_limite?: number;
   // Durée globale prévue pour la commande, saisie librement par l'utilisateur (heures) — pure
   // métadonnée de traçabilité, jamais dérivée en Echeance ni lue par le DSL/solveur.
@@ -308,9 +300,11 @@ export interface RequeteNouvelleCommande {
 export interface ResultatNouvelleCommande {
   instance_id: string;
   commande_id: string;
+  // Tâches de la commande : créées par l'éclatement du processus, ou référencées telles quelles.
+  taches: string[];
   structure_contraintes: string;
-  // Avertissements de dérivation (§FC4) — ex. durée d'une étape de gamme comblée par
-  // apprentissage automatique plutôt que déclarée, jamais silencieux.
+  // Avertissements de dérivation (§FC4) — ex. étape du processus ignorée parce qu'aucune
+  // ressource de l'atelier ne sait la faire, jamais silencieux.
   avertissements: string[];
   // Exécution automatique déclenchée juste après l'ajout (best-effort, voir
   // api/routes/ingestion.py::ajouter_commande) — jamais de génération à la volée : execution_id
@@ -322,40 +316,12 @@ export interface ResultatNouvelleCommande {
   erreur_execution: string | null;
 }
 
-// POST /ingestion/commandes/{commande_id}/produits — ajoute un produit (gamme) supplémentaire à
-// une commande déjà créée (complète RequeteNouvelleCommande.gammes, qui ne joue qu'à la
-// création). Même forme que GammeAvecQuantiteRequete, un seul produit à la fois.
-export type RequeteAjoutProduitCommande = GammeAvecQuantiteRequete;
-
-export interface ResultatAjoutProduitCommande {
-  instance_id: string;
-  commande_id: string;
-  taches: string[];
-  gammes: GammeCommandeStatut[];
-  structure_contraintes: string;
-  avertissements: string[];
-  execution_id: string | null;
-  execution_reussie: boolean | null;
-  erreur_execution: string | null;
-}
-
 // Une tâche de la commande positionnée dans le temps (début/fin résolus contre le dernier
 // planning réussi) — de quoi tracer sa timeline. Absent tant que la commande n'est pas planifiee.
 export interface OperationCommande {
   tache: string;
   debut: number;
   fin: number;
-}
-
-// Un produit (gamme) référencé par une commande, tel que connu au moment de sa création —
-// `produit`/`nom` sont une copie figée (pas une lecture live de GammeProduit) : modifier ou
-// supprimer la gamme elle-même après coup n'affecte jamais la traçabilité d'une commande déjà
-// passée. `gamme_id` reste utile pour retrouver la gamme si elle existe encore.
-export interface GammeCommandeStatut {
-  gamme_id: string;
-  produit: string;
-  nom: string | null;
-  quantite: number | null;
 }
 
 // GET /ingestion/commandes/{commande_id} — statut recalculé à la volée contre le dernier
@@ -379,9 +345,9 @@ export interface StatutCommande {
   est_prospect: boolean;
   description: string | null;
   nom_client: string | null;
-  // Produits (gammes) référencés par cette commande, avec leur quantité — vide pour une commande
-  // qui ne référence que des tâches choisies directement (voir `taches` ci-dessus).
-  gammes: GammeCommandeStatut[];
+  // Nombre de pièces d'une commande éclatée depuis le processus de l'atelier (déjà appliqué aux
+  // durées de ses tâches) — null pour une commande qui référence des tâches existantes.
+  quantite: number | null;
   // Horodatage réel de la dernière exécution réussie de l'instance (même valeur que
   // PlanningAvecDurees.date_execution) — ancrage calendaire des jours relatifs de cette
   // commande (date_limite, operations[].debut/fin). `null` tant que l'instance n'a jamais été

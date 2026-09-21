@@ -80,7 +80,6 @@ import {
   type Objectif,
   type StatutCommande,
 } from "@/integrations/prisme";
-import { libelleProduitsCommande } from "@/lib/commande-produits";
 import { aujourdhui, debutJour, formatDateRelative, type UniteTemps } from "@/lib/dates-relatives";
 import { formatDuree } from "@/lib/unite-duree";
 import { BadgeTypeSignal } from "./supervision";
@@ -672,10 +671,6 @@ function SectionScenarios({
   );
 }
 
-// Associe des tâches déjà présentes dans l'instance à une commande et en dérive une échéance
-// (voir api/routes/ingestion.py, POST /ingestion/{instance_id}/commandes) — ne crée jamais de
-// tâche : contrairement à l'ancienne explosion de gamme, il faut que l'instance ait déjà les
-// tâches concernées (via l'ingestion normale).
 // Timeline compacte d'une commande : une ligne par tâche, échelonnée entre 0 et le plus tardif
 // de (sa propre fin, son échéance) — jamais le makespan de tout l'atelier, qui noierait la
 // commande dans le reste de l'activité. Rien à tracer avant sa première exécution réussie
@@ -812,9 +807,9 @@ function SectionNouvelleCommande({ instance }: { instance: InstanceDetail }) {
                     </Badge>
                   </div>
                 </div>
-                {libelleProduitsCommande(c.gammes) && (
+                {c.quantite !== null && (
                   <p className="text-xs text-muted-foreground">
-                    Produits : {libelleProduitsCommande(c.gammes)}
+                    {c.quantite} pièce{c.quantite > 1 ? "s" : ""}
                   </p>
                 )}
                 {c.description && <p className="text-xs text-muted-foreground">{c.description}</p>}

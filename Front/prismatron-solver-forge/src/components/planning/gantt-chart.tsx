@@ -33,23 +33,20 @@ import {
   parseEntreeDateHeure,
   type UniteTemps,
 } from "@/lib/dates-relatives";
+import {
+  HEURE_FERMETURE,
+  HEURE_OUVERTURE,
+  estInstantOuvre,
+  finRepetitionParTache,
+  segmentsRepetition,
+} from "@/lib/repetition-commande";
 
 function cle(op: { tache: string; ressource: string }): string {
   return `${op.tache}|${op.ressource}`;
 }
 
-// Heures ouvrées fixes 8h-22h — purement une convention d'affichage (comme le week-end
-// ci-dessous), jamais lue par le DSL/solveur ; sans effet en mode jours, où la granularité ne
-// descend pas sous la journée entière.
-const HEURE_OUVERTURE = 8;
-const HEURE_FERMETURE = 22;
-
-// Samedi/dimanche, et — en mode heures — les heures hors 8h-22h, marqués non ouvrés sur le
-// Gantt — purement visuel, ancré sur la même date que les graduations ; le DSL/solveur ne
-// connaît aucune notion de jour/heure ouvré(e) (voir
-// `ContrainteDisponibiliteRessource.jours_semaine_indisponibles`/`jours_indisponibles` pour la
-// vraie contrainte de planification, une notion distincte de cet affichage). Segments
-// consécutifs fusionnés en un seul, pour un rendu propre sans trait de jointure.
+// Plages non ouvrées marquées sur le Gantt (voir estInstantOuvre) ; segments consécutifs fusionnés
+// en un seul, pour un rendu propre sans trait de jointure.
 function segmentsNonOuvres(
   makespan: number,
   ancrage: Date,
@@ -58,12 +55,7 @@ function segmentsNonOuvres(
   const segments: { debut: number; fin: number }[] = [];
   let debutCourant: number | null = null;
   for (let instant = 0; instant < makespan; instant++) {
-    const date = dateDepuisAncrage(instant, ancrage, unite);
-    const weekEnd = [0, 6].includes(date.getDay());
-    const horsHeuresOuvrees =
-      unite === "heures" &&
-      (date.getHours() < HEURE_OUVERTURE || date.getHours() >= HEURE_FERMETURE);
-    const nonOuvre = weekEnd || horsHeuresOuvrees;
+    const nonOuvre = !estInstantOuvre(instant, ancrage, unite);
     if (nonOuvre && debutCourant === null) {
       debutCourant = instant;
     } else if (!nonOuvre && debutCourant !== null) {
@@ -210,6 +202,10 @@ export function GanttChart({
     }
   }
 
+  // Jusqu'où chaque tâche de commande se répète (voir finRepetitionParTache) — calculé sur
+  // `operations`, donc à jour après un glissement.
+  const finRepetition = finRepetitionParTache(commandes ?? [], operations);
+
   function reinitialiser() {
     setOperationsLocales(planning.operations);
     ajuster.reset();
@@ -285,11 +281,15 @@ export function GanttChart({
   }
   const ressources = [...parRessource.keys()].sort();
 
-  const jours = Array.from({ length: makespan }, (_, i) => i);
-  const nonOuvres = segmentsNonOuvres(makespan, ancrage, unite);
+  // Horizon de l'axe : le makespan, étendu jusqu'à la fin de répétition des tâches de commande
+  // (échéance parfois bien après la dernière opération planifiée) pour que les blocs répétés soient
+  // visibles. `makespan` reste la vraie fin du planning, seule base du taux d'utilisation.
+  const horizon = Math.max(makespan, ...finRepetition.values());
+  const jours = Array.from({ length: horizon }, (_, i) => i);
+  const nonOuvres = segmentsNonOuvres(horizon, ancrage, unite);
   const violations = ajuster.data && !ajuster.data.legal ? ajuster.data.violations : [];
 
-  // Fenêtre visible (bornes en instants, jamais négatives ni au-delà du makespan) — un filtre
+  // Fenêtre visible (bornes en instants, jamais négatives ni au-delà de l'horizon) — un filtre
   // vide de chaque côté retombe sur la vue complète, comportement historique inchangé.
   const parseEntree = unite === "heures" ? parseEntreeDateHeure : parseEntreeDate;
   const instantFiltreDebut = filtreDebut
@@ -298,9 +298,9 @@ export function GanttChart({
   const instantFiltreFin = filtreFin
     ? jourDepuisAncrage(parseEntree(filtreFin)!, ancrage, unite)
     : null;
-  const bornDebut = Math.min(Math.max(instantFiltreDebut ?? 0, 0), makespan);
-  const bornFin = Math.max(Math.min(instantFiltreFin ?? makespan, makespan), bornDebut + 1);
-  const periodeFiltree = bornDebut > 0 || bornFin < makespan;
+  const bornDebut = Math.min(Math.max(instantFiltreDebut ?? 0, 0), horizon);
+  const bornFin = Math.max(Math.min(instantFiltreFin ?? horizon, horizon), bornDebut + 1);
+  const periodeFiltree = bornDebut > 0 || bornFin < horizon;
   const joursAffiches = jours.filter((j) => j >= bornDebut && j < bornFin);
   const largeurPisteAffichee = (bornFin - bornDebut) * pxParJour;
   // Décale toute position absolue (en instants) vers l'origine de la fenêtre visible — la piste
@@ -343,7 +343,7 @@ export function GanttChart({
   // Indépendante de la période filtrée (contrairement à `afficherMaintenant` ci-dessous, qui ne
   // pilote que le rendu du trait dans la fenêtre courante) — sert à activer/désactiver le bouton
   // "Aujourd'hui" et à savoir s'il y a quelque chose vers quoi défiler.
-  const maintenantDansPortee = joursDepuisAncrage >= 0 && joursDepuisAncrage <= makespan;
+  const maintenantDansPortee = joursDepuisAncrage >= 0 && joursDepuisAncrage <= horizon;
   const afficherMaintenant = joursDepuisAncrage >= bornDebut && joursDepuisAncrage <= bornFin;
 
   // Réinitialise le filtre de période (sinon "aujourd'hui" pourrait rester hors de la fenêtre
@@ -524,6 +524,13 @@ export function GanttChart({
             Tâche associée à une commande
           </div>
         )}
+        {commandesParTache.size > 0 && (
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-4 rounded-sm border border-dashed border-primary/60 bg-primary/25" />
+            Projection : tâche répétée chaque jour ouvré jusqu'à la réalisation de la commande —
+            visuel seulement, aucune capacité réservée
+          </div>
+        )}
       </div>
 
       {(commandes ?? []).length > 0 && (
@@ -661,6 +668,35 @@ export function GanttChart({
                             .join(", ")}`}
                         />
                       ))}
+                    {operationsRessource.flatMap((op) => {
+                      const commandesTache = commandesParTache.get(op.tache) ?? [];
+                      if (commandesTache.length === 0) return [];
+                      return segmentsRepetition(
+                        op.fin,
+                        finRepetition.get(op.tache) ?? op.fin,
+                        ancrage,
+                        unite,
+                      )
+                        .filter((s) => s.fin > bornDebut && s.debut < bornFin)
+                        .map((s) => (
+                          <div
+                            key={`${cle(op)}|rep|${s.debut}`}
+                            title={`Projection (rien n'est réservé dans le planning) : ${op.tache} répétée chaque jour ouvré jusqu'à la réalisation de ${commandesTache
+                              .map((c) => c.commande_id)
+                              .join(", ")}`}
+                            className={`pointer-events-none absolute top-1.5 flex h-7 items-center gap-1 overflow-hidden rounded border border-dashed border-primary/60 bg-primary/25 px-1 text-[10px] text-primary transition-opacity ${
+                              correspondRecherche(op) ? "" : "opacity-25"
+                            }`}
+                            style={{
+                              left: decale(s.debut) + 1,
+                              width: (s.fin - s.debut) * pxParJour - 2,
+                            }}
+                          >
+                            <Tag className="h-2.5 w-2.5 shrink-0" />
+                            <span className="truncate">Projection · {op.tache}</span>
+                          </div>
+                        ));
+                    })}
                     {operationsRessource.map((op) => {
                       const cleOp = cle(op);
                       const enRetard = tachesEnRetardIds.has(op.tache);

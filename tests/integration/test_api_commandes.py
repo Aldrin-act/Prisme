@@ -2,7 +2,7 @@
 /ingestion/commandes/{commande_id}` (`api/routes/ingestion.py`) — une commande référence des
 tâches déjà présentes dans l'instance et en dérive une `Echeance`
 (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`), sans jamais
-en créer — contrairement à l'ancienne explosion de gamme (fonctionnalité retirée). State en
+en créer — le chemin qui éclate le processus de l'atelier est couvert par `test_api_processus.py`. State en
 mémoire (`EtatAPI`), aucun service externe requis.
 """
 

@@ -56,10 +56,8 @@ from api.etat import (
     CommandeEnregistree,
     Decision,
     DecisionHumaine,
-    EtapeGamme,
+    EtapeProcessus,
     EvenementGeneration,
-    GammeCommandeEnregistree,
-    GammeProduit,
     JobGeneration,
     Priorite,
     PropositionSupervision,
@@ -178,22 +176,10 @@ class EtatPostgres:
                     table=self._table("sources_donnees")
                 )
             )
-            # Gammes produit : gabarit d'étapes réutilisable par produit (compétences, ordre,
-            # durée), explosé en tâches concrètes à l'arrivée d'une commande qui le référence
-            # (une commande peut en référencer plusieurs — voir
-            # `adapters/gamme_derivation.py::traiter_nouvelle_commande`). Restaurée après un
-            # retrait temporaire (§ historique) : `CREATE TABLE IF NOT EXISTS`, idempotent comme
-            # toutes les migrations de ce fichier, la recrée si elle n'existe pas déjà.
-            connexion.execute(
-                sql.SQL(
-                    "CREATE TABLE IF NOT EXISTS {table} ("
-                    "id TEXT PRIMARY KEY, "
-                    "client_id TEXT NOT NULL REFERENCES {clients}(id), "
-                    "produit TEXT NOT NULL, "
-                    "nom TEXT, "
-                    "etapes JSONB NOT NULL)"
-                ).format(table=self._table("gammes_produit"), clients=self._table("clients"))
-            )
+            # Anciennes gammes produit (gabarits réutilisables par produit) — retirées, remplacées
+            # par un processus unique par atelier (`instances_trco.processus`, plus bas). Table
+            # supprimée avec son contenu, décision explicite : aucune donnée n'y est reprise.
+            connexion.execute(sql.SQL("DROP TABLE IF EXISTS {}").format(self._table("gammes_produit")))
 
             # Ancienne table Projet (portait un pointeur "instance courante" +
             # son propre historique d'exécution) — retirée, remplacée par
@@ -229,8 +215,8 @@ class EtatPostgres:
                 )
             )
             # Migrations idempotentes : la commande référence désormais des tâches déjà
-            # existantes (adapters/commande_derivation.py) plutôt que d'exploser une gamme
-            # (fonctionnalité retirée) — gamme_id/quantite n'ont plus de sens.
+            # existantes (adapters/commande_derivation.py) ou éclate le processus de l'atelier,
+            # jamais une gamme (fonctionnalité retirée) — gamme_id n'a plus de sens.
             connexion.execute(
                 sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS gamme_id").format(
                     table=self._table("commandes")
@@ -257,14 +243,9 @@ class EtatPostgres:
                     "ADD COLUMN IF NOT EXISTS nom_client TEXT"
                 ).format(table=self._table("commandes"))
             )
-            # Migration idempotente : produits (gammes) référencés par la commande, en copie
-            # figée au moment de la création (produit/nom, pas une lecture live de gammes_produit
-            # — voir docstring de GammeCommandeEnregistree, api/etat.py) : pure métadonnée de
-            # traçabilité, jamais lue par le DSL/solveur.
+            # Ancienne copie des gammes référencées par la commande — retirée avec les gammes.
             connexion.execute(
-                sql.SQL(
-                    "ALTER TABLE {table} ADD COLUMN IF NOT EXISTS gammes JSONB NOT NULL DEFAULT '[]'::jsonb"
-                ).format(table=self._table("commandes"))
+                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS gammes").format(table=self._table("commandes"))
             )
             # Migration idempotente : avancement réel déclaré par un humain (non_debutee /
             # en_cours / realisee) et horodatage de la déclaration de réalisation — voir
@@ -278,9 +259,21 @@ class EtatPostgres:
                     "ADD COLUMN IF NOT EXISTS date_realisation TEXT"
                 ).format(table=self._table("commandes"))
             )
+            # Migration idempotente : nombre de pièces d'une commande éclatée depuis le processus
+            # de l'atelier (déjà appliqué aux durées, gardé pour l'affichage — voir
+            # `CommandeEnregistree.quantite`). Remplace une ancienne suppression de cette même
+            # colonne : une migration ADD/DROP contradictoire l'effacerait à chaque démarrage.
             connexion.execute(
-                sql.SQL("ALTER TABLE {table} DROP COLUMN IF EXISTS quantite").format(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS quantite INTEGER").format(
                     table=self._table("commandes")
+                )
+            )
+            # Migration idempotente : processus unique de l'atelier (étapes JSON) — gabarit éclaté
+            # à chaque commande, jamais lu par le solveur (voir `EtapeProcessus`, api/etat.py).
+            # NULL = atelier sans processus défini.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS processus JSONB").format(
+                    table=self._table("instances_trco")
                 )
             )
             connexion.execute(
@@ -812,134 +805,62 @@ class EtatPostgres:
             )
             connexion.commit()
 
-    # --- Gammes produit ------------------------------------------------
+    # --- Processus d'atelier ------------------------------------------
 
     @staticmethod
-    def _etapes_vers_json(etapes: tuple[EtapeGamme, ...]) -> str:
+    def _etapes_vers_json(etapes: tuple[EtapeProcessus, ...]) -> str:
         return json.dumps(
             [
                 {
                     "id": e.id,
+                    "nom": e.nom,
                     "competences": list(e.competences),
                     "predecesseurs": list(e.predecesseurs),
-                    "duree_nominale": e.duree_nominale,
+                    "duree_par_piece": e.duree_par_piece,
                 }
                 for e in etapes
             ]
         )
 
     @staticmethod
-    def _etapes_depuis_json(donnees: list[dict]) -> tuple[EtapeGamme, ...]:
+    def _etapes_depuis_json(donnees: list[dict] | None) -> tuple[EtapeProcessus, ...]:
         return tuple(
-            EtapeGamme(
+            EtapeProcessus(
                 id=d["id"],
+                nom=d.get("nom"),
                 competences=tuple(d["competences"]),
                 predecesseurs=tuple(d.get("predecesseurs", [])),
-                duree_nominale=d.get("duree_nominale"),
+                duree_par_piece=d["duree_par_piece"],
             )
-            for d in donnees
+            for d in donnees or []
         )
 
-    def enregistrer_gamme(
-        self, client_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> str:
-        gamme_id = str(uuid.uuid4())
+    def definir_processus(
+        self, instance_id: str, etapes: tuple[EtapeProcessus, ...]
+    ) -> tuple[EtapeProcessus, ...]:
+        """Voir `EtatAPI.definir_processus` (`api/etat.py`) — même contrat. Colonne de
+        `instances_trco` plutôt qu'une table à part : supprimée avec l'atelier, sans cascade."""
         with closing(self._connexion()) as connexion:
-            connexion.execute(
-                sql.SQL("INSERT INTO {} (id, nom) VALUES (%s, NULL) ON CONFLICT (id) DO NOTHING").format(
-                    self._table("clients")
-                ),
-                (client_id,),
+            resultat = connexion.execute(
+                sql.SQL("UPDATE {} SET processus = %s::jsonb WHERE id = %s").format(self._table("instances_trco")),
+                (self._etapes_vers_json(etapes), instance_id),
             )
-            connexion.execute(
-                sql.SQL(
-                    "INSERT INTO {} (id, client_id, produit, nom, etapes) VALUES (%s, %s, %s, %s, %s::jsonb)"
-                ).format(self._table("gammes_produit")),
-                (gamme_id, client_id, produit, nom, self._etapes_vers_json(etapes)),
-            )
+            if resultat.rowcount == 0:
+                raise KeyError(instance_id)
             connexion.commit()
-        return gamme_id
+        return etapes
 
-    def recuperer_gamme(self, gamme_id: str) -> GammeProduit:
+    def recuperer_processus(self, instance_id: str) -> tuple[EtapeProcessus, ...]:
         with closing(self._connexion()) as connexion:
             ligne = connexion.execute(
-                sql.SQL("SELECT id, client_id, produit, nom, etapes FROM {} WHERE id = %s").format(
-                    self._table("gammes_produit")
-                ),
-                (gamme_id,),
+                sql.SQL("SELECT processus FROM {} WHERE id = %s").format(self._table("instances_trco")),
+                (instance_id,),
             ).fetchone()
         if ligne is None:
-            raise KeyError(gamme_id)
-        id_, client_id, produit, nom, etapes = ligne
-        return GammeProduit(
-            id=id_, client_id=client_id, produit=produit, nom=nom, etapes=self._etapes_depuis_json(etapes)
-        )
-
-    def lister_gammes(self, client_id: str | None = None) -> list[GammeProduit]:
-        requete = sql.SQL("SELECT id, client_id, produit, nom, etapes FROM {} WHERE 1 = 1").format(
-            self._table("gammes_produit")
-        )
-        parametres: list[str] = []
-        if client_id is not None:
-            requete += sql.SQL(" AND client_id = %s")
-            parametres.append(client_id)
-
-        with closing(self._connexion()) as connexion:
-            lignes = connexion.execute(requete, parametres).fetchall()
-        return [
-            GammeProduit(id=id_, client_id=cid, produit=produit, nom=nom, etapes=self._etapes_depuis_json(etapes))
-            for id_, cid, produit, nom, etapes in lignes
-        ]
-
-    def modifier_gamme(
-        self, gamme_id: str, produit: str, etapes: tuple[EtapeGamme, ...], nom: str | None = None
-    ) -> GammeProduit:
-        with closing(self._connexion()) as connexion:
-            existe = connexion.execute(
-                sql.SQL("SELECT client_id FROM {} WHERE id = %s").format(self._table("gammes_produit")),
-                (gamme_id,),
-            ).fetchone()
-            if existe is None:
-                raise KeyError(gamme_id)
-            connexion.execute(
-                sql.SQL("UPDATE {} SET produit = %s, nom = %s, etapes = %s::jsonb WHERE id = %s").format(
-                    self._table("gammes_produit")
-                ),
-                (produit, nom, self._etapes_vers_json(etapes), gamme_id),
-            )
-            connexion.commit()
-        return GammeProduit(id=gamme_id, client_id=existe[0], produit=produit, nom=nom, etapes=etapes)
-
-    def supprimer_gamme(self, gamme_id: str) -> None:
-        with closing(self._connexion()) as connexion:
-            existe = connexion.execute(
-                sql.SQL("SELECT 1 FROM {} WHERE id = %s").format(self._table("gammes_produit")),
-                (gamme_id,),
-            ).fetchone()
-            if existe is None:
-                raise KeyError(gamme_id)
-            connexion.execute(
-                sql.SQL("DELETE FROM {} WHERE id = %s").format(self._table("gammes_produit")),
-                (gamme_id,),
-            )
-            connexion.commit()
+            raise KeyError(instance_id)
+        return self._etapes_depuis_json(ligne[0])
 
     # --- Commandes -------------------------------------------------------
-
-    @staticmethod
-    def _gammes_commande_vers_json(gammes: tuple[GammeCommandeEnregistree, ...]) -> str:
-        return json.dumps(
-            [{"gamme_id": g.gamme_id, "produit": g.produit, "nom": g.nom, "quantite": g.quantite} for g in gammes]
-        )
-
-    @staticmethod
-    def _gammes_commande_depuis_json(donnees: list[dict]) -> tuple[GammeCommandeEnregistree, ...]:
-        return tuple(
-            GammeCommandeEnregistree(
-                gamme_id=d["gamme_id"], produit=d["produit"], nom=d.get("nom"), quantite=d.get("quantite")
-            )
-            for d in donnees
-        )
 
     def enregistrer_commande(
         self,
@@ -954,7 +875,7 @@ class EtatPostgres:
         est_prospect: bool = False,
         description: str | None = None,
         nom_client: str | None = None,
-        gammes: tuple[GammeCommandeEnregistree, ...] = (),
+        quantite: int | None = None,
     ) -> None:
         with closing(self._connexion()) as connexion:
             connexion.execute(
@@ -967,8 +888,8 @@ class EtatPostgres:
                 sql.SQL(
                     "INSERT INTO {} (id, instance_id, client_id, date_limite, taches, date_creation, "
                     "duree_heures, numero, date_debut_au_plus_tot, est_prospect, description, nom_client, "
-                    "gammes) "
-                    "VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)"
+                    "quantite) "
+                    "VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s, %s)"
                 ).format(self._table("commandes")),
                 (
                     commande_id,
@@ -983,7 +904,7 @@ class EtatPostgres:
                     est_prospect,
                     description,
                     nom_client,
-                    self._gammes_commande_vers_json(gammes),
+                    quantite,
                 ),
             )
             connexion.commit()
@@ -993,7 +914,7 @@ class EtatPostgres:
             ligne = connexion.execute(
                 sql.SQL(
                     "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
-                    "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes, "
+                    "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, quantite, "
                     "statut_realisation, date_realisation "
                     "FROM {} WHERE id = %s"
                 ).format(self._table("commandes")),
@@ -1014,7 +935,7 @@ class EtatPostgres:
             est_prospect,
             description,
             nom_client,
-            gammes,
+            quantite,
             statut_realisation,
             date_realisation,
         ) = ligne
@@ -1031,7 +952,7 @@ class EtatPostgres:
             est_prospect=est_prospect,
             description=description,
             nom_client=nom_client,
-            gammes=self._gammes_commande_depuis_json(gammes),
+            quantite=quantite,
             statut_realisation=statut_realisation,
             date_realisation=date_realisation,
         )
@@ -1053,33 +974,10 @@ class EtatPostgres:
             connexion.commit()
         return replace(commande, statut_realisation=statut, date_realisation=horodatage)
 
-    def ajouter_gamme_a_commande(
-        self, commande_id: str, taches_ajoutees: tuple[str, ...], gamme: GammeCommandeEnregistree
-    ) -> CommandeEnregistree:
-        """Voir `EtatAPI.ajouter_gamme_a_commande` (`api/etat.py`) — même contrat, `UPDATE` ciblé
-        plutôt qu'un ré-`INSERT` (qui violerait la clé primaire `id` et écraserait
-        `date_creation`)."""
-        commande = self.recuperer_commande(commande_id)
-        nouvelles_taches = (*commande.taches, *taches_ajoutees)
-        nouvelles_gammes = (*commande.gammes, gamme)
-        with closing(self._connexion()) as connexion:
-            connexion.execute(
-                sql.SQL("UPDATE {} SET taches = %s::jsonb, gammes = %s::jsonb WHERE id = %s").format(
-                    self._table("commandes")
-                ),
-                (
-                    json.dumps(list(nouvelles_taches)),
-                    self._gammes_commande_vers_json(nouvelles_gammes),
-                    commande_id,
-                ),
-            )
-            connexion.commit()
-        return replace(commande, taches=nouvelles_taches, gammes=nouvelles_gammes)
-
     def lister_commandes(self, instance_id: str | None = None) -> list[CommandeEnregistree]:
         requete = sql.SQL(
             "SELECT id, instance_id, client_id, date_limite, taches, date_creation, duree_heures, "
-            "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, gammes, "
+            "numero, date_debut_au_plus_tot, est_prospect, description, nom_client, quantite, "
             "statut_realisation, date_realisation "
             "FROM {} WHERE 1 = 1"
         ).format(self._table("commandes"))
@@ -1104,7 +1002,7 @@ class EtatPostgres:
                 est_prospect=est_prospect,
                 description=description,
                 nom_client=nom_client,
-                gammes=self._gammes_commande_depuis_json(gammes),
+                quantite=quantite,
                 statut_realisation=statut_realisation,
                 date_realisation=date_realisation,
             )
@@ -1121,7 +1019,7 @@ class EtatPostgres:
                 est_prospect,
                 description,
                 nom_client,
-                gammes,
+                quantite,
                 statut_realisation,
                 date_realisation,
             ) in lignes

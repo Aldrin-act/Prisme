@@ -213,8 +213,8 @@ _NB_MAX_EXEMPLES_DESCRIPTION = 30
 
 def _resumer_instance_pour_description(instance: InstanceTRCO) -> str:
     """Résumé compact et borné de l'instance pour `decrire_atelier`, plutôt que son JSON complet :
-    les tâches explosées depuis des gammes de commandes portent des identifiants générés
-    (`cmd-1a2b3c4d_0_DECOUPE`) et se répètent d'une commande à l'autre — seuls les produits, les
+    les tâches éclatées depuis le processus de l'atelier portent des identifiants générés
+    (`cmd-1a2b3c4d_DECOUPE`) et se répètent d'une commande à l'autre — seuls les produits, les
     noms d'étapes distincts, les ressources et les types de contraintes décrivent l'atelier."""
     from collections import Counter
 

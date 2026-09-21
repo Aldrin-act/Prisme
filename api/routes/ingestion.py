@@ -3,22 +3,21 @@
 from __future__ import annotations
 
 import uuid
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from adapters.commande_derivation import Commande, deriver_echeances_par_commande
-from adapters.competence_derivation import CompetenceSansDureeEstimee
-from adapters.gamme_derivation import ErreurExplosionGamme, GammeAvecQuantite, traiter_nouvelle_commande
+from adapters.processus_derivation import ErreurProcessus, eclater_processus, valider_processus
 from api.autorisation import client_id_pour_filtre, verifier_acces_client
 from api.comparaison_scenarios import calculer_metriques, calculer_statut_commande
 from api.dependencies import obtenir_registre
 from api.etat import (
     CommandeEnregistree,
+    EtapeProcessus,
     EtatAPI,
-    GammeCommandeEnregistree,
     StatutRealisationCommande,
     obtenir_etat,
     structure_contraintes,
@@ -28,9 +27,6 @@ from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
 from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif, Planning
 
-if TYPE_CHECKING:
-    from estimation import EstimateurDuree
-
 router = APIRouter(prefix="/ingestion", tags=["ingestion"])
 
 
@@ -38,18 +34,22 @@ class RequeteModificationObjectifs(BaseModel):
     objectifs: list[Objectif] = Field(min_length=1)
 
 
-class RequeteGammeCommande(BaseModel):
-    """Une entrée de `RequeteNouvelleCommande.gammes` — une commande peut référencer plusieurs
-    gammes (plusieurs produits), chacune avec sa propre quantité."""
+class RequeteEtapeProcessus(BaseModel):
+    id: str
+    nom: str | None = None
+    competences: list[str] = Field(min_length=1)
+    predecesseurs: list[str] = Field(default_factory=list)
+    duree_par_piece: int = Field(ge=1)
 
-    gamme_id: str
-    quantite: int | None = Field(default=None, ge=1)
+
+class RequeteProcessus(BaseModel):
+    etapes: list[RequeteEtapeProcessus] = Field(min_length=1)
 
 
 class RequeteNouvelleCommande(BaseModel):
-    # Tâches déjà existantes, choisies directement — optionnel dès lors qu'au moins une gamme est
-    # fournie (validé plus bas, voir `_valider_taches_ou_gammes`). Les deux mécanismes coexistent :
-    # une commande peut mélanger tâches choisies à la main et gammes explosées.
+    # Tâches déjà présentes dans l'atelier, choisies directement. Vide (cas normal depuis le
+    # formulaire) : la commande éclate le processus de l'atelier, `quantite` pièces — voir
+    # `ajouter_commande`. Les deux chemins ne se combinent jamais dans une même commande.
     taches: list[str] = Field(default_factory=list)
     # Durée propre à chaque tâche choisie directement, dans l'unité de l'instance
     # (`InstanceTRCO.unite_temps`) — ex. {"T1": 25, "T2": 12}. Contrairement à `duree_heures`
@@ -57,7 +57,9 @@ class RequeteNouvelleCommande(BaseModel):
     # toutes ses ressources compatibles (voir `_appliquer_durees_taches`), donc le planning en
     # tient compte. Une tâche absente du dict garde ses durées actuelles.
     durees_taches: dict[str, int] = Field(default_factory=dict)
-    gammes: list[RequeteGammeCommande] = Field(default_factory=list)
+    # Nombre de pièces, pour une commande qui éclate le processus de l'atelier : chaque étape
+    # dure `duree_par_piece × quantite`. Ignorée pour une commande sur tâches existantes.
+    quantite: int = Field(default=1, ge=1)
     date_limite: int | None = Field(default=None, ge=0)
     # Durée globale prévue, saisie librement par l'utilisateur (heures) — pure métadonnée de
     # traçabilité (voir `CommandeEnregistree.duree_heures`), jamais dérivée en Echeance.
@@ -88,18 +90,6 @@ def _appliquer_durees_taches(instance: InstanceTRCO, durees: dict[str, int]) -> 
     return InstanceTRCO.model_validate({**instance.model_dump(), "contraintes": contraintes})
 
 
-def _estimateur_duree_optionnel() -> EstimateurDuree | None:
-    """`estimation` (scikit-learn) est un extra optionnel (`uv sync --extra estimation`) — import
-    paresseux, même motif que dans `api/routes/adapters.py`/`sources.py`. Absent, une durée
-    d'étape de gamme manquante reste une erreur explicite (`CompetenceSansDureeEstimee`), jamais
-    devinée silencieusement."""
-    try:
-        from estimation import estimateur_par_defaut
-    except ImportError:
-        return None
-    return estimateur_par_defaut()
-
-
 def _commande_en_dict(
     commande: CommandeEnregistree,
     instance: InstanceTRCO,
@@ -126,19 +116,12 @@ def _commande_en_dict(
         "est_prospect": commande.est_prospect,
         "description": commande.description,
         "nom_client": commande.nom_client,
-        "gammes": _gammes_commande_en_dicts(commande.gammes),
+        "quantite": commande.quantite,
         "statut_realisation": commande.statut_realisation,
         "date_realisation": commande.date_realisation,
         "date_execution": date_execution,
         **calculer_statut_commande(instance, planning, commande.taches, commande.date_limite).en_dict(),
     }
-
-
-def _gammes_commande_en_dicts(gammes: tuple[GammeCommandeEnregistree, ...]) -> list[dict[str, object]]:
-    """Sérialisation de `CommandeEnregistree.gammes` pour les réponses JSON ci-dessous — même
-    forme que `RequeteGammeCommande` côté écriture, plus `produit`/`nom` (copie figée à la
-    création, voir docstring de `GammeCommandeEnregistree`)."""
-    return [{"gamme_id": g.gamme_id, "produit": g.produit, "nom": g.nom, "quantite": g.quantite} for g in gammes]
 
 
 def _ressources_manquantes_par_rapport_a_la_base(base: InstanceTRCO, scenario: InstanceTRCO) -> set[str]:
@@ -405,6 +388,74 @@ def modifier_instance(
     }
 
 
+def _etapes_domaine(requete: RequeteProcessus) -> tuple[EtapeProcessus, ...]:
+    return tuple(
+        EtapeProcessus(
+            id=e.id,
+            nom=e.nom,
+            competences=tuple(e.competences),
+            predecesseurs=tuple(e.predecesseurs),
+            duree_par_piece=e.duree_par_piece,
+        )
+        for e in requete.etapes
+    )
+
+
+def _processus_en_dict(etapes: tuple[EtapeProcessus, ...]) -> dict[str, object]:
+    return {
+        "etapes": [
+            {
+                "id": e.id,
+                "nom": e.nom,
+                "competences": list(e.competences),
+                "predecesseurs": list(e.predecesseurs),
+                "duree_par_piece": e.duree_par_piece,
+            }
+            for e in etapes
+        ]
+    }
+
+
+@router.get("/{instance_id}/processus")
+def obtenir_processus(
+    instance_id: str,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Le processus unique de l'atelier — `etapes` vide tant qu'il n'a jamais été défini."""
+    try:
+        client_id, _ = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+    verifier_acces_client(utilisateur, client_id)
+    return _processus_en_dict(etat.recuperer_processus(instance_id))
+
+
+@router.put("/{instance_id}/processus")
+def definir_processus(
+    instance_id: str,
+    requete: RequeteProcessus,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """Définit (ou remplace) le processus de l'atelier. Validé entièrement ici (étapes en double,
+    prédécesseur inconnu, cycle...) plutôt qu'à la première commande, des jours plus tard. Les
+    commandes déjà passées ne sont jamais réécrites : seules les suivantes suivent le nouveau
+    processus."""
+    try:
+        client_id, _ = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+    verifier_acces_client(utilisateur, client_id)
+
+    etapes = _etapes_domaine(requete)
+    try:
+        valider_processus(etapes)
+    except ErreurProcessus as erreur:
+        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
+    return _processus_en_dict(etat.definir_processus(instance_id, etapes))
+
+
 @router.post("/{instance_id}/commandes")
 def ajouter_commande(
     instance_id: str,
@@ -412,32 +463,30 @@ def ajouter_commande(
     etat: EtatAPI = Depends(obtenir_etat),
     utilisateur: dict = Depends(obtenir_utilisateur_courant),
 ) -> dict[str, object]:
-    """Associe des tâches à une commande et en dérive une `Echeance`
-    (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`) — deux
-    sources de tâches, combinables librement : `requete.taches` (déjà présentes dans l'instance,
-    ne crée jamais de tâche) et `requete.gammes` (une ou plusieurs gammes réutilisables, chacune
-    explosée en tâches fraîches — `adapters/gamme_derivation.py`, une commande pouvant référencer
-    plusieurs produits). `commande_id` généré ici, jamais fourni par l'appelant : aucun risque de
-    collision. Repasse par `EtatAPI.modifier_instance` (remplacement complet, historique
-    d'exécution intact).
+    """Crée une commande et en dérive une `Echeance` commune à toutes ses tâches
+    (`adapters/commande_derivation.py`, même mécanisme que `csv_import`/`json_import`). Deux
+    chemins, jamais combinés dans une même commande :
+
+    - **cas normal** (`requete.taches` vide) : le processus de l'atelier est éclaté en tâches
+      fraîches propres à cette commande, chaque étape durant `duree_par_piece × quantite`
+      (`adapters/processus_derivation.py`). 422 si l'atelier n'a pas encore de processus ;
+    - `requete.taches` fourni : la commande référence des tâches déjà présentes dans l'atelier,
+      sans en créer (import de données existantes, API).
+
+    `commande_id` généré ici, jamais fourni par l'appelant : aucun risque de collision. Repasse
+    par `EtatAPI.modifier_instance` (remplacement complet, historique d'exécution intact).
 
     Déclenche ensuite une exécution automatique (best-effort, même composition que
-    `POST /planifier/...` via `executer_pour_instance`) plutôt que d'attendre qu'une analyse de
-    supervision le propose : la commande vient de modifier l'instance (nouvelle `Echeance`), le
-    planning affiché doit refléter ça sans étape supplémentaire. Ne génère jamais de solveur à la
-    volée (principe fondateur "generate once") : si aucun solveur validé n'existe pour la
-    structure de contraintes résultante (ex. première commande à échéance de cette instance —
-    change `structure_contraintes`, un solveur déjà enregistré ne correspond plus tant qu'il
-    n'est pas régénéré), le 409 levé par `executer_pour_instance` est attrapé ici et renvoyé comme
-    statut informatif (`erreur_execution`) — jamais comme un échec de l'ajout de commande
-    lui-même, qui a déjà réussi à ce stade.
+    `POST /planifier/...` via `executer_pour_instance`) : la commande vient de modifier
+    l'instance, le planning affiché doit en tenir compte sans étape supplémentaire. Ne génère
+    jamais de solveur à la volée (principe fondateur "generate once") : si aucun solveur validé
+    ne correspond à la structure de contraintes résultante, le 409 levé par
+    `executer_pour_instance` est renvoyé comme statut informatif (`erreur_execution`), jamais
+    comme un échec de l'ajout de commande lui-même, qui a déjà réussi à ce stade.
 
-    `Registre` volontairement obtenu à la main (`obtenir_registre()`), jamais via `Depends` —
-    sinon FastAPI résoudrait la dépendance (connexion Postgres) *avant* d'entrer dans cette
-    fonction, hors de portée du `try`/`except` ci-dessous : Postgres injoignable ferait alors
-    échouer tout l'ajout de commande, pas seulement l'exécution automatique best-effort. Même
-    raison, aucun fixture `registre_test` requis dans les tests de ce endpoint (§ tests unitaires
-    `EtatAPI` sans service externe, voir `test_api_commandes.py`)."""
+    `Registre` obtenu à la main (`obtenir_registre()`), jamais via `Depends` — sinon FastAPI
+    résoudrait la dépendance (connexion Postgres) *avant* d'entrer ici, hors de portée du
+    `try`/`except` : Postgres injoignable ferait échouer tout l'ajout de commande."""
     try:
         client_id, instance = etat.recuperer_instance(instance_id)
     except KeyError:
@@ -445,72 +494,56 @@ def ajouter_commande(
 
     verifier_acces_client(utilisateur, client_id)
 
-    if not requete.taches and not requete.gammes:
-        raise HTTPException(status_code=422, detail="une commande doit référencer au moins une tâche ou une gamme")
-
-    ids_connus = {t.id for t in instance.taches}
-    inconnues = [t for t in requete.taches if t not in ids_connus]
-    if inconnues:
-        raise HTTPException(status_code=422, detail=f"tâche(s) inconnue(s) de cette instance : {inconnues}")
-
-    hors_commande = sorted(set(requete.durees_taches) - set(requete.taches))
-    if hors_commande:
-        raise HTTPException(
-            status_code=422,
-            detail=f"durée fournie pour des tâches absentes de la commande : {hors_commande}",
-        )
-    durees_invalides = sorted(t for t, d in requete.durees_taches.items() if d < 1)
-    if durees_invalides:
-        raise HTTPException(
-            status_code=422, detail=f"durée invalide (entier ≥ 1 attendu) pour : {durees_invalides}"
-        )
-    try:
-        instance = _appliquer_durees_taches(instance, requete.durees_taches)
-    except ValidationError as erreur:
-        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
-
     commande_id = f"cmd-{uuid.uuid4().hex[:8]}"
-
-    # Résout chaque gamme référencée avant toute explosion — 404/400 explicites plutôt que de
-    # fusionner partiellement une instance si une seule des gammes de la liste est invalide.
-    gammes_resolues: list[GammeAvecQuantite] = []
-    for entree in requete.gammes:
-        try:
-            gamme = etat.recuperer_gamme(entree.gamme_id)
-        except KeyError:
-            raise HTTPException(status_code=404, detail=f"gamme inconnue : {entree.gamme_id!r}") from None
-        if gamme.client_id != client_id:
-            raise HTTPException(
-                status_code=400, detail=f"la gamme {entree.gamme_id!r} n'appartient pas au client de l'instance"
-            )
-        gammes_resolues.append(GammeAvecQuantite(gamme=gamme, quantite=entree.quantite))
-
-    instance_avec_gammes = instance
-    taches_explodees: tuple[str, ...] = ()
     avertissements: tuple[str, ...] = ()
-    if gammes_resolues:
-        try:
-            resultat_gammes = traiter_nouvelle_commande(
-                instance, gammes_resolues, commande_id, estimateur_duree=_estimateur_duree_optionnel()
+    quantite: int | None = None
+
+    if requete.taches:
+        ids_connus = {t.id for t in instance.taches}
+        inconnues = [t for t in requete.taches if t not in ids_connus]
+        if inconnues:
+            raise HTTPException(status_code=422, detail=f"tâche(s) inconnue(s) de cette instance : {inconnues}")
+        hors_commande = sorted(set(requete.durees_taches) - set(requete.taches))
+        if hors_commande:
+            raise HTTPException(
+                status_code=422,
+                detail=f"durée fournie pour des tâches absentes de la commande : {hors_commande}",
             )
-        except (ErreurExplosionGamme, CompetenceSansDureeEstimee) as erreur:
+        durees_invalides = sorted(t for t, d in requete.durees_taches.items() if d < 1)
+        if durees_invalides:
+            raise HTTPException(
+                status_code=422, detail=f"durée invalide (entier ≥ 1 attendu) pour : {durees_invalides}"
+            )
+        try:
+            instance = _appliquer_durees_taches(instance, requete.durees_taches)
+        except ValidationError as erreur:
+            raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
+        taches_commande = tuple(requete.taches)
+    else:
+        processus = etat.recuperer_processus(instance_id)
+        if not processus:
+            raise HTTPException(
+                status_code=422,
+                detail="cet atelier n'a pas encore de processus : définissez-le avant de créer une commande",
+            )
+        try:
+            resultat = eclater_processus(instance, processus, commande_id, requete.quantite)
+        except ErreurProcessus as erreur:
             raise HTTPException(status_code=422, detail=str(erreur)) from erreur
         except ValidationError as erreur:
             raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
-        instance_avec_gammes = resultat_gammes.instance
-        taches_explodees = resultat_gammes.taches_explodees
-        avertissements = resultat_gammes.avertissements
+        instance = resultat.instance
+        taches_commande = resultat.taches_creees
+        avertissements = resultat.avertissements
+        quantite = requete.quantite
 
-    # Échéance dérivée une seule fois, sur l'ensemble complet des tâches de la commande — choisies
-    # directement et/ou explosées depuis une gamme, sans distinction à ce stade.
-    toutes_taches_commande = (*requete.taches, *taches_explodees)
     try:
         nouvelles_echeances = deriver_echeances_par_commande(
-            [Commande(id=commande_id, taches=toutes_taches_commande, date_limite=requete.date_limite)],
-            instance_avec_gammes.contraintes,
+            [Commande(id=commande_id, taches=taches_commande, date_limite=requete.date_limite)],
+            instance.contraintes,
         )
-        instance_fusionnee_dsl = instance_avec_gammes.model_copy(
-            update={"contraintes": [*instance_avec_gammes.contraintes, *nouvelles_echeances]}
+        instance_fusionnee_dsl = InstanceTRCO(
+            **{**dict(instance), "contraintes": [*instance.contraintes, *nouvelles_echeances]}
         )
     except ValidationError as erreur:
         raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
@@ -522,19 +555,14 @@ def ajouter_commande(
         instance_id,
         client_id,
         requete.date_limite,
-        toutes_taches_commande,
+        taches_commande,
         duree_heures=requete.duree_heures,
         numero=requete.numero,
         date_debut_au_plus_tot=requete.date_debut_au_plus_tot,
         est_prospect=requete.est_prospect,
         description=requete.description,
         nom_client=requete.nom_client,
-        gammes=tuple(
-            GammeCommandeEnregistree(
-                gamme_id=g.gamme.id, produit=g.gamme.produit, nom=g.gamme.nom, quantite=g.quantite
-            )
-            for g in gammes_resolues
-        ),
+        quantite=quantite,
     )
 
     execution_id: str | None = None
@@ -553,113 +581,9 @@ def ajouter_commande(
     return {
         "instance_id": instance_id,
         "commande_id": commande_id,
+        "taches": list(taches_commande),
         "structure_contraintes": structure_contraintes(instance_fusionnee),
         "avertissements": list(avertissements),
-        "execution_id": execution_id,
-        "execution_reussie": execution_reussie,
-        "erreur_execution": erreur_execution,
-    }
-
-
-@router.post("/commandes/{commande_id}/produits")
-def ajouter_produit_a_commande(
-    commande_id: str,
-    requete: RequeteGammeCommande,
-    etat: EtatAPI = Depends(obtenir_etat),
-    utilisateur: dict = Depends(obtenir_utilisateur_courant),
-) -> dict[str, object]:
-    """Ajoute un produit (gamme) supplémentaire à une commande déjà créée — complète
-    `POST /{instance_id}/commandes`, qui ne permet de référencer des gammes qu'à la création.
-    Explose la gamme en tâches fraîches (`adapters/gamme_derivation.py`, même mécanisme), fusionne
-    dans l'instance de la commande, et étend `CommandeEnregistree.taches`/`.gammes` en place —
-    `commande_id`/`date_creation`/`date_limite` inchangés. `index_depart=len(commande.gammes)`
-    (voir `traiter_nouvelle_commande`) évite toute collision de préfixe de tâche avec les produits
-    déjà explosés pour cette même commande.
-
-    Échéance dérivée uniquement pour les tâches fraîchement explosées : les tâches déjà présentes
-    dans la commande ont déjà la leur (ou aucune), `deriver_echeances_par_commande` ne touche
-    jamais une tâche à échéance explicite (voir sa docstring) — pas de re-dérivation sur l'existant.
-
-    Même best-effort d'exécution automatique post-fusion que `ajouter_commande` ci-dessus, pour
-    les mêmes raisons (409 si aucun solveur ne correspond encore à la structure de contraintes
-    résultante — jamais une génération à la volée)."""
-    try:
-        commande = etat.recuperer_commande(commande_id)
-    except KeyError:
-        raise HTTPException(status_code=404, detail="commande inconnue") from None
-
-    verifier_acces_client(utilisateur, commande.client_id)
-
-    try:
-        client_id, instance = etat.recuperer_instance(commande.instance_id)
-    except KeyError:
-        raise HTTPException(status_code=404, detail="instance inconnue") from None
-
-    try:
-        gamme = etat.recuperer_gamme(requete.gamme_id)
-    except KeyError:
-        raise HTTPException(status_code=404, detail=f"gamme inconnue : {requete.gamme_id!r}") from None
-    if gamme.client_id != client_id:
-        raise HTTPException(
-            status_code=400, detail=f"la gamme {requete.gamme_id!r} n'appartient pas au client de l'instance"
-        )
-
-    try:
-        resultat_gamme = traiter_nouvelle_commande(
-            instance,
-            [GammeAvecQuantite(gamme=gamme, quantite=requete.quantite)],
-            commande_id,
-            estimateur_duree=_estimateur_duree_optionnel(),
-            index_depart=len(commande.gammes),
-        )
-    except (ErreurExplosionGamme, CompetenceSansDureeEstimee) as erreur:
-        raise HTTPException(status_code=422, detail=str(erreur)) from erreur
-    except ValidationError as erreur:
-        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
-
-    try:
-        nouvelles_echeances = deriver_echeances_par_commande(
-            [Commande(id=commande_id, taches=resultat_gamme.taches_explodees, date_limite=commande.date_limite)],
-            resultat_gamme.instance.contraintes,
-        )
-        instance_fusionnee_dsl = resultat_gamme.instance.model_copy(
-            update={"contraintes": [*resultat_gamme.instance.contraintes, *nouvelles_echeances]}
-        )
-    except ValidationError as erreur:
-        raise HTTPException(status_code=422, detail=erreurs_serialisables(erreur)) from erreur
-
-    instance_fusionnee = etat.modifier_instance(commande.instance_id, instance_fusionnee_dsl)
-
-    commande_mise_a_jour = etat.ajouter_gamme_a_commande(
-        commande_id,
-        resultat_gamme.taches_explodees,
-        GammeCommandeEnregistree(
-            gamme_id=gamme.id, produit=gamme.produit, nom=gamme.nom, quantite=requete.quantite
-        ),
-    )
-
-    execution_id: str | None = None
-    execution_reussie: bool | None = None
-    erreur_execution: str | None = None
-    try:
-        registre = obtenir_registre()
-        execution_id, resultat_execution, _ = executer_pour_instance(
-            etat, registre, commande.instance_id, utilisateur
-        )
-        execution_reussie = resultat_execution.reussi
-        erreur_execution = resultat_execution.erreur
-    except HTTPException as erreur:
-        erreur_execution = str(erreur.detail)
-    except psycopg.OperationalError as erreur:
-        erreur_execution = f"exécution automatique indisponible (Postgres injoignable) : {erreur}"
-
-    return {
-        "instance_id": commande.instance_id,
-        "commande_id": commande_id,
-        "taches": list(commande_mise_a_jour.taches),
-        "gammes": _gammes_commande_en_dicts(commande_mise_a_jour.gammes),
-        "structure_contraintes": structure_contraintes(instance_fusionnee),
-        "avertissements": list(resultat_gamme.avertissements),
         "execution_id": execution_id,
         "execution_reussie": execution_reussie,
         "erreur_execution": erreur_execution,

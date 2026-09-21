@@ -525,9 +525,8 @@ export const prismeClient = {
       null,
     ),
 
-  // Associe des tâches à une commande et en dérive une échéance — deux sources combinables :
-  // taches (déjà présentes dans l'instance, jamais créées) et gammes (une ou plusieurs, chacune
-  // explosée en tâches fraîches — voir api/routes/ingestion.py).
+  // Crée une commande : éclate le processus de l'atelier (cas normal) ou référence des tâches
+  // déjà présentes (`taches`), et en dérive une échéance commune (api/routes/ingestion.py).
   ajouterCommande: (instanceId: string, requete: Types.RequeteNouvelleCommande) =>
     apiFetch<Types.ResultatNouvelleCommande>(
       `${PRISME_CONFIG.routes.ingestion}/${instanceId}/commandes`,
@@ -547,38 +546,18 @@ export const prismeClient = {
       { method: "PATCH", body: JSON.stringify(requete) },
     ),
 
-  // Ajoute un produit (gamme) supplémentaire à une commande déjà créée — complète ajouterCommande
-  // ci-dessus, qui ne permet de référencer des gammes qu'à la création (voir
-  // api/routes/ingestion.py::ajouter_produit_a_commande).
-  ajouterProduitACommande: (commandeId: string, requete: Types.RequeteAjoutProduitCommande) =>
-    apiFetch<Types.ResultatAjoutProduitCommande>(
-      `${PRISME_CONFIG.routes.ingestion}/commandes/${commandeId}/produits`,
-      { method: "POST", body: JSON.stringify(requete) },
-    ),
+  // PROCESSUS D'ATELIER — un seul par atelier, éclaté en tâches propres à chaque nouvelle
+  // commande (voir ajouterCommande ci-dessus).
+  obtenirProcessus: (instanceId: string) =>
+    apiFetch<Types.ProcessusAtelier>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}/processus`),
 
-  // GAMMES OPÉRATOIRES RÉUTILISABLES — décrites une fois par produit, explosées en tâches
-  // concrètes à chaque commande qui les référence (voir ajouterCommande ci-dessus,
-  // api/routes/gammes.py). Même convention clientId que creerSource : dérivé du compte
-  // authentifié, sauf admin ciblant un autre client.
-  creerGamme: (produit: string, etapes: Types.EtapeGamme[], nom?: string, clientId?: string) =>
-    apiFetch<{ gamme_id: string }>(PRISME_CONFIG.routes.gammes, {
-      method: "POST",
-      body: JSON.stringify({ produit, etapes, nom: nom ?? null, client_id: clientId ?? null }),
-    }),
-
-  listerGammes: () => apiFetch<Types.GammeProduit[]>(PRISME_CONFIG.routes.gammes),
-
-  obtenirGamme: (gammeId: string) =>
-    apiFetch<Types.GammeProduit>(`${PRISME_CONFIG.routes.gammes}/${gammeId}`),
-
-  modifierGamme: (gammeId: string, produit: string, etapes: Types.EtapeGamme[], nom?: string) =>
-    apiFetch<Types.GammeProduit>(`${PRISME_CONFIG.routes.gammes}/${gammeId}`, {
+  // Remplace le processus de l'atelier. Les commandes déjà passées ne sont jamais réécrites :
+  // seules les suivantes suivent le nouveau processus.
+  definirProcessus: (instanceId: string, etapes: Types.EtapeProcessus[]) =>
+    apiFetch<Types.ProcessusAtelier>(`${PRISME_CONFIG.routes.ingestion}/${instanceId}/processus`, {
       method: "PUT",
-      body: JSON.stringify({ produit, etapes, nom: nom ?? null }),
+      body: JSON.stringify({ etapes }),
     }),
-
-  supprimerGamme: (gammeId: string) =>
-    apiFetch<void>(`${PRISME_CONFIG.routes.gammes}/${gammeId}`, { method: "DELETE" }),
 
   // Toutes les commandes de cet atelier, chacune avec son statut recalculé à la volée.
   listerCommandes: (instanceId: string) =>
