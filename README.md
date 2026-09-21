@@ -111,8 +111,11 @@ bout-en-bout s'exécutent réellement, pas seulement en `skip`). Un run rouge do
 
 | Variable | Rôle | Défaut |
 |---|---|---|
-| `OPENROUTER_API_KEY` | Clé API du fournisseur LLM unique (`generation/`) | — |
-| `PRISME_LLM_MODEL` | Modèle à utiliser (routé via OpenRouter) | `moonshotai/kimi-k2.6` |
+| `KIMI_API_KEY` | Clé API Kimi (console `platform.kimi.ai`) — appel direct, fournisseur par défaut dès qu'elle est renseignée | — |
+| `KIMI_API_BASE_URL` | Hôte d'API Kimi, à renseigner seulement pour la plateforme chinoise | plateforme internationale |
+| `OPENROUTER_API_KEY` | Clé API OpenRouter — fournisseur de repli (`generation/`) | — |
+| `PRISME_LLM_FOURNISSEUR` | Force le fournisseur : `kimi` ou `openrouter` | selon la présence de `KIMI_API_KEY` |
+| `PRISME_LLM_MODEL` | Modèle à utiliser (le préfixe d'éditeur est retiré en appel direct) | `moonshotai/kimi-k2.6` |
 
 ## Arborescence
 

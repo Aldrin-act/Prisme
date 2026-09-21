@@ -780,10 +780,12 @@ export function useGenererInstanceDepuisSource() {
     mutationFn: ({
       sourceId,
       instructionsComplementaires,
+      signal,
     }: {
       sourceId: string;
       instructionsComplementaires?: string;
-    }) => prismeClient.genererInstanceDepuisSource(sourceId, instructionsComplementaires),
+      signal?: AbortSignal;
+    }) => prismeClient.genererInstanceDepuisSource(sourceId, instructionsComplementaires, signal),
   });
 }
 

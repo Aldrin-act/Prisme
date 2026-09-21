@@ -26,6 +26,9 @@ export class PrismeAPIError extends Error {
   }
 }
 
+/** Statut posé sur une `PrismeAPIError` quand l'appelant a lui-même annulé la requête (pas une panne). */
+export const STATUT_REQUETE_ANNULEE = 499;
+
 // `detail` a 3 formes possibles selon la route (voir `Types.ErreurAPI`) — un
 // objet {code, message} (toutes les erreurs d'auth) affiché tel quel donnait
 // "Erreur API: [object Object]", le message humain n'était jamais extrait.
@@ -56,6 +59,12 @@ async function apiFetch<T>(
   const controller = new AbortController();
   const timeoutId =
     timeoutMs === null ? undefined : setTimeout(() => controller.abort(), timeoutMs);
+  // Annulation demandée par l'appelant (ex. bouton "Arrêter") — relayée vers notre propre
+  // controller, qui reste seul à être passé à fetch (voir `signal` plus bas).
+  const signalAppelant = options?.signal;
+  const relayerAnnulation = () => controller.abort();
+  if (signalAppelant?.aborted) controller.abort();
+  else signalAppelant?.addEventListener("abort", relayerAnnulation);
 
   try {
     // FormData (upload de fichier) : laisser le navigateur poser son propre
@@ -99,11 +108,16 @@ async function apiFetch<T>(
     clearTimeout(timeoutId);
     if (error instanceof PrismeAPIError) throw error;
     if (error instanceof Error && error.name === "AbortError") {
+      if (signalAppelant?.aborted) {
+        throw new PrismeAPIError("Requête annulée", STATUT_REQUETE_ANNULEE);
+      }
       throw new PrismeAPIError("Timeout: La requête a pris trop de temps", 408);
     }
     throw new PrismeAPIError(
       `Erreur réseau: ${error instanceof Error ? error.message : "Inconnue"}`,
     );
+  } finally {
+    signalAppelant?.removeEventListener("abort", relayerAnnulation);
   }
 }
 
@@ -441,7 +455,13 @@ export const prismeClient = {
   // l'utilisateur attendre plutôt que d'abandonner arbitrairement.
   // `instructionsComplementaires` (optionnel) : contexte métier libre injecté dans une section
   // dédiée du prompt — jamais un moyen de réécrire les règles de traduction elles-mêmes.
-  genererInstanceDepuisSource: (sourceId: string, instructionsComplementaires?: string) =>
+  // `signal` (optionnel) : bouton "Arrêter" — coupe la connexion, ce que le serveur détecte pour
+  // abandonner la conversion sans enregistrer d'instance.
+  genererInstanceDepuisSource: (
+    sourceId: string,
+    instructionsComplementaires?: string,
+    signal?: AbortSignal,
+  ) =>
     apiFetch<Types.ReponseComprehension>(
       `${PRISME_CONFIG.routes.sources}/${sourceId}/generer-instance`,
       {
@@ -449,6 +469,7 @@ export const prismeClient = {
         body: JSON.stringify({
           instructions_complementaires: instructionsComplementaires || null,
         }),
+        signal,
       },
       null,
     ),

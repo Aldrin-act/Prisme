@@ -9,6 +9,7 @@
 export {
   prismeClient,
   PrismeAPIError,
+  STATUT_REQUETE_ANNULEE,
   demarrerGenerationSolveur,
   annulerGenerationSolveur,
   suivreJobGeneration,

@@ -42,15 +42,23 @@ cd Front/prismatron-solver-forge && npm install && npm run dev  # frontend dev s
 ```
 
 No type-checker configured. Environment variables:
-- `PRISME_LLM_MODEL` (default `moonshotai/kimi-k2.6`) / `OPENROUTER_API_KEY` — OpenRouter
-  (OpenAI-compatible gateway to Kimi K2/Moonshot AI and other models, via `ChatOpenAI(base_url=...)`
-  — no dedicated LangChain partner package used, same reasoning as the removals below) is the sole
-  LLM provider (`generation/agents/client_llm.py`; the other providers this project used to
-  support — qwen/together/nvidia/minimax/deepseek, plus `config_fournisseurs.py`'s per-agent
-  routing, then Mistral itself, then a direct Moonshot API call — were removed, judged unneeded
-  complexity for a single provider actually run in production). Per-agent overrides:
-  `PRISME_LLM_MODEL_<AGENT>` / `_TIMEOUT_SECONDES_<AGENT>` (e.g. `PRISME_LLM_MODEL_DEBUGGER`) — no
-  per-agent provider choice anymore, there's only one.
+- `PRISME_LLM_MODEL` (default `moonshotai/kimi-k2.6`) plus **two interchangeable providers**
+  (`generation/agents/client_llm.py`), both reached through `ChatOpenAI(base_url=...)` since both
+  speak the OpenAI protocol — no dedicated LangChain partner package, same reasoning as the
+  removals below. `KIMI_API_KEY` (a key from the Kimi console, `platform.kimi.ai`; + optional
+  `KIMI_API_BASE_URL`) calls **Kimi directly**, one gateway less in the path;
+  `OPENROUTER_API_KEY` (+ optional `OPENROUTER_API_BASE_URL`) keeps **OpenRouter** as the fallback.
+  `PRISME_LLM_FOURNISSEUR` (`kimi`/`openrouter`) forces one; absent, the presence of `KIMI_API_KEY`
+  decides (`fournisseur_llm()`). An OpenRouter-catalogue model id is accepted as is in Kimi mode —
+  the `moonshotai/` vendor prefix that catalogue imposes is stripped (`_nom_modele_kimi`), leaving
+  `kimi-k2.6`. The default base URL is the international Kimi API host — **verified** as the one
+  that actually answers (`api.kimi.ai` resolves but serves no `/v1` API); the Chinese platform
+  (`api.moonshot.cn`) issues **separate keys**, so set `KIMI_API_BASE_URL` when using one. A 401
+  `incorrect_api_key_error` on both hosts means the key itself is revoked or wrong, not the
+  endpoint. Earlier providers (qwen/together/nvidia/minimax/deepseek, `config_fournisseurs.py`'s
+  per-agent routing, then Mistral) were removed as unneeded complexity. Per-agent overrides:
+  `PRISME_LLM_MODEL_<AGENT>` / `_TIMEOUT_SECONDES_<AGENT>` (e.g. `PRISME_LLM_MODEL_DEBUGGER`) — the
+  provider choice stays global, never per agent.
 - `DATABASE_URL` — Postgres DSN read by `EtatPostgres`/`Registre`; `obtenir_etat()` always builds
   `EtatPostgres` outside tests, which override it with an in-memory `EtatAPI()` instead.
 - `JWT_SECRET_KEY`/`JWT_ALGORITHM`/`JWT_EXPIRE_MINUTES` (`api/routes/auth.py`, insecure hardcoded

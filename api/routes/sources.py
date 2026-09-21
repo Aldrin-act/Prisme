@@ -23,13 +23,15 @@ client explicitement) — voir `api/autorisation.py`.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import re
+import threading
 from typing import TYPE_CHECKING, Literal
 
 import httpx
 import psycopg
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import BaseModel, Field, ValidationError
 
@@ -349,9 +351,17 @@ class RequeteGenererInstance(BaseModel):
     instructions_complementaires: str | None = None
 
 
+STATUT_CLIENT_A_COUPE = 499  # convention nginx : le client a fermé la connexion avant la réponse
+
+
+class _GenerationAnnulee(Exception):
+    """Le client a coupé la connexion (bouton « Arrêter ») avant l'enregistrement de l'instance."""
+
+
 @router.post("/{source_id}/generer-instance")
-def generer_instance(
+async def generer_instance(
     source_id: str,
+    request: Request,
     requete: RequeteGenererInstance | None = None,
     etat: EtatAPI = Depends(obtenir_etat),
     modele: BaseChatModel = Depends(construire_modele_comprehension),
@@ -364,7 +374,42 @@ def generer_instance(
 
     `requete.instructions_complementaires` (optionnel, jamais persisté sur la source elle-même —
     une tentative peut vouloir des instructions différentes de la précédente) : voir
-    `construire_prompt_comprehension`."""
+    `construire_prompt_comprehension`.
+
+    Arrêt par l'utilisateur : le travail (appel LLM bloquant) tourne dans un thread pendant que
+    cette coroutine surveille la connexion. Si le client la coupe, l'appel LLM en cours ne peut
+    pas être interrompu (il finit en tâche de fond, ses tokens sont déjà consommés), mais son
+    résultat est jeté : rien n'est enregistré."""
+    annule = threading.Event()
+    instructions = requete.instructions_complementaires if requete else None
+    tache = asyncio.create_task(
+        asyncio.to_thread(_convertir_source_par_agent, source_id, instructions, etat, modele, utilisateur, annule)
+    )
+    # Si on abandonne la tâche, son exception finale (_GenerationAnnulee) ne doit pas rester non lue.
+    tache.add_done_callback(lambda t: t.cancelled() or t.exception())
+    try:
+        while not tache.done():
+            if await request.is_disconnected():
+                annule.set()
+                raise HTTPException(status_code=STATUT_CLIENT_A_COUPE, detail="génération arrêtée")
+            await asyncio.wait({tache}, timeout=0.5)
+    except asyncio.CancelledError:
+        annule.set()
+        raise
+    try:
+        return tache.result()
+    except _GenerationAnnulee:
+        raise HTTPException(status_code=STATUT_CLIENT_A_COUPE, detail="génération arrêtée") from None
+
+
+def _convertir_source_par_agent(
+    source_id: str,
+    instructions: str | None,
+    etat: EtatAPI,
+    modele: BaseChatModel,
+    utilisateur: dict,
+    annule: threading.Event,
+) -> dict[str, object]:
     try:
         source = etat.recuperer_source(source_id)
     except KeyError:
@@ -372,11 +417,13 @@ def generer_instance(
 
     verifier_acces_client(utilisateur, source.client_id)
 
-    instructions = requete.instructions_complementaires if requete else None
     try:
         resultat = comprendre_donnees_erp(modele, source.donnees_brutes, instructions)
     except ErreurReponseAgentInvalide as erreur:
         raise HTTPException(status_code=502, detail=f"agent de compréhension : {erreur}") from erreur
+
+    if annule.is_set():
+        raise _GenerationAnnulee
 
     instance = valider_payload_trco(resultat.instance_brute)  # lève déjà un 422 si invalide
     try:

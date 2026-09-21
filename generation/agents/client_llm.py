@@ -1,7 +1,8 @@
 """Client LLM générique pour les agents du pipeline (§5.6).
 
-**Fournisseur : Kimi (Moonshot AI) en direct**, dès que `KIMI_API_KEY` est renseignée — l'API
-Moonshot est compatible OpenAI (`_construire_modele_kimi`), modèle par défaut `kimi-k2.6`.
+**Fournisseur : Kimi en direct**, dès que `KIMI_API_KEY` est renseignée — l'API Kimi est
+compatible OpenAI (`_construire_modele_kimi`), modèle par défaut `kimi-k2.6`, clés créées
+depuis la console Kimi (`platform.kimi.ai`).
 **OpenRouter** (`OPENROUTER_API_KEY`) reste le repli quand aucune clé Kimi n'est configurée.
 `PRISME_LLM_FOURNISSEUR` (`kimi` / `openrouter`) force l'un ou l'autre ; absente, la présence de
 la clé Kimi tranche (`fournisseur_llm`). Aucune clé n'est jamais lue ailleurs, manipulée ni
@@ -9,8 +10,9 @@ journalisée ici : elle est passée telle quelle à `ChatOpenAI`.
 
 `PRISME_LLM_MODEL` et les surcharges par agent (`PRISME_LLM_MODEL_<AGENT>`/
 `PRISME_LLM_TIMEOUT_SECONDES_<AGENT>`) valent pour les deux fournisseurs. Un nom de modèle au
-format OpenRouter (`moonshotai/kimi-k2.6`) est accepté tel quel en mode Kimi : le préfixe du
-fournisseur est retiré (`_nom_modele_kimi`). Les autres fournisseurs historiques
+format du catalogue OpenRouter (`moonshotai/kimi-k2.6`, nommage imposé par ce catalogue) est
+accepté tel quel en mode Kimi : le préfixe d'éditeur est retiré (`_nom_modele_kimi`), ce qui
+laisse `kimi-k2.6`, le seul nommage utilisé côté Kimi. Les autres fournisseurs historiques
 (qwen/together/nvidia/minimax/deepseek/nemotron, Mistral) restent retirés.
 
 Construit sur LangChain (`langchain-core`/`langchain-openai`, `extra` optionnel
@@ -208,9 +210,12 @@ def invoquer_agent_avec_outils(
 
 _MODELE_PAR_DEFAUT = "moonshotai/kimi-k2.6"
 _OPENROUTER_API_BASE_URL_PAR_DEFAUT = "https://openrouter.ai/api/v1"
-# API Moonshot internationale — la plateforme chinoise (`api.moonshot.cn`) a ses propres clés,
-# refusées ici (« Invalid Authentication ») ; surchargeable via `KIMI_API_BASE_URL`.
+# Hôte d'API de la plateforme Kimi internationale — vérifié comme étant celui qui répond
+# (`api.kimi.ai` existe mais ne sert aucune API sur `/v1`). Les clés de la plateforme chinoise
+# (`api.moonshot.cn`) sont distinctes et refusées ici (« Invalid Authentication ») : dans ce cas,
+# surcharger `KIMI_API_BASE_URL`.
 _KIMI_API_BASE_URL_PAR_DEFAUT = "https://api.moonshot.ai/v1"
+# Préfixe d'éditeur du catalogue OpenRouter, retiré pour l'appel direct — voir `_nom_modele_kimi`.
 _PREFIXE_MODELE_KIMI_OPENROUTER = "moonshotai/"
 
 
@@ -224,8 +229,8 @@ def fournisseur_llm() -> str:
 
 
 def _nom_modele_kimi(modele: str) -> str:
-    """`moonshotai/kimi-k2.6` (nommage OpenRouter) → `kimi-k2.6` (nommage de l'API Moonshot) :
-    un même `PRISME_LLM_MODEL` sert les deux fournisseurs."""
+    """`moonshotai/kimi-k2.6` (nommage du catalogue OpenRouter) → `kimi-k2.6` (nommage de l'API
+    Kimi) : un même `PRISME_LLM_MODEL` sert les deux fournisseurs."""
     if modele.startswith(_PREFIXE_MODELE_KIMI_OPENROUTER):
         return modele[len(_PREFIXE_MODELE_KIMI_OPENROUTER) :]
     return modele
@@ -256,9 +261,9 @@ def _construire_modele_openrouter(modele: str, timeout: float) -> BaseChatModel:
 
 
 def _construire_modele_kimi(modele: str, timeout: float) -> BaseChatModel:
-    """Kimi (Moonshot AI) en direct — API compatible OpenAI, même patron `ChatOpenAI` + `base_url`
-    qu'OpenRouter, sans intermédiaire (une passerelle de moins, donc une source de panne et de
-    latence de moins)."""
+    """Kimi en direct — API compatible OpenAI, même patron `ChatOpenAI` + `base_url` qu'OpenRouter,
+    sans intermédiaire (une passerelle de moins, donc une source de panne et de latence de
+    moins)."""
     from langchain_openai import ChatOpenAI
 
     return ChatOpenAI(
@@ -280,9 +285,9 @@ def methode_sortie_structuree(modele: BaseChatModel) -> str:
 
     `"json_mode"` plutôt que le défaut LangChain (`method="function_calling"`, tool-calling
     natif) ou le mode schéma strict (`"json_schema"`) : mode JSON basique, le plus largement
-    supporté chez les fournisseurs compatibles OpenAI — choisi par prudence, pas encore
-    revalidé par un appel réel contre Kimi via OpenRouter (contrairement au choix précédent
-    pour Mistral, qui l'avait été — voir l'historique de ce fichier)."""
+    supporté chez les fournisseurs compatibles OpenAI. **Validé par des appels réels contre
+    l'API Kimi en direct** (`kimi-k2.6`, 2026-09-21) : sortie conforme au schéma dès la première
+    tentative, y compris sur le schéma de l'agent Benchmarker et son champ `Literal`."""
     return "json_mode"
 
 

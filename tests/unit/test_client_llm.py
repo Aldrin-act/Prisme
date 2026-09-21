@@ -395,15 +395,16 @@ def test_fournisseur_force_par_variable(monkeypatch: pytest.MonkeyPatch) -> None
     assert client_llm.fournisseur_llm() == "openrouter"
 
 
-def test_construire_modele_kimi_vise_l_api_moonshot(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_construire_modele_kimi_vise_l_api_kimi(monkeypatch: pytest.MonkeyPatch) -> None:
     pytest.importorskip("langchain_openai")
     monkeypatch.setenv("KIMI_API_KEY", "sk-test")
     monkeypatch.delenv("KIMI_API_BASE_URL", raising=False)
 
     modele = client_llm._construire_modele_kimi("moonshotai/kimi-k2.6", 120.0)
 
-    assert modele.model_name == "kimi-k2.6"  # préfixe OpenRouter retiré
-    assert str(modele.openai_api_base).rstrip("/") == "https://api.moonshot.ai/v1"
+    assert modele.model_name == "kimi-k2.6"  # préfixe d'éditeur du catalogue OpenRouter retiré
+    # URL de l'hôte d'API Kimi international — valeur technique, seul endpoint qui réponde.
+    assert str(modele.openai_api_base).rstrip("/") == client_llm._KIMI_API_BASE_URL_PAR_DEFAUT
 
 
 def test_aiguillage_vers_kimi_quand_il_est_le_fournisseur(monkeypatch: pytest.MonkeyPatch) -> None:

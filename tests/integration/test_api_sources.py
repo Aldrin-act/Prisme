@@ -7,6 +7,7 @@ de Postgres).
 from __future__ import annotations
 
 import json
+import threading
 
 import httpx
 import pytest
@@ -16,7 +17,12 @@ from adapters.agent_comprehension.agent import _SchemaComprehension
 from api.app import app
 from api.etat import EtatAPI, obtenir_etat
 from api.routes.auth import obtenir_utilisateur_courant
-from api.routes.sources import RequeteExplorationAPI, _appeler_api
+from api.routes.sources import (
+    RequeteExplorationAPI,
+    _appeler_api,
+    _convertir_source_par_agent,
+    _GenerationAnnulee,
+)
 from generation.agents.client_llm import construire_modele_comprehension
 from tests.unit.aides_test_agents import ModeleFactice
 
@@ -209,6 +215,40 @@ def test_generer_instance_avec_instructions_complementaires() -> None:
 
         assert reponse.status_code == 200, reponse.json()
         assert reponse.json()["instance_id"] in etat_test.instances
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_generer_instance_arretee_par_l_utilisateur_n_enregistre_rien() -> None:
+    """Bouton « Arrêter » : le client coupe la connexion pendant l'appel LLM (qu'on ne peut pas
+    interrompre) — son résultat doit être jeté, aucune instance créée."""
+    etat_test = EtatAPI()
+    annule = threading.Event()
+
+    class _RunnableQuiSeFaitArreter:
+        def __init__(self, runnable):
+            self._runnable = runnable
+
+        def invoke(self, messages):
+            annule.set()  # l'utilisateur clique sur « Arrêter » pendant l'appel LLM
+            return self._runnable.invoke(messages)
+
+    class ModeleQuiSeFaitArreter(ModeleFactice):
+        def with_structured_output(self, *args, **kwargs):
+            return _RunnableQuiSeFaitArreter(super().with_structured_output(*args, **kwargs))
+
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        source_id = _creer_source(client, "T1;R1;10min")
+        modele = ModeleQuiSeFaitArreter(raw_content="{}", parsed=_schema_comprehension_factice())
+
+        with pytest.raises(_GenerationAnnulee):
+            _convertir_source_par_agent(
+                source_id, None, etat_test, modele, {"role": "admin", "client_id": None}, annule
+            )
+
+        assert etat_test.instances == {}
     finally:
         app.dependency_overrides.clear()
 

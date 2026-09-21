@@ -16,6 +16,7 @@ import {
   Loader2,
   Plug,
   Plus,
+  Square,
   Trash2,
   Upload,
   Zap,
@@ -67,6 +68,7 @@ import {
   useSupprimerSource,
   useDeclencherExecution,
   PrismeAPIError,
+  STATUT_REQUETE_ANNULEE,
   type AuthentificationAPI,
   type Justification,
 } from "@/integrations/prisme";
@@ -1029,8 +1031,19 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
   // État local pour maintenir l'indicateur visible même si le composant re-render
   const [generationEnCours, setGenerationEnCours] = useState(false);
 
-  const erreur = generer.error as PrismeAPIError | null;
+  // Bouton "Arrêter" : coupe la requête en cours, le serveur abandonne alors la conversion sans
+  // enregistrer d'instance.
+  const annulationRef = useRef<AbortController | null>(null);
+
+  const erreurBrute = generer.error as PrismeAPIError | null;
+  const generationAnnulee = erreurBrute?.status === STATUT_REQUETE_ANNULEE;
+  // Une annulation voulue n'est pas un échec : message neutre à part, pas le bandeau rouge.
+  const erreur = generationAnnulee ? null : erreurBrute;
   const erreurDeterministe = genererDeterministe.error as PrismeAPIError | null;
+
+  function arreterGeneration() {
+    annulationRef.current?.abort();
+  }
 
   function invaliderApresConversion() {
     queryClient.invalidateQueries({ queryKey: prismeKeys.source(sourceId) });
@@ -1054,8 +1067,14 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
     executer.reset();
     setDernier(null);
     setGenerationEnCours(true);
+    const annulation = new AbortController();
+    annulationRef.current = annulation;
     generer.mutate(
-      { sourceId, instructionsComplementaires: instructionsComplementaires || undefined },
+      {
+        sourceId,
+        instructionsComplementaires: instructionsComplementaires || undefined,
+        signal: annulation.signal,
+      },
       {
         onSuccess: (data) => {
           setDernier({
@@ -1296,18 +1315,25 @@ function SourceActivePanel({ sourceId }: { sourceId: string }) {
               <Zap className="mr-2 h-4 w-4" />
               {genererDeterministe.isPending ? "Conversion..." : "Convertir sans IA"}
             </Button>
-            <Button
-              onClick={genererInstance}
-              disabled={generationEnCours || generer.isPending || genererDeterministe.isPending}
-            >
-              <ArrowRightLeft className="mr-2 h-4 w-4" />
-              {generationEnCours || generer.isPending
-                ? "Conversion en cours..."
-                : "Générer une instance"}
-            </Button>
+            {generationEnCours || generer.isPending ? (
+              <Button variant="destructive" onClick={arreterGeneration}>
+                <Square className="mr-2 h-4 w-4" />
+                Arrêter
+              </Button>
+            ) : (
+              <Button onClick={genererInstance} disabled={genererDeterministe.isPending}>
+                <ArrowRightLeft className="mr-2 h-4 w-4" />
+                Générer une instance
+              </Button>
+            )}
           </div>
         </div>
         {(generationEnCours || generer.isPending) && <IndicateurGeneration />}
+        {generationAnnulee && (
+          <p className="text-sm text-muted-foreground">
+            Génération arrêtée — aucune instance n'a été créée.
+          </p>
+        )}
       </div>
 
       <div className="glass rounded-2xl p-6">
