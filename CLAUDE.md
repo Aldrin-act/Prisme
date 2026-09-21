@@ -59,6 +59,38 @@ No type-checker configured. Environment variables:
   per-agent routing, then Mistral) were removed as unneeded complexity. Per-agent overrides:
   `PRISME_LLM_MODEL_<AGENT>` / `_TIMEOUT_SECONDES_<AGENT>` (e.g. `PRISME_LLM_MODEL_DEBUGGER`) — the
   provider choice stays global, never per agent.
+- `PRISME_LLM_CONCURRENCE_MAX` — process-wide cap on simultaneous LLM calls (a
+  `threading.BoundedSemaphore` inside `_avec_retry`, the single choke point every LLM call goes
+  through; empty/0 = no cap). Needed because the Kimi account in use allows **one** concurrent
+  request (429 `max organization concurrency: 1`) while the graph fans out Analyste‖Benchmarker:
+  one call held the slot for minutes and the other exhausted its ~30 s of retries. The cap only
+  covers one process — a script run alongside the API still collides at the account level.
+- `PRISME_LLM_REFLEXION` (`activee`/`desactivee`, + `PRISME_LLM_REFLEXION_<AGENT>`) — Kimi-only:
+  `desactivee` sends `extra_body={"thinking": {"type": "disabled"}}`. Measured on `kimi-k2.6`
+  (LangSmith traces): with thinking, 85–92 % of output tokens are reasoning and a comprehension
+  call takes 5–16 min; without, under a minute (same short prompt: 1 182 → 58 tokens, 37 → 2 s).
+  Current `.env` disables it for **every** agent, code writers included: kept on for
+  `GENERATEUR`, the Développeur spent 31 099 of its 32 768 output tokens thinking, its JSON was
+  cut off (`openai.LengthFinishReasonError`, not retried — the same prompt would cut again) and
+  14 min were lost, twice. `invoquer_agent_structure` now turns that error into an actionable
+  `ErreurReponseAgentInvalide`, and `MesureAppelLLM.limite_sortie_atteinte` / cause `longueur`
+  shows it in the UI.
+  **Keep the timeout of any thinking-enabled agent above its longest possible answer**: a
+  Développeur call with thinking outlived `PRISME_LLM_TIMEOUT_SECONDES=600`, the client gave up
+  but Kimi kept generating — that abandoned request held the account's only slot, so every retry
+  (the OpenAI SDK's own, then `_avec_retry`'s) got a 429 and the generation failed. Hence
+  `PRISME_LLM_TIMEOUT_SECONDES_GENERATEUR`/`_DEBUGGER=1800` in `.env`.
+- **LLM-call latency is visible in PRISME itself**, not only in LangSmith: `_avec_retry` builds a
+  `MesureAppelLLM` per logical call (duration, time waiting for a concurrency slot, attempts, 429s,
+  model, input/output/reasoning tokens, `cause_dominante()` ∈ `reflexion`/`attente`/`refus`/`None`)
+  and hands it to a process-wide observer. `generation/graph.py` registers that observer at import:
+  inside a graph node it emits an `etape(<langgraph_node>, "mesure", <readable text>, details)`
+  event; outside a graph (comprehension, supervision) it is a no-op. `"mesure"` events are persisted
+  (`evenements_generation.details` JSONB, added via `ADD COLUMN IF NOT EXISTS`), excluded from the
+  agent-diversity KPI and the home-page agent stats, and attached by the frontend to the **last**
+  row of their agent (prefix match: node `debugger` → row `debugger (tentative 3/10)`) —
+  `components/generation/latence-appels.tsx` renders per-call lines plus a whole-generation summary
+  naming the dominant cause.
 - `DATABASE_URL` — Postgres DSN read by `EtatPostgres`/`Registre`; `obtenir_etat()` always builds
   `EtatPostgres` outside tests, which override it with an in-memory `EtatAPI()` instead.
 - `JWT_SECRET_KEY`/`JWT_ALGORITHM`/`JWT_EXPIRE_MINUTES` (`api/routes/auth.py`, insecure hardcoded

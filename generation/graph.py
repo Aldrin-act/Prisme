@@ -63,13 +63,13 @@ from dataclasses import dataclass
 from typing import Annotated, Literal, TypedDict
 
 from langchain_core.runnables import RunnableConfig
-from langgraph.config import get_stream_writer
+from langgraph.config import get_config, get_stream_writer
 from langgraph.graph import END, START, StateGraph
 
 from generation.agents import analyste, architecte, benchmarker, documentation, memory, reviewer, testeur
 from generation.agents.analyste import ResultatAnalyse
 from generation.agents.architecte import ResultatConception
-from generation.agents.client_llm import construire_modele_pour_agent
+from generation.agents.client_llm import MesureAppelLLM, construire_modele_pour_agent, definir_observateur_appels
 from generation.agents.debugger import corriger_code, corriger_solveur_ou_tests
 from generation.agents.generateur import generer_code_depuis_plan
 from generation.agents.reviewer import ResultatRevue
@@ -87,11 +87,68 @@ from validation_engine.cascade import VerdictCascade, evaluer_cascade
 # couper la boucle avant qu'elle n'ait épuisé ses tentatives légitimes.
 MAX_TENTATIVES_REPARATION = 10
 
-EvenementEtape = dict[str, str]  # {"agent": ..., "statut": "en_cours"|"termine"|"echec", "resume": ...}
+# {"agent": ..., "statut": "en_cours"|"termine"|"echec"|"mesure", "resume": ..., ["details": {...}]}
+# `"mesure"` : un appel au modèle fait par cet agent (durée, attente, tokens, réflexion, refus) —
+# rattaché à la ligne de l'agent par l'interface, jamais un changement d'état de l'étape.
+EvenementEtape = dict[str, object]
 
 
-def etape(agent: str, statut: str, resume: str) -> EvenementEtape:
-    return {"agent": agent, "statut": statut, "resume": resume}
+def etape(agent: str, statut: str, resume: str, details: dict[str, object] | None = None) -> EvenementEtape:
+    evenement: EvenementEtape = {"agent": agent, "statut": statut, "resume": resume}
+    if details is not None:
+        evenement["details"] = details
+    return evenement
+
+
+def _nombre(n: int) -> str:
+    return f"{n:,}".replace(",", " ")
+
+
+def _duree_lisible(secondes: float) -> str:
+    if secondes < 60:
+        return f"{secondes:.0f} s"
+    minutes, reste = divmod(round(secondes), 60)
+    return f"{minutes} min {reste:02d} s"
+
+
+def resumer_mesure(mesure: MesureAppelLLM) -> str:
+    """Phrase lisible enregistrée avec la mesure — compréhensible sans l'interface, par exemple
+    en relisant l'historique d'une génération directement en base."""
+    duree = _duree_lisible(mesure.duree_s)
+    if mesure.attente_file_s >= 1:
+        duree += f" (dont {_duree_lisible(mesure.attente_file_s)} d'attente d'une place)"
+    morceaux = [mesure.modele or "modèle inconnu", duree]
+    if mesure.tokens_entree is not None and mesure.tokens_sortie is not None:
+        tokens = f"{_nombre(mesure.tokens_entree)} → {_nombre(mesure.tokens_sortie)} tokens"
+        if mesure.tokens_reflexion:
+            tokens += f", dont {_nombre(mesure.tokens_reflexion)} de réflexion"
+        morceaux.append(tokens)
+    if mesure.refus_429:
+        morceaux.append(f"{mesure.refus_429} refus 429")
+    if mesure.reponse_conforme is False:
+        morceaux.append("réponse hors format, relancée")
+    if mesure.limite_sortie_atteinte:
+        morceaux.append("réponse coupée : limite de tokens de sortie atteinte")
+    elif not mesure.reussi:
+        morceaux.append(f"échec : {mesure.erreur}")
+    return " · ".join(morceaux)
+
+
+def _emettre_mesure_appel(mesure: MesureAppelLLM) -> None:
+    """Observateur des appels au modèle (`client_llm.definir_observateur_appels`) : pousse chaque
+    mesure dans le flux de la génération en cours, rattachée au nœud qui a fait l'appel
+    (`langgraph_node`). Hors d'une génération — agent de compréhension, supervision, scripts —,
+    il n'y a pas de contexte de graphe : rien à rattacher, la mesure est ignorée."""
+    try:
+        config = get_config()
+        writer = get_stream_writer()
+    except RuntimeError:
+        return
+    agent = str((config.get("metadata") or {}).get("langgraph_node") or "appel")
+    writer(etape(agent, "mesure", resumer_mesure(mesure), mesure.en_dict()))
+
+
+definir_observateur_appels(_emettre_mesure_appel)
 
 
 @dataclass(frozen=True)

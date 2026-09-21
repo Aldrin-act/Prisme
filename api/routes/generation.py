@@ -256,7 +256,9 @@ def _executer_job(
                     etat.mettre_a_jour_job_generation(job.id, **{item.champ: item.valeur})
             else:
                 job.evenements.append(item)
-                etat.ajouter_evenement_generation(job.id, item["agent"], item["statut"], item["resume"])
+                etat.ajouter_evenement_generation(
+                    job.id, item["agent"], item["statut"], item["resume"], details=item.get("details")
+                )
             if job.annule:
                 job.erreur = "Génération annulée par l'utilisateur"
                 break
@@ -530,7 +532,8 @@ def obtenir_historique_job_generation(
         "erreur": job.erreur,
         "termine_le": job.termine_le,
         "evenements": [
-            {"ordre": e.ordre, "agent": e.agent, "statut": e.statut, "resume": e.resume} for e in job.evenements
+            {"ordre": e.ordre, "agent": e.agent, "statut": e.statut, "resume": e.resume, "details": e.details}
+            for e in job.evenements
         ],
         "tentatives": [
             {

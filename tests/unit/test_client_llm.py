@@ -23,7 +23,7 @@ def test_modele_vide_dans_env_retombe_sur_le_defaut(monkeypatch: pytest.MonkeyPa
     monkeypatch.setenv("PRISME_LLM_MODEL", "")  # présent mais vide, comme dans .env par défaut
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda m, timeout, **_: modeles_construits.append(m)
     )
 
     client_llm.construire_modele()
@@ -35,7 +35,7 @@ def test_modele_explicite_dans_env_est_respecte(monkeypatch: pytest.MonkeyPatch)
     monkeypatch.setenv("PRISME_LLM_MODEL", "mon-modele-precis")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda m, timeout, **_: modeles_construits.append(m)
     )
 
     client_llm.construire_modele()
@@ -83,7 +83,7 @@ def test_construire_modele_pour_agent_respecte_la_surcharge_de_modele(monkeypatc
     monkeypatch.setenv("PRISME_LLM_MODEL_DOCUMENTATION", "un-modele-precis")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda m, timeout, **_: modeles_construits.append(m)
     )
 
     client_llm.construire_modele_pour_agent("documentation")
@@ -103,7 +103,7 @@ def test_construire_modele_pour_agent_retombe_sur_le_modele_global_sans_surcharg
     monkeypatch.setenv("PRISME_LLM_MODEL", "mon-modele-global")
     modeles_construits: list[str] = []
     monkeypatch.setattr(
-        client_llm, "_construire_modele_fournisseur", lambda modele, timeout: modeles_construits.append(modele)
+        client_llm, "_construire_modele_fournisseur", lambda m, timeout, **_: modeles_construits.append(m)
     )
 
     client_llm.construire_modele_pour_agent("analyste")
@@ -410,7 +410,7 @@ def test_construire_modele_kimi_vise_l_api_kimi(monkeypatch: pytest.MonkeyPatch)
 def test_aiguillage_vers_kimi_quand_il_est_le_fournisseur(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("PRISME_LLM_FOURNISSEUR", "kimi")
     appels: list[str] = []
-    monkeypatch.setattr(client_llm, "_construire_modele_kimi", lambda modele, timeout: appels.append("kimi"))
+    monkeypatch.setattr(client_llm, "_construire_modele_kimi", lambda modele, timeout, **_: appels.append("kimi"))
     monkeypatch.setattr(
         client_llm, "_construire_modele_openrouter", lambda modele, timeout: appels.append("openrouter")
     )
@@ -418,3 +418,205 @@ def test_aiguillage_vers_kimi_quand_il_est_le_fournisseur(monkeypatch: pytest.Mo
     client_llm.construire_modele_pour_agent("analyste")
 
     assert appels == ["kimi"]
+
+
+# --- Limiteur de concurrence (`PRISME_LLM_CONCURRENCE_MAX`) ------------------------------------
+# Régression vécue : compte Kimi plafonné à une requête simultanée, erreur 429 « max organization
+# concurrency: 1 » — l'Analyste et le Benchmarker partent en parallèle dans le graphe, l'un des
+# deux épuisait ses tentatives pendant que l'autre occupait l'unique place.
+
+
+class _CompteurConcurrence:
+    """Appel factice qui mesure combien d'exécutions se chevauchent réellement."""
+
+    def __init__(self, duree_s: float = 0.05) -> None:
+        import threading
+
+        self._verrou = threading.Lock()
+        self.en_cours = 0
+        self.maximum_observe = 0
+        self.duree_s = duree_s
+
+    def __call__(self) -> str:
+        import time
+
+        with self._verrou:
+            self.en_cours += 1
+            self.maximum_observe = max(self.maximum_observe, self.en_cours)
+        time.sleep(self.duree_s)
+        with self._verrou:
+            self.en_cours -= 1
+        return "ok"
+
+
+def _lancer_en_parallele(appel, nombre: int) -> list[str]:
+    from concurrent.futures import ThreadPoolExecutor
+
+    with ThreadPoolExecutor(max_workers=nombre) as executeur:
+        return list(executeur.map(lambda _: client_llm._avec_retry(appel)(), range(nombre)))
+
+
+def test_sans_limite_les_appels_se_chevauchent(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("PRISME_LLM_CONCURRENCE_MAX", raising=False)
+    compteur = _CompteurConcurrence()
+
+    assert _lancer_en_parallele(compteur, 4) == ["ok"] * 4
+    assert compteur.maximum_observe > 1  # comportement historique, aucune file d'attente
+
+
+def test_limite_a_un_serialise_les_appels_simultanes(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PRISME_LLM_CONCURRENCE_MAX", "1")
+    compteur = _CompteurConcurrence()
+
+    assert _lancer_en_parallele(compteur, 4) == ["ok"] * 4
+    assert compteur.maximum_observe == 1
+
+
+def test_limite_a_deux_autorise_deux_appels_au_plus(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PRISME_LLM_CONCURRENCE_MAX", "2")
+    compteur = _CompteurConcurrence()
+
+    _lancer_en_parallele(compteur, 6)
+
+    assert compteur.maximum_observe == 2
+
+
+def test_limite_zero_equivaut_a_aucune_limite(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PRISME_LLM_CONCURRENCE_MAX", "0")
+
+    assert client_llm._limiteur_concurrence() is None
+
+
+def test_limite_non_entiere_leve_une_erreur_explicite(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PRISME_LLM_CONCURRENCE_MAX", "un")
+
+    with pytest.raises(ValueError, match="PRISME_LLM_CONCURRENCE_MAX"):
+        client_llm._avec_retry(lambda: "ok")()
+
+
+def test_la_place_est_rendue_pendant_l_attente_de_backoff(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Un appel qui échoue puis patiente avant de réessayer ne doit jamais garder la place du
+    limiteur pendant son attente — sinon un seul appel en difficulté bloquerait tout le monde."""
+    monkeypatch.setenv("PRISME_LLM_CONCURRENCE_MAX", "1")
+    places_libres_pendant_attente: list[bool] = []
+
+    def attente_observee(_delai: float) -> None:
+        limiteur = client_llm._limiteur_concurrence()
+        libre = limiteur.acquire(blocking=False)
+        if libre:
+            limiteur.release()
+        places_libres_pendant_attente.append(libre)
+
+    monkeypatch.setattr(client_llm.time, "sleep", attente_observee)
+
+    class _ErreurTransitoire(Exception):
+        status_code = 429
+
+    tentatives = iter([_ErreurTransitoire(), "ok"])
+
+    def appel_qui_echoue_une_fois() -> str:
+        resultat = next(tentatives)
+        if isinstance(resultat, Exception):
+            raise resultat
+        return resultat
+
+    assert client_llm._avec_retry(appel_qui_echoue_une_fois)() == "ok"
+    assert places_libres_pendant_attente == [True]
+
+
+# --- Réflexion du modèle (`PRISME_LLM_REFLEXION`) ----------------------------------------------
+# Mesuré : avec la réflexion, `kimi-k2.6` passe 5 à 16 min par appel de compréhension et 85 à
+# 92 % de sa sortie est de la réflexion ; `{"thinking": {"type": "disabled"}}` ramène l'appel à
+# 39 s — assez pour ne plus monopoliser la place unique d'un compte à concurrence 1.
+
+_CORPS_SANS_REFLEXION = {"thinking": {"type": "disabled"}}
+
+
+def _nettoyer_reflexion(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("PRISME_LLM_REFLEXION", raising=False)
+    for agent in ("ANALYSTE", "COMPREHENSION", "GENERATEUR"):
+        monkeypatch.delenv(f"PRISME_LLM_REFLEXION_{agent}", raising=False)
+
+
+def test_reflexion_active_par_defaut(monkeypatch: pytest.MonkeyPatch) -> None:
+    _nettoyer_reflexion(monkeypatch)
+
+    assert client_llm._reflexion_desactivee("comprehension") is False
+
+
+def test_reflexion_desactivee_globalement(monkeypatch: pytest.MonkeyPatch) -> None:
+    _nettoyer_reflexion(monkeypatch)
+    monkeypatch.setenv("PRISME_LLM_REFLEXION", "desactivee")
+
+    assert client_llm._reflexion_desactivee("comprehension") is True
+    assert client_llm._reflexion_desactivee(None) is True
+
+
+def test_surcharge_par_agent_l_emporte_sur_le_reglage_global(monkeypatch: pytest.MonkeyPatch) -> None:
+    _nettoyer_reflexion(monkeypatch)
+    monkeypatch.setenv("PRISME_LLM_REFLEXION", "desactivee")
+    monkeypatch.setenv("PRISME_LLM_REFLEXION_GENERATEUR", "activee")
+
+    assert client_llm._reflexion_desactivee("generateur") is False
+    assert client_llm._reflexion_desactivee("analyste") is True
+
+
+def test_surcharge_vide_retombe_sur_le_reglage_global(monkeypatch: pytest.MonkeyPatch) -> None:
+    _nettoyer_reflexion(monkeypatch)
+    monkeypatch.setenv("PRISME_LLM_REFLEXION", "desactivee")
+    monkeypatch.setenv("PRISME_LLM_REFLEXION_ANALYSTE", "")  # déclarée vide, comme dans un .env
+
+    assert client_llm._reflexion_desactivee("analyste") is True
+
+
+def test_valeur_de_reflexion_inconnue_leve_une_erreur_explicite(monkeypatch: pytest.MonkeyPatch) -> None:
+    _nettoyer_reflexion(monkeypatch)
+    monkeypatch.setenv("PRISME_LLM_REFLEXION", "peut-etre")
+
+    with pytest.raises(ValueError, match="PRISME_LLM_REFLEXION"):
+        client_llm._reflexion_desactivee("analyste")
+
+
+def test_kimi_sans_reflexion_envoie_le_parametre_thinking(monkeypatch: pytest.MonkeyPatch) -> None:
+    pytest.importorskip("langchain_openai")
+    monkeypatch.setenv("KIMI_API_KEY", "sk-test")
+
+    modele = client_llm._construire_modele_kimi("kimi-k2.6", 120.0, reflexion_desactivee=True)
+
+    assert modele.extra_body == _CORPS_SANS_REFLEXION
+
+
+def test_kimi_avec_reflexion_n_envoie_rien_de_plus(monkeypatch: pytest.MonkeyPatch) -> None:
+    pytest.importorskip("langchain_openai")
+    monkeypatch.setenv("KIMI_API_KEY", "sk-test")
+
+    modele = client_llm._construire_modele_kimi("kimi-k2.6", 120.0)
+
+    assert not modele.extra_body
+
+
+def test_openrouter_ne_recoit_jamais_le_parametre_thinking(monkeypatch: pytest.MonkeyPatch) -> None:
+    pytest.importorskip("langchain_openai")
+    monkeypatch.setenv("PRISME_LLM_FOURNISSEUR", "openrouter")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-test")
+
+    modele = client_llm._construire_modele_fournisseur("moonshotai/kimi-k2.6", 120.0, reflexion_desactivee=True)
+
+    assert not modele.extra_body
+
+
+def test_construire_modele_pour_agent_applique_le_reglage_de_l_agent(monkeypatch: pytest.MonkeyPatch) -> None:
+    _nettoyer_reflexion(monkeypatch)
+    monkeypatch.setenv("PRISME_LLM_FOURNISSEUR", "kimi")
+    monkeypatch.setenv("PRISME_LLM_REFLEXION_COMPREHENSION", "desactivee")
+    reglages: list[bool] = []
+    monkeypatch.setattr(
+        client_llm,
+        "_construire_modele_kimi",
+        lambda modele, timeout, *, reflexion_desactivee=False: reglages.append(reflexion_desactivee),
+    )
+
+    client_llm.construire_modele_pour_agent("comprehension")
+    client_llm.construire_modele_pour_agent("analyste")
+
+    assert reglages == [True, False]

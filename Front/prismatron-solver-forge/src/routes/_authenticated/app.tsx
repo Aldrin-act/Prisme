@@ -65,7 +65,8 @@ function calculerStatsAgents(jobs: JobGenerationInfo[]): StatAgent[] {
   const parAgent = new Map<string, StatAgent>();
   for (const job of jobs) {
     for (const evenement of job.evenements) {
-      if (evenement.statut === "en_cours") continue; // ne compter qu'un évènement terminal par étape
+      // ne compter qu'un évènement terminal par étape — une mesure d'appel au modèle n'en est pas une
+      if (evenement.statut === "en_cours" || evenement.statut === "mesure") continue;
       const nom = agentNormalise(evenement.agent);
       const stat = parAgent.get(nom) ?? { agent: nom, total: 0, echecs: 0 };
       stat.total += 1;

@@ -403,3 +403,19 @@ def test_racine_groupe_scenario_instance_sans_scenario_est_sa_propre_racine() ->
     instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
 
     assert etat.racine_groupe_scenario(instance_id) == instance_id
+
+
+def test_les_details_d_une_mesure_d_appel_sont_conserves_avec_l_evenement() -> None:
+    """Évènement `statut="mesure"` (durée, tokens, réflexion d'un appel au modèle) : ses détails
+    doivent survivre tels quels, pour relire la latence d'une génération passée."""
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client-test", _instance_exemple())
+    etat.enregistrer_job_generation("job-1", instance_id, "client-test")
+    details = {"duree_s": 725.0, "tokens_reflexion": 17_388, "cause": "reflexion"}
+
+    etat.ajouter_evenement_generation("job-1", "developpeur", "en_cours", "Rédaction du code du solveur...")
+    etat.ajouter_evenement_generation("job-1", "developpeur", "mesure", "kimi-k2.6 · 12 min 05 s", details=details)
+
+    evenements = etat.recuperer_job_generation("job-1").evenements
+    assert evenements[0].details is None
+    assert evenements[1].details == details

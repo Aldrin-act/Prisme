@@ -218,3 +218,18 @@ def test_filtre_agent_inconnu_donne_zero_generation_sans_lever() -> None:
     )
     assert resultat.generations_lancees == 0
     assert resultat.taux_reussite is None
+
+
+def test_les_mesures_d_appels_ne_comptent_pas_comme_des_actions_d_agent() -> None:
+    """Une mesure (`statut="mesure"`) décrit un appel au modèle, pas une étape : trois agents
+    distincts restent une diversité parfaite, quel que soit le nombre de mesures émises."""
+    jobs = [_job("j1", termine=True, reussi=True, nombre_tentatives=1)]
+    evenements = [
+        {"job_id": "j1", "ordre": 0, "agent": "analyste", "statut": "termine"},
+        {"job_id": "j1", "ordre": 1, "agent": "analyste", "statut": "mesure"},
+        {"job_id": "j1", "ordre": 2, "agent": "benchmarker", "statut": "termine"},
+        {"job_id": "j1", "ordre": 3, "agent": "benchmarker", "statut": "mesure"},
+        {"job_id": "j1", "ordre": 4, "agent": "architecte", "statut": "termine"},
+    ]
+    resultat = calculer_statistiques(jobs, evenements, [], max_tentatives_reparation=10)
+    assert resultat.diversite_actions_moyenne == 1.0

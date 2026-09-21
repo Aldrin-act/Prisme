@@ -143,6 +143,10 @@ def calculer_statistiques(
     nb_evenements_par_job: dict[str, int] = {}
     for job_id in ids_jobs_termines:
         for e in evenements_par_job.get(job_id, []):
+            # Une mesure d'appel au modèle n'est pas une action d'agent : la compter fausserait la
+            # diversité des actions (nombre d'évènements au dénominateur).
+            if e["statut"] == "mesure":
+                continue
             nom_agent = agent_normalise(str(e["agent"]))
             nb_evenements_par_job[job_id] = nb_evenements_par_job.get(job_id, 0) + 1
             agents_uniques_par_job.setdefault(job_id, set()).add(nom_agent)

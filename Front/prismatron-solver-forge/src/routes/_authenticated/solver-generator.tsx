@@ -8,6 +8,7 @@ import {
   Loader2,
   Plus,
   Sparkles,
+  Timer,
   X,
   XCircle,
 } from "lucide-react";
@@ -30,6 +31,7 @@ import {
 } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PageHeader, EmptyState } from "@/components/app-page";
+import { BilanLatence, MesuresAgent } from "@/components/generation/latence-appels";
 import {
   useInstances,
   useLabelsInstances,
@@ -41,6 +43,8 @@ import {
   suivreJobGeneration,
   PrismeAPIError,
   type EvenementGeneration,
+  type EvenementGenerationHistorise,
+  type MesureAppelLLM,
   type ReponseGenerationSolveur,
   type RapportTestsSandbox,
   type LabelInstance,
@@ -60,8 +64,12 @@ interface OngletStocke {
   jobId: string | null;
 }
 
+// Une ligne de la chronologie : l'état de l'étape d'un agent, plus les appels au modèle qu'il a
+// faits (évènements `statut: "mesure"` rattachés à sa ligne, voir `fusionnerEvenement`).
+type LigneChronologie = EvenementGeneration & { mesures?: MesureAppelLLM[] };
+
 interface OngletGeneration extends OngletStocke {
-  evenements: EvenementGeneration[];
+  evenements: LigneChronologie[];
   resultat: ReponseGenerationSolveur | null;
   erreur: PrismeAPIError | null;
   enCours: boolean;
@@ -124,6 +132,7 @@ function IconeStatut({ statut }: { statut: EvenementGeneration["statut"] }) {
   if (statut === "en_cours")
     return <Loader2 className="h-4 w-4 shrink-0 animate-spin text-primary" />;
   if (statut === "termine") return <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />;
+  if (statut === "mesure") return <Timer className="h-4 w-4 shrink-0 text-muted-foreground" />;
   return <XCircle className="h-4 w-4 shrink-0 text-destructive" />;
 }
 
@@ -177,15 +186,58 @@ function RapportTestsSandboxAffichage({ rapport }: { rapport: RapportTestsSandbo
 // être réutilisée à la fois sur le flux SSE en direct (repli élément par
 // élément, voir plus bas) et sur la liste complète déjà persistée de
 // `DialogHistoriqueGeneration` (repli via `reduce`, voir `fusionnerEvenements`).
-function fusionnerEvenement<T extends { agent: string }>(precedents: T[], nouveau: T): T[] {
+//
+// Une mesure (`statut: "mesure"`) ne remplace jamais une ligne : elle décrit un appel au modèle
+// fait par l'agent, et s'ajoute à la **dernière** ligne de cet agent. Le nom du nœud qui l'émet
+// (`debugger`) est un préfixe de celui de l'étape (`debugger (tentative 3/10)`), d'où la
+// recherche par préfixe ; la plus récente est celle de la tentative en cours. Quand l'étape passe
+// de "en_cours" à "termine", ses mesures déjà rattachées sont conservées.
+type Fusionnable = {
+  agent: string;
+  statut: string;
+  details?: MesureAppelLLM | null;
+  mesures?: MesureAppelLLM[];
+};
+
+function remplacerA<T>(liste: T[], index: number, element: T): T[] {
+  return [...liste.slice(0, index), element, ...liste.slice(index + 1)];
+}
+
+function fusionnerEvenement<T extends Fusionnable>(precedents: T[], nouveau: T): T[] {
+  if (nouveau.statut === "mesure") {
+    let index = -1;
+    for (let i = precedents.length - 1; i >= 0; i--) {
+      const e = precedents[i];
+      if (
+        e.statut !== "mesure" &&
+        (e.agent === nouveau.agent || e.agent.startsWith(`${nouveau.agent} `))
+      ) {
+        index = i;
+        break;
+      }
+    }
+    if (index === -1 || !nouveau.details) return [...precedents, nouveau];
+    const ligne = precedents[index];
+    return remplacerA(precedents, index, {
+      ...ligne,
+      mesures: [...(ligne.mesures ?? []), nouveau.details],
+    });
+  }
   const index = precedents.findIndex((e) => e.agent === nouveau.agent);
   if (index === -1) {
     return [...precedents, nouveau];
   }
-  return [...precedents.slice(0, index), nouveau, ...precedents.slice(index + 1)];
+  return remplacerA(precedents, index, { ...nouveau, mesures: precedents[index].mesures });
 }
 
-function fusionnerEvenements<T extends { agent: string }>(bruts: T[]): T[] {
+// Toutes les mesures d'une chronologie déjà fusionnée — rattachées ou restées orphelines.
+function mesuresDe(lignes: Fusionnable[]): MesureAppelLLM[] {
+  return lignes.flatMap((l) =>
+    l.statut === "mesure" ? (l.details ? [l.details] : []) : (l.mesures ?? []),
+  );
+}
+
+function fusionnerEvenements<T extends Fusionnable>(bruts: T[]): T[] {
   return bruts.reduce<T[]>((acc, e) => fusionnerEvenement(acc, e), []);
 }
 
@@ -565,6 +617,7 @@ function ContenuOnglet({
             (spécification de l'Analyste, choix du Benchmarker, plan de l'Architecte, code généré,
             etc.)
           </p>
+          <BilanLatence mesures={mesuresDe(onglet.evenements)} />
           <ul className="space-y-2">
             {onglet.evenements.map((e, i) => (
               <li
@@ -575,6 +628,7 @@ function ContenuOnglet({
                 <div className="min-w-0 flex-1">
                   <div className="font-medium capitalize">{e.agent}</div>
                   <div className="mt-0.5 text-xs text-muted-foreground">{e.resume}</div>
+                  {e.mesures && <MesuresAgent mesures={e.mesures} />}
                 </div>
               </li>
             ))}
@@ -862,18 +916,24 @@ function DialogHistoriqueGeneration({
 
             <div>
               {(() => {
-                const evenementsFusionnes = fusionnerEvenements(historique.evenements);
+                const evenementsFusionnes = fusionnerEvenements<
+                  EvenementGenerationHistorise & { mesures?: MesureAppelLLM[] }
+                >(historique.evenements);
                 return (
                   <>
                     <h4 className="mb-2 text-sm font-semibold">
-                      Évènements ({evenementsFusionnes.length})
+                      Évènements ({evenementsFusionnes.filter((e) => e.statut !== "mesure").length})
                     </h4>
+                    <BilanLatence mesures={mesuresDe(evenementsFusionnes)} />
                     <ul className="space-y-1.5">
                       {evenementsFusionnes.map((e) => (
                         <li key={e.ordre} className="flex items-start gap-2 text-xs">
                           <IconeStatut statut={e.statut} />
-                          <span className="font-medium capitalize">{e.agent}</span>
-                          <span className="text-muted-foreground">{e.resume}</span>
+                          <div className="min-w-0 flex-1">
+                            <span className="font-medium capitalize">{e.agent}</span>{" "}
+                            <span className="text-muted-foreground">{e.resume}</span>
+                            {e.mesures && <MesuresAgent mesures={e.mesures} />}
+                          </div>
                         </li>
                       ))}
                     </ul>

@@ -594,6 +594,13 @@ class EtatPostgres:
                     "resume TEXT NOT NULL)"
                 ).format(table=self._table("evenements_generation"), jobs=self._table("jobs_generation"))
             )
+            # Mesures des appels au modèle (évènements `statut="mesure"`) — ajoutée après coup,
+            # d'où `ADD COLUMN IF NOT EXISTS` : une base existante gagne la colonne sans migration.
+            connexion.execute(
+                sql.SQL("ALTER TABLE {table} ADD COLUMN IF NOT EXISTS details JSONB").format(
+                    table=self._table("evenements_generation")
+                )
+            )
             connexion.execute(
                 sql.SQL(
                     "CREATE TABLE IF NOT EXISTS {table} ("
@@ -1859,7 +1866,9 @@ class EtatPostgres:
             )
             connexion.commit()
 
-    def ajouter_evenement_generation(self, job_id: str, agent: str, statut: str, resume: str) -> None:
+    def ajouter_evenement_generation(
+        self, job_id: str, agent: str, statut: str, resume: str, details: dict[str, object] | None = None
+    ) -> None:
         with closing(self._connexion()) as connexion:
             (ordre,) = connexion.execute(
                 sql.SQL("SELECT COUNT(*) FROM {} WHERE job_id = %s").format(self._table("evenements_generation")),
@@ -1867,9 +1876,18 @@ class EtatPostgres:
             ).fetchone()
             connexion.execute(
                 sql.SQL(
-                    "INSERT INTO {} (id, job_id, ordre, agent, statut, resume) VALUES (%s, %s, %s, %s, %s, %s)"
+                    "INSERT INTO {} (id, job_id, ordre, agent, statut, resume, details) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb)"
                 ).format(self._table("evenements_generation")),
-                (str(uuid.uuid4()), job_id, ordre, agent, statut, resume),
+                (
+                    str(uuid.uuid4()),
+                    job_id,
+                    ordre,
+                    agent,
+                    statut,
+                    resume,
+                    json.dumps(details) if details is not None else None,
+                ),
             )
             connexion.commit()
 
@@ -1994,9 +2012,9 @@ class EtatPostgres:
                 raise KeyError(job_id)
 
             lignes_evenements = connexion.execute(
-                sql.SQL("SELECT ordre, agent, statut, resume FROM {} WHERE job_id = %s ORDER BY ordre").format(
-                    self._table("evenements_generation")
-                ),
+                sql.SQL(
+                    "SELECT ordre, agent, statut, resume, details FROM {} WHERE job_id = %s ORDER BY ordre"
+                ).format(self._table("evenements_generation")),
                 (job_id,),
             ).fetchall()
 
@@ -2054,8 +2072,8 @@ class EtatPostgres:
             erreur=erreur,
             termine_le=termine_le,
             evenements=[
-                EvenementGeneration(ordre=ordre, agent=agent, statut=statut, resume=resume)
-                for ordre, agent, statut, resume in lignes_evenements
+                EvenementGeneration(ordre=ordre, agent=agent, statut=statut, resume=resume, details=details)
+                for ordre, agent, statut, resume, details in lignes_evenements
             ],
             tentatives=[
                 TentativeGeneration(

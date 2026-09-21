@@ -766,3 +766,16 @@ def test_objectifs_de_source_survivent_a_un_aller_retour_en_base(etat_postgres_t
     assert [o.type for o in source.objectifs] == ["equilibrer_charge", "minimiser_retards"]
     assert source.objectifs[0].poids == 2.0
     assert etat_postgres_test.recuperer_source(sans_objectif).objectifs == ()
+
+
+def test_les_details_d_une_mesure_d_appel_sont_persistes(etat_postgres_test: EtatPostgres) -> None:
+    instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
+    etat_postgres_test.enregistrer_job_generation("job-1", instance_id, "client-test")
+    details = {"duree_s": 725.0, "attente_file_s": 38.0, "tokens_reflexion": 17_388, "cause": "reflexion"}
+
+    etat_postgres_test.ajouter_evenement_generation("job-1", "developpeur", "en_cours", "Rédaction...")
+    etat_postgres_test.ajouter_evenement_generation("job-1", "developpeur", "mesure", "kimi-k2.6", details=details)
+
+    evenements = etat_postgres_test.recuperer_job_generation("job-1").evenements
+    assert evenements[0].details is None
+    assert evenements[1].details == details

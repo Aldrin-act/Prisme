@@ -269,6 +269,9 @@ class EvenementGeneration:
     agent: str
     statut: str
     resume: str
+    # Mesure d'un appel au modèle (`statut="mesure"`, voir `generation.graph.etape`) : durée,
+    # attente d'une place, tokens, réflexion, refus — `None` pour tout autre évènement.
+    details: dict[str, object] | None = None
 
 
 @dataclass(frozen=True)
@@ -916,10 +919,14 @@ class EtatAPI:
             cree_le=datetime.now(UTC).isoformat(),
         )
 
-    def ajouter_evenement_generation(self, job_id: str, agent: str, statut: str, resume: str) -> None:
+    def ajouter_evenement_generation(
+        self, job_id: str, agent: str, statut: str, resume: str, details: dict[str, object] | None = None
+    ) -> None:
         job = self.jobs_generation[job_id]
         job.evenements.append(
-            EvenementGeneration(ordre=len(job.evenements), agent=agent, statut=statut, resume=resume)
+            EvenementGeneration(
+                ordre=len(job.evenements), agent=agent, statut=statut, resume=resume, details=details
+            )
         )
 
     def ajouter_tentative_generation(self, job_id: str, tentative: TentativeGeneration) -> None:

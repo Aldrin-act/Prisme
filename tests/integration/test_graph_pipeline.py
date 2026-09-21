@@ -355,7 +355,14 @@ def test_stream_produit_des_evenements_etape_puis_le_resultat_final() -> None:
     noms_agents = [e["agent"] for e in elements]
     assert "benchmarker" in noms_agents
     assert "documentation" in noms_agents
-    assert all(e["statut"] in ("en_cours", "termine", "echec") for e in elements)
+    assert all(e["statut"] in ("en_cours", "termine", "echec", "mesure") for e in elements)
+
+    # Chaque appel au modèle émet une mesure, rattachée au nœud qui l'a fait — c'est ce qui rend
+    # la latence d'une génération visible dans l'interface.
+    mesures = [e for e in elements if e["statut"] == "mesure"]
+    agents_mesures = {e["agent"] for e in mesures}
+    assert {"analyste", "benchmarker", "architecte", "developpeur", "testeur"} <= agents_mesures
+    assert all({"duree_s", "attente_file_s", "tentatives", "cause"} <= e["details"].keys() for e in mesures)
 
 
 def _fabrique_qui_explose_sur(agent_cible: str, specs: dict[str, object | list[object]]):

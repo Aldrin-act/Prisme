@@ -751,12 +751,40 @@ export interface EchecCascade {
   details: string[];
 }
 
+// Ce qui explique surtout la durée d'un appel au modèle (voir `MesureAppelLLM.cause_dominante`,
+// generation/agents/client_llm.py) — `null` : appel court, rien à expliquer.
+// `longueur` : réponse coupée à la limite de tokens de sortie — un échec, pas une lenteur.
+export type CauseLatence = "reflexion" | "attente" | "refus" | "longueur" | null;
+
+// Mesure d'un appel au modèle fait par un agent — miroir de `MesureAppelLLM.en_dict()`.
+// `duree_s` couvre tout l'appel logique, attente d'une place et nouvelles tentatives comprises.
+export interface MesureAppelLLM {
+  reussi: boolean;
+  duree_s: number;
+  attente_file_s: number;
+  tentatives: number;
+  refus_429: number;
+  modele: string | null;
+  tokens_entree: number | null;
+  tokens_sortie: number | null;
+  tokens_reflexion: number | null;
+  // `false` : le modèle a répondu, mais pas au format demandé — l'agent relance un appel.
+  reponse_conforme: boolean | null;
+  erreur: string | null;
+  // Réponse coupée : le modèle a atteint sa limite de tokens de sortie avant d’avoir fini.
+  limite_sortie_atteinte: boolean;
+  cause: CauseLatence;
+}
+
 // Un évènement de progression par agent/sous-étape (POST /generation/{id}/stream,
-// Server-Sent Events, event: "etape").
+// Server-Sent Events, event: "etape"). `statut: "mesure"` n'est pas un changement d'état de
+// l'étape : c'est un appel au modèle fait par cet agent, décrit dans `details` — l'interface le
+// rattache à la ligne de l'agent au lieu de la remplacer.
 export interface EvenementGeneration {
   agent: string;
-  statut: "en_cours" | "termine" | "echec";
+  statut: "en_cours" | "termine" | "echec" | "mesure";
   resume: string;
+  details?: MesureAppelLLM | null;
 }
 
 export interface ReponseGenerationSolveur {
@@ -822,8 +850,9 @@ export interface StatistiquesGeneration {
 export interface EvenementGenerationHistorise {
   ordre: number;
   agent: string;
-  statut: "en_cours" | "termine" | "echec";
+  statut: "en_cours" | "termine" | "echec" | "mesure";
   resume: string;
+  details?: MesureAppelLLM | null;
 }
 
 export interface TentativeGenerationHistorisee {
