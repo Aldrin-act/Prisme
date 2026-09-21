@@ -14,8 +14,11 @@ Ne touche jamais aux opérations déjà gelées par un horizon de replanificatio
 engagé, les décaler violerait le contrat "generate once" du gel d'horizon.
 
 Portée volontairement limitée aux jours de la semaine fermés (`jours_fermes`, samedi/dimanche par
-défaut) — n'a rien à voir avec `ContrainteDisponibiliteRessource` (mécanisme DSL séparé, opt-in,
-propre à chaque ressource, inchangé par ce module).
+défaut) et, en mode heures, aux heures hors de la plage ouvrée du jour (`heure_ouverture`/
+`heure_fermeture`, 8h-22h par défaut) — une opération est continue, jamais coupée par la nuit : elle
+commence à l'ouverture suivante si elle ne tient pas avant la fermeture. N'a rien à voir avec
+`ContrainteDisponibiliteRessource` (mécanisme DSL séparé, opt-in, propre à chaque ressource,
+inchangé par ce module).
 """
 
 from __future__ import annotations
@@ -30,16 +33,33 @@ from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, OperationPlani
 # (0=lundi..6=dimanche) : ne jamais confondre les deux dans ce module.
 
 
-def _est_bloque(instant: int, reference: datetime, unite_temps: str, jours_fermes: frozenset[int]) -> bool:
-    """Un jour fermé est un fait calendaire global, valable identiquement pour toute ressource —
-    contrairement à `ContrainteDisponibiliteRessource`, jamais propre à une ressource ici."""
+def _est_bloque(
+    instant: int,
+    reference: datetime,
+    unite_temps: str,
+    jours_fermes: frozenset[int],
+    heures_ouvrees: tuple[int, int] = (0, 24),
+) -> bool:
+    """Un jour fermé ou une heure hors plage ouvrée (mode heures seulement) est un fait calendaire
+    global, valable identiquement pour toute ressource — contrairement à
+    `ContrainteDisponibiliteRessource`, jamais propre à une ressource ici."""
     pas_heures = 24 if unite_temps == "jours" else 1
-    jour_semaine = (reference + timedelta(hours=instant * pas_heures)).isoweekday() % 7
-    return jour_semaine in jours_fermes
+    moment = reference + timedelta(hours=instant * pas_heures)
+    if moment.isoweekday() % 7 in jours_fermes:
+        return True
+    if unite_temps == "heures":
+        ouverture, fermeture = heures_ouvrees
+        return not (ouverture <= moment.hour < fermeture)
+    return False
 
 
 def _prochain_instant_libre(
-    debut: int, duree: int, reference: datetime, unite_temps: str, jours_fermes: frozenset[int]
+    debut: int,
+    duree: int,
+    reference: datetime,
+    unite_temps: str,
+    jours_fermes: frozenset[int],
+    heures_ouvrees: tuple[int, int] = (0, 24),
 ) -> int:
     """Plus petit `debut' >= debut` tel que `[debut', debut'+duree)` ne chevauche aucun instant
     bloqué — boucle pour gérer aussi bien un jour fermé isolé qu'une opération assez longue pour en
@@ -55,13 +75,20 @@ def _prochain_instant_libre(
     boucle de plusieurs millions d'itérations jusqu'à `OverflowError` sur l'arithmétique de
     dates)."""
     longueur_cycle = 168 if unite_temps == "heures" else 7
+    debut_initial = debut
     for _ in range(longueur_cycle + 1):
         instants_bloques = [
-            i for i in range(debut, debut + duree) if _est_bloque(i, reference, unite_temps, jours_fermes)
+            i
+            for i in range(debut, debut + duree)
+            if _est_bloque(i, reference, unite_temps, jours_fermes, heures_ouvrees)
         ]
         if not instants_bloques:
             return debut
         debut = max(instants_bloques) + 1
+    # Aucune fenêtre assez longue : au moins commencer à un instant ouvert (jamais en pleine nuit).
+    for i in range(debut_initial, debut_initial + longueur_cycle + 1):
+        if not _est_bloque(i, reference, unite_temps, jours_fermes, heures_ouvrees):
+            return i
     return debut
 
 
@@ -76,13 +103,13 @@ def repousser_hors_jours_non_ouvres(
     fermé (`instance.jours_fermes`). Sans effet si `jours_fermes` est vide, ou sur un planning qui
     ne touche jamais aucun de ces jours."""
     jours_fermes = frozenset(instance.jours_fermes)
-    if not jours_fermes:
+    heures_ouvrees = (instance.heure_ouverture, instance.heure_fermeture)
+    heures_restreintes = instance.unite_temps == "heures" and heures_ouvrees != (0, 24)
+    if not jours_fermes and not heures_restreintes:
         return planning
 
     duree_par_couple: dict[tuple[str, str], int] = {
-        (c.tache, c.ressource): c.duree
-        for c in instance.contraintes
-        if isinstance(c, CompatibiliteRessourceTache)
+        (c.tache, c.ressource): c.duree for c in instance.contraintes if isinstance(c, CompatibiliteRessourceTache)
     }
 
     predecesseurs_par_tache: dict[str, list[str]] = defaultdict(list)
@@ -130,16 +157,16 @@ def repousser_hors_jours_non_ouvres(
             fin_avant_decalee = nouveau_debut[tache_avant] + duree_avant
             plancher = max(plancher, fin_avant_decalee + gap_original)
 
-        debut = _prochain_instant_libre(plancher, duree, reference, instance.unite_temps, jours_fermes)
+        debut = _prochain_instant_libre(
+            plancher, duree, reference, instance.unite_temps, jours_fermes, heures_ouvrees
+        )
         nouveau_debut[op.tache] = debut
         fin_ressource[op.ressource] = debut + duree
         derniere_op_ressource[op.ressource] = op
 
     return Planning(
         operations=[
-            OperationPlanifiee(
-                tache=op.tache, ressource=op.ressource, debut=nouveau_debut.get(op.tache, op.debut)
-            )
+            OperationPlanifiee(tache=op.tache, ressource=op.ressource, debut=nouveau_debut.get(op.tache, op.debut))
             for op in planning.operations
         ]
     )

@@ -387,7 +387,11 @@ def executer_solveur_valide(
         for op in (planning_precedent.operations if planning_precedent else [])
         if op.debut < horizon_gele_jours
     )
-    planning = repousser_hors_jours_non_ouvres(instance, planning, datetime.now(UTC), operations_gelees)
+    # Heure locale du serveur (et non UTC) : les heures ouvrées se lisent sur l'horloge de l'atelier,
+    # la même que celle du navigateur qui affiche le planning (l'ancrage du jour 0).
+    planning = repousser_hors_jours_non_ouvres(
+        instance, planning, datetime.now(UTC).astimezone(), operations_gelees
+    )
 
     verdict = verifier_faisabilite(instance, planning)
     return ResultatExecution(planning, verdict, None)

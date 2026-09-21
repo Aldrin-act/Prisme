@@ -70,11 +70,36 @@ class InstanceTRCO(BaseModel):
     # jamais `structure_contraintes`, donc ne peut jamais invalider un solveur déjà enregistré.
     jours_fermes: list[int] = Field(default_factory=lambda: [0, 6])
 
+    # Heures ouvrées de chaque jour non fermé, uniquement en mode `"heures"` (sans effet en jours) :
+    # `[heure_ouverture, heure_fermeture[`, 8h-22h par défaut — mêmes bornes que l'affichage du Gantt.
+    # Même statut que `jours_fermes` : consommé par la seule correction post-solveur
+    # (`validation_engine/jours_non_ouvres.py`), jamais lu par le solveur généré ni
+    # `feasibility_checker.py`, et jamais une `Contrainte` (ne change pas `structure_contraintes`).
+    heure_ouverture: int = 8
+    heure_fermeture: int = 22
+    # Position de l'instant 0 dans la semaine (0 = dimanche 00h ... 167 = samedi 23h), mode heures
+    # seulement. Posée par l'exécution (`sandbox/runner.py`) sur l'instant réel de l'exécution, jamais
+    # saisie ni enregistrée avec l'instance : c'est elle qui active le calendrier ouvré (voir
+    # `dsl/calendrier.py` — une opération travaille jusqu'à la fermeture, s'arrête, reprend à
+    # l'ouverture). `None` (défaut) : pas de calendrier, `fin = debut + duree` comme toujours.
+    position_zero_semaine: int | None = Field(default=None, ge=0, lt=168)
+
+    @model_validator(mode="after")
+    def _heures_ouvrees_valides(self) -> InstanceTRCO:
+        if not (0 <= self.heure_ouverture < self.heure_fermeture <= 24):
+            raise ValueError(
+                "heure_ouverture et heure_fermeture doivent vérifier 0 <= ouverture < fermeture <= 24 : "
+                f"({self.heure_ouverture}, {self.heure_fermeture})"
+            )
+        return self
+
     @model_validator(mode="after")
     def _jours_fermes_valides(self) -> InstanceTRCO:
         invalides = sorted({j for j in self.jours_fermes if not (0 <= j <= 6)})
         if invalides:
-            raise ValueError(f"jours_fermes doit contenir des valeurs entre 0 (dimanche) et 6 (samedi) : {invalides}")
+            raise ValueError(
+                f"jours_fermes doit contenir des valeurs entre 0 (dimanche) et 6 (samedi) : {invalides}"
+            )
         return self
 
     @model_validator(mode="after")
@@ -142,7 +167,9 @@ class InstanceTRCO(BaseModel):
                         raise ValueError(f"changement de série référence une tâche inconnue : {id_tache!r}")
             elif isinstance(contrainte, ConsommationMatiere):
                 if contrainte.tache not in ids_taches:
-                    raise ValueError(f"consommation de matière référence une tâche inconnue : {contrainte.tache!r}")
+                    raise ValueError(
+                        f"consommation de matière référence une tâche inconnue : {contrainte.tache!r}"
+                    )
                 if contrainte.materiau not in ids_materiaux:
                     raise ValueError(
                         f"consommation de matière référence un matériau inconnu : {contrainte.materiau!r}"

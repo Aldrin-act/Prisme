@@ -91,6 +91,12 @@ const ECHELLE_PAR_UNITE: Record<
   heures: { defaut: 8, min: 2, max: 48, pas: 2 },
 };
 const LARGEUR_COL_RESSOURCE = 144; // == w-36, dupliqué en px pour aligner l'offset de l'en-tête
+// Largeur réservée hors de la piste, sur une ligne de ressource : colonne du taux d'utilisation
+// (w-24 = 96) + gouttières.
+const LARGEUR_HORS_PISTE = LARGEUR_COL_RESSOURCE + 12 + 96 + 24;
+// Échelle maximale de l'ajustement automatique en mode jours — au-delà, un planning de quelques
+// jours donnerait des barres démesurées. En mode heures, le plafond est celui du zoom manuel.
+const AJUSTEMENT_MAX_JOURS = 96;
 
 export function GanttChart({
   planning,
@@ -153,6 +159,11 @@ export function GanttChart({
   // jour (ex. après un glissement en mode éditable).
   const [operationDetailCle, setOperationDetailCle] = useState<string | null>(null);
   const conteneurScrollRef = useRef<HTMLDivElement>(null);
+  // Largeur disponible pour le Gantt, et zoom choisi à la main : tant que l'utilisateur n'a pas
+  // touché au zoom, l'échelle s'ajuste pour que tout le planning tienne à l'écran — un planning de
+  // quelques heures n'est plus réduit à une bande de 90 px sur une page vide.
+  const [largeurDisponible, setLargeurDisponible] = useState(0);
+  const zoomManuel = useRef(false);
 
   // Toute nouvelle version du planning affiché (nouvelle exécution, bascule
   // original/ajusté...) réinitialise l'édition en cours et le zoom — jamais un mélange
@@ -163,6 +174,7 @@ export function GanttChart({
   useEffect(() => {
     setOperationsLocales(planning.operations);
     setPxParJour(echelle.defaut);
+    zoomManuel.current = false;
     setFiltreDebut("");
     setFiltreFin("");
     setRecherche("");
@@ -205,6 +217,43 @@ export function GanttChart({
   // Jusqu'où chaque tâche de commande se répète (voir finRepetitionParTache) — calculé sur
   // `operations`, donc à jour après un glissement.
   const finRepetition = finRepetitionParTache(commandes ?? [], operations);
+
+  // Horizon servant à l'ajustement : celui du planning d'origine (pas de `operationsLocales`), pour
+  // que glisser une barre ne fasse jamais sauter l'échelle.
+  const operationsOrigine = operationsAvecFin(planning.operations, planning.durees);
+  const horizonAjustement = Math.max(
+    1,
+    ...operationsOrigine.map((op) => op.fin),
+    ...finRepetitionParTache(commandes ?? [], operationsOrigine).values(),
+  );
+  const aDesOperations = operations.length > 0 && makespan > 0;
+  const echelleAjustee =
+    largeurDisponible > 0
+      ? Math.min(
+          unite === "heures" ? echelle.max : AJUSTEMENT_MAX_JOURS,
+          Math.max(
+            echelle.min,
+            Math.floor((largeurDisponible - LARGEUR_HORS_PISTE) / horizonAjustement),
+          ),
+        )
+      : echelle.defaut;
+
+  // Mesure la largeur du conteneur (monté seulement quand il y a des opérations à afficher).
+  useEffect(() => {
+    const conteneur = conteneurScrollRef.current;
+    if (!conteneur) return;
+    const mesurer = () => setLargeurDisponible(conteneur.clientWidth);
+    mesurer();
+    const observateur = new ResizeObserver(mesurer);
+    observateur.observe(conteneur);
+    return () => observateur.disconnect();
+  }, [aDesOperations]);
+
+  // Déclaré après l'effet de réinitialisation ci-dessus : à chaque nouveau planning, celui-ci
+  // l'emporte sur `echelle.defaut`.
+  useEffect(() => {
+    if (!zoomManuel.current) setPxParJour(echelleAjustee);
+  }, [echelleAjustee, planning]);
 
   function reinitialiser() {
     setOperationsLocales(planning.operations);
@@ -262,7 +311,13 @@ export function GanttChart({
     setDrag(null);
   }
 
+  function ajusterALaFenetre() {
+    zoomManuel.current = false;
+    setPxParJour(echelleAjustee);
+  }
+
   function zoomer(sens: 1 | -1) {
+    zoomManuel.current = true;
     setPxParJour((p) => Math.min(echelle.max, Math.max(echelle.min, p + sens * echelle.pas)));
   }
 
@@ -420,6 +475,15 @@ export function GanttChart({
             aria-label="Augmenter le zoom"
           >
             <ZoomIn className="h-3.5 w-3.5" />
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-7 px-2 text-xs"
+            onClick={ajusterALaFenetre}
+            title="Ajuster l'échelle pour que tout le planning tienne à l'écran"
+          >
+            Ajuster
           </Button>
         </div>
       </div>

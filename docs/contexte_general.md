@@ -423,7 +423,7 @@ arbitrés par la suite (§1.8, §2.1).
 ```
    Organisations industrielles                     Données de production
    responsables d'un atelier                        et ressources disponibles
-   (chefs de production,           <----------->     (gammes, exports ERP/MES,
+   (chefs de production,           <----------->     (processus, exports ERP/MES,
    ordonnanceurs, intégrateurs SI)                    fichiers de suivi, historiques)
                     \                                     /
                      \                                   /
@@ -443,7 +443,7 @@ arbitrés par la suite (§1.8, §2.1).
 | Question | Réponse |
 |---|---|
 | À qui rend-il service ? | Aux organisations industrielles responsables d'un atelier : chefs de production, ordonnanceurs, intégrateurs SI. |
-| Sur quoi agit-il ? | Sur les tâches et gammes de production, la charge des ressources disponibles, et les données de processus de l'entreprise (exports ERP/MES, fichiers de suivi, historiques d'exécution). |
+| Sur quoi agit-il ? | Sur les tâches et processus de production, la charge des ressources disponibles, et les données de processus de l'entreprise (exports ERP/MES, fichiers de suivi, historiques d'exécution). |
 | Dans quel but ? | Comprendre le contexte métier, générer un solveur d'ordonnancement sur mesure, l'exécuter en toute sécurité, et permettre à l'humain de superviser et de valider chaque décision à risque. |
 
 ### 2.4.2 Diagramme pieuvre

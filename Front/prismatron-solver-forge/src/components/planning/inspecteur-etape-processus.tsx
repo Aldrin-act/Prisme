@@ -3,6 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { EtapeProcessus } from "@/integrations/prisme";
 import type { DonneesNoeudEtape } from "./editeur-processus";
 import { competencesDe, idDepuisNom } from "./processus-utils";
 
@@ -14,6 +22,8 @@ export function InspecteurEtapeProcessus({
   erreur,
   uniteTemps,
   competencesAtelier,
+  tachesAtelier,
+  nomsDejaPris,
   onPatch,
   onSupprimer,
   onFermer,
@@ -24,6 +34,10 @@ export function InspecteurEtapeProcessus({
   uniteTemps: "jours" | "heures";
   /** Compétences que possède au moins une ressource de l'atelier — proposées en un clic. */
   competencesAtelier: string[];
+  /** Tâches de l'atelier : le nom de l'étape se choisit dans cette liste (champ libre si vide). */
+  tachesAtelier: EtapeProcessus[];
+  /** Noms déjà pris par les autres étapes — une tâche ne devient étape qu'une fois. */
+  nomsDejaPris: string[];
   onPatch: (patch: Partial<DonneesNoeudEtape>) => void;
   onSupprimer: () => void;
   onFermer: () => void;
@@ -36,6 +50,26 @@ export function InspecteurEtapeProcessus({
     const idSuitLeNom = donnees.id === "" || donnees.id === idDepuisNom(donnees.nom);
     onPatch(idSuitLeNom ? { nom, id: idDepuisNom(nom) } : { nom });
   }
+
+  // Choisir une tâche de l'atelier reprend aussi ses compétences et sa durée, sans écraser ce que
+  // l'utilisateur a déjà saisi sur cette étape.
+  function choisirTache(nom: string) {
+    const tache = tachesAtelier.find((t) => (t.nom ?? t.id) === nom);
+    changerNom(nom);
+    if (!tache) return;
+    const patch: Partial<DonneesNoeudEtape> = {};
+    if (competences.length === 0 && tache.competences.length > 0) {
+      patch.competencesTexte = tache.competences.join(", ");
+    }
+    if (donnees.dureeParPiece === "" && tache.duree_par_piece > 0) {
+      patch.dureeParPiece = String(tache.duree_par_piece);
+    }
+    if (Object.keys(patch).length > 0) onPatch(patch);
+  }
+
+  const nomsTaches = tachesAtelier
+    .map((t) => t.nom ?? t.id)
+    .filter((nom) => nom === donnees.nom || !nomsDejaPris.includes(nom));
 
   function ajouterCompetence(competence: string) {
     onPatch({ competencesTexte: [...competences, competence].join(", ") });
@@ -59,12 +93,35 @@ export function InspecteurEtapeProcessus({
 
       <div className="space-y-1">
         <Label htmlFor="etape-nom">Nom</Label>
-        <Input
-          id="etape-nom"
-          value={donnees.nom}
-          placeholder="ex : Tournage"
-          onChange={(e) => changerNom(e.target.value)}
-        />
+        {tachesAtelier.length > 0 ? (
+          <>
+            <Select value={donnees.nom || undefined} onValueChange={choisirTache}>
+              <SelectTrigger id="etape-nom">
+                <SelectValue placeholder="Choisir une tâche de l'atelier" />
+              </SelectTrigger>
+              <SelectContent>
+                {donnees.nom !== "" && !nomsTaches.includes(donnees.nom) && (
+                  <SelectItem value={donnees.nom}>{donnees.nom}</SelectItem>
+                )}
+                {nomsTaches.map((nom) => (
+                  <SelectItem key={nom} value={nom}>
+                    {nom}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              Une étape correspond à une tâche de l'atelier.
+            </p>
+          </>
+        ) : (
+          <Input
+            id="etape-nom"
+            value={donnees.nom}
+            placeholder="ex : Tournage"
+            onChange={(e) => changerNom(e.target.value)}
+          />
+        )}
       </div>
 
       <div className="space-y-1">

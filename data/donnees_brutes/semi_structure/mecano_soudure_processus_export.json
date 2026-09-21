@@ -1,0 +1,60 @@
+{
+  "site": "Atelier Mécano-Soudure Atlas - Halle B",
+  "export": {"date": "2026-09-21", "outil": "GPAO-Atlas v4.2", "operateur": "planif.b"},
+  "calendrier_atelier": {
+    "jours_travailles": "lundi au vendredi",
+    "horaires": "8h-17h, pause déjeuner 12h-13h",
+    "remarque": "samedi et dimanche fermés, halle B entièrement à l'arrêt"
+  },
+  "processus_fabrication": {
+    "libelle": "Groupe motopompe PH-200 - toutes les commandes de l'atelier suivent ce même enchaînement",
+    "operations": [
+      {"op": 10, "libelle": "Découpe laser", "aptitude_requise": "DECOUPE-LASER", "tps_par_piece": "4 min", "reglage": "20 min"},
+      {"op": 20, "libelle": "Pliage", "aptitude_requise": "PLIAGE", "tps_par_piece": "6 min", "reglage": "30 min", "apres": [10], "note": "PLIEUSE-02 fait le même travail mais environ 1,5 fois plus lentement"},
+      {"op": 30, "libelle": "Soudage châssis", "aptitude_requise": "SOUD-TIG", "tps_par_piece": "0,25 h", "reglage": null, "apres": [20]},
+      {"op": 35, "libelle": "Usinage support moteur", "aptitude_requise": "USINAGE-CN", "tps_par_piece": "0,1 h", "reglage": "25 min", "apres": [20]},
+      {"op": 40, "libelle": "Peinture époxy", "aptitude_requise": "PEINTURE-EPOXY", "tps_par_piece": 5, "reglage": "15 min", "apres": [30, 35], "note": "cuisson incluse, démarre quand le châssis ET le support sont prêts"},
+      {"op": 50, "libelle": "Assemblage groupe", "aptitude_requise": "ASSEMBLAGE", "tps_par_piece": "25 min", "reglage": null, "apres": [40]},
+      {"op": 60, "libelle": "Essai en charge", "aptitude_requise": "HAB-ESSAI-380V", "tps_par_piece": null, "apres": [50], "note": "compter environ 40 minutes par pompe, essai sous 380V, poste habilité uniquement"}
+    ]
+  },
+  "carnet_commandes": [
+    {
+      "cmd": "CMD-2026-0412",
+      "client": "Hydro-Sud",
+      "qte": 6,
+      "livraison_souhaitee": "2026-10-02",
+      "priorite": "haute"
+    },
+    {
+      "cmd": "CMD-2026-0415",
+      "client": "Agri-Maroc",
+      "qte": 10,
+      "livraison_souhaitee": "fin de semaine 40",
+      "priorite": "normale"
+    },
+    {
+      "cmd": "CMD-2026-0418",
+      "client": "Hydro-Sud",
+      "qte": 20,
+      "livraison_souhaitee": "jeudi 1er octobre",
+      "priorite": "normale",
+      "commentaire": "peut être livré en deux fois si besoin, pas obligatoire"
+    }
+  ],
+  "parc_postes": [
+    {"code": "LASER-01", "libelle": "Découpe laser", "aptitudes": ["DECOUPE-LASER"], "atelier": "Halle B"},
+    {"code": "PLIEUSE-01", "libelle": "Presse plieuse", "aptitudes": ["PLIAGE"]},
+    {"code": "PLIEUSE-02", "libelle": "Presse plieuse (plus ancienne, moins rapide)", "aptitudes": ["PLIAGE"]},
+    {"code": "SOUD-01", "libelle": "Poste de soudure", "aptitudes": ["SOUD-TIG", "SOUD-MIG"]},
+    {"code": "SOUD-02", "libelle": "Poste de soudure", "aptitudes": ["SOUD-MIG"]},
+    {"code": "CU-01", "libelle": "Centre d'usinage", "aptitudes": ["USINAGE-CN"]},
+    {"code": "CAB-PEINT-01", "libelle": "Cabine peinture", "aptitudes": ["PEINTURE-EPOXY"]},
+    {"code": "ASSEMB-01", "libelle": "Banc d'assemblage", "aptitudes": ["ASSEMBLAGE"]},
+    {"code": "ESSAI-01", "libelle": "Banc d'essai", "aptitudes": ["HAB-ESSAI-380V"]}
+  ],
+  "historique_arrets": [
+    {"poste": "LASER-01", "date": "2026-09-05", "motif": "changement lentille"},
+    {"poste": "CAB-PEINT-01", "date": "2026-08-20", "motif": "remplacement filtres"}
+  ]
+}

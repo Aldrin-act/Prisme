@@ -140,7 +140,7 @@ def test_aucune_etape_realisable_refuse() -> None:
 
 
 def test_taches_existantes_a_competence_requise_ne_bloquent_pas() -> None:
-    """Régression : l'ancien éclatement (gammes) passait toutes les contraintes de l'atelier à la
+    """Régression : l'ancien éclatement passait toutes les contraintes de l'atelier à la
     dérivation des compatibilités, qui exige une durée pour chaque tâche à compétence requise —
     un atelier dont les tâches d'origine déclarent des compétences faisait donc tout échouer."""
     resultat = eclater_processus(_atelier(), (TOURNAGE,), "cmd-1", quantite=1)

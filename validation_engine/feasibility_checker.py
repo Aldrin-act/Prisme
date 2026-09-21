@@ -48,6 +48,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Literal
 
+from dsl.calendrier import calendrier_actif, est_instant_ouvre, fin_calendaire
 from dsl.schema import (
     CompatibiliteRessourceTache,
     ConsommationMatiere,
@@ -79,6 +80,7 @@ TypeViolation = Literal[
     "taille_lot_hors_bornes",
     "changement_serie_insuffisant",
     "stock_insuffisant",
+    "debut_hors_heures_ouvrees",
 ]
 
 
@@ -164,6 +166,21 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
             continue
         operations_valides[tache_id] = operation
 
+    # Calendrier ouvré (mode heures, voir dsl/calendrier.py) : une opération ne démarre qu'à une heure
+    # ouvrée — elle peut ensuite traverser la nuit/le week-end, sa fin est `fin_calendaire`.
+    if calendrier_actif(instance):
+        for tache_id, operation in operations_valides.items():
+            if not est_instant_ouvre(instance, operation.debut):
+                violations.append(
+                    Violation(
+                        "debut_hors_heures_ouvrees",
+                        f"{tache_id!r} démarre à l'heure {operation.debut}, hors des heures ouvrées "
+                        f"({instance.heure_ouverture}h-{instance.heure_fermeture}h, jours fermés exclus)",
+                        tache=tache_id,
+                        ressource=operation.ressource,
+                    )
+                )
+
     ressources_autorisees: dict[str, set[str]] = defaultdict(set)
     duree_par_couple: dict[tuple[str, str], int] = {}
     for contrainte in instance.contraintes:
@@ -184,7 +201,7 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
             # (incompatibilite_ressource_tache), aucune durée connue pour ce
             # couple précis, donc pas de vérification de fin possible ici.
             continue
-        fin_avant = operation_avant.debut + duree_avant
+        fin_avant = fin_calendaire(instance, operation_avant.debut, duree_avant)
         if fin_avant > operation_apres.debut:
             violations.append(
                 Violation(
@@ -206,7 +223,7 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
             # Ressource incompatible : déjà signalé séparément (incompatibilite_ressource_tache),
             # aucune durée connue pour ce couple, donc pas de vérification d'échéance possible ici.
             continue
-        fin = operation.debut + duree
+        fin = fin_calendaire(instance, operation.debut, duree)
         if fin > contrainte.echeance:
             violations.append(
                 Violation(
@@ -254,7 +271,7 @@ def verifier_faisabilite(instance: InstanceTRCO, planning: Planning) -> Resultat
             # Ressource incompatible : déjà signalé séparément ci-dessus, pas
             # de durée connue pour ce couple, donc pas de chevauchement calculable.
             continue
-        fin = operation.debut + duree_operation
+        fin = fin_calendaire(instance, operation.debut, duree_operation)
         operations_par_ressource[operation.ressource].append((tache_id, operation.debut, fin))
 
     capacite_par_ressource: dict[str, int] = {

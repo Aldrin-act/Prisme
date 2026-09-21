@@ -171,8 +171,8 @@ Le module est réexécuté sur la même instance à chaque commande client ajout
 modifie l'instance avant la réexécution suivante :
 
 - elle ajoute des `Tache` neuves, dont l'identifiant est généré (ex. `cmd-1a2b3c4d_0_DECOUPE`)
-  et dont `produit`/`quantite` sont renseignés quand elles viennent d'une gamme produit ;
-- elle ajoute les `Precedence` qui enchaînent les étapes de chaque gamme — y compris **plusieurs
+  et dont `produit`/`quantite` sont renseignés quand elles viennent du processus de l'atelier ;
+- elle ajoute les `Precedence` qui enchaînent les étapes du processus — y compris **plusieurs
   prédécesseurs pour une même tâche** (sous-produits qui convergent vers un assemblage), et des
   tâches sans aucune précédence ;
 - elle ajoute des `CompetenceRequise` et les `CompatibiliteRessourceTache` qui en sont dérivées ;
@@ -373,7 +373,7 @@ accède, ne les devine jamais par analogie avec un autre projet :
 - `Tache.quantite` (`int | None`) : donnée d'entrée pour `ContrainteTailleLot`
   uniquement (déjà vérifiée en amont) — jamais lue dans le code généré, ni
   comme durée, ni comme poids, ni comme borne de décision. Renseignée par les
-  commandes issues d'une gamme : ce n'est **pas** un multiplicateur de durée
+  commandes issues du processus de l'atelier : ce n'est **pas** un multiplicateur de durée
   (la durée à utiliser est déjà dans `CompatibiliteRessourceTache.duree`).
 - `Tache.produit`, `Tache.statut` (`str | None`) : purement informatifs, jamais lus.
 - `DeclarationMateriau.materiau`, `.stock_initial` (`float`), `.unite` (informatif) ;

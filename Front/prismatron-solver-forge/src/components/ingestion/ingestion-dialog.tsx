@@ -351,6 +351,15 @@ function construireInstance(
           }
         }
       })
+      // Une disponibilité sans aucun jour ni motif n'indique aucune indisponibilité — sans effet,
+      // et refusée par le DSL (« au moins un jour »). On l'écarte plutôt que de bloquer tout
+      // l'enregistrement sur une ligne laissée vide.
+      .filter(
+        (c) =>
+          c.type !== "disponibilite_ressource" ||
+          c.jours_indisponibles.length > 0 ||
+          (c.jours_semaine_indisponibles?.length ?? 0) > 0,
+      )
       .concat(contraintesNonEditables),
     objectifs: construireObjectifs(objectifs),
     unite_temps: uniteTemps,

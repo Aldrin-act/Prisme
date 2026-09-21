@@ -271,8 +271,8 @@ is unaffected by any stock check.
 (1–5) is consumed by generated code as a **tie-break only** — never a weight on the primary
 objective, never a constraint — see "Priorité des tâches" in `generation_solveur.md`.
 `Tache.statut`/`Tache.produit`/`Ressource.type` remain purely informative fields (no constraint or
-objective reads them) — `produit` groups tasks for display (e.g. the routing/gammes graph editor,
-`Front/.../components/planning/flow-graph-editor.tsx`), never read by the solver.
+objective reads them) — `produit` groups tasks for display (e.g. the workshop process graph editor,
+`Front/.../components/planning/editeur-processus.tsx`), never read by the solver.
 
 Order intake also feeds the DSL indirectly: `adapters/commande_derivation.py` derives `Echeance`
 constraints from `Commande` (id, tasks, client, deadline) objects — explicit `Echeance` always

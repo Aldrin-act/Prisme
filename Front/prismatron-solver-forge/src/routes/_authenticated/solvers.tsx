@@ -253,26 +253,6 @@ function DialogSolveur({
                     </p>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <Label htmlFor="horizon_gele_jours" className="text-xs text-muted-foreground">
-                      Horizon gelé (jours, optionnel)
-                    </Label>
-                    <Input
-                      id="horizon_gele_jours"
-                      type="number"
-                      min={0}
-                      value={horizonGeleJours}
-                      onChange={(e) => setHorizonGeleJours(e.target.value)}
-                      placeholder="0"
-                      className="w-32"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Fige les opérations déjà planifiées qui commencent avant ce nombre de jours —
-                      reprend le dernier planning réussi de cette instance, sans effet s'il n'y en a
-                      pas encore.
-                    </p>
-                  </div>
-
                   <Button onClick={executer} disabled={!instanceId || declencher.isPending}>
                     <Play className="mr-2 h-4 w-4" />
                     {declencher.isPending ? "Exécution en cours..." : "Exécuter le solveur"}
@@ -302,13 +282,6 @@ function DialogSolveur({
                         <CheckCircle2 className="h-4 w-4" /> Exécution réussie — voir l'onglet
                         Planning
                       </div>
-                      {reponseExecution.horizon_gele_jours > 0 && (
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {reponseExecution.planning_precedent_utilise
-                            ? "Horizon gelé appliqué — les opérations déjà planifiées dans la fenêtre ont été reprises telles quelles."
-                            : "Aucun planning précédent trouvé pour cette instance — solve normal, rien n'a été figé."}
-                        </p>
-                      )}
                     </div>
                   )}
                 </div>

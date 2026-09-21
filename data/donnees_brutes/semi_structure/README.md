@@ -4,7 +4,7 @@ Ce répertoire contient des exports JSON **volontairement irréguliers** d'ateli
 production industrielle — ni du T-R-C-O canonique (`format_simplifie/`), ni un export ERP à
 vocabulaire fixe et reconnaissable (`json_erp/`). Aucun des deux chemins déterministes de ce
 projet ne peut les interpréter : `adapters/json_import` attend les clés canoniques
-`taches`/`ressources`/`contraintes` (absentes ici, vérifié directement — les trois fichiers
+`taches`/`ressources`/`contraintes` (absentes ici, vérifié directement — les quatre fichiers
 échouent avec `ErreurPayloadInvalide`, jamais silencieusement acceptés).
 
 Seul l'agent de compréhension (`adapters/agent_comprehension/agent.py::comprendre_donnees_erp`)
@@ -58,9 +58,36 @@ réglage), donc deux `CompatibiliteRessourceTache` légitimes pour la même tâc
   volontaire avec l'ambiguïté machine/opérateur de `fonderie_export.json`) — Nadia couvre les
   deux réglages, Julien seulement le tour, Marc aucun.
 
+### `mecano_soudure_processus_export.json` — mécano-soudure, un processus unique pour tout l'atelier
+
+Le processus de fabrication est **décrit une seule fois pour l'atelier** (`processus_fabrication`,
+une liste d'opérations numérotées) puis **appliqué à chaque commande** (`carnet_commandes`,
+seulement une quantité et une date de livraison). L'agent doit donc éclater lui-même chaque
+commande en tâches (une par opération, propre à cette commande), jamais une tâche par opération
+pour tout l'atelier. Il n'y a volontairement **aucun processus par produit** (concept retiré de
+PRISME : un atelier = un processus). Teste en plus :
+
+- **Durée à calculer, pas à lire** : `tps_par_piece` × `qte` + `reglage`, en formats mélangés
+  (`"4 min"`, `"0,25 h"`, entier nu `5` — minutes implicites, `null` avec l'estimation en toutes
+  lettres dans `note`).
+- **Précédences par numéro d'opération** (`apres: [20]`, local au processus) et **fusion** : la
+  peinture (`op` 40) attend le soudage du châssis **et** l'usinage du support (`apres: [30, 35]`).
+- **Échéances hétérogènes** : date ISO, « fin de semaine 40 », « jeudi 1er octobre » — à ramener à
+  des jours relatifs ; l'une est même facultative (`commentaire` sur `CMD-2026-0418`).
+- **Flexibilité de routage** : deux presses plieuses aptes au même pliage, la seconde environ
+  1,5 fois plus lente (durées différentes selon la ressource) ; `SOUD-TIG` uniquement sur `SOUD-01`.
+- **Compétences par recoupement, explicites des deux côtés** : `aptitude_requise` sur chaque
+  opération, `aptitudes` sur chaque poste — c'est ce qui permet à l'agent de déduire les
+  compatibilités. Sans cela (par exemple seulement un type de poste ou un code de machine), la
+  règle absolue du prompt de compréhension lui interdit de créer la moindre compatibilité et le
+  garde-fou rejette l'instance (« tâche(s) sans aucune contrainte de compatibilité »).
+- **Calendrier** : week-end fermé (`calendrier_atelier`), donc un `ContrainteDisponibiliteRessource`
+  par jours de semaine indisponibles à déduire d'un texte libre.
+- **Bruit** : `historique_arrets`, sans rapport avec la planification.
+
 ## Utilisation
 
-Un seul outil normalisé pour les trois fichiers (`scripts/afficher_prompt_comprehension.py`) —
+Un seul outil normalisé pour les quatre fichiers (`scripts/afficher_prompt_comprehension.py`) —
 même prompt système, même gabarit, jamais reconstruits à la main par fichier :
 
 ```bash
@@ -71,7 +98,7 @@ uv run python -m scripts.afficher_prompt_comprehension data/donnees_brutes/semi_
 uv run python -m scripts.afficher_prompt_comprehension --executer data/donnees_brutes/semi_structure/fonderie_export.json
 ```
 
-(remplacer le chemin pour tester les deux autres fichiers — fonctionne aussi sur n'importe quel
+(remplacer le chemin pour tester les autres fichiers — fonctionne aussi sur n'importe quel
 autre fichier de données brutes, pas seulement ce dossier.)
 
 Rien de ce qui précède n'est une garantie — c'est un LLM, le résultat exact varie d'un appel à

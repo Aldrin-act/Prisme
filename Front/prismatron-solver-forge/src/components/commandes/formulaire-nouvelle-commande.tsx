@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { EditeurProcessus } from "@/components/planning/editeur-processus";
+import { AvertissementEnchainements } from "@/components/planning/avertissement-enchainements";
+import { etapesDepuisTaches } from "@/components/planning/processus-utils";
 import {
   prismeKeys,
   useAjouterCommande,
@@ -136,6 +138,9 @@ export function FormulaireNouvelleCommande({
   const ajouter = useAjouterCommande();
   const processus = useProcessus(instance.instance_id);
   const etapes = processus.data?.etapes ?? [];
+  // Sans processus défini, les tâches déjà présentes dans l'atelier (ingérées) sont proposées comme
+  // étapes : une tâche = une étape. Simple proposition, à vérifier puis enregistrer.
+  const etapesProposees = useMemo(() => etapesDepuisTaches(instance), [instance]);
 
   const [ouvert, setOuvert] = useState(integre);
   const [editionProcessus, setEditionProcessus] = useState(false);
@@ -251,13 +256,18 @@ export function FormulaireNouvelleCommande({
           <p className="text-xs text-muted-foreground">
             Toutes les commandes suivantes suivront ce processus. Les commandes déjà créées gardent
             le leur.
+            {etapes.length === 0 &&
+              etapesProposees.length > 0 &&
+              " Les tâches de l'atelier sont proposées comme étapes : vérifiez-les, puis enregistrez."}
           </p>
         </div>
+        <AvertissementEnchainements etapes={etapes.length > 0 ? etapes : etapesProposees} />
         <EditeurProcessus
           instanceId={instance.instance_id}
-          etapes={etapes}
+          etapes={etapes.length > 0 ? etapes : etapesProposees}
           uniteTemps={uniteTemps}
           competencesAtelier={competencesAtelier}
+          tachesAtelier={etapesProposees}
           onEnregistre={() => basculerEdition(false)}
           onAnnuler={() => basculerEdition(false)}
         />
@@ -295,6 +305,9 @@ export function FormulaireNouvelleCommande({
                 </Button>
               )}
             </div>
+            {!processus.isLoading && (
+              <AvertissementEnchainements etapes={etapes.length > 0 ? etapes : etapesProposees} />
+            )}
             {processus.isLoading ? (
               <Skeleton className="h-20 w-full" />
             ) : etapes.length > 0 ? (
@@ -306,11 +319,16 @@ export function FormulaireNouvelleCommande({
             ) : (
               <div className="space-y-2 rounded-lg border border-dashed border-border p-3 text-sm">
                 <p className="text-muted-foreground">
-                  Cet atelier n'a pas encore de processus. Définissez une fois ses étapes et leur
-                  ordre : chaque commande les reprendra.
+                  Cet atelier n'a pas encore de processus.{" "}
+                  {etapesProposees.length > 0
+                    ? `Ses ${etapesProposees.length} étapes sont déjà proposées à partir de ses tâches (une tâche = une étape) : vérifiez-les et enregistrez, chaque commande les reprendra.`
+                    : "Définissez une fois ses étapes et leur ordre : chaque commande les reprendra."}
                 </p>
                 <Button type="button" size="sm" onClick={() => basculerEdition(true)}>
-                  <Workflow className="mr-1.5 h-3.5 w-3.5" /> Définir le processus
+                  <Workflow className="mr-1.5 h-3.5 w-3.5" />{" "}
+                  {etapesProposees.length > 0
+                    ? "Vérifier le processus proposé"
+                    : "Définir le processus"}
                 </Button>
               </div>
             )}

@@ -132,6 +132,8 @@ export function EditeurProcessus(props: {
   etapes: EtapeProcessus[];
   uniteTemps: "jours" | "heures";
   competencesAtelier: string[];
+  /** Tâches de l'atelier (une entrée par nom de tâche) : le nom d'une étape se choisit dans cette liste. */
+  tachesAtelier: EtapeProcessus[];
   onEnregistre: () => void;
   onAnnuler: () => void;
 }) {
@@ -147,6 +149,7 @@ function CorpsEditeurProcessus({
   etapes,
   uniteTemps,
   competencesAtelier,
+  tachesAtelier,
   onEnregistre,
   onAnnuler,
 }: {
@@ -154,6 +157,7 @@ function CorpsEditeurProcessus({
   etapes: EtapeProcessus[];
   uniteTemps: "jours" | "heures";
   competencesAtelier: string[];
+  tachesAtelier: EtapeProcessus[];
   onEnregistre: () => void;
   onAnnuler: () => void;
 }) {
@@ -295,6 +299,8 @@ function CorpsEditeurProcessus({
             erreur={erreursNoeud.get(noeudSelectionne.id) ?? null}
             uniteTemps={uniteTemps}
             competencesAtelier={competencesAtelier}
+            tachesAtelier={tachesAtelier}
+            nomsDejaPris={nodes.filter((n) => n.id !== noeudSelectionne.id).map((n) => n.data.nom)}
             onPatch={(patch) => patchNoeud(noeudSelectionne.id, patch)}
             onSupprimer={() => deleteElements({ nodes: [{ id: noeudSelectionne.id }] })}
             onFermer={() => setNoeudSelectionneId(null)}

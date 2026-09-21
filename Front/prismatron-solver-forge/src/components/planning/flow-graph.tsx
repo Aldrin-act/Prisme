@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -13,10 +13,16 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./flow-graph.css";
+import { Button } from "@/components/ui/button";
 import type { Contrainte, Tache } from "@/integrations/prisme";
 import { LARGEUR_NOEUD, calculerPositions } from "./flow-graph-layout";
+import { AvertissementEnchainements } from "./avertissement-enchainements";
+import { etapesDepuisTaches } from "./processus-utils";
 
-type NoeudTache = Node<{ label: string; ressources: string[] }, "tache">;
+type NoeudTache = Node<
+  { label: string; ressources: string[]; occurrences: number; ids: string[] },
+  "tache"
+>;
 
 // Nœud personnalisé plutôt que le type "default" de React Flow : le CSS de
 // base de la lib (`@xyflow/react/dist/style.css`) fixe un fond blanc sur
@@ -38,10 +44,15 @@ function NoeudTache({ data }: NodeProps<NoeudTache>) {
     <div
       className="rounded-lg border border-border bg-card px-3 py-2 text-xs font-mono text-foreground"
       style={{ width: LARGEUR_NOEUD }}
-      title={`${data.label}\nRessources : ${ressourcesTexte}`}
+      title={`${data.label}${data.occurrences > 1 ? ` (×${data.occurrences})` : ""}\n${data.ids.join(", ")}\nRessources : ${ressourcesTexte}`}
     >
       <Handle type="target" position={Position.Left} />
-      <div className="truncate">{data.label}</div>
+      <div className="truncate">
+        {data.label}
+        {data.occurrences > 1 && (
+          <span className="ml-1.5 text-muted-foreground">×{data.occurrences}</span>
+        )}
+      </div>
       <div className="truncate text-muted-foreground">{ressourcesTexte}</div>
       <Handle type="source" position={Position.Right} />
     </div>
@@ -50,29 +61,72 @@ function NoeudTache({ data }: NodeProps<NoeudTache>) {
 
 const TYPES_NOEUD = { tache: NoeudTache };
 
-// Mise en page une seule fois par rendu (pas de recalcul dans une boucle) —
-// voir flow-graph-layout.ts pour le calcul dagre partagé avec l'éditeur.
+// Une étape du graphe : une tâche seule (vue « Tâches ») ou toutes les tâches de même nom (vue
+// « Processus de l'atelier »).
+interface Etape {
+  cle: string;
+  label: string;
+  ids: string[];
+}
+
+// Le libellé d'une étape est le nom de la tâche récupérée (« Découpe laser »), jamais son
+// identifiant technique (« CMD-2026-0412-OP10 »), gardé seulement dans l'info-bulle. Sans nom,
+// l'identifiant reste le seul libellé possible.
+function libelleTache(t: Tache): string {
+  return t.nom?.trim() || t.id;
+}
+
+function etapesParTache(taches: Tache[]): Etape[] {
+  return taches.map((t) => ({ cle: t.id, label: libelleTache(t), ids: [t.id] }));
+}
+
+// Processus de l'atelier : les tâches de même nom (une par commande, en pratique) se replient en
+// une seule étape, et les précédences se déduisent d'une étape à l'autre — on lit alors
+// l'enchaînement de l'atelier une fois, pas une copie par commande.
+function etapesParProcessus(taches: Tache[]): Etape[] {
+  const parNom = new Map<string, Etape>();
+  for (const t of taches) {
+    const label = libelleTache(t);
+    const etape = parNom.get(label) ?? { cle: label, label, ids: [] };
+    etape.ids.push(t.id);
+    parNom.set(label, etape);
+  }
+  return [...parNom.values()];
+}
+
 function disposer(
-  taches: Tache[],
+  etapes: Etape[],
   aretes: { source: string; target: string }[],
   ressourcesParTache: Map<string, string[]>,
 ) {
+  const cleParTache = new Map(etapes.flatMap((e) => e.ids.map((id) => [id, e.cle] as const)));
+  const aretesEtapes = new Map<string, { source: string; target: string }>();
+  for (const a of aretes) {
+    const source = cleParTache.get(a.source);
+    const target = cleParTache.get(a.target);
+    if (source === undefined || target === undefined || source === target) continue;
+    aretesEtapes.set(`${source}->${target}`, { source, target });
+  }
+  const arcsBruts = [...aretesEtapes.values()];
+
   const positions = calculerPositions(
-    taches.map((t) => t.id),
-    aretes,
+    etapes.map((e) => e.cle),
+    arcsBruts,
   );
 
-  const noeuds: NoeudTache[] = taches.map((t) => ({
-    id: t.id,
+  const noeuds: NoeudTache[] = etapes.map((e) => ({
+    id: e.cle,
     type: "tache",
-    position: positions.get(t.id) ?? { x: 0, y: 0 },
+    position: positions.get(e.cle) ?? { x: 0, y: 0 },
     data: {
-      label: t.nom ? `${t.id} — ${t.nom}` : t.id,
-      ressources: ressourcesParTache.get(t.id) ?? [],
+      label: e.label,
+      ids: e.ids,
+      occurrences: e.ids.length,
+      ressources: [...new Set(e.ids.flatMap((id) => ressourcesParTache.get(id) ?? []))],
     },
   }));
 
-  const arcs: Edge[] = aretes.map((a, i) => ({
+  const arcs: Edge[] = arcsBruts.map((a, i) => ({
     id: `${a.source}->${a.target}-${i}`,
     source: a.source,
     target: a.target,
@@ -102,9 +156,24 @@ export function FlowGraph({ taches, contraintes }: { taches: Tache[]; contrainte
     return map;
   }, [contraintes]);
 
+  const etapesTaches = useMemo(() => etapesParTache(taches), [taches]);
+  const etapesProcessus = useMemo(() => etapesParProcessus(taches), [taches]);
+  // Vue par défaut : le processus de l'atelier dès qu'il replie quelque chose (plusieurs commandes
+  // sur le même enchaînement) — sinon les deux vues seraient identiques, autant rester sur les tâches.
+  const [vue, setVue] = useState<"processus" | "taches">(
+    etapesProcessus.length < etapesTaches.length ? "processus" : "taches",
+  );
+  const peutReplier = etapesProcessus.length < etapesTaches.length;
+  const vueEffective = peutReplier ? vue : "taches";
+
   const { noeuds, arcs } = useMemo(
-    () => disposer(taches, aretes, ressourcesParTache),
-    [taches, aretes, ressourcesParTache],
+    () =>
+      disposer(
+        vueEffective === "processus" ? etapesProcessus : etapesTaches,
+        aretes,
+        ressourcesParTache,
+      ),
+    [vueEffective, etapesProcessus, etapesTaches, aretes, ressourcesParTache],
   );
 
   if (taches.length === 0) {
@@ -112,20 +181,42 @@ export function FlowGraph({ taches, contraintes }: { taches: Tache[]; contrainte
   }
 
   return (
-    <div className="h-[500px] w-full rounded-lg border border-border">
-      <ReactFlowProvider>
-        <ReactFlow
-          nodes={noeuds}
-          edges={arcs}
-          nodeTypes={TYPES_NOEUD}
-          fitView
-          nodesConnectable={false}
-          proOptions={{ hideAttribution: true }}
-        >
-          <Background />
-          <Controls />
-        </ReactFlow>
-      </ReactFlowProvider>
+    <div className="space-y-2">
+      <AvertissementEnchainements etapes={etapesDepuisTaches({ taches, contraintes })} />
+      {peutReplier && (
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant={vueEffective === "processus" ? "default" : "outline"}
+            onClick={() => setVue("processus")}
+          >
+            Processus de l'atelier
+          </Button>
+          <Button
+            size="sm"
+            variant={vueEffective === "taches" ? "default" : "outline"}
+            onClick={() => setVue("taches")}
+          >
+            Toutes les tâches ({etapesTaches.length})
+          </Button>
+        </div>
+      )}
+      <div className="h-[500px] w-full rounded-lg border border-border">
+        <ReactFlowProvider>
+          <ReactFlow
+            key={vueEffective}
+            nodes={noeuds}
+            edges={arcs}
+            nodeTypes={TYPES_NOEUD}
+            fitView
+            nodesConnectable={false}
+            proOptions={{ hideAttribution: true }}
+          >
+            <Background />
+            <Controls />
+          </ReactFlow>
+        </ReactFlowProvider>
+      </div>
     </div>
   );
 }
