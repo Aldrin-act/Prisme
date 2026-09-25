@@ -378,6 +378,17 @@ export interface RequeteStatutCommande {
   date_realisation?: string | null;
 }
 
+// PRISME ne sait jamais qu'une tâche tourne en retard tout seul (aucun capteur ne remonte
+// l'atelier en direct) — un humain corrige la durée réellement constatée sur la ressource sur
+// laquelle la tâche tourne vraiment (jamais ses autres ressources compatibles, contrairement à
+// `durees_taches` à la création d'une commande) — voir
+// `api/routes/ingestion.py::declarer_retard_tache`. N'exécute rien : à l'appelant de relancer
+// une exécution ensuite pour obtenir un planning qui en tient compte.
+export interface RequeteRetardTache {
+  ressource: string;
+  nouvelle_duree: number;
+}
+
 // ============================================================================
 // SCÉNARIOS COMPARATIFS
 // ============================================================================
@@ -478,6 +489,14 @@ export interface InstanceInfo {
   // "api", "agent_ia" ou "scenario". `null` pour toute instance enregistrée
   // avant l'ajout de ce champ — purement informatif, jamais lu par le solveur.
   canal_ingestion: string | null;
+  // Résumé en langage naturel de l'atelier, proposé par l'agent de compréhension — `null` pour
+  // toute instance ingérée hors de ce chemin (payload T-R-C-O direct, CSV, scénario...). Même
+  // champ que `InstanceDetail.description_metier`.
+  description_metier: string | null;
+  // Instance de base du groupe de scénarios dont celle-ci est une variante — `null` si ce n'est
+  // pas un scénario (y compris pour l'instance de base elle-même : voir
+  // `api/etat.py::EtatAPI.lister_instances`, jamais sa propre clé dans `groupes_scenario`).
+  groupe_scenario_id: string | null;
 }
 
 export interface ExecutionInfo {

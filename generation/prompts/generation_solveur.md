@@ -203,10 +203,9 @@ est déjà le mieux possible pour elle). Procède ainsi :
 
 1. le décodeur place les tâches comme d'habitude, puis compte `nb_echeances_depassees` sur le
    planning obtenu ;
-2. la fitness renvoie un **tuple** `(nb_echeances_depassees, objectif_principal,
-   terme_priorite)` — la comparaison lexicographique des tuples Python fait qu'un planning qui
-   respecte toutes les échéances bat toujours un planning qui en dépasse une, quel que soit son
-   objectif ;
+2. la fitness renvoie un **tuple** `(nb_echeances_depassees, objectif_principal)` — la comparaison
+   lexicographique des tuples Python fait qu'un planning qui respecte toutes les échéances bat
+   toujours un planning qui en dépasse une, quel que soit son objectif ;
 3. oriente la recherche vers les échéances : au moins une solution initiale triée par échéance
    croissante (règle EDD, tâches sans échéance en dernier, départage par identifiant) ;
 4. à la fin, si la meilleure solution trouvée a `nb_echeances_depassees > 0`, renvoie `None` —
@@ -336,22 +335,6 @@ régénéré.
     charges.values()) / (2 * len(charges) * sum(charges.values()))` (ou 0 si la
     somme des charges est nulle).
 
-## Priorité des tâches (`Tache.priorite`, départage uniquement)
-
-`Tache.priorite` (1 = critique, 5 = faible, optionnelle) **ne fait jamais
-perdre à l'objectif principal la moindre unité** — elle ne départage
-qu'entre plusieurs plannings de même valeur d'objectif (celui ou ceux de
-`instance.objectifs`, voir ci-dessus). Jamais un poids ajouté à l'objectif
-principal, jamais une contrainte.
-
-- Fais renvoyer à la fitness un **tuple** `(objectif_principal, terme_priorite)` plutôt qu'un
-  seul nombre, avec `terme_priorite = somme((6 - t.priorite) * fin_tache)` sur les seules tâches
-  ayant une `priorite` déclarée (poids 5 pour priorité 1/critique, poids 1 pour priorité 5/faible ;
-  tâches sans `priorite` exclues de la somme) — la comparaison lexicographique native des tuples
-  Python fait exactement ce départage, sans aucune échelle à calculer ni risque de dépassement.
-  Quand des échéances sont présentes, le tuple complet est celui de la section « Échéances » :
-  `(nb_echeances_depassees, objectif_principal, terme_priorite)`.
-
 ## Accès aux données de l'instance (noms de champs exacts — ne pas en deviner d'autres)
 
 `InstanceTRCO` a exactement ces champs : `taches`, `ressources`, `contraintes`, `objectifs`,
@@ -402,14 +385,14 @@ accède, ne les devine jamais par analogie avec un autre projet :
   `.duree_setup` (unité de `InstanceTRCO.unite_temps`) : contrainte dirigée,
   `tache_avant` → `tache_apres` uniquement dans ce sens — voir plus haut
   pour l'encodage.
-- `Tache.priorite` (`int | None`, 1 à 5) : départage uniquement, voir
-  "Priorité des tâches" plus haut — jamais un champ de contrainte/objectif.
 - `Tache.quantite` (`int | None`) : donnée d'entrée pour `ContrainteTailleLot`
   uniquement (déjà vérifiée en amont) — jamais lue dans le code généré, ni
   comme durée, ni comme poids, ni comme borne de décision. Renseignée par les
   commandes issues du processus de l'atelier : ce n'est **pas** un multiplicateur de durée
   (la durée à utiliser est déjà dans `CompatibiliteRessourceTache.duree`).
-- `Tache.produit`, `Tache.statut` (`str | None`) : purement informatifs, jamais lus.
+- `Tache.priorite` (`int | None`, 1 à 5), `Tache.produit`, `Tache.statut` (`str | None`) :
+  purement informatifs, jamais lus — jamais comme départage, jamais comme poids, jamais comme
+  contrainte.
 - `DeclarationMateriau.materiau`, `.stock_initial` (`float`), `.unite` (informatif) ;
   `ConsommationMatiere.tache`, `.materiau`, `.quantite` (`float`) — voir « Matières ».
 - `Tache.id`, `Ressource.id` (type `Identifiant`, une chaîne) sont les

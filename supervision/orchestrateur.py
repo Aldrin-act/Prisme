@@ -255,7 +255,7 @@ def analyser_instance(
     # ajoutée ou retirée. Si oui, une ré-exécution avec ce même solveur n'a plus de sens :
     # `instance_a_replanifier` est retiré au profit de la régénération, pour ne jamais proposer
     # deux actions contradictoires.
-    solveur = solveur_a_evaluer(registre, client_id, instance_id, id_solveur)
+    solveur = solveur_a_evaluer(etat, registre, client_id, instance_id, id_solveur)
     if solveur is not None:
         evaluation = evaluer_solveur(etat, registre, modele, instance_id, solveur)
         if evaluation.instance_jugee_infaisable:
@@ -286,12 +286,30 @@ def analyser_instance(
     # `commande_id` fait partie de la clé : sans lui, une seule commande en retard sur l'atelier
     # couvrirait indéfiniment toutes ses *autres* commandes en retard (jamais reproposées) —
     # `None` pour les trois autres signaux, dédupliqués par (type_signal, instance_id) seuls.
+    propositions_atelier = [
+        p for p in etat.lister_propositions(client_id=client_id) if p["instance_id"] == instance_id
+    ]
     deja_en_attente = {
         (p["type_signal"], p["instance_id"], p.get("commande_id"))
-        for p in etat.lister_propositions(client_id=client_id, en_attente_seulement=True)
-        if p["instance_id"] == instance_id
+        for p in propositions_atelier
+        if p["decision"] is None
     }
-    nouveaux = [s for s in signaux if (s.type_signal, s.instance_id, s.commande_id) not in deja_en_attente]
+    # Un signal déjà refusé n'est jamais reproposé tel quel : le refus reste valable tant que les
+    # faits qui l'appuient (`details`, ex. quelle structure/quelle échéance) n'ont pas changé — un
+    # simple nouveau passage d'analyse ne doit pas regonfler la liste de doublons refusés. Si les
+    # faits ont changé (l'atelier ou la commande a réellement évolué), le signal reste, un humain
+    # le revoit.
+    deja_refuses = {
+        (p["type_signal"], p["instance_id"], p.get("commande_id"), tuple(p["details"]))
+        for p in propositions_atelier
+        if p["decision"] == "refusee"
+    }
+    nouveaux = [
+        s
+        for s in signaux
+        if (s.type_signal, s.instance_id, s.commande_id) not in deja_en_attente
+        and (s.type_signal, s.instance_id, s.commande_id, s.details) not in deja_refuses
+    ]
     if not nouveaux:
         return []
 

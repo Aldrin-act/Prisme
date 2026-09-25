@@ -202,7 +202,7 @@ def evaluer_solveur_atelier(
         raise HTTPException(status_code=404, detail="instance inconnue") from None
     verifier_acces_client(utilisateur, client_id)
     try:
-        solveur = solveur_a_evaluer(registre, client_id, requete.instance_id, requete.id_solveur)
+        solveur = solveur_a_evaluer(etat, registre, client_id, requete.instance_id, requete.id_solveur)
     except SolveurHorsAtelier as erreur:
         raise HTTPException(status_code=422, detail=str(erreur)) from erreur
     if solveur is None:

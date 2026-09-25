@@ -40,7 +40,7 @@ _CHEMIN_PLANNING_PRECEDENT_CONTENEUR = "/mnt/planning_precedent.json"
 _PARAMETRES_HORIZON_GELE = {"planning_precedent", "horizon_gele_jours"}
 
 
-def _solveur_supporte_horizon_gele(code_source: str) -> bool:
+def solveur_supporte_horizon_gele(code_source: str) -> bool:
     """`ast.parse` uniquement (§5.3 : jamais d'exécution de code non fiable hors sandbox) —
     vrai si la fonction top-level `resoudre` déclare `planning_precedent`/`horizon_gele_jours`
     parmi ses paramètres (replanification à horizon glissant, Phase 2). Les solveurs enregistrés
@@ -184,7 +184,7 @@ def executer_dans_sandbox(
     changent rien à la commande/aux volumes envoyés au conteneur quand `horizon_gele_jours == 0`
     (le défaut) — comportement strictement identique à avant l'ajout de cette fonctionnalité.
     L'appelant (`executer_solveur_valide`) est responsable de vérifier au préalable que le
-    solveur ciblé supporte ces paramètres (`_solveur_supporte_horizon_gele`) — ce module ne le
+    solveur ciblé supporte ces paramètres (`solveur_supporte_horizon_gele`) — ce module ne le
     refait pas ici."""
     import docker
     from docker.errors import DockerException
@@ -379,7 +379,7 @@ def executer_solveur_valide(
     except (KeyError, ErreurIntegriteSolveur) as erreur:
         return ResultatExecution(None, None, f"solveur introuvable ou corrompu : {erreur}")
 
-    if horizon_gele_jours > 0 and not _solveur_supporte_horizon_gele(artefact.code_source):
+    if horizon_gele_jours > 0 and not solveur_supporte_horizon_gele(artefact.code_source):
         return ResultatExecution(
             None,
             None,

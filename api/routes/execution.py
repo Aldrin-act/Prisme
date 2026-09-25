@@ -8,7 +8,13 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from api.autorisation import verifier_acces_client
 from api.dependencies import obtenir_registre
-from api.etat import EtatAPI, obtenir_etat, signature_objectifs, structure_contraintes
+from api.etat import (
+    EtatAPI,
+    obtenir_etat,
+    signature_objectifs,
+    solveurs_pour_instance_ou_scenario_de_base,
+    structure_contraintes,
+)
 from api.routes.auth import obtenir_utilisateur_courant
 from sandbox.runner import ResultatExecution, executer_solveur_valide
 from solver_store.registry import Registre
@@ -33,7 +39,11 @@ def executer_pour_instance(
     le transmet comme `planning_precedent` — un solveur qui ne supporte pas ce paramètre échoue
     explicitement dans `executer_solveur_valide`, jamais une dégradation silencieuse vers un
     solve normal. Le booléen renvoyé indique si un planning précédent a réellement été trouvé
-    (transparence : distingue "rien à figer" d'un vrai gel appliqué)."""
+    (transparence : distingue "rien à figer" d'un vrai gel appliqué).
+
+    Un scénario (`POST .../scenarios`) sans solveur enregistré à son propre `instance_id` réutilise
+    celui de l'instance de base dont il varie (voir `solveurs_pour_instance_ou_scenario_de_base`) —
+    son historique d'exécution/planning reste, lui, entièrement le sien."""
     try:
         client_id, instance = etat.recuperer_instance(instance_id)
     except KeyError:
@@ -46,10 +56,14 @@ def executer_pour_instance(
     # instance_id en plus de structure/objectifs : un solveur ne sert que l'instance qui l'a
     # fait générer (plus de partage par signature entre instances d'un même client) — le filtre
     # structure/objectifs reste en plus, pour détecter le cas où l'instance a été modifiée
-    # depuis la génération de son propre solveur (devenu incompatible sans être régénéré).
-    solveurs = registre.rechercher_solveurs(
-        client_id=client_id,
-        instance_id=instance_id,
+    # depuis la génération de son propre solveur (devenu incompatible sans être régénéré). Une
+    # exception : un scénario (`POST .../scenarios`) sans solveur propre retombe sur celui de
+    # l'instance de base dont il varie (voir `solveurs_pour_instance_ou_scenario_de_base`).
+    solveurs = solveurs_pour_instance_ou_scenario_de_base(
+        etat,
+        registre,
+        client_id,
+        instance_id,
         structure_contraintes=structure,
         signature_objectifs=objectifs,
     )

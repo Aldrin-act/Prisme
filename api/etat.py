@@ -28,6 +28,7 @@ from sandbox.runner import ResultatExecution
 
 if TYPE_CHECKING:
     from api.etat_postgres import EtatPostgres
+    from solver_store.registry import ArtefactSolveur, Registre
 
 Decision = Literal["acceptee", "refusee"]
 TypeSignal = Literal[
@@ -70,6 +71,45 @@ def instance_a_la_date(instance: InstanceTRCO, date_execution: str | None) -> In
     if not date_execution:
         return instance
     return avec_calendrier(instance, datetime.fromisoformat(date_execution).astimezone())
+
+
+def solveurs_pour_instance_ou_scenario_de_base(
+    etat: EtatAPI,
+    registre: Registre,
+    client_id: str,
+    instance_id: str,
+    structure_contraintes: str | None = None,
+    signature_objectifs: str | None = None,
+) -> list[ArtefactSolveur]:
+    """Solveurs actifs de `instance_id` — ou, à défaut, ceux de l'instance de base de son groupe
+    de scénarios (`racine_groupe_scenario`) si `instance_id` en est une variante (`POST
+    .../scenarios`, jamais l'instance de base elle-même).
+
+    Un scénario est une variante de la MÊME atelier (mêmes ressources, imposé à sa création — voir
+    `api/routes/ingestion.py::creer_scenario`) : il réutilise donc le solveur de l'atelier dont il
+    varie plutôt que d'en exiger un généré à part, tant que sa propre structure de contraintes et
+    ses objectifs restent ceux de la base (sinon la recherche par signature échoue naturellement,
+    aucun repli n'a de sens). Si le scénario a lui-même reçu un solveur dédié (généré explicitement
+    pour lui via `POST /generation/{instance_id}` sur son propre id), celui-ci l'emporte toujours —
+    ce repli ne s'applique que quand `instance_id` n'en a AUCUN. Ne s'applique jamais dans l'autre
+    sens : l'instance de base ne retombe jamais sur le solveur d'une de ses variantes."""
+    solveurs = registre.rechercher_solveurs(
+        client_id=client_id,
+        instance_id=instance_id,
+        structure_contraintes=structure_contraintes,
+        signature_objectifs=signature_objectifs,
+    )
+    if solveurs:
+        return solveurs
+    racine_id = etat.racine_groupe_scenario(instance_id)
+    if racine_id == instance_id:
+        return solveurs
+    return registre.rechercher_solveurs(
+        client_id=client_id,
+        instance_id=racine_id,
+        structure_contraintes=structure_contraintes,
+        signature_objectifs=signature_objectifs,
+    )
 
 
 def durees_par_contrainte(instance: InstanceTRCO) -> dict[str, int]:
@@ -774,6 +814,12 @@ class EtatAPI:
                 "unite_duree": self.unites_duree.get(instance_id),
                 "date_modification": self.dates_modification.get(instance_id),
                 "canal_ingestion": self.canaux_ingestion.get(instance_id),
+                "description_metier": self.descriptions_metier.get(instance_id),
+                # `None` pour l'instance de base d'un groupe de scénarios (jamais sa propre clé
+                # dans `groupes_scenario`, voir `racine_groupe_scenario`) ou pour toute instance
+                # hors scénario — jamais l'instance elle-même par défaut, contrairement à
+                # `racine_groupe_scenario` qui, lui, doit toujours renvoyer une racine.
+                "groupe_scenario_id": self.groupes_scenario.get(instance_id),
             }
             for instance_id, (client_id_instance, instance) in self.instances.items()
             if client_id is None or client_id_instance == client_id

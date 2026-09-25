@@ -194,8 +194,10 @@ def _formater_solveurs(solveurs: tuple[SolveurSupervision, ...]) -> str:
         return "(aucun solveur enregistré)"
     return "\n".join(
         f"- `{s.id}` : instance_id=`{s.instance_id}`, structure_contraintes=`{s.structure_contraintes}`, "
-        f"signature_objectifs=`{s.signature_objectifs}` (structure/objectifs informatifs uniquement — "
-        f"seul instance_id détermine à quelle instance ce solveur appartient)"
+        f"signature_objectifs=`{s.signature_objectifs}` (structure/objectifs informatifs uniquement ; "
+        f"`instance_id` peut différer de l'instance analysée ci-dessus — un scénario sans solveur "
+        f"propre réutilise celui de l'instance de base dont il varie, ce solveur appartient bien à "
+        f"cet atelier malgré cet écart)"
         for s in solveurs
     )
 

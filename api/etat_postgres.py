@@ -1300,7 +1300,8 @@ class EtatPostgres:
         requete = sql.SQL(
             "SELECT i.id, i.client_id, i.structure_contraintes, "
             "EXISTS(SELECT 1 FROM {executions} e WHERE e.instance_id = i.id) AS executee, "
-            "i.unite_duree, i.date_modification, i.canal_ingestion "
+            "i.unite_duree, i.date_modification, i.canal_ingestion, i.description_metier, "
+            "i.groupe_scenario_id "
             "FROM {instances} i WHERE 1 = 1"
         ).format(executions=self._table("executions"), instances=self._table("instances_trco"))
         parametres: list[str] = []
@@ -1319,6 +1320,8 @@ class EtatPostgres:
                 "unite_duree": ligne[4],
                 "date_modification": ligne[5],
                 "canal_ingestion": ligne[6],
+                "description_metier": ligne[7],
+                "groupe_scenario_id": ligne[8],
             }
             for ligne in lignes
         ]

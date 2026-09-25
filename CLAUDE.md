@@ -169,7 +169,7 @@ found and fixed then.
   two new params are optional/defaulted so every already-registered solver (9 artifacts at time
   of writing, all still the 1-param signature) keeps working unchanged for a normal execution;
   requesting `horizon_gele_jours>0` against one of them fails explicitly (`sandbox/runner.py::
-  _solveur_supporte_horizon_gele`, a pure `ast.parse` of `ArtefactSolveur.code_source`, never an
+  solveur_supporte_horizon_gele`, a pure `ast.parse` of `ArtefactSolveur.code_source`, never an
   exec) rather than silently falling back to a full replan — never automatic regeneration either.
 - **Étape 8 — API + adapters** (`api/`, `adapters/`): a multi-tenant surface — **Instance**
   (`api/etat.py`) is the sole primary entity: it owns its own execution/planning history directly
@@ -267,12 +267,36 @@ BOM/nomenclature auto-derivation from an ERP's `nomenclatures`/`produit_id` (`Co
 must be declared directly, v1 scope) — both explicitly deferred follow-ups. Same
 optional-if-unused behavior as the rest of this list: an instance with no `DeclarationMateriau`
 is unaffected by any stock check.
-`Tache.priorite`
-(1–5) is consumed by generated code as a **tie-break only** — never a weight on the primary
-objective, never a constraint — see "Priorité des tâches" in `generation_solveur.md`.
-`Tache.statut`/`Tache.produit`/`Ressource.type` remain purely informative fields (no constraint or
-objective reads them) — `produit` groups tasks for display (e.g. the workshop process graph editor,
-`Front/.../components/planning/editeur-processus.tsx`), never read by the solver.
+**Working-hours calendar** (`dsl/calendrier.py`, hours mode only): an operation works **only during open
+hours** — started at 19h with 5 h of work it runs until 22h, stops, resumes at 8h next day and ends at
+10h; nights and closed days (`jours_fermes`, weekend by default) are crossed without being counted.
+`duree` = hours *worked*; the real end is `fin_calendaire(instance, debut, duree)`, never `debut +
+duree`. Open hours are `InstanceTRCO.heure_ouverture`/`heure_fermeture` (8–22), and the calendar is
+active only when `position_zero_semaine` (position of instant 0 in the week) is set — by the
+**execution** (`sandbox/runner.py`, from the same instant `api/routes/execution.py` stores as
+`date_execution`, local server time), never stored with the instance. The rule lives once and is used by
+the generated solver (taught in `generation_solveur.md`, imports `dsl.calendrier`), the feasibility
+checker (`debut_hors_heures_ouvrees` + calendar-aware ends), the post-solver correction
+(`jours_non_ouvres.py`, which makes legal a plan from a solver that ignores the calendar — e.g. the 12
+frozen ones), `makespan`, the commande status/metrics/supervision (`api/etat.py::instance_a_la_date`) and
+the Gantt/calendar (`Front/.../lib/calendrier-ouvre.ts`, a TS mirror: bars split per worked segment).
+Days mode is unchanged (weekend closed days still pushed as a block). **Rebuild the sandbox image**
+(`docker build -t prisme-sandbox -f sandbox/container/Dockerfile .`) after touching `dsl/`: it bakes a
+copy, and `extra="forbid"` rejects the new instance fields on a stale one (they are omitted from the
+container JSON when at their default, so days-mode executions still work on an old image).
+`Tache.priorite`/`Tache.statut`/`Tache.produit`/`Ressource.type` remain purely informative fields
+(no constraint or objective reads them, generated code is never taught to) — `produit` groups tasks
+for display (e.g. the workshop process graph editor,
+`Front/.../components/planning/editeur-processus.tsx`), never read by the solver. `priorite` used to
+be taught as a tie-break-only fitness term (a `terme_priorite` tuple component); removed from the
+generation prompts (`generation_solveur.md`/`architecte.md`) as low-value in practice and to simplify
+— **kept in the DSL schema itself** (never removed) because 8 already-frozen solvers in
+`solver_store/artifacts/` read `t.priorite` directly with no `getattr` fallback: dropping the field
+would crash them on their next execution, breaking "generate once, re-execute many times" for
+solvers that already exist. The UI input for it was also dropped from the raw T-R-C-O
+editor/scenario form (`ingestion-dialog.tsx`) — still settable from the flow-graph task inspector or
+directly via the API/a JSON import, for whoever still wants it; existing values on a loaded instance
+are never silently wiped either way.
 
 Order intake also feeds the DSL indirectly: `adapters/commande_derivation.py` derives `Echeance`
 constraints from `Commande` (id, tasks, client, deadline) objects — explicit `Echeance` always
@@ -281,7 +305,17 @@ into the CSV/JSON adapters, never a DSL-level concept itself. Separately, `group
 self-referencing FK on `instances_trco`, `ON DELETE SET NULL`) lets several what-if instance
 variants be grouped for side-by-side comparison (`POST/GET .../scenarios`,
 `api/comparaison_scenarios.py`) — unrelated to the removed `instance_parente_id` lineage concept
-and to `SourceDonnees`; purely an API/storage-layer grouping, never touches the DSL.
+and to `SourceDonnees`; purely an API/storage-layer grouping, never touches the DSL. A scenario
+without its own registered solver (the normal case: `POST .../scenarios` never generates one)
+**reuses its base instance's solver** to execute (`api/etat.py::solveurs_pour_instance_ou_scenario_de_base`,
+wired into `executer_pour_instance` and every supervision solver lookup) as long as its own
+`structure_contraintes`/`signature_objectifs` still match the base's (checked exactly like a normal
+execution) — one narrow, explicit exception to "a solver serves only the instance it was generated
+for": a scenario is by construction a variant of the SAME atelier (same resources, enforced at
+creation), never a different one, so this never crosses ateliers. If a scenario is later given its
+own solver (`POST /generation/{instance_id}` on the scenario's own id, e.g. because it diverged
+enough that the base's no longer applies), that one takes over — the fallback only fires when the
+scenario has none of its own. Its own execution/planning history stays entirely its own regardless.
 
 ## Module map
 

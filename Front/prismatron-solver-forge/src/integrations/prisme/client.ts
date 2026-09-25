@@ -546,6 +546,14 @@ export const prismeClient = {
       { method: "PATCH", body: JSON.stringify(requete) },
     ),
 
+  // Déclare un retard réellement constaté sur une tâche (voir Types.RequeteRetardTache) — ne
+  // déclenche aucune exécution, à faire explicitement ensuite avec la durée corrigée.
+  declarerRetardTache: (instanceId: string, tacheId: string, requete: Types.RequeteRetardTache) =>
+    apiFetch<Types.InstanceDetail>(
+      `${PRISME_CONFIG.routes.ingestion}/${instanceId}/taches/${tacheId}/retard`,
+      { method: "PATCH", body: JSON.stringify(requete) },
+    ),
+
   // PROCESSUS D'ATELIER — un seul par atelier, éclaté en tâches propres à chaque nouvelle
   // commande (voir ajouterCommande ci-dessus).
   obtenirProcessus: (instanceId: string) =>

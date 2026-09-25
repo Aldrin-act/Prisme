@@ -46,6 +46,27 @@ def test_description_metier_absente_pour_une_ingestion_sans_agent() -> None:
     assert etat.recuperer_description_metier(instance_id) is None
 
 
+def test_lister_instances_expose_la_description_et_la_base_du_scenario() -> None:
+    """Vue de supervision (`lister_instances`) : la description métier et la base d'un groupe de
+    scénarios doivent être visibles depuis la liste, pas seulement en allant chercher chaque
+    instance une par une — voir la colonne « Description » et la référence à la base sur la page
+    Instances."""
+    etat = EtatAPI()
+    base_id = etat.enregistrer_instance(
+        "client-test", _instance_exemple(), description_metier="Découpe puis assemblage de la pièce."
+    )
+    scenario_id = etat.enregistrer_instance("client-test", _instance_exemple(), groupe_scenario_id=base_id)
+
+    instances = {i["instance_id"]: i for i in etat.lister_instances()}
+
+    assert instances[base_id]["description_metier"] == "Découpe puis assemblage de la pièce."
+    # L'instance de base n'a jamais sa propre clé dans `groupes_scenario` — jamais elle-même comme
+    # "base" (voir EtatAPI.racine_groupe_scenario, qui, lui, retomberait sur base_id par défaut).
+    assert instances[base_id]["groupe_scenario_id"] is None
+    assert instances[scenario_id]["groupe_scenario_id"] == base_id
+    assert instances[scenario_id]["description_metier"] is None
+
+
 def test_supprimer_instance_purge_sa_description_metier() -> None:
     etat = EtatAPI()
     instance_id = etat.enregistrer_instance(

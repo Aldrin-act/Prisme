@@ -106,3 +106,54 @@ def test_horizon_gele_negatif_est_rejete(client_isole: tuple[TestClient, EtatAPI
     reponse = client.post(f"/execution/{instance_id}", params={"horizon_gele_jours": -1})
 
     assert reponse.status_code == 422
+
+
+def test_scenario_sans_solveur_propre_execute_avec_celui_de_sa_base(
+    image_sandbox: str, client_isole: tuple[TestClient, EtatAPI], registre_test: Registre
+) -> None:
+    """Un scénario (`POST .../scenarios`) n'a jamais son propre solveur enregistré — il doit
+    pouvoir s'exécuter quand même, avec le solveur de l'instance de base dont il varie, tant que
+    sa structure de contraintes et ses objectifs restent les mêmes (voir
+    `api/etat.py::solveurs_pour_instance_ou_scenario_de_base`)."""
+    client, etat_test = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_payload_valide()).json()["instance_id"]
+    _enregistrer_solveur_minimal(registre_test, instance_id)
+
+    # Même structure/objectifs que la base, seule la donnée (durée) change — un vrai « et si ».
+    payload_variante = {
+        "taches": [{"id": "T1"}],
+        "ressources": [{"id": "R1"}],
+        "contraintes": [{"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 5}],
+        "objectifs": [{"type": "minimiser_makespan"}],
+    }
+    scenario_id = client.post(f"/ingestion/{instance_id}/scenarios", json=payload_variante).json()["instance_id"]
+    assert scenario_id != instance_id
+    # Aucun solveur enregistré pour scenario_id lui-même.
+    assert registre_test.rechercher_solveurs(client_id="client_a", instance_id=scenario_id) == []
+
+    reponse = client.post(f"/execution/{scenario_id}")
+
+    assert reponse.status_code == 200, reponse.json()
+    corps = reponse.json()
+    assert corps["reussi"] is True, corps["erreur"]
+    # Le solveur exécuté est bien celui de la base, pas un solveur fantôme du scénario.
+    solveur_base = registre_test.rechercher_solveurs(client_id="client_a", instance_id=instance_id)[0]
+    _, _, resultat_execution = etat_test.recuperer_execution(corps["execution_id"])
+    assert resultat_execution.reussi
+    executions_scenario = [e for e in etat_test.executions.values() if e[1] == scenario_id]
+    assert len(executions_scenario) == 1
+    assert executions_scenario[0][0] == solveur_base.id
+
+
+def test_scenario_et_base_sans_aucun_solveur_echoue_toujours_409(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    """Sans solveur nulle part (ni sur le scénario, ni sur sa base), l'exécution du scénario
+    échoue explicitement — le repli sur la base ne fabrique jamais un solveur qui n'existe pas."""
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_payload_valide()).json()["instance_id"]
+    scenario_id = client.post(f"/ingestion/{instance_id}/scenarios", json=_payload_valide()).json()["instance_id"]
+
+    reponse = client.post(f"/execution/{scenario_id}")
+
+    assert reponse.status_code == 409

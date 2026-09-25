@@ -13,6 +13,9 @@ import {
 import {
   prismeKeys,
   useAjusterPlanning,
+  useDeclarerRetardTache,
+  useDeclencherExecution,
+  PrismeAPIError,
   type Contrainte,
   type OperationPlanifiee,
   type PlanningAvecDurees,
@@ -33,11 +36,7 @@ import {
   parseEntreeDateHeure,
   type UniteTemps,
 } from "@/lib/dates-relatives";
-import {
-  HEURE_FERMETURE,
-  HEURE_OUVERTURE,
-  estInstantOuvre,
-} from "@/lib/calendrier-ouvre";
+import { HEURE_FERMETURE, HEURE_OUVERTURE, estInstantOuvre } from "@/lib/calendrier-ouvre";
 import { finCalendaire, segmentsTravailles } from "@/lib/calendrier-ouvre";
 import { finRepetitionParTache, segmentsRepetition } from "@/lib/repetition-commande";
 
@@ -117,6 +116,7 @@ export function GanttChart({
   editable = false,
   executionId,
   onAjustementReussi,
+  instanceId,
 }: {
   planning: PlanningAvecDurees;
   // Optionnelle : sans elle, la colonne taux d'utilisation ne s'affiche
@@ -139,9 +139,17 @@ export function GanttChart({
   editable?: boolean;
   executionId?: string;
   onAjustementReussi?: (planning: PlanningAvecDurees) => void;
+  // Requis pour "Déclarer un retard" dans le panneau de détail d'une opération — corrige la
+  // durée réellement constatée sur une tâche/ressource, jamais détecté automatiquement (PRISME
+  // n'a aucun capteur d'atelier en direct, voir api/routes/ingestion.py::declarer_retard_tache).
+  // Sans cette prop, le panneau de détail reste en lecture seule comme avant.
+  instanceId?: string;
 }) {
   const queryClient = useQueryClient();
   const ajuster = useAjusterPlanning();
+  const declarerRetard = useDeclarerRetardTache();
+  const executerApresRetard = useDeclencherExecution();
+  const [dureeCorrigee, setDureeCorrigee] = useState("");
   const unite: UniteTemps = uniteDuree === "heures" ? "heures" : "jours";
   const echelle = ECHELLE_PAR_UNITE[unite];
   // Instant 0 ancré sur la date réelle de l'exécution. Normalisé à minuit local en mode jours
@@ -190,6 +198,9 @@ export function GanttChart({
     setRecherche("");
     setOperationDetailCle(null);
     ajuster.reset();
+    declarerRetard.reset();
+    executerApresRetard.reset();
+    setDureeCorrigee("");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planning]);
 
@@ -317,6 +328,9 @@ export function GanttChart({
     const aReellementGlisse = drag !== null && Math.abs(e.clientX - drag.xDepart) > 3;
     if (!aReellementGlisse) {
       setOperationDetailCle(cleOp);
+      declarerRetard.reset();
+      executerApresRetard.reset();
+      setDureeCorrigee("");
     }
     setDrag(null);
   }
@@ -677,7 +691,10 @@ export function GanttChart({
                 ? tauxUtilisationRessource(
                     ressource,
                     // Charge = heures travaillées, pas le temps écoulé (les pauses ne comptent pas).
-                    operationsRessourceToutes.map((op) => ({ debut: op.debut, fin: op.debut + op.duree })),
+                    operationsRessourceToutes.map((op) => ({
+                      debut: op.debut,
+                      fin: op.debut + op.duree,
+                    })),
                     makespan,
                     contraintes,
                   )
@@ -909,6 +926,86 @@ export function GanttChart({
                               </span>
                             ))}
                           </div>
+                        </div>
+                      )}
+                      {instanceId && (
+                        <div className="border-t border-border/50 pt-3">
+                          <span className="text-xs text-muted-foreground">
+                            Déclarer un retard réel
+                          </span>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            PRISME ne détecte rien tout seul — corrigez la durée réellement
+                            constatée sur {operationDetail.ressource}, puis relancez l'exécution
+                            pour un planning qui en tient compte.
+                          </p>
+                          <div className="mt-2 flex items-center gap-2">
+                            <Input
+                              type="number"
+                              min={1}
+                              placeholder={`nouvelle durée (${unite === "heures" ? "h" : "j"})`}
+                              value={dureeCorrigee}
+                              onChange={(e) => setDureeCorrigee(e.target.value)}
+                              className="w-40"
+                            />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={
+                                !dureeCorrigee ||
+                                Number(dureeCorrigee) < 1 ||
+                                declarerRetard.isPending
+                              }
+                              onClick={() =>
+                                declarerRetard.mutate({
+                                  instanceId,
+                                  tacheId: operationDetail.tache,
+                                  requete: {
+                                    ressource: operationDetail.ressource,
+                                    nouvelle_duree: Number(dureeCorrigee),
+                                  },
+                                })
+                              }
+                            >
+                              {declarerRetard.isPending ? "Correction..." : "Corriger la durée"}
+                            </Button>
+                          </div>
+                          {declarerRetard.isError && (
+                            <p className="mt-1.5 text-xs text-destructive">
+                              {(declarerRetard.error as PrismeAPIError).message}
+                            </p>
+                          )}
+                          {declarerRetard.isSuccess && !executerApresRetard.isSuccess && (
+                            <div className="mt-1.5 flex items-center gap-2 text-xs">
+                              <span className="text-primary">Durée corrigée.</span>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={executerApresRetard.isPending}
+                                onClick={() =>
+                                  executerApresRetard.mutate(
+                                    { instanceId },
+                                    {
+                                      onSuccess: () =>
+                                        queryClient.invalidateQueries({
+                                          queryKey: prismeKeys.executions(),
+                                        }),
+                                    },
+                                  )
+                                }
+                              >
+                                {executerApresRetard.isPending
+                                  ? "Exécution..."
+                                  : "Relancer l'exécution"}
+                              </Button>
+                            </div>
+                          )}
+                          {executerApresRetard.isSuccess && (
+                            <p className="mt-1.5 text-xs text-muted-foreground">
+                              {executerApresRetard.data.reussi
+                                ? "Nouvelle exécution réussie — ferme puis rouvre ce planning pour la voir."
+                                : "Exécution en échec."}
+                            </p>
+                          )}
                         </div>
                       )}
                     </>

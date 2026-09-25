@@ -45,6 +45,9 @@ export const Route = createFileRoute("/_authenticated/solvers")({
 function SolversPage() {
   const { data: solveurs, isLoading } = useSolveurs();
   const [aVoir, setAVoir] = useState<SolveurInfo | null>(null);
+  // Nom lisible de l'atelier (voir instances.tsx) — même source que le Client, mais le client_id
+  // seul ne distingue pas deux ateliers d'un même client (ex. plusieurs instances "demo").
+  const labels = useLabelsInstances();
 
   return (
     <>
@@ -67,6 +70,7 @@ function SolversPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Solveur</TableHead>
+                <TableHead>Atelier</TableHead>
                 <TableHead>Client</TableHead>
                 <TableHead>Structure des contraintes</TableHead>
                 <TableHead>Objectifs</TableHead>
@@ -80,6 +84,11 @@ function SolversPage() {
                 <TableRow key={s.id}>
                   <TableCell className="font-mono text-xs" title={s.id}>
                     {s.id.slice(0, 8)}…
+                  </TableCell>
+                  <TableCell className="font-mono text-xs" title={s.instance_id ?? undefined}>
+                    {s.instance_id
+                      ? (labels.get(s.instance_id)?.label ?? `${s.instance_id.slice(0, 8)}…`)
+                      : "orphelin"}
                   </TableCell>
                   <TableCell>{s.client_id}</TableCell>
                   <TableCell>
@@ -315,6 +324,7 @@ function DialogSolveur({
                     uniteDuree={instanceChoisie?.unite_duree}
                     editable={!voirOriginal}
                     executionId={executionId ?? undefined}
+                    instanceId={instanceChoisie?.instance_id}
                   />
                 </div>
               ) : (

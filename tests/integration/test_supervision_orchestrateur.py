@@ -103,6 +103,62 @@ def test_detecte_et_persiste_une_proposition(registre_test: Registre) -> None:
     assert len(en_base) == 1
 
 
+def test_signal_refuse_n_est_pas_reproduit_si_rien_n_a_change(registre_test: Registre) -> None:
+    """Un signal déjà refusé (même type, même atelier, mêmes faits) n'est jamais recréé par un
+    nouveau passage d'analyse — sinon relancer « Analyser » plusieurs fois regonfle indéfiniment la
+    liste de doublons refusés, sans qu'aucune décision n'ait de sens à reprendre."""
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    modele = _modele(
+        signaux_detection=[{"instance_id": instance_id, "type_signal": "signature_orpheline"}],
+        propositions=[
+            {
+                "reference": f"signature_orpheline:{instance_id}",
+                "resume": "Régénération nécessaire.",
+                "priorite": "haute",
+            }
+        ],
+    )
+
+    premiere_passe = analyser_et_proposer(etat, registre_test, modele, "client_test")
+    assert len(premiere_passe) == 1
+    etat.decider_proposition(premiere_passe[0].id, "refusee")
+
+    deuxieme_passe = analyser_et_proposer(etat, registre_test, modele, "client_test")
+
+    assert deuxieme_passe == []
+    assert len(etat.lister_propositions(client_id="client_test")) == 1
+
+
+def test_signal_refuse_est_reproduit_si_les_faits_ont_change(registre_test: Registre) -> None:
+    """Même signal (signature_orpheline sur le même atelier), mais une structure de contraintes
+    différente entre les deux passes : ce n'est plus le même problème, il est reproposé même si le
+    précédent avait été refusé."""
+    etat = EtatAPI()
+    instance_id = etat.enregistrer_instance("client_test", _INSTANCE_SANS_SOLVEUR)
+    modele = _modele(
+        signaux_detection=[{"instance_id": instance_id, "type_signal": "signature_orpheline"}],
+        propositions=[
+            {
+                "reference": f"signature_orpheline:{instance_id}",
+                "resume": "Régénération nécessaire.",
+                "priorite": "haute",
+            }
+        ],
+    )
+
+    premiere_passe = analyser_et_proposer(etat, registre_test, modele, "client_test")
+    assert len(premiere_passe) == 1
+    etat.decider_proposition(premiere_passe[0].id, "refusee")
+
+    etat.modifier_instance(instance_id, _INSTANCE_STRUCTURE_MINIMALE)
+
+    deuxieme_passe = analyser_et_proposer(etat, registre_test, modele, "client_test")
+
+    assert len(deuxieme_passe) == 1
+    assert len(etat.lister_propositions(client_id="client_test")) == 2
+
+
 def test_ne_rappelle_jamais_la_redaction_si_rien_de_nouveau(registre_test: Registre) -> None:
     """La détection (LLM) tourne à chaque appel — elle ne peut plus être évitée, c'est elle qui
     établit s'il y a du nouveau à proposer. La rédaction (second appel LLM), elle, reste évitée

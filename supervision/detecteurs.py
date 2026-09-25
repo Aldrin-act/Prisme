@@ -40,7 +40,14 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from api.comparaison_scenarios import calculer_statut_commande
-from api.etat import CommandeEnregistree, EtatAPI, instance_a_la_date, signature_objectifs, structure_contraintes
+from api.etat import (
+    CommandeEnregistree,
+    EtatAPI,
+    instance_a_la_date,
+    signature_objectifs,
+    solveurs_pour_instance_ou_scenario_de_base,
+    structure_contraintes,
+)
 from solver_store.registry import Registre
 from supervision.adequation import EvaluationSolveur, SolveurHorsAtelier
 from supervision.agent import (
@@ -135,11 +142,11 @@ def detecter_signaux_instance(
     id_solveur: str | None = None,
 ) -> tuple[SignalDetecte, ...]:
     """Détection pour **un seul atelier** : rassemble uniquement l'instance `instance_id`, ses
-    propres solveurs actifs (`Registre.rechercher_solveurs(instance_id=...)` — un solveur ne sert
-    que l'instance qui l'a fait générer) et ses propres exécutions, délègue à
-    `supervision.agent.detecter_signaux_llm`, puis valide et convertit sa réponse. Tout signal
-    renvoyé pour un autre `instance_id` que celui analysé est écarté (hallucination, ou recopie
-    d'un identifiant vu ailleurs). Lève `KeyError` si l'instance n'existe pas.
+    propres solveurs actifs — ou, si c'est un scénario sans solveur propre, ceux de l'instance de
+    base dont il varie (`solveurs_pour_instance_ou_scenario_de_base`) — et ses propres exécutions,
+    délègue à `supervision.agent.detecter_signaux_llm`, puis valide et convertit sa réponse. Tout
+    signal renvoyé pour un autre `instance_id` que celui analysé est écarté (hallucination, ou
+    recopie d'un identifiant vu ailleurs). Lève `KeyError` si l'instance n'existe pas.
 
     `id_solveur` (entrée explicite de l'analyse, avec `instance_id`) : l'analyse porte alors sur
     le couple (atelier, solveur) — seul ce solveur est montré au LLM, seules ses exécutions sont
@@ -165,7 +172,7 @@ def detecter_signaux_instance(
             structure_contraintes=s.structure_contraintes,
             signature_objectifs=s.signature_objectifs,
         )
-        for s in registre.rechercher_solveurs(client_id=client_id, instance_id=instance_id)
+        for s in solveurs_pour_instance_ou_scenario_de_base(etat, registre, client_id, instance_id)
     }
     if id_solveur is not None:
         if id_solveur not in solveurs:
@@ -205,13 +212,11 @@ def detecter_signaux_instance(
                 )
             )
         elif brut.type_signal == "instance_a_replanifier":
-            # Un solveur ne sert que l'instance qui l'a fait générer — `solveurs` ne contient déjà
-            # que ceux de cet atelier, revérifié quand même : le LLM peut se tromper ou halluciner.
-            if (
-                brut.raison is None
-                or brut.id_solveur_disponible not in solveurs
-                or solveurs[brut.id_solveur_disponible].instance_id != instance_id
-            ):
+            # `solveurs` ne contient déjà que ceux de cet atelier (le sien propre, ou — pour un
+            # scénario sans solveur propre — celui de sa base, voir
+            # `solveurs_pour_instance_ou_scenario_de_base`), revérifié quand même : le LLM peut se
+            # tromper ou halluciner un identifiant.
+            if brut.raison is None or brut.id_solveur_disponible not in solveurs:
                 continue
             signaux.append(
                 SignalInstanceAReplanifier(

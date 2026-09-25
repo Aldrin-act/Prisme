@@ -410,6 +410,26 @@ def test_lister_instances_et_executions(etat_postgres_test: EtatPostgres) -> Non
     assert executions[0]["decision"] is None
 
 
+def test_lister_instances_expose_la_description_et_la_base_du_scenario(
+    etat_postgres_test: EtatPostgres,
+) -> None:
+    """Même contrat que `EtatAPI.lister_instances` (tests/unit/test_etat.py) — la description
+    métier et la base d'un groupe de scénarios doivent être visibles depuis la liste."""
+    base_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), description_metier="Découpe puis assemblage de la pièce."
+    )
+    scenario_id = etat_postgres_test.enregistrer_instance(
+        "client-test", _instance_exemple(), groupe_scenario_id=base_id
+    )
+
+    instances = {i["instance_id"]: i for i in etat_postgres_test.lister_instances()}
+
+    assert instances[base_id]["description_metier"] == "Découpe puis assemblage de la pièce."
+    assert instances[base_id]["groupe_scenario_id"] is None
+    assert instances[scenario_id]["groupe_scenario_id"] == base_id
+    assert instances[scenario_id]["description_metier"] is None
+
+
 def test_decision_humaine(etat_postgres_test: EtatPostgres) -> None:
     instance_id = etat_postgres_test.enregistrer_instance("client-test", _instance_exemple())
     resultat = ResultatExecution(planning=None, verdict_faisabilite=None, erreur="peu importe")

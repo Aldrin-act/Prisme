@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import uuid
+from datetime import UTC, datetime
 from typing import Any
 
 import psycopg
@@ -21,12 +22,15 @@ from api.etat import (
     StatutRealisationCommande,
     instance_a_la_date,
     obtenir_etat,
+    signature_objectifs,
+    solveurs_pour_instance_ou_scenario_de_base,
     structure_contraintes,
 )
 from api.input_validation import erreurs_serialisables, valider_payload_trco
 from api.routes.auth import obtenir_utilisateur_courant
 from api.routes.execution import executer_pour_instance
 from dsl.schema import CompatibiliteRessourceTache, InstanceTRCO, Objectif, Planning
+from sandbox.runner import solveur_supporte_horizon_gele
 
 router = APIRouter(prefix="/ingestion", tags=["ingestion"])
 
@@ -72,6 +76,19 @@ class RequeteNouvelleCommande(BaseModel):
     est_prospect: bool = False
     description: str | None = None
     nom_client: str | None = None
+
+
+def _horizon_gele_jusqu_a_maintenant(unite_temps: str, date_execution_precedente: str) -> int:
+    """Convertit « maintenant » en instant relatif de l'instance, dans le même référentiel que
+    `OperationPlanifiee.debut` — pour figer (`horizon_gele_jours`) tout ce que le dernier planning
+    plaçait avant cet instant : ces opérations sont déjà censées avoir démarré, dans la vraie vie,
+    au moment où une nouvelle commande arrive. Jamais négatif (une horloge en clientèle légèrement
+    en avance sur le serveur ne doit pas produire un horizon négatif)."""
+    ancrage = datetime.fromisoformat(date_execution_precedente)
+    ecoule = datetime.now(UTC) - ancrage.astimezone(UTC)
+    heures_ecoulees = ecoule.total_seconds() / 3600
+    pas_heures = 1 if unite_temps == "heures" else 24
+    return max(0, int(heures_ecoulees // pas_heures))
 
 
 def _appliquer_durees_taches(instance: InstanceTRCO, durees: dict[str, int]) -> InstanceTRCO:
@@ -482,7 +499,13 @@ def ajouter_commande(
 
     Déclenche ensuite une exécution automatique (best-effort, même composition que
     `POST /planifier/...` via `executer_pour_instance`) : la commande vient de modifier
-    l'instance, le planning affiché doit en tenir compte sans étape supplémentaire. Ne génère
+    l'instance, le planning affiché doit en tenir compte sans étape supplémentaire. Cette
+    réexécution fige automatiquement (`horizon_gele_jours` calculé jusqu'à l'instant présent, voir
+    `_horizon_gele_jusqu_a_maintenant`) toute opération du planning précédent censée avoir déjà
+    démarré — pour ne jamais redéplacer, à l'ajout d'une commande, ce qui est déjà réellement en
+    cours dans l'atelier — sauf pour la toute première exécution (rien à figer) ou si le solveur
+    actif ne supporte pas ce paramètre (`avertissements` le signale alors, le replan reste complet
+    comme avant l'ajout de cette protection). Ne génère
     jamais de solveur à la volée (principe fondateur "generate once") : si aucun solveur validé
     ne correspond à la structure de contraintes résultante, le 409 levé par
     `executer_pour_instance` est renvoyé comme statut informatif (`erreur_execution`), jamais
@@ -569,12 +592,50 @@ def ajouter_commande(
         quantite=quantite,
     )
 
+    avertissements_liste = list(avertissements)
     execution_id: str | None = None
     execution_reussie: bool | None = None
     erreur_execution: str | None = None
+    gel_applique = False
     try:
         registre = obtenir_registre()
-        execution_id, resultat_execution, _ = executer_pour_instance(etat, registre, instance_id, utilisateur)
+
+        # Protège ce qui tourne déjà réellement dans l'atelier : sans ça, cette réexécution
+        # automatique (comme toute réexécution normale, `horizon_gele_jours=0` par défaut) peut
+        # redéplacer une opération déjà en cours au moment même où la commande est ajoutée — le
+        # planning ne le sait jamais tout seul (§ human-in-the-loop, voir `declarer_retard_tache`
+        # ci-dessus pour le même principe côté durée). Jamais pour la toute première exécution
+        # (rien n'a encore pu commencer) ; jamais non plus si le solveur actif ne sait pas honorer
+        # ce paramètre — dans ce cas, on retombe sur le replan complet d'avant plutôt que de faire
+        # échouer l'ajout d'une commande pour une protection que ce solveur ne peut pas offrir,
+        # mais l'utilisateur en est informé (contrairement à `POST /execution` qui, lui, échoue
+        # explicitement — ici, rien n'a été demandé explicitement pour cette exécution précise).
+        horizon_gele_jours = 0
+        date_precedente = etat.date_derniere_execution_reussie(instance_id)
+        if date_precedente is not None:
+            solveurs_actifs = solveurs_pour_instance_ou_scenario_de_base(
+                etat,
+                registre,
+                client_id,
+                instance_id,
+                structure_contraintes=structure_contraintes(instance_fusionnee),
+                signature_objectifs=signature_objectifs(instance_fusionnee),
+            )
+            if solveurs_actifs and solveur_supporte_horizon_gele(solveurs_actifs[0].code_source):
+                horizon_gele_jours = _horizon_gele_jusqu_a_maintenant(
+                    instance_fusionnee.unite_temps, date_precedente
+                )
+            elif solveurs_actifs:
+                avertissements_liste.append(
+                    "ce solveur ne protège pas les tâches déjà en cours (généré avant l'ajout de "
+                    "l'horizon gelé) — le planning précédent a été entièrement recalculé ; "
+                    "régénérez le solveur pour que les prochaines commandes ne déplacent plus ce "
+                    "qui est déjà engagé"
+                )
+
+        execution_id, resultat_execution, gel_applique = executer_pour_instance(
+            etat, registre, instance_id, utilisateur, horizon_gele_jours=horizon_gele_jours
+        )
         execution_reussie = resultat_execution.reussi
         erreur_execution = resultat_execution.erreur
     except HTTPException as erreur:
@@ -587,10 +648,14 @@ def ajouter_commande(
         "commande_id": commande_id,
         "taches": list(taches_commande),
         "structure_contraintes": structure_contraintes(instance_fusionnee),
-        "avertissements": list(avertissements),
+        "avertissements": avertissements_liste,
         "execution_id": execution_id,
         "execution_reussie": execution_reussie,
         "erreur_execution": erreur_execution,
+        # Transparence sur la protection appliquée à cette réexécution automatique (voir
+        # `executer_pour_instance` : distingue "rien à figer" — première exécution, ou solveur qui
+        # ne supporte pas ce paramètre, `avertissements` le dit alors — d'un vrai gel appliqué).
+        "gel_applique": gel_applique,
     }
 
 
@@ -681,6 +746,65 @@ def changer_statut_commande(
     date_execution = etat.date_derniere_execution_reussie(commande.instance_id)
 
     return _commande_en_dict(commande, instance, planning, date_execution)
+
+
+class RequeteRetardTache(BaseModel):
+    # La ressource sur laquelle la tâche tourne réellement (celle du dernier planning) — jamais
+    # toutes ses ressources compatibles comme `_appliquer_durees_taches` : ce n'est pas la tâche
+    # en général qui est corrigée, seulement ce qui est réellement observé sur cette ressource-là ;
+    # une durée hypothétique jamais essayée sur une autre ressource ne doit pas changer.
+    ressource: str
+    nouvelle_duree: int = Field(ge=1)
+
+
+@router.patch("/{instance_id}/taches/{tache_id}/retard")
+def declarer_retard_tache(
+    instance_id: str,
+    tache_id: str,
+    requete: RequeteRetardTache,
+    etat: EtatAPI = Depends(obtenir_etat),
+    utilisateur: dict = Depends(obtenir_utilisateur_courant),
+) -> dict[str, object]:
+    """PRISME ne sait jamais qu'une tâche tourne en retard par elle-même — aucun capteur ne
+    remonte l'atelier en direct, seul un humain qui l'observe peut le dire (§ human-in-the-loop,
+    même principe que `changer_statut_commande` ci-dessus, mais au grain de la tâche plutôt que de
+    la commande entière). Cette route ne fait que corriger la durée réelle constatée sur
+    `(tache_id, requete.ressource)` — jamais un mécanisme d'alerte automatique, jamais une
+    exécution déclenchée ici : l'appelant relance `POST /execution/{instance_id}` ensuite pour
+    obtenir un planning qui en tient compte (voir `executer_pour_instance`, même geste qu'un aléa
+    quelconque : réingérer une donnée corrigée puis réexécuter)."""
+    try:
+        client_id, instance = etat.recuperer_instance(instance_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="instance inconnue") from None
+
+    verifier_acces_client(utilisateur, client_id)
+
+    couple_connu = any(
+        isinstance(c, CompatibiliteRessourceTache) and c.tache == tache_id and c.ressource == requete.ressource
+        for c in instance.contraintes
+    )
+    if not couple_connu:
+        raise HTTPException(
+            status_code=404,
+            detail=f"aucune compatibilité ressource-tâche {tache_id!r}/{requete.ressource!r} sur cette instance",
+        )
+
+    contraintes = [
+        {**c.model_dump(), "duree": requete.nouvelle_duree}
+        if isinstance(c, CompatibiliteRessourceTache) and c.tache == tache_id and c.ressource == requete.ressource
+        else c.model_dump()
+        for c in instance.contraintes
+    ]
+    instance_corrigee = InstanceTRCO.model_validate({**instance.model_dump(), "contraintes": contraintes})
+    instance_corrigee = etat.modifier_instance(instance_id, instance_corrigee)
+
+    return {
+        "instance_id": instance_id,
+        "client_id": client_id,
+        "structure_contraintes": structure_contraintes(instance_corrigee),
+        **instance_corrigee.model_dump(mode="json"),
+    }
 
 
 @router.delete("/{instance_id}", status_code=204)

@@ -391,3 +391,75 @@ def test_comparer_scenarios_commandes_en_retard_null_sans_execution(
     scenario = reponse.json()["scenarios"][0]
     assert scenario["metriques"] is None
     assert scenario["commandes_en_retard"] is None
+
+
+# --- Déclaration de retard sur une tâche (PATCH /ingestion/{instance_id}/taches/{tache_id}/retard) --------
+
+_PAYLOAD_DEUX_RESSOURCES = {
+    "taches": [{"id": "T1"}],
+    "ressources": [{"id": "R1"}, {"id": "R2"}],
+    "contraintes": [
+        {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R1", "duree": 10},
+        {"type": "compatibilite_ressource_tache", "tache": "T1", "ressource": "R2", "duree": 20},
+    ],
+    "objectifs": [{"type": "minimiser_makespan"}],
+}
+
+
+def test_declarer_retard_tache_corrige_uniquement_la_ressource_declaree(
+    client_isole: tuple[TestClient, EtatAPI],
+) -> None:
+    """PRISME ne sait jamais qu'une tâche est en retard tout seul — c'est une correction humaine
+    de la durée réellement observée sur LA ressource sur laquelle elle tourne, jamais sur ses
+    autres ressources compatibles (contrairement à `durees_taches` à la création d'une commande,
+    qui écrase toutes les ressources d'un coup) : R2 doit rester à sa durée d'origine."""
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_DEUX_RESSOURCES).json()["instance_id"]
+
+    reponse = client.patch(
+        f"/ingestion/{instance_id}/taches/T1/retard", json={"ressource": "R1", "nouvelle_duree": 15}
+    )
+
+    assert reponse.status_code == 200, reponse.json()
+    contraintes = reponse.json()["contraintes"]
+    durees = {c["ressource"]: c["duree"] for c in contraintes if c["type"] == "compatibilite_ressource_tache"}
+    assert durees == {"R1": 15, "R2": 20}
+
+    # Persisté : une relecture de l'instance renvoie bien la durée corrigée.
+    relue = client.get(f"/ingestion/{instance_id}").json()
+    durees_relues = {
+        c["ressource"]: c["duree"] for c in relue["contraintes"] if c["type"] == "compatibilite_ressource_tache"
+    }
+    assert durees_relues == {"R1": 15, "R2": 20}
+
+
+def test_declarer_retard_tache_couple_inconnu_404(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    reponse = client.patch(
+        f"/ingestion/{instance_id}/taches/T1/retard", json={"ressource": "R-inconnue", "nouvelle_duree": 15}
+    )
+
+    assert reponse.status_code == 404
+
+
+def test_declarer_retard_tache_instance_inconnue_404(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    client, _ = client_isole
+
+    reponse = client.patch(
+        "/ingestion/id-inexistant/taches/T1/retard", json={"ressource": "R1", "nouvelle_duree": 15}
+    )
+
+    assert reponse.status_code == 404
+
+
+def test_declarer_retard_tache_duree_invalide_422(client_isole: tuple[TestClient, EtatAPI]) -> None:
+    client, _ = client_isole
+    instance_id = client.post("/ingestion/client_a", json=_PAYLOAD_MINIMAL).json()["instance_id"]
+
+    reponse = client.patch(
+        f"/ingestion/{instance_id}/taches/T1/retard", json={"ressource": "R1", "nouvelle_duree": 0}
+    )
+
+    assert reponse.status_code == 422

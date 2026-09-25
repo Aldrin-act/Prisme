@@ -905,3 +905,27 @@ export function useChangerStatutCommande() {
     },
   });
 }
+
+/**
+ * Mutation pour déclarer un retard réellement constaté sur une tâche (voir
+ * Types.RequeteRetardTache) — corrige sa durée sur une ressource précise, n'exécute rien :
+ * l'appelant relance une exécution ensuite (`useDeclencherExecution`) pour en tenir compte.
+ */
+export function useDeclarerRetardTache() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      instanceId,
+      tacheId,
+      requete,
+    }: {
+      instanceId: string;
+      tacheId: string;
+      requete: Types.RequeteRetardTache;
+    }) => prismeClient.declarerRetardTache(instanceId, tacheId, requete),
+    onSuccess: (instance) => {
+      queryClient.invalidateQueries({ queryKey: prismeKeys.instance(instance.instance_id) });
+      queryClient.invalidateQueries({ queryKey: prismeKeys.instances() });
+    },
+  });
+}

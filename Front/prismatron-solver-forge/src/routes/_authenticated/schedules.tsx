@@ -327,6 +327,7 @@ function SectionPlanning({
               uniteDuree={instance?.unite_duree}
               editable={!voirOriginal}
               executionId={execution?.execution_id}
+              instanceId={instance?.instance_id}
             />
           ) : (
             <p className="text-sm text-muted-foreground">

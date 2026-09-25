@@ -11,15 +11,16 @@ import {
   RefreshCw,
   ShieldAlert,
   Cpu,
-  MinusCircle,
   Wrench,
   XCircle,
   Zap,
 } from "lucide-react";
+import { VerdictSolveur } from "@/components/supervision/verdict-solveur";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -46,9 +47,6 @@ import {
   useSolveurs,
   useEvaluerSolveurSupervision,
   PrismeAPIError,
-  type ConstatSolveur,
-  type EvaluationSolveurSupervision,
-  type VerdictConstatSolveur,
   type PropositionSupervision,
   type ReponseDecisionPropositionSupervision,
 } from "@/integrations/prisme";
@@ -133,101 +131,6 @@ function resumeResultatDispatch(
   if (resultat.action === "aucune")
     return "Signalé — aucune action système : à traiter par vous (données, client, planification).";
   return "Action déclenchée.";
-}
-
-const PRESENTATION_VERDICT: Record<
-  VerdictConstatSolveur,
-  { label: string; icone: typeof AlertTriangle; couleur: string }
-> = {
-  bloquant: { label: "Bloquant", icone: XCircle, couleur: "text-destructive" },
-  a_surveiller: { label: "À surveiller", icone: AlertTriangle, couleur: "text-amber-500" },
-  sans_impact: { label: "Sans impact", icone: CheckCircle2, couleur: "text-emerald-500" },
-  non_verifie: { label: "Non vérifié", icone: MinusCircle, couleur: "text-muted-foreground" },
-};
-
-// Ordre d'affichage : ce qui justifie (ou non) la régénération d'abord.
-const ORDRE_VERDICT: Record<VerdictConstatSolveur, number> = {
-  bloquant: 0,
-  a_surveiller: 1,
-  non_verifie: 2,
-  sans_impact: 3,
-};
-
-function LigneConstat({ constat }: { constat: ConstatSolveur }) {
-  const { label, icone: Icone, couleur } = PRESENTATION_VERDICT[constat.verdict];
-  return (
-    <li className="flex gap-2">
-      <Icone className={`mt-0.5 h-4 w-4 shrink-0 ${couleur}`} />
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2 text-sm font-medium">
-          {constat.sujet}
-          <span className={`text-xs font-normal ${couleur}`}>{label}</span>
-        </div>
-        <div className="text-xs text-muted-foreground">{constat.argument}</div>
-        {constat.preuves.length > 0 && (
-          <ul className="mt-1 space-y-0.5 border-l border-border/60 pl-2">
-            {constat.preuves.map((preuve, i) => (
-              <li key={i} className="text-xs text-muted-foreground">
-                {preuve}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </li>
-  );
-}
-
-// Verdict « faut-il régénérer ce solveur ? » — un constat argumenté par changement (essai réel,
-// lecture du code, Benchmarker : supervision/adequation.py). Seul un constat bloquant recommande de
-// régénérer ; la décision reste humaine, en acceptant la proposition correspondante après analyse.
-function VerdictSolveur({ evaluation }: { evaluation: EvaluationSolveurSupervision }) {
-  const constats = [...evaluation.constats].sort(
-    (a, b) => ORDRE_VERDICT[a.verdict] - ORDRE_VERDICT[b.verdict],
-  );
-  const nbBloquants = constats.filter((c) => c.verdict === "bloquant").length;
-  return (
-    <div
-      className={`rounded-xl border p-4 ${
-        evaluation.a_regenerer
-          ? "border-destructive/40 bg-destructive/5"
-          : "border-emerald-500/40 bg-emerald-500/5"
-      }`}
-    >
-      <div className="mb-1 flex items-center gap-2 font-semibold">
-        {evaluation.a_regenerer ? (
-          <>
-            <AlertTriangle className="h-4 w-4 text-destructive" /> Régénération recommandée
-          </>
-        ) : (
-          <>
-            <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Pas de raison de régénérer ce
-            solveur
-          </>
-        )}
-      </div>
-      <p className="mb-3 text-xs text-muted-foreground">
-        {evaluation.a_regenerer
-          ? `${nbBloquants} argument(s) bloquant(s) montrent que le solveur ne répond plus à cet atelier.`
-          : "Aucun argument ne montre que le solveur ne répond plus à cet atelier."}
-        {evaluation.essai &&
-          (evaluation.essai.erreur
-            ? " Essai réel sur l'instance actuelle : en échec."
-            : ` Essai réel sur l'instance actuelle : ${evaluation.essai.nb_violations} violation(s).`)}
-      </p>
-      <ul className="space-y-3">
-        {constats.map((constat, i) => (
-          <LigneConstat key={i} constat={constat} />
-        ))}
-      </ul>
-      {evaluation.a_regenerer && (
-        <p className="mt-3 text-xs text-muted-foreground">
-          Lancez « Analyser cet atelier » pour créer la proposition de régénération, puis
-          acceptez-la pour démarrer la génération d'un nouveau solveur.
-        </p>
-      )}
-    </div>
-  );
 }
 
 function SupervisionPage() {
@@ -334,9 +237,24 @@ function SupervisionPage() {
   }
 
   // Atelier choisi : seules ses propositions sont affichées, pour traiter un atelier à la fois.
-  const propositionsTriees = [...(propositions ?? [])]
+  const propositionsAtelier = [...(propositions ?? [])]
     .filter((p) => !instanceId || p.instance_id === instanceId)
     .sort((a, b) => b.date_creation.localeCompare(a.date_creation));
+
+  // « Traitées » couvre acceptée ET refusée — seule « en attente » (decision === null) exige une
+  // action de l'utilisateur, c'est elle qui doit rester la vue par défaut, courte.
+  const enAttente = propositionsAtelier.filter((p) => p.decision === null);
+  const traitees = propositionsAtelier.filter((p) => p.decision !== null);
+  const [onglet, setOnglet] = useState<"en_attente" | "traitees">("en_attente");
+  const propositionsAffichees = onglet === "en_attente" ? enAttente : traitees;
+
+  // Propositions orphelines (instance supprimée depuis) : illisibles individuellement (aucun nom,
+  // aucun lien vers l'atelier) — repliées sous une seule ligne dépliable plutôt qu'une par une.
+  const orphelinesAffichees = propositionsAffichees.filter((p) => p.instance_id === null);
+  const propositionsAfficheesNonOrphelines = propositionsAffichees.filter(
+    (p) => p.instance_id !== null,
+  );
+  const [orphelinesDepliees, setOrphelinesDepliees] = useState(false);
 
   return (
     <>
@@ -437,7 +355,15 @@ function SupervisionPage() {
             <AlertCircle className="h-4 w-4" /> {erreurEvaluation.message}
           </p>
         )}
-        {evaluer.data && <VerdictSolveur evaluation={evaluer.data} />}
+        {evaluer.data && (
+          <VerdictSolveur
+            evaluation={evaluer.data}
+            indiceRegeneration={
+              "Lancez « Analyser cet atelier » pour créer la proposition de régénération, puis " +
+              "acceptez-la pour démarrer la génération d'un nouveau solveur."
+            }
+          />
+        )}
       </div>
 
       <div className="glass mb-6 flex flex-wrap items-end gap-4 rounded-2xl p-4">
@@ -463,13 +389,34 @@ function SupervisionPage() {
         </Button>
       </div>
 
+      <Tabs
+        value={onglet}
+        onValueChange={(v) => setOnglet(v as "en_attente" | "traitees")}
+        className="mb-3"
+      >
+        <TabsList>
+          <TabsTrigger value="en_attente">En attente ({enAttente.length})</TabsTrigger>
+          <TabsTrigger value="traitees">Traitées ({traitees.length})</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Chargement...</p>
-      ) : propositionsTriees.length === 0 ? (
+      ) : propositionsAffichees.length === 0 ? (
         <EmptyState
           icon={ShieldAlert}
-          title={instanceId ? "Aucune proposition pour cet atelier" : "Aucune proposition"}
-          desc="Lancez une analyse pour détecter d'éventuels signaux sur vos ateliers et exécutions."
+          title={
+            onglet === "traitees"
+              ? "Aucune proposition traitée"
+              : instanceId
+                ? "Aucune proposition en attente pour cet atelier"
+                : "Aucune proposition en attente"
+          }
+          desc={
+            onglet === "traitees"
+              ? "Les propositions acceptées ou refusées apparaîtront ici."
+              : "Lancez une analyse pour détecter d'éventuels signaux sur vos ateliers et exécutions."
+          }
         />
       ) : (
         <div className="glass overflow-hidden rounded-2xl">
@@ -485,7 +432,53 @@ function SupervisionPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {propositionsTriees.map((p) => (
+              {orphelinesAffichees.length > 0 && (
+                <>
+                  <TableRow
+                    className="cursor-pointer hover:bg-muted/30"
+                    onClick={() => setOrphelinesDepliees((v) => !v)}
+                  >
+                    <TableCell colSpan={6} className="text-sm text-muted-foreground">
+                      {orphelinesDepliees ? "▾" : "▸"} {orphelinesAffichees.length} proposition
+                      {orphelinesAffichees.length > 1 ? "s" : ""} orpheline
+                      {orphelinesAffichees.length > 1 ? "s" : ""} (instance supprimée depuis)
+                    </TableCell>
+                  </TableRow>
+                  {orphelinesDepliees &&
+                    orphelinesAffichees.map((p) => (
+                      <TableRow key={p.proposition_id} className="bg-muted/10">
+                        <TableCell>
+                          <BadgeTypeSignal type={p.type_signal} />
+                        </TableCell>
+                        <TableCell>
+                          <BadgePriorite priorite={p.priorite} />
+                        </TableCell>
+                        <TableCell className="max-w-md text-sm">{p.resume}</TableCell>
+                        <TableCell>
+                          <span className="text-xs text-muted-foreground">instance supprimée</span>
+                        </TableCell>
+                        <TableCell>
+                          <BadgeDecisionProposition decision={p.decision} />
+                        </TableCell>
+                        <TableCell>
+                          {p.decision === null && (
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={decider.isPending}
+                                onClick={() => decider_(p.proposition_id, "refusee")}
+                              >
+                                Refuser
+                              </Button>
+                            </div>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </>
+              )}
+              {propositionsAfficheesNonOrphelines.map((p) => (
                 <TableRow key={p.proposition_id}>
                   <TableCell>
                     <BadgeTypeSignal type={p.type_signal} />

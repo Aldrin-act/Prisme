@@ -96,7 +96,7 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
      se limite à l'objectif de ce planning, sans terme de pénalité pour ces
      contraintes. Seules les `Echeance` ne peuvent pas être garanties au
      placement : la fitness est alors un tuple
-     `(nb_echeances_depassees, objectif, terme_priorite)`, et `resoudre`
+     `(nb_echeances_depassees, objectif)`, et `resoudre`
      renvoie `None` si la meilleure solution dépasse encore une échéance
      (voir « Échéances » dans la mission).
 
@@ -160,7 +160,7 @@ Exemple de réponse valide (cas `tabu_search`, avec échéances) :
 {{
   "variables": "solution = permutation des identifiants de tâches (ordre de priorité) ; solution initiale triée par échéance croissante (EDD, tâches sans échéance en dernier, départage par identifiant)",
   "contraintes_modele": "décodeur constructif : parcourir la permutation, reporter une tâche tant qu'une de ses Precedence n'est pas planifiée, choisir la ressource compatible à la fin la plus tôt (tables durée/compatibilité précalculées une fois), rejeter tout début qui chevauche une opération ou tombe sur un instant indisponible — aucune pénalité sur les contraintes dures ; les Echeance sont comptées après décodage",
-  "objectif": "fitness = tuple (nb_echeances_depassees, makespan, terme_priorite) comparé lexicographiquement ; voisinage = échange de deux tâches voisines dans la permutation ; liste tabou de longueur fixe ; nombre d'itérations fixe ; renvoie None si la meilleure solution dépasse encore une échéance",
+  "objectif": "fitness = tuple (nb_echeances_depassees, makespan) comparé lexicographiquement ; voisinage = échange de deux tâches voisines dans la permutation ; liste tabou de longueur fixe ; nombre d'itérations fixe ; renvoie None si la meilleure solution dépasse encore une échéance",
   "fonctions_internes": "_preprocess(instance) -> tables ; _decoder(perm, tables) -> Planning ; _fitness(planning, tables) -> tuple ; _recherche_tabou(tables, rng) -> perm"
 }}
 ```

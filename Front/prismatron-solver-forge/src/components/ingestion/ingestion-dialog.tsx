@@ -13,6 +13,9 @@ import {
   AlertCircle,
   FolderOpen,
   CalendarOff,
+  Scale,
+  ChevronDown,
+  ChevronRight,
   X,
 } from "lucide-react";
 
@@ -48,6 +51,7 @@ import {
   useImporterJsonAvecCompetences,
   useImporterCsvLocal,
   useDeclencherExecution,
+  useEvaluerSolveurSupervision,
   PrismeAPIError,
   type Contrainte,
   type InstanceDetail,
@@ -59,6 +63,7 @@ import {
   type TypeObjectif,
 } from "@/integrations/prisme";
 import { useAuth } from "@/integrations/prisme/auth";
+import { VerdictSolveur } from "@/components/supervision/verdict-solveur";
 import {
   aujourdhui,
   dateDepuisAncrage,
@@ -144,6 +149,17 @@ export const LABELS_OBJECTIF: Record<TypeObjectif, string> = {
   maximiser_utilisation: "Maximiser l'utilisation",
   minimiser_changements: "Minimiser les changements",
 };
+
+// Types d'objectif portant des réglages au-delà de type/poids (méthode, seuil, ressources
+// ciblées...) — repliés par défaut sous "Options avancées" : un utilisateur ordinaire n'a besoin
+// que d'indiquer le poids, les valeurs par défaut de `nouvelObjectif()` (linéaire, écart max...)
+// couvrent le cas courant. `minimiser_changements` n'a aucun réglage propre, jamais de bouton.
+const TYPES_AVEC_OPTIONS_AVANCEES = new Set<TypeObjectif>([
+  "minimiser_makespan",
+  "equilibrer_charge",
+  "minimiser_retards",
+  "maximiser_utilisation",
+]);
 
 function nouvelleTache(): TacheLigne {
   return { clef: idLocal(), id: "", nom: "" };
@@ -420,6 +436,10 @@ export function IngestionDialog({
   const importerJson = useImporterJsonAvecCompetences();
   const importerCsvLocal = useImporterCsvLocal();
   const executer = useDeclencherExecution();
+  // Verdict « le solveur de la base peut-il répondre à ce scénario ? » — proposé seulement quand
+  // l'exécution automatique échoue faute de solveur (voir bloc executer.isError plus bas). Coûte
+  // un vrai appel LLM (Benchmarker rejoué), donc jamais déclenché sans un clic explicite.
+  const evaluer = useEvaluerSolveurSupervision();
   const { utilisateur } = useAuth();
   const estAdmin = utilisateur?.role === "admin";
 
@@ -535,6 +555,7 @@ export function IngestionDialog({
     importerJson.reset();
     importerCsvLocal.reset();
     executer.reset();
+    evaluer.reset();
   }
 
   function fermer(open: boolean) {
@@ -742,11 +763,38 @@ export function IngestionDialog({
                   {(executer.error as PrismeAPIError).message}
                 </p>
                 {succes && (
-                  <Button asChild size="sm" variant="outline" className="mt-2">
-                    <Link to="/solver-generator" search={{ instanceId: succes.instance_id }}>
-                      Générer un solveur pour cette instance
-                    </Link>
-                  </Button>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {scenarioDeBase && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={evaluer.isPending}
+                        onClick={() => evaluer.mutate({ instanceId: succes.instance_id })}
+                      >
+                        {evaluer.isPending
+                          ? "Vérification..."
+                          : "Le solveur de la base répond-il encore ?"}
+                      </Button>
+                    )}
+                    <Button asChild size="sm" variant="outline">
+                      <Link to="/solver-generator" search={{ instanceId: succes.instance_id }}>
+                        Générer un solveur pour cette instance
+                      </Link>
+                    </Button>
+                  </div>
+                )}
+                {evaluer.isError && (
+                  <p className="mt-2 text-xs text-destructive">
+                    {(evaluer.error as PrismeAPIError).message}
+                  </p>
+                )}
+                {evaluer.data && (
+                  <div className="mt-3">
+                    <VerdictSolveur
+                      evaluation={evaluer.data}
+                      indiceRegeneration="Aucun repli possible ici : cliquez « Générer un solveur pour cette instance » ci-dessus."
+                    />
+                  </div>
                 )}
               </div>
             )}
@@ -1328,10 +1376,11 @@ function SectionTaches({
             <Input
               placeholder="id (ex: T1)"
               value={t.id}
+              title={t.id}
               onChange={(e) =>
                 setTaches((arr) => arr.map((x, j) => (j === i ? { ...x, id: e.target.value } : x)))
               }
-              className="w-32 font-mono text-xs"
+              className="w-48 font-mono text-xs"
             />
             <Input
               placeholder="nom (optionnel)"
@@ -1341,21 +1390,12 @@ function SectionTaches({
               }
               className="min-w-32 flex-1"
             />
-            <Input
-              placeholder="priorité 1-5"
-              type="number"
-              min={1}
-              max={5}
-              value={t.priorite ?? ""}
-              onChange={(e) =>
-                setTaches((arr) =>
-                  arr.map((x, j) =>
-                    j === i ? { ...x, priorite: Number(e.target.value) || undefined } : x,
-                  ),
-                )
-              }
-              className="w-28"
-            />
+            {/* Pas de champ "priorité" ici : c'est un simple départage entre plannings sinon
+                équivalents (jamais lu comme contrainte ni comme poids d'objectif, voir
+                generation_solveur.md), rarement utile en pratique et retiré de ce formulaire pour
+                ne pas laisser croire qu'il faut le remplir. `t.priorite` reste porté tel quel s'il
+                était déjà présent sur l'instance chargée (jamais effacé silencieusement) — modifiable
+                uniquement via l'inspecteur de tâche du graphe de flux, si jamais nécessaire. */}
             <Button
               type="button"
               size="icon"
@@ -1403,12 +1443,13 @@ function SectionRessources({
             <Input
               placeholder="id (ex: R1)"
               value={r.id}
+              title={r.id}
               onChange={(e) =>
                 setRessources((arr) =>
                   arr.map((x, j) => (j === i ? { ...x, id: e.target.value } : x)),
                 )
               }
-              className="w-32 font-mono text-xs"
+              className="w-48 font-mono text-xs"
             />
             <Input
               placeholder="nom (optionnel)"
@@ -1943,129 +1984,186 @@ export function SectionObjectifs({
     setObjectifs((arr) => arr.map((x, j) => (j === i ? { ...x, ...patch } : x)));
   }
 
+  // Replié par défaut sur chaque ligne — un utilisateur ordinaire n'a besoin que du poids, jamais
+  // de choisir une "fonction de pénalité" ou une "méthode" pour comprendre ce qu'il fait.
+  const [avancesOuverts, setAvancesOuverts] = useState<Set<string>>(new Set());
+  function basculerAvance(clef: string) {
+    setAvancesOuverts((s) => {
+      const suivant = new Set(s);
+      if (suivant.has(clef)) suivant.delete(clef);
+      else suivant.add(clef);
+      return suivant;
+    });
+  }
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <Label>Objectifs</Label>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          onClick={() => setObjectifs((o) => [...o, nouvelObjectif()])}
-        >
-          <Plus className="mr-1 h-3.5 w-3.5" /> Ajouter
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            // Remet chaque poids à 1 (la valeur par défaut d'un objectif) — pur confort de saisie,
+            // aucun changement de comportement du solveur : les poids n'ont jamais eu besoin de
+            // sommer à 1 ni d'être dans une plage donnée (voir generation_solveur.md, "Objectifs").
+            // Sans effet à un seul objectif (déjà expliqué à l'utilisateur), donc désactivé alors.
+            onClick={() => setObjectifs((o) => o.map((x) => ({ ...x, poids: "1" })))}
+            disabled={objectifs.length < 2}
+            title="Remet chaque poids à 1 — n'a d'effet qu'avec plusieurs objectifs"
+          >
+            <Scale className="mr-1 h-3.5 w-3.5" /> Égaliser les poids
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => setObjectifs((o) => [...o, nouvelObjectif()])}
+          >
+            <Plus className="mr-1 h-3.5 w-3.5" /> Ajouter
+          </Button>
+        </div>
       </div>
       <div className="space-y-2">
-        {objectifs.map((o, i) => (
-          <div
-            key={o.clef}
-            className="flex flex-wrap items-center gap-2 rounded-lg border border-border/50 p-2"
-          >
-            <Select value={o.type} onValueChange={(v) => majLigne(i, { type: v as TypeObjectif })}>
-              <SelectTrigger className="w-56">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(Object.keys(LABELS_OBJECTIF) as TypeObjectif[]).map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {LABELS_OBJECTIF[t]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Input
-              placeholder="poids"
-              type="number"
-              min={0}
-              step="0.1"
-              value={o.poids}
-              onChange={(e) => majLigne(i, { poids: e.target.value })}
-              className="w-24"
-            />
-
-            {o.type === "minimiser_makespan" && (
-              <Input
-                placeholder="makespan cible (min, optionnel)"
-                type="number"
-                min={0}
-                value={o.makespanCible}
-                onChange={(e) => majLigne(i, { makespanCible: e.target.value })}
-                className="w-56"
-              />
-            )}
-            {o.type === "equilibrer_charge" && (
-              <>
+        {objectifs.map((o, i) => {
+          const aOptions = TYPES_AVEC_OPTIONS_AVANCEES.has(o.type);
+          const ouvert = aOptions && avancesOuverts.has(o.clef);
+          return (
+            <div key={o.clef} className="rounded-lg border border-border/50 p-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Select
-                  value={o.methode}
-                  onValueChange={(v) => majLigne(i, { methode: v as ObjectifLigne["methode"] })}
+                  value={o.type}
+                  onValueChange={(v) => majLigne(i, { type: v as TypeObjectif })}
                 >
-                  <SelectTrigger className="w-36">
+                  <SelectTrigger className="w-56">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ecart_max">Écart max</SelectItem>
-                    <SelectItem value="variance">Variance</SelectItem>
-                    <SelectItem value="gini">Gini</SelectItem>
+                    {(Object.keys(LABELS_OBJECTIF) as TypeObjectif[]).map((t) => (
+                      <SelectItem key={t} value={t}>
+                        {LABELS_OBJECTIF[t]}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
+
                 <Input
-                  placeholder="ressources ciblées (optionnel)"
-                  value={o.ressourcesCibles}
-                  onChange={(e) => majLigne(i, { ressourcesCibles: e.target.value })}
-                  className="w-56"
-                />
-              </>
-            )}
-            {o.type === "minimiser_retards" && (
-              <>
-                <Select
-                  value={o.fonctionPenalite}
-                  onValueChange={(v) =>
-                    majLigne(i, { fonctionPenalite: v as ObjectifLigne["fonctionPenalite"] })
-                  }
-                >
-                  <SelectTrigger className="w-40">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="lineaire">Linéaire</SelectItem>
-                    <SelectItem value="quadratique">Quadratique</SelectItem>
-                    <SelectItem value="exponentielle">Exponentielle</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input
-                  placeholder={`seuil de grâce (${libelleUnite(uniteTemps)})`}
+                  placeholder="poids"
                   type="number"
                   min={0}
-                  value={o.seuilGrace}
-                  onChange={(e) => majLigne(i, { seuilGrace: e.target.value })}
-                  className="w-40"
+                  step="0.1"
+                  value={o.poids}
+                  onChange={(e) => majLigne(i, { poids: e.target.value })}
+                  className="w-24"
                 />
-              </>
-            )}
-            {o.type === "maximiser_utilisation" && (
-              <Input
-                placeholder="ressources prioritaires (optionnel)"
-                value={o.ressourcesPrioritaires}
-                onChange={(e) => majLigne(i, { ressourcesPrioritaires: e.target.value })}
-                className="w-56"
-              />
-            )}
 
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              className="ml-auto"
-              onClick={() => setObjectifs((arr) => arr.filter((_, j) => j !== i))}
-              disabled={objectifs.length === 1}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        ))}
+                {aOptions && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="text-xs text-muted-foreground"
+                    onClick={() => basculerAvance(o.clef)}
+                  >
+                    {ouvert ? (
+                      <ChevronDown className="mr-1 h-3.5 w-3.5" />
+                    ) : (
+                      <ChevronRight className="mr-1 h-3.5 w-3.5" />
+                    )}
+                    Options avancées
+                  </Button>
+                )}
+
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="ml-auto"
+                  onClick={() => setObjectifs((arr) => arr.filter((_, j) => j !== i))}
+                  disabled={objectifs.length === 1}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {ouvert && (
+                <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-border/50 pt-2">
+                  {o.type === "minimiser_makespan" && (
+                    <Input
+                      placeholder={`makespan cible (${libelleUnite(uniteTemps)}, optionnel)`}
+                      type="number"
+                      min={0}
+                      value={o.makespanCible}
+                      onChange={(e) => majLigne(i, { makespanCible: e.target.value })}
+                      className="w-56"
+                    />
+                  )}
+                  {o.type === "equilibrer_charge" && (
+                    <>
+                      <Select
+                        value={o.methode}
+                        onValueChange={(v) =>
+                          majLigne(i, { methode: v as ObjectifLigne["methode"] })
+                        }
+                      >
+                        <SelectTrigger className="w-36">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ecart_max">Écart max</SelectItem>
+                          <SelectItem value="variance">Variance</SelectItem>
+                          <SelectItem value="gini">Gini</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        placeholder="ressources ciblées (optionnel)"
+                        value={o.ressourcesCibles}
+                        onChange={(e) => majLigne(i, { ressourcesCibles: e.target.value })}
+                        className="w-56"
+                      />
+                    </>
+                  )}
+                  {o.type === "minimiser_retards" && (
+                    <>
+                      <Select
+                        value={o.fonctionPenalite}
+                        onValueChange={(v) =>
+                          majLigne(i, { fonctionPenalite: v as ObjectifLigne["fonctionPenalite"] })
+                        }
+                      >
+                        <SelectTrigger className="w-40">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="lineaire">Linéaire</SelectItem>
+                          <SelectItem value="quadratique">Quadratique</SelectItem>
+                          <SelectItem value="exponentielle">Exponentielle</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        placeholder={`seuil de grâce (${libelleUnite(uniteTemps)})`}
+                        type="number"
+                        min={0}
+                        value={o.seuilGrace}
+                        onChange={(e) => majLigne(i, { seuilGrace: e.target.value })}
+                        className="w-40"
+                      />
+                    </>
+                  )}
+                  {o.type === "maximiser_utilisation" && (
+                    <Input
+                      placeholder="ressources prioritaires (optionnel)"
+                      value={o.ressourcesPrioritaires}
+                      onChange={(e) => majLigne(i, { ressourcesPrioritaires: e.target.value })}
+                      className="w-56"
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
       <p className="text-xs text-muted-foreground">
         Plusieurs objectifs sont combinés selon leur poids relatif (ex. 0.7 équilibrage + 0.3

@@ -11,12 +11,14 @@ import {
   GitCompareArrows,
   Loader2,
   Pencil,
+  Play,
   Plus,
   Trash2,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -73,6 +75,7 @@ import {
   useComparaisonScenarios,
   useCommandesInstance,
   usePropositionsSupervision,
+  useDeclencherExecution,
   PrismeAPIError,
   type Contrainte,
   type InstanceDetail,
@@ -195,87 +198,151 @@ function InstancesPage() {
 
       {instances && instances.length > 0 && (
         <>
-          <div className="glass overflow-hidden rounded-2xl">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Instance</TableHead>
-                    <TableHead>Source</TableHead>
-                    <TableHead>Client</TableHead>
-                    <TableHead>Structure des contraintes</TableHead>
-                    <TableHead>Statut</TableHead>
-                    <TableHead />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {instances.map((instance) => {
-                    const info = labels.get(instance.instance_id);
-                    return (
-                      <TableRow key={instance.instance_id}>
-                        <TableCell className="font-mono text-xs" title={instance.instance_id}>
-                          {info ? info.label : instance.instance_id}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col items-start gap-1">
-                            <Badge variant="outline" className="text-xs">
-                              {LABELS_CANAL_INGESTION[instance.canal_ingestion ?? ""] ?? "—"}
-                            </Badge>
-                            {info?.sourceId && (
-                              <Link
-                                to="/donnees"
-                                search={{ source: info.sourceId }}
-                                className="text-primary text-xs underline-offset-2 hover:underline"
-                              >
-                                {info.nomSource}
-                              </Link>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>{instance.client_id}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="font-mono text-xs">
-                            {instance.structure_contraintes}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {instancesEnGeneration.has(instance.instance_id) ? (
-                            <Badge variant="secondary" className="gap-1.5">
-                              <Loader2 className="h-3 w-3 animate-spin" /> Génération en cours
-                            </Badge>
-                          ) : (
-                            <Badge variant={instance.executee ? "secondary" : "outline"}>
-                              {instance.executee ? "Exécutée" : "En attente"}
-                            </Badge>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex justify-end gap-1">
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              aria-label="Voir l'instance"
-                              onClick={() => setAVoir(instance.instance_id)}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              aria-label="Supprimer l'instance"
-                              onClick={() => ouvrirConfirmation(instance.instance_id)}
-                            >
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </div>
-                        </TableCell>
+          {(() => {
+            // Un scénario n'a jamais sa propre description (canal_ingestion="scenario", jamais
+            // passé par l'agent de compréhension) — cette table permet de retrouver celle de sa
+            // base, sans dépendre d'un second appel réseau : `instances` couvre déjà tout le client.
+            const instancesParId = new Map(instances.map((i) => [i.instance_id, i]));
+            return (
+              <div className="glass overflow-hidden rounded-2xl">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Instance</TableHead>
+                        <TableHead>Source</TableHead>
+                        <TableHead>Client</TableHead>
+                        <TableHead>Structure des contraintes</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead>Statut</TableHead>
+                        <TableHead />
                       </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
+                    </TableHeader>
+                    <TableBody>
+                      {instances.map((instance) => {
+                        const info = labels.get(instance.instance_id);
+                        // Scénario (voir groupe_scenario_id, jamais présent sur l'instance de base
+                        // elle-même) : référence lisible vers sa base, avec le même label que celui
+                        // qu'elle porterait dans la colonne Instance.
+                        const labelBase = instance.groupe_scenario_id
+                          ? (labels.get(instance.groupe_scenario_id)?.label ??
+                            instance.groupe_scenario_id)
+                          : null;
+                        return (
+                          <TableRow key={instance.instance_id}>
+                            <TableCell className="font-mono text-xs" title={instance.instance_id}>
+                              {info ? info.label : instance.instance_id}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex flex-col items-start gap-1">
+                                <Badge variant="outline" className="text-xs">
+                                  {LABELS_CANAL_INGESTION[instance.canal_ingestion ?? ""] ?? "—"}
+                                </Badge>
+                                {info?.sourceId && (
+                                  <Link
+                                    to="/donnees"
+                                    search={{ source: info.sourceId }}
+                                    className="text-primary text-xs underline-offset-2 hover:underline"
+                                  >
+                                    {info.nomSource}
+                                  </Link>
+                                )}
+                                {labelBase && (
+                                  <span
+                                    className="font-mono text-xs text-muted-foreground"
+                                    title={instance.groupe_scenario_id ?? undefined}
+                                  >
+                                    scénario de {labelBase}
+                                  </span>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell>{instance.client_id}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="font-mono text-xs">
+                                {instance.structure_contraintes}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              {(() => {
+                                // Un scénario n'a jamais sa propre description (canal_ingestion=
+                                // "scenario", jamais passé par l'agent de compréhension) — retombe sur
+                                // celle de l'instance de base dont il varie, le sujet de l'atelier
+                                // restant le même (voir POST .../scenarios : mêmes ressources imposées).
+                                const description =
+                                  instance.description_metier ??
+                                  (instance.groupe_scenario_id
+                                    ? instancesParId.get(instance.groupe_scenario_id)
+                                        ?.description_metier
+                                    : null);
+                                if (!description) {
+                                  return <span className="text-xs text-muted-foreground">—</span>;
+                                }
+                                const heritee = !instance.description_metier;
+                                return (
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        aria-label="Voir la description de l'atelier"
+                                      >
+                                        <Eye className="h-4 w-4" />
+                                      </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="max-w-sm text-sm">
+                                      {heritee && (
+                                        <p className="mb-1.5 text-xs font-medium text-muted-foreground">
+                                          Description de l'instance de base ({labelBase}) — ce
+                                          scénario n'en a pas de propre.
+                                        </p>
+                                      )}
+                                      {description}
+                                    </PopoverContent>
+                                  </Popover>
+                                );
+                              })()}
+                            </TableCell>
+                            <TableCell>
+                              {instancesEnGeneration.has(instance.instance_id) ? (
+                                <Badge variant="secondary" className="gap-1.5">
+                                  <Loader2 className="h-3 w-3 animate-spin" /> Génération en cours
+                                </Badge>
+                              ) : (
+                                <Badge variant={instance.executee ? "secondary" : "outline"}>
+                                  {instance.executee ? "Exécutée" : "En attente"}
+                                </Badge>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex justify-end gap-1">
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  aria-label="Voir l'instance"
+                                  onClick={() => setAVoir(instance.instance_id)}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  aria-label="Supprimer l'instance"
+                                  onClick={() => ouvrirConfirmation(instance.instance_id)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            );
+          })()}
         </>
       )}
 
@@ -575,17 +642,41 @@ function SectionScenarios({
   estExecutee: boolean;
   onCreerScenario: (instance: InstanceDetail) => void;
 }) {
+  const queryClient = useQueryClient();
   const { data: comparaison, isLoading } = useComparaisonScenarios(instance.instance_id);
   // Signaux de l'agent de supervision (§2, MT7) en attente d'une décision —
   // un scénario est une instance comme une autre pour ces détecteurs
   // (`supervision/detecteurs.py` ne filtre jamais sur groupe_scenario_id),
   // donc "signature orpheline" (aucun solveur ne matche) et "à replanifier"
-  // (jamais exécutée / modifiée depuis) s'y déclenchent déjà — seule leur
-  // affichage manquait ici, relégué à la page /supervision séparée.
+  // (jamais exécutée / modifiée depuis) s'y déclenchent — seule leur affichage manquait ici,
+  // relégué à la page /supervision séparée. Un scénario sans solveur propre réutilise celui de
+  // sa base à l'exécution (`api/etat.py::solveurs_pour_instance_ou_scenario_de_base`) : ce n'est
+  // donc plus jamais "signature orpheline" tant que la base a un solveur compatible.
   const { data: propositions } = usePropositionsSupervision(true);
   const propositionParInstance = new Map(
     (propositions ?? []).filter((p) => p.instance_id).map((p) => [p.instance_id, p]),
   );
+
+  // Exécute un scénario directement depuis cette table — mêmes ressources que la base, mais
+  // aucun solveur propre : l'exécution retombe sur celui de la base (voir commentaire ci-dessus).
+  const executer = useDeclencherExecution();
+  const erreurExecution = executer.error as PrismeAPIError | null;
+  const instanceEnCoursId = executer.variables?.instanceId;
+
+  function executerScenario(scenarioId: string) {
+    executer.mutate(
+      { instanceId: scenarioId },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: prismeKeys.comparaisonScenarios(instance.instance_id),
+          });
+          queryClient.invalidateQueries({ queryKey: prismeKeys.executions() });
+          queryClient.invalidateQueries({ queryKey: prismeKeys.propositionsSupervision(true) });
+        },
+      },
+    );
+  }
 
   return (
     <div className="space-y-3">
@@ -619,6 +710,7 @@ function SectionScenarios({
                 <TableHead>Commandes en retard</TableHead>
                 <TableHead>Exécuté le</TableHead>
                 <TableHead>Supervision</TableHead>
+                <TableHead />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -660,11 +752,35 @@ function SectionScenarios({
                         <span className="text-muted-foreground">—</span>
                       )}
                     </TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => executerScenario(s.instance_id)}
+                        disabled={executer.isPending}
+                        title="Réexécute cette instance (le scénario reprend le solveur de la base s'il n'a pas le sien)"
+                      >
+                        {executer.isPending && instanceEnCoursId === s.instance_id ? (
+                          <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <Play className="mr-1.5 h-3.5 w-3.5" />
+                        )}
+                        Exécuter
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
           </Table>
+        </div>
+      )}
+      {erreurExecution && (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 font-medium">
+            <AlertCircle className="h-4 w-4" /> Échec de l'exécution
+          </div>
+          <p className="mt-1">{erreurExecution.message}</p>
         </div>
       )}
     </div>

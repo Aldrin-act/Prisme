@@ -654,3 +654,140 @@ def test_changer_statut_refuse_un_client_etranger() -> None:
         assert reponse.status_code == 403
     finally:
         app.dependency_overrides.clear()
+
+
+# --- Gel automatique à l'ajout d'une commande (protège ce qui tourne déjà) ------------------
+#
+# `ajouter_commande` obtient son `Registre` à la main (`obtenir_registre()`, jamais `Depends` —
+# voir sa docstring), donc `app.dependency_overrides[obtenir_registre]` ne l'atteint pas : les
+# tests ci-dessus ne l'exercent jamais avec un vrai solveur. Ici, on bascule directement le
+# singleton du module (`api.dependencies._REGISTRE_GLOBAL`) sur `registre_test` — un vrai schéma
+# Postgres isolé, jamais le store réel du dépôt — pour un vrai bout en bout (Docker requis).
+#
+# Le solveur est enregistré avec `structure_contraintes="compatibilite_ressource_tache,echeance"`
+# (jamais juste "compatibilite_ressource_tache") : la toute première commande ajoutée fait déjà
+# apparaître une `Echeance` (voir `deriver_echeances_par_commande`), donc c'est cette structure-là
+# que `POST .../commandes` doit retrouver dès son tout premier appel pour que l'exécution
+# automatique réussisse (même limite déjà connue : changer de structure invalide un solveur
+# existant tant qu'il n'est pas régénéré).
+
+from collections.abc import Iterator  # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+import api.dependencies as _dependencies_module  # noqa: E402
+import scripts._solveur_minimal as _module_solveur_minimal  # noqa: E402
+from sandbox.runner import solveur_supporte_horizon_gele  # noqa: E402
+from solver_store.registry import Registre  # noqa: E402
+from validation_engine.cascade import VerdictCascade  # noqa: E402
+
+
+@pytest.fixture
+def registre_global_isole(registre_test: Registre) -> Iterator[Registre]:
+    """Redirige `obtenir_registre()` (donc `ajouter_commande`) vers `registre_test` le temps du
+    test — sans ça, ce singleton pointe toujours le store Postgres réel du dépôt."""
+    ancien = _dependencies_module._REGISTRE_GLOBAL
+    _dependencies_module._REGISTRE_GLOBAL = registre_test
+    try:
+        yield registre_test
+    finally:
+        _dependencies_module._REGISTRE_GLOBAL = ancien
+
+
+_CODE_ANCIENNE_SIGNATURE = """
+from dsl.schema import OperationPlanifiee, Planning
+
+
+def resoudre(instance):
+    return Planning(operations=[OperationPlanifiee(tache="EXISTANT", ressource="R1", debut=0)])
+"""
+
+
+def _enregistrer_solveur(registre: Registre, instance_id: str, code_source: str) -> None:
+    registre.enregistrer_solveur(
+        code_source=code_source,
+        structure_contraintes="compatibilite_ressource_tache,echeance",
+        verdict_cascade=VerdictCascade(diagnostics=()),
+        instance_id=instance_id,
+        client_id="client_test",
+    )
+
+
+def test_ajout_commande_fige_ce_qui_est_deja_planifie(image_sandbox: str, registre_global_isole: Registre) -> None:
+    """Une première commande exécute normalement (rien à figer encore) ; son exécution reculée
+    dans le temps à la main (même technique que `test_supervision_orchestrateur.py`) ; une
+    deuxième commande doit alors figer automatiquement ce que la première a déjà planifié
+    (§ human-in-the-loop, aucune détection réelle — juste "maintenant" en instant relatif) et le
+    signaler (`gel_applique`)."""
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        _enregistrer_solveur(
+            registre_global_isole,
+            instance_id,
+            _Path(_module_solveur_minimal.__file__).read_text(encoding="utf-8"),
+        )
+
+        premiere = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 100}
+        )
+        assert premiere.status_code == 200, premiere.json()
+        corps_premiere = premiere.json()
+        assert corps_premiere["execution_reussie"] is True, corps_premiere["erreur_execution"]
+        # Toute première exécution de cet atelier : rien à figer encore.
+        assert corps_premiere["gel_applique"] is False
+
+        # Recule l'horodatage de cette exécution de plusieurs années — largement de quoi rendre
+        # "maintenant" positif quelle que soit l'unité de l'instance (jours par défaut ici).
+        etat_test.dates_execution[corps_premiere["execution_id"]] = "2020-01-01T00:00:00+00:00"
+
+        deuxieme = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 200}
+        )
+
+        assert deuxieme.status_code == 200, deuxieme.json()
+        corps = deuxieme.json()
+        assert corps["execution_reussie"] is True, corps["erreur_execution"]
+        assert corps["gel_applique"] is True
+        assert corps["avertissements"] == []
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_ajout_commande_solveur_sans_support_du_gel_avertit_sans_echouer(
+    image_sandbox: str, registre_global_isole: Registre
+) -> None:
+    """Solveur généré avant l'ajout de l'horizon gelé (signature à un seul paramètre) : la
+    protection ne peut pas s'appliquer — l'ajout de commande doit quand même réussir (replan
+    complet, comme avant cette fonctionnalité), avec un avertissement explicite plutôt qu'un
+    échec silencieux ou un blocage inattendu de l'ajout de commande."""
+    assert solveur_supporte_horizon_gele(_CODE_ANCIENNE_SIGNATURE) is False  # prémisse du test
+
+    etat_test = EtatAPI()
+    app.dependency_overrides[obtenir_etat] = lambda: etat_test
+    try:
+        client = TestClient(app)
+        instance_id = _creer_instance(client)
+        _enregistrer_solveur(registre_global_isole, instance_id, _CODE_ANCIENNE_SIGNATURE)
+
+        premiere = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 100}
+        )
+        assert premiere.status_code == 200, premiere.json()
+        corps_premiere = premiere.json()
+        assert corps_premiere["execution_reussie"] is True, corps_premiere["erreur_execution"]
+        etat_test.dates_execution[corps_premiere["execution_id"]] = "2020-01-01T00:00:00+00:00"
+
+        deuxieme = client.post(
+            f"/ingestion/{instance_id}/commandes", json={"taches": ["EXISTANT"], "date_limite": 200}
+        )
+
+        assert deuxieme.status_code == 200, deuxieme.json()
+        corps = deuxieme.json()
+        assert corps["execution_reussie"] is True, corps["erreur_execution"]
+        assert corps["gel_applique"] is False
+        assert len(corps["avertissements"]) == 1
+        assert "ne protège pas" in corps["avertissements"][0]
+    finally:
+        app.dependency_overrides.clear()

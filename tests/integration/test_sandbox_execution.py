@@ -146,3 +146,35 @@ def test_horizon_gele_force_la_ressource_et_le_debut_du_planning_precedent(image
     assert planning is not None
     assert planning.operations[0].ressource == "R2"
     assert planning.operations[0].debut == 0
+
+
+def test_mode_heures_calendrier_ouvre_rend_legal_un_solveur_qui_l_ignore(
+    image_sandbox: str, registre_test: Registre
+) -> None:
+    """Un solveur figé qui ignore le calendrier (démarre à l'instant 0, en pleine nuit) : l'exécution
+    ancre l'instant 0 sur la référence (lundi 03h), la correction post-solveur décale le démarrage à
+    l'ouverture (8h) et le garde-fou valide avec la fin calendaire (`dsl/calendrier.py`)."""
+    from datetime import UTC, datetime
+
+    id_solveur = registre_test.enregistrer_solveur(
+        code_source=CODE_ANCIENNE_SIGNATURE,
+        structure_contraintes="compatibilite_ressource_tache",
+        verdict_cascade=VerdictCascade(diagnostics=()),
+        instance_id="inst_test",
+    )
+    instance = InstanceTRCO(
+        taches=[Tache(id="T1")],
+        ressources=[Ressource(id="R1")],
+        contraintes=[CompatibiliteRessourceTache(tache="T1", ressource="R1", duree=10)],
+        objectifs=[MinimiserMakespan()],
+        unite_temps="heures",
+    )
+    lundi_3h = datetime(2026, 9, 21, 3, 0, tzinfo=UTC)  # 2026-09-21 est un lundi
+
+    resultat = executer_solveur_valide(registre_test, id_solveur, instance, reference=lundi_3h)
+
+    assert resultat.reussi, resultat.erreur
+    assert resultat.planning is not None
+    # Instant 0 = lundi 03h (heure locale du serveur) : le démarrage tombe sur une heure ouvrée.
+    (operation,) = resultat.planning.operations
+    assert operation.debut > 0

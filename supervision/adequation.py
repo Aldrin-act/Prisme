@@ -33,7 +33,12 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal
 
-from api.etat import EtatAPI, signature_objectifs, structure_contraintes
+from api.etat import (
+    EtatAPI,
+    signature_objectifs,
+    solveurs_pour_instance_ou_scenario_de_base,
+    structure_contraintes,
+)
 from generation.agents.base import ErreurReponseAgentInvalide
 from generation.agents.benchmarker import benchmarker_algorithmes
 from sandbox.runner import ResultatExecution, executer_solveur_valide, sandbox_disponible
@@ -184,16 +189,21 @@ def _code_mentionne(code_source: str, type_dsl: str) -> bool:
     return type_dsl in code_source or (nom_classe is not None and nom_classe in code_source)
 
 
-def solveurs_actifs_atelier(registre: Registre, client_id: str, instance_id: str) -> dict[str, ArtefactSolveur]:
-    return {s.id: s for s in registre.rechercher_solveurs(client_id=client_id, instance_id=instance_id)}
+def solveurs_actifs_atelier(
+    etat: EtatAPI, registre: Registre, client_id: str, instance_id: str
+) -> dict[str, ArtefactSolveur]:
+    """Solveurs actifs de cet atelier — y compris, pour un scénario sans solveur propre, celui de
+    l'instance de base dont il varie (voir `api/etat.py::solveurs_pour_instance_ou_scenario_de_base`) :
+    « l'atelier » d'un scénario reste, pour la supervision, celui de sa base."""
+    return {s.id: s for s in solveurs_pour_instance_ou_scenario_de_base(etat, registre, client_id, instance_id)}
 
 
 def solveur_a_evaluer(
-    registre: Registre, client_id: str, instance_id: str, id_solveur: str | None
+    etat: EtatAPI, registre: Registre, client_id: str, instance_id: str, id_solveur: str | None
 ) -> ArtefactSolveur | None:
     """Le solveur demandé (vérifié comme appartenant à l'atelier, sinon `SolveurHorsAtelier`), ou à
     défaut le plus récemment validé de l'atelier ; `None` si l'atelier n'en a aucun."""
-    solveurs = solveurs_actifs_atelier(registre, client_id, instance_id)
+    solveurs = solveurs_actifs_atelier(etat, registre, client_id, instance_id)
     if id_solveur is not None:
         if id_solveur not in solveurs:
             raise SolveurHorsAtelier(
