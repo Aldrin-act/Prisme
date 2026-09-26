@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Même version que Railpack sur Railway, qui installe le frontend avec bun.
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+
+      # Même commande que le build Railway : un bun.lock désynchronisé de package.json échoue ici,
+      # avant de casser le déploiement.
+      - name: Installer les dépendances (bun.lock figé)
+        run: bun install --frozen-lockfile
+
+      # package-lock.json sert au dev local (npm) : il doit rester aligné sur package.json lui aussi.
+      - name: Vérifier que package-lock.json est à jour
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          git diff --exit-code package-lock.json
+
+      - name: Lint (ESLint + Prettier)
+        run: bun run lint
+
+      - name: Typage (tsc)
+        run: bun run typecheck
+
+      - name: Tests unitaires (Vitest)
+        run: bun run test
+
+      # Même cible que Railway : serveur Node. L'URL d'API n'est qu'une valeur factice pour le build.
+      - name: Build de production
+        run: bun run build
+        env:
+          NITRO_PRESET: node-server
+          VITE_PRISME_API_URL: https://api.exemple.invalid
