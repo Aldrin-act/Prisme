@@ -7,6 +7,7 @@ Documentation OpenAPI générée automatiquement par FastAPI, disponible sur
 
 from __future__ import annotations
 
+import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -54,12 +55,15 @@ app = FastAPI(
     lifespan=_lifespan,
 )
 
-# Dev uniquement : le dashboard (Vite, port variable selon disponibilité) et l'API (uvicorn,
-# :8000) tournent en processus séparés, sans étape de build/déploiement commune pour ce PoC.
-# Regex plutôt qu'une liste de ports fixes : Vite change de port si le précédent est occupé.
+# Le dashboard (Vite en dev, serveur Node en production) et l'API tournent en processus séparés,
+# donc sur des origines différentes. En dev : regex plutôt qu'une liste de ports fixes, Vite change de
+# port si le précédent est occupé. En production (ex. Railway, voir docs/deploiement_railway.md) :
+# `PRISME_CORS_ORIGINES` liste les URL exactes du frontend, séparées par des virgules.
+_ORIGINES_CORS = [o.strip().rstrip("/") for o in os.environ.get("PRISME_CORS_ORIGINES", "").split(",") if o]
 app.add_middleware(
     CORSMiddleware,
     allow_origin_regex=r"http://(localhost|127\.0\.0\.1):\d+",
+    allow_origins=_ORIGINES_CORS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
