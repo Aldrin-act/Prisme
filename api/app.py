@@ -14,6 +14,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.admin_initial import creer_admin_initial
 from api.routes import (
     adapters,
     api_keys,
@@ -39,7 +40,9 @@ async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
     MT7, `supervision/planificateur.py`) — no-op tant que
     `PRISME_SUPERVISION_ACTIVE` n'est pas positionné. Premier hook
     `lifespan` de ce module ; jusqu'ici aucun besoin de code au
-    démarrage/arrêt du serveur."""
+    démarrage/arrêt du serveur. Crée aussi le compte admin initial s'il est configuré
+    (`api/admin_initial.py`, `PRISME_ADMIN_EMAIL`/`PRISME_ADMIN_MOT_DE_PASSE`)."""
+    creer_admin_initial(auth.utilisateurs_db)
     arret = demarrer_planificateur()
     yield
     arret.set()

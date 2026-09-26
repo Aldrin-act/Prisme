@@ -40,6 +40,11 @@ PRISME_LLM_TIMEOUT_SECONDES_DEBUGGER=1800
 # Authentification — une vraie valeur longue et aléatoire, jamais celle de dev
 JWT_SECRET_KEY=...
 
+# Compte administrateur initial, créé au premier démarrage (12 caractères min.). Ensuite, changer le
+# mot de passe depuis l'interface : ces variables ne l'écrasent jamais.
+PRISME_ADMIN_EMAIL=admin@exemple.ma
+PRISME_ADMIN_MOT_DE_PASSE=...
+
 # URL du frontend (étape 3) — à ajouter une fois le frontend déployé
 PRISME_CORS_ORIGINES=https://<domaine-du-front>.up.railway.app
 ```
