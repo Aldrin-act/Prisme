@@ -127,6 +127,9 @@ class EssaiSolveur:
     reussi: bool
     erreur: str | None
     violations: tuple[tuple[str, str], ...]  # (type de violation, message)
+    # Tâches dont l'échéance est dépassée dans le planning produit — de quoi distinguer une faute du
+    # solveur d'une échéance que les données rendent impossible (`_echeances_impossibles`).
+    taches_echeance_depassee: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -227,12 +230,57 @@ def _essayer(
     executer: Callable[[Registre, str, InstanceTRCO], ResultatExecution],
 ) -> EssaiSolveur:
     resultat = executer(registre, solveur.id, instance)
-    violations = (
-        tuple((v.type, v.message) for v in resultat.verdict_faisabilite.violations)
-        if resultat.verdict_faisabilite is not None
-        else ()
+    brutes = resultat.verdict_faisabilite.violations if resultat.verdict_faisabilite is not None else ()
+    return EssaiSolveur(
+        reussi=resultat.reussi,
+        erreur=resultat.erreur,
+        violations=tuple((v.type, v.message) for v in brutes),
+        taches_echeance_depassee=tuple(
+            v.tache for v in brutes if v.type == "echeance_depassee" and v.tache is not None
+        ),
     )
-    return EssaiSolveur(reussi=resultat.reussi, erreur=resultat.erreur, violations=violations)
+
+
+def _fins_au_plus_tot(instance: InstanceTRCO) -> dict[str, int]:
+    """Fin la plus tôt possible de chaque tâche, en ignorant toute ressource partagée : départ à 0,
+    durée la plus courte parmi ses compatibilités, après la fin au plus tôt de ses prédécesseurs.
+    Borne basse sûre — le partage des ressources, le calendrier ouvré ou les indisponibilités ne
+    peuvent que retarder une tâche, jamais l'avancer."""
+    duree_min: dict[str, int] = {}
+    predecesseurs: dict[str, list[str]] = {t.id: [] for t in instance.taches}
+    for c in instance.contraintes:
+        if c.type == "compatibilite_ressource_tache":
+            duree_min[c.tache] = min(duree_min.get(c.tache, c.duree), c.duree)
+        elif c.type == "precedence":
+            predecesseurs[c.apres].append(c.avant)
+
+    fins: dict[str, int] = {}
+
+    def fin(tache: str, en_cours: frozenset[str] = frozenset()) -> int:
+        if tache not in fins:
+            # Un cycle de précédences rendrait l'instance infaisable de toute façon : on l'ignore ici
+            # plutôt que de boucler, le vérificateur le signale déjà par ailleurs.
+            debut = max(
+                (fin(p, en_cours | {tache}) for p in predecesseurs.get(tache, ()) if p not in en_cours),
+                default=0,
+            )
+            fins[tache] = debut + duree_min.get(tache, 0)
+        return fins[tache]
+
+    for t in instance.taches:
+        fin(t.id)
+    return fins
+
+
+def _echeances_impossibles(instance: InstanceTRCO) -> dict[str, tuple[int, int]]:
+    """Tâches dont l'échéance tombe avant leur fin au plus tôt (`_fins_au_plus_tot`) : aucun
+    solveur ne peut la tenir, quelles que soient ses qualités. `{tache: (echeance, fin_au_plus_tot)}`."""
+    fins = _fins_au_plus_tot(instance)
+    echeances: dict[str, int] = {}
+    for c in instance.contraintes:
+        if c.type == "echeance":
+            echeances[c.tache] = min(echeances.get(c.tache, c.echeance), c.echeance)
+    return {t: (e, fins[t]) for t, e in echeances.items() if t in fins and e < fins[t]}
 
 
 # Message posé par `sandbox/runner.py::executer_solveur_valide` quand le solveur répond « aucune
@@ -267,13 +315,44 @@ def _constat_essai_en_echec(essai: EssaiSolveur) -> Constat:
     )
 
 
-def _constat_contrainte_ajoutee(type_c: str, solveur: ArtefactSolveur, essai: EssaiSolveur | None) -> Constat:
+def _constat_echeances_impossibles(sujet: str, essai: EssaiSolveur, instance: InstanceTRCO) -> Constat | None:
+    """Échéances dépassées dans l'essai *toutes* intenables par les données : jamais une faute du
+    solveur (voir CLAUDE.md, boucle de diagnostic — ne jamais « améliorer » un solveur sain pour
+    des données impossibles). `None` si au moins une échéance dépassée était tenable : le solveur
+    reste alors en cause."""
+    if not essai.taches_echeance_depassee:
+        return None
+    impossibles = _echeances_impossibles(instance)
+    if any(t not in impossibles for t in essai.taches_echeance_depassee):
+        return None
+    return Constat(
+        "contraintes",
+        sujet,
+        "a_surveiller",
+        "le planning produit dépasse des échéances, mais aucune n'était tenable : elles tombent avant la "
+        "fin la plus tôt possible de leur tâche, quel que soit le solveur — ce sont les données "
+        "(échéances ou durées) à revoir, pas le solveur",
+        tuple(
+            f"{t} : échéance {impossibles[t][0]}, fin au plus tôt {impossibles[t][1]}"
+            for t in sorted(set(essai.taches_echeance_depassee))[:_MAX_PREUVES]
+        ),
+    )
+
+
+def _constat_contrainte_ajoutee(
+    type_c: str, solveur: ArtefactSolveur, essai: EssaiSolveur | None, instance: InstanceTRCO
+) -> Constat:
     sujet = f"Contrainte ajoutée : {type_c}"
     if type_c in _CONTRAINTES_HORS_SOLVEUR:
         return Constat("contraintes", sujet, "sans_impact", _CONTRAINTES_HORS_SOLVEUR[type_c] + ".")
 
     mentionnee = _code_mentionne(solveur.code_source, type_c)
     types_violation = _VIOLATIONS_PAR_CONTRAINTE.get(type_c, frozenset())
+
+    if type_c == "echeance" and essai is not None and essai.erreur is None:
+        constat = _constat_echeances_impossibles(sujet, essai, instance)
+        if constat is not None:
+            return constat
 
     if essai is not None and essai.reussi is False and essai.erreur is None:
         # Planning produit mais illégal : on regarde si c'est bien CETTE contrainte qui est violée.
@@ -477,7 +556,7 @@ def evaluer_solveur(
         if essai.erreur is not None:
             constats.append(_constat_essai_en_echec(essai))
 
-    constats += [_constat_contrainte_ajoutee(t, solveur, essai) for t in contraintes_ajoutees]
+    constats += [_constat_contrainte_ajoutee(t, solveur, essai, instance) for t in contraintes_ajoutees]
     constats += [_constat_contrainte_retiree(t, essai) for t in contraintes_retirees]
     constats += [_constat_objectif_ajoute(t, solveur) for t in objectifs_ajoutes]
     constats += [_constat_objectif_retire(t, solveur) for t in objectifs_retires]

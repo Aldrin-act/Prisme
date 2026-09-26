@@ -27,7 +27,12 @@ from dsl.schema import (
 from generation.agents import benchmarker
 from sandbox.runner import ResultatExecution
 from solver_store.registry import ArtefactSolveur
-from supervision.adequation import EvaluationSolveur, evaluer_solveur
+from supervision.adequation import (
+    EvaluationSolveur,
+    _echeances_impossibles,
+    _fins_au_plus_tot,
+    evaluer_solveur,
+)
 from tests.unit.aides_test_agents import ModeleFactice
 from validation_engine.feasibility_checker import ResultatFaisabilite, Violation
 
@@ -124,8 +129,12 @@ def _constat(evaluation: EvaluationSolveur, debut_sujet: str):
     return next(c for c in evaluation.constats if c.sujet.startswith(debut_sujet))
 
 
-def _avec_echeance(instance: InstanceTRCO = _INSTANCE) -> InstanceTRCO:
-    return instance.model_copy(update={"contraintes": [*instance.contraintes, Echeance(tache="T2", echeance=12)]})
+def _avec_echeance(instance: InstanceTRCO = _INSTANCE, echeance: int = 20) -> InstanceTRCO:
+    """Par défaut une échéance tenable (T2 peut finir au plus tôt à 15 = 10 + 5) : un dépassement
+    est alors bien imputable au solveur, jamais aux données."""
+    return instance.model_copy(
+        update={"contraintes": [*instance.contraintes, Echeance(tache="T2", echeance=echeance)]}
+    )
 
 
 # --- Rien n'a changé ---
@@ -146,13 +155,13 @@ def test_contrainte_ajoutee_et_violee_par_l_essai_reel_est_bloquante() -> None:
     evaluation = _evaluer(
         _avec_echeance(),
         _solveur(),
-        executer=_essai_avec_violation("echeance_depassee", "T2 finit à 15, échéance 12"),
+        executer=_essai_avec_violation("echeance_depassee", "T2 finit à 25, échéance 20"),
     )
 
     constat = _constat(evaluation, "Contrainte ajoutée : echeance")
     assert constat.verdict == "bloquant"
     assert "essai réel" in constat.argument
-    assert constat.preuves == ("T2 finit à 15, échéance 12",)
+    assert constat.preuves == ("T2 finit à 25, échéance 20",)
     assert evaluation.a_regenerer is True
 
 
@@ -203,6 +212,64 @@ def test_contrainte_retiree_n_impose_pas_de_regeneration() -> None:
 
     assert _constat(evaluation, "Contrainte retirée : echeance").verdict == "sans_impact"
     assert evaluation.a_regenerer is False
+
+
+def test_echeance_intenable_par_les_donnees_est_a_surveiller_pas_une_faute_du_solveur() -> None:
+    """T2 ne peut pas finir avant 15 (T1 = 10 puis T2 = 5) : une échéance à 12 est dépassée par
+    n'importe quel solveur — ce sont les données à revoir, jamais une raison de régénérer."""
+    evaluation = _evaluer(
+        _avec_echeance(echeance=12),
+        _solveur(),
+        executer=_essai_avec_violation("echeance_depassee", "T2 finit à 15, échéance 12"),
+    )
+
+    constat = _constat(evaluation, "Contrainte ajoutée : echeance")
+    assert constat.verdict == "a_surveiller"
+    assert "données" in constat.argument
+    assert constat.preuves == ("T2 : échéance 12, fin au plus tôt 15",)
+    assert evaluation.a_regenerer is False
+
+
+def test_echeance_intenable_a_cote_d_une_echeance_tenable_ratee_reste_bloquante() -> None:
+    """Une seule échéance tenable dépassée suffit à mettre le solveur en cause, même si d'autres
+    sont intenables par les données."""
+    instance = _avec_echeance(echeance=12)
+    instance = instance.model_copy(
+        update={"contraintes": [*instance.contraintes, Echeance(tache="T1", echeance=10)]}
+    )
+
+    def executer(*_: object) -> ResultatExecution:
+        violations = (
+            Violation(type="echeance_depassee", message="T2 finit à 20, échéance 12", tache="T2"),
+            Violation(type="echeance_depassee", message="T1 finit à 15, échéance 10", tache="T1"),
+        )
+        return ResultatExecution(_PLANNING, ResultatFaisabilite(violations=violations), None)
+
+    evaluation = _evaluer(instance, _solveur(), executer=executer)
+
+    assert _constat(evaluation, "Contrainte ajoutée : echeance").verdict == "bloquant"
+    assert evaluation.a_regenerer is True
+
+
+def test_fin_au_plus_tot_suit_les_precedences_avec_la_duree_la_plus_courte() -> None:
+    instance = InstanceTRCO(
+        taches=[Tache(id="A"), Tache(id="B"), Tache(id="C")],
+        ressources=[Ressource(id="R1"), Ressource(id="R2")],
+        contraintes=[
+            Precedence(avant="A", apres="C"),
+            Precedence(avant="B", apres="C"),
+            CompatibiliteRessourceTache(tache="A", ressource="R1", duree=4),
+            CompatibiliteRessourceTache(tache="A", ressource="R2", duree=2),
+            CompatibiliteRessourceTache(tache="B", ressource="R1", duree=6),
+            CompatibiliteRessourceTache(tache="C", ressource="R2", duree=3),
+            Echeance(tache="C", echeance=8),
+            Echeance(tache="A", echeance=2),
+        ],
+        objectifs=[MinimiserMakespan()],
+    )
+
+    assert _fins_au_plus_tot(instance) == {"A": 2, "B": 6, "C": 9}
+    assert _echeances_impossibles(instance) == {"C": (8, 9)}
 
 
 # --- Essai en échec ---

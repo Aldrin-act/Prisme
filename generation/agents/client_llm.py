@@ -602,13 +602,18 @@ def construire_modele_comprehension_optionnel() -> BaseChatModel | None:
     (ex. description métier automatique sur un import CSV/JSON déterministe,
     `api/routes/adapters.py::_description_metier_optionnelle`) — un chemin qui doit rester
     utilisable sans `.[llm]` installé, contrairement aux routes de compréhension elles-mêmes qui
-    en dépendent entièrement. Ne fait *que* couvrir l'absence de la dépendance (`ImportError`,
-    `langchain_openai` non installé) : une clé API absente/invalide construit quand même le
-    client (`ChatOpenAI` ne valide rien à la construction) et échoue seulement au premier appel
-    réel, à la charge de l'appelant."""
+    en dépendent entièrement. Couvre l'absence de la dépendance (`ImportError`, `langchain_openai`
+    non installé) et l'absence de clé API : le SDK `openai` refuse désormais de construire le
+    client sans clé (`OpenAIError` dès `ChatOpenAI(...)`, vu en CI où aucune clé n'est définie).
+    Une clé présente mais invalide construit toujours le client et échoue seulement au premier
+    appel réel, à la charge de l'appelant."""
+    try:
+        from openai import OpenAIError
+    except ImportError:
+        return None
     try:
         return construire_modele_comprehension()
-    except ImportError:
+    except (ImportError, OpenAIError):
         return None
 
 
