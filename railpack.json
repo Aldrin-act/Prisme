@@ -1,0 +1,11 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "steps": {
+    "build": {
+      "commands": ["...", "uv sync --locked --no-dev --no-editable --extra llm --extra sandbox"]
+    }
+  },
+  "deploy": {
+    "startCommand": "uvicorn api.app:app --host 0.0.0.0 --port ${PORT:-8000}"
+  }
+}

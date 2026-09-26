@@ -14,13 +14,13 @@ dependencies = [
     "python-dotenv>=1.0.0",  # Gestion des variables d'environnement
     "email-validator>=2.0",  # Requis par pydantic.EmailStr (api/routes/auth.py)
     "pyyaml>=6.0",  # Lecture des configurations secteurs YAML
+    "uvicorn>=0.30",  # Sert l'API en production (railpack.json), pas seulement en dev
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest==9.1.1",
     "ruff>=0.15.21",
-    "uvicorn>=0.30",
 ]
 llm = [
     "langchain-core>=0.3",

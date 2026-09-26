@@ -1864,13 +1864,13 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "python-multipart" },
     { name = "pyyaml" },
+    { name = "uvicorn" },
 ]
 
 [package.optional-dependencies]
 dev = [
     { name = "pytest" },
     { name = "ruff" },
-    { name = "uvicorn" },
 ]
 estimation = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
@@ -1910,7 +1910,7 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.15.21" },
     { name = "scikit-learn", marker = "extra == 'estimation'", specifier = ">=1.4" },
-    { name = "uvicorn", marker = "extra == 'dev'", specifier = ">=0.30" },
+    { name = "uvicorn", specifier = ">=0.30" },
 ]
 provides-extras = ["dev", "llm", "sandbox", "estimation"]
 
