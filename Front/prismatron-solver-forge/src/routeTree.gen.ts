@@ -9,65 +9,31 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as ArchitectureRouteImport } from './routes/architecture'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as DocsRouteImport } from './routes/docs'
-import { Route as FeaturesRouteImport } from './routes/features'
-import { Route as PlatformRouteImport } from './routes/platform'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as UseCasesRouteImport } from './routes/use-cases'
-import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
-import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
-import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
-import { Route as AuthenticatedCommandesRouteImport } from './routes/_authenticated/commandes'
-import { Route as AuthenticatedDonneesRouteImport } from './routes/_authenticated/donnees'
-import { Route as AuthenticatedInstancesRouteImport } from './routes/_authenticated/instances'
-import { Route as AuthenticatedSchedulesRouteImport } from './routes/_authenticated/schedules'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
-import { Route as AuthenticatedSolverGeneratorRouteImport } from './routes/_authenticated/solver-generator'
-import { Route as AuthenticatedSolversRouteImport } from './routes/_authenticated/solvers'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PlatformRouteImport } from './routes/platform'
+import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as DocsRouteImport } from './routes/docs'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ArchitectureRouteImport } from './routes/architecture'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSupervisionRouteImport } from './routes/_authenticated/supervision'
+import { Route as AuthenticatedSolversRouteImport } from './routes/_authenticated/solvers'
+import { Route as AuthenticatedSolverGeneratorRouteImport } from './routes/_authenticated/solver-generator'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSchedulesRouteImport } from './routes/_authenticated/schedules'
+import { Route as AuthenticatedInstancesRouteImport } from './routes/_authenticated/instances'
+import { Route as AuthenticatedDonneesRouteImport } from './routes/_authenticated/donnees'
+import { Route as AuthenticatedCommandesRouteImport } from './routes/_authenticated/commandes'
+import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticated/clients'
+import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArchitectureRoute = ArchitectureRouteImport.update({
-  id: '/architecture',
-  path: '/architecture',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocsRoute = DocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesRoute = FeaturesRouteImport.update({
-  id: '/features',
-  path: '/features',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlatformRoute = PlatformRouteImport.update({
-  id: '/platform',
-  path: '/platform',
+const UseCasesRoute = UseCasesRouteImport.update({
+  id: '/use-cases',
+  path: '/use-cases',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -75,49 +41,54 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UseCasesRoute = UseCasesRouteImport.update({
-  id: '/use-cases',
-  path: '/use-cases',
+const PlatformRoute = PlatformRouteImport.update({
+  id: '/platform',
+  path: '/platform',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedApiKeysRoute = AuthenticatedApiKeysRouteImport.update({
-  id: '/api-keys',
-  path: '/api-keys',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
-  id: '/app',
-  path: '/app',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
-  id: '/clients',
-  path: '/clients',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedCommandesRoute = AuthenticatedCommandesRouteImport.update({
-  id: '/commandes',
-  path: '/commandes',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedDonneesRoute = AuthenticatedDonneesRouteImport.update({
-  id: '/donnees',
-  path: '/donnees',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const ArchitectureRoute = ArchitectureRouteImport.update({
+  id: '/architecture',
+  path: '/architecture',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedInstancesRoute = AuthenticatedInstancesRouteImport.update({
-  id: '/instances',
-  path: '/instances',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedSchedulesRoute = AuthenticatedSchedulesRouteImport.update({
-  id: '/schedules',
-  path: '/schedules',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const AuthenticatedSupervisionRoute =
+  AuthenticatedSupervisionRouteImport.update({
+    id: '/supervision',
+    path: '/supervision',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSolversRoute = AuthenticatedSolversRouteImport.update({
+  id: '/solvers',
+  path: '/solvers',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSolverGeneratorRoute =
@@ -126,17 +97,46 @@ const AuthenticatedSolverGeneratorRoute =
     path: '/solver-generator',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedSolversRoute = AuthenticatedSolversRouteImport.update({
-  id: '/solvers',
-  path: '/solvers',
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedSupervisionRoute =
-  AuthenticatedSupervisionRouteImport.update({
-    id: '/supervision',
-    path: '/supervision',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
+const AuthenticatedSchedulesRoute = AuthenticatedSchedulesRouteImport.update({
+  id: '/schedules',
+  path: '/schedules',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInstancesRoute = AuthenticatedInstancesRouteImport.update({
+  id: '/instances',
+  path: '/instances',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDonneesRoute = AuthenticatedDonneesRouteImport.update({
+  id: '/donnees',
+  path: '/donnees',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCommandesRoute = AuthenticatedCommandesRouteImport.update({
+  id: '/commandes',
+  path: '/commandes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedClientsRoute = AuthenticatedClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedApiKeysRoute = AuthenticatedApiKeysRouteImport.update({
+  id: '/api-keys',
+  path: '/api-keys',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -291,60 +291,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/architecture': {
-      id: '/architecture'
-      path: '/architecture'
-      fullPath: '/architecture'
-      preLoaderRoute: typeof ArchitectureRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/docs': {
-      id: '/docs'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof DocsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features': {
-      id: '/features'
-      path: '/features'
-      fullPath: '/features'
-      preLoaderRoute: typeof FeaturesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/platform': {
-      id: '/platform'
-      path: '/platform'
-      fullPath: '/platform'
-      preLoaderRoute: typeof PlatformRouteImport
+    '/use-cases': {
+      id: '/use-cases'
+      path: '/use-cases'
+      fullPath: '/use-cases'
+      preLoaderRoute: typeof UseCasesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -354,74 +305,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/use-cases': {
-      id: '/use-cases'
-      path: '/use-cases'
-      fullPath: '/use-cases'
-      preLoaderRoute: typeof UseCasesRouteImport
+    '/platform': {
+      id: '/platform'
+      path: '/platform'
+      fullPath: '/platform'
+      preLoaderRoute: typeof PlatformRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/api-keys': {
-      id: '/_authenticated/api-keys'
-      path: '/api-keys'
-      fullPath: '/api-keys'
-      preLoaderRoute: typeof AuthenticatedApiKeysRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/app': {
-      id: '/_authenticated/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AuthenticatedAppRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/clients': {
-      id: '/_authenticated/clients'
-      path: '/clients'
-      fullPath: '/clients'
-      preLoaderRoute: typeof AuthenticatedClientsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/commandes': {
-      id: '/_authenticated/commandes'
-      path: '/commandes'
-      fullPath: '/commandes'
-      preLoaderRoute: typeof AuthenticatedCommandesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/donnees': {
-      id: '/_authenticated/donnees'
-      path: '/donnees'
-      fullPath: '/donnees'
-      preLoaderRoute: typeof AuthenticatedDonneesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/architecture': {
+      id: '/architecture'
+      path: '/architecture'
+      fullPath: '/architecture'
+      preLoaderRoute: typeof ArchitectureRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/instances': {
-      id: '/_authenticated/instances'
-      path: '/instances'
-      fullPath: '/instances'
-      preLoaderRoute: typeof AuthenticatedInstancesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/schedules': {
-      id: '/_authenticated/schedules'
-      path: '/schedules'
-      fullPath: '/schedules'
-      preLoaderRoute: typeof AuthenticatedSchedulesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/solver-generator': {
-      id: '/_authenticated/solver-generator'
-      path: '/solver-generator'
-      fullPath: '/solver-generator'
-      preLoaderRoute: typeof AuthenticatedSolverGeneratorRouteImport
+    '/_authenticated/supervision': {
+      id: '/_authenticated/supervision'
+      path: '/supervision'
+      fullPath: '/supervision'
+      preLoaderRoute: typeof AuthenticatedSupervisionRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/solvers': {
@@ -431,11 +375,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSolversRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/supervision': {
-      id: '/_authenticated/supervision'
-      path: '/supervision'
-      fullPath: '/supervision'
-      preLoaderRoute: typeof AuthenticatedSupervisionRouteImport
+    '/_authenticated/solver-generator': {
+      id: '/_authenticated/solver-generator'
+      path: '/solver-generator'
+      fullPath: '/solver-generator'
+      preLoaderRoute: typeof AuthenticatedSolverGeneratorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/schedules': {
+      id: '/_authenticated/schedules'
+      path: '/schedules'
+      fullPath: '/schedules'
+      preLoaderRoute: typeof AuthenticatedSchedulesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/instances': {
+      id: '/_authenticated/instances'
+      path: '/instances'
+      fullPath: '/instances'
+      preLoaderRoute: typeof AuthenticatedInstancesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/donnees': {
+      id: '/_authenticated/donnees'
+      path: '/donnees'
+      fullPath: '/donnees'
+      preLoaderRoute: typeof AuthenticatedDonneesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/commandes': {
+      id: '/_authenticated/commandes'
+      path: '/commandes'
+      fullPath: '/commandes'
+      preLoaderRoute: typeof AuthenticatedCommandesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/clients': {
+      id: '/_authenticated/clients'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof AuthenticatedClientsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/app': {
+      id: '/_authenticated/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthenticatedAppRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/api-keys': {
+      id: '/_authenticated/api-keys'
+      path: '/api-keys'
+      fullPath: '/api-keys'
+      preLoaderRoute: typeof AuthenticatedApiKeysRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
