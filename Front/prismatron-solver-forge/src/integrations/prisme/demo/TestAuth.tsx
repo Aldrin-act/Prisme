@@ -23,8 +23,8 @@ export function TestAuthPage() {
       setMessage("✅ Connexion réussie !");
       // Rafraîchir les données
       setTimeout(() => refetchInstances(), 100);
-    } catch (error: any) {
-      setMessage(`❌ Erreur: ${error.message}`);
+    } catch (error) {
+      setMessage(`❌ Erreur: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
 

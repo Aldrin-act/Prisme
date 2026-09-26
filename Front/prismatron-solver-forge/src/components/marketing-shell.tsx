@@ -75,7 +75,8 @@ export function MarketingFooter() {
             <span className="font-bold">PRISME</span>
           </div>
           <p className="mt-3 text-sm text-muted-foreground">
-            Planification industrielle propulsée par l'IA. Supervisée par l'humain. Auditable par conception.
+            Planification industrielle propulsée par l'IA. Supervisée par l'humain. Auditable par
+            conception.
           </p>
         </div>
         <FooterCol
@@ -122,13 +123,7 @@ export function MarketingFooter() {
   );
 }
 
-function FooterCol({
-  title,
-  items,
-}: {
-  title: string;
-  items: { label: string; to: string }[];
-}) {
+function FooterCol({ title, items }: { title: string; items: { label: string; to: string }[] }) {
   return (
     <div>
       <div className="text-sm font-semibold">{title}</div>

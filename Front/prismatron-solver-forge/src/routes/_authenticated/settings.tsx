@@ -13,7 +13,10 @@ function SettingsPage() {
   const { utilisateur } = Route.useRouteContext();
   return (
     <>
-      <PageHeader title="Paramètres" desc="Gérez votre profil, votre organisation et vos intégrations." />
+      <PageHeader
+        title="Paramètres"
+        desc="Gérez votre profil, votre organisation et vos intégrations."
+      />
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="glass rounded-2xl p-6">
           <h3 className="font-semibold">Profil</h3>
@@ -30,7 +33,9 @@ function SettingsPage() {
               </Label>
               <Input defaultValue={`${utilisateur.prenom} ${utilisateur.nom}`} />
             </div>
-            <Button className="bg-gradient-to-r from-primary to-accent">Enregistrer les modifications</Button>
+            <Button className="bg-gradient-to-r from-primary to-accent">
+              Enregistrer les modifications
+            </Button>
           </div>
         </div>
         <div className="glass rounded-2xl p-6">

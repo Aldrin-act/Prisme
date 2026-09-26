@@ -6,7 +6,14 @@ import { AlertCircle, Building2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -40,7 +47,10 @@ function ClientsPage() {
   }
 
   const boutonNouveauClient = (
-    <Button className="bg-gradient-to-r from-primary to-accent" onClick={() => setDialogOuvert(true)}>
+    <Button
+      className="bg-gradient-to-r from-primary to-accent"
+      onClick={() => setDialogOuvert(true)}
+    >
       <Plus className="mr-2 h-4 w-4" /> Nouveau client
     </Button>
   );
@@ -88,7 +98,13 @@ function ClientsPage() {
   );
 }
 
-function DialogNouveauClient({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+function DialogNouveauClient({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const queryClient = useQueryClient();
   const creer = useCreerClient();
   const [clientId, setClientId] = useState("");
@@ -125,8 +141,9 @@ function DialogNouveauClient({ open, onOpenChange }: { open: boolean; onOpenChan
         <DialogHeader>
           <DialogTitle>Nouveau client</DialogTitle>
           <DialogDescription>
-            Le client_id identifie ce tenant partout dans le système (matching des solveurs, cloisonnement des
-            données) — choisissez-le avec soin, il n'est pas modifiable après création.
+            Le client_id identifie ce tenant partout dans le système (matching des solveurs,
+            cloisonnement des données) — choisissez-le avec soin, il n'est pas modifiable après
+            création.
           </DialogDescription>
         </DialogHeader>
 

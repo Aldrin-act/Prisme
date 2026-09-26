@@ -15,7 +15,8 @@ export const Route = createFileRoute("/docs")({
       { property: "og:title", content: "Documentation PRISME" },
       {
         property: "og:description",
-        content: "Tout ce dont développeurs et opérateurs ont besoin pour exploiter PRISME en production.",
+        content:
+          "Tout ce dont développeurs et opérateurs ont besoin pour exploiter PRISME en production.",
       },
     ],
   }),
@@ -26,7 +27,12 @@ const SECTIONS = [
   {
     icon: BookOpen,
     title: "Démarrage",
-    items: ["Démarrage rapide", "Créer votre première instance", "Connecter votre ERP", "Approuver votre premier solveur"],
+    items: [
+      "Démarrage rapide",
+      "Créer votre première instance",
+      "Connecter votre ERP",
+      "Approuver votre premier solveur",
+    ],
   },
   {
     icon: Code2,
@@ -36,17 +42,32 @@ const SECTIONS = [
   {
     icon: Cpu,
     title: "Génération de solveurs",
-    items: ["Le pipeline d'agents", "Prompts et garde-fous", "Diff et explication", "Sélection du modèle"],
+    items: [
+      "Le pipeline d'agents",
+      "Prompts et garde-fous",
+      "Diff et explication",
+      "Sélection du modèle",
+    ],
   },
   {
     icon: ShieldCheck,
     title: "Validation",
-    items: ["Vérifications statiques", "Tests sémantiques", "Tests de propriétés", "Approbation humaine"],
+    items: [
+      "Vérifications statiques",
+      "Tests sémantiques",
+      "Tests de propriétés",
+      "Approbation humaine",
+    ],
   },
   {
     icon: Workflow,
     title: "Bac à sable et exécution",
-    items: ["Modèle de conteneurs", "Limites de ressources", "Garanties d'isolation", "Signature des artefacts"],
+    items: [
+      "Modèle de conteneurs",
+      "Limites de ressources",
+      "Garanties d'isolation",
+      "Signature des artefacts",
+    ],
   },
   {
     icon: KeyRound,

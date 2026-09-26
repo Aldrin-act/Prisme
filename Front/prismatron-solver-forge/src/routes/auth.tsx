@@ -7,7 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useAuth } from "@/integrations/prisme/auth";
 import { PrismeAPIError } from "@/integrations/prisme/client";
 import { useClients } from "@/integrations/prisme";
@@ -22,9 +28,15 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Connexion — PRISME" },
-      { name: "description", content: "Accédez à la plateforme de planification industrielle PRISME." },
+      {
+        name: "description",
+        content: "Accédez à la plateforme de planification industrielle PRISME.",
+      },
       { property: "og:title", content: "Connexion — PRISME" },
-      { property: "og:description", content: "Accédez à la plateforme de planification industrielle PRISME." },
+      {
+        property: "og:description",
+        content: "Accédez à la plateforme de planification industrielle PRISME.",
+      },
     ],
   }),
   validateSearch: searchSchema,
@@ -182,7 +194,8 @@ function SignUpForm() {
     const pwOk = passwordSchema.safeParse(password);
     if (!emailOk.success) return toast.error(emailOk.error.issues[0].message);
     if (!pwOk.success) return toast.error(pwOk.error.issues[0].message);
-    if (!prenom.trim() || !nom.trim()) return toast.error("Merci de renseigner votre prénom et votre nom");
+    if (!prenom.trim() || !nom.trim())
+      return toast.error("Merci de renseigner votre prénom et votre nom");
     if (!clientId) return toast.error("Merci de sélectionner votre client");
     setLoading(true);
     try {
@@ -199,10 +212,20 @@ function SignUpForm() {
     <form onSubmit={onSubmit} className="mt-4 space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <Field label="Prénom">
-          <Input value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Jeanne" required />
+          <Input
+            value={prenom}
+            onChange={(e) => setPrenom(e.target.value)}
+            placeholder="Jeanne"
+            required
+          />
         </Field>
         <Field label="Nom">
-          <Input value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Dupont" required />
+          <Input
+            value={nom}
+            onChange={(e) => setNom(e.target.value)}
+            placeholder="Dupont"
+            required
+          />
         </Field>
       </div>
       <Field label="Email">

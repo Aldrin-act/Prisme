@@ -52,7 +52,9 @@ function ArchitecturePage() {
             {NODES.map((n, i) => (
               <div key={n.name} className="relative">
                 <div className="glass h-full rounded-2xl p-5">
-                  <div className="text-xs text-muted-foreground">Nœud {String(i + 1).padStart(2, "0")}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Nœud {String(i + 1).padStart(2, "0")}
+                  </div>
                   <div className="mt-1 text-lg font-semibold">{n.name}</div>
                   <p className="mt-2 text-sm text-muted-foreground">{n.desc}</p>
                 </div>

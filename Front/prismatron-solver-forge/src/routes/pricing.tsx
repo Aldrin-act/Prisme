@@ -16,7 +16,8 @@ export const Route = createFileRoute("/pricing")({
       { property: "og:title", content: "Tarifs — PRISME" },
       {
         property: "og:description",
-        content: "Une tarification simple et de qualité industrielle pour des équipes de toute taille.",
+        content:
+          "Une tarification simple et de qualité industrielle pour des équipes de toute taille.",
       },
     ],
   }),
@@ -28,7 +29,12 @@ const PLANS = [
     name: "Communautaire",
     price: "Gratuit",
     desc: "Pour la recherche et l'évaluation.",
-    features: ["1 instance", "Exécutions manuelles des solveurs", "Support communautaire", "Journal d'audit basique"],
+    features: [
+      "1 instance",
+      "Exécutions manuelles des solveurs",
+      "Support communautaire",
+      "Journal d'audit basique",
+    ],
     cta: "Commencer gratuitement",
     to: "/auth" as const,
     highlight: false,
@@ -121,8 +127,8 @@ function PricingPage() {
       <section className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h2 className="text-2xl font-bold">Besoin de quelque chose de spécifique ?</h2>
         <p className="mt-2 text-muted-foreground">
-          Déploiements air-gapped, SLA personnalisés, vos propres modèles — nous adaptons PRISME
-          à votre cadre de conformité.
+          Déploiements air-gapped, SLA personnalisés, vos propres modèles — nous adaptons PRISME à
+          votre cadre de conformité.
         </p>
         <Button asChild size="lg" className="mt-6 bg-gradient-to-r from-primary to-accent">
           <Link to="/contact">Parler aux ventes</Link>

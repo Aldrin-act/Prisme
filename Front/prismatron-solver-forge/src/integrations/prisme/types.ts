@@ -461,7 +461,10 @@ export interface CodeSource {
 // ============================================================================
 
 export type CauseDiagnostic =
-  "code_defectueux" | "donnees_corrompues" | "mauvaise_specification" | "inconnu";
+  | "code_defectueux"
+  | "donnees_corrompues"
+  | "mauvaise_specification"
+  | "inconnu";
 
 export interface DiagnosticPayload {
   motif_declenchement: string;
@@ -582,7 +585,10 @@ export interface EvaluationSolveurSupervision {
 // "aucune" : commande_en_retard — purement informatif, aucune route système déclenchée sur
 // acceptation (voir api/routes/supervision.py::_dispatcher_action).
 export type ActionSuggereeSupervision =
-  "regenerer_solveur" | "executer" | "diagnostiquer" | "aucune";
+  | "regenerer_solveur"
+  | "executer"
+  | "diagnostiquer"
+  | "aucune";
 export type PrioriteSupervision = "haute" | "moyenne" | "basse";
 
 export interface PropositionSupervision {

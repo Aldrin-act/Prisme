@@ -32,14 +32,46 @@ export const Route = createFileRoute("/use-cases")({
 });
 
 const CASES = [
-  { icon: Factory, title: "Industrie manufacturière", desc: "Plan directeur de production, minimisation des changements de série, contrôle des en-cours." },
-  { icon: Car, title: "Automobile", desc: "Assemblage final séquencé, flux de pièces en JAT, équilibrage de ligne multi-modèles." },
-  { icon: Chip, title: "Électronique", desc: "Chargement de lignes SMT, allocation fours et postes de test, ordonnancement en petites séries." },
-  { icon: Truck, title: "Logistique", desc: "Planification des vagues d'entrepôt, ordonnancement des quais, roulement des chauffeurs." },
-  { icon: Boxes, title: "Lignes d'assemblage", desc: "Optimisation du takt-time, équilibrage des postes, réduction du temps de cycle." },
-  { icon: ClipboardList, title: "Planification de production", desc: "Plans à moyen terme alignés S&OP avec contraintes de capacité et de demande." },
-  { icon: Wrench, title: "Maintenance", desc: "Plannings préventifs et prédictifs avec appariement des compétences des techniciens." },
-  { icon: CalendarClock, title: "Allocation des ressources", desc: "Outillage, moules, montages — la bonne ressource, au bon poste, au bon moment." },
+  {
+    icon: Factory,
+    title: "Industrie manufacturière",
+    desc: "Plan directeur de production, minimisation des changements de série, contrôle des en-cours.",
+  },
+  {
+    icon: Car,
+    title: "Automobile",
+    desc: "Assemblage final séquencé, flux de pièces en JAT, équilibrage de ligne multi-modèles.",
+  },
+  {
+    icon: Chip,
+    title: "Électronique",
+    desc: "Chargement de lignes SMT, allocation fours et postes de test, ordonnancement en petites séries.",
+  },
+  {
+    icon: Truck,
+    title: "Logistique",
+    desc: "Planification des vagues d'entrepôt, ordonnancement des quais, roulement des chauffeurs.",
+  },
+  {
+    icon: Boxes,
+    title: "Lignes d'assemblage",
+    desc: "Optimisation du takt-time, équilibrage des postes, réduction du temps de cycle.",
+  },
+  {
+    icon: ClipboardList,
+    title: "Planification de production",
+    desc: "Plans à moyen terme alignés S&OP avec contraintes de capacité et de demande.",
+  },
+  {
+    icon: Wrench,
+    title: "Maintenance",
+    desc: "Plannings préventifs et prédictifs avec appariement des compétences des techniciens.",
+  },
+  {
+    icon: CalendarClock,
+    title: "Allocation des ressources",
+    desc: "Outillage, moules, montages — la bonne ressource, au bon poste, au bon moment.",
+  },
 ];
 
 function UseCasesPage() {
