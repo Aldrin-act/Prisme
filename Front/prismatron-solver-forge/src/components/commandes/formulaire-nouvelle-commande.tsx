@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, ArrowDown, Pencil, Plus, Workflow } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -148,7 +147,6 @@ export function FormulaireNouvelleCommande({
   const [dateLimite, setDateLimite] = useState("");
   const [dateDebutAuPlusTot, setDateDebutAuPlusTot] = useState("");
   const [numero, setNumero] = useState("");
-  const [estProspect, setEstProspect] = useState(false);
   const [description, setDescription] = useState("");
   const [nomClient, setNomClient] = useState("");
   const uniteTemps: UniteTemps = instance.unite_temps === "heures" ? "heures" : "jours";
@@ -183,7 +181,6 @@ export function FormulaireNouvelleCommande({
     setDateLimite("");
     setDateDebutAuPlusTot("");
     setNumero("");
-    setEstProspect(false);
     setDescription("");
     setNomClient("");
     setDernierCommandeId(null);
@@ -215,7 +212,6 @@ export function FormulaireNouvelleCommande({
             ? jourDepuisAncrage(dateDebut, aujourdhui(), uniteTemps)
             : undefined,
           numero: numero !== "" ? numero : undefined,
-          est_prospect: estProspect,
           description: description !== "" ? description : undefined,
           nom_client: nomClient !== "" ? nomClient : undefined,
         },
@@ -411,11 +407,6 @@ export function FormulaireNouvelleCommande({
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
-
-          <label className="flex items-center gap-2 text-sm">
-            <Checkbox checked={estProspect} onCheckedChange={(v) => setEstProspect(v === true)} />
-            Cette commande est-elle un prospect ?
-          </label>
 
           {erreur && (
             <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">

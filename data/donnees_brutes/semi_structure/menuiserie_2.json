@@ -1,0 +1,458 @@
+{
+  "export_erp": {
+    "societe": "Atelier menuiserie",
+    "date_export": "2026-09-25T07:30:00",
+    "unite_temps": "heures",
+    "jours_non_travailles": [
+      "samedi",
+      "dimanche"
+    ],
+    "postes_de_charge": [
+      {
+        "ref_poste": "P01",
+        "designation": "Scie à format",
+        "competences": [
+          "debit"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P02",
+        "designation": "Raboteuse",
+        "competences": [
+          "rabotage",
+          "usinage_cn"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P03",
+        "designation": "Centre CN",
+        "competences": [
+          "usinage_cn",
+          "percage"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P04",
+        "designation": "Perceuse multi",
+        "competences": [
+          "percage"
+        ],
+        "horaire": "8h-17h",
+        "statut": "maintenance prévue J+3"
+      },
+      {
+        "ref_poste": "P05",
+        "designation": "Établi montage",
+        "competences": [
+          "assemblage"
+        ],
+        "horaire": "6h-14h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P06",
+        "designation": "Ponceuse large bande",
+        "competences": [
+          "poncage"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P07",
+        "designation": "Cabine vernis",
+        "competences": [
+          "vernissage",
+          "emballage"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P08",
+        "designation": "Poste contrôle",
+        "competences": [
+          "controle"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "maintenance prévue J+3"
+      }
+    ],
+    "gammes_fabrication": [
+      {
+        "article": "Table chêne",
+        "gamme": [
+          {
+            "code_op": "DEBIT",
+            "libelle": "Debit",
+            "apres": [],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "debit"
+            ]
+          },
+          {
+            "code_op": "RABOTAGE",
+            "libelle": "Rabotage",
+            "apres": [
+              "DEBIT"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "rabotage"
+            ]
+          },
+          {
+            "code_op": "USINAGE_CN",
+            "libelle": "Usinage cn",
+            "apres": [
+              "RABOTAGE"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "usinage_cn"
+            ]
+          },
+          {
+            "code_op": "PERCAGE",
+            "libelle": "Percage",
+            "apres": [
+              "USINAGE_CN"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "percage"
+            ]
+          },
+          {
+            "code_op": "ASSEMBLAGE",
+            "libelle": "Assemblage",
+            "apres": [
+              "PERCAGE"
+            ],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "assemblage"
+            ]
+          },
+          {
+            "code_op": "PONCAGE",
+            "libelle": "Poncage",
+            "apres": [
+              "ASSEMBLAGE"
+            ],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "poncage"
+            ]
+          },
+          {
+            "code_op": "VERNISSAGE",
+            "libelle": "Vernissage",
+            "apres": [
+              "PONCAGE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "vernissage"
+            ]
+          },
+          {
+            "code_op": "EMBALLAGE",
+            "libelle": "Emballage",
+            "apres": [
+              "VERNISSAGE"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "emballage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Armoire 2P",
+        "gamme": [
+          {
+            "code_op": "RABOTAGE",
+            "libelle": "Rabotage",
+            "apres": [],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "rabotage"
+            ]
+          },
+          {
+            "code_op": "PERCAGE",
+            "libelle": "Percage",
+            "apres": [
+              "RABOTAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "percage"
+            ]
+          },
+          {
+            "code_op": "PONCAGE",
+            "libelle": "Poncage",
+            "apres": [
+              "PERCAGE"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "poncage"
+            ]
+          },
+          {
+            "code_op": "VERNISSAGE",
+            "libelle": "Vernissage",
+            "apres": [
+              "PONCAGE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "vernissage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE",
+            "libelle": "Controle",
+            "apres": [
+              "VERNISSAGE"
+            ],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "controle"
+            ]
+          },
+          {
+            "code_op": "EMBALLAGE",
+            "libelle": "Emballage",
+            "apres": [
+              "CONTROLE"
+            ],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "emballage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Chaise hêtre",
+        "gamme": [
+          {
+            "code_op": "RABOTAGE",
+            "libelle": "Rabotage",
+            "apres": [],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "rabotage"
+            ]
+          },
+          {
+            "code_op": "USINAGE_CN",
+            "libelle": "Usinage cn",
+            "apres": [
+              "RABOTAGE"
+            ],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "usinage_cn"
+            ]
+          },
+          {
+            "code_op": "PERCAGE",
+            "libelle": "Percage",
+            "apres": [
+              "USINAGE_CN"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "percage"
+            ]
+          },
+          {
+            "code_op": "PONCAGE",
+            "libelle": "Poncage",
+            "apres": [
+              "USINAGE_CN",
+              "PERCAGE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "poncage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE",
+            "libelle": "Controle",
+            "apres": [
+              "PONCAGE"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "controle"
+            ]
+          },
+          {
+            "code_op": "EMBALLAGE",
+            "libelle": "Emballage",
+            "apres": [
+              "CONTROLE"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "emballage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Bibliothèque",
+        "gamme": [
+          {
+            "code_op": "DEBIT",
+            "libelle": "Debit",
+            "apres": [],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "debit"
+            ]
+          },
+          {
+            "code_op": "RABOTAGE",
+            "libelle": "Rabotage",
+            "apres": [
+              "DEBIT"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "rabotage"
+            ]
+          },
+          {
+            "code_op": "USINAGE_CN",
+            "libelle": "Usinage cn",
+            "apres": [
+              "RABOTAGE"
+            ],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "usinage_cn"
+            ]
+          },
+          {
+            "code_op": "PERCAGE",
+            "libelle": "Percage",
+            "apres": [
+              "USINAGE_CN"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "percage"
+            ]
+          },
+          {
+            "code_op": "ASSEMBLAGE",
+            "libelle": "Assemblage",
+            "apres": [
+              "PERCAGE"
+            ],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "assemblage"
+            ]
+          },
+          {
+            "code_op": "PONCAGE",
+            "libelle": "Poncage",
+            "apres": [
+              "USINAGE_CN"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "poncage"
+            ]
+          },
+          {
+            "code_op": "VERNISSAGE",
+            "libelle": "Vernissage",
+            "apres": [
+              "ASSEMBLAGE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "vernissage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE",
+            "libelle": "Controle",
+            "apres": [
+              "VERNISSAGE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "controle"
+            ]
+          }
+        ]
+      }
+    ],
+    "ordres_fabrication": [
+      {
+        "num_of": "OF-20261989",
+        "client": "Groupe Sefrioui",
+        "article": "Table chêne",
+        "qte": 2,
+        "livraison_souhaitee": "J+14",
+        "priorite": "urgente"
+      },
+      {
+        "num_of": "OF-20263816",
+        "client": "Atlas Déco",
+        "article": "Table chêne",
+        "qte": 3,
+        "livraison_souhaitee": "J+6",
+        "priorite": "normale"
+      },
+      {
+        "num_of": "OF-20261415",
+        "client": "SOTRAMEX",
+        "article": "Table chêne",
+        "qte": 12,
+        "livraison_souhaitee": "J+11",
+        "priorite": "normale"
+      },
+      {
+        "num_of": "OF-20263574",
+        "client": "Atlas Déco",
+        "article": "Table chêne",
+        "qte": 13,
+        "livraison_souhaitee": "J+4",
+        "priorite": "normale"
+      }
+    ],
+    "stocks": [
+      {
+        "matiere": "Panneau chêne 19mm",
+        "stock_dispo": 97,
+        "unite": "plaque"
+      },
+      {
+        "matiere": "Vernis PU",
+        "stock_dispo": 38,
+        "unite": "L"
+      }
+    ],
+    "remarque": "export partiel, certains temps sont estimés par le chef d'atelier"
+  }
+}

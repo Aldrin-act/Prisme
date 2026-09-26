@@ -1,0 +1,350 @@
+{
+  "export_erp": {
+    "societe": "Atelier textile",
+    "date_export": "2026-09-25T07:30:00",
+    "unite_temps": "heures",
+    "jours_non_travailles": [
+      "samedi",
+      "dimanche"
+    ],
+    "postes_de_charge": [
+      {
+        "ref_poste": "P01",
+        "designation": "Table de coupe auto",
+        "competences": [
+          "coupe"
+        ],
+        "horaire": "6h-14h",
+        "statut": "maintenance prévue J+3"
+      },
+      {
+        "ref_poste": "P02",
+        "designation": "Presse thermocollante",
+        "competences": [
+          "thermocollage",
+          "pliage"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P03",
+        "designation": "Piqueuse plate",
+        "competences": [
+          "piqure"
+        ],
+        "horaire": "8h-17h",
+        "statut": "maintenance prévue J+3"
+      },
+      {
+        "ref_poste": "P04",
+        "designation": "Surjeteuse",
+        "competences": [
+          "surpiquage"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P05",
+        "designation": "Boutonnière auto",
+        "competences": [
+          "boutonniere"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P06",
+        "designation": "Table repassage",
+        "competences": [
+          "repassage",
+          "controle_qualite"
+        ],
+        "horaire": "6h-14h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P07",
+        "designation": "Poste QC",
+        "competences": [
+          "controle_qualite"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "maintenance prévue J+3"
+      }
+    ],
+    "gammes_fabrication": [
+      {
+        "article": "Chemise homme",
+        "gamme": [
+          {
+            "code_op": "COUPE",
+            "libelle": "Coupe",
+            "apres": [],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "coupe"
+            ]
+          },
+          {
+            "code_op": "THERMOCOLLAGE",
+            "libelle": "Thermocollage",
+            "apres": [
+              "COUPE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "thermocollage"
+            ]
+          },
+          {
+            "code_op": "PIQURE",
+            "libelle": "Piqure",
+            "apres": [
+              "THERMOCOLLAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "piqure"
+            ]
+          },
+          {
+            "code_op": "SURPIQUAGE",
+            "libelle": "Surpiquage",
+            "apres": [
+              "PIQURE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "surpiquage"
+            ]
+          },
+          {
+            "code_op": "REPASSAGE",
+            "libelle": "Repassage",
+            "apres": [
+              "SURPIQUAGE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "repassage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE_QUALITE",
+            "libelle": "Controle qualite",
+            "apres": [
+              "PIQURE",
+              "COUPE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "controle_qualite"
+            ]
+          },
+          {
+            "code_op": "PLIAGE",
+            "libelle": "Pliage",
+            "apres": [
+              "COUPE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "pliage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Veste lin",
+        "gamme": [
+          {
+            "code_op": "THERMOCOLLAGE",
+            "libelle": "Thermocollage",
+            "apres": [],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "thermocollage"
+            ]
+          },
+          {
+            "code_op": "SURPIQUAGE",
+            "libelle": "Surpiquage",
+            "apres": [
+              "THERMOCOLLAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "surpiquage"
+            ]
+          },
+          {
+            "code_op": "REPASSAGE",
+            "libelle": "Repassage",
+            "apres": [
+              "SURPIQUAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "repassage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE_QUALITE",
+            "libelle": "Controle qualite",
+            "apres": [
+              "SURPIQUAGE",
+              "REPASSAGE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "controle_qualite"
+            ]
+          },
+          {
+            "code_op": "PLIAGE",
+            "libelle": "Pliage",
+            "apres": [
+              "THERMOCOLLAGE",
+              "REPASSAGE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "pliage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Pantalon chino",
+        "gamme": [
+          {
+            "code_op": "COUPE",
+            "libelle": "Coupe",
+            "apres": [],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "coupe"
+            ]
+          },
+          {
+            "code_op": "THERMOCOLLAGE",
+            "libelle": "Thermocollage",
+            "apres": [
+              "COUPE"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "thermocollage"
+            ]
+          },
+          {
+            "code_op": "PIQURE",
+            "libelle": "Piqure",
+            "apres": [
+              "THERMOCOLLAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "piqure"
+            ]
+          },
+          {
+            "code_op": "BOUTONNIERE",
+            "libelle": "Boutonniere",
+            "apres": [
+              "PIQURE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "boutonniere"
+            ]
+          },
+          {
+            "code_op": "REPASSAGE",
+            "libelle": "Repassage",
+            "apres": [
+              "PIQURE",
+              "COUPE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "repassage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE_QUALITE",
+            "libelle": "Controle qualite",
+            "apres": [
+              "REPASSAGE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "controle_qualite"
+            ]
+          },
+          {
+            "code_op": "PLIAGE",
+            "libelle": "Pliage",
+            "apres": [
+              "CONTROLE_QUALITE",
+              "PIQURE"
+            ],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "pliage"
+            ]
+          }
+        ]
+      }
+    ],
+    "ordres_fabrication": [
+      {
+        "num_of": "OF-20264032",
+        "client": "ElecNord",
+        "article": "Veste lin",
+        "qte": 5,
+        "livraison_souhaitee": "J+17",
+        "priorite": "normale"
+      },
+      {
+        "num_of": "OF-20261254",
+        "client": "Atlas Déco",
+        "article": "Veste lin",
+        "qte": 24,
+        "livraison_souhaitee": "J+17",
+        "priorite": "urgente"
+      },
+      {
+        "num_of": "OF-20263228",
+        "client": "SOTRAMEX",
+        "article": "Veste lin",
+        "qte": 4,
+        "livraison_souhaitee": "J+9",
+        "priorite": "basse"
+      },
+      {
+        "num_of": "OF-20263569",
+        "client": "SOTRAMEX",
+        "article": "Chemise homme",
+        "qte": 21,
+        "livraison_souhaitee": "J+5",
+        "priorite": "urgente"
+      }
+    ],
+    "stocks": [
+      {
+        "matiere": "Rouleau lin 150cm",
+        "stock_dispo": 216,
+        "unite": "m"
+      },
+      {
+        "matiere": "Boutons nacre",
+        "stock_dispo": 23,
+        "unite": "pièce"
+      }
+    ],
+    "remarque": "export partiel, certains temps sont estimés par le chef d'atelier"
+  }
+}

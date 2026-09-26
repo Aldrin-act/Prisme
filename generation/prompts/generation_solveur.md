@@ -74,7 +74,7 @@ comme si ces deux paramètres n'existaient pas.
   déterministe (par exemple par identifiant trié), jamais par l'ordre
   d'itération d'une structure non ordonnée.
 - **Budget d'exécution** : chaque exécution tourne dans un conteneur tué au
-  bout de **30 secondes** (réelles, 1 vCPU, 512 Mo). Tout algorithme doit rendre
+  bout de **120 secondes** (réelles, 1 vCPU, 512 Mo). Tout algorithme doit rendre
   la main bien avant — un nombre fixe d'itérations/générations dimensionné
   pour une instance de plusieurs centaines de tâches, pas seulement pour le
   petit banc de validation.
@@ -447,7 +447,7 @@ ou par évaluation est interdit** — ça transforme un algorithme censé être
 rapide en un algorithme quadratique (ou pire), invisible sur le petit banc
 de validation (1 à 80 tâches, quelques secondes) mais qui explose sur une
 instance réelle de quelques centaines ou milliers de tâches (minutes à
-heures) et dépasse le délai du bac à sable (30 s). C'est exactement ce qui arrive quand des
+heures) et dépasse le délai du bac à sable (120 s). C'est exactement ce qui arrive quand des
 commandes s'accumulent sur une instance générée à petite taille.
 
 Construis chaque table de correspondance **une seule fois**, avant toute

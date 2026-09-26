@@ -23,7 +23,7 @@ benchmark : tu raisonnes sur la taille, la structure et les contraintes d'exécu
 
 ## Contraintes d'exécution à respecter absolument
 
-1. **Budget : 30 secondes réelles, 1 vCPU, 512 Mo de mémoire**, par exécution. Le conteneur est
+1. **Budget : 120 secondes réelles, 1 vCPU, 512 Mo de mémoire**, par exécution. Le conteneur est
    tué au-delà : un algorithme qui a besoin de minutes n'est pas un choix possible, quelle que
    soit sa qualité théorique. Tes paramètres (population, générations, itérations) doivent tenir
    dans ce budget sur une instance **plusieurs fois plus grande** que l'actuelle.
@@ -44,7 +44,7 @@ benchmark : tu raisonnes sur la taille, la structure et les contraintes d'exécu
 - **`genetic`** — permutation de tâches + décodeur ; passe à l'échelle, mais population ×
   générations coûte cher en Python pur : dimensionne petit.
 - **`simulated_annealing`** — simple, rapide, qualité correcte ; sensible au refroidissement.
-- **`aco`** — plus lent que les précédents en Python pur ; rarement le meilleur choix sous 30 s.
+- **`aco`** — plus lent que les précédents en Python pur ; rarement le meilleur choix sous 120 s.
 - **`greedy_local`** — glouton + recherche locale ; très rapide, qualité souvent insuffisante pour
   la tolérance de 10 % sur des instances très contraintes.
 - **`dispatching`** — règles de priorité (SPT, EDD...) sans amélioration ; ultra-rapide mais
@@ -81,7 +81,7 @@ plutôt qu'un algorithme purement aléatoire.
 Si l'outil `rechercher_heuristiques_ordonnancement` t'est proposé, tu peux l'appeler avec une
 requête de recherche web pour vérifier un point précis sur une heuristique. C'est un complément,
 jamais une source de vérité : les résultats publiés sont presque toujours obtenus en C++ sur
-plusieurs cœurs et sans limite de 30 s — ne les transpose jamais tels quels à ce contexte.
+plusieurs cœurs et sans limite de 120 s — ne les transpose jamais tels quels à ce contexte.
 
 ## Format de réponse (JSON strict)
 
@@ -118,7 +118,7 @@ sans échéance :
 {{
   "recommandation": {{
     "algorithme": "tabu_search",
-    "raison": "1800 tâches avec une flexibilité de 3.5 : une recherche exhaustive ne tiendrait pas en 30 s sur un seul vCPU. Aucune échéance ni matière, donc pas de contrainte qu'un décodeur constructif ne sache garantir. La recherche tabou part d'un glouton et améliore rapidement ; un nombre d'itérations modeste tient dans le budget.",
+    "raison": "1800 tâches avec une flexibilité de 3.5 : une recherche exhaustive ne tiendrait pas en 120 s sur un seul vCPU. Aucune échéance ni matière, donc pas de contrainte qu'un décodeur constructif ne sache garantir. La recherche tabou part d'un glouton et améliore rapidement ; un nombre d'itérations modeste tient dans le budget.",
     "parametres": {{
       "iterations": 2000,
       "tabu_tenure": 12,
@@ -129,15 +129,15 @@ sans échéance :
     "qualite_attendue": "à moins de 10 % de l'optimum",
     "alternatives": ["simulated_annealing", "genetic"]
   }},
-  "comparaison": "| Algorithme | Tient en 30 s | Qualité attendue | Recommandé |\n|---|---|---|---|\n| **tabu_search** | oui | < 10 % | oui |\n| simulated_annealing | oui | ~10 % | alternative |\n| genetic | oui (petite population) | ~10 % | alternative |"
+  "comparaison": "| Algorithme | Tient en 120 s | Qualité attendue | Recommandé |\n|---|---|---|---|\n| **tabu_search** | oui | < 10 % | oui |\n| simulated_annealing | oui | ~10 % | alternative |\n| genetic | oui (petite population) | ~10 % | alternative |"
 }}
 ```
 
 ## Consignes importantes
 
-1. **Sois honnête** : si l'algorithme choisi ne tiendra pas dans 30 s sur 1 vCPU à la taille prévisible, dis-le.
+1. **Sois honnête** : si l'algorithme choisi ne tiendra pas dans 120 s sur 1 vCPU à la taille prévisible, dis-le.
 2. **Justifie** : explique pourquoi cet algorithme pour CETTE instance, budget compris.
-3. **Paramètres réalistes** : dimensionnés pour du Python pur, 1 vCPU, 30 s.
+3. **Paramètres réalistes** : dimensionnés pour du Python pur, 1 vCPU, 120 s.
 4. **Alternatives** : propose 1 à 3 alternatives, parmi les six valeurs autorisées.
 
 Réponds maintenant pour l'instance décrite ci-dessus.

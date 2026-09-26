@@ -21,8 +21,9 @@ from __future__ import annotations
 
 import ast
 import json
+import os
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -86,9 +87,37 @@ def sandbox_disponible() -> bool:
         return False
 
 
+# Budget de temps d'une exécution. 120 s plutôt que les 30 s d'origine : une recherche tabou
+# sur une instance réelle de 84 tâches en mode heures demande ~90 s en Python pur sur un cœur,
+# alors qu'elle passe la cascade de validation (jugée sur le petit banc synthétique). Trop court,
+# le budget transformait un solveur valide en échec d'exécution. Surchargeable par
+# `PRISME_SANDBOX_LIMITE_TEMPS_S` — toute valeur modifiée doit être répercutée dans les prompts
+# de génération, qui enseignent ce budget aux agents (`generation/prompts/`).
+_LIMITE_TEMPS_DEFAUT_S = 120.0
+
+
+def limite_temps_configuree() -> float:
+    """Budget de temps par exécution, d'après `PRISME_SANDBOX_LIMITE_TEMPS_S` (défaut : 120 s).
+
+    Lue à chaque construction de `LimitesSandbox`, jamais à l'import : `.env` peut être chargé
+    après ce module. Une valeur non numérique ou négative lève une erreur explicite plutôt que de
+    retomber en silence sur le défaut — un budget mal orthographié se traduirait sinon par des
+    dépassements inexplicables."""
+    valeur = (os.environ.get("PRISME_SANDBOX_LIMITE_TEMPS_S") or "").strip()
+    if not valeur:
+        return _LIMITE_TEMPS_DEFAUT_S
+    try:
+        secondes = float(valeur)
+    except ValueError:
+        raise ValueError(f"PRISME_SANDBOX_LIMITE_TEMPS_S doit être un nombre, reçu : {valeur!r}") from None
+    if secondes <= 0:
+        raise ValueError(f"PRISME_SANDBOX_LIMITE_TEMPS_S doit être strictement positif, reçu : {secondes}")
+    return secondes
+
+
 @dataclass(frozen=True)
 class LimitesSandbox:
-    limite_temps_s: float = 30.0
+    limite_temps_s: float = field(default_factory=limite_temps_configuree)
     limite_memoire: str = "512m"
     limite_cpu_nano: int = 1_000_000_000  # 1 vCPU
     limite_pids: int = 64

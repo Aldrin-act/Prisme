@@ -91,6 +91,15 @@ No type-checker configured. Environment variables:
   row of their agent (prefix match: node `debugger` → row `debugger (tentative 3/10)`) —
   `components/generation/latence-appels.tsx` renders per-call lines plus a whole-generation summary
   naming the dominant cause.
+- `PRISME_SANDBOX_LIMITE_TEMPS_S` — per-execution time budget of the sandbox container, default
+  **120 s** (was a hardcoded 30 s). Raised after a real failure: the frozen `tabu_search` solver of
+  an 84-task hours-mode instance needs ~90 s in pure Python on one core, so every execution died on
+  `wait()` with a raw npipe read timeout — while the solver had passed the whole validation
+  cascade, which only ever judges it on the **small** synthetic bench. Nothing measures runtime on
+  the real instance before a solver is registered: that gap is still open. The other limits
+  (1 vCPU, 512 MB, 64 PIDs) stay hardcoded. **Changing this value means changing the generation
+  prompts too** (`generation_solveur.md`, `architecte.md`, `benchmarker.md`, `debugger.md` all
+  teach the budget to the agents).
 - `DATABASE_URL` — Postgres DSN read by `EtatPostgres`/`Registre`; `obtenir_etat()` always builds
   `EtatPostgres` outside tests, which override it with an in-memory `EtatAPI()` instead.
 - `JWT_SECRET_KEY`/`JWT_ALGORITHM`/`JWT_EXPIRE_MINUTES` (`api/routes/auth.py`, insecure hardcoded

@@ -1,0 +1,459 @@
+{
+  "export_erp": {
+    "societe": "Atelier mecanique",
+    "date_export": "2026-09-25T07:30:00",
+    "unite_temps": "heures",
+    "jours_non_travailles": [
+      "samedi",
+      "dimanche"
+    ],
+    "postes_de_charge": [
+      {
+        "ref_poste": "P01",
+        "designation": "Scie ruban",
+        "competences": [
+          "sciage"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P02",
+        "designation": "Tour CN Mazak",
+        "competences": [
+          "tournage"
+        ],
+        "horaire": "6h-14h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P03",
+        "designation": "Fraiseuse 5 axes",
+        "competences": [
+          "fraisage"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "maintenance prévue J+3"
+      },
+      {
+        "ref_poste": "P04",
+        "designation": "Taraudeuse",
+        "competences": [
+          "taraudage"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P05",
+        "designation": "Four TTH",
+        "competences": [
+          "traitement_thermique"
+        ],
+        "horaire": "8h-17h",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P06",
+        "designation": "Rectifieuse",
+        "competences": [
+          "rectification",
+          "ebavurage"
+        ],
+        "horaire": "8h-17h",
+        "statut": "maintenance prévue J+3"
+      },
+      {
+        "ref_poste": "P07",
+        "designation": "Poste ébavurage",
+        "competences": [
+          "ebavurage",
+          "emballage"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "actif"
+      },
+      {
+        "ref_poste": "P08",
+        "designation": "Machine 3D",
+        "competences": [
+          "controle_dim"
+        ],
+        "horaire": "8h-22h (2x7)",
+        "statut": "actif"
+      }
+    ],
+    "gammes_fabrication": [
+      {
+        "article": "Arbre moteur",
+        "gamme": [
+          {
+            "code_op": "SCIAGE",
+            "libelle": "Sciage",
+            "apres": [],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "sciage"
+            ]
+          },
+          {
+            "code_op": "TOURNAGE",
+            "libelle": "Tournage",
+            "apres": [
+              "SCIAGE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "tournage"
+            ]
+          },
+          {
+            "code_op": "FRAISAGE",
+            "libelle": "Fraisage",
+            "apres": [
+              "TOURNAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "fraisage"
+            ]
+          },
+          {
+            "code_op": "TARAUDAGE",
+            "libelle": "Taraudage",
+            "apres": [
+              "FRAISAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "taraudage"
+            ]
+          },
+          {
+            "code_op": "EBAVURAGE",
+            "libelle": "Ebavurage",
+            "apres": [
+              "TARAUDAGE"
+            ],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "ebavurage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE_DIM",
+            "libelle": "Controle dim",
+            "apres": [
+              "TARAUDAGE"
+            ],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "controle_dim"
+            ]
+          },
+          {
+            "code_op": "EMBALLAGE",
+            "libelle": "Emballage",
+            "apres": [
+              "CONTROLE_DIM"
+            ],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "emballage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Bride DN50",
+        "gamme": [
+          {
+            "code_op": "SCIAGE",
+            "libelle": "Sciage",
+            "apres": [],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "sciage"
+            ]
+          },
+          {
+            "code_op": "TOURNAGE",
+            "libelle": "Tournage",
+            "apres": [
+              "SCIAGE"
+            ],
+            "temps_unitaire_h": 1.5,
+            "savoir_faire": [
+              "tournage"
+            ]
+          },
+          {
+            "code_op": "FRAISAGE",
+            "libelle": "Fraisage",
+            "apres": [
+              "TOURNAGE"
+            ],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "fraisage"
+            ]
+          },
+          {
+            "code_op": "TARAUDAGE",
+            "libelle": "Taraudage",
+            "apres": [
+              "FRAISAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "taraudage"
+            ]
+          },
+          {
+            "code_op": "TRAITEMENT_THERMIQUE",
+            "libelle": "Traitement thermique",
+            "apres": [
+              "TARAUDAGE"
+            ],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "traitement_thermique"
+            ]
+          },
+          {
+            "code_op": "RECTIFICATION",
+            "libelle": "Rectification",
+            "apres": [
+              "TRAITEMENT_THERMIQUE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "rectification"
+            ]
+          },
+          {
+            "code_op": "EBAVURAGE",
+            "libelle": "Ebavurage",
+            "apres": [
+              "RECTIFICATION"
+            ],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "ebavurage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Palier",
+        "gamme": [
+          {
+            "code_op": "SCIAGE",
+            "libelle": "Sciage",
+            "apres": [],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "sciage"
+            ]
+          },
+          {
+            "code_op": "TOURNAGE",
+            "libelle": "Tournage",
+            "apres": [
+              "SCIAGE"
+            ],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "tournage"
+            ]
+          },
+          {
+            "code_op": "FRAISAGE",
+            "libelle": "Fraisage",
+            "apres": [
+              "TOURNAGE",
+              "SCIAGE"
+            ],
+            "temps_unitaire_h": 2,
+            "savoir_faire": [
+              "fraisage"
+            ]
+          },
+          {
+            "code_op": "TARAUDAGE",
+            "libelle": "Taraudage",
+            "apres": [
+              "FRAISAGE"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "taraudage"
+            ]
+          },
+          {
+            "code_op": "TRAITEMENT_THERMIQUE",
+            "libelle": "Traitement thermique",
+            "apres": [
+              "TARAUDAGE"
+            ],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "traitement_thermique"
+            ]
+          },
+          {
+            "code_op": "RECTIFICATION",
+            "libelle": "Rectification",
+            "apres": [
+              "TRAITEMENT_THERMIQUE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "rectification"
+            ]
+          },
+          {
+            "code_op": "CONTROLE_DIM",
+            "libelle": "Controle dim",
+            "apres": [
+              "RECTIFICATION"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "controle_dim"
+            ]
+          },
+          {
+            "code_op": "EMBALLAGE",
+            "libelle": "Emballage",
+            "apres": [
+              "TOURNAGE",
+              "SCIAGE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "emballage"
+            ]
+          }
+        ]
+      },
+      {
+        "article": "Pignon Z24",
+        "gamme": [
+          {
+            "code_op": "SCIAGE",
+            "libelle": "Sciage",
+            "apres": [],
+            "temps_unitaire_h": 1,
+            "savoir_faire": [
+              "sciage"
+            ]
+          },
+          {
+            "code_op": "FRAISAGE",
+            "libelle": "Fraisage",
+            "apres": [
+              "SCIAGE"
+            ],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "fraisage"
+            ]
+          },
+          {
+            "code_op": "TRAITEMENT_THERMIQUE",
+            "libelle": "Traitement thermique",
+            "apres": [
+              "SCIAGE",
+              "FRAISAGE"
+            ],
+            "temps_unitaire_h": 0.5,
+            "savoir_faire": [
+              "traitement_thermique"
+            ]
+          },
+          {
+            "code_op": "RECTIFICATION",
+            "libelle": "Rectification",
+            "apres": [
+              "FRAISAGE"
+            ],
+            "temps_unitaire_h": 0.25,
+            "savoir_faire": [
+              "rectification"
+            ]
+          },
+          {
+            "code_op": "EBAVURAGE",
+            "libelle": "Ebavurage",
+            "apres": [
+              "RECTIFICATION"
+            ],
+            "temps_unitaire_h": 3,
+            "savoir_faire": [
+              "ebavurage"
+            ]
+          },
+          {
+            "code_op": "CONTROLE_DIM",
+            "libelle": "Controle dim",
+            "apres": [
+              "EBAVURAGE"
+            ],
+            "temps_unitaire_h": 0.75,
+            "savoir_faire": [
+              "controle_dim"
+            ]
+          }
+        ]
+      }
+    ],
+    "ordres_fabrication": [
+      {
+        "num_of": "OF-20262566",
+        "client": "MaroBois",
+        "article": "Bride DN50",
+        "qte": 1,
+        "livraison_souhaitee": "J+3",
+        "priorite": "basse"
+      },
+      {
+        "num_of": "OF-20267479",
+        "client": "ElecNord",
+        "article": "Pignon Z24",
+        "qte": 21,
+        "livraison_souhaitee": "J+4",
+        "priorite": "urgente"
+      },
+      {
+        "num_of": "OF-20264907",
+        "client": "MaroBois",
+        "article": "Pignon Z24",
+        "qte": 22,
+        "livraison_souhaitee": "J+9",
+        "priorite": "basse"
+      },
+      {
+        "num_of": "OF-20269771",
+        "client": "MaroBois",
+        "article": "Palier",
+        "qte": 1,
+        "livraison_souhaitee": "J+7",
+        "priorite": "urgente"
+      }
+    ],
+    "stocks": [
+      {
+        "matiere": "Barre acier C45 Ø60",
+        "stock_dispo": 196,
+        "unite": "barre"
+      },
+      {
+        "matiere": "Huile de coupe",
+        "stock_dispo": 206,
+        "unite": "L"
+      }
+    ],
+    "remarque": "export partiel, certains temps sont estimés par le chef d'atelier"
+  }
+}

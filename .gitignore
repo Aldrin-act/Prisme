@@ -23,3 +23,8 @@ htmlcov/
 solver_store/*.sqlite3
 solver_store/artifacts/*
 !solver_store/artifacts/.gitkeep
+
+# Sorties des scripts de génération de dev (scripts/generer_*.py) — régénérées à chaque lancement
+/solveur_genere.py
+/test_solveur_genere.py
+/solveur_genere_doc.md

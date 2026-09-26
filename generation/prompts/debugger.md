@@ -35,7 +35,7 @@ plupart des échecs :
   comptée sur le début au lieu de la fin, solution initiale non réalisable ;
 - délai dépassé ou planning absent sur une grande instance : recherche répétée dans
   `instance.contraintes` à l'intérieur d'une boucle (section « Précalcule tout »), trop
-  d'itérations pour 30 s sur 1 vCPU, arrêt au temps réel au lieu d'un nombre fixe d'itérations ;
+  d'itérations pour 120 s sur 1 vCPU, arrêt au temps réel au lieu d'un nombre fixe d'itérations ;
 - résultat différent d'un appel à l'autre : hasard global (`random.random()` au lieu d'un
   `random.Random(graine)` local), itération sur un `set` d'identifiants (ordre variable d'un
   processus à l'autre), égalité départagée par l'ordre d'itération, arrêt au temps réel ;

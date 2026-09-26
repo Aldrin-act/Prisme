@@ -109,7 +109,7 @@ ci-dessus pour le détail par type (`MinimiserMakespan`, `EquilibrerCharge`).
   identifiant. Et un critère
   d'arrêt déterministe et indépendant de la machine (nombre fixe
   d'itérations ou de générations), jamais une limite de temps écoulé —
-  dimensionné pour finir largement sous les **30 secondes sur 1 vCPU** du
+  dimensionné pour finir largement sous les **120 secondes sur 1 vCPU** du
   bac à sable avec une instance de plusieurs centaines de tâches (par
   exemple, réduis la population ou le nombre de générations proposés par le
   Benchmarker s'ils sont incompatibles avec ce budget).
